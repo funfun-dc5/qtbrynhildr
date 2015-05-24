@@ -1,0 +1,213 @@
+#!/bin/bash
+# for Qt on Windows
+QTROOT="/c/Tools/develop/Qt/Qt5.4.1/5.4"
+MINGWDIR="mingw491_32"
+
+# check arg1
+if [ -n "$1" ] ; then
+	case $1 in
+		clean)
+		;;
+		man)
+		;;
+		static)
+			echo "install static binary..."
+			if [ ! -e ./qtbrynhildr_plugin_import.cpp ] ; then
+			   echo "Not exist: qtbrynhildr_plugin_import.cpp. Please check static build."
+			   exit 1;
+			fi
+			;;
+		*)
+			echo "Unkown argument : $1"
+			exit 1
+			;;
+	esac
+fi
+
+# setting
+APP="qtbrynhildr"
+ISS="$APP.iss"
+INSTALL="/usr/bin/install"
+INSTALLFLAGS="-C"
+DATE=`date +%Y%m%d`
+
+# check environment
+case $UNAME in
+    CYGWIN*)
+		DISTDIR="../dist/windows/dist_win"
+		;;
+	Linux)
+		UNAMEM=`uname -m`
+		case $UNAMEM in
+			x86_64)
+				DISTDIR="../dist/linux/dist_ubuntu_x64"
+				PKGNAME="ubuntu_x64"
+				echo "Installing for Ubuntu x64..."
+				;;
+			i686)
+				DISTDIR="../dist/linux/dist_ubuntu_x86"
+				PKGNAME="ubuntu_x86"
+				echo "Installing for Ubuntu x86..."
+				;;
+		esac
+		;;
+    *)
+		echo "Not support platform."
+		exit 1;
+		;;
+esac
+
+# clean
+if [ "$1" = "clean" ] ; then
+	echo "Cleaning..."
+	case $UNAME in
+		CYGWIN*)
+			# clean
+			\rm -rf ${DISTDIR}/bin
+			\rm -rf ${DISTDIR}/doc
+			\rm -rf ${DISTDIR}/${ISS}
+			;;
+		Linux)
+			# clean
+			\rm -rf ${DISTDIR}/bin
+			\rm -rf ${DISTDIR}/doc
+			;;
+		*)
+			echo "Not support platform."
+			exit 1;
+			;;
+	esac
+
+	echo "Done."
+	exit 0;
+fi
+
+# man
+if [ "$1" = "man" ] ; then
+	echo "Installing manual..."
+	case $UNAME in
+		CYGWIN*)
+			# copy manual file
+			if [ -e ../doc/sphinx/build/html/index.html ] ; then
+				echo "copy manual..."
+				rm -rf ../dist/doc/manual/*
+				cp -r ../doc/sphinx/build/* ../dist/doc/manual
+				\rm -rf ../dist/doc/manual/html/_sources
+				\rm -f ../dist/doc/manual/html/.buildinfo
+			else
+				echo "Not exist: index.html. Please make html."
+				exit 1;
+			fi
+			;;
+		Linux)
+			echo "Nothing to do."
+			exit 0;
+			;;
+		*)
+			echo "Not support platform."
+			exit 1;
+			;;
+	esac
+
+	echo "Done."
+	exit 0;
+fi
+
+# install
+case $UNAME in
+    CYGWIN*)
+		# check
+		echo "Installing for windows..."
+		if [ ! -x release/${APP}.exe ] ; then
+			echo "NOT Found ${APP}.exe"
+			exit 1;
+		fi
+		VERSION=`release/${APP}.exe -vv`
+		# make package string
+		PKGSTRING="${APP}-windows-v${VERSION}-${DATE}.exe"
+		# for windows
+		# create directory
+		mkdir -p ${DISTDIR}/bin
+		# install files (DLL)
+		if [ "$1" != "static" ] ; then
+			echo "copy DLL files..."
+			# for Qt DLL
+			mkdir -p ${DISTDIR}/bin/platforms
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/Qt5Core.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/Qt5Gui.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/Qt5Network.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/Qt5Widgets.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/libstdc++-6.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/libwinpthread-1.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/icuin53.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/icuuc53.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/bin/icudt53.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/${MINGWDIR}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
+		fi
+		# copy executable file
+		echo "copy executable file..."
+		${INSTALL} ${INSTALLFLAGS} release/${APP}.exe ${DISTDIR}/bin
+		# copy document file
+		#mkdir -p ${DISTDIR}/doc
+		#${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+		# copy manual file
+		if [ -e ../doc/sphinx/build/html/index.html ] ; then
+			echo "copy manual..."
+			cp -r ../doc/sphinx/build/* ../dist/doc/manual
+			\rm -rf ../dist/doc/manual/html/_sources
+			\rm -f ../dist/doc/manual/html/.buildinfo
+		else
+			echo "Not exist: index.html. Please make html."
+			exit 1;
+		fi
+		# create .iss
+		echo "create .iss file"
+		pushd ../dist
+		cd windows/dist_win
+		find bin -type f -print | sed -f ../../script/iss.sed | awk -f ../../script/iss_bin.awk > tmp_bin.iss
+		cd ../..
+		find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss.awk > tmp.iss
+		cat windows/dist_win/${ISS}.template windows/dist_win/tmp_bin.iss tmp.iss > windows/dist_win/${ISS}
+		rm -f windows/dist_win/tmp_bin.iss tmp.iss
+		popd
+		echo "Done."
+		;;
+	Linux)
+		# check
+		echo "Installing for linux..."
+		if [ ! -x ./${APP} ] ; then
+			echo "NOT Found ${APP}"
+			exit 1;
+		fi
+		VERSION=`${APP} -vv`
+		# for linux
+		# create directory
+		mkdir -p ${DISTDIR}/bin
+		mkdir -p ${DISTDIR}/doc
+		# copy executable file
+		echo "copy executable file..."
+		${INSTALL} ${INSTALLFLAGS} ${APP} ${DISTDIR}/bin
+		# copy document file
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+		# copy manual file
+		if [ -e ../dist/doc/manual/html/index.html ] ; then
+			echo "copy manual..."
+			mkdir -p ${DISTDIR}/doc/manual
+			cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
+		else
+			echo "Not exist: index.html. Please make html."
+			exit 1;
+		fi
+		# make package string
+		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
+		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
+		(cd ../dist/linux; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
+		echo "Done."
+		;;
+    *)
+		echo "Not support platform."
+		;;
+esac

@@ -1,0 +1,33 @@
+#-----------------------------
+# ignore files or directories
+#-----------------------------
+#-----------------------
+# ignore directories
+#-----------------------
+release/
+debug/
+build/
+# for Sphinx
+doctrees/
+html/
+#-----------------------
+# ignore source files
+#-----------------------
+src/qtbrynhildr_plugin_import.cpp
+src/ui_connect_to_server_dialog.h
+src/ui_desktop_scaling_dialog.h
+#-----------------------
+# ignore files
+#-----------------------
+Makefile
+*.Release
+*.Debug
+*.bak
+*.log
+*~
+# for windows
+*.exe
+*.dll
+# for unix
+*.o
+*.a

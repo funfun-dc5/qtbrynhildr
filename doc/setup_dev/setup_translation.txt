@@ -1,0 +1,12 @@
+
+1) make .ts file
+
+lupdate -verbose -no-obsolete -no-ui-lines qtbrynhildr.pro
+
+2) edit .ts file
+
+run Linguist
+
+3) convert .ts file to .qm file
+
+lrelease -verbose qtbrynhildr.pro

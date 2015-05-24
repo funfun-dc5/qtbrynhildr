@@ -1,0 +1,6 @@
+install: html
+	@echo "install ..."
+	@cp -r build/* ../../dist/doc/manual
+	@rm -rf ../../dist/doc/manual/html/_sources
+	@rm -rf ../../dist/doc/manual/html/.buildinfo
+	@echo "done."

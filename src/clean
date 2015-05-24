@@ -1,0 +1,23 @@
+#!/bin/bash
+APP="qtbrynhildr"
+
+case $UNAME in
+    CYGWIN*)
+		mingw32-make clean
+		# for static build
+		rm -f ${APP}_plugin_import.cpp
+		# delete executable file
+		rm -f release/${APP}.exe debug/${APP}.exe 
+		echo "Done."
+		;;
+	Linux)
+		make clean
+		rm -f ${APP}
+		echo "Done."
+		;;
+    *)
+		echo "Not support platform."
+		;;
+esac
+
+rm -f ${APP}.log

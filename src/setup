@@ -1,0 +1,44 @@
+#!/bin/bash
+# for Qt on Windows
+PRO="qtbrynhildr.pro"
+
+case $UNAME in
+	CYGWIN*)
+		# check arg1
+		QTROOT="/c/Tools/develop/Qt/Qt5.4.1/5.4/mingw491_32/bin"
+		if [ -n "$1" ] ; then
+			case $1 in
+				static)
+					QTROOT="/d/QtInstall/src/qt5.4.1static/qtbase/bin"
+					echo "set up for Static link."
+					;;
+				*)
+					echo "Unkown argument : $1"
+					exit 1
+					;;
+			esac
+		else
+			echo "set up for Dynamic link."
+		fi
+		./clean
+		rm -f Makefile Makefile.Release Makefile.Debug
+		${QTROOT}/qmake ${PRO}
+		chmod 644 Makefile
+		if [ -e Makefile.Release ]; then
+			chmod 644 Makefile.Release
+		fi
+		if [ -e Makefile.Debug ]; then
+			chmod 644 Makefile.Debug
+		fi
+		echo "Done."
+		;;
+	Linux)
+		rm -f Makefile Makefile.Release Makefile.Debug
+		qmake ${PRO}
+		./clean
+		echo "Done."
+		;;
+    *)
+		echo "Not support platform."
+		;;
+esac

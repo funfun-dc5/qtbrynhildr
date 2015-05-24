@@ -1,0 +1,132 @@
+;----------------------------------------------------------------------
+; QtBrynhildr installer script for Inno Setup
+;----------------------------------------------------------------------
+#define AppVer "1.0.0"
+#define RCName ""
+#define AppVerNum StringChange(AppVer, ".", "")
+#define AppDateString GetDateTimeString("yyyymmdd", "", "")
+#define AuthName "mcz-xoxo"
+
+[Setup]
+AppName=Qt Brynhildr
+AppVersion={#AppVer}
+AppVerName=Qt Brynhildr Ver.{#AppVer}
+DefaultGroupName=Qt Brynhildr
+OutputBaseFilename=qtbrynhildr-windows-v{#AppVerNum}{#RCName}-{#AppDateString}
+DefaultDirName={pf}\QtBrynhildr
+UsePreviousAppDir=yes
+AppendDefaultDirName=yes
+OutputDir=.\
+TouchTime=03:15
+
+;----------------------------------------------------------------------
+; インストーラプログラム
+;----------------------------------------------------------------------
+VersionInfoVersion={#AppVer}
+VersionInfoDescription=Qt Brynhildrをセットアップするプログラム
+AppCopyright=Copyright(C) 2015 FunFun @ mcz-xoxo, All rights reserved.
+SetupIconFile=..\..\..\src\images\qtbrynhildr48.ico
+;ウィザードページに表示されるグラフィック（*.bmp: 164 x 314）
+;WizardImageFile=bmp\installer_pic.bmp
+;ウィザードページに表示されるグラフィックが拡大されない
+;WizardImageStretch=no
+;その隙間色
+;WizardImageBackColor=$ffffff
+;ウィザードページの右上部分のグラフィック（*.bmp: 55 x 58）
+;WizardSmallImageFile=bmp\installer_pic.bmp
+;進捗表示
+ShowTasksTreeLines=yes
+
+;----------------------------------------------------------------------
+; 多言語化
+;----------------------------------------------------------------------
+ShowLanguageDialog=yes
+
+;----------------------------------------------------------------------
+; インストール前に
+;----------------------------------------------------------------------
+;;InfoBeforeFile="..\..\doc\NEED.txt"
+
+;----------------------------------------------------------------------
+; ライセンス
+;----------------------------------------------------------------------
+LicenseFile="..\..\doc\LICENSE.txt"
+
+;----------------------------------------------------------------------
+;「プログラムの追加と削除」ダイアログ情報
+;----------------------------------------------------------------------
+;配布元
+AppPublisher=FunFun @ {#AuthName}
+;アプリケーション配布元 Webサイトの URL
+AppPublisherURL=http://mcz-xoxo.cocolog-nifty.com/blog/
+;連絡先
+AppContact=fu.aba.dc5@gmail.com
+;サポートサイトURL
+;;AppSupportURL=http://mcz-xoxo.cocolog-nifty.com/blog/
+;ReadMeファイルパス
+AppReadmeFile="{app}\ReadMe.txt"
+;製品更新先のURL
+;;AppUpdatesURL=http://mcz-xoxo.cocolog-nifty.com/blog/
+;アプリケーションの説明
+AppComments=A client for Brynhildr/Siegfried (public mode)
+
+[Languages]
+Name: japanese; MessagesFile: compiler:Languages\Japanese.isl
+Name: english; MessagesFile: compiler:Default.isl
+
+[Messages]
+japanese.BeveledLabel=Japanese
+english.BeveledLabel=English
+
+[CustomMessages]
+japanese.MakeShortcut="デスクトップにショートカットアイコンを作成する"
+english.MakeShortcut="Make shortcut icon on desktop"
+
+[Files]
+; ランタイム
+;; Source: "vcredist\vcredist_x86.exe"; DestDir: "{app}\vcredist"; Flags: ignoreversion touch
+; LICENSE.txt
+Source: "..\..\doc\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion touch
+; ReadMe.txt
+Source: "..\..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
+; executable files
+;; Source: "bin\qtbrynhildr.exe"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\libgcc_s_dw2-1.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\libstdc++-6.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\libwinpthread-1.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\icudt53.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\icuin53.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\icuuc53.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\Qt5Core.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\Qt5Gui.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\Qt5Multimedia.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\Qt5Network.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\Qt5Widgets.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
+;; Source: "bin\platforms\qwindows.dll"; DestDir: "{app}\bin\platforms"; Flags: ignoreversion touch
+
+[Registry]
+;（アンインストール時に）動作設定を削除
+;;Root: HKCU; Subkey: "Software\{#AuthName}"; Flags: uninsdeletekeyifempty
+;;Root: HKCU; Subkey: "Software\{#AuthName}\Qt Brynhildr"; Flags: uninsdeletekey
+
+[Icons]
+Name: "{commondesktop}\Qt Brynhildr"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{group}\Qt Brynhildr"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}";
+
+Name: "{commondesktop}\Qt Brynhildr ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
+
+; マニュアル
+Name: "{commondesktop}\はじめてのQt Brynhildr(書きかけ版)"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
+
+; ランタイム
+;;Name: "{commondesktop}\vcredist"; Filename: "{app}\vcredist\vcredist_x86.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+
+[Tasks]
+Name: desktopicon; Description: "{cm:MakeShortcut}"
+
+[UninstallDelete]
+;（アンインストール時に）設定ファイル及びフォルダを削除
+Type: files; Name: "{userappdata}\{#AuthName}\Qt Brynhildr.ini"
+Type: dirifempty; Name: "{userappdata}\{#AuthName}"
+
+[Files]

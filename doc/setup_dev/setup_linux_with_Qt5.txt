@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------
+ Setup Development Environment for Qt Brynhildr on Linux (Ubuntu-14.04 LTS)
+---------------------------------------------------------------------------
+
+0) install Qt5.4.1 and g++
+
+ http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linux-x64-5.4.1.run
+
+ chmod 755 qt-opensource-linux-x64-5.4.1.run
+ sudo ./qt-opensource-linux-x64-5.4.1.run
+
+ (*) If you don't have g++ command, do "sudo apt-get install g++"
+     and you may have to do "sudo apt-get install libglu1-mesa-dev" for openGL.
+
+1) build crypt++ library
+
+2) check setup script (src/setup)
+
+3) run src/setup
+
+4) make

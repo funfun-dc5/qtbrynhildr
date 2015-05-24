@@ -1,0 +1,27 @@
+---------------------------------------------------------------------------
+ Setup Development Environment for Qt Brynhildr for android
+---------------------------------------------------------------------------
+
+1) Download and install Qt5.4.1 for andoird (windows)
+
+http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-windows-x86-android-5.4.1.exe
+
+2) set PATH
+
+  PATH=/c/Tools/develop/Qt/Qt5.4.1_x86_android/5.4/android_armv7/bin:${PATH}
+
+3) Download and extract ndk
+
+http://dl.google.com/android/ndk/android-ndk-r10d-windows-x86.exe
+
+4) set ANDROID_NDK_ROOT environment variable
+
+   set ANDROID_NDK_ROOT=c:\Tools\develop\andoird\android-ndk-r10d
+
+5) set PATH
+
+  PATH=/c/Tools/develop/android/android-ndk-r10d:${PATH}
+
+6) execute setup script
+
+ cd qtbrynhildr/src; ./setup

@@ -7,12 +7,23 @@ case $UNAME in
 		# for static build
 		rm -f ${APP}_plugin_import.cpp
 		# delete executable file
-		rm -f release/${APP}.exe debug/${APP}.exe 
+		rm -f release/${APP}.exe debug/${APP}.exe
+		# delete manual
+		pushd ../doc/manual
+		make clean
+		popd
+		rm -rf ../dist/doc/manual/*
 		echo "Done."
 		;;
 	Linux)
 		make clean
+		# delete executable file
 		rm -f ${APP}
+		pushd ../doc/manual
+		# delete manual
+		make clean
+		popd
+		rm -rf ../dist/doc/manual/*
 		echo "Done."
 		;;
     *)

@@ -178,7 +178,7 @@ case $UNAME in
 		# for linux
 		# create directory
 		mkdir -p ${DISTDIR}/bin
-		mkdir -p ${DISTDIR}/doc
+		mkdir -p ${DISTDIR}/doc/manual
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLFLAGS} ${APP} ${DISTDIR}/bin
@@ -190,6 +190,7 @@ case $UNAME in
 		make html
 		make install
 		popd
+		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
 		# make package string
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
 		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})

@@ -24,8 +24,13 @@
 2. インストール
 ---------------
 
+インストーラパッケージを実行します。インストールウィザードに従ってインストールします。
+
 (1) 言語の選択
 ^^^^^^^^^^^^^^
+
+「日本語」もしくは「英語」を選択します。
+
 .. image:: images/windows_installer1.jpg
 
 (2) セットアップウィザードの開始
@@ -36,18 +41,27 @@
 ^^^^^^^^^^^^^^^^^^
 .. image:: images/windows_installer3.jpg
 
+「 同意する」を選択します。
+
 .. image:: images/windows_installer4.jpg
 
 (4) インストール先の指定
 ^^^^^^^^^^^^^^^^^^^^^^^^
+ インストール先を指定します。
+
 .. image:: images/windows_installer5.jpg
 
 (5) プログラムグループの指定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 登録するスタートアップメニューのグループを指定します。
+
 .. image:: images/windows_installer6.jpg
 
 (6) 追加タスクの選択
 ^^^^^^^^^^^^^^^^^^^^
+
+ 必要な作業にチェックを入れてください。
+
 .. image:: images/windows_installer7.jpg
 
 (7) インストール準備完了
@@ -68,9 +82,15 @@
 
 (2) 「アンインストール」を実行する
 
+確認ダイアログが表示されます。
+
 .. image:: images/windows_uninstaller3.jpg
 
+「アンインストール」が実行されます。
+
 .. image:: images/windows_uninstaller4.jpg
+
+「アンインストール」が完了しました。
 
 .. image:: images/windows_uninstaller5.jpg
 

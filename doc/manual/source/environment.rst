@@ -19,7 +19,7 @@
 
  [起動のみ確認]
 
-  * Windows 10  Insider Preview (32bit/64bit)
+  * Windows 10 Pro Insider Preview (32bit/64bit)
 
  .. [#] すべてのエディションで確認したわけではありません。
 

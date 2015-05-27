@@ -48,6 +48,8 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: images/ubuntu_installer4.png
 
+「同意する」を選択してください。
+
 .. image:: images/ubuntu_installer5.png
 
 (5) インストールの準備完了
@@ -67,6 +69,9 @@
 
 (1) メンテナンスツール起動
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+root権限でQt5.x.x/MaintenanceToolを実行してください。
+
 .. image:: images/ubuntu_uninstaller1.png
 
 (2) インストールの準備完了

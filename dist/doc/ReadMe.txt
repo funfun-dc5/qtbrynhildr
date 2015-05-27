@@ -488,7 +488,7 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=8328
  (2) 「サーバとの接続に失敗しました！(Failed to connect server!)」
 
  サーバに接続できませんでした。
- ホスト名もしくはIPアドレスが間違えているかもしれません。
+ サーバ名もしくはIPアドレスが間違えているかもしれません。
 
  (3) 「パスワードが違います！(Password Error!)」
 

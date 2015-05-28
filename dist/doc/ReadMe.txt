@@ -118,17 +118,11 @@ http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linu
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
 
- (2) アーカイブファイルを解凍します。
-
-  tar xvfJ <アーカイブファイル名>
+ (2) 自己解凍ファイルを実行します。
 
  例)
-  tar xvfJ qtbrynhildr-ubuntu_x64-v100-20150604.tar.xz
-
-  (*) 自己解凍形式ファイル(.run)の場合、以下のようにすれば解凍できます。
-
-      chmod 755 ./qtbrynhildr-ubuntu_x64-v100-20150604.run
-	  ./qtbrynhildr-ubuntu_x64-v100-20150604.run
+  chmod 500 ./qtbrynhildr-ubuntu_x64-v100-20150604.run
+  ./qtbrynhildr-ubuntu_x64-v100-20150604.run
 
  (3) 起動確認します。
 
@@ -308,8 +302,8 @@ http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linu
      [2] モニタの選択
 
          マルチモニタを利用している場合に操作対象とするモニタを変更します。
-		 モニタ1(メインモニタ)からモニタ9を選択します。
-		 1台しかモニタを接続していない場合は変更できません。
+         モニタ1(メインモニタ)からモニタ9を選択します。
+         1台しかモニタを接続していない場合は変更できません。
 
      [3] コントロール ON/OFF
 

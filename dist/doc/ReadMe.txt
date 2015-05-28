@@ -118,7 +118,7 @@ http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linu
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
 
- (2) 自己解凍ファイルを実行します。
+ (2) 自己解凍ファイルを実行してパッケージを展開します。
 
  例)
   chmod 500 ./qtbrynhildr-ubuntu_x64-v100-20150604.run

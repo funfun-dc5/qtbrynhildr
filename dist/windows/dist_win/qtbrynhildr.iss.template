@@ -116,7 +116,7 @@ Name: "{group}\Qt Brynhildr"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir:
 Name: "{commondesktop}\Qt Brynhildr ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; マニュアル
-Name: "{commondesktop}\はじめて の QtBrynhildr(Ver.0.9.1)"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\はじめて の QtBrynhildr(Ver.0.9.2)"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; ランタイム
 ;;Name: "{commondesktop}\vcredist"; Filename: "{app}\vcredist\vcredist_x86.exe"; WorkingDir: "{app}"; Tasks: desktopicon

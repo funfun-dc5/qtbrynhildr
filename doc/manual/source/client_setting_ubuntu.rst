@@ -13,11 +13,11 @@
 
  [64bit版]
 
-   qtbrynhildr-ubuntu_x64-v100-20150604.run
+   qtbrynhildr-ubuntu_x64-v100.run
 
  [32bit版]
 
-   qtbrynhildr-ubuntu_x86-v100-20150604.run
+   qtbrynhildr-ubuntu_x86-v100.run
 
 (2).Qt5のダウンロード [1]_
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -92,8 +92,8 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
  自己解凍ファイルは以下のようにして展開します。 ::
 
-  funfun@ubuntu-PC-x64:~$ chmod 500 ./qtbrynhildr-ubuntu_x64-v100-20150604.run
-  funfun@ubuntu-PC-x64:~$ ./qtbrynhildr-ubuntu_x64-v100-20150604.run
+  funfun@ubuntu-PC-x64:~$ chmod 500 ./qtbrynhildr-ubuntu_x64-v100.run
+  funfun@ubuntu-PC-x64:~$ ./qtbrynhildr-ubuntu_x64-v100.run
   UnZipSFX 5.52 of 28 February 2005, by Info-ZIP (http://www.info-zip.org).
    creating: dist_ubuntu_x64/
    creating: dist_ubuntu_x64/bin/

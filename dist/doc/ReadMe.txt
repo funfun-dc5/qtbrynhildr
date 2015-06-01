@@ -121,8 +121,8 @@ http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linu
  (2) 自己解凍ファイルを実行してパッケージを展開します。
 
  例)
-  chmod 500 ./qtbrynhildr-ubuntu_x64-v100-20150604.run
-  ./qtbrynhildr-ubuntu_x64-v100-20150604.run
+  chmod 500 ./qtbrynhildr-ubuntu_x64-v100.run
+  ./qtbrynhildr-ubuntu_x64-v100.run
 
  (3) 起動確認します。
 

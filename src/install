@@ -192,7 +192,8 @@ case $UNAME in
 		popd
 		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
 		# make package string
-		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
+		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
 		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
 		(cd ../dist/linux; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
 		echo "Done."

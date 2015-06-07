@@ -148,14 +148,14 @@ void MainWindow::refreshDesktop(QImage image)
 	// resize main window
 	resize(size.width(), size.height());
 	// set maximum width & height
-	int targetWidth = size.width() + QTB_MAINWINDOW_WIDTH_CORRECT;
-	int targetHeight = size.height() + heightOfMenuBar + heightOfStatusBar + QTB_MAINWINDOW_HEIGHT_CORRECT;
-	QSize desktopSize = settings->getDesktop()->getCurrentScreen().size();
-	if (desktopSize.width() < targetWidth){
-	  targetWidth = desktopSize.width();
+	int targetWidth = size.width() + settings->getDesktop()->geCorrectWindowWidth();
+	int targetHeight = size.height() + heightOfMenuBar + heightOfStatusBar + settings->getDesktop()->geCorrectWindowHeight();
+	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+	if (targetWidth > screenSize.width()){
+	  targetWidth = screenSize.width();
 	}
-	if (desktopSize.height() < targetHeight){
-	  targetHeight = desktopSize.height();
+	if (targetHeight > screenSize.height()){
+	  targetHeight = screenSize.height();
 	}
 	parent->setMaximumWidth(targetWidth);
 	parent->setMaximumHeight(targetHeight);

@@ -34,12 +34,30 @@ public:
 	return maxImageDataSize;
   }
 
+  // get correct widow width
+  int geCorrectWindowWidth() const
+  {
+	return correctWindowWidth;
+  }
+
+  // get correct widow height
+  int geCorrectWindowHeight() const
+  {
+	return correctWindowHeight;
+  }
+
 private:
   // current screen
   QRect currentScreen;
 
   // max image size
   unsigned long maxImageDataSize;
+
+  // correct window width
+  int correctWindowWidth;
+
+  // correct window height
+  int correctWindowHeight;
 
   // output log flag
   const bool outputLog;

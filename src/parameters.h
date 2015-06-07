@@ -8,17 +8,6 @@
 namespace qtbrynhildr {
 
 //---------------------------------------------------------------------------
-// for MainWindow
-//---------------------------------------------------------------------------
-#if defined(Q_OS_WIN)
-const int QTB_MAINWINDOW_WIDTH_CORRECT = 2;
-const int QTB_MAINWINDOW_HEIGHT_CORRECT = 5;
-#elif defined(Q_OS_LINUX)
-const int QTB_MAINWINDOW_WIDTH_CORRECT = 2;
-const int QTB_MAINWINDOW_HEIGHT_CORRECT = 2;
-#endif // defined(Q_OS_LINUX)
-
-//---------------------------------------------------------------------------
 // for keyboard & mouse
 //---------------------------------------------------------------------------
 // keyboard buffer size (entry)

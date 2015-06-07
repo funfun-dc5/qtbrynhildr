@@ -212,10 +212,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   // get window information
   heightOfMenuBar = menuBar()->sizeHint().height();
   heightOfStatusBar = statusBar()->sizeHint().height();
-#if 0 // for TEST
-  cout << "menuBar height =" << heightOfMenuBar << endl << flush;
-  cout << "statusBar height =" << heightOfStatusBar << endl << flush;
-#endif // for TEST
+  if (settings->getOutputLog()){
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "menuBar height = " + QString::number(heightOfMenuBar));
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "statusBar height = " + QString::number(heightOfStatusBar));
+  }
   mainWindow->setHeightOfMenuBar(heightOfMenuBar);
   mainWindow->setHeightOfStatusBar(heightOfStatusBar);
 
@@ -376,6 +378,16 @@ MainWindow *QtBrynhildr::getMainWindow() const
 // refresh window
 void QtBrynhildr::refreshWindow()
 {
+  // output log for Window Size
+  if (settings->getOutputLog()){
+	QSize size = mainWindow->getSize();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "WindowSize : (" +
+								 QString::number(size.width())  + "," +
+								 QString::number(size.height()) +
+								 ")");
+  }
+
   // update status bar
   updateStatusBar();
 }
@@ -990,9 +1002,9 @@ void QtBrynhildr::readSettings()
   resize(rect.size());
 
   // set maximum width & height
-  int targetWidth = rect.size().width() + QTB_MAINWINDOW_WIDTH_CORRECT;
+  int targetWidth = rect.size().width() + settings->getDesktop()->geCorrectWindowWidth();
   setMaximumWidth(targetWidth);
-  int targetHeight = rect.size().height() + heightOfMenuBar + heightOfStatusBar + QTB_MAINWINDOW_HEIGHT_CORRECT;
+  int targetHeight = rect.size().height() + heightOfMenuBar + heightOfStatusBar + settings->getDesktop()->geCorrectWindowHeight();
   setMaximumHeight(targetHeight);
 }
 

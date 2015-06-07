@@ -185,7 +185,7 @@ SOCKET NetThread::socketToServer()
   if (error != 0){
 #if defined(Q_OS_WIN)
 	if (settings->getOutputLog()){
-	  const QString text = QString("socketToServer() : getaddrinfo(): error = ") + error;
+	  const QString text = QString("socketToServer() : getaddrinfo(): error = ") + QString::number(error);
 	  emit outputLogMessage(PHASE_DEBUG, text);
 	}
 #elif defined(Q_OS_LINUX)

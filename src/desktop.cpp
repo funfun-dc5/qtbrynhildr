@@ -70,6 +70,32 @@ Desktop::Desktop()
   //  cout << "[Desktop] maxImageDataSize = " << maxImageDataSize << endl << flush;
 #endif
 
+  // set correct window width and height
+#if defined(Q_OS_WIN)
+  // OS Version
+  QString kernelVersion = QSysInfo::kernelVersion();
+  if (kernelVersion.startsWith("6.3")){			// Windows 8.1
+	correctWindowWidth = 2;
+	correctWindowHeight = 5;
+  }
+  else if (kernelVersion.startsWith("6.2")){	// Windows 8
+	correctWindowWidth = 2;
+	correctWindowHeight = 5;
+  }
+  else if (kernelVersion.startsWith("6.1")){	// Windows 7
+	correctWindowWidth = 2;
+	correctWindowHeight = 8;
+  }
+  else {
+	// NOT supported Version
+	correctWindowWidth = 2;
+	correctWindowHeight = 5;
+  }
+#elif defined(Q_OS_LINUX)
+  correctWindowWidth = 2;
+  correctWindowHeight = 2;
+#endif // defined(Q_OS_LINUX)
+
   // log flush
   if (outputLog){
 	cout << flush;

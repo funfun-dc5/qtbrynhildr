@@ -13,6 +13,8 @@ case $UNAME in
 		make clean
 		popd
 		rm -rf ../dist/doc/manual/*
+		# delete files for install
+		./install clean
 		echo "Done."
 		;;
 	Linux)
@@ -24,6 +26,8 @@ case $UNAME in
 		make clean
 		popd
 		rm -rf ../dist/doc/manual/*
+		# delete files for install
+		./install clean
 		echo "Done."
 		;;
     *)

@@ -80,8 +80,10 @@ japanese.BeveledLabel=Japanese
 english.BeveledLabel=English
 
 [CustomMessages]
-japanese.MakeShortcut="デスクトップにショートカットアイコンを作成する"
-english.MakeShortcut="Make shortcut icon on desktop"
+japanese.MakeShortcut=デスクトップにショートカットアイコンを作成する
+english.MakeShortcut=Make shortcut icon on desktop
+japanese.ManualShortcut=はじめて の Qt Brynhildr(Ver.0.9.2)
+english.ManualShortcut=First step of Qt Brynhildr(Ver.0.9.2)
 
 [Files]
 ; ランタイム
@@ -117,7 +119,7 @@ Name: "{group}\Qt Brynhildr"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir:
 Name: "{commondesktop}\Qt Brynhildr ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; マニュアル
-Name: "{commondesktop}\はじめて の QtBrynhildr(Ver.0.9.2)"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\{cm:ManualShortcut}"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; ランタイム
 ;;Name: "{commondesktop}\vcredist"; Filename: "{app}\vcredist\vcredist_x86.exe"; WorkingDir: "{app}"; Tasks: desktopicon

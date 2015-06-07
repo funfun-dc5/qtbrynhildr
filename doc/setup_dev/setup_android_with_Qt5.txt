@@ -24,4 +24,5 @@ http://dl.google.com/android/ndk/android-ndk-r10d-windows-x86.exe
 
 6) execute setup script
 
- cd qtbrynhildr/src; ./setup
+ cd qtbrynhildr/src
+ ./setup

@@ -12,10 +12,11 @@
  (*) If you don't have g++ command, do "sudo apt-get install g++"
      and you may have to do "sudo apt-get install libglu1-mesa-dev" for openGL.
 
-1) build crypt++ library
+1) check setup script (src/setup)
 
-2) check setup script (src/setup)
+2) run src/setup
 
-3) run src/setup
+ cd qtbrynhildr/src
+ ./setup
 
-4) make
+3) make

@@ -9,7 +9,9 @@
 (1).Qt Brynhildrのダウンロード
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
- すみません、まだダウンロード先は決まっていません。決まり次第追記します。
+ 以下からダウンロードします。
+
+ <https://github.com/funfun-dc5/qtbrynhildr/releases>
 
  [64bit版]
 

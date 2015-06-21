@@ -15,6 +15,14 @@
 
  詳細は別途ブログに投稿予定です。
 
+ ソースコードは以下で公開しています。
+
+ <https://github.com/funfun-dc5/qtbrynhildr.git>
+
+ 関連記事は以下です。
+
+ <http://mcz-xoxo.cocolog-nifty.com/blog/2015/06/ver101-8e35.html>
+
  .. [#] Windowsネイティブに特化するなら「ブリュンヒルデ零式改(zeroshikikai.cpp)」をベースに
         するという解もありますよ。
 

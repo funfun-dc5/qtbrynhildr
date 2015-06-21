@@ -212,13 +212,17 @@ PROCESS_RESULT ControlThread::processForHeader()
   // check result
   if (com_data->mode != sentMode){
 	switch(com_data->mode){
+	case MODE_RESULT_PASSWORD_ERROR:
+	  // password error
+	  return PROCESS_PASSWORD_ERROR;
+	  break;
 	case MODE_RESULT_CONNECT_ERROR:
 	  // connect error
 	  return PROCESS_CONNECT_ERROR;
 	  break;
-	case MODE_RESULT_PASSWORD_ERROR:
-	  // password error
-	  return PROCESS_PASSWORD_ERROR;
+	case MODE_RESULT_CONNECT_WAIT:
+	  // wait for connect
+	  return PROCESS_SUCCEEDED;
 	  break;
 	default:
 	  // unknown error

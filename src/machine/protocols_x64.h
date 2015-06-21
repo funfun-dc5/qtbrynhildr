@@ -90,8 +90,9 @@ typedef int		VIDEO_QUALITY;
 typedef	int		MODE;
 #define MODE_PUBLIC						5	// public mode
 // result value
-#define MODE_RESULT_CONNECT_ERROR		-1	// connect error
 #define MODE_RESULT_PASSWORD_ERROR		0	// password error
+#define MODE_RESULT_CONNECT_ERROR		-1	// connect error
+#define MODE_RESULT_CONNECT_WAIT		-2	// connect wait
 
 // sound quality
 typedef	int		SOUND_QUALITY;

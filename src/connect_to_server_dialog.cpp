@@ -23,7 +23,8 @@ namespace qtbrynhildr {
 ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 											 QWidget *parent)
   :
-  QDialog(parent),
+  //  QDialog(parent),
+  QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
   settings(settings),
   // for DEBUG
   outputLog(false)

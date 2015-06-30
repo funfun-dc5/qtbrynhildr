@@ -17,6 +17,7 @@ FORMS += GUI/desktop_scaling_dialog.ui
 
 # for MinGW
 win32 {
+DEFINES += QWT_DLL
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr_resource.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp

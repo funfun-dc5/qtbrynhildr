@@ -42,6 +42,8 @@ typedef enum {
 // LogMessage
 class LogMessage : public QMessageBox
 {
+  Q_OBJECT
+
 public:
   // constructor
   LogMessage(QWidget *parent);

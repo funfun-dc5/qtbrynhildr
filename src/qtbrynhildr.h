@@ -151,6 +151,12 @@ private slots:
   void sendKey_CTRL_ESC(); // CTRL + ESC
   void sendKey_WINDOWS(); // WINDOWS
 
+  // toggle show menu bar
+  void toggleShowMenuBar();
+
+  // toggle show status bar
+  void toggleShowStatusBar();
+
   // full screen
   void fullScreen();
 
@@ -229,6 +235,9 @@ private:
   // File Menu
   QMenu *fileMenu;
 
+  // Display Menu
+  QMenu *displayMenu;
+
   // Video Menu
   QMenu *videoMenu;
 
@@ -287,11 +296,17 @@ private:
   // video Quality MAXIMUM
   QAction *videoQuality_MAXIMUM_Action;
 
-  // full screen
-  QAction *fullScreen_Action;
+  // show menu bar
+  QAction *showMenuBar_Action;
+
+  // show status bar
+  QAction *showStatusBar_Action;
 
   // stays on top
   QAction *staysOnTop_Action;
+
+  // full screen
+  QAction *fullScreen_Action;
 
   // desktop scaling
   QAction *desktopScalingDialog_Action;

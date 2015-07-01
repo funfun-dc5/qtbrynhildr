@@ -35,15 +35,27 @@ public:
   }
 
   // get correct widow width
-  int geCorrectWindowWidth() const
+  int getCorrectWindowWidth() const
   {
 	return correctWindowWidth;
   }
 
   // get correct widow height
-  int geCorrectWindowHeight() const
+  int getCorrectWindowHeight() const
   {
 	return correctWindowHeight;
+  }
+
+  // get height of menu bar in hiding
+  int getHeightOfMenuBarInHiding() const
+  {
+	return heightOfMenuBarInHiding;
+  }
+
+  // get height of status bar in hiding
+  int getHeightOfStatusBarInHiding() const
+  {
+	return heightOfStatusBarInHiding;
   }
 
 private:
@@ -58,6 +70,12 @@ private:
 
   // correct window height
   int correctWindowHeight;
+
+  // height of menu bar in hiding
+  int heightOfMenuBarInHiding;
+
+  // height of status bar in hiding
+  int heightOfStatusBarInHiding;
 
   // output log flag
   const bool outputLog;

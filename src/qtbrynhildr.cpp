@@ -196,6 +196,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   createContextMenu();
   createToolBars();
   createStatusBar();
+  // show or hide
+  menuBar()->setVisible(settings->getOnShowMenuBar());
+  statusBar()->setVisible(settings->getOnShowStatusBar());
 
   // set icon
   //  setWindowIcon(QIcon(QTB_ICON_FILENAME));
@@ -204,7 +207,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   setWindowTitle(tr(QTB_APPLICATION));
 
   // set window flags
-  //  setWindowFlags(Qt::FramelessWindowHint);
+  if (settings->getOnFrameLessWindow()){
+	setWindowFlags(Qt::FramelessWindowHint);
+  }
 
   // refresh window
   refreshWindow();
@@ -388,6 +393,11 @@ void QtBrynhildr::refreshWindow()
 								 ")");
   }
 
+  // refresh desktop
+  if (settings->getConnected()){
+	mainWindow->refreshDesktop();
+  }
+
   // update status bar
   updateStatusBar();
 }
@@ -522,6 +532,38 @@ void QtBrynhildr::createActions()
   about_Action->setStatusTip(tr("Show Qt Brynhildr"));
   connect(about_Action, SIGNAL(triggered()), this, SLOT(about()));
 
+  // Show Menu Bar
+  showMenuBar_Action = new QAction(tr("Show Menu Bar"), this);
+  showMenuBar_Action->setStatusTip(tr("Show Menu Bar"));
+  showMenuBar_Action->setCheckable(true);
+  showMenuBar_Action->setChecked(settings->getOnShowMenuBar());
+  connect(showMenuBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowMenuBar()));
+
+  // Show Status Bar
+  showStatusBar_Action = new QAction(tr("Show Status Bar"), this);
+  showStatusBar_Action->setStatusTip(tr("Show Status Bar"));
+  showStatusBar_Action->setCheckable(true);
+  showStatusBar_Action->setChecked(settings->getOnShowStatusBar());
+  connect(showStatusBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowStatusBar()));
+
+  // Full Screen
+  if (QTB_DESKTOP_FULL_SCREEN){
+	fullScreen_Action = new QAction(tr("Full Screen"), this);
+	fullScreen_Action->setStatusTip(tr("Full Screen"));
+	fullScreen_Action->setCheckable(true);
+	fullScreen_Action->setChecked(false);
+	connect(fullScreen_Action, SIGNAL(triggered()), this, SLOT(fullScreen()));
+  }
+
+  // Stays On Top
+  if (QTB_DESKTOP_STAYS_ON_TOP){
+	staysOnTop_Action = new QAction(tr("Stays On Top"), this);
+	staysOnTop_Action->setStatusTip(tr("Stays On Top"));
+	staysOnTop_Action->setCheckable(true);
+	staysOnTop_Action->setChecked(settings->getOnStaysOnTop());
+	connect(staysOnTop_Action, SIGNAL(triggered()), this, SLOT(toggleStaysOnTop()));
+  }
+
   // Video Quality Action MINIMUM
   videoQuality_MINIMUM_Action = new QAction(tr("Video Quality: Minimum"), this);
   videoQuality_MINIMUM_Action->setCheckable(true);
@@ -556,24 +598,6 @@ void QtBrynhildr::createActions()
   videoQuality_MAXIMUM_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_MAXIMUM);
   videoQuality_MAXIMUM_Action->setStatusTip(tr("Video Quality: Maximum"));
   connect(videoQuality_MAXIMUM_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_MAXIMUM()));
-
-  // Full Screen
-  if (QTB_DESKTOP_FULL_SCREEN){
-	fullScreen_Action = new QAction(tr("Full Screen"), this);
-	fullScreen_Action->setStatusTip(tr("Full Screen"));
-	fullScreen_Action->setCheckable(true);
-	fullScreen_Action->setChecked(false);
-	connect(fullScreen_Action, SIGNAL(triggered()), this, SLOT(fullScreen()));
-  }
-
-  // Stays On Top
-  if (QTB_DESKTOP_STAYS_ON_TOP){
-	staysOnTop_Action = new QAction(tr("Stays On Top"), this);
-	staysOnTop_Action->setStatusTip(tr("Stays On Top"));
-	staysOnTop_Action->setCheckable(true);
-	staysOnTop_Action->setChecked(settings->getOnStaysOnTop());
-	connect(staysOnTop_Action, SIGNAL(triggered()), this, SLOT(toggleStaysOnTop()));
-  }
 
   // Deskop Scaling Action
   if (QTB_DESKTOP_IMAGE_SCALING){
@@ -801,6 +825,21 @@ void QtBrynhildr::createMenus()
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
 
+  // display menu
+  displayMenu = menuBar()->addMenu(tr("&Display"));
+  displayMenu->addAction(showMenuBar_Action);
+  displayMenu->addAction(showStatusBar_Action);
+  // for stays on top
+  if (QTB_DESKTOP_STAYS_ON_TOP){
+	displayMenu->addSeparator();
+	displayMenu->addAction(staysOnTop_Action);
+  }
+  // for full screen
+  if (QTB_DESKTOP_FULL_SCREEN){
+	displayMenu->addSeparator();
+	displayMenu->addAction(fullScreen_Action);
+  }
+
   // video menu
   videoMenu = menuBar()->addMenu(tr("&Video"));
   videoMenu->addAction(videoQuality_MINIMUM_Action);
@@ -820,18 +859,6 @@ void QtBrynhildr::createMenus()
   selectFrameRateSubMenu->addAction(selectFrameRate50_Action);
   selectFrameRateSubMenu->addAction(selectFrameRate60_Action);
   selectFrameRateSubMenu->addAction(selectFrameRateMaximum_Action);
-
-  // for full screen
-  if (QTB_DESKTOP_FULL_SCREEN){
-	videoMenu->addSeparator();
-	videoMenu->addAction(fullScreen_Action);
-  }
-
-  // for stays on top
-  if (QTB_DESKTOP_STAYS_ON_TOP){
-	videoMenu->addSeparator();
-	videoMenu->addAction(staysOnTop_Action);
-  }
 
   // for scaling
   if (QTB_DESKTOP_IMAGE_SCALING){
@@ -1002,9 +1029,9 @@ void QtBrynhildr::readSettings()
   resize(rect.size());
 
   // set maximum width & height
-  int targetWidth = rect.size().width() + settings->getDesktop()->geCorrectWindowWidth();
+  int targetWidth = rect.size().width() + settings->getDesktop()->getCorrectWindowWidth();
   setMaximumWidth(targetWidth);
-  int targetHeight = rect.size().height() + heightOfMenuBar + heightOfStatusBar + settings->getDesktop()->geCorrectWindowHeight();
+  int targetHeight = rect.size().height() + heightOfMenuBar + heightOfStatusBar + settings->getDesktop()->getCorrectWindowHeight();
   setMaximumHeight(targetHeight);
 }
 
@@ -1487,6 +1514,34 @@ void QtBrynhildr::sendKey_WINDOWS()
 	// release
 	keyBuffer->put(VK_LWIN,	KEYCODE_FLG_KEYUP); // Windows key release
   }
+}
+
+// toggle show menu bar
+void QtBrynhildr::toggleShowMenuBar()
+{
+  if (settings->getOnShowMenuBar()){
+	settings->setOnShowMenuBar(false);
+	menuBar()->setVisible(false);
+  }
+  else {
+	settings->setOnShowMenuBar(true);
+	menuBar()->setVisible(true);
+  }
+  refreshWindow();
+}
+
+// toggle show status bar
+void QtBrynhildr::toggleShowStatusBar()
+{
+  if (settings->getOnShowStatusBar()){
+	settings->setOnShowStatusBar(false);
+	statusBar()->setVisible(false);
+  }
+  else {
+	settings->setOnShowStatusBar(true);
+	statusBar()->setVisible(true);
+  }
+  refreshWindow();
 }
 
 // full screen

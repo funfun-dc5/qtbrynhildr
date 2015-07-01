@@ -162,6 +162,18 @@ typedef int SCALING_TYPE;
 #define QTB_ONSTAYSONTOP					"onStaysOnTop"
 #define QTB_ONSTAYSONTOP_DEFAULT			false
 
+// for onFrameLessWindow
+#define QTB_ONFRAMELESSWINDOW				"onFrameLessWindow"
+#define QTB_ONFRAMELESSWINDOW_DEFAULT		false
+
+// for onShowMenuBar
+#define QTB_ONSHOWMENUBAR					"onShowMenuBar"
+#define QTB_ONSHOWMENUBAR_DEFAULT			true
+
+// for onShowStatusBar
+#define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
+#define QTB_ONSHOWSTATUSBAR_DEFAULT			true
+
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE			"graphicsBufferSize"
 #define QTB_GRAPHICSBUFFERSIZE_DEFAULT	(1024 * 1024)
@@ -739,6 +751,42 @@ public:
 	this->onStaysOnTop = onStaysOnTop;
   }
 
+  // get frame less window flag
+  bool getOnFrameLessWindow() const
+  {
+	return onFrameLessWindow;
+  }
+
+  // set frame less window flag
+  void setOnFrameLessWindow(bool onFrameLessWindow)
+  {
+	this->onFrameLessWindow = onFrameLessWindow;
+  }
+
+  // get show menu bar flag
+  bool getOnShowMenuBar() const
+  {
+	return onShowMenuBar;
+  }
+
+  // set show menu bar flag
+  void setOnShowMenuBar(bool onShowMenuBar)
+  {
+	this->onShowMenuBar = onShowMenuBar;
+  }
+
+  // get show status bar flag
+  bool getOnShowStatusBar() const
+  {
+	return onShowStatusBar;
+  }
+
+  // set show status bar flag
+  void setOnShowStatusBar(bool onShowStatusBar)
+  {
+	this->onShowStatusBar = onShowStatusBar;
+  }
+
   // get on scroll mode flag
   bool getOnScrollMode() const
   {
@@ -903,6 +951,15 @@ private:
 
   // stays on top
   volatile bool onStaysOnTop;
+
+  // frame less window
+  volatile bool onFrameLessWindow;
+
+  // show menu bar
+  volatile bool onShowMenuBar;
+
+  // show status bar
+  volatile bool onShowStatusBar;
 
   // scroll mode
   volatile bool onScrollMode;

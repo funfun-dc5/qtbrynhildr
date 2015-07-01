@@ -92,7 +92,7 @@
  Ubuntu 15.04ではQtが5.4.1にアップデートされましたのでこの作業は不要です。
  恐らく(4)も不要です。但し、メニューの場所はシステム設定によって変わります。
 
- 同じウィンドウにメニューバーを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
+ 同じウィンドウにメニューを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
  Qt Brynhildrを起動してください。Qt Brynhildr実行時だけ変えたい場合は例えば
 
  env UBUNTU_MENUPROXY=0 ./dist_ubuntu_x64/bin/qtbrynhildr

@@ -1,5 +1,7 @@
 # setup for Qt5
 #
+UNAME=`uname`
+UNAMEM=`uname -m`
 case $UNAME in
 	CYGWIN*)
 		QTROOT="/c/Tools/develop/Qt/Qt5.5.0/5.5/mingw492_32"

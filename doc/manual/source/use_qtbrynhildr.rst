@@ -47,6 +47,22 @@
 
  .. image:: images/confirm_dialog.jpg
 
+* 「表示」メニュー
+
+ .. image:: images/menu_display.jpg
+
+ * 「メニューバーを表示」
+
+   メニューバーの表示のON/OFFを変更します。
+
+ * 「ステータスバーを表示」
+
+   ステータスバーの表示のON/OFFを変更します。
+
+ * 「常に最前面に表示」
+
+   常に最前面に表示します。
+
 * 「ビデオ」メニュー
 
  .. image:: images/menu_video.jpg
@@ -61,10 +77,6 @@
    画面書き換えの頻度(FPS(Frame Per Second))の最大値(maxfps)を変更します。
 
  .. image:: images/menu_video_framerate.jpg
-
- * 「常に最前面に表示」
-
-   常に最前面に表示します。
 
  * 「デスクトップのスケーリング」
 

@@ -77,23 +77,33 @@ Desktop::Desktop()
   if (kernelVersion.startsWith("6.3")){			// Windows 8.1
 	correctWindowWidth = 2;
 	correctWindowHeight = 5;
+	heightOfMenuBarInHiding = -1;
+	heightOfStatusBarInHiding = -2;
   }
   else if (kernelVersion.startsWith("6.2")){	// Windows 8
 	correctWindowWidth = 2;
 	correctWindowHeight = 5;
+	heightOfMenuBarInHiding = -1;
+	heightOfStatusBarInHiding = -2;
   }
   else if (kernelVersion.startsWith("6.1")){	// Windows 7
 	correctWindowWidth = 2;
 	correctWindowHeight = 8;
+	heightOfMenuBarInHiding = -1;
+	heightOfStatusBarInHiding = -4;
   }
   else {
 	// NOT supported Version
 	correctWindowWidth = 2;
 	correctWindowHeight = 5;
+	heightOfMenuBarInHiding = -1;
+	heightOfStatusBarInHiding = -2;
   }
 #elif defined(Q_OS_LINUX)
   correctWindowWidth = 2;
   correctWindowHeight = 2;
+  heightOfMenuBarInHiding = -1;
+  heightOfStatusBarInHiding = 0;
 #endif // defined(Q_OS_LINUX)
 
   // log flush

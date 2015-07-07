@@ -56,6 +56,9 @@ public:
   // refresh desktop window
   void refreshDesktop(QImage image);
 
+  // refresh desktop window
+  void refreshDesktop();
+
   // clear desktop window
   void clearDesktop();
 
@@ -116,6 +119,12 @@ private:
   // get desktop scaling factor
   qreal getDesktopScalingFactor(QSize targetSize);
 
+  // get height of menu bar
+  int getHeightOfMenuBar();
+
+  // get height of status bar
+  int getHeightOfStatusBar();
+
 private:
   // settings
   Settings *settings;
@@ -158,6 +167,12 @@ private:
 
   // height of status bar
   int heightOfStatusBar;
+
+  // height of menu bar in hiding
+  int heightOfMenuBarInHiding;
+
+  // height of status bar in hiding
+  int heightOfStatusBarInHiding;
 };
 
 } // end of namespace qtbrynhildr

@@ -74,6 +74,11 @@ Settings::Settings(const char *iniFileName)
 
   setOnStaysOnTop(QTB_ONSTAYSONTOP_DEFAULT);
 
+  setOnFrameLessWindow(QTB_ONFRAMELESSWINDOW_DEFAULT);
+
+  setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
+  setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
+
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
 
@@ -185,11 +190,23 @@ void Settings::readSettings()
 
   // load onConfirmAtExit
   setOnConfirmAtExit(settings->value(QTB_ONCONFIRMATEXIT,
-							 QTB_ONCONFIRMATEXIT_DEFAULT).toBool());
+									 QTB_ONCONFIRMATEXIT_DEFAULT).toBool());
 
   // load onStaysOnTop
   setOnStaysOnTop(settings->value(QTB_ONSTAYSONTOP,
-							 QTB_ONSTAYSONTOP_DEFAULT).toBool());
+								  QTB_ONSTAYSONTOP_DEFAULT).toBool());
+
+  // load onFrameLessWindow
+  setOnFrameLessWindow(settings->value(QTB_ONFRAMELESSWINDOW,
+									   QTB_ONFRAMELESSWINDOW_DEFAULT).toBool());
+
+  // load onShowMenuBar
+  setOnShowMenuBar(settings->value(QTB_ONSHOWMENUBAR,
+								   QTB_ONSHOWMENUBAR_DEFAULT).toBool());
+
+  // load onShowStatusBar
+  setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
+								   QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
 
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
@@ -287,6 +304,15 @@ void Settings::writeSettings()
   // save onStaysOnTop
   settings->setValue(QTB_ONSTAYSONTOP, onStaysOnTop);
 
+  // save onFrameLessWindow
+  settings->setValue(QTB_ONFRAMELESSWINDOW, onFrameLessWindow);
+
+  // save onShowMenuBar
+  settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
+
+  // save onShowStatusBar
+  settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
+
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
 
@@ -338,6 +364,9 @@ void Settings::printSettings() const
   qDebug() << "MonitorNo               : " << monitorNo;
   qDebug() << "ConfirmAtExit           : " << onConfirmAtExit;
   qDebug() << "StaysOnTop              : " << onStaysOnTop;
+  qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
+  qDebug() << "ShowMenuBar             : " << onShowMenuBar;
+  qDebug() << "ShowStatusBar           : " << onShowStatusBar;
 
   qDebug() << "------------------------------------------";
   qDebug() << "Graphics Buffer Size (bytes) : " << graphicsBufferSize;

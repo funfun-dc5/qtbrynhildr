@@ -38,7 +38,9 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
   outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
   outputLogForMouse(QTB_DEBUG_MOUSE),
   heightOfMenuBar(0),
-  heightOfStatusBar(0)
+  heightOfStatusBar(0),
+  heightOfMenuBarInHiding(0),
+  heightOfStatusBarInHiding(0)
 {
   // save parent
   this->parent = parent;
@@ -55,6 +57,10 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
 
   // create mouse buffer
   mouseBuffer = new MouseBuffer(QTB_MOUSE_BUFFER_SIZE);
+
+  // set parameters
+  heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
+  heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
 }
 
 // destructor
@@ -147,27 +153,42 @@ void MainWindow::refreshDesktop(QImage image)
 	previousSize = size;
 	// resize main window
 	resize(size.width(), size.height());
-	// set maximum width & height
-	int targetWidth = size.width() + settings->getDesktop()->geCorrectWindowWidth();
-	int targetHeight = size.height() + heightOfMenuBar + heightOfStatusBar + settings->getDesktop()->geCorrectWindowHeight();
-	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
-	if (targetWidth > screenSize.width()){
-	  targetWidth = screenSize.width();
-	}
-	if (targetHeight > screenSize.height()){
-	  targetHeight = screenSize.height();
-	}
-	parent->setMaximumWidth(targetWidth);
-	parent->setMaximumHeight(targetHeight);
-	if (QTB_FIXED_MAINWINDOW_SIZE){
-	  if (settings->getOnKeepOriginalDesktopSize()){
-		parent->resize(targetWidth, targetHeight);
-	  }
-	}
 
-	// refresh image
-	update();
+	// refresh
+	refreshDesktop();
   }
+}
+
+// reflesh desktop window
+void MainWindow::refreshDesktop()
+{
+  // check size
+  if (size.width() < 0 || size.height() < 0){
+	// size is null value
+	// Nothing to do
+	return;
+  }
+
+  // set maximum width & height
+  int targetWidth = size.width() + settings->getDesktop()->getCorrectWindowWidth();
+  int targetHeight = size.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+  QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+  if (targetWidth > screenSize.width()){
+	targetWidth = screenSize.width();
+  }
+  if (targetHeight > screenSize.height()){
+	targetHeight = screenSize.height();
+  }
+  parent->setMaximumWidth(targetWidth);
+  parent->setMaximumHeight(targetHeight);
+  if (QTB_FIXED_MAINWINDOW_SIZE){
+	if (settings->getOnKeepOriginalDesktopSize()){
+	  parent->resize(targetWidth, targetHeight);
+	}
+  }
+
+  // refresh image
+  update();
 }
 
 // clear desktop window
@@ -526,6 +547,28 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
   }
 
   return scalingFactor;
+}
+
+// get height of menu bar
+int MainWindow::getHeightOfMenuBar()
+{
+  if (settings->getOnShowMenuBar()){
+	return heightOfMenuBar;
+  }
+  else {
+	return heightOfMenuBarInHiding;
+  }
+}
+
+// get height of status bar
+int MainWindow::getHeightOfStatusBar()
+{
+  if (settings->getOnShowStatusBar()){
+	return heightOfStatusBar;
+  }
+  else {
+	return heightOfStatusBarInHiding;
+  }
 }
 
 // minimum size hint

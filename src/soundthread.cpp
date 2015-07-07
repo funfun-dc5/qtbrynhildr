@@ -254,9 +254,10 @@ void SoundThread::shutdownConnection()
 // change samplerate
 bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 {
-#if 0 // for DEBUG
-  cout << "[called] changeSamplerate(" << samplerate << ")" << endl << flush;
-#endif
+  if (settings->getOutputLog()){
+	cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << endl << flush;
+  }
+
   if (format == 0){
 	format = new QAudioFormat();
   }
@@ -282,10 +283,13 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	if (settings->getOutputLog()){
 	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
 	  emit outputLogMessage(PHASE_SOUND, msg);
-	  QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
-	  qDebug() << "supported Sample Rates : " << sampleRatesList;
 	}
 	return true; // NOT supported sample rate
+  }
+  // supported Sample Rates
+  if (settings->getOutputLog()){
+	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
+	qDebug() << "supported Sample Rates : " << sampleRatesList;
   }
   // clean sound buffer
   soundBuffer->clear();

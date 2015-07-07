@@ -23,13 +23,13 @@
 
 (2).Qt5のダウンロード [1]_
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- [64bit版 Qt5.4.1]
+ [64bit版 Qt5.5.0]
 
- <http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linux-x64-5.4.1.run>
+ <http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x64-5.5.0.run>
 
- [32bit版 Qt5.4.1]
+ [32bit版 Qt5.5.0]
 
- <http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linux-x86-5.4.1.run>
+ <http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x86-5.5.0.run>
 
 2. Qt5のインストール [1]_
 --------------------------

@@ -1,0 +1,45 @@
+# setup for Qt5
+#
+case $UNAME in
+	CYGWIN*)
+		QTROOT="/c/Tools/develop/Qt/Qt5.5.0/5.5/mingw492_32"
+#		QTROOT="/c/Tools/develop/Qt/Qt5.4.1/5.4/mingw491_32"
+		if [ -n "$1" ] ; then
+			case $1 in
+				static)
+					QTROOT="/d/QtInstall/src/qt5.5.0static/qtbase"
+#					QTROOT="/d/QtInstall/src/qt5.4.1static/qtbase"
+					echo "set up for Static link."
+					;;
+				clean)
+					# ignore
+					;;
+				*)
+					echo "Unkown argument : $1"
+					exit 1
+					;;
+			esac
+		else
+			echo "set up for Dynamic link."
+		fi
+	;;
+	Linux)
+		export UNAMEM=`uname -m`
+		case $UNAMEM in
+			x86_64)
+				QTROOT=/opt/Qt5.5.0/5.5/gcc_64
+#				QTROOT=/opt/Qt5.4.1/5.4/gcc_64
+				;;
+			i686)
+				QTROOT=/opt/Qt5.5.0/5.5/gcc
+#				QTROOT=/opt/Qt5.4.1/5.4/gcc
+				;;
+			*)
+				echo "Not Support $UNAMEM"
+				return;;
+		esac
+		;;
+    *)
+		echo "Not support platform."
+		;;
+esac

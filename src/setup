@@ -1,28 +1,16 @@
 #!/bin/bash
-# for Qt on Windows
+UNAME=`uname`
+UNAMEM=`uname -m`
 PRO="qtbrynhildr.pro"
+
+source ./setup_qt5 $1
+
+./clean
+rm -f Makefile Makefile.Release Makefile.Debug
+${QTROOT}/bin/qmake ${PRO}
 
 case $UNAME in
 	CYGWIN*)
-		# check arg1
-		QTROOT="/c/Tools/develop/Qt/Qt5.4.1/5.4/mingw491_32/bin"
-		if [ -n "$1" ] ; then
-			case $1 in
-				static)
-					QTROOT="/d/QtInstall/src/qt5.4.1static/qtbase/bin"
-					echo "set up for Static link."
-					;;
-				*)
-					echo "Unkown argument : $1"
-					exit 1
-					;;
-			esac
-		else
-			echo "set up for Dynamic link."
-		fi
-		./clean
-		rm -f Makefile Makefile.Release Makefile.Debug
-		${QTROOT}/qmake ${PRO}
 		chmod 644 Makefile
 		if [ -e Makefile.Release ]; then
 			chmod 644 Makefile.Release
@@ -33,23 +21,6 @@ case $UNAME in
 		echo "Done."
 		;;
 	Linux)
-		export UNAMEM=`uname -m`
-		case $UNAMEM in
-			x86_64)
-#				QTROOT=/opt/Qt5.4.2/5.4/gcc_64/bin
-				QTROOT=/opt/Qt5.4.1/5.4/gcc_64/bin
-				;;
-			i686)
-#				QTROOT=/opt/Qt5.4.2/5.4/gcc/bin
-				QTROOT=/opt/Qt5.4.1/5.4/gcc/bin
-				;;
-			*)
-				echo "Not Support $UNAMEM"
-				return;;
-		esac
-		rm -f Makefile Makefile.Release Makefile.Debug
-		${QTROOT}/qmake ${PRO}
-		./clean
 		echo "Done."
 		;;
     *)

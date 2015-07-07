@@ -12,15 +12,15 @@
 
  <https://github.com/funfun-dc5/qtbrynhildr/releases>
 
-(2) Visual C++ 2010 x86 Redistributable のダウンロード
+(2) Visual C++ 2013 x86 Redistributable のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  Windows版ではランタイムライブラリパッケージ
 
-  Visual C++ 2010 x86 Redistributable
+  Visual C++ 2013 x86 Redistributable
 
  が必要な場合があります。例えば以下から入手できます。
 
- <http://www.microsoft.com/ja-jp/download/details.aspx?id=8328>
+ <https://www.microsoft.com/ja-jp/download/details.aspx?id=40784>
 
 2. インストール
 ---------------

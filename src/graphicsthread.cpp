@@ -180,6 +180,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
 	else {
 	  // NG
+	  if (outputLog){
+		cout << "[GraphicsThread:debug] Received Image Data Size = " << receivedDataSize << endl << flush;
+	  }
 	  // Failed to load JPEG image
 	  return TRANSMIT_FAILED_IMAGE_DRAW;
 	}

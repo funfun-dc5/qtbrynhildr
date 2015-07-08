@@ -535,6 +535,7 @@ void QtBrynhildr::createActions()
   // Show Menu Bar
   showMenuBar_Action = new QAction(tr("Show Menu Bar"), this);
   showMenuBar_Action->setStatusTip(tr("Show Menu Bar"));
+  showMenuBar_Action->setEnabled(false); // for TEST
   showMenuBar_Action->setCheckable(true);
   showMenuBar_Action->setChecked(settings->getOnShowMenuBar());
   connect(showMenuBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowMenuBar()));

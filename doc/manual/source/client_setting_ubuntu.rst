@@ -139,3 +139,14 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
    ~/.config/mcz-xoxo/Qt Brynhildr.ini
 
   オプションにファイル名を与えることで変更できます。
+
+..
+       Ubuntu 15.04でQtが5.4.1にアップデートされましたのでQt5のインストールは不要です。
+       但しメニューの場所はシステム設定によって変わります。
+
+       同じウィンドウにメニューバーを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
+       Qt Brynhildrを起動してください。Qt Brynhildr実行時だけ変えたい場合は例えば
+
+       env UBUNTU_MENUPROXY=0 ./dist_ubuntu_x64/bin/qtbrynhildr
+
+       という感じです。

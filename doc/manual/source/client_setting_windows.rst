@@ -20,7 +20,7 @@
 
  が必要な場合があります。例えば以下から入手できます。
 
- <https://www.microsoft.com/ja-jp/download/details.aspx?id=40784>
+ <http://www.microsoft.com/ja-jp/download/details.aspx?id=40784>
 
 2. インストール
 ---------------

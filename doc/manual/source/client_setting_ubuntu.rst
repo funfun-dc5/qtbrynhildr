@@ -21,8 +21,8 @@
 
    qtbrynhildr-ubuntu_x86-v100.run
 
-(2).Qt5のダウンロード [1]_
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(2).Qt5のダウンロード
+^^^^^^^^^^^^^^^^^^^^^
  [64bit版 Qt5.5.0]
 
  <http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x64-5.5.0.run>
@@ -31,11 +31,15 @@
 
  <http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x86-5.5.0.run>
 
-2. Qt5のインストール [1]_
+2. Qt5のインストール
 --------------------------
 
 (1) インストーラ起動
 ^^^^^^^^^^^^^^^^^^^^
+.. image:: images/ubuntu_installer00.png
+
+.. image:: images/ubuntu_installer01.png
+
 .. image:: images/ubuntu_installer1.png
 
 (2) インストール先の選択
@@ -66,13 +70,15 @@
 ^^^^^^^^^^^^^^^^^^^^
 .. image:: images/ubuntu_installer8.png
 
-3. Qt5のアンインストール [1]_
-------------------------------
+3. Qt5のアンインストール
+------------------------
 
 (1) メンテナンスツール起動
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 root権限でQt5.x.x/MaintenanceToolを実行してください。
+
+.. image:: images/ubuntu_uninstaller0.png
 
 .. image:: images/ubuntu_uninstaller1.png
 
@@ -128,18 +134,8 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
 * 設定ファイル
 
-  標準では以下のファイルに保存されます。::
+  標準では以下のファイルに保存されます。 ::
 
    ~/.config/mcz-xoxo/Qt Brynhildr.ini
 
   オプションにファイル名を与えることで変更できます。
-
-.. [1] Ubuntu 15.04でQtが5.4.1にアップデートされましたのでQt5のインストールは不要です。
-       但しメニューの場所はシステム設定によって変わります。
-
-       同じウィンドウにメニューバーを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
-       Qt Brynhildrを起動してください。Qt Brynhildr実行時だけ変えたい場合は例えば
-
-       env UBUNTU_MENUPROXY=0 ./dist_ubuntu_x64/bin/qtbrynhildr
-
-       という感じです。

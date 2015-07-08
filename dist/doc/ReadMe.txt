@@ -466,7 +466,7 @@ Visual C++ 2013 x86 Redistributable
 
 例えば以下から入手できます。
 
-https://www.microsoft.com/ja-jp/download/details.aspx?id=40784
+http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
 ----------------------------------------------------------------------
 7. メッセージダイアログについて
@@ -820,4 +820,3 @@ http://mcz-xoxo.cocolog-nifty.com/blog/
 https://github.com/funfun-dc5/qtbrynhildr.git
 
 ----------------------------------------------------------------------
-HBD : 19950604, 19960611, 19930621

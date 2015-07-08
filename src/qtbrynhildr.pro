@@ -13,6 +13,7 @@ TRANSLATIONS = translations/qtbrynhildr_ja_JP.ts
 FORMS = GUI/connect_to_server_dialog.ui
 FORMS += GUI/desktop_scaling_dialog.ui
 
+# for DEBUG
 #CONFIG += console
 
 # for MinGW

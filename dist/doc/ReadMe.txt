@@ -88,32 +88,20 @@
 
  (1) Qt5をインストールします。(すでにインストール済みの場合はスキップしてください)
 
- ***********************************************************************************
- Ubuntu 15.04ではQtが5.4.1にアップデートされましたのでこの作業は不要です。
- 恐らく(4)も不要です。但し、メニューの場所はシステム設定によって変わります。
-
- 同じウィンドウにメニューを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
- Qt Brynhildrを起動してください。Qt Brynhildr実行時だけ変えたい場合は例えば
-
- env UBUNTU_MENUPROXY=0 ./dist_ubuntu_x64/bin/qtbrynhildr
-
- という感じです。
- ***********************************************************************************
-
  以下を環境に合わせてダウンロードします。
 
 [64bit]
-http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linux-x64-5.4.1.run
+http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x64-5.5.0.run
 
 [32bit]
-http://download.qt-project.org/official_releases/qt/5.4/5.4.1/qt-opensource-linux-x86-5.4.1.run
+http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x86-5.5.0.run
 
  root権限で実行してください、インストーラが表示されます。
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.4.1.run
- sudo ./qt-opensource-linux-x64-5.4.1.run
+ chmod 755 ./qt-opensource-linux-x64-5.5.0.run
+ sudo ./qt-opensource-linux-x64-5.5.0.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
@@ -472,13 +460,13 @@ geometry=@Rect(200 200 800 600)
 ----------------------------------------------------------------------
 Windows版ではランタイムライブラリパッケージ
 
-Visual C++ 2010 x86 Redistributable
+Visual C++ 2013 x86 Redistributable
 
 が必要な場合があります。
 
 例えば以下から入手できます。
 
-http://www.microsoft.com/ja-jp/download/details.aspx?id=8328
+http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
 ----------------------------------------------------------------------
 7. メッセージダイアログについて
@@ -590,7 +578,7 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=8328
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
-Ver.2.0.0 : [新規機能]
+Ver.1.1.0 : [新規機能]
              ・「表示」メニューを追加
              ・メニューバー表示/非表示(「表示」メニュー)
              ・ステータスバー表示/非表示(「表示」メニュー)
@@ -598,6 +586,9 @@ Ver.2.0.0 : [新規機能]
             [その他変更]
              ・「最前面に表示」を「表示」メニューへ移動
              ・フレームレスウィンドウ化のフラグ追加 (タッチパネルデバイス用)
+             ・Qtの環境を5.4.1からQt5.5.0へ更新
+                (1) キーボードニーモニックが正しく表示されるようになった
+                (2) サウンドの音質のサポートが改善された
 
 Ver.1.0.3 : [不具合修正]
              ・メッセージが一部正しく翻訳されない不具合修正
@@ -829,4 +820,3 @@ http://mcz-xoxo.cocolog-nifty.com/blog/
 https://github.com/funfun-dc5/qtbrynhildr.git
 
 ----------------------------------------------------------------------
-HBD : 19950604, 19960611, 19930621

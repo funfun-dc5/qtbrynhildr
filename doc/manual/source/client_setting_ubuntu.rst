@@ -23,22 +23,24 @@
 
 (2).Qt5のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^
- [64bit版 Qt5.5.0]
+ [64bit版 Qt5.4.2]
 
- <http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x64-5.5.0.run>
+ <http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x64-5.4.2.run>
 
- [32bit版 Qt5.5.0]
+ [32bit版 Qt5.4.2]
 
- <http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x86-5.5.0.run>
+ <http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run>
 
 2. Qt5のインストール
 --------------------------
 
 (1) インストーラ起動
 ^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_installer00.png
+..
+ image:: images/ubuntu_installer00.png
 
-.. image:: images/ubuntu_installer01.png
+..
+ image:: images/ubuntu_installer01.png
 
 .. image:: images/ubuntu_installer1.png
 
@@ -78,7 +80,8 @@
 
 root権限でQt5.x.x/MaintenanceToolを実行してください。
 
-.. image:: images/ubuntu_uninstaller0.png
+..
+ image:: images/ubuntu_uninstaller0.png
 
 .. image:: images/ubuntu_uninstaller1.png
 

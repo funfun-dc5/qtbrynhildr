@@ -20,6 +20,8 @@
 
      C:\Users\ユーザ名\AppData\Local\VirtualStore\Program Files (x86)\QtBrynhildr\qtbrynhildr.log
 
+ 2. キーボードニーモニックが正しく表示されない場合があります。(Qt5.4の既知の不具合)
+
 3. Ubuntu版のみの制限
 ---------------------
 

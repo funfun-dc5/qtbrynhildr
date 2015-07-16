@@ -90,18 +90,18 @@
 
  以下を環境に合わせてダウンロードします。
 
-[64bit]
-http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x64-5.5.0.run
+ [64bit]
+ http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x64-5.4.2.run
 
-[32bit]
-http://download.qt-project.org/official_releases/qt/5.5/5.5.0/qt-opensource-linux-x86-5.5.0.run
+ [32bit]
+ http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run
 
  root権限で実行してください、インストーラが表示されます。
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.5.0.run
- sudo ./qt-opensource-linux-x64-5.5.0.run
+ chmod 755 ./qt-opensource-linux-x64-5.4.2.run
+ sudo ./qt-opensource-linux-x64-5.4.2.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
@@ -509,6 +509,8 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
  C:\Users\ユーザ名\AppData\Local\VirtualStore\Program Files (x86)\QtBrynhildr\qtbrynhildr.log
 
+ (2) キーボードニーモニックが正しく表示されない場合があります。(Qt5.4の既知の不具合)
+
 ----------------------------------------------------------------------
 8-3. Ubuntu版のみの制限
 ----------------------------------------------------------------------
@@ -578,6 +580,15 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.1.1.1 : [不具合修正]
+             ・他のサウンド再生アプリケーションと同時に利用できない不具合への対応
+               (Ubuntu x86版のみ)
+
+            [その他変更]
+             ・サウンド再生の安定性の確保のためQtの環境を5.5.0からQt5.4.2へバージョンダウン
+               (*) Ver.1.1.0の[その他変更] (1), (2)は再度無効となる
+             ・ドキュメント修正
+
 Ver.1.1.0 : [新規機能]
              ・「表示」メニューを追加
              ・メニューバー表示/非表示(「表示」メニュー)
@@ -820,3 +831,4 @@ http://mcz-xoxo.cocolog-nifty.com/blog/
 https://github.com/funfun-dc5/qtbrynhildr.git
 
 ----------------------------------------------------------------------
+HBD : 19940712

@@ -30,6 +30,7 @@
 #include "mainwindow.h"
 #include "option.h"
 #include "settings.h"
+#include "software_keyboard.h"
 
 // thread
 #include "controlthread.h"
@@ -227,6 +228,9 @@ private:
   QLabel *locationLabel;
   // formula label
   QLabel *formulaLabel;
+
+  // software keyboard
+  SoftwareKeyboard *softwareKeyboard;
 
   // ------------------------------------------------------------
   // Menu

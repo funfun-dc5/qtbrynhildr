@@ -24,7 +24,7 @@ public:
 
   // key id
   typedef enum {
-	ID_KEY_1 = 0,
+	ID_KEY_1 = 1,
 	ID_KEY_2,
 	ID_KEY_3,
 	ID_KEY_4,
@@ -91,7 +91,7 @@ public:
 	ID_KEY_65,
 	ID_KEY_66,
 	ID_KEY_67,
-	ID_KEY_NUM
+	ID_KEY_NUM = ID_KEY_67
   } ID_KEY;
 
 protected:
@@ -247,8 +247,17 @@ protected:
   // shift key status
   bool onShiftKey;
 
+  // control key status
+  bool onControlKey;
+
+  // alt key status
+  bool onAltKey;
+
   // Fn key status
   bool onFnKey;
+
+  // windows key status
+  bool onWindowsKey;
 
   // output log flag
   bool outputLog;

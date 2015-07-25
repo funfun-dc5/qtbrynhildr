@@ -24,7 +24,10 @@ SoftwareKeyboard::SoftwareKeyboard(KeyBuffer *keyBuffer, QWidget *parent)
   :
   keyBuffer(keyBuffer),
   onShiftKey(false),
+  onControlKey(false),
+  onAltKey(false),
   onFnKey(false),
+  onWindowsKey(false),
   // for DEBUG
   outputLog(true)
 {

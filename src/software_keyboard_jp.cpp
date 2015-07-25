@@ -23,8 +23,8 @@ SoftwareKeyboard_JP::SoftwareKeyboard_JP(KeyBuffer *keyBuffer, QWidget *parent)
   :
   SoftwareKeyboard(keyBuffer, parent)
 {
-  // update key top text
-  updateKeyTopText();
+  // initialize key top text
+  initializeKeyTopText();
 }
 
 //---------------------------------------------------------------------------
@@ -33,13 +33,50 @@ SoftwareKeyboard_JP::SoftwareKeyboard_JP(KeyBuffer *keyBuffer, QWidget *parent)
 // pressed key
 void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 {
-  if (outputLog)
+  if (outputLog){
 	cout << "Pressed Key! id = " << id << endl << flush;
+	if (onShiftKey)
+	  cout << "Pressed : " << keyTopTextWithShift[id-1] << endl << flush;
+	else if (onFnKey)
+	  cout << "Pressed : " << keyTopTextWithFn[id-1] << endl << flush;
+	else
+	  cout << "Pressed : " << keyTopText[id-1] << endl << flush;
+  }
 
   switch(id){
   case ID_KEY_1:
-	// VK_ESCAPE
-	cout << "Pressed : VK_ESCAPE" << endl << flush;
+	// ESC
+	break;
+  case ID_KEY_43:
+  case ID_KEY_56:
+	// Shift
+	onShiftKey = !onShiftKey;
+	cout << "onShiftKey : " << onShiftKey << endl << flush;
+	pressedShiftKey();
+	break;
+  case ID_KEY_30:
+  case ID_KEY_62:
+	// Control
+	onControlKey = !onControlKey;
+	cout << "onControlKey : " << onControlKey << endl << flush;
+	break;
+  case ID_KEY_57:
+  case ID_KEY_64:
+	// Fn
+	onFnKey = !onFnKey;
+	cout << "onFnKey : " << onFnKey << endl << flush;
+	pressedFnKey();
+	break;
+  case ID_KEY_58:
+  case ID_KEY_63:
+	// Alt
+	onAltKey = !onAltKey;
+	cout << "onAltKey : " << onAltKey << endl << flush;
+	break;
+  case ID_KEY_59:
+	// Windows
+	onWindowsKey = !onWindowsKey;
+	cout << "onWindowsKey : " << onWindowsKey << endl << flush;
 	break;
   default:
 	// unknown
@@ -55,7 +92,7 @@ void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
 }
 
 // update key top text
-void SoftwareKeyboard_JP::updateKeyTopText()
+void SoftwareKeyboard_JP::initializeKeyTopText()
 {
   pushButton_1->setText("ESC");
   pushButton_2->setText("1");
@@ -124,6 +161,90 @@ void SoftwareKeyboard_JP::updateKeyTopText()
   pushButton_65->setText("\342\206\220");
   pushButton_66->setText("\342\206\223");
   pushButton_67->setText("\342\206\222");
+}
+
+// shift key
+void SoftwareKeyboard_JP::pressedShiftKey()
+{
+  if (onShiftKey){
+	// pressed
+	pushButton_2->setText("!");
+	pushButton_3->setText("\"");
+	pushButton_4->setText("#");
+	pushButton_5->setText("$");
+	pushButton_6->setText("%");
+	pushButton_7->setText("&");
+	pushButton_8->setText("'");
+	pushButton_9->setText("(");
+	pushButton_10->setText(")");
+	pushButton_12->setText("=");
+	pushButton_13->setText("~");
+	pushButton_14->setText("|");
+	pushButton_27->setText("`");
+	pushButton_28->setText("{");
+	pushButton_40->setText("+");
+	pushButton_41->setText("*");
+	pushButton_42->setText("}");
+	pushButton_51->setText("<");
+	pushButton_52->setText(">");
+	pushButton_53->setText("?");
+	pushButton_54->setText("_");
+  }
+  else {
+	// released
+	pushButton_2->setText("1");
+	pushButton_3->setText("2");
+	pushButton_4->setText("3");
+	pushButton_5->setText("4");
+	pushButton_6->setText("5");
+	pushButton_7->setText("6");
+	pushButton_8->setText("7");
+	pushButton_9->setText("8");
+	pushButton_10->setText("9");
+	pushButton_12->setText("-");
+	pushButton_13->setText("^");
+	pushButton_14->setText("\\");
+	pushButton_27->setText("@");
+	pushButton_28->setText("[");
+	pushButton_40->setText(";");
+	pushButton_41->setText(":");
+	pushButton_42->setText("]");
+	pushButton_51->setText(",");
+	pushButton_52->setText(".");
+	pushButton_53->setText("/");
+	pushButton_54->setText("\\");
+  }
+}
+
+// Fn key
+void SoftwareKeyboard_JP::pressedFnKey()
+{
+  if (onFnKey){
+	// pressed
+	pushButton_2->setText("F1");
+	pushButton_3->setText("F2");
+	pushButton_4->setText("F3");
+	pushButton_5->setText("F4");
+	pushButton_6->setText("F5");
+	pushButton_7->setText("F6");
+	pushButton_8->setText("F7");
+	pushButton_9->setText("F8");
+	pushButton_10->setText("F9");
+	pushButton_11->setText("F10");
+  }
+  else {
+	// released
+	pushButton_2->setText("1");
+	pushButton_3->setText("2");
+	pushButton_4->setText("3");
+	pushButton_5->setText("4");
+	pushButton_6->setText("5");
+	pushButton_7->setText("6");
+	pushButton_8->setText("7");
+	pushButton_9->setText("8");
+	pushButton_10->setText("9");
+	pushButton_11->setText("0");
+  }
 }
 
 } // end of namespace qtbrynhildr

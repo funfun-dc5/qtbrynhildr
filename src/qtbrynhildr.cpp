@@ -183,7 +183,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   mainWindow = new MainWindow(settings, this);
   // set Widget
 #if 1 // for testing Software Keyboard
-  softwareKeyboard = new SoftwareKeyboard(this);
+  softwareKeyboard = new SoftwareKeyboard_JP(mainWindow->getKeyBuffer(), this);
   scrollArea->setWidget(softwareKeyboard);
 #else
   scrollArea->setWidget(mainWindow);

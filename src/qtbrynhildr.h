@@ -31,6 +31,7 @@
 #include "option.h"
 #include "settings.h"
 #include "software_keyboard.h"
+#include "software_keyboard_jp.h"
 
 // thread
 #include "controlthread.h"

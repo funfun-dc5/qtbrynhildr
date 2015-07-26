@@ -256,9 +256,6 @@ protected:
   // Fn key status
   bool onFnKey;
 
-  // windows key status
-  bool onWindowsKey;
-
   // output log flag
   bool outputLog;
 };

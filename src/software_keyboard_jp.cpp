@@ -69,11 +69,6 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 	onAltKey = !onAltKey;
 	cout << "onAltKey : " << onAltKey << endl << flush;
 	break;
-  case ID_KEY_59:
-	// Windows
-	onWindowsKey = !onWindowsKey;
-	cout << "onWindowsKey : " << onWindowsKey << endl << flush;
-	break;
   case ID_KEY_57:
   case ID_KEY_64:
 	// Fn
@@ -102,7 +97,6 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 		// Nothing to do
 		break;
 	  }
-	  onFnKey = false; // Just for once
 	}
 	else { // except for Fn keys
 	  if (onShiftKey){
@@ -110,15 +104,9 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 	  }
 	  if (onControlKey){
 		keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYDOWN);
-		onControlKey = false; // Just for once
 	  }
 	  if (onAltKey){
 		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYDOWN);
-		onAltKey = false; // Just for once
-	  }
-	  if (onWindowsKey){
-		keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYDOWN);
-		onWindowsKey = false; // Just for once
 	  }
 	  keyBuffer->put(VK_Code[id], KEYCODE_FLG_KEYDOWN);
 	}
@@ -155,8 +143,6 @@ void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
   case ID_KEY_58:
   case ID_KEY_63:
 	// Alt
-  case ID_KEY_59:
-	// Windows
   case ID_KEY_57:
   case ID_KEY_64:
 	// Fn
@@ -165,17 +151,36 @@ void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
   default:
 	if (onFnKey){
 	  // Fn keys
+	  switch(id){
+	  case ID_KEY_2:	// F1
+	  case ID_KEY_3:	// F2
+	  case ID_KEY_4:	// F3
+	  case ID_KEY_5:	// F4
+	  case ID_KEY_6:	// F5
+	  case ID_KEY_7:	// F6
+	  case ID_KEY_8:	// F7
+	  case ID_KEY_9:	// F8
+	  case ID_KEY_10:	// F9
+	  case ID_KEY_11:	// F10
+		// send Fn key
+		keyBuffer->put(VK_F1 + (id - ID_KEY_2), KEYCODE_FLG_KEYUP);
+		break;
+	  default:
+		// Nothing to do
+		break;
+	  }
+	  onFnKey = false; // Just for once
+	  pressedFnKey();
 	}
 	else { // except for Fn keys
 	  keyBuffer->put(VK_Code[id], KEYCODE_FLG_KEYUP);
-	  if (onWindowsKey){
-		keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYUP);
-	  }
 	  if (onAltKey){
 		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYUP);
+		onAltKey = false; // Just for once
 	  }
 	  if (onControlKey){
 		keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP);
+		onControlKey = false; // Just for once
 	  }
 	  if (onShiftKey){
 		keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);

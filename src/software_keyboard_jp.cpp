@@ -79,23 +79,9 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
   default:
 	if (onFnKey){
 	  // Fn keys
-	  switch(id){
-	  case ID_KEY_2:	// F1
-	  case ID_KEY_3:	// F2
-	  case ID_KEY_4:	// F3
-	  case ID_KEY_5:	// F4
-	  case ID_KEY_6:	// F5
-	  case ID_KEY_7:	// F6
-	  case ID_KEY_8:	// F7
-	  case ID_KEY_9:	// F8
-	  case ID_KEY_10:	// F9
-	  case ID_KEY_11:	// F10
-		// send Fn key
-		keyBuffer->put(VK_F1 + (id - ID_KEY_2), KEYCODE_FLG_KEYDOWN);
-		break;
-	  default:
-		// Nothing to do
-		break;
+	  char key = VK_CodeWithFn[id];
+	  if (key != VK_NONE_00){
+		keyBuffer->put(key, KEYCODE_FLG_KEYDOWN);
 	  }
 	}
 	else { // except for Fn keys
@@ -151,36 +137,18 @@ void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
   default:
 	if (onFnKey){
 	  // Fn keys
-	  switch(id){
-	  case ID_KEY_2:	// F1
-	  case ID_KEY_3:	// F2
-	  case ID_KEY_4:	// F3
-	  case ID_KEY_5:	// F4
-	  case ID_KEY_6:	// F5
-	  case ID_KEY_7:	// F6
-	  case ID_KEY_8:	// F7
-	  case ID_KEY_9:	// F8
-	  case ID_KEY_10:	// F9
-	  case ID_KEY_11:	// F10
-		// send Fn key
-		keyBuffer->put(VK_F1 + (id - ID_KEY_2), KEYCODE_FLG_KEYUP);
-		break;
-	  default:
-		// Nothing to do
-		break;
+	  char key = VK_CodeWithFn[id];
+	  if (key != VK_NONE_00){
+		keyBuffer->put(key, KEYCODE_FLG_KEYUP);
 	  }
-	  onFnKey = false; // Just for once
-	  pressedFnKey();
 	}
 	else { // except for Fn keys
 	  keyBuffer->put(VK_Code[id], KEYCODE_FLG_KEYUP);
 	  if (onAltKey){
 		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYUP);
-		onAltKey = false; // Just for once
 	  }
 	  if (onControlKey){
 		keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP);
-		onControlKey = false; // Just for once
 	  }
 	  if (onShiftKey){
 		keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
@@ -332,6 +300,28 @@ void SoftwareKeyboard_JP::pressedFnKey()
 	pushButton_9->setText("F8");
 	pushButton_10->setText("F9");
 	pushButton_11->setText("F10");
+	pushButton_12->setText("F11");
+	pushButton_13->setText("F12");
+	pushButton_14->setText("Ins");
+	pushButton_15->setText("Del");
+
+	pushButton_27->setText("");
+	pushButton_28->setText("");
+
+	pushButton_40->setText("");
+	pushButton_41->setText("Pause");
+	pushButton_42->setText("PrtS");
+
+	pushButton_51->setText("");
+	pushButton_52->setText("");
+	pushButton_53->setText("");
+	pushButton_54->setText("");
+	pushButton_55->setText("PgU");
+
+	pushButton_65->setText("Home");
+	pushButton_66->setText("PgD");
+	pushButton_67->setText("End");
+
   }
   else {
 	// released
@@ -345,6 +335,27 @@ void SoftwareKeyboard_JP::pressedFnKey()
 	pushButton_9->setText("8");
 	pushButton_10->setText("9");
 	pushButton_11->setText("0");
+	pushButton_12->setText("-");
+	pushButton_13->setText("^");
+	pushButton_14->setText("\\");
+	pushButton_15->setText("BS");
+
+	pushButton_27->setText("@");
+	pushButton_28->setText("[");
+
+	pushButton_40->setText(";");
+	pushButton_41->setText(":");
+	pushButton_42->setText("]");
+
+	pushButton_51->setText(",");
+	pushButton_52->setText(".");
+	pushButton_53->setText("/");
+	pushButton_54->setText("\\");
+	pushButton_55->setText("\342\206\221");
+
+	pushButton_65->setText("\342\206\220");
+	pushButton_66->setText("\342\206\223");
+	pushButton_67->setText("\342\206\222");
   }
 }
 

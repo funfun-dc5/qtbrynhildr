@@ -32,6 +32,9 @@
 #include "settings.h"
 #include "software_keyboard.h"
 #include "software_keyboard_jp.h"
+#if 1 // for TEST
+#include "software_keyboard_dialog.h"
+#endif
 
 // thread
 #include "controlthread.h"
@@ -451,6 +454,10 @@ private:
 
   // height of status bar
   int heightOfStatusBar;
+
+#if 1 // for TEST
+  SoftwareKeyboardDialog *softwareKeyboardDialog;
+#endif
 };
 
 } // end of namespace qtbrynhildr

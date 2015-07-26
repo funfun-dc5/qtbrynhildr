@@ -36,17 +36,20 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
   if (outputLog){
 	cout << "Pressed Key! id = " << id << endl << flush;
 	if (onShiftKey)
-	  cout << "Pressed : " << keyTopTextWithShift[id-1] << endl << flush;
+	  cout << "Pressed : " << keyTopTextWithShift[id] << endl << flush;
 	else if (onFnKey)
-	  cout << "Pressed : " << keyTopTextWithFn[id-1] << endl << flush;
+	  cout << "Pressed : " << keyTopTextWithFn[id] << endl << flush;
 	else
-	  cout << "Pressed : " << keyTopText[id-1] << endl << flush;
+	  cout << "Pressed : " << keyTopText[id] << endl << flush;
+  }
+
+  // check id
+  if (id <= 0 || id > ID_KEY_NUM){
+	// error
+	return;
   }
 
   switch(id){
-  case ID_KEY_1:
-	// ESC
-	break;
   case ID_KEY_43:
   case ID_KEY_56:
 	// Shift
@@ -60,13 +63,6 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 	onControlKey = !onControlKey;
 	cout << "onControlKey : " << onControlKey << endl << flush;
 	break;
-  case ID_KEY_57:
-  case ID_KEY_64:
-	// Fn
-	onFnKey = !onFnKey;
-	cout << "onFnKey : " << onFnKey << endl << flush;
-	pressedFnKey();
-	break;
   case ID_KEY_58:
   case ID_KEY_63:
 	// Alt
@@ -78,8 +74,31 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 	onWindowsKey = !onWindowsKey;
 	cout << "onWindowsKey : " << onWindowsKey << endl << flush;
 	break;
+  case ID_KEY_57:
+  case ID_KEY_64:
+	// Fn
+	onFnKey = !onFnKey;
+	cout << "onFnKey : " << onFnKey << endl << flush;
+	pressedFnKey();
+	break;
   default:
-	// unknown
+	if (onFnKey){
+	}
+	else { // except for Fn keys
+	  if (onShiftKey){
+		keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYDOWN);
+	  }
+	  if (onControlKey){
+		keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYDOWN);
+	  }
+	  if (onAltKey){
+		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYDOWN);
+	  }
+	  if (onWindowsKey){
+		keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYDOWN);
+	  }
+	  keyBuffer->put(VK_Code[id], KEYCODE_FLG_KEYDOWN);
+	}
 	break;
   }
 }
@@ -87,8 +106,59 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 // released key
 void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
 {
-  if (outputLog)
+  if (outputLog){
 	cout << "Released Key! id = " << id << endl << flush;
+	if (onShiftKey)
+	  cout << "Released : " << keyTopTextWithShift[id] << endl << flush;
+	else if (onFnKey)
+	  cout << "Released : " << keyTopTextWithFn[id] << endl << flush;
+	else
+	  cout << "Released : " << keyTopText[id] << endl << flush;
+  }
+
+  // check id
+  if (id <= 0 || id > ID_KEY_NUM){
+	// error
+	return;
+  }
+
+  switch(id){
+  case ID_KEY_43:
+  case ID_KEY_56:
+	// Shift
+  case ID_KEY_30:
+  case ID_KEY_62:
+	// Control
+  case ID_KEY_58:
+  case ID_KEY_63:
+	// Alt
+  case ID_KEY_59:
+	// Windows
+  case ID_KEY_57:
+  case ID_KEY_64:
+	// Fn
+	// Nothig to do
+	break;
+  default:
+	if (onFnKey){
+	}
+	else { // except for Fn keys
+	  keyBuffer->put(VK_Code[id], KEYCODE_FLG_KEYUP);
+	  if (onWindowsKey){
+		keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYUP);
+	  }
+	  if (onAltKey){
+		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYUP);
+	  }
+	  if (onControlKey){
+		keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP);
+	  }
+	  if (onShiftKey){
+		keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
+	  }
+	}
+	break;
+  }
 }
 
 // update key top text

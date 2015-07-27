@@ -244,7 +244,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD){
 	softwareKeyboard = new SoftwareKeyboard_JP(mainWindow->getKeyBuffer(), this);
-	softwareButton = new SoftwareButton(mainWindow->getMouseBuffer(), this);
+	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
 #if 1 // for TEST
 	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
 	softwareButtonDialog = new SoftwareButtonDialog(softwareButton, this);

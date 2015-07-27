@@ -48,6 +48,10 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   :
   desktopScalingDialog(0),
+  softwareKeyboard(0),
+#if 1 // for TEST
+  softwareKeyboardDialog(0),
+#endif
   frameCounter(0),
   option(0),
   iniFileName(0),
@@ -184,11 +188,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   // set Widget
   scrollArea->setWidget(mainWindow);
   setCentralWidget(scrollArea);
-#if 1 // for testing Software Keyboard
-  softwareKeyboard = new SoftwareKeyboard_JP(mainWindow->getKeyBuffer(), this);
-  softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
-  softwareKeyboardDialog->show();
-#endif
 #else
   // Main Window Widget
   mainWindow = new MainWindow(settings, this);
@@ -238,6 +237,14 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
 	desktopScalingDialog = new DesktopScalingDialog(settings, this);
+  }
+
+  // Software Keyboard
+  if (QTB_SOFTWARE_KEYBOARD){
+	softwareKeyboard = new SoftwareKeyboard_JP(mainWindow->getKeyBuffer(), this);
+#if 1 // for TEST
+	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
+#endif
   }
 
   // for Event Converter TEST
@@ -819,6 +826,15 @@ void QtBrynhildr::createActions()
   onScrollMode_Action->setChecked(settings->getOnScrollMode());
   onScrollMode_Action->setStatusTip(tr("Scroll Mode"));
   connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
+
+#if 1 // for TEST
+  // show Software Keyboard
+  showSoftwareKeyboard_Action = new QAction(tr("Software Keyboard"), this);
+  showSoftwareKeyboard_Action->setCheckable(true);
+  showSoftwareKeyboard_Action->setChecked(false);
+  showSoftwareKeyboard_Action->setStatusTip(tr("Software Keyboard"));
+  connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
+#endif
 }
 
 // create Menus
@@ -923,6 +939,9 @@ void QtBrynhildr::createMenus()
 	optionMenu->addSeparator();
 	inTestingSubMenu = optionMenu->addMenu(tr("In Testing"));
 	// in Testing Menu
+#if 1 // for TEST
+	inTestingSubMenu->addAction(showSoftwareKeyboard_Action);
+#endif
   }
 
   menuBar()->addSeparator();
@@ -1716,6 +1735,22 @@ void QtBrynhildr::toggleOnScrollMode()
 	settings->setOnScrollMode(true);
   }
 }
+
+#if 1 // for TEST
+  // software keyboard
+void QtBrynhildr::toggleShowSoftwareKeyboard()
+{
+  static bool showSoftwareKeyboard = false;
+  if (showSoftwareKeyboard){
+	softwareKeyboardDialog->hide();
+  }
+  else {
+	softwareKeyboardDialog->show();
+  }
+  showSoftwareKeyboard = ! showSoftwareKeyboard;
+  showSoftwareKeyboard_Action->setChecked(showSoftwareKeyboard);
+}
+#endif
 
 // toggle outputLog
 void QtBrynhildr::toggleOutputLog()

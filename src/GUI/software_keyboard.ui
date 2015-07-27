@@ -36,105 +36,105 @@
      <item>
       <widget class="QPushButton" name="pushButton_1">
        <property name="text">
-        <string>ESC</string>
+        <string notr="true">ESC</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">
        <property name="text">
-        <string>1</string>
+        <string notr="true">1</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_3">
        <property name="text">
-        <string>2</string>
+        <string notr="true">2</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_4">
        <property name="text">
-        <string>3</string>
+        <string notr="true">3</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_5">
        <property name="text">
-        <string>4</string>
+        <string notr="true">4</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_6">
        <property name="text">
-        <string>5</string>
+        <string notr="true">5</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_7">
        <property name="text">
-        <string>6</string>
+        <string notr="true">6</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_8">
        <property name="text">
-        <string>7</string>
+        <string notr="true">7</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_9">
        <property name="text">
-        <string>8</string>
+        <string notr="true">8</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_10">
        <property name="text">
-        <string>9</string>
+        <string notr="true">9</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_11">
        <property name="text">
-        <string>0</string>
+        <string notr="true">0</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_12">
        <property name="text">
-        <string>-</string>
+        <string notr="true">-</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_13">
        <property name="text">
-        <string>^</string>
+        <string notr="true">^</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_14">
        <property name="text">
-        <string>\</string>
+        <string notr="true">\</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_15">
        <property name="text">
-        <string>BS</string>
+        <string notr="true">BS</string>
        </property>
       </widget>
      </item>
@@ -151,98 +151,98 @@
      <item>
       <widget class="QPushButton" name="pushButton_16">
        <property name="text">
-        <string>Tab</string>
+        <string notr="true">Tab</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_17">
        <property name="text">
-        <string>Q</string>
+        <string notr="true">Q</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_18">
        <property name="text">
-        <string>W</string>
+        <string notr="true">W</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_19">
        <property name="text">
-        <string>E</string>
+        <string notr="true">E</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_20">
        <property name="text">
-        <string>R</string>
+        <string notr="true">R</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_21">
        <property name="text">
-        <string>T</string>
+        <string notr="true">T</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_22">
        <property name="text">
-        <string>Y</string>
+        <string notr="true">Y</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_23">
        <property name="text">
-        <string>U</string>
+        <string notr="true">U</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_24">
        <property name="text">
-        <string>I</string>
+        <string notr="true">I</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_25">
        <property name="text">
-        <string>O</string>
+        <string notr="true">O</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_26">
        <property name="text">
-        <string>P</string>
+        <string notr="true">P</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_27">
        <property name="text">
-        <string>@</string>
+        <string notr="true">@</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_28">
        <property name="text">
-        <string>[</string>
+        <string notr="true">[</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_29">
        <property name="text">
-        <string>RET</string>
+        <string notr="true">RET</string>
        </property>
       </widget>
      </item>
@@ -259,91 +259,91 @@
      <item>
       <widget class="QPushButton" name="pushButton_30">
        <property name="text">
-        <string>Ctrl</string>
+        <string notr="true">Ctrl</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_31">
        <property name="text">
-        <string>A</string>
+        <string notr="true">A</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_32">
        <property name="text">
-        <string>S</string>
+        <string notr="true">S</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_33">
        <property name="text">
-        <string>D</string>
+        <string notr="true">D</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_34">
        <property name="text">
-        <string>F</string>
+        <string notr="true">F</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_35">
        <property name="text">
-        <string>G</string>
+        <string notr="true">G</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_36">
        <property name="text">
-        <string>H</string>
+        <string notr="true">H</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_37">
        <property name="text">
-        <string>J</string>
+        <string notr="true">J</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_38">
        <property name="text">
-        <string>K</string>
+        <string notr="true">K</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_39">
        <property name="text">
-        <string>L</string>
+        <string notr="true">L</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_40">
        <property name="text">
-        <string>;</string>
+        <string notr="true">;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_41">
        <property name="text">
-        <string>:</string>
+        <string notr="true">:</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_42">
        <property name="text">
-        <string>]</string>
+        <string notr="true">]</string>
        </property>
       </widget>
      </item>
@@ -360,98 +360,98 @@
      <item>
       <widget class="QPushButton" name="pushButton_43">
        <property name="text">
-        <string>Shift</string>
+        <string notr="true">Shift</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_44">
        <property name="text">
-        <string>Z</string>
+        <string notr="true">Z</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_45">
        <property name="text">
-        <string>X</string>
+        <string notr="true">X</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_46">
        <property name="text">
-        <string>C</string>
+        <string notr="true">C</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_47">
        <property name="text">
-        <string>V</string>
+        <string notr="true">V</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_48">
        <property name="text">
-        <string>B</string>
+        <string notr="true">B</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_49">
        <property name="text">
-        <string>N</string>
+        <string notr="true">N</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_50">
        <property name="text">
-        <string>M</string>
+        <string notr="true">M</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_51">
        <property name="text">
-        <string>,</string>
+        <string notr="true">,</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_52">
        <property name="text">
-        <string>.</string>
+        <string notr="true">.</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_53">
        <property name="text">
-        <string>/</string>
+        <string notr="true">/</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_54">
        <property name="text">
-        <string>\</string>
+        <string notr="true">\</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_55">
        <property name="text">
-        <string>↑</string>
+        <string notr="true">↑</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_56">
        <property name="text">
-        <string>Shift</string>
+        <string notr="true">Shift</string>
        </property>
       </widget>
      </item>
@@ -468,77 +468,77 @@
      <item>
       <widget class="QPushButton" name="pushButton_57">
        <property name="text">
-        <string>Fn</string>
+        <string notr="true">Fn</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_58">
        <property name="text">
-        <string>Alt</string>
+        <string notr="true">Alt</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_59">
        <property name="text">
-        <string>Windows</string>
+        <string notr="true">Windows</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_60">
        <property name="text">
-        <string>JP</string>
+        <string notr="true">JP</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_61">
        <property name="text">
-        <string>Space</string>
+        <string notr="true">Space</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_62">
        <property name="text">
-        <string>Ctrl</string>
+        <string notr="true">Ctrl</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_63">
        <property name="text">
-        <string>Alt</string>
+        <string notr="true">Alt</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_64">
        <property name="text">
-        <string>Fn</string>
+        <string notr="true">Fn</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_65">
        <property name="text">
-        <string>←</string>
+        <string notr="true">←</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_66">
        <property name="text">
-        <string>↓</string>
+        <string notr="true">↓</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_67">
        <property name="text">
-        <string>→</string>
+        <string notr="true">→</string>
        </property>
       </widget>
      </item>

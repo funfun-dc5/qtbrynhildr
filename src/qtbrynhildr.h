@@ -196,6 +196,11 @@ private slots:
   // scroll mode
   void toggleOnScrollMode();
 
+#if 1 // for TEST
+  // software keyboard
+  void toggleShowSoftwareKeyboard();
+#endif
+
 private:
   // build GUI
   void createActions();
@@ -232,9 +237,6 @@ private:
   QLabel *locationLabel;
   // formula label
   QLabel *formulaLabel;
-
-  // software keyboard
-  SoftwareKeyboard *softwareKeyboard;
 
   // ------------------------------------------------------------
   // Menu
@@ -376,6 +378,13 @@ private:
   // toggle scroll mode
   QAction *onScrollMode_Action;
 
+  // software keyboard
+  SoftwareKeyboard *softwareKeyboard;
+#if 1 // for TEST
+  SoftwareKeyboardDialog *softwareKeyboardDialog;
+  QAction *showSoftwareKeyboard_Action;
+#endif
+
 private:
   // clear Video Quality check
   void clearVideoQualityCheck();
@@ -454,10 +463,6 @@ private:
 
   // height of status bar
   int heightOfStatusBar;
-
-#if 1 // for TEST
-  SoftwareKeyboardDialog *softwareKeyboardDialog;
-#endif
 };
 
 } // end of namespace qtbrynhildr

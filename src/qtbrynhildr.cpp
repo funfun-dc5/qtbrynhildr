@@ -247,6 +247,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #endif
   }
 
+  // Software Button
+  if (QTB_SOFTWARE_KEYBOARD){
+  }
+
   // for Event Converter TEST
   if (QTB_DEBUG_KEYBOARD || QTB_DEBUG_MOUSE){
 	mainWindow->setEventConverter(new EventConverter_JP());
@@ -834,6 +838,13 @@ void QtBrynhildr::createActions()
   showSoftwareKeyboard_Action->setChecked(false);
   showSoftwareKeyboard_Action->setStatusTip(tr("Software Keyboard"));
   connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
+
+  // show Software Button
+  showSoftwareButton_Action = new QAction(tr("Software Button"), this);
+  showSoftwareButton_Action->setCheckable(true);
+  showSoftwareButton_Action->setChecked(false);
+  showSoftwareButton_Action->setStatusTip(tr("Software Button"));
+  connect(showSoftwareButton_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareButton()));
 #endif
 }
 
@@ -941,6 +952,7 @@ void QtBrynhildr::createMenus()
 	// in Testing Menu
 #if 1 // for TEST
 	inTestingSubMenu->addAction(showSoftwareKeyboard_Action);
+	inTestingSubMenu->addAction(showSoftwareButton_Action);
 #endif
   }
 
@@ -1737,7 +1749,7 @@ void QtBrynhildr::toggleOnScrollMode()
 }
 
 #if 1 // for TEST
-  // software keyboard
+// software keyboard
 void QtBrynhildr::toggleShowSoftwareKeyboard()
 {
   static bool showSoftwareKeyboard = false;
@@ -1749,6 +1761,21 @@ void QtBrynhildr::toggleShowSoftwareKeyboard()
   }
   showSoftwareKeyboard = ! showSoftwareKeyboard;
   showSoftwareKeyboard_Action->setChecked(showSoftwareKeyboard);
+}
+
+// software button
+void QtBrynhildr::toggleShowSoftwareButton()
+{
+  bool showSoftwareButton = settings->getOnShowSoftwareButton();
+  if (showSoftwareButton){
+	//	softwareButtonDialog->hide();
+  }
+  else {
+	//	softwareButtonDialog->show();
+  }
+  showSoftwareButton = ! showSoftwareButton;
+  settings->setOnShowSoftwareButton(showSoftwareButton);
+  showSoftwareButton_Action->setChecked(showSoftwareButton);
 }
 #endif
 

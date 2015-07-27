@@ -30,7 +30,8 @@ Settings::Settings(const char *iniFileName)
   bootupFlag(false),
   shutdownFlag(false),
   connected(false),
-  onScrollMode(false)
+  onScrollMode(false),
+  onShowSoftwareButton(false)
 {
   if (iniFileName != 0){
 	settings = new QSettings(iniFileName, QSettings::IniFormat);

@@ -199,6 +199,9 @@ private slots:
 #if 1 // for TEST
   // software keyboard
   void toggleShowSoftwareKeyboard();
+
+  // software button
+  void toggleShowSoftwareButton();
 #endif
 
 private:
@@ -383,6 +386,7 @@ private:
 #if 1 // for TEST
   SoftwareKeyboardDialog *softwareKeyboardDialog;
   QAction *showSoftwareKeyboard_Action;
+  QAction *showSoftwareButton_Action;
 #endif
 
 private:

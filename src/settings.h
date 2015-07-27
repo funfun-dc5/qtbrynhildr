@@ -799,6 +799,18 @@ public:
 	this->onScrollMode = onScrollMode;
   }
 
+  // get on show Software Button flag
+  bool getOnShowSoftwareButton() const
+  {
+	return onShowSoftwareButton;
+  }
+
+  // set on show Software Button flag
+  void setOnShowSoftwareButton(bool onShowSoftwareButton)
+  {
+	this->onShowSoftwareButton = onShowSoftwareButton;
+  }
+
   // get graphics buffer size
   int getGraphicsBufferSize() const
   {
@@ -963,6 +975,9 @@ private:
 
   // scroll mode
   volatile bool onScrollMode;
+
+  // software button
+  volatile bool onShowSoftwareButton;
 
   // buffer
   volatile int graphicsBufferSize;

@@ -28,6 +28,9 @@ const bool QTB_DESKTOP_FRAME_CONTROL	= true;
 // software keyboard
 const bool QTB_SOFTWARE_KEYBOARD		= true;
 
+// software button
+const bool QTB_SOFTWARE_BUTTON			= true;
+
 // translation
 const bool QTB_TRANSLATION				= true;
 

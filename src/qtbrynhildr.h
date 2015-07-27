@@ -30,9 +30,11 @@
 #include "mainwindow.h"
 #include "option.h"
 #include "settings.h"
+#include "software_button.h"
 #include "software_keyboard.h"
 #include "software_keyboard_jp.h"
 #if 1 // for TEST
+#include "software_button_dialog.h"
 #include "software_keyboard_dialog.h"
 #endif
 
@@ -383,8 +385,10 @@ private:
 
   // software keyboard
   SoftwareKeyboard *softwareKeyboard;
+  SoftwareButton *softwareButton;
 #if 1 // for TEST
   SoftwareKeyboardDialog *softwareKeyboardDialog;
+  SoftwareButtonDialog *softwareButtonDialog;
   QAction *showSoftwareKeyboard_Action;
   QAction *showSoftwareButton_Action;
 #endif

@@ -49,8 +49,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   :
   desktopScalingDialog(0),
   softwareKeyboard(0),
+  softwareButton(0),
 #if 1 // for TEST
   softwareKeyboardDialog(0),
+  softwareButtonDialog(0),
 #endif
   frameCounter(0),
   option(0),
@@ -239,16 +241,14 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	desktopScalingDialog = new DesktopScalingDialog(settings, this);
   }
 
-  // Software Keyboard
+  // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD){
 	softwareKeyboard = new SoftwareKeyboard_JP(mainWindow->getKeyBuffer(), this);
+	softwareButton = new SoftwareButton(mainWindow->getMouseBuffer(), this);
 #if 1 // for TEST
 	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
+	softwareButtonDialog = new SoftwareButtonDialog(softwareButton, this);
 #endif
-  }
-
-  // Software Button
-  if (QTB_SOFTWARE_KEYBOARD){
   }
 
   // for Event Converter TEST
@@ -1768,10 +1768,10 @@ void QtBrynhildr::toggleShowSoftwareButton()
 {
   bool showSoftwareButton = settings->getOnShowSoftwareButton();
   if (showSoftwareButton){
-	//	softwareButtonDialog->hide();
+	softwareButtonDialog->hide();
   }
   else {
-	//	softwareButtonDialog->show();
+	softwareButtonDialog->show();
   }
   showSoftwareButton = ! showSoftwareButton;
   settings->setOnShowSoftwareButton(showSoftwareButton);

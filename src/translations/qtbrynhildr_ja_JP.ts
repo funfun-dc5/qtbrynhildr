@@ -77,6 +77,87 @@
     </message>
 </context>
 <context>
+    <name>SoftwareButton</name>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Monitor</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>モニタ</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Option</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>オプション</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Highest</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>最高</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>High</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>高</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Standard</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>標準</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Low</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>低</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Lowest</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>最低</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Sound Quality</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>音質</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Wheel -</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>Wheel -</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Video Quality</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>画質</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Left</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>左ボタン</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Right</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>右ボタン</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Wheel +</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>Wheel +</translation>
+    </message>
+</context>
+<context>
     <name>qtbrynhildr::LogMessage</name>
     <message>
         <location filename="../logmessage.cpp" line="216"/>
@@ -106,7 +187,7 @@
 <context>
     <name>qtbrynhildr::QtBrynhildr</name>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="88"/>
+        <location filename="../qtbrynhildr.cpp" line="90"/>
         <source>Bootup.</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>起動しました。</translation>
@@ -161,13 +242,13 @@
         <translation>Qt Brynhildr について</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="79"/>
+        <location filename="../qtbrynhildr.cpp" line="81"/>
         <source>warning</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="80"/>
+        <location filename="../qtbrynhildr.cpp" line="82"/>
         <source>Failed to open log file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ログファイルのオープンに失敗しました</translation>

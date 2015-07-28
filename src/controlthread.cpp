@@ -244,7 +244,8 @@ PROCESS_RESULT ControlThread::processForHeader()
   if (monitorCount != com_data->monitor_count){
 	monitorCount = com_data->monitor_count;
 	//	cout << "[ControlThread] monitor_count=" << (int)monitorCount << endl << flush;
-	emit setMonitorCount(monitorCount);
+	settings->setMonitorCount(monitorCount);
+	emit refreshMenu();
   }
 
   // counter up

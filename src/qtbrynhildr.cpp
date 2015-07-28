@@ -241,9 +241,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   }
 
   // Software Keyboard and Button
-  if (QTB_SOFTWARE_KEYBOARD){
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this);
 	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
+	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 1 // for TEST
 	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
 	softwareButtonDialog = new SoftwareButtonDialog(softwareButton, this);
@@ -289,8 +290,8 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 		  SLOT(refreshWindow()));
 
   connect(controlThread,
-		  SIGNAL(setMonitorCount(int)),
-		  SLOT(setMonitorCount(int)));
+		  SIGNAL(refreshMenu()),
+		  SLOT(refreshMenu()));
 
   connect(controlThread,
 		  SIGNAL(finished()),
@@ -417,10 +418,81 @@ void QtBrynhildr::refreshWindow()
   updateStatusBar();
 }
 
-// set monitor count
-void QtBrynhildr::setMonitorCount(int monitorCount)
+// refresh menu
+void QtBrynhildr::refreshMenu()
 {
+  // video quality
+  refreshVideoQualityMenu();
+
+  // sound quality
+  refreshSoundQualityMenu();
+
+  // monitor menu
+  refreshMonitorMenu();
+}
+
+// refresh video quality menu
+void QtBrynhildr::refreshVideoQualityMenu()
+{
+  clearVideoQualityCheck();
+  VIDEO_QUALITY videoQuality = settings->getVideoQuality();
+  switch(videoQuality){
+  case VIDEO_QUALITY_MINIMUM:
+	videoQuality_MINIMUM_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_LOW:
+	videoQuality_LOW_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_STANDARD:
+	videoQuality_STANDARD_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_HIGH:
+	videoQuality_HIGH_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_MAXIMUM:
+	videoQuality_MAXIMUM_Action->setChecked(true);
+	break;
+  default:
+	// error
+	ABORT();
+	break;
+  }
+}
+
+// refresh sound quality menu
+void QtBrynhildr::refreshSoundQualityMenu()
+{
+  clearSoundQualityCheck();
+  SOUND_QUALITY soundQuality = settings->getSoundQuality();
+  switch(soundQuality){
+  case SOUND_QUALITY_MINIMUM:
+	soundQuality_MINIMUM_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_LOW:
+	soundQuality_LOW_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_STANDARD:
+	soundQuality_STANDARD_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_HIGH:
+	soundQuality_HIGH_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_MAXIMUM:
+	soundQuality_MAXIMUM_Action->setChecked(true);
+	break;
+  default:
+	// error
+	ABORT();
+	break;
+  }
+}
+
+// refresh monitor menu
+void QtBrynhildr::refreshMonitorMenu()
+{
+  MONITOR_COUNT monitorCount = settings->getMonitorCount();
   //  cout << "[QtBrynhildr] monitor_count=" << monitorCount << endl << flush;
+
   switch(monitorCount){
   case 9:
 	// set available Monitor 9
@@ -463,7 +535,6 @@ void QtBrynhildr::setMonitorCount(int monitorCount)
 	if (monitorCount > 1){
 	  selectMonitorNoAll_Action->setEnabled(true);
 	}
-	settings->setMonitorCount((MONITOR_COUNT)monitorCount);
 	break;
   case 0:
 	// disabled all
@@ -1357,80 +1428,70 @@ void QtBrynhildr::disabledSelectMonitor()
 void QtBrynhildr::setVideoQuality_MINIMUM()
 {
   settings->setVideoQuality(VIDEO_QUALITY_MINIMUM);
-  clearVideoQualityCheck();
-  videoQuality_MINIMUM_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality LOW
 void QtBrynhildr::setVideoQuality_LOW()
 {
   settings->setVideoQuality(VIDEO_QUALITY_LOW);
-  clearVideoQualityCheck();
-  videoQuality_LOW_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality STANDARD
 void QtBrynhildr::setVideoQuality_STANDARD()
 {
   settings->setVideoQuality(VIDEO_QUALITY_STANDARD);
-  clearVideoQualityCheck();
-  videoQuality_STANDARD_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality HIGH
 void QtBrynhildr::setVideoQuality_HIGH()
 {
   settings->setVideoQuality(VIDEO_QUALITY_HIGH);
-  clearVideoQualityCheck();
-  videoQuality_HIGH_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality MAXIMUM
 void QtBrynhildr::setVideoQuality_MAXIMUM()
 {
   settings->setVideoQuality(VIDEO_QUALITY_MAXIMUM);
-  clearVideoQualityCheck();
-  videoQuality_MAXIMUM_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set sound quality MINIMUM
 void QtBrynhildr::setSoundQuality_MINIMUM()
 {
   settings->setSoundQuality(SOUND_QUALITY_MINIMUM);
-  clearSoundQualityCheck();
-  soundQuality_MINIMUM_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality LOW
 void QtBrynhildr::setSoundQuality_LOW()
 {
   settings->setSoundQuality(SOUND_QUALITY_LOW);
-  clearSoundQualityCheck();
-  soundQuality_LOW_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality STANDARD
 void QtBrynhildr::setSoundQuality_STANDARD()
 {
   settings->setSoundQuality(SOUND_QUALITY_STANDARD);
-  clearSoundQualityCheck();
-  soundQuality_STANDARD_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality HIGH
 void QtBrynhildr::setSoundQuality_HIGH()
 {
   settings->setSoundQuality(SOUND_QUALITY_HIGH);
-  clearSoundQualityCheck();
-  soundQuality_HIGH_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality MAXIMUM
 void QtBrynhildr::setSoundQuality_MAXIMUM()
 {
   settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
-  clearSoundQualityCheck();
-  soundQuality_MAXIMUM_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // toggle onControl

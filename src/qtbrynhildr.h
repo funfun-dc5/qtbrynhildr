@@ -87,8 +87,8 @@ public slots:
   // refresh window
   void refreshWindow();
 
-  // set monitor count
-  void setMonitorCount(int monitorCount);
+  // refresh menu
+  void refreshMenu();
 
   // desktop Changed
   void onDesktopChanged(QImage image);
@@ -228,6 +228,15 @@ private:
 
   // disconnected
   void disconnected();
+
+  // refresh monitor menu
+  void refreshMonitorMenu();
+
+  // video quality
+  void refreshVideoQualityMenu();
+
+  // sound quality
+  void refreshSoundQualityMenu();
 
 private:
   // GUI

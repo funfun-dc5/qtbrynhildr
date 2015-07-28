@@ -102,17 +102,13 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	cout << "Pressed Button! id = " << id << endl << flush;
   }
 
-  // check connected
-  if (!settings->getConnected()){
-	return;
-  }
-
   // check id
   if (id <= 0 || id > ID_BUTTON_NUM){
 	// error
 	return;
   }
 
+  bool updated = false;
   MouseInfoValue value;
   value.button = MOUSE_BUTTON_DOWN;
 
@@ -137,11 +133,17 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	  MONITOR_NO monitorNo = id - ID_BUTTON_3 + 1;
 	  if (monitorNo <= settings->getMonitorCount()){
 		settings->setMonitorNo(monitorNo);
+		updated = true;
 	  }
 	}
 	break;
   case ID_BUTTON_12:
 	// Wheel +
+	if (settings->getConnected()){
+	  MouseInfoValue value;
+	  value.wheel = 15; // + 1 tick
+	  mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
+	}
 	break;
   case ID_BUTTON_13:
 	// Sound Quality
@@ -149,25 +151,35 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
   case ID_BUTTON_14:
 	// Sound Quality (Lowest)
 	settings->setSoundQuality(SOUND_QUALITY_MINIMUM);
+	updated = true;
 	break;
   case ID_BUTTON_15:
 	// Sound Quality (Low)
 	settings->setSoundQuality(SOUND_QUALITY_LOW);
+	updated = true;
 	break;
   case ID_BUTTON_16:
 	// Sound Quality (Standard)
 	settings->setSoundQuality(SOUND_QUALITY_STANDARD);
+	updated = true;
 	break;
   case ID_BUTTON_17:
 	// Sound Quality (High)
 	settings->setSoundQuality(SOUND_QUALITY_HIGH);
+	updated = true;
 	break;
   case ID_BUTTON_18:
 	// Sound Quality (Highest)
 	settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
+	updated = true;
 	break;
   case ID_BUTTON_19:
 	// Wheel -
+	if (settings->getConnected()){
+	  MouseInfoValue value;
+	  value.wheel = -15; // - 1 tick
+	  mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
+	}
 	break;
   case ID_BUTTON_20:
 	// Video Quality
@@ -175,33 +187,47 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
   case ID_BUTTON_21:
 	// Video Quality (Lowest)
 	settings->setVideoQuality(VIDEO_QUALITY_MINIMUM);
+	updated = true;
 	break;
   case ID_BUTTON_22:
 	// Video Quality (Low)
 	settings->setVideoQuality(VIDEO_QUALITY_LOW);
+	updated = true;
 	break;
   case ID_BUTTON_23:
 	// Video Quality (Standard)
 	settings->setVideoQuality(VIDEO_QUALITY_STANDARD);
+	updated = true;
 	break;
   case ID_BUTTON_24:
 	// Video Quality (High)
 	settings->setVideoQuality(VIDEO_QUALITY_HIGH);
+	updated = true;
 	break;
   case ID_BUTTON_25:
 	// Video Quality (Highest)
 	settings->setVideoQuality(VIDEO_QUALITY_MAXIMUM);
+	updated = true;
 	break;
   case ID_BUTTON_26:
 	// Mouse Right Button
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	if (settings->getConnected()){
+	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	}
 	break;
   case ID_BUTTON_27:
 	// Mouse Left Button
-	mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	if (settings->getConnected()){
+	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	}
 	break;
   default:
+	// error
+	ABORT();
 	break;
+  }
+  if (updated){
+	emit refreshMenu();
   }
 }
 
@@ -210,11 +236,6 @@ void SoftwareButton::releasedButton(ID_BUTTON id)
 {
   if (outputLog){
 	cout << "Released Button! id = " << id << endl << flush;
-  }
-
-  // check connected
-  if (!settings->getConnected()){
-	return;
   }
 
   // check id
@@ -288,14 +309,19 @@ void SoftwareButton::releasedButton(ID_BUTTON id)
 	break;
   case ID_BUTTON_26:
 	// Mouse Right Button
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	if (settings->getConnected()){
+	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	}
 	break;
   case ID_BUTTON_27:
 	// Mouse Left Button
-	mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	if (settings->getConnected()){
+	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	}
 	break;
   default:
-	// Nothing to do
+	// error
+	ABORT();
 	break;
   }
 }

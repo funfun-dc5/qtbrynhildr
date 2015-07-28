@@ -72,8 +72,8 @@ signals:
   // refresh window
   void refreshWindow();
 
-  // set monitor count
-  void setMonitorCount(int monitorCount);
+  // refresh menu
+  void refreshMenu();
 };
 
 } // end of namespace qtbrynhildr

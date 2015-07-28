@@ -130,6 +130,10 @@ private:
 
   // output log flag
   bool outputLog;
+
+signals:
+  // refresh menu
+  void refreshMenu();
 };
 
 } // end of namespace qtbrynhildr

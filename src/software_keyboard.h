@@ -4,6 +4,9 @@
 
 #ifndef SOFTWARE_KEYBOARD_H
 #define SOFTWARE_KEYBOARD_H
+// System Header
+#include <string>
+
 // Qt Header
 #include <QWidget>
 
@@ -101,6 +104,9 @@ protected:
 
   // released key
   virtual void releasedKey(ID_KEY id) = 0;
+
+  // get name of virtual keycode
+  string getVKCodeByString(uchar vkcode);
 
 private slots:
   // pressed slots

@@ -31,6 +31,7 @@ Settings::Settings(const char *iniFileName)
   shutdownFlag(false),
   connected(false),
   onScrollMode(false),
+  onShowSoftwareKeyboard(false),
   onShowSoftwareButton(false)
 {
   if (iniFileName != 0){

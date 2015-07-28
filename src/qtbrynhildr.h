@@ -393,7 +393,7 @@ private:
   // toggle scroll mode
   QAction *onScrollMode_Action;
 
-  // software keyboard
+  // software keyboard and button
   SoftwareKeyboard *softwareKeyboard;
   SoftwareButton *softwareButton;
 #if 1 // for TEST

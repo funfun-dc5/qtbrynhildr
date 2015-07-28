@@ -1225,6 +1225,11 @@ void QtBrynhildr::connectToServer()
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	if (softwareKeyboard != 0){
+#if 1 // for TEST
+	  if (settings->getOnShowSoftwareKeyboard()){
+		toggleShowSoftwareKeyboard();
+	  }
+#endif
 	  delete softwareKeyboard;
 	  softwareKeyboard = 0;
 	}
@@ -1839,30 +1844,31 @@ void QtBrynhildr::toggleOnScrollMode()
 // software keyboard
 void QtBrynhildr::toggleShowSoftwareKeyboard()
 {
-  static bool showSoftwareKeyboard = false;
-  if (showSoftwareKeyboard){
+  bool onShowSoftwareKeyboard = settings->getOnShowSoftwareKeyboard();
+  if (onShowSoftwareKeyboard){
 	softwareKeyboardDialog->hide();
   }
   else {
 	softwareKeyboardDialog->show();
   }
-  showSoftwareKeyboard = ! showSoftwareKeyboard;
-  showSoftwareKeyboard_Action->setChecked(showSoftwareKeyboard);
+  onShowSoftwareKeyboard = ! onShowSoftwareKeyboard;
+  settings->setOnShowSoftwareKeyboard(onShowSoftwareKeyboard);
+  showSoftwareKeyboard_Action->setChecked(onShowSoftwareKeyboard);
 }
 
 // software button
 void QtBrynhildr::toggleShowSoftwareButton()
 {
-  bool showSoftwareButton = settings->getOnShowSoftwareButton();
-  if (showSoftwareButton){
+  bool onShowSoftwareButton = settings->getOnShowSoftwareButton();
+  if (onShowSoftwareButton){
 	softwareButtonDialog->hide();
   }
   else {
 	softwareButtonDialog->show();
   }
-  showSoftwareButton = ! showSoftwareButton;
-  settings->setOnShowSoftwareButton(showSoftwareButton);
-  showSoftwareButton_Action->setChecked(showSoftwareButton);
+  onShowSoftwareButton = ! onShowSoftwareButton;
+  settings->setOnShowSoftwareButton(onShowSoftwareButton);
+  showSoftwareButton_Action->setChecked(onShowSoftwareButton);
 }
 #endif
 

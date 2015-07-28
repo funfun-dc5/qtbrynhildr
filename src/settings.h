@@ -811,6 +811,18 @@ public:
 	this->onScrollMode = onScrollMode;
   }
 
+  // get on show Software Keyboard flag
+  bool getOnShowSoftwareKeyboard() const
+  {
+	return onShowSoftwareKeyboard;
+  }
+
+  // set on show Software Keyboard flag
+  void setOnShowSoftwareKeyboard(bool onShowSoftwareKeyboard)
+  {
+	this->onShowSoftwareKeyboard = onShowSoftwareKeyboard;
+  }
+
   // get on show Software Button flag
   bool getOnShowSoftwareButton() const
   {
@@ -990,6 +1002,9 @@ private:
 
   // scroll mode
   volatile bool onScrollMode;
+
+  // software keyboard
+  volatile bool onShowSoftwareKeyboard;
 
   // software button
   volatile bool onShowSoftwareButton;

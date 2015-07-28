@@ -65,7 +65,7 @@ class SoftwareKeyboard_JP : public SoftwareKeyboard
 {
 public:
   // constructor
-  SoftwareKeyboard_JP(KeyBuffer *keyBuffer, QWidget *parent = 0);
+  SoftwareKeyboard_JP(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent = 0);
 
 protected:
   // pressed key

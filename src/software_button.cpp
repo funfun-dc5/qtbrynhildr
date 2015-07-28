@@ -102,6 +102,11 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	cout << "Pressed Button! id = " << id << endl << flush;
   }
 
+  // check connected
+  if (!settings->getConnected()){
+	return;
+  }
+
   // check id
   if (id <= 0 || id > ID_BUTTON_NUM){
 	// error
@@ -127,8 +132,13 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
   case ID_BUTTON_9: // monitor No.7
   case ID_BUTTON_10: // monitor No.8
   case ID_BUTTON_11: // monitor No.9
-	// monitor No.1 - No.9
-	settings->setMonitorNo(id - ID_BUTTON_3 + 1);
+	{
+	  // monitor No.1 - No.9
+	  MONITOR_NO monitorNo = id - ID_BUTTON_3 + 1;
+	  if (monitorNo <= settings->getMonitorCount()){
+		settings->setMonitorNo(monitorNo);
+	  }
+	}
 	break;
   case ID_BUTTON_12:
 	// Wheel +
@@ -200,6 +210,11 @@ void SoftwareButton::releasedButton(ID_BUTTON id)
 {
   if (outputLog){
 	cout << "Released Button! id = " << id << endl << flush;
+  }
+
+  // check connected
+  if (!settings->getConnected()){
+	return;
   }
 
   // check id

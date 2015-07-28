@@ -62,7 +62,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
-  monitorCount(0),
   fullScreenMode(false),
   heightOfMenuBar(0),
   heightOfStatusBar(0)
@@ -243,7 +242,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD){
-	softwareKeyboard = new SoftwareKeyboard_JP(mainWindow->getKeyBuffer(), this);
+	softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this);
 	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
 #if 1 // for TEST
 	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
@@ -464,7 +463,7 @@ void QtBrynhildr::setMonitorCount(int monitorCount)
 	if (monitorCount > 1){
 	  selectMonitorNoAll_Action->setEnabled(true);
 	}
-	this->monitorCount = (MONITOR_COUNT)monitorCount;
+	settings->setMonitorCount((MONITOR_COUNT)monitorCount);
 	break;
   case 0:
 	// disabled all

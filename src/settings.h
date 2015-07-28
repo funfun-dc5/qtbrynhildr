@@ -727,6 +727,18 @@ public:
 	}
   }
 
+  // get monitor count
+  MONITOR_COUNT getMonitorCount() const
+  {
+	return monitorCount;
+  }
+
+  // set monitor count
+  void setMonitorCount(MONITOR_COUNT monitorCount)
+  {
+	this->monitorCount = monitorCount;
+  }
+
   // get confirm at exit flag
   bool getOnConfirmAtExit() const
   {
@@ -957,6 +969,9 @@ private:
 
   // select monitor
   volatile MONITOR_NO monitorNo;
+
+  // monitor count
+  volatile MONITOR_COUNT monitorCount;
 
   // confirm at exit
   volatile bool onConfirmAtExit;

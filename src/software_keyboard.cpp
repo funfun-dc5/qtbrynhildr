@@ -20,8 +20,9 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-SoftwareKeyboard::SoftwareKeyboard(KeyBuffer *keyBuffer, QWidget *parent)
+SoftwareKeyboard::SoftwareKeyboard(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent)
   :
+  settings(settings),
   keyBuffer(keyBuffer),
   onShiftKey(false),
   onControlKey(false),

@@ -9,6 +9,7 @@
 
 // Local Header
 #include "keybuffer.h"
+#include "settings.h"
 #include "ui_software_keyboard.h"
 
 namespace qtbrynhildr {
@@ -20,7 +21,7 @@ class SoftwareKeyboard : public QWidget, public Ui::SoftwareKeyboard
 
 public:
   // constructor
-  SoftwareKeyboard(KeyBuffer *keyBuffer, QWidget *parent = 0);
+  SoftwareKeyboard(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent = 0);
 
   // key id
   typedef enum {
@@ -241,6 +242,9 @@ private slots:
   void releasedKey_67();
 
 protected:
+  // settings
+  Settings *settings;
+
   // key buffer
   KeyBuffer *keyBuffer;
 

@@ -19,9 +19,9 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // public
 //---------------------------------------------------------------------------
-SoftwareKeyboard_JP::SoftwareKeyboard_JP(KeyBuffer *keyBuffer, QWidget *parent)
+SoftwareKeyboard_JP::SoftwareKeyboard_JP(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent)
   :
-  SoftwareKeyboard(keyBuffer, parent)
+  SoftwareKeyboard(settings, keyBuffer, parent)
 {
   // initialize key top text
   initializeKeyTopText();
@@ -41,6 +41,11 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 	  cout << "Pressed : " << keyTopTextWithFn[id] << endl << flush;
 	else
 	  cout << "Pressed : " << keyTopText[id] << endl << flush;
+  }
+
+  // check connected
+  if (!settings->getConnected()){
+	return;
   }
 
   // check id
@@ -116,6 +121,11 @@ void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
   // check id
   if (id <= 0 || id > ID_KEY_NUM){
 	// error
+	return;
+  }
+
+  // check connected
+  if (!settings->getConnected()){
 	return;
   }
 

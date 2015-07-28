@@ -460,9 +460,6 @@ private:
   // event converter
   EventConverter *eventConverter;
 
-  // monitor count
-  MONITOR_COUNT monitorCount;
-
   // full screen
   bool fullScreenMode;
 

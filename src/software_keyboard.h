@@ -98,6 +98,19 @@ public:
 	ID_KEY_NUM = ID_KEY_67
   } ID_KEY;
 
+  // key information
+  typedef struct {
+	struct {
+	  char *keyTopText;
+	  char *keyTopTextWithShift;
+	  char VK_Code;
+	} keyTop;
+	struct {
+	  char *keyTopText;
+	  char VK_Code;
+	} keyTopWithFn;
+  } KeyTopInfo;
+
 protected:
   // pressed key
   virtual void pressedKey(ID_KEY id) = 0;
@@ -248,6 +261,9 @@ private slots:
   void releasedKey_67();
 
 protected:
+  // buttons
+  QPushButton *buttons[ID_KEY_NUM+1];
+
   // settings
   Settings *settings;
 

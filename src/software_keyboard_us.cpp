@@ -16,77 +16,81 @@
 
 namespace qtbrynhildr {
 
-  // VK_Code table
-  const static char VK_Code[SoftwareKeyboard::ID_KEY_NUM+1] = {
-	VK_NONE_00, // DUMMY
+  // key information table
+  const static SoftwareKeyboard::KeyTopInfo keyTopInfo[SoftwareKeyboard::ID_KEY_NUM+1] = {
+	{{"",		"",		VK_NONE_00		},	{"",		VK_NONE_00	}},	// DUMMY
 
-	VK_ESCAPE,VK_1,VK_2,VK_3,VK_4,VK_5,VK_6,VK_7,VK_8,VK_9,VK_0,VK_OEM_MINUS,VK_OEM_7,VK_NONE_00,VK_BACK,
+	{{"ESC",	"ESC",	VK_ESCAPE		},	{"ESC",		VK_ESCAPE	}},	// ID_KEY_1
+	{{"1",		"!",	VK_1			},	{"F1",		VK_F1		}},	// ID_KEY_2
+	{{"2",		"@",	VK_2			},	{"F2",		VK_F2		}},	// ID_KEY_3
+	{{"3",		"#",	VK_3			},	{"F3",		VK_F3		}},	// ID_KEY_4
+	{{"4",		"$",	VK_4			},	{"F4",		VK_F4		}},	// ID_KEY_5
+	{{"5",		"%",	VK_5			},	{"F5",		VK_F5		}},	// ID_KEY_6
+	{{"6",		"^",	VK_6			},	{"F6",		VK_F6		}},	// ID_KEY_7
+	{{"7",		"&&",	VK_7			},	{"F7",		VK_F7		}},	// ID_KEY_8
+	{{"8",		"*",	VK_8			},	{"F8",		VK_F8		}},	// ID_KEY_9
+	{{"9",		"(",	VK_9			},	{"F9",		VK_F9		}},	// ID_KEY_10
+	{{"0",		")",	VK_0			},	{"F10",		VK_F10		}},	// ID_KEY_11
+	{{"-",		"_",	VK_OEM_MINUS	},	{"F11",		VK_F11		}},	// ID_KEY_12
+	{{"=",		"+",	VK_OEM_7		},	{"F12",		VK_F12		}},	// ID_KEY_13
+	{{"",		"",		VK_NONE_00		},	{"Ins",		VK_INSERT	}},	// ID_KEY_14
+	{{"BS",		"BS",	VK_BACK			},	{"Del",		VK_DELETE	}},	// ID_KEY_15
 
-	VK_TAB,VK_Q,VK_W,VK_E,VK_R,VK_T,VK_Y,VK_U,VK_I,VK_O,VK_P,VK_OEM_3,VK_OEM_4,VK_RETURN,
+	{{"Tab",	"Tab",	VK_TAB			},	{"Tab",		VK_TAB		}},	// ID_KEY_16
+	{{"Q",		"Q",	VK_Q			},	{"Q",		VK_Q		}},	// ID_KEY_17
+	{{"W",		"W",	VK_W			},	{"W",		VK_W		}},	// ID_KEY_18
+	{{"E",		"E",	VK_E			},	{"E",		VK_E		}},	// ID_KEY_19
+	{{"R",		"R",	VK_R			},	{"R",		VK_R		}},	// ID_KEY_20
+	{{"T",		"T",	VK_T			},	{"T",		VK_T		}},	// ID_KEY_21
+	{{"Y",		"Y",	VK_Y			},	{"Y",		VK_Y		}},	// ID_KEY_22
+	{{"U",		"U",	VK_U			},	{"U",		VK_U		}},	// ID_KEY_23
+	{{"I",		"I",	VK_I			},	{"I",		VK_I		}},	// ID_KEY_24
+	{{"O",		"O",	VK_O			},	{"O",		VK_O		}},	// ID_KEY_25
+	{{"P",		"P",	VK_P			},	{"P",		VK_P		}},	// ID_KEY_26
+	{{"[",		"{",	VK_OEM_3		},	{"",		VK_NONE_00	}},	// ID_KEY_27
+	{{"]",		"}",	VK_OEM_4		},	{"",		VK_NONE_00	}},	// ID_KEY_28
+	{{"RET",	"RET",	VK_RETURN		},	{"RET",		VK_RETURN	}},	// ID_KEY_29
 
-	VK_LCONTROL,VK_A,VK_S,VK_D,VK_F,VK_G,VK_H,VK_J,VK_K,VK_L,VK_OEM_PLUS,VK_OEM_1,VK_OEM_6,
+	{{"Ctrl",	"Ctrl",	VK_LCONTROL		},	{"Ctrl",	VK_LCONTROL	}},	// ID_KEY_30
+	{{"A",		"A",	VK_A			},	{"A",		VK_A		}},	// ID_KEY_31
+	{{"S",		"S",	VK_S			},	{"S",		VK_S		}},	// ID_KEY_32
+	{{"D",		"D",	VK_D			},	{"D",		VK_D		}},	// ID_KEY_33
+	{{"F",		"F",	VK_F			},	{"F",		VK_F		}},	// ID_KEY_34
+	{{"G",		"G",	VK_G			},	{"G",		VK_G		}},	// ID_KEY_35
+	{{"H",		"H",	VK_H			},	{"H",		VK_H		}},	// ID_KEY_36
+	{{"J",		"J",	VK_J			},	{"J",		VK_J		}},	// ID_KEY_37
+	{{"K",		"K",	VK_K			},	{"K",		VK_K		}},	// ID_KEY_38
+	{{"L",		"L",	VK_L			},	{"L",		VK_L		}},	// ID_KEY_39
+	{{";",		":",	VK_OEM_PLUS		},	{"",		VK_NONE_00	}},	// ID_KEY_40
+	{{"'",		"\"",	VK_OEM_1		},	{"Pause",	VK_PAUSE	}},	// ID_KEY_41
+	{{"\\",		"|",	VK_OEM_6		},	{"PrtS",	VK_SNAPSHOT	}},	// ID_KEY_42
 
-	VK_LSHIFT,VK_Z,VK_X,VK_C,VK_V,VK_B,VK_N,VK_M,VK_OEM_COMMA,VK_OEM_PERIOD,VK_OEM_2,VK_NONE_00,VK_UP,VK_RSHIFT,
+	{{"Shift",	"Shift",VK_LSHIFT		},	{"Shift",	VK_LSHIFT	}},	// ID_KEY_43
+	{{"Z",		"Z",	VK_Z			},	{"Z",		VK_A		}},	// ID_KEY_44
+	{{"X",		"X",	VK_X			},	{"X",		VK_Z		}},	// ID_KEY_45
+	{{"C",		"C",	VK_C			},	{"C",		VK_C		}},	// ID_KEY_46
+	{{"V",		"V",	VK_V			},	{"V",		VK_V		}},	// ID_KEY_47
+	{{"B",		"B",	VK_B			},	{"B",		VK_B		}},	// ID_KEY_48
+	{{"N",		"N",	VK_N			},	{"N",		VK_N		}},	// ID_KEY_49
+	{{"M",		"M",	VK_M			},	{"M",		VK_M		}},	// ID_KEY_50
+	{{",",		"<",	VK_OEM_COMMA	},	{"",		VK_NONE_00	}},	// ID_KEY_51
+	{{".",		">",	VK_OEM_PERIOD	},	{"",		VK_NONE_00	}},	// ID_KEY_52
+	{{"\\",		"?",	VK_OEM_2		},	{"",		VK_NONE_00	}},	// ID_KEY_53
+	{{"",		"",		VK_NONE_00		},	{"",		VK_NONE_00	}},	// ID_KEY_54
+	{{"↑",		"↑",	VK_UP			},	{"PgU",		VK_PRIOR	}},	// ID_KEY_55
+	{{"Shift",	"Shift",VK_RSHIFT		},	{"Shift",	VK_RSHIFT	}},	// ID_KEY_56
 
-	VK_NONE_00,VK_LMENU,VK_LWIN,VK_NONE_00,VK_SPACE,VK_RCONTROL,VK_RMENU,VK_NONE_00,VK_LEFT,VK_DOWN,VK_RIGHT
-  };
-
-  // VK_Code table with Fn
-  const static char VK_CodeWithFn[SoftwareKeyboard::ID_KEY_NUM+1] = {
-	VK_NONE_00, // DUMMY
-
-	VK_ESCAPE,VK_F1,VK_F2,VK_F3,VK_F4,VK_F5,VK_F6,VK_F7,VK_F8,VK_F9,VK_F10,VK_F11,VK_F12,VK_INSERT,VK_DELETE,
-
-	VK_TAB,VK_Q,VK_W,VK_E,VK_R,VK_T,VK_Y,VK_U,VK_I,VK_O,VK_P,VK_NONE_00,VK_NONE_00,VK_RETURN,
-
-	VK_LCONTROL,VK_A,VK_S,VK_D,VK_F,VK_G,VK_H,VK_J,VK_K,VK_L,VK_NONE_00,VK_PAUSE,VK_SNAPSHOT,
-
-	VK_LSHIFT,VK_Z,VK_X,VK_C,VK_V,VK_B,VK_N,VK_M,VK_NONE_00,VK_NONE_00,VK_NONE_00,VK_NONE_00,VK_PRIOR,VK_RSHIFT,
-
-	VK_NONE_00,VK_LMENU,VK_LWIN,VK_NONE_00,VK_SPACE,VK_RCONTROL,VK_RMENU,VK_NONE_00,VK_HOME,VK_NEXT,VK_END
-  };
-
-  // key top text table with Fn
-  const static string keyTopText[SoftwareKeyboard::ID_KEY_NUM+1] = {
-	"", // DUMMY
-
-	"~","1","2","3","4","5","6","7","8","9","0","-","=","","BS",
-
-	"Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","RET",
-
-	"Ctrl","A","S","D","F","G","H","J","K","L",";","'","\\",
-
-	"Shift","Z","X","C","V","B","N","M",",",".","/","","\342\206\221","Shift",
-
-	"Fn","Alt","Windows","","Space","Ctrl","Alt","Fn","\342\206\220","\342\206\223","\342\206\222"
-  };
-
-  const static string keyTopTextWithShift[SoftwareKeyboard::ID_KEY_NUM+1] = {
-	"", // DUMMY
-
-	"~","!","@","#","$","%","^","&","*","(",")","-","+","","BS",
-
-	"Tab","Q","W","E","R","T","Y","U","I","O","P","{","}","RET",
-
-	"Ctrl","A","S","D","F","G","H","J","K","L",":","\"","|",
-
-	"Shift","Z","X","C","V","B","N","M","<",">","?","","\342\206\221","Shift",
-
-	"Fn","Alt","Windows","","Space","Ctrl","Alt","Fn","\342\206\220","\342\206\223","\342\206\222"
-  };
-
-  const static string keyTopTextWithFn[SoftwareKeyboard::ID_KEY_NUM+1] = {
-	"", // DUMMY
-
-	"~","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Ins","Del",
-
-	"Tab","Q","W","E","R","T","Y","U","I","O","P","","","RET",
-
-	"Ctrl","A","S","D","F","G","H","J","K","L","","Pause","PrtS",
-
-	"Shift","Z","X","C","V","B","N","M","","","","","PgU","Shift",
-
-	"Fn","Alt","Windows","","Space","Ctrl","Alt","Fn","Home","PgD","End"
+	{{"Fn",		"Fn",	VK_NONE_00		},	{"Fn",		VK_NONE_00	}},	// ID_KEY_57
+	{{"Alt",	"Alt",	VK_LMENU		},	{"Alt",		VK_LMENU	}},	// ID_KEY_58
+	{{"Win",	"Win",	VK_LWIN			},	{"Win",		VK_LWIN		}},	// ID_KEY_59
+	{{"`",		"~",	VK_OEM_7		},	{"`",		VK_OEM_7	}},	// ID_KEY_60
+	{{"Space",	"Space",VK_SPACE		},	{"Space",	VK_SPACE	}},	// ID_KEY_61
+	{{"Ctrl",	"Ctrl",	VK_RCONTROL		},	{"Ctrl",	VK_RCONTROL	}},	// ID_KEY_62
+	{{"Alt",	"Alt",	VK_RMENU		},	{"Alt",		VK_RMENU	}},	// ID_KEY_63
+	{{"Fn",		"Fn",	VK_NONE_00		},	{"Fn",		VK_NONE_00	}},	// ID_KEY_64
+	{{"←",		"←",	VK_LEFT			},	{"Home",	VK_HOME		}},	// ID_KEY_65
+	{{"↓",		"↓",	VK_DOWN			},	{"PgD",		VK_NEXT		}},	// ID_KEY_66
+	{{"→",		"→",	VK_RIGHT		},	{"End",		VK_END		}},	// ID_KEY_67
   };
 
 //---------------------------------------------------------------------------
@@ -106,15 +110,14 @@ SoftwareKeyboard_US::SoftwareKeyboard_US(Settings *settings, KeyBuffer *keyBuffe
 // pressed key
 void SoftwareKeyboard_US::pressedKey(ID_KEY id)
 {
-  // for DEBUG
   if (outputLog){
 	cout << "Pressed Key! id = " << id << endl << flush;
 	if (onShiftKey)
-	  cout << "Pressed : " << keyTopTextWithShift[id] << endl << flush;
+	  cout << "Pressed : " << keyTopInfo[id].keyTop.keyTopTextWithShift << endl << flush;
 	else if (onFnKey)
-	  cout << "Pressed : " << keyTopTextWithFn[id] << endl << flush;
+	  cout << "Pressed : " << keyTopInfo[id].keyTopWithFn.keyTopText << endl << flush;
 	else
-	  cout << "Pressed : " << keyTopText[id] << endl << flush;
+	  cout << "Pressed : " << keyTopInfo[id].keyTop.keyTopText << endl << flush;
   }
 
   // check connected
@@ -158,11 +161,11 @@ void SoftwareKeyboard_US::pressedKey(ID_KEY id)
   default:
 	if (onFnKey){
 	  // Fn keys
-	  char key = VK_CodeWithFn[id];
+	  char key = keyTopInfo[id].keyTopWithFn.VK_Code;
 	  if (key != VK_NONE_00){
 		keyBuffer->put(key, KEYCODE_FLG_KEYDOWN);
 		if (outputLog){
-		  cout << "VK_Code : " << getVKCodeByString(VK_CodeWithFn[id])  << endl << flush;
+		  cout << "VK_Code : " << getVKCodeByString(key)  << endl << flush;
 		}
 	  }
 	}
@@ -176,9 +179,10 @@ void SoftwareKeyboard_US::pressedKey(ID_KEY id)
 	  if (onAltKey){
 		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYDOWN);
 	  }
-	  keyBuffer->put(VK_Code[id], KEYCODE_FLG_KEYDOWN);
+	  char key = keyTopInfo[id].keyTop.VK_Code;
+	  keyBuffer->put(key, KEYCODE_FLG_KEYDOWN);
 	  if (outputLog){
-		cout << "VK_Code : " << getVKCodeByString(VK_Code[id])  << endl << flush;
+		cout << "VK_Code : " << getVKCodeByString(key)  << endl << flush;
 	  }
 	}
 	break;
@@ -191,11 +195,11 @@ void SoftwareKeyboard_US::releasedKey(ID_KEY id)
   if (outputLog){
 	cout << "Released Key! id = " << id << endl << flush;
 	if (onShiftKey)
-	  cout << "Released : " << keyTopTextWithShift[id] << endl << flush;
+	  cout << "Released : " << keyTopInfo[id].keyTop.keyTopTextWithShift << endl << flush;
 	else if (onFnKey)
-	  cout << "Released : " << keyTopTextWithFn[id] << endl << flush;
+	  cout << "Released : " << keyTopInfo[id].keyTopWithFn.keyTopText << endl << flush;
 	else
-	  cout << "Released : " << keyTopText[id] << endl << flush;
+	  cout << "Released : " << keyTopInfo[id].keyTop.keyTopText << endl << flush;
   }
 
   // check id
@@ -227,18 +231,19 @@ void SoftwareKeyboard_US::releasedKey(ID_KEY id)
   default:
 	if (onFnKey){
 	  // Fn keys
-	  char key = VK_CodeWithFn[id];
+	  char key = keyTopInfo[id].keyTopWithFn.VK_Code;
 	  if (key != VK_NONE_00){
 		keyBuffer->put(key, KEYCODE_FLG_KEYUP);
 		if (outputLog){
-		  cout << "VK_Code : " << getVKCodeByString(VK_CodeWithFn[id])  << endl << flush;
+		  cout << "VK_Code : " << getVKCodeByString(key)  << endl << flush;
 		}
 	  }
 	}
 	else { // except for Fn keys
-	  keyBuffer->put(VK_Code[id], KEYCODE_FLG_KEYUP);
+	  char key = keyTopInfo[id].keyTop.VK_Code;
+	  keyBuffer->put(key, KEYCODE_FLG_KEYUP);
 	  if (outputLog){
-		cout << "VK_Code : " << getVKCodeByString(VK_Code[id])  << endl << flush;
+		cout << "VK_Code : " << getVKCodeByString(key)  << endl << flush;
 	  }
 	  if (onAltKey){
 		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYUP);
@@ -257,73 +262,9 @@ void SoftwareKeyboard_US::releasedKey(ID_KEY id)
 // update key top text
 void SoftwareKeyboard_US::initializeKeyTopText()
 {
-  pushButton_1->setText("~");
-  pushButton_2->setText("1");
-  pushButton_3->setText("2");
-  pushButton_4->setText("3");
-  pushButton_5->setText("4");
-  pushButton_6->setText("5");
-  pushButton_7->setText("6");
-  pushButton_8->setText("7");
-  pushButton_9->setText("8");
-  pushButton_10->setText("9");
-  pushButton_11->setText("0");
-  pushButton_12->setText("-");
-  pushButton_13->setText("=");
-  pushButton_14->setText("");
-  pushButton_15->setText("BS");
-  pushButton_16->setText("Tab");
-  pushButton_17->setText("Q");
-  pushButton_18->setText("W");
-  pushButton_19->setText("E");
-  pushButton_20->setText("R");
-  pushButton_21->setText("T");
-  pushButton_22->setText("Y");
-  pushButton_23->setText("U");
-  pushButton_24->setText("I");
-  pushButton_25->setText("O");
-  pushButton_26->setText("P");
-  pushButton_27->setText("[");
-  pushButton_28->setText("]");
-  pushButton_29->setText("RET");
-  pushButton_30->setText("Ctrl");
-  pushButton_31->setText("A");
-  pushButton_32->setText("S");
-  pushButton_33->setText("D");
-  pushButton_34->setText("F");
-  pushButton_35->setText("G");
-  pushButton_36->setText("H");
-  pushButton_37->setText("J");
-  pushButton_38->setText("K");
-  pushButton_39->setText("L");
-  pushButton_40->setText(";");
-  pushButton_41->setText("'");
-  pushButton_42->setText("\\");
-  pushButton_43->setText("Shift");
-  pushButton_44->setText("Z");
-  pushButton_45->setText("X");
-  pushButton_46->setText("C");
-  pushButton_47->setText("V");
-  pushButton_48->setText("B");
-  pushButton_49->setText("N");
-  pushButton_50->setText("M");
-  pushButton_51->setText(",");
-  pushButton_52->setText(".");
-  pushButton_53->setText("/");
-  pushButton_54->setText("");
-  pushButton_55->setText("\342\206\221");
-  pushButton_56->setText("Shift");
-  pushButton_57->setText("Fn");
-  pushButton_58->setText("Alt");
-  pushButton_59->setText("Windows");
-  pushButton_60->setText("");
-  pushButton_61->setText("Space");
-  pushButton_62->setText("Ctrl");
-  pushButton_63->setText("Alt");
-  pushButton_64->setText("Fn");
-  pushButton_65->setText("\342\206\220");
-  pushButton_66->setText("\342\206\223");
-  pushButton_67->setText("\342\206\222");
+  for (int i = 1; i <= ID_KEY_NUM; i++){
+	buttons[i]->setText(keyTopInfo[i].keyTop.keyTopText);
+  }
 }
 
 // shift key
@@ -331,47 +272,13 @@ void SoftwareKeyboard_US::pressedShiftKey()
 {
   if (onShiftKey){
 	// pressed
-	pushButton_2->setText("!");
-	pushButton_3->setText("@");
-	pushButton_4->setText("#");
-	pushButton_5->setText("$");
-	pushButton_6->setText("%");
-	pushButton_7->setText("^");
-	pushButton_8->setText("&&");
-	pushButton_9->setText("*");
-	pushButton_10->setText("(");
-	pushButton_11->setText(")");
-	pushButton_13->setText("+");
-	pushButton_27->setText("{");
-	pushButton_28->setText("}");
-	pushButton_40->setText(":");
-	pushButton_41->setText("\"");
-	pushButton_42->setText("|");
-	pushButton_51->setText("<");
-	pushButton_52->setText(">");
-	pushButton_53->setText("?");
+	for (int i = 1; i <= ID_KEY_NUM; i++){
+	  buttons[i]->setText(keyTopInfo[i].keyTop.keyTopTextWithShift);
+	}
   }
   else {
 	// released
-	pushButton_2->setText("1");
-	pushButton_3->setText("2");
-	pushButton_4->setText("3");
-	pushButton_5->setText("4");
-	pushButton_6->setText("5");
-	pushButton_7->setText("6");
-	pushButton_8->setText("7");
-	pushButton_9->setText("8");
-	pushButton_10->setText("9");
-	pushButton_11->setText("0");
-	pushButton_13->setText("=");
-	pushButton_27->setText("[");
-	pushButton_28->setText("]");
-	pushButton_40->setText(";");
-	pushButton_41->setText("'");
-	pushButton_42->setText("\\");
-	pushButton_51->setText(",");
-	pushButton_52->setText(".");
-	pushButton_53->setText("/");
+	initializeKeyTopText();
   }
 }
 
@@ -380,70 +287,13 @@ void SoftwareKeyboard_US::pressedFnKey()
 {
   if (onFnKey){
 	// pressed
-	pushButton_2->setText("F1");
-	pushButton_3->setText("F2");
-	pushButton_4->setText("F3");
-	pushButton_5->setText("F4");
-	pushButton_6->setText("F5");
-	pushButton_7->setText("F6");
-	pushButton_8->setText("F7");
-	pushButton_9->setText("F8");
-	pushButton_10->setText("F9");
-	pushButton_11->setText("F10");
-	pushButton_12->setText("F11");
-	pushButton_13->setText("F12");
-	pushButton_14->setText("Ins");
-	pushButton_15->setText("Del");
-
-	pushButton_27->setText("");
-	pushButton_28->setText("");
-
-	pushButton_40->setText("");
-	pushButton_41->setText("Pause");
-	pushButton_42->setText("PrtS");
-
-	pushButton_51->setText("");
-	pushButton_52->setText("");
-	pushButton_53->setText("");
-	pushButton_55->setText("PgU");
-
-	pushButton_65->setText("Home");
-	pushButton_66->setText("PgD");
-	pushButton_67->setText("End");
-
+	for (int i = 1; i <= ID_KEY_NUM; i++){
+	  buttons[i]->setText(keyTopInfo[i].keyTopWithFn.keyTopText);
+	}
   }
   else {
 	// released
-	pushButton_2->setText("1");
-	pushButton_3->setText("2");
-	pushButton_4->setText("3");
-	pushButton_5->setText("4");
-	pushButton_6->setText("5");
-	pushButton_7->setText("6");
-	pushButton_8->setText("7");
-	pushButton_9->setText("8");
-	pushButton_10->setText("9");
-	pushButton_11->setText("0");
-	pushButton_12->setText("-");
-	pushButton_13->setText("=");
-	pushButton_14->setText("\\");
-	pushButton_15->setText("BS");
-
-	pushButton_27->setText("[");
-	pushButton_28->setText("]");
-
-	pushButton_40->setText(";");
-	pushButton_41->setText("'");
-	pushButton_42->setText("\\");
-
-	pushButton_51->setText(",");
-	pushButton_52->setText(".");
-	pushButton_53->setText("/");
-	pushButton_55->setText("\342\206\221");
-
-	pushButton_65->setText("\342\206\220");
-	pushButton_66->setText("\342\206\223");
-	pushButton_67->setText("\342\206\222");
+	initializeKeyTopText();
   }
 }
 

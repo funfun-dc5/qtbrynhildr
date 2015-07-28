@@ -465,6 +465,76 @@ SoftwareKeyboard::SoftwareKeyboard(Settings *settings, KeyBuffer *keyBuffer, QWi
   connect(pushButton_65, SIGNAL(released()), this, SLOT(releasedKey_65()));
   connect(pushButton_66, SIGNAL(released()), this, SLOT(releasedKey_66()));
   connect(pushButton_67, SIGNAL(released()), this, SLOT(releasedKey_67()));
+
+  // set button table
+  buttons[0] = 0; // DUMMY
+  buttons[ID_KEY_1] = pushButton_1;
+  buttons[ID_KEY_2] = pushButton_2;
+  buttons[ID_KEY_3] = pushButton_3;
+  buttons[ID_KEY_4] = pushButton_4;
+  buttons[ID_KEY_5] = pushButton_5;
+  buttons[ID_KEY_6] = pushButton_6;
+  buttons[ID_KEY_7] = pushButton_7;
+  buttons[ID_KEY_8] = pushButton_8;
+  buttons[ID_KEY_9] = pushButton_9;
+  buttons[ID_KEY_10] = pushButton_10;
+  buttons[ID_KEY_11] = pushButton_11;
+  buttons[ID_KEY_12] = pushButton_12;
+  buttons[ID_KEY_13] = pushButton_13;
+  buttons[ID_KEY_14] = pushButton_14;
+  buttons[ID_KEY_15] = pushButton_15;
+  buttons[ID_KEY_16] = pushButton_16;
+  buttons[ID_KEY_17] = pushButton_17;
+  buttons[ID_KEY_18] = pushButton_18;
+  buttons[ID_KEY_19] = pushButton_19;
+  buttons[ID_KEY_20] = pushButton_20;
+  buttons[ID_KEY_21] = pushButton_21;
+  buttons[ID_KEY_22] = pushButton_22;
+  buttons[ID_KEY_23] = pushButton_23;
+  buttons[ID_KEY_24] = pushButton_24;
+  buttons[ID_KEY_25] = pushButton_25;
+  buttons[ID_KEY_26] = pushButton_26;
+  buttons[ID_KEY_27] = pushButton_27;
+  buttons[ID_KEY_28] = pushButton_28;
+  buttons[ID_KEY_29] = pushButton_29;
+  buttons[ID_KEY_30] = pushButton_30;
+  buttons[ID_KEY_31] = pushButton_31;
+  buttons[ID_KEY_32] = pushButton_32;
+  buttons[ID_KEY_33] = pushButton_33;
+  buttons[ID_KEY_34] = pushButton_34;
+  buttons[ID_KEY_35] = pushButton_35;
+  buttons[ID_KEY_36] = pushButton_36;
+  buttons[ID_KEY_37] = pushButton_37;
+  buttons[ID_KEY_38] = pushButton_38;
+  buttons[ID_KEY_39] = pushButton_39;
+  buttons[ID_KEY_40] = pushButton_40;
+  buttons[ID_KEY_41] = pushButton_41;
+  buttons[ID_KEY_42] = pushButton_42;
+  buttons[ID_KEY_43] = pushButton_43;
+  buttons[ID_KEY_44] = pushButton_44;
+  buttons[ID_KEY_45] = pushButton_45;
+  buttons[ID_KEY_46] = pushButton_46;
+  buttons[ID_KEY_47] = pushButton_47;
+  buttons[ID_KEY_48] = pushButton_48;
+  buttons[ID_KEY_49] = pushButton_49;
+  buttons[ID_KEY_50] = pushButton_50;
+  buttons[ID_KEY_51] = pushButton_51;
+  buttons[ID_KEY_52] = pushButton_52;
+  buttons[ID_KEY_53] = pushButton_53;
+  buttons[ID_KEY_54] = pushButton_54;
+  buttons[ID_KEY_55] = pushButton_55;
+  buttons[ID_KEY_56] = pushButton_56;
+  buttons[ID_KEY_57] = pushButton_57;
+  buttons[ID_KEY_58] = pushButton_58;
+  buttons[ID_KEY_59] = pushButton_59;
+  buttons[ID_KEY_60] = pushButton_60;
+  buttons[ID_KEY_61] = pushButton_61;
+  buttons[ID_KEY_62] = pushButton_62;
+  buttons[ID_KEY_63] = pushButton_63;
+  buttons[ID_KEY_64] = pushButton_64;
+  buttons[ID_KEY_65] = pushButton_65;
+  buttons[ID_KEY_66] = pushButton_66;
+  buttons[ID_KEY_67] = pushButton_67;
 }
 
 //---------------------------------------------------------------------------

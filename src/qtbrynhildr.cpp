@@ -242,7 +242,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this);
+	softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
 	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 1 // for TEST

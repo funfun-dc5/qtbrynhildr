@@ -33,6 +33,7 @@
 #include "software_button.h"
 #include "software_keyboard.h"
 #include "software_keyboard_jp.h"
+#include "software_keyboard_us.h"
 #if 1 // for TEST
 #include "software_button_dialog.h"
 #include "software_keyboard_dialog.h"

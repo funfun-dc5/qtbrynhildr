@@ -1,9 +1,9 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-// sofware_keybord_jp.h
+// sofware_keybord_us.h
 
-#ifndef SOFTWARE_KEYBOARD_JP_H
-#define SOFTWARE_KEYBOARD_JP_H
+#ifndef SOFTWARE_KEYBOARD_US_H
+#define SOFTWARE_KEYBOARD_US_H
 // Qt Header
 
 // Local Header
@@ -12,12 +12,12 @@
 
 namespace qtbrynhildr {
 
-// SoftwareKeyboard_JP
-class SoftwareKeyboard_JP : public SoftwareKeyboard
+// SoftwareKeyboard_US
+class SoftwareKeyboard_US : public SoftwareKeyboard
 {
 public:
   // constructor
-  SoftwareKeyboard_JP(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent = 0);
+  SoftwareKeyboard_US(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent = 0);
 
 protected:
   // pressed key
@@ -39,4 +39,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // SOFTWARE_KEYBOARD_JP_H
+#endif // SOFTWARE_KEYBOARD_US_H

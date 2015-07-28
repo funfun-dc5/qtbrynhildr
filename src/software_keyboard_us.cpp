@@ -1,6 +1,6 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-// software_keyboard_jp.cpp
+// software_keyboard_us.cpp
 
 // Common Header
 #include "common.h"
@@ -11,11 +11,10 @@
 // Qt header
 
 // Local Header
-#include "software_keyboard_jp.h"
+#include "software_keyboard_us.h"
 #include "windows/keycodes.h"
 
 namespace qtbrynhildr {
-
 
   // VK_Code table
   const static char VK_Code[SoftwareKeyboard::ID_KEY_NUM+1] = {
@@ -24,7 +23,7 @@ namespace qtbrynhildr {
 	VK_TAB,VK_Q,VK_W,VK_E,VK_R,VK_T,VK_Y,VK_U,VK_I,VK_O,VK_P,VK_OEM_3,VK_OEM_4,VK_RETURN,
 	VK_LCONTROL,VK_A,VK_S,VK_D,VK_F,VK_G,VK_H,VK_J,VK_K,VK_L,VK_OEM_PLUS,VK_OEM_1,VK_OEM_6,
 	VK_LSHIFT,VK_Z,VK_X,VK_C,VK_V,VK_B,VK_N,VK_M,VK_OEM_COMMA,VK_OEM_PERIOD,VK_OEM_2,VK_OEM_102,VK_UP,VK_RSHIFT,
-	VK_NONE_00,VK_LMENU,VK_LWIN,VK_KANJI,VK_SPACE,VK_RCONTROL,VK_RMENU,VK_NONE_00,VK_LEFT,VK_DOWN,VK_RIGHT
+	VK_NONE_00,VK_LMENU,VK_LWIN,VK_NONE_00,VK_SPACE,VK_RCONTROL,VK_RMENU,VK_NONE_00,VK_LEFT,VK_DOWN,VK_RIGHT
   };
 
   // VK_Code table with Fn
@@ -34,41 +33,41 @@ namespace qtbrynhildr {
 	VK_TAB,VK_Q,VK_W,VK_E,VK_R,VK_T,VK_Y,VK_U,VK_I,VK_O,VK_P,VK_NONE_00,VK_NONE_00,VK_RETURN,
 	VK_LCONTROL,VK_A,VK_S,VK_D,VK_F,VK_G,VK_H,VK_J,VK_K,VK_L,VK_NONE_00,VK_PAUSE,VK_SNAPSHOT,
 	VK_LSHIFT,VK_Z,VK_X,VK_C,VK_V,VK_B,VK_N,VK_M,VK_NONE_00,VK_NONE_00,VK_NONE_00,VK_NONE_00,VK_PRIOR,VK_RSHIFT,
-	VK_NONE_00,VK_LMENU,VK_LWIN,VK_KANJI,VK_SPACE,VK_RCONTROL,VK_RMENU,VK_NONE_00,VK_HOME,VK_NEXT,VK_END
+	VK_NONE_00,VK_LMENU,VK_LWIN,VK_NONE_00,VK_SPACE,VK_RCONTROL,VK_RMENU,VK_NONE_00,VK_HOME,VK_NEXT,VK_END
   };
 
   // key top text table with Fn
   const static string keyTopText[SoftwareKeyboard::ID_KEY_NUM+1] = {
 	"", // DUMMY
-	"ESC","1","2","3","4","5","6","7","8","9","0","-","^","\\","BS",
-	"Tab","Q","W","E","R","T","Y","U","I","O","P","@","[","RET",
-	"Ctrl","A","S","D","F","G","H","J","K","L",";",":","]",
-	"Shift","Z","X","C","V","B","N","M",",",".","/","\\","\342\206\221","Shift",
-	"Fn","Alt","Windows","JP","Space","Ctrl","Alt","Fn","\342\206\220","\342\206\223","\342\206\222"
+	"~","1","2","3","4","5","6","7","8","9","0","-","=","","BS",
+	"Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","RET",
+	"Ctrl","A","S","D","F","G","H","J","K","L",";",":","\\",
+	"Shift","Z","X","C","V","B","N","M",",",".","/","","\342\206\221","Shift",
+	"Fn","Alt","Windows","","Space","Ctrl","Alt","Fn","\342\206\220","\342\206\223","\342\206\222"
   };
 
   const static string keyTopTextWithShift[SoftwareKeyboard::ID_KEY_NUM+1] = {
 	"", // DUMMY
-	"ESC","!","\"","#","$","%","&","'","(",")","0","=","~","|","BS",
-	"Tab","Q","W","E","R","T","Y","U","I","O","P","`","{","RET",
-	"Ctrl","A","S","D","F","G","H","J","K","L","+","*","}",
-	"Shift","Z","X","C","V","B","N","M","<",">","?","_","\342\206\221","Shift",
-	"Fn","Alt","Windows","JP","Space","Ctrl","Alt","Fn","\342\206\220","\342\206\223","\342\206\222"
+	"~","!","@","#","$","%","'","&","*","(",")","-","+","","BS",
+	"Tab","Q","W","E","R","T","Y","U","I","O","P","{","}","RET",
+	"Ctrl","A","S","D","F","G","H","J","K","L",":","\"","|",
+	"Shift","Z","X","C","V","B","N","M","<",">","?","","\342\206\221","Shift",
+	"Fn","Alt","Windows","","Space","Ctrl","Alt","Fn","\342\206\220","\342\206\223","\342\206\222"
   };
 
   const static string keyTopTextWithFn[SoftwareKeyboard::ID_KEY_NUM+1] = {
 	"", // DUMMY
-	"ESC","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Ins","Del",
+	"~","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Ins","Del",
 	"Tab","Q","W","E","R","T","Y","U","I","O","P","","","RET",
 	"Ctrl","A","S","D","F","G","H","J","K","L","","Pause","PrtS",
 	"Shift","Z","X","C","V","B","N","M","","","","","PgU","Shift",
-	"Fn","Alt","Windows","JP","Space","Ctrl","Alt","Fn","Home","PgD","End"
+	"Fn","Alt","Windows","","Space","Ctrl","Alt","Fn","Home","PgD","End"
   };
 
 //---------------------------------------------------------------------------
 // public
 //---------------------------------------------------------------------------
-SoftwareKeyboard_JP::SoftwareKeyboard_JP(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent)
+SoftwareKeyboard_US::SoftwareKeyboard_US(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent)
   :
   SoftwareKeyboard(settings, keyBuffer, parent)
 {
@@ -80,7 +79,7 @@ SoftwareKeyboard_JP::SoftwareKeyboard_JP(Settings *settings, KeyBuffer *keyBuffe
 // protected
 //---------------------------------------------------------------------------
 // pressed key
-void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
+void SoftwareKeyboard_US::pressedKey(ID_KEY id)
 {
   if (outputLog){
 	cout << "Pressed Key! id = " << id << endl << flush;
@@ -155,7 +154,7 @@ void SoftwareKeyboard_JP::pressedKey(ID_KEY id)
 }
 
 // released key
-void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
+void SoftwareKeyboard_US::releasedKey(ID_KEY id)
 {
   if (outputLog){
 	cout << "Released Key! id = " << id << endl << flush;
@@ -218,9 +217,9 @@ void SoftwareKeyboard_JP::releasedKey(ID_KEY id)
 }
 
 // update key top text
-void SoftwareKeyboard_JP::initializeKeyTopText()
+void SoftwareKeyboard_US::initializeKeyTopText()
 {
-  pushButton_1->setText("ESC");
+  pushButton_1->setText("~");
   pushButton_2->setText("1");
   pushButton_3->setText("2");
   pushButton_4->setText("3");
@@ -233,7 +232,7 @@ void SoftwareKeyboard_JP::initializeKeyTopText()
   pushButton_11->setText("0");
   pushButton_12->setText("-");
   pushButton_13->setText("^");
-  pushButton_14->setText("\\");
+  pushButton_14->setText("");
   pushButton_15->setText("BS");
   pushButton_16->setText("Tab");
   pushButton_17->setText("Q");
@@ -246,8 +245,8 @@ void SoftwareKeyboard_JP::initializeKeyTopText()
   pushButton_24->setText("I");
   pushButton_25->setText("O");
   pushButton_26->setText("P");
-  pushButton_27->setText("@");
-  pushButton_28->setText("[");
+  pushButton_27->setText("[");
+  pushButton_28->setText("]");
   pushButton_29->setText("RET");
   pushButton_30->setText("Ctrl");
   pushButton_31->setText("A");
@@ -261,7 +260,7 @@ void SoftwareKeyboard_JP::initializeKeyTopText()
   pushButton_39->setText("L");
   pushButton_40->setText(";");
   pushButton_41->setText(":");
-  pushButton_42->setText("]");
+  pushButton_42->setText("\\");
   pushButton_43->setText("Shift");
   pushButton_44->setText("Z");
   pushButton_45->setText("X");
@@ -273,13 +272,13 @@ void SoftwareKeyboard_JP::initializeKeyTopText()
   pushButton_51->setText(",");
   pushButton_52->setText(".");
   pushButton_53->setText("/");
-  pushButton_54->setText("\\");
+  pushButton_54->setText("");
   pushButton_55->setText("\342\206\221");
   pushButton_56->setText("Shift");
   pushButton_57->setText("Fn");
   pushButton_58->setText("Alt");
   pushButton_59->setText("Windows");
-  pushButton_60->setText("JP");
+  pushButton_60->setText("");
   pushButton_61->setText("Space");
   pushButton_62->setText("Ctrl");
   pushButton_63->setText("Alt");
@@ -290,32 +289,29 @@ void SoftwareKeyboard_JP::initializeKeyTopText()
 }
 
 // shift key
-void SoftwareKeyboard_JP::pressedShiftKey()
+void SoftwareKeyboard_US::pressedShiftKey()
 {
   if (onShiftKey){
 	// pressed
 	pushButton_2->setText("!");
-	pushButton_3->setText("\"");
+	pushButton_3->setText("@");
 	pushButton_4->setText("#");
 	pushButton_5->setText("$");
 	pushButton_6->setText("%");
-	pushButton_7->setText("&&");
-	pushButton_8->setText("'");
-	pushButton_9->setText("(");
-	pushButton_10->setText(")");
+	pushButton_7->setText("^");
+	pushButton_8->setText("&&");
+	pushButton_9->setText("*");
+	pushButton_10->setText("(");
 	pushButton_11->setText("");
-	pushButton_12->setText("=");
-	pushButton_13->setText("~");
-	pushButton_14->setText("|");
-	pushButton_27->setText("`");
-	pushButton_28->setText("{");
-	pushButton_40->setText("+");
-	pushButton_41->setText("*");
-	pushButton_42->setText("}");
+	pushButton_13->setText("+");
+	pushButton_27->setText("{");
+	pushButton_28->setText("}");
+	pushButton_40->setText(":");
+	pushButton_41->setText("\"");
+	pushButton_42->setText("|");
 	pushButton_51->setText("<");
 	pushButton_52->setText(">");
 	pushButton_53->setText("?");
-	pushButton_54->setText("_");
   }
   else {
 	// released
@@ -329,23 +325,20 @@ void SoftwareKeyboard_JP::pressedShiftKey()
 	pushButton_9->setText("8");
 	pushButton_10->setText("9");
 	pushButton_11->setText("0");
-	pushButton_12->setText("-");
 	pushButton_13->setText("^");
-	pushButton_14->setText("\\");
-	pushButton_27->setText("@");
-	pushButton_28->setText("[");
+	pushButton_27->setText("[");
+	pushButton_28->setText("]");
 	pushButton_40->setText(";");
 	pushButton_41->setText(":");
-	pushButton_42->setText("]");
+	pushButton_42->setText("\\");
 	pushButton_51->setText(",");
 	pushButton_52->setText(".");
 	pushButton_53->setText("/");
-	pushButton_54->setText("\\");
   }
 }
 
 // Fn key
-void SoftwareKeyboard_JP::pressedFnKey()
+void SoftwareKeyboard_US::pressedFnKey()
 {
   if (onFnKey){
 	// pressed
@@ -374,7 +367,6 @@ void SoftwareKeyboard_JP::pressedFnKey()
 	pushButton_51->setText("");
 	pushButton_52->setText("");
 	pushButton_53->setText("");
-	pushButton_54->setText("");
 	pushButton_55->setText("PgU");
 
 	pushButton_65->setText("Home");
@@ -399,17 +391,16 @@ void SoftwareKeyboard_JP::pressedFnKey()
 	pushButton_14->setText("\\");
 	pushButton_15->setText("BS");
 
-	pushButton_27->setText("@");
-	pushButton_28->setText("[");
+	pushButton_27->setText("[");
+	pushButton_28->setText("]");
 
 	pushButton_40->setText(";");
 	pushButton_41->setText(":");
-	pushButton_42->setText("]");
+	pushButton_42->setText("\\");
 
 	pushButton_51->setText(",");
 	pushButton_52->setText(".");
 	pushButton_53->setText("/");
-	pushButton_54->setText("\\");
 	pushButton_55->setText("\342\206\221");
 
 	pushButton_65->setText("\342\206\220");

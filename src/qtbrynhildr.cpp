@@ -242,12 +242,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
 	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 1 // for TEST
-	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
 	softwareButtonDialog = new SoftwareButtonDialog(softwareButton, this);
+	softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
+	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
 #endif
   }
 
@@ -1221,6 +1221,33 @@ void QtBrynhildr::connectToServer()
 	return;
   }
   mainWindow->setEventConverter(eventConverter);
+
+  // Software Keyboard and Button
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	if (softwareKeyboard != 0){
+	  delete softwareKeyboard;
+	  softwareKeyboard = 0;
+	}
+	switch(settings->getKeyboardType()){
+	case KEYBOARD_TYPE_JP:
+	  softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this);
+	  break;
+	case KEYBOARD_TYPE_US:
+	  softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
+	  break;
+	default:
+	  // unknown keyboard type
+	  ABORT();
+	  break;
+	}
+#if 1 // for TEST
+	if (softwareKeyboardDialog != 0){
+	  delete softwareKeyboardDialog;
+	  softwareKeyboardDialog = 0;
+	}
+	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
+#endif
+  }
 
   // clear buffer for control
   mainWindow->getKeyBuffer()->clear();

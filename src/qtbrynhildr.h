@@ -10,6 +10,7 @@
 // Qt Header
 #include <QAction>
 #include <QDateTime>
+#include <QDockWidget>
 #include <QLabel>
 #include <QMainWindow>
 #include <QMenu>
@@ -34,7 +35,7 @@
 #include "software_keyboard.h"
 #include "software_keyboard_jp.h"
 #include "software_keyboard_us.h"
-#if 1 // for TEST
+#if 0 // for TEST
 #include "software_button_dialog.h"
 #include "software_keyboard_dialog.h"
 #endif
@@ -199,7 +200,13 @@ private slots:
   // scroll mode
   void toggleOnScrollMode();
 
-#if 1 // for TEST
+  // visibility changed software keyboard
+  void visibilityChangedSoftwareKeyboard(bool visible);
+
+  // visibility changed software button
+  void visibilityChangedSoftwareButton(bool visible);
+
+#if 0 // for TEST
   // software keyboard
   void toggleShowSoftwareKeyboard();
 
@@ -396,7 +403,9 @@ private:
   // software keyboard and button
   SoftwareKeyboard *softwareKeyboard;
   SoftwareButton *softwareButton;
-#if 1 // for TEST
+  QDockWidget *softwareKeyboardDockWidget;
+  QDockWidget *softwareButtonDockWidget;
+#if 0 // for TEST
   SoftwareKeyboardDialog *softwareKeyboardDialog;
   SoftwareButtonDialog *softwareButtonDialog;
   QAction *showSoftwareKeyboard_Action;

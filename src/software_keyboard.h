@@ -8,6 +8,7 @@
 #include <string>
 
 // Qt Header
+#include <QSize>
 #include <QWidget>
 
 // Local Header
@@ -120,6 +121,9 @@ protected:
 
   // get name of virtual keycode
   string getVKCodeByString(uchar vkcode);
+
+  QSize sizeHint() const;
+  //  QSize minimumSizeHint() const;
 
 private slots:
   // pressed slots

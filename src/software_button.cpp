@@ -92,6 +92,18 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
 // protected
 //---------------------------------------------------------------------------
 
+QSize SoftwareButton::sizeHint() const
+{
+  //  return QSize(1170,350);
+  return size();
+}
+#if 0
+QSize SoftwareButton::minimumSizeHint() const
+{
+  return QSize(1170,350);
+}
+#endif
+
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------

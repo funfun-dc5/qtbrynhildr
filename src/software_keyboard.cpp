@@ -546,6 +546,18 @@ string SoftwareKeyboard::getVKCodeByString(uchar vkcode)
   return nameTableOfVKCode[vkcode];
 }
 
+QSize SoftwareKeyboard::sizeHint() const
+{
+  //  return QSize(1170,350);
+  return size();
+}
+#if 0
+QSize SoftwareKeyboard::minimumSizeHint() const
+{
+  return QSize(1170,350);
+}
+#endif
+
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------

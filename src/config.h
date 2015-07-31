@@ -32,7 +32,7 @@ const bool QTB_SOFTWARE_KEYBOARD_AND_BUTTON		= true;
 const bool QTB_TRANSLATION				= true;
 
 // in testing
-const bool QTB_IN_TESTING				= true;
+const bool QTB_IN_TESTING				= false;
 
 // splash screen
 #define QTB_SPLASH_SCREEN			0

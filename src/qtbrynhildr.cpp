@@ -50,7 +50,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   desktopScalingDialog(0),
   softwareKeyboard(0),
   softwareButton(0),
-#if 1 // for TEST
+  softwareKeyboardDockWidget(0),
+  softwareButtonDockWidget(0),
+#if 0 // for TEST
   softwareKeyboardDialog(0),
   softwareButtonDialog(0),
 #endif
@@ -244,7 +246,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
-#if 1 // for TEST
+#if 0 // for TEST
 	softwareButtonDialog = new SoftwareButtonDialog(softwareButton, this);
 	softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
 	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
@@ -901,7 +903,7 @@ void QtBrynhildr::createActions()
   onScrollMode_Action->setStatusTip(tr("Scroll Mode"));
   connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
 
-#if 1 // for TEST
+#if 0 // for TEST
   // show Software Keyboard
   showSoftwareKeyboard_Action = new QAction(tr("Software Keyboard"), this);
   showSoftwareKeyboard_Action->setCheckable(true);
@@ -1020,7 +1022,7 @@ void QtBrynhildr::createMenus()
 	optionMenu->addSeparator();
 	inTestingSubMenu = optionMenu->addMenu(tr("In Testing"));
 	// in Testing Menu
-#if 1 // for TEST
+#if 0 // for TEST
 	inTestingSubMenu->addAction(showSoftwareKeyboard_Action);
 	inTestingSubMenu->addAction(showSoftwareButton_Action);
 #endif
@@ -1224,8 +1226,9 @@ void QtBrynhildr::connectToServer()
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	// software keyboard
 	if (softwareKeyboard != 0){
-#if 1 // for TEST
+#if 0 // for TEST
 	  if (settings->getOnShowSoftwareKeyboard()){
 		toggleShowSoftwareKeyboard();
 	  }
@@ -1245,13 +1248,34 @@ void QtBrynhildr::connectToServer()
 	  ABORT();
 	  break;
 	}
-#if 1 // for TEST
+#if 0 // for TEST
 	if (softwareKeyboardDialog != 0){
 	  delete softwareKeyboardDialog;
 	  softwareKeyboardDialog = 0;
 	}
 	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
 #endif
+	if (softwareKeyboardDockWidget != 0){
+	  removeDockWidget(softwareKeyboardDockWidget);
+	  delete softwareKeyboardDockWidget;
+	  softwareKeyboardDockWidget = 0;
+	}
+	softwareKeyboardDockWidget = new QDockWidget(tr("Software Keyboard"));
+	softwareKeyboardDockWidget->setWidget(softwareKeyboard);
+	softwareKeyboardDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+	connect(softwareKeyboardDockWidget,
+			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
+	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
+
+	// software button
+	if (softwareButtonDockWidget == 0){
+	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
+	  softwareButtonDockWidget->setWidget(softwareButton);
+	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
+	  connect(softwareButtonDockWidget,
+			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
+	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
+	}
   }
 
   // clear buffer for control
@@ -1840,7 +1864,19 @@ void QtBrynhildr::toggleOnScrollMode()
   }
 }
 
-#if 1 // for TEST
+// visibility changed software keyboard
+void QtBrynhildr::visibilityChangedSoftwareKeyboard(bool visible)
+{
+  settings->setOnShowSoftwareKeyboard(visible);
+}
+
+// visibility changed software button
+void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
+{
+  settings->setOnShowSoftwareButton(visible);
+}
+
+#if 0 // for TEST
 // software keyboard
 void QtBrynhildr::toggleShowSoftwareKeyboard()
 {

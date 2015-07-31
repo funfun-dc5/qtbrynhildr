@@ -5,6 +5,7 @@
 #ifndef SOFTWARE_BUTTON_H
 #define SOFTWARE_BUTTON_H
 // Qt Header
+#include <QSize>
 #include <QWidget>
 
 // Local Header
@@ -61,6 +62,9 @@ private:
 
   // releaseed key
   void releasedButton(ID_BUTTON id);
+
+  QSize sizeHint() const;
+  //  QSize minimumSizeHint() const;
 
 private slots:
   // pressed slots

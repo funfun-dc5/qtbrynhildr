@@ -385,7 +385,7 @@ void NetThread::printHeader()
   if (com_data == 0)
 	return;
 
-  cout << "======================================================================" << endl;
+  cout << "============================== HEADER ==============================" << endl;
   cout << "com_data->data_type      :" << (int)com_data->data_type << endl;
   cout << "com_data->thread         :" << (int)com_data->thread << endl;
   cout << "com_data->sound_type     :" << (int)com_data->sound_type << endl;
@@ -406,14 +406,32 @@ void NetThread::printHeader()
 										 << com_data->ver[1]
 										 << com_data->ver[2]
 										 << com_data->ver[3] << "\"" << endl;
-
-  cout << "com_data->mode           :"	<< com_data->mode << endl;
+  cout << "com_data->samplerate     :"  << com_data->samplerate << endl;
+  cout << "com_data->image_cx       :"  << com_data->image_cx << endl;
+  cout << "com_data->image_cy       :"  << com_data->image_cy << endl;
+  cout << "com_data->server_cx      :"  << com_data->server_cx << endl;
+  cout << "com_data->server_cy      :"  << com_data->server_cy << endl;
+  cout << "com_data->control        :"	<< com_data->control << endl;
+  cout << "com_data->mouse_move     :"	<< com_data->mouse_move << endl;
+  cout << "com_data->mouse_x        :"  << com_data->mouse_x << endl;
+  cout << "com_data->mouse_y        :"  << com_data->mouse_y << endl;
+  cout << "com_data->mouse_left     :"  << (int)com_data->mouse_left << endl;
+  cout << "com_data->mouse_right    :"  << (int)com_data->mouse_right << endl;
+  cout << "com_data->mouse_wheel    :"  << (int)com_data->mouse_wheel << endl;
+  cout << "com_data->keycode        :"  << (int)com_data->keycode << endl;
+  cout << "com_data->keycode_flg    :"  << (int)com_data->keycode_flg << endl;
   cout << "com_data->monitor_no     :"	<< (int)com_data->monitor_no << endl;
   cout << "com_data->monitor_count  :"	<< (int)com_data->monitor_count << endl;
+  cout << "com_data->sound_capture  :"	<< com_data->sound_capture << endl;
+  cout << "com_data->keydown        :"	<< com_data->keydown << endl;
+  cout << "com_data->video_quality  :"	<< com_data->video_quality << endl;
+  cout << "com_data->client_scroll_x:"  << com_data->client_scroll_x << endl;
+  cout << "com_data->client_scroll_y:"  << com_data->client_scroll_y << endl;
+  cout << "com_data->zoom           :"  << com_data->zoom << endl;
+  cout << "com_data->mode           :"	<< com_data->mode << endl;
+  cout << "com_data->sound_quality  :"	<< com_data->sound_quality << endl;
 
-  cout << "com_data->control        :"	<< com_data->control << endl;
-
-  cout << flush;
+  cout << endl << flush;
 }
 
 } // end of namespace qtbrynhildr

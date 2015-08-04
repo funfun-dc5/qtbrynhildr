@@ -113,12 +113,25 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  if (QTB_DESKTOP_IMAGE_SCALING){
 		QSize windowSize = mainWindow->getSize();
 		QSize desktopSize = mainWindow->getDesktopSize();
-		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-		  if (com_data->zoom != 1.0){
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * com_data->zoom
-			  + settings->getDesktopOffsetX();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * com_data->zoom
-			  + settings->getDesktopOffsetY();
+		if (windowSize.width() < 0 || windowSize.height() < 0 ||
+			desktopSize.width() < 0 || desktopSize.height() < 0){
+		  // Nothing to do
+		  com_data->mouse_move = MOUSE_MOVE_OFF;
+		}
+		else {
+		  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+			if (com_data->zoom != 1.0){
+			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * com_data->zoom
+															+ settings->getDesktopOffsetX();
+			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * com_data->zoom
+				+ settings->getDesktopOffsetY();
+			}
+			else {
+			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
+				+ settings->getDesktopOffsetX();
+			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
+				+ settings->getDesktopOffsetY();
+			}
 		  }
 		  else {
 			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
@@ -127,13 +140,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 			  + settings->getDesktopOffsetY();
 		  }
 		}
-		else {
-		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-			+ settings->getDesktopOffsetX();
-		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-			+ settings->getDesktopOffsetY();
-		}
-
 	  }
 	  else {
 		com_data->mouse_x = pos.x + settings->getDesktopOffsetX();

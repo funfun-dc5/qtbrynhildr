@@ -52,6 +52,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   option(0),
   iniFileName(0),
   settings(0),
+#if QTB_CRYPTOGRAM
+  cipher(0),
+#endif // QTB_CRYPTGRAM
   logMessage(new LogMessage(this)),
   controlThread(0),
   graphicsThread(0),

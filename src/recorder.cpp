@@ -6,11 +6,13 @@
 #include "common.h"
 
 // System Header
+#include <fstream>
 #include <iostream>
 
 // Qt Header
 
 // Local Header
+#include "parameters.h"
 #include "recorder.h"
 
 namespace qtbrynhildr {
@@ -68,7 +70,7 @@ void Recorder::makeFileHeader()
   //  header->version
 }
 
-// record com_data
+// put com_data
 void Recorder::putCOM_DATA(COM_DATA *com_data)
 {
   //  printHeader();
@@ -80,12 +82,27 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
 	// found new com_data
 	if (bodyEntry.counter > 0){
 	  // write to file
-	  cout << "Write Data : counter = " << bodyEntry.counter << " : com_data" << endl << flush;
+	  cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
+#if 1 // for TEST
+	  fstream file;
+	  char filename[QTB_MAXPATHLEN+1];
+	  snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "record_test");
+	  file.open(filename, ios::out | ios::binary | ios::app);
+	  if (file.is_open()){
+		file.write((char*)&bodyEntry, sizeof(BodyEntry));
+		file.close();
+	  }
+#endif // for TEST
 	}
 	// set new com_data
 	bodyEntry.counter = 1;
 	memcpy(&bodyEntry.com_data, com_data, sizeof(COM_DATA));
   }
+}
+
+// get com_data
+COM_DATA *Recorder::getCOM_DATA()
+{
 }
 
 } // end of namespace qtbrynhildr

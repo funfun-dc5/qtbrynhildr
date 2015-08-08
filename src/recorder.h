@@ -17,42 +17,6 @@
 
 namespace qtbrynhildr {
 
-// file header
-typedef struct {
-  // magic
-  char magic[QTB_RECORDER_MAGIC_LENGTH];
-
-  // time
-  time_t time;
-
-  // file length
-  int length;
-
-  // server name
-  char server[64];
-
-  // version of server OS
-
-  // desktop width
-  int width;
-
-  // desktop height
-  int height;
-
-  // checksum
-  int checksum;
-
-  // version of Qt Brynhildr
-  int version;
-
-} FileHeader;
-
-// body entry
-typedef struct {
-  int counter;
-  COM_DATA com_data;
-} BodyEntry;
-
 // Recorder
 class Recorder
 {
@@ -62,14 +26,53 @@ public:
   // destructor
   ~Recorder();
 
-  // record com_data
+  // put com_data
   void putCOM_DATA(COM_DATA *com_data);
+
+  // get com_data
+  COM_DATA *getCOM_DATA();
 
 private:
   // make file header
   void makeFileHeader();
 
 private:
+  // file header
+  typedef struct {
+	// magic
+	char magic[QTB_RECORDER_MAGIC_LENGTH];
+
+	// time
+	time_t time;
+
+	// file length
+	int length;
+
+	// server name
+	char server[64];
+
+	// version of server OS
+
+	// desktop width
+	int width;
+
+	// desktop height
+	int height;
+
+	// checksum
+	int checksum;
+
+	// version of Qt Brynhildr
+	int version;
+
+  } FileHeader;
+
+  // body entry
+  typedef struct {
+	int counter;
+	COM_DATA com_data;
+  } BodyEntry;
+
   // settings
   Settings *settings;
 

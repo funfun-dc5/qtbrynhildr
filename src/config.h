@@ -31,6 +31,9 @@ const bool QTB_TRANSLATION				= true;
 // in testing
 const bool QTB_IN_TESTING				= false;
 
+// recorder
+#define QTB_RECORDER				1
+
 // splash screen
 #define QTB_SPLASH_SCREEN			0
 

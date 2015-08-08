@@ -14,6 +14,9 @@
 #include "mainwindow.h"
 #include "mousebuffer.h"
 #include "netthread.h"
+#if QTB_RECORDER
+#include "recorder.h"
+#endif // QTB_RECORDER
 #include "settings.h"
 
 namespace qtbrynhildr {
@@ -50,6 +53,11 @@ private:
   void initHeader();
 
 private:
+#if QTB_RECORDER
+  // recorder
+  Recorder *recorder;
+#endif // QTB_RECORDER
+
   // keyboard buffer
   KeyBuffer *keyBuffer;
 

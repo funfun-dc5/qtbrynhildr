@@ -6,7 +6,6 @@
 #include "common.h"
 
 // System Header
-#include <fstream>
 #include <iostream>
 
 // Qt Header
@@ -84,13 +83,17 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
 	  // write to file
 	  cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
 #if 1 // for TEST
-	  fstream file;
 	  char filename[QTB_MAXPATHLEN+1];
 	  snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "record_test");
-	  file.open(filename, ios::out | ios::binary | ios::app);
-	  if (file.is_open()){
-		file.write((char*)&bodyEntry, sizeof(BodyEntry));
-		file.close();
+	  if (!file.is_open()){
+		file.open(filename, ios::out | ios::binary | ios::app);
+		if (file.is_open()){
+		  file.write((char*)&bodyEntry, sizeof(BodyEntry));
+		  file.close();
+		}
+	  }
+	  else {
+		// already open file
 	  }
 #endif // for TEST
 	}
@@ -103,6 +106,47 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
 // get com_data
 COM_DATA *Recorder::getCOM_DATA()
 {
+  static bool done = false;
+
+  // (1) open file sream
+  if (!file.is_open() && !done){
+	char filename[QTB_MAXPATHLEN+1];
+	snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "record_test");
+	file.open(filename, ios::in | ios::binary);
+	if (file.is_open()){
+	  bodyEntry.counter = 0;
+	  cout << "open!" << endl << flush;
+	}
+	else {
+	  return 0;
+	}
+  }
+  else {
+	if (!done){
+	  if (file.eof()){
+		done = true;
+		file.close();
+		cout << "close!" << endl << flush;
+		return 0;
+	  }
+	}
+	else {
+	  return 0;
+	}
+  }
+
+  // (2)
+  if (bodyEntry.counter == 0){
+	static int counter = 1;
+	// read next bodyEntry
+	file.read((char*)&bodyEntry, sizeof(BodyEntry));
+	cout << "read next entry! : " << counter << endl << flush;
+	counter++;
+  }
+
+  // (3)
+  bodyEntry.counter -= 1;
+  return &bodyEntry.com_data;
 }
 
 } // end of namespace qtbrynhildr

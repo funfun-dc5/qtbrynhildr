@@ -6,6 +6,7 @@
 #define RECORDER_H
 // System Header
 #include <ctime>
+#include <fstream>
 
 // Local Header
 #include "protocols.h"
@@ -81,6 +82,9 @@ private:
 
   // body entry
   BodyEntry bodyEntry;
+
+  // file stream
+  fstream file;
 
   // output log flag
   bool outputLog;

@@ -205,9 +205,16 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 #endif
 
-#if 1 // for TEST
+#if 0 // for TEST
   // record
   recorder->putCOM_DATA(com_data);
+#else
+  // replay
+  COM_DATA *recordedCOM_DATA = recorder->getCOM_DATA();
+  if (recordedCOM_DATA != 0){
+	// override com_data
+	memcpy(com_data, recordedCOM_DATA, sizeof(COM_DATA));
+  }
 #endif // for TEST
 
   // save mode

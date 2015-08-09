@@ -262,9 +262,11 @@ void Option::printHelp() const
 #if QTB_RECORDER
   // -record <file>
   cout << "-record <file>" << endl;
+  cout << "        " << "record operations to <file>." << endl;
 
   // -replay <file>
   cout << "-replay <file>" << endl;
+  cout << "        " << "replay operations from <file>." << endl;
 #endif // QTB_RECORDER
 
   // -debug <on|off>

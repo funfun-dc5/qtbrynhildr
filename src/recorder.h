@@ -27,6 +27,18 @@ public:
   // destructor
   ~Recorder();
 
+  // start recording
+  void startRecording();
+
+  // stop recording
+  void stopRecording();
+
+  // start replaying
+  void startReplaying();
+
+  // stop replaying
+  void stopReplaying();
+
   // put com_data
   void putCOM_DATA(COM_DATA *com_data);
 

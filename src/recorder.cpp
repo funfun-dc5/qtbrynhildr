@@ -24,7 +24,7 @@ Recorder::Recorder(Settings *settings)
   settings(settings),
   header(0),
   // for DEBUG
-  outputLog(false)
+  outputLog(true)
 {
 }
 
@@ -71,6 +71,30 @@ void Recorder::makeFileHeader()
   //  header->version
 }
 
+// start recording
+void Recorder::startRecording()
+{
+  char filename[QTB_MAXPATHLEN+1];
+  snprintf(filename, QTB_MAXPATHLEN, "%s", settings->getRecordingControlFileName());
+  file.open(filename , ios::out | ios::binary);
+  if (file.is_open()){
+	settings->setOnRecordingControl(true);
+	if (outputLog)
+	  cout << "open : " << filename  << endl << flush;
+  }
+}
+
+// stop recording
+void Recorder::stopRecording()
+{
+  if (file.is_open()){
+	file.close();
+	if (outputLog)
+	  cout << "close : " << endl << flush;
+  }
+  settings->setOnRecordingControl(false);
+}
+
 // put com_data
 void Recorder::putCOM_DATA(COM_DATA *com_data)
 {
@@ -82,30 +106,12 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
   else {
 	// found new com_data
 	if (bodyEntry.counter > 0){
-	  static bool firstOpen = true;
 	  // write to file
 	  if (outputLog)
 		cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
-#if 1 // for TEST
-	  char filename[QTB_MAXPATHLEN+1];
-	  snprintf(filename, QTB_MAXPATHLEN, "%s", settings->getRecordingControlFileName());
-	  if (!file.is_open()){
-		if (firstOpen){
-		  firstOpen = false;
-		  file.open(filename , ios::out | ios::binary);
-		}
-		else {
-		  file.open(filename, ios::out | ios::binary | ios::app);
-		}
 		if (file.is_open()){
 		  file.write((char*)&bodyEntry, sizeof(BodyEntry));
-		  file.close();
 		}
-	  }
-	  else {
-		// already open file
-	  }
-#endif // for TEST
 	}
 	// set new com_data
 	bodyEntry.counter = 1;
@@ -113,51 +119,50 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
   }
 }
 
+// start replaying
+void Recorder::startReplaying()
+{
+  char filename[QTB_MAXPATHLEN+1];
+  snprintf(filename, QTB_MAXPATHLEN, "%s", settings->getReplayingControlFileName());
+  file.open(filename , ios::in | ios::binary);
+  if (file.is_open()){
+	settings->setOnReplayingControl(true);
+	bodyEntry.counter = 0;
+	if (outputLog)
+	  cout << "open : " << filename  << endl << flush;
+  }
+}
+
+// stop replaying
+void Recorder::stopReplaying()
+{
+  if (file.is_open()){
+	file.close();
+	if (outputLog)
+	  cout << "close : " << endl << flush;
+  }
+  settings->setOnReplayingControl(false);
+}
+
 // get com_data
 COM_DATA *Recorder::getCOM_DATA()
 {
-  static bool done = false;
-
-  // (1) open file sream
-  if (!file.is_open() && !done){
-	char filename[QTB_MAXPATHLEN+1];
-	snprintf(filename, QTB_MAXPATHLEN, "%s",  settings->getReplayingControlFileName());
-	file.open(filename, ios::in | ios::binary);
+  // (1)
+  if (bodyEntry.counter == 0){
+	static int counter = 1;
+	// read next bodyEntry
 	if (file.is_open()){
-	  bodyEntry.counter = 0;
+	  file.read((char*)&bodyEntry, sizeof(BodyEntry));
 	  if (outputLog)
-		cout << "open!" << endl << flush;
-	}
-	else {
-	  return 0;
-	}
-  }
-  else {
-	if (!done){
+		cout << "read next entry! : " << counter << endl << flush;
+	  counter++;
 	  if (file.eof()){
-		done = true;
-		file.close();
-		if (outputLog)
-		  cout << "close!" << endl << flush;
-		return 0;
+		stopReplaying();
 	  }
-	}
-	else {
-	  return 0;
 	}
   }
 
   // (2)
-  if (bodyEntry.counter == 0){
-	static int counter = 1;
-	// read next bodyEntry
-	file.read((char*)&bodyEntry, sizeof(BodyEntry));
-	if (outputLog)
-	  cout << "read next entry! : " << counter << endl << flush;
-	counter++;
-  }
-
-  // (3)
   bodyEntry.counter -= 1;
   return &bodyEntry.com_data;
 }

@@ -20,23 +20,22 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
+#if QTB_RECORDER
+ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder)
+#else  // QTB_RECORDER
 ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
+#endif // QTB_RECORDER
   :
   NetThread("ControlThread", settings, mainWindow),
-#if QTB_RECORDER
-  recorder(0),
-#endif // QTB_RECORDER
   keyBuffer(0),
   mouseBuffer(0),
+#if QTB_RECORDER
+  recorder(recorder),
+#endif // QTB_RECORDER
   monitorCount(0),
   sentMode(0)
 {
   outputLog = false; // for DEBUG
-
-#if QTB_RECORDER
-  // recorder
-  recorder = new Recorder(settings);
-#endif // QTB_RECORDER
 
   // keyboard buffer
   keyBuffer = mainWindow->getKeyBuffer();
@@ -53,13 +52,6 @@ ControlThread::~ControlThread()
 	delete com_data;
 	com_data = 0;
   }
-#if QTB_RECORDER
-  // delete recorder
-  if (recorder != 0){
-	delete recorder;
-	recorder = 0;
-  }
-#endif // QTB_RECORDER
 }
 
 //---------------------------------------------------------------------------

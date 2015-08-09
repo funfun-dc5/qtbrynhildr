@@ -29,6 +29,9 @@
 #include "logmessage.h"
 #include "mainwindow.h"
 #include "option.h"
+#if QTB_RECORDER
+#include "recorder.h"
+#endif // QTB_RECORDER
 #include "settings.h"
 
 // thread
@@ -437,6 +440,11 @@ private:
   // cipher
   Cipher *cipher;
 #endif // QTB_CRYPTGRAM
+
+#if QTB_RECORDER
+  // recorder
+  Recorder *recorder;
+#endif // QTB_RECORDER
 
   // current path
   QString currentPath;

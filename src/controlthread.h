@@ -28,7 +28,11 @@ class ControlThread : public NetThread
 
 public:
   // constructor
-  ControlThread(Settings *settings, MainWindow *mainWindow);
+#if QTB_RECORDER
+ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder);
+#else  // QTB_RECORDER
+ControlThread(Settings *settings, MainWindow *mainWindow);
+#endif // QTB_RECORDER
   // destructor
   ~ControlThread();
 
@@ -53,16 +57,16 @@ private:
   void initHeader();
 
 private:
-#if QTB_RECORDER
-  // recorder
-  Recorder *recorder;
-#endif // QTB_RECORDER
-
   // keyboard buffer
   KeyBuffer *keyBuffer;
 
   // mouse buffer
   MouseBuffer *mouseBuffer;
+
+#if QTB_RECORDER
+  // recorder
+  Recorder *recorder;
+#endif // QTB_RECORDER
 
   // mouse position
   MOUSE_POS prevPos;

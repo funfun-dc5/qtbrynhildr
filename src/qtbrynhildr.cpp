@@ -13,6 +13,9 @@
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
+#if QTB_RECORDER
+#include <QFileDialog>
+#endif // QTB_RECORDER
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -52,6 +55,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   option(0),
   iniFileName(0),
   settings(0),
+#if QTB_RECORDER
+  recorder(0),
+#endif // QTB_RECORDER
   logMessage(new LogMessage(this)),
   controlThread(0),
   graphicsThread(0),
@@ -133,6 +139,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	  settings->setOutputLog(false);
 	}
   }
+
 #if QTB_RECORDER
   // record
   settings->setOnRecordingControl(option->getRecordingFlag());
@@ -140,6 +147,15 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   // replay
   settings->setOnReplayingControl(option->getReplayingFlag());
   settings->setReplayingControlFileName(option->getReplayingFileName());
+
+  // recorder
+  recorder = new Recorder(settings);
+  if (settings->getOnReplayingControl()){
+	recorder->startReplaying();
+  }
+  else if (settings->getOnRecordingControl()){
+	recorder->startRecording();
+  }
 #endif // QTB_RECORDER
 
   // version
@@ -251,7 +267,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   //------------------------------------------------------------
   // create threads
   //------------------------------------------------------------
+#if QTB_RECORDER
+  controlThread = new ControlThread(settings, mainWindow, recorder);
+#else // QTB_RECORDER
   controlThread = new ControlThread(settings, mainWindow);
+#endif // QTB_RECORDER
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
@@ -369,6 +389,15 @@ QtBrynhildr::~QtBrynhildr()
 	cipher = 0;
   }
 #endif
+
+#if QTB_RECORDER
+  // delete recorder
+  if (recorder != 0){
+	delete recorder;
+	recorder = 0;
+  }
+#endif // QTB_RECORDER
+
   // settings
   if (settings != 0){
 	delete settings;
@@ -1486,25 +1515,43 @@ void QtBrynhildr::toggleOnSound()
 void QtBrynhildr::startRecordingControl()
 {
   // prepare for recording
+  // Yet
 
   // start to record
-  settings->setOnRecordingControl(true);
+  recorder->startRecording();
 }
 
 // stop recording control
 void QtBrynhildr::stopRecordingControl()
 {
+  // prepare for save file
+  QString fileName =
+	QFileDialog::getOpenFileName(this,
+								 tr("Save file"),
+								 ".",
+								 tr("Control Record File (*.qtbf)"));
+  // Yet
+
   // stop to record
-  settings->setOnRecordingControl(false);
+  recorder->stopRecording();
 }
 
 // replay recorded control
 void QtBrynhildr::replayRecordingControl()
 {
+  static char filename[QTB_MAXPATHLEN];
+
   // prepare for replaying
+  QString fileName =
+	QFileDialog::getOpenFileName(this,
+								 tr("Open file"),
+								 ".",
+								 tr("Control Record File (*.qtbf)"));
+  strncpy(filename, qPrintable(fileName), QTB_MAXPATHLEN);
+  settings->setReplayingControlFileName(filename);
 
   // start to replay
-  settings->setOnReplayingControl(true);
+  recorder->startReplaying();
 }
 #endif // QTB_RECORDER
 

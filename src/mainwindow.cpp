@@ -301,7 +301,7 @@ void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
   if (outputLogForMouse){
-	cout << "[MainWindow] mousePressEvent: ";
+	qDebug() << "[MainWindow] mousePressEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -318,7 +318,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[MainWindow] mouseReleaseEvent: ";
+	qDebug() << "[MainWindow] mouseReleaseEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -335,7 +335,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[MainWindow] mouseDoubleClickEvent: ";
+	qDebug() << "[MainWindow] mouseDoubleClickEvent: ";
 	printMouseButtonEvent(event);
   }
 

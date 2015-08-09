@@ -93,7 +93,7 @@ void DesktopScalingDialog::on_resetButton_clicked()
 void DesktopScalingDialog::accept()
 {
   if (outputLog)
-	qDebug() << "accept()."; // for DEBUG
+	cout << "accept()."; // for DEBUG
   hide();
 }
 
@@ -101,7 +101,7 @@ void DesktopScalingDialog::accept()
 void DesktopScalingDialog::reject()
 {
   if (outputLog)
-	qDebug() << "reject()."; // for DEBUG
+	cout << "reject()."; // for DEBUG
   settings->setDesktopScalingFactor(originalFactor);
   hide();
 }

@@ -14,6 +14,8 @@
 #include "parameters.h"
 #include "recorder.h"
 
+#if QTB_RECORDER
+
 namespace qtbrynhildr {
 
 // constructor
@@ -161,3 +163,5 @@ COM_DATA *Recorder::getCOM_DATA()
 }
 
 } // end of namespace qtbrynhildr
+
+#endif // QTB_RECORDER

@@ -143,6 +143,13 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
+#if QTB_RECORDER
+  // record and replay
+  void startRecordingControl();
+  void stopRecordingControl();
+  void replayRecordingControl();
+#endif // QTB_RECORDER
+
   // send key
 #if 0 // for TEST
   void sendKey_CTRL_ALT_DEL(); // CTRL + ALT + DEL
@@ -256,6 +263,11 @@ private:
   // Send Key Sub Menu
   QMenu *sendKeySubMenu;
 
+#if QTB_RECORDER
+  // Record and Replay Sub Menu
+  QMenu *recordAndReplaySubMenu;
+#endif // QTB_RECORDER
+
   // Option Menu
   QMenu *optionMenu;
 
@@ -352,6 +364,15 @@ private:
 
   // toggle onSound
   QAction *onSound_Action;
+
+#if QTB_RECORDER
+  // start recording control
+  QAction *startRecordingControl_Action;
+  // stop recording control
+  QAction *stopRecordingControl_Action;
+  // replay recorded control
+  QAction *replayRecordingControl_Action;
+#endif // QTB_RECORDER
 
   // send key
   QAction *sendKey1_Action;

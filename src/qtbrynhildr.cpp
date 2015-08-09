@@ -791,6 +791,23 @@ void QtBrynhildr::createActions()
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
 
+#if QTB_RECORDER
+  // start recording control
+  startRecordingControl_Action = new QAction(tr("Start Recodrding"), this);
+  startRecordingControl_Action->setStatusTip(tr("Start Recodrding"));
+  connect(startRecordingControl_Action, SIGNAL(triggered()), this, SLOT(startRecordingControl()));
+
+  // stop recording control
+  stopRecordingControl_Action = new QAction(tr("Stop Recodrding"), this);
+  stopRecordingControl_Action->setStatusTip(tr("Stop Recodrding"));
+  connect(stopRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopRecordingControl()));
+
+  // replay recorded control
+  replayRecordingControl_Action = new QAction(tr("Replay"), this);
+  replayRecordingControl_Action->setStatusTip(tr("Replay"));
+  connect(replayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(replayRecordingControl()));
+#endif // QTB_RECORDER
+
   // send key Action
 #if 0 // for TEST
   sendKey1_Action = new QAction(tr("Ctrl + Alt + Del"), this);
@@ -914,6 +931,15 @@ void QtBrynhildr::createMenus()
   controlMenu->addAction(onControl_Action);
   controlMenu->addAction(onGraphics_Action);
   controlMenu->addAction(onSound_Action);
+
+#if QTB_RECORDER
+  // for record and replay
+  controlMenu->addSeparator();
+  recordAndReplaySubMenu = controlMenu->addMenu(tr("Record and Replay"));
+  recordAndReplaySubMenu->addAction(startRecordingControl_Action);
+  recordAndReplaySubMenu->addAction(stopRecordingControl_Action);
+  recordAndReplaySubMenu->addAction(replayRecordingControl_Action);
+#endif // QTB_RECORDER
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("&Option"));
@@ -1454,6 +1480,33 @@ void QtBrynhildr::toggleOnSound()
 	onSound_Action->setChecked(true);
   }
 }
+
+#if QTB_RECORDER
+// start recording control
+void QtBrynhildr::startRecordingControl()
+{
+  // prepare for recording
+
+  // start to record
+  settings->setOnRecordingControl(true);
+}
+
+// stop recording control
+void QtBrynhildr::stopRecordingControl()
+{
+  // stop to record
+  settings->setOnRecordingControl(false);
+}
+
+// replay recorded control
+void QtBrynhildr::replayRecordingControl()
+{
+  // prepare for replaying
+
+  // start to replay
+  settings->setOnReplayingControl(true);
+}
+#endif // QTB_RECORDER
 
 #if 0 // for TEST
 // send key for CTRL + ALT + DEL

@@ -66,6 +66,20 @@ public:
 	return debug;
   }
 
+#if QTB_RECORDER
+  // recording flag
+  bool getRecordingFlag() const
+  {
+	return recordingFlag;
+  }
+
+  // replaying flag
+  bool getReplayingFlag() const
+  {
+	return replayingFlag;
+  }
+#endif // QTB_RECORDER
+
 private:
   // analyze command line options
   bool analyzeOptions(int argc, char *argv[]);
@@ -94,6 +108,14 @@ private:
 
   // debug
   const char *debug;
+
+#if QTB_RECORDER
+  // recording flag
+  bool recordingFlag;
+
+  // replaying flag
+  bool replayingFlag;
+#endif // QTB_RECORDER
 
   // bootup flag
   bool bootupFlag;

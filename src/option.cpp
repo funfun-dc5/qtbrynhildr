@@ -26,6 +26,10 @@ Option::Option(int argc, char *argv[])
   password(0),
   iniFileName(0),
   debug(0),
+#if QTB_RECORDER
+  recordingFlag(false),
+  replayingFlag(false),
+#endif // QTB_RECORDER
   bootupFlag(false),
   shutdownFlag(false)
 {
@@ -135,6 +139,14 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  argv++;
 		}
 	  }
+#if QTB_RECORDER
+	  else if (strncmp("record", optionName, sizeof("record")) == 0){
+		recordingFlag = true;
+	  }
+	  else if (strncmp("replay", optionName, sizeof("replay")) == 0){
+		replayingFlag = true;
+	  }
+#endif // QTB_RECORDER
 	  else if ((strncmp("version", optionName, sizeof("version")) == 0)||
 			   (strncmp("v", optionName, sizeof("v")) == 0)){
 		printVersion();
@@ -196,6 +208,14 @@ void Option::printHelp() const
   // -server <server name|IP address>:<password>[:<port no>]
   cout << "-server <server name|IP address>:<password>[:<port no>]" << endl;
   cout << "        " << "bootup for server." << endl;
+
+#if QTB_RECORDER
+  // -record <file>
+  cout << "-record <file>" << endl;
+
+  // -replay <file>
+  cout << "-replay <file>" << endl;
+#endif // QTB_RECORDER
 
   // -debug <on|off>
   cout << "-debug <on|off>" << endl;

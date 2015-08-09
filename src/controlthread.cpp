@@ -205,17 +205,25 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 #endif
 
-#if 0 // for TEST
-  // record
-  recorder->putCOM_DATA(com_data);
-#else
-  // replay
-  COM_DATA *recordedCOM_DATA = recorder->getCOM_DATA();
-  if (recordedCOM_DATA != 0){
-	// override com_data
-	memcpy(com_data, recordedCOM_DATA, sizeof(COM_DATA));
+#if QTB_RECORDER
+  // recording
+  if (settings->getOnRecordingControl()){
+	recorder->putCOM_DATA(com_data);
   }
-#endif // for TEST
+  // replaying
+  else if (settings->getOnReplayingControl()){
+	// replay
+	COM_DATA *recordedCOM_DATA = recorder->getCOM_DATA();
+	if (recordedCOM_DATA != 0){
+	  // override com_data
+	  memcpy(com_data, recordedCOM_DATA, sizeof(COM_DATA));
+	}
+	else {
+	  // stop replaying
+	  settings->setOnReplayingControl(false);
+	}
+  }
+#endif // QTB_RECORDER
 
   // save mode
   sentMode = com_data->mode;

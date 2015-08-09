@@ -133,6 +133,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	  settings->setOutputLog(false);
 	}
   }
+#if QTB_RECORDER
+  // record
+  settings->setOnRecordingControl(option->getRecordingFlag());
+  // replay
+  settings->setOnReplayingControl(option->getReplayingFlag());
+#endif // QTB_RECORDER
 
   // version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION);

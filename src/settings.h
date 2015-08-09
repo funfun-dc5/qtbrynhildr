@@ -787,6 +787,32 @@ public:
 	this->onShowStatusBar = onShowStatusBar;
   }
 
+#if QTB_RECORDER
+  // get on recording control flag
+  bool getOnRecordingControl() const
+  {
+	return onRecordingControl;
+  }
+
+  // set on recording control flag
+  void setOnRecordingControl(bool onRecordingControl)
+  {
+	this->onRecordingControl = onRecordingControl;
+  }
+
+  // get on replaying control flag
+  bool getOnReplayingControl() const
+  {
+	return onReplayingControl;
+  }
+
+  // set on replaying control flag
+  void setOnReplayingControl(bool onReplayingControl)
+  {
+	this->onReplayingControl = onReplayingControl;
+  }
+#endif // QTB_RECORDER
+
   // get on scroll mode flag
   bool getOnScrollMode() const
   {
@@ -960,6 +986,14 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+#if QTB_RECORDER
+  // recording
+  volatile bool onRecordingControl;
+
+  // reply
+  volatile bool onReplayingControl;
+#endif // QTB_RECORDER
 
   // scroll mode
   volatile bool onScrollMode;

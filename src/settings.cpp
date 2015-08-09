@@ -30,6 +30,10 @@ Settings::Settings(const char *iniFileName)
   bootupFlag(false),
   shutdownFlag(false),
   connected(false),
+#if QTB_RECORDER
+  onRecordingControl(false),
+  onReplayingControl(false),
+#endif // QTB_RECORDER
   onScrollMode(false)
 {
   if (iniFileName != 0){

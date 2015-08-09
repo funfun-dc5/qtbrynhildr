@@ -80,13 +80,21 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
   else {
 	// found new com_data
 	if (bodyEntry.counter > 0){
+	  static bool firstOpen = true;
 	  // write to file
-	  cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
+	  if (outputLog)
+		cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
 #if 1 // for TEST
 	  char filename[QTB_MAXPATHLEN+1];
-	  snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "record_test");
+	  snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "test");
 	  if (!file.is_open()){
-		file.open(filename, ios::out | ios::binary | ios::app);
+		if (firstOpen){
+		  firstOpen = false;
+		  file.open(filename , ios::out | ios::binary);
+		}
+		else {
+		  file.open(filename, ios::out | ios::binary | ios::app);
+		}
 		if (file.is_open()){
 		  file.write((char*)&bodyEntry, sizeof(BodyEntry));
 		  file.close();
@@ -111,11 +119,12 @@ COM_DATA *Recorder::getCOM_DATA()
   // (1) open file sream
   if (!file.is_open() && !done){
 	char filename[QTB_MAXPATHLEN+1];
-	snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "record_test");
+	snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "test");
 	file.open(filename, ios::in | ios::binary);
 	if (file.is_open()){
 	  bodyEntry.counter = 0;
-	  cout << "open!" << endl << flush;
+	  if (outputLog)
+		cout << "open!" << endl << flush;
 	}
 	else {
 	  return 0;
@@ -126,7 +135,8 @@ COM_DATA *Recorder::getCOM_DATA()
 	  if (file.eof()){
 		done = true;
 		file.close();
-		cout << "close!" << endl << flush;
+		if (outputLog)
+		  cout << "close!" << endl << flush;
 		return 0;
 	  }
 	}
@@ -140,7 +150,8 @@ COM_DATA *Recorder::getCOM_DATA()
 	static int counter = 1;
 	// read next bodyEntry
 	file.read((char*)&bodyEntry, sizeof(BodyEntry));
-	cout << "read next entry! : " << counter << endl << flush;
+	if (outputLog)
+	  cout << "read next entry! : " << counter << endl << flush;
 	counter++;
   }
 

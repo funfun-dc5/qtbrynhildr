@@ -7,6 +7,9 @@
 
 // System Header
 #include <cstring>
+#if 1 // copy for TEST
+#include <cstdio>
+#endif
 //#include <iostream>
 
 // Qt Header
@@ -823,6 +826,8 @@ void QtBrynhildr::createActions()
 #if QTB_RECORDER
   // start recording control
   startRecordingControl_Action = new QAction(tr("Start Recodrding"), this);
+  startRecordingControl_Action->setCheckable(true);
+  startRecordingControl_Action->setChecked(settings->getOnRecordingControl());
   startRecordingControl_Action->setStatusTip(tr("Start Recodrding"));
   connect(startRecordingControl_Action, SIGNAL(triggered()), this, SLOT(startRecordingControl()));
 
@@ -1514,8 +1519,10 @@ void QtBrynhildr::toggleOnSound()
 // start recording control
 void QtBrynhildr::startRecordingControl()
 {
+  static const char filename[QTB_MAXPATHLEN] = "qtbrynhildr.tmp";
+
   // prepare for recording
-  // Yet
+  settings->setRecordingControlFileName(filename);
 
   // start to record
   recorder->startRecording();
@@ -1526,14 +1533,26 @@ void QtBrynhildr::stopRecordingControl()
 {
   // prepare for save file
   QString fileName =
-	QFileDialog::getOpenFileName(this,
+	QFileDialog::getSaveFileName(this,
 								 tr("Save file"),
 								 ".",
 								 tr("Control Record File (*.qtbf)"));
-  // Yet
-
   // stop to record
   recorder->stopRecording();
+
+  // make fileName (header + raw)
+#if 1 // copy for TEST
+  char filename[QTB_MAXPATHLEN+1];
+  strncpy(filename, qPrintable(fileName), QTB_MAXPATHLEN);
+  if (rename("qtbrynhildr.tmp", filename) == 0){
+	//	cout << "succeeded to rename()." << endl << flush;
+  }
+  else {
+	cout << "failed to rename()." << endl << flush;
+  }
+#endif
+
+  startRecordingControl_Action->setChecked(false);
 }
 
 // replay recorded control

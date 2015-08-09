@@ -24,7 +24,7 @@ Recorder::Recorder(Settings *settings)
   settings(settings),
   header(0),
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
 }
 

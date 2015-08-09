@@ -800,6 +800,18 @@ public:
 	this->onRecordingControl = onRecordingControl;
   }
 
+  // get recording control filename
+  const char* getRecordingControlFileName() const
+  {
+	return recordingControlFileName;
+  }
+
+  // set recording control filename
+  void setRecordingControlFileName(const char *recordingControlFileName)
+  {
+	this->recordingControlFileName = recordingControlFileName;
+  }
+
   // get on replaying control flag
   bool getOnReplayingControl() const
   {
@@ -810,6 +822,18 @@ public:
   void setOnReplayingControl(bool onReplayingControl)
   {
 	this->onReplayingControl = onReplayingControl;
+  }
+
+  // get replaying control filename
+  const char* getReplayingControlFileName() const
+  {
+	return replayingControlFileName;
+  }
+
+  // set replaying control filename
+  void setReplayingControlFileName(const char *replayingControlFileName)
+  {
+	this->replayingControlFileName = replayingControlFileName;
   }
 #endif // QTB_RECORDER
 
@@ -990,9 +1014,12 @@ private:
 #if QTB_RECORDER
   // recording
   volatile bool onRecordingControl;
+  const char *recordingControlFileName;
 
   // reply
   volatile bool onReplayingControl;
+  const char *replayingControlFileName;
+
 #endif // QTB_RECORDER
 
   // scroll mode

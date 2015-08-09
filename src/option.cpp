@@ -28,7 +28,9 @@ Option::Option(int argc, char *argv[])
   debug(0),
 #if QTB_RECORDER
   recordingFlag(false),
+  recordingFileName(0),
   replayingFlag(false),
+  replayingFileName(0),
 #endif // QTB_RECORDER
   bootupFlag(false),
   shutdownFlag(false)
@@ -141,10 +143,58 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  }
 #if QTB_RECORDER
 	  else if (strncmp("record", optionName, sizeof("record")) == 0){
-		recordingFlag = true;
+		// check argument
+		if (argc < 3){
+		  // error : no argument
+		  cout << "-record option need an argument." << endl << flush;
+		  printHelp();
+		  shutdownFlag = true;
+		}
+		else {
+		  const char *arg = (char*)(&argv[2][0]);
+
+		  // check other option
+		  if (arg[0] == '-'){
+			cout << "-record option need an argument." << endl << flush;
+			printHelp();
+			shutdownFlag = true;
+		  }
+		  else {
+			recordingFlag = true;
+			recordingFileName = arg;
+		  }
+
+		  // next argument
+		  argc--;
+		  argv++;
+		}
 	  }
 	  else if (strncmp("replay", optionName, sizeof("replay")) == 0){
-		replayingFlag = true;
+		// check argument
+		if (argc < 3){
+		  // error : no argument
+		  cout << "-replay option need an argument." << endl << flush;
+		  printHelp();
+		  shutdownFlag = true;
+		}
+		else {
+		  const char *arg = (char*)(&argv[2][0]);
+
+		  // check other option
+		  if (arg[0] == '-'){
+			cout << "-replay option need an argument." << endl << flush;
+			printHelp();
+			shutdownFlag = true;
+		  }
+		  else {
+			replayingFlag = true;
+			replayingFileName = arg;
+		  }
+
+		  // next argument
+		  argc--;
+		  argv++;
+		}
 	  }
 #endif // QTB_RECORDER
 	  else if ((strncmp("version", optionName, sizeof("version")) == 0)||

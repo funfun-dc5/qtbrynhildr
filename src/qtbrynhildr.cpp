@@ -136,8 +136,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #if QTB_RECORDER
   // record
   settings->setOnRecordingControl(option->getRecordingFlag());
+  settings->setRecordingControlFileName(option->getRecordingFileName());
   // replay
   settings->setOnReplayingControl(option->getReplayingFlag());
+  settings->setReplayingControlFileName(option->getReplayingFileName());
 #endif // QTB_RECORDER
 
   // version

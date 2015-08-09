@@ -86,7 +86,7 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
 		cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
 #if 1 // for TEST
 	  char filename[QTB_MAXPATHLEN+1];
-	  snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "test");
+	  snprintf(filename, QTB_MAXPATHLEN, "%s", settings->getRecordingControlFileName());
 	  if (!file.is_open()){
 		if (firstOpen){
 		  firstOpen = false;
@@ -119,7 +119,7 @@ COM_DATA *Recorder::getCOM_DATA()
   // (1) open file sream
   if (!file.is_open() && !done){
 	char filename[QTB_MAXPATHLEN+1];
-	snprintf(filename, QTB_MAXPATHLEN, "%s.qtbf", "test");
+	snprintf(filename, QTB_MAXPATHLEN, "%s",  settings->getReplayingControlFileName());
 	file.open(filename, ios::in | ios::binary);
 	if (file.is_open()){
 	  bodyEntry.counter = 0;

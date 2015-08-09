@@ -73,10 +73,22 @@ public:
 	return recordingFlag;
   }
 
+  // recording filename
+  const char *getRecordingFileName() const
+  {
+	return recordingFileName;
+  }
+
   // replaying flag
   bool getReplayingFlag() const
   {
 	return replayingFlag;
+  }
+
+  // replaying filename
+  const char *getReplayingFileName() const
+  {
+	return replayingFileName;
   }
 #endif // QTB_RECORDER
 
@@ -113,8 +125,14 @@ private:
   // recording flag
   bool recordingFlag;
 
+  // recording filename
+  const char *recordingFileName;
+
   // replaying flag
   bool replayingFlag;
+
+  // replaying filename
+  const char *replayingFileName;
 #endif // QTB_RECORDER
 
   // bootup flag

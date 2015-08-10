@@ -146,19 +146,17 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #if QTB_RECORDER
   // record
   settings->setOnRecordingControl(option->getRecordingFlag());
-  settings->setRecordingControlFileName(option->getRecordingFileName());
+  if (option->getRecordingFlag()){
+	settings->setRecordingControlFileName(option->getRecordingFileName());
+  }
   // replay
   settings->setOnReplayingControl(option->getReplayingFlag());
-  settings->setReplayingControlFileName(option->getReplayingFileName());
+  if (option->getReplayingFlag()){
+	settings->setReplayingControlFileName(option->getReplayingFileName());
+  }
 
   // recorder
   recorder = new Recorder(settings);
-  if (settings->getOnReplayingControl()){
-	recorder->startReplaying();
-  }
-  else if (settings->getOnRecordingControl()){
-	recorder->startRecording();
-  }
 #endif // QTB_RECORDER
 
   // version
@@ -1189,6 +1187,16 @@ void QtBrynhildr::connectToServer()
   mainWindow->getKeyBuffer()->clear();
   mainWindow->getMouseBuffer()->clear();
 
+#if QTB_RECORDER
+  // recorder
+  if (settings->getOnReplayingControl()){
+	recorder->startReplaying();
+  }
+  else if (settings->getOnRecordingControl()){
+	recorder->startRecording();
+  }
+#endif // QTB_RECORDER
+
   // initialize socket
   initSocket();
 
@@ -1213,6 +1221,16 @@ void QtBrynhildr::disconnectToServer()
   if (!settings->getConnected()){
 	return;
   }
+
+#if QTB_RECORDER
+  // stop record and replay
+  if (settings->getOnReplayingControl()){
+	recorder->stopReplaying();
+  }
+  if (settings->getOnRecordingControl()){
+	recorder->stopRecording(settings->getRecordingControlFileName());
+  }
+#endif // QTB_RECORDER
 
   // exit all threads
   controlThread->exitThread();
@@ -1519,10 +1537,11 @@ void QtBrynhildr::toggleOnSound()
 // start recording control
 void QtBrynhildr::startRecordingControl()
 {
-  static const char filename[QTB_MAXPATHLEN] = "qtbrynhildr.tmp";
-
-  // prepare for recording
-  settings->setRecordingControlFileName(filename);
+  // check
+  if (settings->getOnRecordingControl()){
+	// Now in recording
+	return;
+  }
 
   // start to record
   recorder->startRecording();
@@ -1531,26 +1550,20 @@ void QtBrynhildr::startRecordingControl()
 // stop recording control
 void QtBrynhildr::stopRecordingControl()
 {
+  // check
+  if (!settings->getOnRecordingControl()){
+	// Now Not in recording
+	return;
+  }
+
   // prepare for save file
   QString fileName =
 	QFileDialog::getSaveFileName(this,
 								 tr("Save file"),
 								 ".",
-								 tr("Control Record File (*.qtbf)"));
+								 tr("Control Record File (*.qtb)"));
   // stop to record
-  recorder->stopRecording();
-
-  // make fileName (header + raw)
-#if 1 // copy for TEST
-  char filename[QTB_MAXPATHLEN+1];
-  strncpy(filename, qPrintable(fileName), QTB_MAXPATHLEN);
-  if (rename("qtbrynhildr.tmp", filename) == 0){
-	//	cout << "succeeded to rename()." << endl << flush;
-  }
-  else {
-	cout << "failed to rename()." << endl << flush;
-  }
-#endif
+  recorder->stopRecording(qPrintable(fileName));
 
   startRecordingControl_Action->setChecked(false);
 }
@@ -1558,14 +1571,20 @@ void QtBrynhildr::stopRecordingControl()
 // replay recorded control
 void QtBrynhildr::replayRecordingControl()
 {
-  static char filename[QTB_MAXPATHLEN];
+  static char filename[QTB_MAXPATHLEN+1];
+
+  // check
+  if (settings->getOnReplayingControl()){
+	// Now in replaying
+	return;
+  }
 
   // prepare for replaying
   QString fileName =
 	QFileDialog::getOpenFileName(this,
 								 tr("Open file"),
 								 ".",
-								 tr("Control Record File (*.qtbf)"));
+								 tr("Control Record File (*.qtb)"));
   strncpy(filename, qPrintable(fileName), QTB_MAXPATHLEN);
   settings->setReplayingControlFileName(filename);
 

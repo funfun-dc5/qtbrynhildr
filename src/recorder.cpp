@@ -71,12 +71,18 @@ void Recorder::makeFileHeader()
   //  header->version
 }
 
+// check file header
+bool Recorder::checkFileHeader()
+{
+  return true;
+}
+
 // start recording
 void Recorder::startRecording()
 {
-  char filename[QTB_MAXPATHLEN+1];
-  snprintf(filename, QTB_MAXPATHLEN, "%s", settings->getRecordingControlFileName());
-  file.open(filename , ios::out | ios::binary);
+  const char filename[QTB_MAXPATHLEN+1] = "qtbrynhidlr.tmp";
+
+  file.open(filename, ios::out | ios::binary);
   if (file.is_open()){
 	settings->setOnRecordingControl(true);
 	if (outputLog)
@@ -85,14 +91,27 @@ void Recorder::startRecording()
 }
 
 // stop recording
-void Recorder::stopRecording()
+void Recorder::stopRecording(const char* saveFileName)
 {
+  const char filename[QTB_MAXPATHLEN+1] = "qtbrynhidlr.tmp";
+
   if (file.is_open()){
 	file.close();
 	if (outputLog)
 	  cout << "close : " << endl << flush;
   }
   settings->setOnRecordingControl(false);
+
+  // make fileName (header + raw)
+#if 1 // copy for TEST
+  if (rename(filename, saveFileName) == 0){
+	if (outputLog)
+	  cout << "succeeded to rename()." << endl << flush;
+  }
+  else {
+	cout << "failed to rename()." << endl << flush;
+  }
+#endif
 }
 
 // put com_data

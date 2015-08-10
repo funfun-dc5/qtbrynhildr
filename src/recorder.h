@@ -13,8 +13,8 @@
 #include "settings.h"
 
 // magic
-#define QTB_RECORDER_MAGIC 			"QTBF"
-#define QTB_RECORDER_MAGIC_LENGTH	4
+#define QTB_RECORDER_MAGIC 			"QTB"
+#define QTB_RECORDER_MAGIC_LENGTH	3
 
 namespace qtbrynhildr {
 
@@ -31,7 +31,7 @@ public:
   void startRecording();
 
   // stop recording
-  void stopRecording();
+  void stopRecording(const char *saveFileName);
 
   // start replaying
   void startReplaying();
@@ -48,6 +48,9 @@ public:
 private:
   // make file header
   void makeFileHeader();
+
+  // check file header
+  bool checkFileHeader();
 
 private:
   // file header

@@ -38,19 +38,19 @@
  [対応OS]
 ==============================
 
- Windows 7   (32bit/64bit)
- Windows 8   (32bit/64bit)
- Windows 8.1 (32bit/64bit)
- Windows 10  (32bit/64bit)
+ Windows 7   (64bit/32bit)
+ Windows 8   (64bit/32bit)
+ Windows 8.1 (64bit/32bit)
+ Windows 10  (64bit/32bit)
 
- Ubuntu 14.04 LTS以降 (32bit/64bit)
+ Ubuntu 14.04 LTS以降 (x64/x86)
 
  (*1) 全てのエディションで試したわけではありません。
       現在確認済みの環境は
 
-      Windows 10 Pro (x64/x86)
-      Windows 8.1 Pro update (x64)
-      Windows 7 Home (x64)
+      Windows 10 Pro (64bit/32bit)
+      Windows 8.1 Pro update (64bit)
+      Windows 7 Home (64bit)
       Ubuntu 15.04 (x64)
       Ubuntu 14.04 LTS (x64)
       Ubuntu 14.04 LTS (x86)
@@ -458,7 +458,7 @@ geometry=@Rect(200 200 800 600)
 
  -replay <file>
 
- リモート操作情報をファイルから読み込みます。
+ リモート操作情報をファイルから読み込み、操作を再現します。
 
  (5) -version(-v)オプション
 
@@ -525,7 +525,6 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 8-2. Windows版のみの制限
 ----------------------------------------------------------------------
 
-
  (1) Windows版ではインストールフォルダにログファイルが作成されない可能性があります。
      UACのため出力先が以下のように強制変更されている可能性があります。
 
@@ -572,7 +571,7 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
  [1] OS名
 
- [2] 32bit/64bit
+ [2] 64bit/32bit
 
  [3] サービスパックの適用(ServicePack/update) [Windows版のみ]
 

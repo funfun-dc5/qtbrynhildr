@@ -66,6 +66,32 @@ public:
 	return debug;
   }
 
+#if QTB_RECORDER
+  // recording flag
+  bool getRecordingFlag() const
+  {
+	return recordingFlag;
+  }
+
+  // recording filename
+  const char *getRecordingFileName() const
+  {
+	return recordingFileName;
+  }
+
+  // replaying flag
+  bool getReplayingFlag() const
+  {
+	return replayingFlag;
+  }
+
+  // replaying filename
+  const char *getReplayingFileName() const
+  {
+	return replayingFileName;
+  }
+#endif // QTB_RECORDER
+
 private:
   // analyze command line options
   bool analyzeOptions(int argc, char *argv[]);
@@ -94,6 +120,20 @@ private:
 
   // debug
   const char *debug;
+
+#if QTB_RECORDER
+  // recording flag
+  bool recordingFlag;
+
+  // recording filename
+  const char *recordingFileName;
+
+  // replaying flag
+  bool replayingFlag;
+
+  // replaying filename
+  const char *replayingFileName;
+#endif // QTB_RECORDER
 
   // bootup flag
   bool bootupFlag;

@@ -26,6 +26,12 @@ Option::Option(int argc, char *argv[])
   password(0),
   iniFileName(0),
   debug(0),
+#if QTB_RECORDER
+  recordingFlag(false),
+  recordingFileName(0),
+  replayingFlag(false),
+  replayingFileName(0),
+#endif // QTB_RECORDER
   bootupFlag(false),
   shutdownFlag(false)
 {
@@ -135,6 +141,62 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  argv++;
 		}
 	  }
+#if QTB_RECORDER
+	  else if (strncmp("record", optionName, sizeof("record")) == 0){
+		// check argument
+		if (argc < 3){
+		  // error : no argument
+		  cout << "-record option need an argument." << endl << flush;
+		  printHelp();
+		  shutdownFlag = true;
+		}
+		else {
+		  const char *arg = (char*)(&argv[2][0]);
+
+		  // check other option
+		  if (arg[0] == '-'){
+			cout << "-record option need an argument." << endl << flush;
+			printHelp();
+			shutdownFlag = true;
+		  }
+		  else {
+			recordingFlag = true;
+			recordingFileName = arg;
+		  }
+
+		  // next argument
+		  argc--;
+		  argv++;
+		}
+	  }
+	  else if (strncmp("replay", optionName, sizeof("replay")) == 0){
+		// check argument
+		if (argc < 3){
+		  // error : no argument
+		  cout << "-replay option need an argument." << endl << flush;
+		  printHelp();
+		  shutdownFlag = true;
+		}
+		else {
+		  const char *arg = (char*)(&argv[2][0]);
+
+		  // check other option
+		  if (arg[0] == '-'){
+			cout << "-replay option need an argument." << endl << flush;
+			printHelp();
+			shutdownFlag = true;
+		  }
+		  else {
+			replayingFlag = true;
+			replayingFileName = arg;
+		  }
+
+		  // next argument
+		  argc--;
+		  argv++;
+		}
+	  }
+#endif // QTB_RECORDER
 	  else if ((strncmp("version", optionName, sizeof("version")) == 0)||
 			   (strncmp("v", optionName, sizeof("v")) == 0)){
 		printVersion();
@@ -196,6 +258,16 @@ void Option::printHelp() const
   // -server <server name|IP address>:<password>[:<port no>]
   cout << "-server <server name|IP address>:<password>[:<port no>]" << endl;
   cout << "        " << "bootup for server." << endl;
+
+#if QTB_RECORDER
+  // -record <file>
+  cout << "-record <file>" << endl;
+  cout << "        " << "record operations to <file>." << endl;
+
+  // -replay <file>
+  cout << "-replay <file>" << endl;
+  cout << "        " << "replay operations from <file>." << endl;
+#endif // QTB_RECORDER
 
   // -debug <on|off>
   cout << "-debug <on|off>" << endl;

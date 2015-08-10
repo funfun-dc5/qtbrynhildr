@@ -31,3 +31,5 @@ Makefile
 # for unix
 *.o
 *.a
+# for testing
+*.qtbf

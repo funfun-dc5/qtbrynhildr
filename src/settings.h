@@ -787,6 +787,56 @@ public:
 	this->onShowStatusBar = onShowStatusBar;
   }
 
+#if QTB_RECORDER
+  // get on recording control flag
+  bool getOnRecordingControl() const
+  {
+	return onRecordingControl;
+  }
+
+  // set on recording control flag
+  void setOnRecordingControl(bool onRecordingControl)
+  {
+	this->onRecordingControl = onRecordingControl;
+  }
+
+  // get recording control filename
+  const char* getRecordingControlFileName() const
+  {
+	return recordingControlFileName;
+  }
+
+  // set recording control filename
+  void setRecordingControlFileName(const char *recordingControlFileName)
+  {
+	this->recordingControlFileName = recordingControlFileName;
+  }
+
+  // get on replaying control flag
+  bool getOnReplayingControl() const
+  {
+	return onReplayingControl;
+  }
+
+  // set on replaying control flag
+  void setOnReplayingControl(bool onReplayingControl)
+  {
+	this->onReplayingControl = onReplayingControl;
+  }
+
+  // get replaying control filename
+  const char* getReplayingControlFileName() const
+  {
+	return replayingControlFileName;
+  }
+
+  // set replaying control filename
+  void setReplayingControlFileName(const char *replayingControlFileName)
+  {
+	this->replayingControlFileName = replayingControlFileName;
+  }
+#endif // QTB_RECORDER
+
   // get on scroll mode flag
   bool getOnScrollMode() const
   {
@@ -960,6 +1010,17 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+#if QTB_RECORDER
+  // recording
+  volatile bool onRecordingControl;
+  const char *recordingControlFileName;
+
+  // reply
+  volatile bool onReplayingControl;
+  const char *replayingControlFileName;
+
+#endif // QTB_RECORDER
 
   // scroll mode
   volatile bool onScrollMode;

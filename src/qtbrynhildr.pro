@@ -42,6 +42,7 @@ HEADERS += settings.h
 HEADERS += netthread.h controlthread.h graphicsthread.h soundthread.h
 HEADERS += keybuffer.h mousebuffer.h soundbuffer.h
 HEADERS += windows/keycodes.h windows/eventconverter.h windows/eventconverter_jp.h windows/eventconverter_us.h
+HEADERS += recorder.h
 
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
@@ -52,3 +53,4 @@ SOURCES += settings.cpp
 SOURCES += netthread.cpp controlthread.cpp graphicsthread.cpp soundthread.cpp
 SOURCES += keybuffer.cpp mousebuffer.cpp soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/eventconverter_jp.cpp windows/eventconverter_us.cpp
+SOURCES += recorder.cpp

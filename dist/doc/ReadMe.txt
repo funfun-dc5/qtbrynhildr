@@ -38,22 +38,24 @@
  [対応OS]
 ==============================
 
- Windows 7 (32bit/64bit)
- Windows 8 (32bit/64bit)
+ Windows 7   (32bit/64bit)
+ Windows 8   (32bit/64bit)
  Windows 8.1 (32bit/64bit)
+ Windows 10  (32bit/64bit)
 
  Ubuntu 14.04 LTS以降 (32bit/64bit)
 
  (*1) 全てのエディションで試したわけではありません。
       現在確認済みの環境は
+
+      Windows 10 Pro (x64/x86)
       Windows 8.1 Pro update (x64)
       Windows 7 Home (x64)
+      Ubuntu 15.04 (x64)
       Ubuntu 14.04 LTS (x64)
       Ubuntu 14.04 LTS (x86)
-      のみです。
 
-      Windows 10 Pro Insider Preview (x64/x86)とUbuntu 14.10/15.04 (x64)は
-      基本的な動作(マウス、キーボード、日本語入力、サウンドなど)のみ確認しました。
+      のみです。
 
  (*2) Qt5のサポートする環境(OS)で動作させられたらいいなぁと思っていますが、
       お約束は出来ません。
@@ -600,9 +602,14 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
-Ver.x.x.x : [新規機能]
+Ver.1.2.0 : [新規機能]
              ・リモート操作のファイル記録/再生機能を追加
                メニュー項目及び起動オプションを追加
+
+            [その他変更]
+             ・インストーラパッケージ作成ツールをバージョンアップ(InnoSetup 5.5.6)
+              (Windows版)
+             ・Windows 10 (x64/x86)をサポートOSに追加
 
 Ver.1.1.1 : [不具合修正]
              ・他のサウンド再生アプリケーションと同時に利用できない不具合への対応
@@ -856,4 +863,3 @@ http://mcz-xoxo.cocolog-nifty.com/blog/
 https://github.com/funfun-dc5/qtbrynhildr.git
 
 ----------------------------------------------------------------------
-HBD : 19940712

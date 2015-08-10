@@ -157,6 +157,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // recorder
   recorder = new Recorder(settings);
+  if (settings->getOnReplayingControl()){
+	recorder->startReplaying();
+  }
+  else if (settings->getOnRecordingControl()){
+	recorder->startRecording();
+  }
 #endif // QTB_RECORDER
 
   // version
@@ -1187,16 +1193,6 @@ void QtBrynhildr::connectToServer()
   mainWindow->getKeyBuffer()->clear();
   mainWindow->getMouseBuffer()->clear();
 
-#if QTB_RECORDER
-  // recorder
-  if (settings->getOnReplayingControl()){
-	recorder->startReplaying();
-  }
-  else if (settings->getOnRecordingControl()){
-	recorder->startRecording();
-  }
-#endif // QTB_RECORDER
-
   // initialize socket
   initSocket();
 
@@ -1565,6 +1561,7 @@ void QtBrynhildr::stopRecordingControl()
   // stop to record
   recorder->stopRecording(qPrintable(fileName));
 
+  // checked
   startRecordingControl_Action->setChecked(false);
 }
 

@@ -5,7 +5,10 @@
 // Common Header
 #include "common.h"
 
+#if QTB_RECORDER
+
 // System Header
+#include <cstring>
 #include <iostream>
 
 // Qt Header
@@ -13,8 +16,10 @@
 // Local Header
 #include "parameters.h"
 #include "recorder.h"
+#include "version.h"
 
-#if QTB_RECORDER
+// temporary filename
+#define RECORDER_TMP_FILENAME "qtbrynhildr.tmp"
 
 namespace qtbrynhildr {
 
@@ -22,10 +27,16 @@ namespace qtbrynhildr {
 Recorder::Recorder(Settings *settings)
   :
   settings(settings),
-  header(0),
+  header(new FileHeader),
+  counter(0),
+  dataSize(0),
+  checkSum(0),
+  filename(RECORDER_TMP_FILENAME),
   // for DEBUG
   outputLog(false)
 {
+  // initialization
+  bodyEntry.counter = 0;
 }
 
 // destructor
@@ -38,52 +49,12 @@ Recorder::~Recorder()
   }
 }
 
-// make file header
-void Recorder::makeFileHeader()
-{
-  // create header
-  if (header == 0){
-	header = new FileHeader();
-  }
-
-  // magic
-  memcpy(header->magic, QTB_RECORDER_MAGIC, QTB_RECORDER_MAGIC_LENGTH);
-
-  // time
-  header->time = time(&header->time);
-
-  // file length
-  header->length = 0;
-
-  // server name
-
-  // version of server OS
-
-  // desktop width
-  //  header->width
-
-  // desktop height
-  //  header->height
-
-  // checksum
-
-  // version of Qt Brynhildr
-  //  header->version
-}
-
-// check file header
-bool Recorder::checkFileHeader()
-{
-  return true;
-}
-
 // start recording
 void Recorder::startRecording()
 {
-  const char filename[QTB_MAXPATHLEN+1] = "qtbrynhidlr.tmp";
-
   file.open(filename, ios::out | ios::binary);
   if (file.is_open()){
+	dataSize = checkSum = 0;
 	settings->setOnRecordingControl(true);
 	if (outputLog)
 	  cout << "open : " << filename  << endl << flush;
@@ -93,8 +64,6 @@ void Recorder::startRecording()
 // stop recording
 void Recorder::stopRecording(const char* saveFileName)
 {
-  const char filename[QTB_MAXPATHLEN+1] = "qtbrynhidlr.tmp";
-
   if (file.is_open()){
 	file.close();
 	if (outputLog)
@@ -104,6 +73,24 @@ void Recorder::stopRecording(const char* saveFileName)
 
   // make fileName (header + raw)
 #if 1 // copy for TEST
+  fstream in_file;
+  fstream out_file;
+  in_file.open(filename, ios::in | ios::binary);
+  out_file.open(saveFileName, ios::out | ios::binary);
+  // write FileHeader
+  makeFileHeader();
+  out_file.write((char*)header, sizeof(FileHeader));
+  while(true){
+	char buf[sizeof(BodyEntry)];
+	in_file.read(buf, sizeof(BodyEntry));
+	if (in_file.eof())
+	  break;
+	out_file.write(buf, sizeof(BodyEntry));
+  }
+  in_file.close();
+  out_file.close();
+  remove(filename);
+#else
   if (rename(filename, saveFileName) == 0){
 	if (outputLog)
 	  cout << "succeeded to rename()." << endl << flush;
@@ -126,11 +113,14 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
 	// found new com_data
 	if (bodyEntry.counter > 0){
 	  // write to file
-	  if (outputLog)
-		cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
-		if (file.is_open()){
-		  file.write((char*)&bodyEntry, sizeof(BodyEntry));
-		}
+	  if (file.is_open()){
+		file.write((char*)&bodyEntry, sizeof(BodyEntry));
+		dataSize += sizeof(BodyEntry);
+		checkSum += sizeof(BodyEntry); // for TEST
+		counter++;
+		if (outputLog)
+		  cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
+	  }
 	}
 	// set new com_data
 	bodyEntry.counter = 1;
@@ -141,14 +131,27 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
 // start replaying
 void Recorder::startReplaying()
 {
-  char filename[QTB_MAXPATHLEN+1];
-  snprintf(filename, QTB_MAXPATHLEN, "%s", settings->getReplayingControlFileName());
-  file.open(filename , ios::in | ios::binary);
+  char loadFileName[QTB_MAXPATHLEN+1];
+  snprintf(loadFileName, QTB_MAXPATHLEN, "%s", settings->getReplayingControlFileName());
+  file.open(loadFileName, ios::in | ios::binary);
   if (file.is_open()){
+	// read FileHeader and check
+	file.read((char*)header, sizeof(FileHeader));
+	if (!checkFileHeader()){
+	  // illegal header
+	  file.close();
+	  return;
+	}
+	counter = 0;
+	dataSize = checkSum = 0;
 	settings->setOnReplayingControl(true);
 	bodyEntry.counter = 0;
 	if (outputLog)
-	  cout << "open : " << filename  << endl << flush;
+	  cout << "succeded top open : " << loadFileName  << endl << flush;
+  }
+  else {
+	if (outputLog)
+	  cout << " failed to open : " << loadFileName  << endl << flush;
   }
 }
 
@@ -168,13 +171,14 @@ COM_DATA *Recorder::getCOM_DATA()
 {
   // (1)
   if (bodyEntry.counter == 0){
-	static int counter = 1;
 	// read next bodyEntry
 	if (file.is_open()){
 	  file.read((char*)&bodyEntry, sizeof(BodyEntry));
+	  dataSize += sizeof(BodyEntry);
+	  checkSum += sizeof(BodyEntry); // for TEST
+	  counter++;
 	  if (outputLog)
 		cout << "read next entry! : " << counter << endl << flush;
-	  counter++;
 	  if (file.eof()){
 		stopReplaying();
 	  }
@@ -184,6 +188,63 @@ COM_DATA *Recorder::getCOM_DATA()
   // (2)
   bodyEntry.counter -= 1;
   return &bodyEntry.com_data;
+}
+
+// make file header
+void Recorder::makeFileHeader()
+{
+  // magic
+  memcpy(header->magic, QTB_RECORDER_MAGIC, QTB_RECORDER_MAGIC_LENGTH);
+
+  // time
+  header->time = time(&header->time);
+
+  // file length
+  header->length = dataSize + sizeof(FileHeader);
+
+  // server name
+  strncpy(header->server, qPrintable(settings->getServerName()), 63);
+  header->server[63] = '\0';
+
+  // type of server OS
+  header->serverType = settings->getServerType();
+
+  // desktop width
+  header->width = settings->getDesktopWidth();
+
+  // desktop height
+  header->height = settings->getDesktopHeight();
+
+  // checksum
+  header->checksum = checkSum;
+
+  // version of Qt Brynhildr
+  header->version = QTB_VERSION_NUMBER;
+}
+
+// check file header
+bool Recorder::checkFileHeader()
+{
+  // magic
+  if (memcmp(header->magic, QTB_RECORDER_MAGIC, QTB_RECORDER_MAGIC_LENGTH) != 0){
+	cout << "illegal magic!" << endl << flush;
+	return false;
+  }
+
+  // server name
+  if (strncmp(header->server, qPrintable(settings->getServerName()), 63) != 0){
+	// different server name
+	cout << "illegal server!" << endl << flush;
+	return false;
+  }
+
+  // type of server OS
+  if (header->serverType != settings->getServerType()){
+	cout << "illegal server type!" << endl << flush;
+	return false;
+  }
+
+  return true;
 }
 
 } // end of namespace qtbrynhildr

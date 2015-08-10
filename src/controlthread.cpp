@@ -198,12 +198,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 #endif
 
 #if QTB_RECORDER
-  // recording
-  if (settings->getOnRecordingControl()){
-	recorder->putCOM_DATA(com_data);
-  }
   // replaying
-  else if (settings->getOnReplayingControl()){
+  if (settings->getOnReplayingControl()){
 	// replay
 	COM_DATA *recordedCOM_DATA = recorder->getCOM_DATA();
 	if (recordedCOM_DATA != 0){
@@ -214,6 +210,10 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  // stop replaying
 	  settings->setOnReplayingControl(false);
 	}
+  }
+  // recording
+  else if (settings->getOnRecordingControl()){
+	recorder->putCOM_DATA(com_data);
   }
 #endif // QTB_RECORDER
 

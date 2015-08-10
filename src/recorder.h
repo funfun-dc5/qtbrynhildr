@@ -67,7 +67,8 @@ private:
 	// server name
 	char server[64];
 
-	// version of server OS
+	// type of server OS
+	SERVER_TYPE serverType;
 
 	// desktop width
 	int width;
@@ -98,8 +99,20 @@ private:
   // body entry
   BodyEntry bodyEntry;
 
+  // counter of body entry
+  int counter;
+
+  // data size
+  int dataSize;
+
+  // checksum
+  int checkSum;
+
   // file stream
   fstream file;
+
+  // temporary filename
+  const char *filename;
 
   // output log flag
   bool outputLog;

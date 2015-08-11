@@ -95,6 +95,9 @@ public slots:
   // network error handler
   void onNetworkError();
 
+  // exit applilcation
+  void exitApplication();
+
   // output Log Message
   void outputLogMessage(int msgID);
 

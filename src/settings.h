@@ -158,6 +158,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"
 #define QTB_ONCONFIRMATEXIT_DEFAULT		true
 
+// for onExitAfterRelpay
+#define QTB_ONEXITAFTERREPLAY			"onExitAfterReplay"
+#define QTB_ONEXITAFTERREPLAY_DEFAULT	false
+
 // for onStaysOnTop
 #define QTB_ONSTAYSONTOP					"onStaysOnTop"
 #define QTB_ONSTAYSONTOP_DEFAULT			false
@@ -739,6 +743,18 @@ public:
 	this->onConfirmAtExit = onConfirmAtExit;
   }
 
+  // get exit after replaying flag
+  bool getOnExitAfterReplay() const
+  {
+	return onExitAfterReplay;
+  }
+
+  // set exit after replaying flag
+  void setOnExitAfterReplay(bool onExitAfterReplay)
+  {
+	this->onExitAfterReplay = onExitAfterReplay;
+  }
+
   // get stays on top flag
   bool getOnStaysOnTop() const
   {
@@ -998,6 +1014,9 @@ private:
 
   // confirm at exit
   volatile bool onConfirmAtExit;
+
+  // exit after replaying
+  volatile bool onExitAfterReplay;
 
   // stays on top
   volatile bool onStaysOnTop;

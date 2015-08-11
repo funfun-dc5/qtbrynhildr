@@ -163,7 +163,6 @@ void Recorder::stopReplaying()
 	if (outputLog)
 	  cout << "close : " << endl << flush;
   }
-  settings->setOnReplayingControl(false);
 }
 
 // get com_data
@@ -183,6 +182,13 @@ COM_DATA *Recorder::getCOM_DATA()
 		stopReplaying();
 	  }
 	}
+	else {
+	  // file is closed
+	  return 0;
+	}
+  }
+  else if (bodyEntry.counter < 0){
+	return 0;
   }
 
   // (2)

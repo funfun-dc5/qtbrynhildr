@@ -209,6 +209,9 @@ PROCESS_RESULT ControlThread::processForHeader()
 	else {
 	  // stop replaying
 	  settings->setOnReplayingControl(false);
+	  if (settings->getOnExitAfterReplay()){
+		emit exitApplication();
+	  }
 	}
   }
   // recording

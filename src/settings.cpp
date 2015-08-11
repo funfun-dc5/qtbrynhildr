@@ -76,6 +76,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnConfirmAtExit(QTB_ONCONFIRMATEXIT_DEFAULT);
 
+  setOnExitAfterReplay(QTB_ONEXITAFTERREPLAY_DEFAULT);
+
   setOnStaysOnTop(QTB_ONSTAYSONTOP_DEFAULT);
 
   setOnFrameLessWindow(QTB_ONFRAMELESSWINDOW_DEFAULT);
@@ -196,6 +198,10 @@ void Settings::readSettings()
   setOnConfirmAtExit(settings->value(QTB_ONCONFIRMATEXIT,
 									 QTB_ONCONFIRMATEXIT_DEFAULT).toBool());
 
+  // load onExitAfterReplay
+  setOnExitAfterReplay(settings->value(QTB_ONEXITAFTERREPLAY,
+									   QTB_ONEXITAFTERREPLAY_DEFAULT).toBool());
+
   // load onStaysOnTop
   setOnStaysOnTop(settings->value(QTB_ONSTAYSONTOP,
 								  QTB_ONSTAYSONTOP_DEFAULT).toBool());
@@ -305,6 +311,9 @@ void Settings::writeSettings()
   // save confirmAtExit
   settings->setValue(QTB_ONCONFIRMATEXIT, onConfirmAtExit);
 
+  // save exit after replay
+  settings->setValue(QTB_ONEXITAFTERREPLAY, onExitAfterReplay);
+
   // save onStaysOnTop
   settings->setValue(QTB_ONSTAYSONTOP, onStaysOnTop);
 
@@ -367,6 +376,7 @@ void Settings::printSettings() const
 
   qDebug() << "MonitorNo               : " << monitorNo;
   qDebug() << "ConfirmAtExit           : " << onConfirmAtExit;
+  qDebug() << "ExitAfterReplay         : " << onExitAfterReplay;
   qDebug() << "StaysOnTop              : " << onStaysOnTop;
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;

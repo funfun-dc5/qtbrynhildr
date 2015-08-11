@@ -426,6 +426,7 @@ desktopOffsetX=0
 desktopOffsetY=0
 monitorNo=1
 onConfirmAtExit=true
+onExitAfterReplay=false
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true

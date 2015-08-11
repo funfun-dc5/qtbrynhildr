@@ -319,6 +319,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 		  SIGNAL(networkError()),
 		  SLOT(onNetworkError()));
 
+  connect(controlThread,
+		  SIGNAL(exitApplication()),
+		  SLOT(exitApplication()));
+
   // graphics thread
   connect(graphicsThread,
 		  SIGNAL(desktopChanged(QImage)),
@@ -530,6 +534,12 @@ void QtBrynhildr::onNetworkError()
   settings->setConnected(false);
   mainWindow->clearDesktop();
   refreshWindow();
+}
+
+// exit applilcation
+void QtBrynhildr::exitApplication()
+{
+  exit();
 }
 
 // output Log Message

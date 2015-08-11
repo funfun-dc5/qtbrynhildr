@@ -86,6 +86,9 @@ signals:
 
   // set monitor count
   void setMonitorCount(int monitorCount);
+
+  // exit application
+  void exitApplication();
 };
 
 } // end of namespace qtbrynhildr

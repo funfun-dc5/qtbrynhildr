@@ -982,11 +982,13 @@ void QtBrynhildr::createMenus()
 
 #if QTB_RECORDER
   // for record and replay
+  if (!QTB_IN_TESTING){
   controlMenu->addSeparator();
   recordAndReplaySubMenu = controlMenu->addMenu(tr("Record and Replay"));
   recordAndReplaySubMenu->addAction(startRecordingControl_Action);
   recordAndReplaySubMenu->addAction(stopRecordingControl_Action);
   recordAndReplaySubMenu->addAction(replayRecordingControl_Action);
+  }
 #endif // QTB_RECORDER
 
   // option menu
@@ -1001,6 +1003,12 @@ void QtBrynhildr::createMenus()
 	optionMenu->addSeparator();
 	inTestingSubMenu = optionMenu->addMenu(tr("In Testing"));
 	// in Testing Menu
+#if QTB_RECORDER
+	recordAndReplaySubMenu = inTestingSubMenu->addMenu(tr("Record and Replay"));
+	recordAndReplaySubMenu->addAction(startRecordingControl_Action);
+	recordAndReplaySubMenu->addAction(stopRecordingControl_Action);
+	recordAndReplaySubMenu->addAction(replayRecordingControl_Action);
+#endif // QTB_RECORDER
   }
 
   menuBar()->addSeparator();

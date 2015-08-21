@@ -85,6 +85,8 @@ Settings::Settings(const char *iniFileName)
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
 
+  setOnShowFrameRate(QTB_ONSHOWFRAMERATE_DEFAULT);
+
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
 
@@ -216,7 +218,11 @@ void Settings::readSettings()
 
   // load onShowStatusBar
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
-								   QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
+									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
+
+  // load onShowFrameRate
+  setOnShowFrameRate(settings->value(QTB_ONSHOWFRAMERATE,
+							   QTB_ONSHOWFRAMERATE_DEFAULT).toBool());
 
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
@@ -323,8 +329,11 @@ void Settings::writeSettings()
   // save onShowMenuBar
   settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
 
-  // save onShowStatusBar
-  settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
+  // save onShowMenuBar
+  settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
+
+  // save onShowFrameRate
+  settings->setValue(QTB_ONSHOWFRAMERATE, onShowFrameRate);
 
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
@@ -381,6 +390,7 @@ void Settings::printSettings() const
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
+  qDebug() << "ShowFrameRate           : " << onShowFrameRate;
 
   qDebug() << "------------------------------------------";
   qDebug() << "Graphics Buffer Size (bytes) : " << graphicsBufferSize;

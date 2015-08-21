@@ -32,6 +32,9 @@ public:
 	return frameCounter;
   };
 
+  // get frame rate
+  double getFrameRate() const;
+
 protected:
   // connect to server
   CONNECT_RESULT connectToServer();

@@ -55,6 +55,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   :
   desktopScalingDialog(0),
   frameCounter(0),
+  currentFrameRate(0),
   option(0),
   iniFileName(0),
   settings(0),
@@ -518,7 +519,19 @@ bool QtBrynhildr::getShutdownFlag() const
 // desktop Changed
 void QtBrynhildr::onDesktopChanged(QImage image)
 {
+  // update desktop
   mainWindow->refreshDesktop(image);
+
+  // update current frame rate
+  if (settings->getOnShowFrameRate()){
+	static int refreshCounter = 1;
+	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
+	  currentFrameRate = graphicsThread->getFrameRate();
+	  updateFrameRate();
+	  refreshCounter = 1;
+	}
+	refreshCounter++;
+  }
 }
 
 // desktop clear
@@ -600,6 +613,13 @@ void QtBrynhildr::createActions()
   showStatusBar_Action->setCheckable(true);
   showStatusBar_Action->setChecked(settings->getOnShowStatusBar());
   connect(showStatusBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowStatusBar()));
+
+  // Show FrameRate
+  showFrameRate_Action = new QAction(tr("Show FrameRate"), this);
+  showFrameRate_Action->setStatusTip(tr("Show FrameRate"));
+  showFrameRate_Action->setCheckable(true);
+  showFrameRate_Action->setChecked(settings->getOnShowFrameRate());
+  connect(showFrameRate_Action, SIGNAL(triggered()), this, SLOT(toggleShowFrameRate()));
 
   // Full Screen
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -903,6 +923,7 @@ void QtBrynhildr::createMenus()
   displayMenu = menuBar()->addMenu(tr("&Display"));
   displayMenu->addAction(showMenuBar_Action);
   displayMenu->addAction(showStatusBar_Action);
+  displayMenu->addAction(showFrameRate_Action);
   // for stays on top
   if (QTB_DESKTOP_STAYS_ON_TOP){
 	displayMenu->addSeparator();
@@ -1032,28 +1053,64 @@ void QtBrynhildr::createToolBars()
 // create Status Bar
 void QtBrynhildr::createStatusBar()
 {
-  locationLabel = new QLabel;
-  locationLabel->setAlignment(Qt::AlignHCenter);
+  connectionLabel = new QLabel;
+  connectionLabel->setAlignment(Qt::AlignHCenter);
 
-  formulaLabel = new QLabel;
-  formulaLabel->setIndent(3);
+  frameRateLabel = new QLabel;
+  frameRateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignLeft);
+  frameRateLabel->setText(tr("FrameRate: ")+"00.00");
+  // set initial size
+  //  frameRateLabel->setMinimumSize(frameRateLabel->sizeHint());
+  frameRateLabel->setMinimumSize(QSize(frameRateLabel->sizeHint().width() * 2,
+									   frameRateLabel->sizeHint().height()));
+  //  cout << "size.width  = " << frameRateLabel->sizeHint().width() << endl << flush;
+  //  cout << "size.height = " << frameRateLabel->sizeHint().height() << endl << flush;
 
-  statusBar()->addWidget(locationLabel);
-  statusBar()->addWidget(formulaLabel, 1);
+  statusBar()->addWidget(connectionLabel);
+  statusBar()->addPermanentWidget(frameRateLabel);
 }
 
 // update Status Bar
 void QtBrynhildr::updateStatusBar()
 {
-  // update location
+  // update labels
+  // update connected
+  updateConnected();
+  // update fps
+  updateFrameRate();
+}
+
+// update connected
+void QtBrynhildr::updateConnected()
+{
   if (settings->getConnected()){
-	locationLabel->setText(tr("connected : ") + settings->getServerName());
+	// connection
+	connectionLabel->setText(tr("connected : ") + settings->getServerName());
   }
   else {
-	locationLabel->setText(tr("connected : ") + "None");
+	// connection
+	connectionLabel->setText(tr("connected : ") + "None");
   }
 
-  locationLabel->setMinimumSize(locationLabel->sizeHint());
+  // set minimum size
+  connectionLabel->setMinimumSize(connectionLabel->sizeHint());
+}
+
+// update frame rate
+void QtBrynhildr::updateFrameRate()
+{
+  // update fps
+  if (settings->getOnShowFrameRate()){
+	if (settings->getConnected()){
+	  frameRateLabel->setText(tr("FrameRate: ")+QString::number(currentFrameRate, 'f', 2));
+	}
+	else {
+	  frameRateLabel->setText(tr("FrameRate: ")+"00.00");
+	}
+  }
+  else {
+	frameRateLabel->clear();
+  }
 }
 
 // connected
@@ -1704,6 +1761,18 @@ void QtBrynhildr::toggleShowStatusBar()
 	statusBar()->setVisible(true);
   }
   refreshWindow();
+}
+
+// toggle show frame rate
+void QtBrynhildr::toggleShowFrameRate()
+{
+  if (settings->getOnShowFrameRate()){
+	settings->setOnShowFrameRate(false);
+  }
+  else {
+	settings->setOnShowFrameRate(true);
+  }
+  updateStatusBar();
 }
 
 // full screen

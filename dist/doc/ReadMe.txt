@@ -253,7 +253,11 @@
 
      ステータスバーの表示のON/OFFを変更します。
 
-     [3] 常に最前面に表示
+     [3] フレームレートを表示
+
+     フレームレート(FPS)の表示のON/OFFを変更します。
+
+     [4] 常に最前面に表示
 
      常に最前面に表示します。
 
@@ -435,6 +439,7 @@ onExitAfterReplay=false
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true
+onShowFrameRate=true
 onStaysOnTop=false
 graphicsBufferSize=1048576
 soundBufferSize=1048576
@@ -616,6 +621,8 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 Ver.1.2.0 : [新規機能]
              ・リモート操作のファイル記録/再生機能を追加
                メニュー項目及び起動オプションを追加
+             ・ステータスバーへのフレームレート(FPS)表示機能を追加
+               メニュー項目を追加
 
             [その他変更]
              ・インストーラパッケージ作成ツールをバージョンアップ(InnoSetup 5.5.6)

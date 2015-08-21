@@ -62,6 +62,27 @@ GraphicsThread::~GraphicsThread()
   }
 }
 
+// get frame rate
+double GraphicsThread::getFrameRate() const
+{
+  static QDateTime previsouTime;
+  static unsigned int previousFrameCount;
+  QDateTime currentTime = QDateTime::currentDateTime();
+  unsigned int currentFrameCount = getFrameCounter();
+  double fps = 0.0;
+
+  if (!previsouTime.isNull()){
+	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previsouTime.toMSecsSinceEpoch();
+	qint64 diffFrameCount = currentFrameCount - previousFrameCount;
+	fps = diffFrameCount / ((double)diffMSeconds/1000);
+	//	cout << "diffMSeconds   = " << diffMSeconds << endl << flush;
+	//	cout << "diffFrameCount = " << diffFrameCount << endl << flush;
+  }
+  previsouTime = currentTime;
+  previousFrameCount = currentFrameCount;
+  return fps;
+}
+
 //---------------------------------------------------------------------------
 // protected
 //---------------------------------------------------------------------------

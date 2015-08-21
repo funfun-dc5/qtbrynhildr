@@ -178,6 +178,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
 
+// for onShowFrameRate
+#define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
+#define QTB_ONSHOWFRAMERATE_DEFAULT			false
+
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE			"graphicsBufferSize"
 #define QTB_GRAPHICSBUFFERSIZE_DEFAULT	(1024 * 1024)
@@ -803,6 +807,18 @@ public:
 	this->onShowStatusBar = onShowStatusBar;
   }
 
+  // get show flag
+  bool getOnShowFrameRate() const
+  {
+	return onShowFrameRate;
+  }
+
+  // set show status bar flag
+  void setOnShowFrameRate(bool onShowFrameRate)
+  {
+	this->onShowFrameRate = onShowFrameRate;
+  }
+
 #if QTB_RECORDER
   // get on recording control flag
   bool getOnRecordingControl() const
@@ -1029,6 +1045,9 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+  // show frame rate
+  volatile bool onShowFrameRate;
 
 #if QTB_RECORDER
   // recording

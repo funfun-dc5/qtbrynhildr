@@ -37,6 +37,9 @@ const int QTB_AUDIOOUTPUT_SOUND_BUFFER_SIZE = 1024 * 64;
 // max path length
 const int QTB_MAXPATHLEN = 2048;
 
+// status refresh count
+const int QTB_STATUS_REFRESH_COUNT = 10;
+
 } // end of namespace qtbrynhildr
 
 #endif // PARAMETERS_H

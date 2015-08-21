@@ -170,6 +170,9 @@ private slots:
   // toggle show status bar
   void toggleShowStatusBar();
 
+  // toggle show frame rate
+  void toggleShowFrameRate();
+
   // full screen
   void fullScreen();
 
@@ -221,6 +224,12 @@ private:
   // update status bar
   void updateStatusBar();
 
+  // update connected
+  void updateConnected();
+
+  // update frame rate
+  void updateFrameRate();
+
   // connected
   void connected();
 
@@ -236,10 +245,10 @@ private:
   // window size
   QSize mainWindowSize;
 
-  // location label
-  QLabel *locationLabel;
-  // formula label
-  QLabel *formulaLabel;
+  // connection label
+  QLabel *connectionLabel;
+  // frame rate label
+  QLabel *frameRateLabel;
 
   // ------------------------------------------------------------
   // Menu
@@ -319,6 +328,9 @@ private:
 
   // show status bar
   QAction *showStatusBar_Action;
+
+  // show frame rate
+  QAction *showFrameRate_Action;
 
   // stays on top
   QAction *staysOnTop_Action;
@@ -429,6 +441,9 @@ private:
 
   // frameCounter
   unsigned int frameCounter;
+
+  // current frame rate
+  double currentFrameRate;
 
   // option
   Option *option;

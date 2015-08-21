@@ -29,7 +29,7 @@ const bool QTB_DESKTOP_FRAME_CONTROL	= true;
 const bool QTB_TRANSLATION				= true;
 
 // in testing
-const bool QTB_IN_TESTING				= true;
+const bool QTB_IN_TESTING				= false;
 
 // recorder
 #define QTB_RECORDER				1

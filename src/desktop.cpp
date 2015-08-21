@@ -76,26 +76,26 @@ Desktop::Desktop()
   QString kernelVersion = QSysInfo::kernelVersion();
   if (kernelVersion.startsWith("6.3")){			// Windows 8.1
 	correctWindowWidth = 2;
-	correctWindowHeight = 5;
+	correctWindowHeight = 3;
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -2;
   }
   else if (kernelVersion.startsWith("6.2")){	// Windows 8
 	correctWindowWidth = 2;
-	correctWindowHeight = 5;
+	correctWindowHeight = 3;
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -2;
   }
   else if (kernelVersion.startsWith("6.1")){	// Windows 7
 	correctWindowWidth = 2;
-	correctWindowHeight = 8;
+	correctWindowHeight = 4;
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -4;
   }
   else {
 	// NOT supported Version
 	correctWindowWidth = 2;
-	correctWindowHeight = 5;
+	correctWindowHeight = 3;
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -2;
   }

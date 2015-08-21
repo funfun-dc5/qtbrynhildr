@@ -1083,6 +1083,12 @@ void QtBrynhildr::updateStatusBar()
 // update connected
 void QtBrynhildr::updateConnected()
 {
+  // check
+  if (connectionLabel == 0){
+	// Nothing to do
+	return;
+  }
+
   if (settings->getConnected()){
 	// connection
 	connectionLabel->setText(tr("connected : ") + settings->getServerName());
@@ -1099,6 +1105,12 @@ void QtBrynhildr::updateConnected()
 // update frame rate
 void QtBrynhildr::updateFrameRate()
 {
+  // check
+  if (frameRateLabel == 0){
+	// Nothing to do
+	return;
+  }
+
   // update fps
   if (settings->getOnShowFrameRate()){
 	if (settings->getConnected()){

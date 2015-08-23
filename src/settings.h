@@ -158,6 +158,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"
 #define QTB_ONCONFIRMATEXIT_DEFAULT		true
 
+// for onExitAfterRelpay
+#define QTB_ONEXITAFTERREPLAY			"onExitAfterReplay"
+#define QTB_ONEXITAFTERREPLAY_DEFAULT	false
+
 // for onStaysOnTop
 #define QTB_ONSTAYSONTOP					"onStaysOnTop"
 #define QTB_ONSTAYSONTOP_DEFAULT			false
@@ -173,6 +177,10 @@ typedef int SCALING_TYPE;
 // for onShowStatusBar
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
+
+// for onShowFrameRate
+#define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
+#define QTB_ONSHOWFRAMERATE_DEFAULT			false
 
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE			"graphicsBufferSize"
@@ -751,6 +759,18 @@ public:
 	this->onConfirmAtExit = onConfirmAtExit;
   }
 
+  // get exit after replaying flag
+  bool getOnExitAfterReplay() const
+  {
+	return onExitAfterReplay;
+  }
+
+  // set exit after replaying flag
+  void setOnExitAfterReplay(bool onExitAfterReplay)
+  {
+	this->onExitAfterReplay = onExitAfterReplay;
+  }
+
   // get stays on top flag
   bool getOnStaysOnTop() const
   {
@@ -798,6 +818,68 @@ public:
   {
 	this->onShowStatusBar = onShowStatusBar;
   }
+
+  // get show flag
+  bool getOnShowFrameRate() const
+  {
+	return onShowFrameRate;
+  }
+
+  // set show status bar flag
+  void setOnShowFrameRate(bool onShowFrameRate)
+  {
+	this->onShowFrameRate = onShowFrameRate;
+  }
+
+#if QTB_RECORDER
+  // get on recording control flag
+  bool getOnRecordingControl() const
+  {
+	return onRecordingControl;
+  }
+
+  // set on recording control flag
+  void setOnRecordingControl(bool onRecordingControl)
+  {
+	this->onRecordingControl = onRecordingControl;
+  }
+
+  // get recording control filename
+  const char* getRecordingControlFileName() const
+  {
+	return recordingControlFileName;
+  }
+
+  // set recording control filename
+  void setRecordingControlFileName(const char *recordingControlFileName)
+  {
+	this->recordingControlFileName = recordingControlFileName;
+  }
+
+  // get on replaying control flag
+  bool getOnReplayingControl() const
+  {
+	return onReplayingControl;
+  }
+
+  // set on replaying control flag
+  void setOnReplayingControl(bool onReplayingControl)
+  {
+	this->onReplayingControl = onReplayingControl;
+  }
+
+  // get replaying control filename
+  const char* getReplayingControlFileName() const
+  {
+	return replayingControlFileName;
+  }
+
+  // set replaying control filename
+  void setReplayingControlFileName(const char *replayingControlFileName)
+  {
+	this->replayingControlFileName = replayingControlFileName;
+  }
+#endif // QTB_RECORDER
 
   // get on scroll mode flag
   bool getOnScrollMode() const
@@ -988,6 +1070,9 @@ private:
   // confirm at exit
   volatile bool onConfirmAtExit;
 
+  // exit after replaying
+  volatile bool onExitAfterReplay;
+
   // stays on top
   volatile bool onStaysOnTop;
 
@@ -1000,14 +1085,28 @@ private:
   // show status bar
   volatile bool onShowStatusBar;
 
-  // scroll mode
-  volatile bool onScrollMode;
+  // show frame rate
+  volatile bool onShowFrameRate;
 
   // software keyboard
   volatile bool onShowSoftwareKeyboard;
 
   // software button
   volatile bool onShowSoftwareButton;
+
+#if QTB_RECORDER
+  // recording
+  volatile bool onRecordingControl;
+  const char *recordingControlFileName;
+
+  // reply
+  volatile bool onReplayingControl;
+  const char *replayingControlFileName;
+
+#endif // QTB_RECORDER
+
+  // scroll mode
+  volatile bool onScrollMode;
 
   // buffer
   volatile int graphicsBufferSize;

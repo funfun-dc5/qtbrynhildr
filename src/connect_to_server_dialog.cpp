@@ -62,41 +62,41 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 void ConnectToServerDialog::on_lineEdit_hostname_textChanged()
 {
   if (outputLog)
-	qDebug() << "text Changed : hostname"; // for DEBUG
+	cout << "text Changed : hostname"; // for DEBUG
 }
 
 // server type field
 void ConnectToServerDialog::on_comboBox_hosttype_currentIndexChanged(int index)
 {
   if (outputLog)
-	qDebug() << "index Changed : hosttype : index = " << index; // for DEBUG
+	cout << "index Changed : hosttype : index = " << index; // for DEBUG
 }
 
 // keyboard type field
 void ConnectToServerDialog::on_comboBox_keyboardtype_currentIndexChanged(int index)
 {
   if (outputLog)
-	qDebug() << "index Changed : keyboardtype : index = " << index; // for DEBUG
+	cout << "index Changed : keyboardtype : index = " << index; // for DEBUG
 }
 
 // port no field
 void ConnectToServerDialog::on_spinBox_portno_valueChanged(int i)
 {
   if (outputLog)
-	qDebug() << "value Changed : portno : value = " << i; // for DEBUG
+	cout << "value Changed : portno : value = " << i; // for DEBUG
 }
 
 // password field
 void ConnectToServerDialog::on_lineEdit_password_textChanged()
 {
   if (outputLog)
-	qDebug() << "text Changed : password"; // for DEBUG
+	cout << "text Changed : password"; // for DEBUG
 
   // check
   QString password = lineEdit_password->text();
   if (password.size() > ENCRYPTION_KEY_LENGTH){
 	// error
-	qDebug() << "password is too long : " << password.size();
+	cout << "password is too long : " << password.size();
   }
 }
 
@@ -104,7 +104,7 @@ void ConnectToServerDialog::on_lineEdit_password_textChanged()
 void ConnectToServerDialog::accept()
 {
   if (outputLog)
-	qDebug() << "accept()."; // for DEBUG
+	cout << "accept()."; // for DEBUG
 
   // server name
   settings->setServerName(lineEdit_hostname->text());
@@ -128,7 +128,7 @@ void ConnectToServerDialog::accept()
 void ConnectToServerDialog::reject()
 {
   if (outputLog)
-	qDebug() << "reject()."; // for DEBUG
+	cout << "reject()."; // for DEBUG
   hide();
 }
 

@@ -7,12 +7,18 @@
 
 // System Header
 #include <cstring>
+#if 1 // copy for TEST
+#include <cstdio>
+#endif
 //#include <iostream>
 
 // Qt Header
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
+#if QTB_RECORDER
+#include <QFileDialog>
+#endif // QTB_RECORDER
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -57,9 +63,13 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   softwareButtonDialog(0),
 #endif
   frameCounter(0),
+  currentFrameRate(0),
   option(0),
   iniFileName(0),
   settings(0),
+#if QTB_RECORDER
+  recorder(0),
+#endif // QTB_RECORDER
   logMessage(new LogMessage(this)),
   controlThread(0),
   graphicsThread(0),
@@ -140,6 +150,28 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	  settings->setOutputLog(false);
 	}
   }
+
+#if QTB_RECORDER
+  // record
+  settings->setOnRecordingControl(option->getRecordingFlag());
+  if (option->getRecordingFlag()){
+	settings->setRecordingControlFileName(option->getRecordingFileName());
+  }
+  // replay
+  settings->setOnReplayingControl(option->getReplayingFlag());
+  if (option->getReplayingFlag()){
+	settings->setReplayingControlFileName(option->getReplayingFileName());
+  }
+
+  // recorder
+  recorder = new Recorder(settings);
+  if (settings->getOnReplayingControl()){
+	recorder->startReplaying();
+  }
+  else if (settings->getOnRecordingControl()){
+	recorder->startRecording();
+  }
+#endif // QTB_RECORDER
 
   // version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION);
@@ -261,7 +293,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   //------------------------------------------------------------
   // create threads
   //------------------------------------------------------------
+#if QTB_RECORDER
+  controlThread = new ControlThread(settings, mainWindow, recorder);
+#else // QTB_RECORDER
   controlThread = new ControlThread(settings, mainWindow);
+#endif // QTB_RECORDER
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
@@ -301,6 +337,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(controlThread,
 		  SIGNAL(networkError()),
 		  SLOT(onNetworkError()));
+
+  connect(controlThread,
+		  SIGNAL(exitApplication()),
+		  SLOT(exitApplication()));
 
   // graphics thread
   connect(graphicsThread,
@@ -379,6 +419,15 @@ QtBrynhildr::~QtBrynhildr()
 	cipher = 0;
   }
 #endif
+
+#if QTB_RECORDER
+  // delete recorder
+  if (recorder != 0){
+	delete recorder;
+	recorder = 0;
+  }
+#endif // QTB_RECORDER
+
   // settings
   if (settings != 0){
 	delete settings;
@@ -558,7 +607,19 @@ bool QtBrynhildr::getShutdownFlag() const
 // desktop Changed
 void QtBrynhildr::onDesktopChanged(QImage image)
 {
+  // update desktop
   mainWindow->refreshDesktop(image);
+
+  // update current frame rate
+  if (settings->getOnShowFrameRate()){
+	static int refreshCounter = 1;
+	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
+	  currentFrameRate = graphicsThread->getFrameRate();
+	  updateFrameRate();
+	  refreshCounter = 1;
+	}
+	refreshCounter++;
+  }
 }
 
 // desktop clear
@@ -574,6 +635,12 @@ void QtBrynhildr::onNetworkError()
   settings->setConnected(false);
   mainWindow->clearDesktop();
   refreshWindow();
+}
+
+// exit applilcation
+void QtBrynhildr::exitApplication()
+{
+  exit();
 }
 
 // output Log Message
@@ -623,6 +690,7 @@ void QtBrynhildr::createActions()
   // Show Menu Bar
   showMenuBar_Action = new QAction(tr("Show Menu Bar"), this);
   showMenuBar_Action->setStatusTip(tr("Show Menu Bar"));
+  showMenuBar_Action->setEnabled(false); // for TEST
   showMenuBar_Action->setCheckable(true);
   showMenuBar_Action->setChecked(settings->getOnShowMenuBar());
   connect(showMenuBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowMenuBar()));
@@ -633,6 +701,13 @@ void QtBrynhildr::createActions()
   showStatusBar_Action->setCheckable(true);
   showStatusBar_Action->setChecked(settings->getOnShowStatusBar());
   connect(showStatusBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowStatusBar()));
+
+  // Show FrameRate
+  showFrameRate_Action = new QAction(tr("Show FrameRate"), this);
+  showFrameRate_Action->setStatusTip(tr("Show FrameRate"));
+  showFrameRate_Action->setCheckable(true);
+  showFrameRate_Action->setChecked(settings->getOnShowFrameRate());
+  connect(showFrameRate_Action, SIGNAL(triggered()), this, SLOT(toggleShowFrameRate()));
 
   // Full Screen
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -870,6 +945,25 @@ void QtBrynhildr::createActions()
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
 
+#if QTB_RECORDER
+  // start recording control
+  startRecordingControl_Action = new QAction(tr("Start Recodrding"), this);
+  startRecordingControl_Action->setCheckable(true);
+  startRecordingControl_Action->setChecked(settings->getOnRecordingControl());
+  startRecordingControl_Action->setStatusTip(tr("Start Recodrding"));
+  connect(startRecordingControl_Action, SIGNAL(triggered()), this, SLOT(startRecordingControl()));
+
+  // stop recording control
+  stopRecordingControl_Action = new QAction(tr("Stop Recodrding"), this);
+  stopRecordingControl_Action->setStatusTip(tr("Stop Recodrding"));
+  connect(stopRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopRecordingControl()));
+
+  // replay recorded control
+  replayRecordingControl_Action = new QAction(tr("Replay"), this);
+  replayRecordingControl_Action->setStatusTip(tr("Replay"));
+  connect(replayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(replayRecordingControl()));
+#endif // QTB_RECORDER
+
   // send key Action
 #if 0 // for TEST
   sendKey1_Action = new QAction(tr("Ctrl + Alt + Del"), this);
@@ -933,6 +1027,7 @@ void QtBrynhildr::createMenus()
   displayMenu = menuBar()->addMenu(tr("&Display"));
   displayMenu->addAction(showMenuBar_Action);
   displayMenu->addAction(showStatusBar_Action);
+  displayMenu->addAction(showFrameRate_Action);
   // for stays on top
   if (QTB_DESKTOP_STAYS_ON_TOP){
 	displayMenu->addSeparator();
@@ -1010,6 +1105,15 @@ void QtBrynhildr::createMenus()
   controlMenu->addAction(onGraphics_Action);
   controlMenu->addAction(onSound_Action);
 
+#if QTB_RECORDER
+  // for record and replay
+  controlMenu->addSeparator();
+  recordAndReplaySubMenu = controlMenu->addMenu(tr("Record and Replay"));
+  recordAndReplaySubMenu->addAction(startRecordingControl_Action);
+  recordAndReplaySubMenu->addAction(stopRecordingControl_Action);
+  recordAndReplaySubMenu->addAction(replayRecordingControl_Action);
+#endif // QTB_RECORDER
+
   // option menu
   optionMenu = menuBar()->addMenu(tr("&Option"));
   modeSubMenu = optionMenu->addMenu(tr("Mode"));
@@ -1049,28 +1153,76 @@ void QtBrynhildr::createToolBars()
 // create Status Bar
 void QtBrynhildr::createStatusBar()
 {
-  locationLabel = new QLabel;
-  locationLabel->setAlignment(Qt::AlignHCenter);
+  connectionLabel = new QLabel;
+  connectionLabel->setAlignment(Qt::AlignHCenter);
 
-  formulaLabel = new QLabel;
-  formulaLabel->setIndent(3);
+  frameRateLabel = new QLabel;
+  frameRateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignLeft);
+  frameRateLabel->setText(tr("FrameRate: ")+"00.00");
+  // set initial size
+  //  frameRateLabel->setMinimumSize(frameRateLabel->sizeHint());
+  frameRateLabel->setMinimumSize(QSize(frameRateLabel->sizeHint().width() * 2,
+									   frameRateLabel->sizeHint().height()));
+  //  cout << "size.width  = " << frameRateLabel->sizeHint().width() << endl << flush;
+  //  cout << "size.height = " << frameRateLabel->sizeHint().height() << endl << flush;
 
-  statusBar()->addWidget(locationLabel);
-  statusBar()->addWidget(formulaLabel, 1);
+  statusBar()->addWidget(connectionLabel);
+  statusBar()->addPermanentWidget(frameRateLabel);
 }
 
 // update Status Bar
 void QtBrynhildr::updateStatusBar()
 {
-  // update location
-  if (settings->getConnected()){
-	locationLabel->setText(tr("connected : ") + settings->getServerName());
-  }
-  else {
-	locationLabel->setText(tr("connected : ") + "None");
+  // update labels
+  // update connected
+  updateConnected();
+  // update fps
+  updateFrameRate();
+}
+
+// update connected
+void QtBrynhildr::updateConnected()
+{
+  // check
+  if (connectionLabel == 0){
+	// Nothing to do
+	return;
   }
 
-  locationLabel->setMinimumSize(locationLabel->sizeHint());
+  if (settings->getConnected()){
+	// connection
+	connectionLabel->setText(tr("connected : ") + settings->getServerName());
+  }
+  else {
+	// connection
+	connectionLabel->setText(tr("connected : ") + "None");
+  }
+
+  // set minimum size
+  connectionLabel->setMinimumSize(connectionLabel->sizeHint());
+}
+
+// update frame rate
+void QtBrynhildr::updateFrameRate()
+{
+  // check
+  if (frameRateLabel == 0){
+	// Nothing to do
+	return;
+  }
+
+  // update fps
+  if (settings->getOnShowFrameRate()){
+	if (settings->getConnected()){
+	  frameRateLabel->setText(tr("FrameRate: ")+QString::number(currentFrameRate, 'f', 2));
+	}
+	else {
+	  frameRateLabel->setText(tr("FrameRate: ")+"00.00");
+	}
+  }
+  else {
+	frameRateLabel->clear();
+  }
 }
 
 // connected
@@ -1306,6 +1458,16 @@ void QtBrynhildr::disconnectToServer()
   if (!settings->getConnected()){
 	return;
   }
+
+#if QTB_RECORDER
+  // stop record and replay
+  if (settings->getOnReplayingControl()){
+	recorder->stopReplaying();
+  }
+  if (settings->getOnRecordingControl()){
+	recorder->stopRecording(settings->getRecordingControlFileName());
+  }
+#endif // QTB_RECORDER
 
   // exit all threads
   controlThread->exitThread();
@@ -1598,6 +1760,67 @@ void QtBrynhildr::toggleOnSound()
   }
 }
 
+#if QTB_RECORDER
+// start recording control
+void QtBrynhildr::startRecordingControl()
+{
+  // check
+  if (settings->getOnRecordingControl()){
+	// Now in recording
+	return;
+  }
+
+  // start to record
+  recorder->startRecording();
+}
+
+// stop recording control
+void QtBrynhildr::stopRecordingControl()
+{
+  // check
+  if (!settings->getOnRecordingControl()){
+	// Now Not in recording
+	return;
+  }
+
+  // prepare for save file
+  QString fileName =
+	QFileDialog::getSaveFileName(this,
+								 tr("Save file"),
+								 ".",
+								 tr("Control Record File (*.qtb)"));
+  // stop to record
+  recorder->stopRecording(qPrintable(fileName));
+
+  // checked
+  startRecordingControl_Action->setChecked(false);
+}
+
+// replay recorded control
+void QtBrynhildr::replayRecordingControl()
+{
+  static char filename[QTB_MAXPATHLEN+1];
+
+  // check
+  if (settings->getOnReplayingControl()){
+	// Now in replaying
+	return;
+  }
+
+  // prepare for replaying
+  QString fileName =
+	QFileDialog::getOpenFileName(this,
+								 tr("Open file"),
+								 ".",
+								 tr("Control Record File (*.qtb)"));
+  strncpy(filename, qPrintable(fileName), QTB_MAXPATHLEN);
+  settings->setReplayingControlFileName(filename);
+
+  // start to replay
+  recorder->startReplaying();
+}
+#endif // QTB_RECORDER
+
 #if 0 // for TEST
 // send key for CTRL + ALT + DEL
 void QtBrynhildr::sendKey_CTRL_ALT_DEL()
@@ -1694,6 +1917,18 @@ void QtBrynhildr::toggleShowStatusBar()
 	statusBar()->setVisible(true);
   }
   refreshWindow();
+}
+
+// toggle show frame rate
+void QtBrynhildr::toggleShowFrameRate()
+{
+  if (settings->getOnShowFrameRate()){
+	settings->setOnShowFrameRate(false);
+  }
+  else {
+	settings->setOnShowFrameRate(true);
+  }
+  updateStatusBar();
 }
 
 // full screen

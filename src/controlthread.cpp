@@ -20,11 +20,18 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
+#if QTB_RECORDER
+ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder)
+#else  // QTB_RECORDER
 ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
+#endif // QTB_RECORDER
   :
   NetThread("ControlThread", settings, mainWindow),
   keyBuffer(0),
   mouseBuffer(0),
+#if QTB_RECORDER
+  recorder(recorder),
+#endif // QTB_RECORDER
   monitorCount(0),
   sentMode(0)
 {
@@ -113,12 +120,25 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  if (QTB_DESKTOP_IMAGE_SCALING){
 		QSize windowSize = mainWindow->getSize();
 		QSize desktopSize = mainWindow->getDesktopSize();
-		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-		  if (com_data->zoom != 1.0){
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * com_data->zoom
-			  + settings->getDesktopOffsetX();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * com_data->zoom
-			  + settings->getDesktopOffsetY();
+		if (windowSize.width() < 0 || windowSize.height() < 0 ||
+			desktopSize.width() < 0 || desktopSize.height() < 0){
+		  // Nothing to do
+		  com_data->mouse_move = MOUSE_MOVE_OFF;
+		}
+		else {
+		  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+			if (com_data->zoom != 1.0){
+			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * com_data->zoom
+															+ settings->getDesktopOffsetX();
+			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * com_data->zoom
+				+ settings->getDesktopOffsetY();
+			}
+			else {
+			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
+				+ settings->getDesktopOffsetX();
+			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
+				+ settings->getDesktopOffsetY();
+			}
 		  }
 		  else {
 			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
@@ -127,13 +147,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 			  + settings->getDesktopOffsetY();
 		  }
 		}
-		else {
-		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-			+ settings->getDesktopOffsetX();
-		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-			+ settings->getDesktopOffsetY();
-		}
-
 	  }
 	  else {
 		com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
@@ -183,6 +196,29 @@ PROCESS_RESULT ControlThread::processForHeader()
 	printHeader();
   }
 #endif
+
+#if QTB_RECORDER
+  // replaying
+  if (settings->getOnReplayingControl()){
+	// replay
+	COM_DATA *recordedCOM_DATA = recorder->getCOM_DATA();
+	if (recordedCOM_DATA != 0){
+	  // override com_data
+	  memcpy(com_data, recordedCOM_DATA, sizeof(COM_DATA));
+	}
+	else {
+	  // stop replaying
+	  settings->setOnReplayingControl(false);
+	  if (settings->getOnExitAfterReplay()){
+		emit exitApplication();
+	  }
+	}
+  }
+  // recording
+  else if (settings->getOnRecordingControl()){
+	recorder->putCOM_DATA(com_data);
+  }
+#endif // QTB_RECORDER
 
   // save mode
   sentMode = com_data->mode;

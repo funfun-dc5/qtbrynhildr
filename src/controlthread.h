@@ -14,6 +14,9 @@
 #include "mainwindow.h"
 #include "mousebuffer.h"
 #include "netthread.h"
+#if QTB_RECORDER
+#include "recorder.h"
+#endif // QTB_RECORDER
 #include "settings.h"
 
 namespace qtbrynhildr {
@@ -25,7 +28,11 @@ class ControlThread : public NetThread
 
 public:
   // constructor
-  ControlThread(Settings *settings, MainWindow *mainWindow);
+#if QTB_RECORDER
+ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder);
+#else  // QTB_RECORDER
+ControlThread(Settings *settings, MainWindow *mainWindow);
+#endif // QTB_RECORDER
   // destructor
   ~ControlThread();
 
@@ -56,6 +63,11 @@ private:
   // mouse buffer
   MouseBuffer *mouseBuffer;
 
+#if QTB_RECORDER
+  // recorder
+  Recorder *recorder;
+#endif // QTB_RECORDER
+
   // mouse position
   MOUSE_POS prevPos;
 
@@ -74,6 +86,9 @@ signals:
 
   // refresh menu
   void refreshMenu();
+
+  // exit application
+  void exitApplication();
 };
 
 } // end of namespace qtbrynhildr

@@ -13,21 +13,14 @@
 
 (1) Windows版  [#]_ 
 ^^^^^^^^^^^^^^^^^^^^
-  * Windows 7   (32bit/64bit)
-  * Windows 8   (32bit/64bit)
-  * Windows 8.1 (32bit/64bit)
-
- [基本的な動作(マウス、キーボード、日本語入力、サウンドなど)のみ確認]
-
-  * Windows 10 Pro Insider Preview (32bit/64bit)
+  * Windows 7   (64bit/32bit)
+  * Windows 8   (64bit/32bit)
+  * Windows 8.1 (64bit/32bit)
+  * Windows 10  (64bit/32bit)
 
  .. [#] すべてのエディションで確認したわけではありません。
 
 (2) Ubuntu版
 ^^^^^^^^^^^^^
-  * Ubuntu 14.04 LTS (x86/x64)
-
- [基本的な動作(マウス、キーボード、日本語入力、サウンドなど)のみ確認]
-
-  * Ubuntu 14.10 (x64)
+  * Ubuntu 14.04 LTS (x64/x86)
   * Ubuntu 15.04 (x64)

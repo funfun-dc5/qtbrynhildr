@@ -172,7 +172,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   if (settings->getOutputSoundDataToFile()){
 	fstream file;
 	char filename[QTB_MAXPATHLEN+1];
-	snprintf(filename, QTB_MAXPATHLEN, "pcm/%s.jpg", QTB_SOUND_OUTPUT_FILENAME);
+	snprintf(filename, QTB_MAXPATHLEN, "pcm/%s", QTB_SOUND_OUTPUT_FILENAME);
 	file.open(filename, ios::out | ios::binary | ios::app);
 	if (file.is_open()){
 	  file.write(buffer, receivedDataSize);

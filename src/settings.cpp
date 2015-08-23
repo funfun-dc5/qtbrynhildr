@@ -30,9 +30,13 @@ Settings::Settings(const char *iniFileName)
   bootupFlag(false),
   shutdownFlag(false),
   connected(false),
-  onScrollMode(false),
   onShowSoftwareKeyboard(false),
-  onShowSoftwareButton(false)
+  onShowSoftwareButton(false),
+#if QTB_RECORDER
+  onRecordingControl(false),
+  onReplayingControl(false),
+#endif // QTB_RECORDER
+  onScrollMode(false)
 {
   if (iniFileName != 0){
 	settings = new QSettings(iniFileName, QSettings::IniFormat);
@@ -74,12 +78,16 @@ Settings::Settings(const char *iniFileName)
 
   setOnConfirmAtExit(QTB_ONCONFIRMATEXIT_DEFAULT);
 
+  setOnExitAfterReplay(QTB_ONEXITAFTERREPLAY_DEFAULT);
+
   setOnStaysOnTop(QTB_ONSTAYSONTOP_DEFAULT);
 
   setOnFrameLessWindow(QTB_ONFRAMELESSWINDOW_DEFAULT);
 
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
+
+  setOnShowFrameRate(QTB_ONSHOWFRAMERATE_DEFAULT);
 
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
@@ -194,6 +202,10 @@ void Settings::readSettings()
   setOnConfirmAtExit(settings->value(QTB_ONCONFIRMATEXIT,
 									 QTB_ONCONFIRMATEXIT_DEFAULT).toBool());
 
+  // load onExitAfterReplay
+  setOnExitAfterReplay(settings->value(QTB_ONEXITAFTERREPLAY,
+									   QTB_ONEXITAFTERREPLAY_DEFAULT).toBool());
+
   // load onStaysOnTop
   setOnStaysOnTop(settings->value(QTB_ONSTAYSONTOP,
 								  QTB_ONSTAYSONTOP_DEFAULT).toBool());
@@ -208,7 +220,11 @@ void Settings::readSettings()
 
   // load onShowStatusBar
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
-								   QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
+									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
+
+  // load onShowFrameRate
+  setOnShowFrameRate(settings->value(QTB_ONSHOWFRAMERATE,
+							   QTB_ONSHOWFRAMERATE_DEFAULT).toBool());
 
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
@@ -303,6 +319,9 @@ void Settings::writeSettings()
   // save confirmAtExit
   settings->setValue(QTB_ONCONFIRMATEXIT, onConfirmAtExit);
 
+  // save exit after replay
+  settings->setValue(QTB_ONEXITAFTERREPLAY, onExitAfterReplay);
+
   // save onStaysOnTop
   settings->setValue(QTB_ONSTAYSONTOP, onStaysOnTop);
 
@@ -312,8 +331,11 @@ void Settings::writeSettings()
   // save onShowMenuBar
   settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
 
-  // save onShowStatusBar
-  settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
+  // save onShowMenuBar
+  settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
+
+  // save onShowFrameRate
+  settings->setValue(QTB_ONSHOWFRAMERATE, onShowFrameRate);
 
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
@@ -365,10 +387,12 @@ void Settings::printSettings() const
 
   qDebug() << "MonitorNo               : " << monitorNo;
   qDebug() << "ConfirmAtExit           : " << onConfirmAtExit;
+  qDebug() << "ExitAfterReplay         : " << onExitAfterReplay;
   qDebug() << "StaysOnTop              : " << onStaysOnTop;
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
+  qDebug() << "ShowFrameRate           : " << onShowFrameRate;
 
   qDebug() << "------------------------------------------";
   qDebug() << "Graphics Buffer Size (bytes) : " << graphicsBufferSize;

@@ -30,6 +30,9 @@
 #include "logmessage.h"
 #include "mainwindow.h"
 #include "option.h"
+#if QTB_RECORDER
+#include "recorder.h"
+#endif // QTB_RECORDER
 #include "settings.h"
 #include "software_button.h"
 #include "software_keyboard.h"
@@ -101,6 +104,9 @@ public slots:
   // network error handler
   void onNetworkError();
 
+  // exit applilcation
+  void exitApplication();
+
   // output Log Message
   void outputLogMessage(int msgID);
 
@@ -152,6 +158,13 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
+#if QTB_RECORDER
+  // record and replay
+  void startRecordingControl();
+  void stopRecordingControl();
+  void replayRecordingControl();
+#endif // QTB_RECORDER
+
   // send key
 #if 0 // for TEST
   void sendKey_CTRL_ALT_DEL(); // CTRL + ALT + DEL
@@ -165,6 +178,9 @@ private slots:
 
   // toggle show status bar
   void toggleShowStatusBar();
+
+  // toggle show frame rate
+  void toggleShowFrameRate();
 
   // full screen
   void fullScreen();
@@ -231,6 +247,12 @@ private:
   // update status bar
   void updateStatusBar();
 
+  // update connected
+  void updateConnected();
+
+  // update frame rate
+  void updateFrameRate();
+
   // connected
   void connected();
 
@@ -255,10 +277,10 @@ private:
   // window size
   QSize mainWindowSize;
 
-  // location label
-  QLabel *locationLabel;
-  // formula label
-  QLabel *formulaLabel;
+  // connection label
+  QLabel *connectionLabel;
+  // frame rate label
+  QLabel *frameRateLabel;
 
   // ------------------------------------------------------------
   // Menu
@@ -287,6 +309,11 @@ private:
 
   // Send Key Sub Menu
   QMenu *sendKeySubMenu;
+
+#if QTB_RECORDER
+  // Record and Replay Sub Menu
+  QMenu *recordAndReplaySubMenu;
+#endif // QTB_RECORDER
 
   // Option Menu
   QMenu *optionMenu;
@@ -333,6 +360,9 @@ private:
 
   // show status bar
   QAction *showStatusBar_Action;
+
+  // show frame rate
+  QAction *showFrameRate_Action;
 
   // stays on top
   QAction *staysOnTop_Action;
@@ -384,6 +414,15 @@ private:
 
   // toggle onSound
   QAction *onSound_Action;
+
+#if QTB_RECORDER
+  // start recording control
+  QAction *startRecordingControl_Action;
+  // stop recording control
+  QAction *stopRecordingControl_Action;
+  // replay recorded control
+  QAction *replayRecordingControl_Action;
+#endif // QTB_RECORDER
 
   // send key
   QAction *sendKey1_Action;
@@ -447,6 +486,9 @@ private:
   // frameCounter
   unsigned int frameCounter;
 
+  // current frame rate
+  double currentFrameRate;
+
   // option
   Option *option;
 
@@ -460,6 +502,11 @@ private:
   // cipher
   Cipher *cipher;
 #endif // QTB_CRYPTGRAM
+
+#if QTB_RECORDER
+  // recorder
+  Recorder *recorder;
+#endif // QTB_RECORDER
 
   // current path
   QString currentPath;

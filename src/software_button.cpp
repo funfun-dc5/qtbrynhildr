@@ -23,6 +23,10 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   :
   settings(settings),
   mouseBuffer(mouseBuffer),
+  onOptionButton(true),
+  onShowMonitorButton(true),
+  onShowSoundQualityButton(true),
+  onShowVideoQualityButton(true),
   // for DEBUG
   outputLog(true)
 {
@@ -86,6 +90,9 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   connect(pushButton_25, SIGNAL(released()), this, SLOT(releasedButton_25()));
   connect(pushButton_26, SIGNAL(released()), this, SLOT(releasedButton_26()));
   connect(pushButton_27, SIGNAL(released()), this, SLOT(releasedButton_27()));
+
+  // initialization
+  toggleOptionButton();
 }
 
 //---------------------------------------------------------------------------
@@ -103,6 +110,66 @@ QSize SoftwareButton::minimumSizeHint() const
   return QSize(1170,350);
 }
 #endif
+
+// toggle option button
+void SoftwareButton::toggleOptionButton()
+{
+  onOptionButton = !onOptionButton;
+
+  // monitor option button
+  pushButton_2->setVisible(onOptionButton);
+  // sound quality option button
+  pushButton_13->setVisible(onOptionButton);
+  // sound video option button
+  pushButton_20->setVisible(onOptionButton);
+
+  if(!onOptionButton){
+	// clear buttons
+	if (onShowMonitorButton)
+	  toggleShowMonitorButton();
+	if (onShowSoundQualityButton)
+	  toggleShowSoundQualityButton();
+	if (onShowVideoQualityButton)
+	  toggleShowVideoQualityButton();
+  }
+}
+
+// toggle monitor button
+void SoftwareButton::toggleShowMonitorButton()
+{
+  onShowMonitorButton = !onShowMonitorButton;
+  pushButton_3->setVisible(onShowMonitorButton);
+  pushButton_4->setVisible(onShowMonitorButton);
+  pushButton_5->setVisible(onShowMonitorButton);
+  pushButton_6->setVisible(onShowMonitorButton);
+  pushButton_7->setVisible(onShowMonitorButton);
+  pushButton_8->setVisible(onShowMonitorButton);
+  pushButton_9->setVisible(onShowMonitorButton);
+  pushButton_10->setVisible(onShowMonitorButton);
+  pushButton_11->setVisible(onShowMonitorButton);
+}
+
+// toggle sound quality button
+void SoftwareButton::toggleShowSoundQualityButton()
+{
+  onShowSoundQualityButton = !onShowSoundQualityButton;
+  pushButton_14->setVisible(onShowSoundQualityButton);
+  pushButton_15->setVisible(onShowSoundQualityButton);
+  pushButton_16->setVisible(onShowSoundQualityButton);
+  pushButton_17->setVisible(onShowSoundQualityButton);
+  pushButton_18->setVisible(onShowSoundQualityButton);
+}
+
+// toggle video quality button
+void SoftwareButton::toggleShowVideoQualityButton()
+{
+  onShowVideoQualityButton = !onShowVideoQualityButton;
+  pushButton_21->setVisible(onShowVideoQualityButton);
+  pushButton_22->setVisible(onShowVideoQualityButton);
+  pushButton_23->setVisible(onShowVideoQualityButton);
+  pushButton_24->setVisible(onShowVideoQualityButton);
+  pushButton_25->setVisible(onShowVideoQualityButton);
+}
 
 //---------------------------------------------------------------------------
 // private
@@ -127,9 +194,11 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
   switch(id){
   case ID_BUTTON_1:
 	// Option
+	toggleOptionButton();
 	break;
   case ID_BUTTON_2:
 	// Monitor
+	toggleShowMonitorButton();
 	break;
   case ID_BUTTON_3: // monitor No.1
   case ID_BUTTON_4: // monitor No.2
@@ -159,6 +228,7 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	break;
   case ID_BUTTON_13:
 	// Sound Quality
+	toggleShowSoundQualityButton();
 	break;
   case ID_BUTTON_14:
 	// Sound Quality (Lowest)
@@ -195,6 +265,7 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	break;
   case ID_BUTTON_20:
 	// Video Quality
+	toggleShowVideoQualityButton();
 	break;
   case ID_BUTTON_21:
 	// Video Quality (Lowest)

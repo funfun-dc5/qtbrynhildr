@@ -60,11 +60,23 @@ private:
   // pressed key
   void pressedButton(ID_BUTTON id);
 
-  // releaseed key
+  // released key
   void releasedButton(ID_BUTTON id);
 
   QSize sizeHint() const;
   //  QSize minimumSizeHint() const;
+
+  // toggle option button
+  void toggleOptionButton();
+
+  // toggle monitor button
+  void toggleShowMonitorButton();
+
+  // toggle sound quality button
+  void toggleShowSoundQualityButton();
+
+  // toggle video quality button
+  void toggleShowVideoQualityButton();
 
 private slots:
   // pressed slots
@@ -131,6 +143,18 @@ private:
 
   // mouse buffer
   MouseBuffer *mouseBuffer;
+
+  // option button status flag
+  bool onOptionButton;
+
+  // show monitor button flag
+  bool onShowMonitorButton;
+
+  // show sound quality button flag
+  bool onShowSoundQualityButton;
+
+  // show video quality button flag
+  bool onShowVideoQualityButton;
 
   // output log flag
   bool outputLog;

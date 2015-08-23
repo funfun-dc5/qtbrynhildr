@@ -1418,6 +1418,7 @@ void QtBrynhildr::connectToServer()
 	connect(softwareKeyboardDockWidget,
 			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
 	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
+	softwareKeyboardDockWidget->setVisible(false);
 
 	// software button
 	if (softwareButtonDockWidget == 0){
@@ -1428,6 +1429,7 @@ void QtBrynhildr::connectToServer()
 			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
 	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
 	}
+	softwareButtonDockWidget->setVisible(false);
   }
 
   // clear buffer for control

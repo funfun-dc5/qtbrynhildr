@@ -51,8 +51,7 @@
       Windows 7 Home Premium (64bit)
       Windows 8.1 Pro update (64bit)
       Windows 10 Pro (64bit/32bit)
-      Ubuntu 14.04 LTS (x64)
-      Ubuntu 14.04 LTS (x86)
+      Ubuntu 14.04 LTS (x64/x86)
       Ubuntu 15.04 (x64)
 
       のみです。

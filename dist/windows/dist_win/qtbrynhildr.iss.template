@@ -1,8 +1,8 @@
 ;----------------------------------------------------------------------
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
-#define AppVer "2.0.0"
-#define RCName "-alpha"
+#define AppVer "1.2.0"
+#define RCName "-rc2"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"
@@ -12,8 +12,8 @@ AppName=Qt Brynhildr
 AppVersion={#AppVer}
 AppVerName=Qt Brynhildr Ver.{#AppVer}
 DefaultGroupName=Qt Brynhildr
-OutputBaseFilename=qtbrynhildr-windows-v{#AppVerNum}{#RCName}-{#AppDateString}
-;OutputBaseFilename=qtbrynhildr-windows-v{#AppVerNum}{#RCName}
+;OutputBaseFilename=qtbrynhildr-windows-v{#AppVerNum}{#RCName}-{#AppDateString}
+OutputBaseFilename=qtbrynhildr-windows-v{#AppVerNum}{#RCName}
 DefaultDirName={pf}\QtBrynhildr
 UsePreviousAppDir=yes
 AppendDefaultDirName=yes

@@ -10,6 +10,7 @@
 // Qt Header
 #include <QAction>
 #include <QDateTime>
+#include <QDockWidget>
 #include <QLabel>
 #include <QMainWindow>
 #include <QMenu>
@@ -33,6 +34,14 @@
 #include "recorder.h"
 #endif // QTB_RECORDER
 #include "settings.h"
+#include "software_button.h"
+#include "software_keyboard.h"
+#include "software_keyboard_jp.h"
+#include "software_keyboard_us.h"
+#if 0 // for TEST
+#include "software_button_dialog.h"
+#include "software_keyboard_dialog.h"
+#endif
 
 // thread
 #include "controlthread.h"
@@ -83,8 +92,8 @@ public slots:
   // refresh window
   void refreshWindow();
 
-  // set monitor count
-  void setMonitorCount(int monitorCount);
+  // refresh menu
+  void refreshMenu();
 
   // desktop Changed
   void onDesktopChanged(QImage image);
@@ -207,6 +216,20 @@ private slots:
   // scroll mode
   void toggleOnScrollMode();
 
+  // visibility changed software keyboard
+  void visibilityChangedSoftwareKeyboard(bool visible);
+
+  // visibility changed software button
+  void visibilityChangedSoftwareButton(bool visible);
+
+#if 0 // for TEST
+  // software keyboard
+  void toggleShowSoftwareKeyboard();
+
+  // software button
+  void toggleShowSoftwareButton();
+#endif
+
 private:
   // build GUI
   void createActions();
@@ -235,6 +258,15 @@ private:
 
   // disconnected
   void disconnected();
+
+  // refresh monitor menu
+  void refreshMonitorMenu();
+
+  // video quality
+  void refreshVideoQualityMenu();
+
+  // sound quality
+  void refreshSoundQualityMenu();
 
 private:
   // GUI
@@ -407,6 +439,18 @@ private:
   // toggle scroll mode
   QAction *onScrollMode_Action;
 
+  // software keyboard and button
+  SoftwareKeyboard *softwareKeyboard;
+  SoftwareButton *softwareButton;
+  QDockWidget *softwareKeyboardDockWidget;
+  QDockWidget *softwareButtonDockWidget;
+#if 0 // for TEST
+  SoftwareKeyboardDialog *softwareKeyboardDialog;
+  SoftwareButtonDialog *softwareButtonDialog;
+  QAction *showSoftwareKeyboard_Action;
+  QAction *showSoftwareButton_Action;
+#endif
+
 private:
   // clear Video Quality check
   void clearVideoQualityCheck();
@@ -481,9 +525,6 @@ private:
 
   // event converter
   EventConverter *eventConverter;
-
-  // monitor count
-  MONITOR_COUNT monitorCount;
 
   // full screen
   bool fullScreenMode;

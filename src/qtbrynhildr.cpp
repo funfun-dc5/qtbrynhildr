@@ -54,6 +54,14 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   :
   desktopScalingDialog(0),
+  softwareKeyboard(0),
+  softwareButton(0),
+  softwareKeyboardDockWidget(0),
+  softwareButtonDockWidget(0),
+#if 0 // for TEST
+  softwareKeyboardDialog(0),
+  softwareButtonDialog(0),
+#endif
   frameCounter(0),
   currentFrameRate(0),
   option(0),
@@ -66,7 +74,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
-  monitorCount(0),
   fullScreenMode(false),
   heightOfMenuBar(0),
   heightOfStatusBar(0)
@@ -267,6 +274,17 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	desktopScalingDialog = new DesktopScalingDialog(settings, this);
   }
 
+  // Software Keyboard and Button
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
+	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
+#if 0 // for TEST
+	softwareButtonDialog = new SoftwareButtonDialog(softwareButton, this);
+	softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
+	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
+#endif
+  }
+
   // for Event Converter TEST
   if (QTB_DEBUG_KEYBOARD || QTB_DEBUG_MOUSE){
 	mainWindow->setEventConverter(new EventConverter_JP());
@@ -310,8 +328,8 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 		  SLOT(refreshWindow()));
 
   connect(controlThread,
-		  SIGNAL(setMonitorCount(int)),
-		  SLOT(setMonitorCount(int)));
+		  SIGNAL(refreshMenu()),
+		  SLOT(refreshMenu()));
 
   connect(controlThread,
 		  SIGNAL(finished()),
@@ -451,10 +469,81 @@ void QtBrynhildr::refreshWindow()
   updateStatusBar();
 }
 
-// set monitor count
-void QtBrynhildr::setMonitorCount(int monitorCount)
+// refresh menu
+void QtBrynhildr::refreshMenu()
 {
+  // video quality
+  refreshVideoQualityMenu();
+
+  // sound quality
+  refreshSoundQualityMenu();
+
+  // monitor menu
+  refreshMonitorMenu();
+}
+
+// refresh video quality menu
+void QtBrynhildr::refreshVideoQualityMenu()
+{
+  clearVideoQualityCheck();
+  VIDEO_QUALITY videoQuality = settings->getVideoQuality();
+  switch(videoQuality){
+  case VIDEO_QUALITY_MINIMUM:
+	videoQuality_MINIMUM_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_LOW:
+	videoQuality_LOW_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_STANDARD:
+	videoQuality_STANDARD_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_HIGH:
+	videoQuality_HIGH_Action->setChecked(true);
+	break;
+  case VIDEO_QUALITY_MAXIMUM:
+	videoQuality_MAXIMUM_Action->setChecked(true);
+	break;
+  default:
+	// error
+	ABORT();
+	break;
+  }
+}
+
+// refresh sound quality menu
+void QtBrynhildr::refreshSoundQualityMenu()
+{
+  clearSoundQualityCheck();
+  SOUND_QUALITY soundQuality = settings->getSoundQuality();
+  switch(soundQuality){
+  case SOUND_QUALITY_MINIMUM:
+	soundQuality_MINIMUM_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_LOW:
+	soundQuality_LOW_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_STANDARD:
+	soundQuality_STANDARD_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_HIGH:
+	soundQuality_HIGH_Action->setChecked(true);
+	break;
+  case SOUND_QUALITY_MAXIMUM:
+	soundQuality_MAXIMUM_Action->setChecked(true);
+	break;
+  default:
+	// error
+	ABORT();
+	break;
+  }
+}
+
+// refresh monitor menu
+void QtBrynhildr::refreshMonitorMenu()
+{
+  MONITOR_COUNT monitorCount = settings->getMonitorCount();
   //  cout << "[QtBrynhildr] monitor_count=" << monitorCount << endl << flush;
+
   switch(monitorCount){
   case 9:
 	// set available Monitor 9
@@ -497,7 +586,6 @@ void QtBrynhildr::setMonitorCount(int monitorCount)
 	if (monitorCount > 1){
 	  selectMonitorNoAll_Action->setEnabled(true);
 	}
-	this->monitorCount = (MONITOR_COUNT)monitorCount;
 	break;
   case 0:
 	// disabled all
@@ -908,6 +996,22 @@ void QtBrynhildr::createActions()
   onScrollMode_Action->setChecked(settings->getOnScrollMode());
   onScrollMode_Action->setStatusTip(tr("Scroll Mode"));
   connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
+
+#if 0 // for TEST
+  // show Software Keyboard
+  showSoftwareKeyboard_Action = new QAction(tr("Software Keyboard"), this);
+  showSoftwareKeyboard_Action->setCheckable(true);
+  showSoftwareKeyboard_Action->setChecked(false);
+  showSoftwareKeyboard_Action->setStatusTip(tr("Software Keyboard"));
+  connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
+
+  // show Software Button
+  showSoftwareButton_Action = new QAction(tr("Software Button"), this);
+  showSoftwareButton_Action->setCheckable(true);
+  showSoftwareButton_Action->setChecked(false);
+  showSoftwareButton_Action->setStatusTip(tr("Software Button"));
+  connect(showSoftwareButton_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareButton()));
+#endif
 }
 
 // create Menus
@@ -1022,6 +1126,10 @@ void QtBrynhildr::createMenus()
 	optionMenu->addSeparator();
 	inTestingSubMenu = optionMenu->addMenu(tr("In Testing"));
 	// in Testing Menu
+#if 0 // for TEST
+	inTestingSubMenu->addAction(showSoftwareKeyboard_Action);
+	inTestingSubMenu->addAction(showSoftwareButton_Action);
+#endif
   }
 
   menuBar()->addSeparator();
@@ -1268,6 +1376,62 @@ void QtBrynhildr::connectToServer()
   }
   mainWindow->setEventConverter(eventConverter);
 
+  // Software Keyboard and Button
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	// software keyboard
+	if (softwareKeyboard != 0){
+#if 0 // for TEST
+	  if (settings->getOnShowSoftwareKeyboard()){
+		toggleShowSoftwareKeyboard();
+	  }
+#endif
+	  delete softwareKeyboard;
+	  softwareKeyboard = 0;
+	}
+	switch(settings->getKeyboardType()){
+	case KEYBOARD_TYPE_JP:
+	  softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this);
+	  break;
+	case KEYBOARD_TYPE_US:
+	  softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
+	  break;
+	default:
+	  // unknown keyboard type
+	  ABORT();
+	  break;
+	}
+#if 0 // for TEST
+	if (softwareKeyboardDialog != 0){
+	  delete softwareKeyboardDialog;
+	  softwareKeyboardDialog = 0;
+	}
+	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
+#endif
+	if (softwareKeyboardDockWidget != 0){
+	  removeDockWidget(softwareKeyboardDockWidget);
+	  delete softwareKeyboardDockWidget;
+	  softwareKeyboardDockWidget = 0;
+	}
+	softwareKeyboardDockWidget = new QDockWidget(tr("Software Keyboard"));
+	softwareKeyboardDockWidget->setWidget(softwareKeyboard);
+	softwareKeyboardDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+	connect(softwareKeyboardDockWidget,
+			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
+	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
+	softwareKeyboardDockWidget->setVisible(false);
+
+	// software button
+	if (softwareButtonDockWidget == 0){
+	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
+	  softwareButtonDockWidget->setWidget(softwareButton);
+	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
+	  connect(softwareButtonDockWidget,
+			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
+	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
+	}
+	softwareButtonDockWidget->setVisible(false);
+  }
+
   // clear buffer for control
   mainWindow->getKeyBuffer()->clear();
   mainWindow->getMouseBuffer()->clear();
@@ -1484,80 +1648,70 @@ void QtBrynhildr::disabledSelectMonitor()
 void QtBrynhildr::setVideoQuality_MINIMUM()
 {
   settings->setVideoQuality(VIDEO_QUALITY_MINIMUM);
-  clearVideoQualityCheck();
-  videoQuality_MINIMUM_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality LOW
 void QtBrynhildr::setVideoQuality_LOW()
 {
   settings->setVideoQuality(VIDEO_QUALITY_LOW);
-  clearVideoQualityCheck();
-  videoQuality_LOW_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality STANDARD
 void QtBrynhildr::setVideoQuality_STANDARD()
 {
   settings->setVideoQuality(VIDEO_QUALITY_STANDARD);
-  clearVideoQualityCheck();
-  videoQuality_STANDARD_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality HIGH
 void QtBrynhildr::setVideoQuality_HIGH()
 {
   settings->setVideoQuality(VIDEO_QUALITY_HIGH);
-  clearVideoQualityCheck();
-  videoQuality_HIGH_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set video quality MAXIMUM
 void QtBrynhildr::setVideoQuality_MAXIMUM()
 {
   settings->setVideoQuality(VIDEO_QUALITY_MAXIMUM);
-  clearVideoQualityCheck();
-  videoQuality_MAXIMUM_Action->setChecked(true);
+  refreshVideoQualityMenu();
 }
 
 // set sound quality MINIMUM
 void QtBrynhildr::setSoundQuality_MINIMUM()
 {
   settings->setSoundQuality(SOUND_QUALITY_MINIMUM);
-  clearSoundQualityCheck();
-  soundQuality_MINIMUM_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality LOW
 void QtBrynhildr::setSoundQuality_LOW()
 {
   settings->setSoundQuality(SOUND_QUALITY_LOW);
-  clearSoundQualityCheck();
-  soundQuality_LOW_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality STANDARD
 void QtBrynhildr::setSoundQuality_STANDARD()
 {
   settings->setSoundQuality(SOUND_QUALITY_STANDARD);
-  clearSoundQualityCheck();
-  soundQuality_STANDARD_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality HIGH
 void QtBrynhildr::setSoundQuality_HIGH()
 {
   settings->setSoundQuality(SOUND_QUALITY_HIGH);
-  clearSoundQualityCheck();
-  soundQuality_HIGH_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // set sound quality MAXIMUM
 void QtBrynhildr::setSoundQuality_MAXIMUM()
 {
   settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
-  clearSoundQualityCheck();
-  soundQuality_MAXIMUM_Action->setChecked(true);
+  refreshSoundQualityMenu();
 }
 
 // toggle onControl
@@ -1946,6 +2100,50 @@ void QtBrynhildr::toggleOnScrollMode()
 	settings->setOnScrollMode(true);
   }
 }
+
+// visibility changed software keyboard
+void QtBrynhildr::visibilityChangedSoftwareKeyboard(bool visible)
+{
+  settings->setOnShowSoftwareKeyboard(visible);
+}
+
+// visibility changed software button
+void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
+{
+  settings->setOnShowSoftwareButton(visible);
+}
+
+#if 0 // for TEST
+// software keyboard
+void QtBrynhildr::toggleShowSoftwareKeyboard()
+{
+  bool onShowSoftwareKeyboard = settings->getOnShowSoftwareKeyboard();
+  if (onShowSoftwareKeyboard){
+	softwareKeyboardDialog->hide();
+  }
+  else {
+	softwareKeyboardDialog->show();
+  }
+  onShowSoftwareKeyboard = ! onShowSoftwareKeyboard;
+  settings->setOnShowSoftwareKeyboard(onShowSoftwareKeyboard);
+  showSoftwareKeyboard_Action->setChecked(onShowSoftwareKeyboard);
+}
+
+// software button
+void QtBrynhildr::toggleShowSoftwareButton()
+{
+  bool onShowSoftwareButton = settings->getOnShowSoftwareButton();
+  if (onShowSoftwareButton){
+	softwareButtonDialog->hide();
+  }
+  else {
+	softwareButtonDialog->show();
+  }
+  onShowSoftwareButton = ! onShowSoftwareButton;
+  settings->setOnShowSoftwareButton(onShowSoftwareButton);
+  showSoftwareButton_Action->setChecked(onShowSoftwareButton);
+}
+#endif
 
 // toggle outputLog
 void QtBrynhildr::toggleOutputLog()

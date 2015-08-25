@@ -12,6 +12,8 @@ RESOURCES = qtbrynhildr.qrc
 TRANSLATIONS = translations/qtbrynhildr_ja_JP.ts
 FORMS = GUI/connect_to_server_dialog.ui
 FORMS += GUI/desktop_scaling_dialog.ui
+FORMS += GUI/software_keyboard.ui
+FORMS += GUI/software_button.ui
 
 # for DEBUG
 #CONFIG += console
@@ -38,6 +40,8 @@ HEADERS += qtbrynhildr.h
 HEADERS += option.h desktop.h
 HEADERS += debug.h
 HEADERS += mainwindow.h connect_to_server_dialog.h desktop_scaling_dialog.h logmessage.h
+HEADERS += software_keyboard.h software_keyboard_jp.h software_keyboard_us.h
+HEADERS += software_button.h
 HEADERS += settings.h
 HEADERS += netthread.h controlthread.h graphicsthread.h soundthread.h
 HEADERS += keybuffer.h mousebuffer.h soundbuffer.h
@@ -49,6 +53,8 @@ SOURCES += qtbrynhildr.cpp
 SOURCES += option.cpp desktop.cpp
 SOURCES += debug.cpp
 SOURCES += mainwindow.cpp connect_to_server_dialog.cpp desktop_scaling_dialog.cpp logmessage.cpp
+SOURCES += software_keyboard.cpp software_keyboard_jp.cpp software_keyboard_us.cpp
+SOURCES += software_button.cpp
 SOURCES += settings.cpp
 SOURCES += netthread.cpp controlthread.cpp graphicsthread.cpp soundthread.cpp
 SOURCES += keybuffer.cpp mousebuffer.cpp soundbuffer.cpp

@@ -735,6 +735,18 @@ public:
 	}
   }
 
+  // get monitor count
+  MONITOR_COUNT getMonitorCount() const
+  {
+	return monitorCount;
+  }
+
+  // set monitor count
+  void setMonitorCount(MONITOR_COUNT monitorCount)
+  {
+	this->monitorCount = monitorCount;
+  }
+
   // get confirm at exit flag
   bool getOnConfirmAtExit() const
   {
@@ -879,6 +891,30 @@ public:
   void setOnScrollMode(bool onScrollMode)
   {
 	this->onScrollMode = onScrollMode;
+  }
+
+  // get on show Software Keyboard flag
+  bool getOnShowSoftwareKeyboard() const
+  {
+	return onShowSoftwareKeyboard;
+  }
+
+  // set on show Software Keyboard flag
+  void setOnShowSoftwareKeyboard(bool onShowSoftwareKeyboard)
+  {
+	this->onShowSoftwareKeyboard = onShowSoftwareKeyboard;
+  }
+
+  // get on show Software Button flag
+  bool getOnShowSoftwareButton() const
+  {
+	return onShowSoftwareButton;
+  }
+
+  // set on show Software Button flag
+  void setOnShowSoftwareButton(bool onShowSoftwareButton)
+  {
+	this->onShowSoftwareButton = onShowSoftwareButton;
   }
 
   // get graphics buffer size
@@ -1028,6 +1064,9 @@ private:
   // select monitor
   volatile MONITOR_NO monitorNo;
 
+  // monitor count
+  volatile MONITOR_COUNT monitorCount;
+
   // confirm at exit
   volatile bool onConfirmAtExit;
 
@@ -1048,6 +1087,12 @@ private:
 
   // show frame rate
   volatile bool onShowFrameRate;
+
+  // software keyboard
+  volatile bool onShowSoftwareKeyboard;
+
+  // software button
+  volatile bool onShowSoftwareButton;
 
 #if QTB_RECORDER
   // recording

@@ -307,9 +307,25 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+#if 1 // for TEST
+	if (!settings->getOnShowSoftwareButton()){
+	  MouseInfoValue value;
+	  value.button = MOUSE_BUTTON_DOWN;
+	  setMouseButtonEvent(event, value);
+	}
+	else {
+	  if (event->button() == Qt::LeftButton){
+		MOUSE_POS pos;
+		pos.x = event->pos().x();
+		pos.y = event->pos().y();
+		mouseBuffer->setMousePos(pos);
+	  }
+	}
+#else // for TEST
 	MouseInfoValue value;
 	value.button = MOUSE_BUTTON_DOWN;
 	setMouseButtonEvent(event, value);
+#endif // for TEST
   }
 }
 
@@ -324,9 +340,17 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+#if 1 // for TEST
+	if (!settings->getOnShowSoftwareButton()){
+	  MouseInfoValue value;
+	  value.button = MOUSE_BUTTON_UP;
+	  setMouseButtonEvent(event, value);
+	}
+#else // for TEST
 	MouseInfoValue value;
 	value.button = MOUSE_BUTTON_UP;
 	setMouseButtonEvent(event, value);
+#endif // for TEST
   }
 }
 
@@ -341,9 +365,17 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+#if 1 // for TEST
+	if (!settings->getOnShowSoftwareButton()){
+	  MouseInfoValue value;
+	  value.button = MOUSE_BUTTON_DBLCLK;
+	  setMouseButtonEvent(event, value);
+	}
+#else // for TEST
 	MouseInfoValue value;
 	value.button = MOUSE_BUTTON_DBLCLK;
 	setMouseButtonEvent(event, value);
+#endif // for TEST
   }
 }
 
@@ -359,9 +391,17 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+#if 1 // for TEST
+	if (!settings->getOnShowSoftwareButton()){
+	  MouseInfoValue value;
+	  value.wheel = degrees;
+	  mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
+	}
+#else // for TEST
 	MouseInfoValue value;
 	value.wheel = degrees;
 	mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
+#endif // for TEST
   }
 }
 
@@ -375,10 +415,19 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+#if 1 // for TEST
+	if (!settings->getOnShowSoftwareButton()){
+	  MOUSE_POS pos;
+	  pos.x = event->pos().x();
+	  pos.y = event->pos().y();
+	  mouseBuffer->setMousePos(pos);
+	}
+#else // for TEST
 	MOUSE_POS pos;
 	pos.x = event->pos().x();
 	pos.y = event->pos().y();
 	mouseBuffer->setMousePos(pos);
+#endif // for TEST
   }
 }
 

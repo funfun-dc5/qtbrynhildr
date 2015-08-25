@@ -84,8 +84,8 @@ signals:
   // refresh window
   void refreshWindow();
 
-  // set monitor count
-  void setMonitorCount(int monitorCount);
+  // refresh menu
+  void refreshMenu();
 
   // exit application
   void exitApplication();

@@ -176,11 +176,20 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   //  if (true){
 	fstream file;
 	char filename[QTB_MAXPATHLEN+1];
-	snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg", QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
-	file.open(filename, ios::out | ios::binary | ios::trunc);
-	if (file.is_open()){
-	  file.write(buffer, receivedDataSize);
-	  file.close();
+	int result;
+	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg", QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+	if (result > 0 && result <= QTB_MAXPATHLEN){
+	  file.open(filename, ios::out | ios::binary | ios::trunc);
+	  if (file.is_open()){
+		file.write(buffer, receivedDataSize);
+		file.close();
+	  }
+	}
+	else {
+	  // snprintf() error
+	  if (settings->getOutputLog()){
+		cout << "[GraphicsThread] snprintf() error!" << endl << flush;
+	  }
 	}
   }
 

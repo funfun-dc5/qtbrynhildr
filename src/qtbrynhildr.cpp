@@ -70,6 +70,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #if QTB_RECORDER
   recorder(0),
 #endif // QTB_RECORDER
+#if QTB_CRYPTOGRAM
+  cipher(0),
+#endif // QTB_CRYPTGRAM
   logMessage(new LogMessage(this)),
   controlThread(0),
   graphicsThread(0),

@@ -176,11 +176,26 @@ SOCKET NetThread::socketToServer()
 #endif // for TEST
   addrinfo_hints.ai_socktype = SOCK_STREAM;
 
-  char server[256];
-  char port[10];
+  char server[512];
+  char port[16];
   int error;
-  snprintf(server, 256, "%s", qPrintable(settings->getServerName()));
-  snprintf(port, 10, "%d", settings->getPortNo());
+  int result;
+  result = snprintf(server, 256, "%s", qPrintable(settings->getServerName()));
+  if (result <= 0 || result > 255){
+	if (settings->getOutputLog()){
+	  const QString text = QString("socketToServer() : snprintf() error! for server");
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+	return INVALID_SOCKET;
+  }
+  result = snprintf(port, 10, "%d", settings->getPortNo());
+  if (result <= 0 || result > 9){
+	if (settings->getOutputLog()){
+	  const QString text = QString("socketToServer() : snprintf() error! for port");
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+	return INVALID_SOCKET;
+  }
   error = getaddrinfo(server, port, &addrinfo_hints, &addrinfo);
   if (error != 0){
 #if defined(Q_OS_WIN)

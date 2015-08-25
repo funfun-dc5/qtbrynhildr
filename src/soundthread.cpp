@@ -172,11 +172,20 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   if (settings->getOutputSoundDataToFile()){
 	fstream file;
 	char filename[QTB_MAXPATHLEN+1];
-	snprintf(filename, QTB_MAXPATHLEN, "pcm/%s", QTB_SOUND_OUTPUT_FILENAME);
-	file.open(filename, ios::out | ios::binary | ios::app);
-	if (file.is_open()){
-	  file.write(buffer, receivedDataSize);
-	  file.close();
+	int result;
+	result = snprintf(filename, QTB_MAXPATHLEN, "pcm/%s", QTB_SOUND_OUTPUT_FILENAME);
+	if (result > 0 && result <= QTB_MAXPATHLEN){
+	  file.open(filename, ios::out | ios::binary | ios::app);
+	  if (file.is_open()){
+		file.write(buffer, receivedDataSize);
+		file.close();
+	  }
+	}
+	else {
+	  // snprintf() error
+	  if (settings->getOutputLog()){
+		cout << "[SoundThread] snprintf() error!" << endl << flush;
+	  }
 	}
   }
 

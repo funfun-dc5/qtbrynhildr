@@ -58,10 +58,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   softwareButton(0),
   softwareKeyboardDockWidget(0),
   softwareButtonDockWidget(0),
-#if 0 // for TEST
-  softwareKeyboardDialog(0),
-  softwareButtonDialog(0),
-#endif
   frameCounter(0),
   currentFrameRate(0),
   option(0),
@@ -281,11 +277,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
-#if 0 // for TEST
-	softwareButtonDialog = new SoftwareButtonDialog(softwareButton, this);
-	softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
-	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
-#endif
   }
 
   // for Event Converter TEST
@@ -999,22 +990,6 @@ void QtBrynhildr::createActions()
   onScrollMode_Action->setChecked(settings->getOnScrollMode());
   onScrollMode_Action->setStatusTip(tr("Scroll Mode"));
   connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
-
-#if 0 // for TEST
-  // show Software Keyboard
-  showSoftwareKeyboard_Action = new QAction(tr("Software Keyboard"), this);
-  showSoftwareKeyboard_Action->setCheckable(true);
-  showSoftwareKeyboard_Action->setChecked(false);
-  showSoftwareKeyboard_Action->setStatusTip(tr("Software Keyboard"));
-  connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
-
-  // show Software Button
-  showSoftwareButton_Action = new QAction(tr("Software Button"), this);
-  showSoftwareButton_Action->setCheckable(true);
-  showSoftwareButton_Action->setChecked(false);
-  showSoftwareButton_Action->setStatusTip(tr("Software Button"));
-  connect(showSoftwareButton_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareButton()));
-#endif
 }
 
 // create Menus
@@ -1129,10 +1104,6 @@ void QtBrynhildr::createMenus()
 	optionMenu->addSeparator();
 	inTestingSubMenu = optionMenu->addMenu(tr("In Testing"));
 	// in Testing Menu
-#if 0 // for TEST
-	inTestingSubMenu->addAction(showSoftwareKeyboard_Action);
-	inTestingSubMenu->addAction(showSoftwareButton_Action);
-#endif
   }
 
   menuBar()->addSeparator();
@@ -1383,11 +1354,6 @@ void QtBrynhildr::connectToServer()
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	// software keyboard
 	if (softwareKeyboard != 0){
-#if 0 // for TEST
-	  if (settings->getOnShowSoftwareKeyboard()){
-		toggleShowSoftwareKeyboard();
-	  }
-#endif
 	  delete softwareKeyboard;
 	  softwareKeyboard = 0;
 	}
@@ -1403,13 +1369,6 @@ void QtBrynhildr::connectToServer()
 	  ABORT();
 	  break;
 	}
-#if 0 // for TEST
-	if (softwareKeyboardDialog != 0){
-	  delete softwareKeyboardDialog;
-	  softwareKeyboardDialog = 0;
-	}
-	softwareKeyboardDialog = new SoftwareKeyboardDialog(softwareKeyboard, this);
-#endif
 	if (softwareKeyboardDockWidget != 0){
 	  removeDockWidget(softwareKeyboardDockWidget);
 	  delete softwareKeyboardDockWidget;
@@ -2115,38 +2074,6 @@ void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
 {
   settings->setOnShowSoftwareButton(visible);
 }
-
-#if 0 // for TEST
-// software keyboard
-void QtBrynhildr::toggleShowSoftwareKeyboard()
-{
-  bool onShowSoftwareKeyboard = settings->getOnShowSoftwareKeyboard();
-  if (onShowSoftwareKeyboard){
-	softwareKeyboardDialog->hide();
-  }
-  else {
-	softwareKeyboardDialog->show();
-  }
-  onShowSoftwareKeyboard = ! onShowSoftwareKeyboard;
-  settings->setOnShowSoftwareKeyboard(onShowSoftwareKeyboard);
-  showSoftwareKeyboard_Action->setChecked(onShowSoftwareKeyboard);
-}
-
-// software button
-void QtBrynhildr::toggleShowSoftwareButton()
-{
-  bool onShowSoftwareButton = settings->getOnShowSoftwareButton();
-  if (onShowSoftwareButton){
-	softwareButtonDialog->hide();
-  }
-  else {
-	softwareButtonDialog->show();
-  }
-  onShowSoftwareButton = ! onShowSoftwareButton;
-  settings->setOnShowSoftwareButton(onShowSoftwareButton);
-  showSoftwareButton_Action->setChecked(onShowSoftwareButton);
-}
-#endif
 
 // toggle outputLog
 void QtBrynhildr::toggleOutputLog()

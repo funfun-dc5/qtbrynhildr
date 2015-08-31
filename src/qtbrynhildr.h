@@ -38,10 +38,6 @@
 #include "software_keyboard.h"
 #include "software_keyboard_jp.h"
 #include "software_keyboard_us.h"
-#if 0 // for TEST
-#include "software_button_dialog.h"
-#include "software_keyboard_dialog.h"
-#endif
 
 // thread
 #include "controlthread.h"
@@ -221,14 +217,6 @@ private slots:
 
   // visibility changed software button
   void visibilityChangedSoftwareButton(bool visible);
-
-#if 0 // for TEST
-  // software keyboard
-  void toggleShowSoftwareKeyboard();
-
-  // software button
-  void toggleShowSoftwareButton();
-#endif
 
 private:
   // build GUI
@@ -444,12 +432,6 @@ private:
   SoftwareButton *softwareButton;
   QDockWidget *softwareKeyboardDockWidget;
   QDockWidget *softwareButtonDockWidget;
-#if 0 // for TEST
-  SoftwareKeyboardDialog *softwareKeyboardDialog;
-  SoftwareButtonDialog *softwareButtonDialog;
-  QAction *showSoftwareKeyboard_Action;
-  QAction *showSoftwareButton_Action;
-#endif
 
 private:
   // clear Video Quality check

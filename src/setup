@@ -23,6 +23,9 @@ case $UNAME in
 	Linux)
 		echo "Done."
 		;;
+	Darwin)
+		echo "Done."
+		;;
     *)
 		echo "Not support platform."
 		;;

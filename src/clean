@@ -30,6 +30,19 @@ case $UNAME in
 		./install clean
 		echo "Done."
 		;;
+	Darwin)
+		make clean
+		# delete executable file
+		rm -f ${APP}
+		pushd ../doc/manual
+		# delete manual
+		make clean
+		popd
+		rm -rf ../dist/doc/manual/*
+		# delete files for install
+		./install clean
+		echo "Done."
+		;;
     *)
 		echo "Not support platform."
 		;;

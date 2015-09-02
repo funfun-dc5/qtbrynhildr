@@ -246,7 +246,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 }
 
 // shutdown connection
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 void SoundThread::shutdownConnection()
 {
   if (sock_sound != INVALID_SOCKET){
@@ -255,7 +255,7 @@ void SoundThread::shutdownConnection()
 	sock_sound = INVALID_SOCKET;
   }
 }
-#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX)
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 
 //---------------------------------------------------------------------------
 // private

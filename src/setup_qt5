@@ -37,6 +37,17 @@ case $UNAME in
 				return;;
 		esac
 		;;
+	Darwin)
+		export UNAMEM=`uname -m`
+		case $UNAMEM in
+			x86_64)
+				QTROOT=/opt/Qt5.4.2/5.4/clang_64
+				;;
+			*)
+				echo "Not Support $UNAMEM"
+				return;;
+		esac
+		;;
     *)
 		echo "Not support platform."
 		;;

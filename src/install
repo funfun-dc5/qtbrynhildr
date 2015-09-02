@@ -52,6 +52,18 @@ case $UNAME in
 				;;
 		esac
 		;;
+	Darwin)
+		UNAMEM=`uname -m`
+		case $UNAMEM in
+			x86_64)
+#				DISTDIR="../dist/macosx/dist_macosx_x64"
+#				PKGNAME="macosx_x64"
+				echo "Installing for Darwin x64..."
+				echo "Now NOT support Darwin."
+				exit 1;
+				;;
+		esac
+		;;
     *)
 		echo "Not support platform."
 		exit 1;
@@ -71,6 +83,9 @@ if [ "$1" = "clean" ] ; then
 			# clean
 			\rm -rf ${DISTDIR}/bin
 			\rm -rf ${DISTDIR}/doc
+			;;
+		Darwin)
+			# clean
 			;;
 		*)
 			echo "Not support platform."
@@ -100,6 +115,10 @@ if [ "$1" = "man" ] ; then
 			make html
 			make install
 			popd
+			exit 0;
+			;;
+		Darwin)
+			# copy manual file
 			exit 0;
 			;;
 		*)
@@ -199,6 +218,9 @@ case $UNAME in
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
 		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
 		(cd ../dist/linux; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
+		echo "Done."
+		;;
+	Darwin)
 		echo "Done."
 		;;
     *)

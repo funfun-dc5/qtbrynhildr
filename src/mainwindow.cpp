@@ -6,9 +6,9 @@
 #include "common.h"
 
 // System Header
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 #include <unistd.h>
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 
 // Qt Header
 #include <QKeyEvent>
@@ -21,9 +21,9 @@
 #include "mainwindow.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 #include "desktop_scaling_dialog.h"
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 
 namespace qtbrynhildr {
 
@@ -592,7 +592,13 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 		}
 	  } // end of while
 	}
-#endif // defined(Q_OS_LINUX)
+#elif  defined(Q_OS_MAC)
+	else {
+	  // Darwin
+	  // Internal Error: Unkown State
+	  ABORT();
+	}
+#endif
   }
 
   return scalingFactor;

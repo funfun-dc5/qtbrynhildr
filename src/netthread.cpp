@@ -160,7 +160,7 @@ void NetThread::connectedToServer()
 {
 }
 
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 // socket to server
 SOCKET NetThread::socketToServer()
 {
@@ -203,12 +203,12 @@ SOCKET NetThread::socketToServer()
 	  const QString text = QString("socketToServer() : getaddrinfo(): error = ") + QString::number(error);
 	  emit outputLogMessage(PHASE_DEBUG, text);
 	}
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 	if (settings->getOutputLog()){
 	  const QString text = QString("socketToServer() : getaddrinfo(): strerror = ") + gai_strerror(error);
 	  emit outputLogMessage(PHASE_DEBUG, text);
 	}
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 	return INVALID_SOCKET;
   }
 
@@ -229,9 +229,9 @@ SOCKET NetThread::socketToServer()
   // for socket option
   if (sock != INVALID_SOCKET){
 	// set socket option
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 	setSocketOption(sock);
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 #if defined(DEBUG)
 	// check socket option
 	checkSocketOption(sock);
@@ -321,7 +321,7 @@ void NetThread::setSocketOption(SOCKET sock)
   socklen_t len = sizeof(val);
 #if defined(Q_OS_WIN)
   if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char*)&val, len) == -1){
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
   if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const void*)&val, len) == -1){
 #endif
 	cout << "[" << name << "] sockopt: SO_KEEPALIVE : setsockopt() error";
@@ -349,7 +349,7 @@ void NetThread::checkSocketOption(SOCKET sock)
   // SO_KEEPALIVE
 #if defined(Q_OS_WIN)
   if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char*)&val, &len) == -1){
-#elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
   if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (void*)&val, &len) == -1){
 #endif
 	cout << "[" << name << "] sockopt: SO_KEEPALIVE : getsockopt() error";
@@ -391,7 +391,7 @@ int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t 
   return SOCKET_ERROR;
 }
 
-#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX)
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 
 // print protocol header
 void NetThread::printHeader()

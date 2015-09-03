@@ -61,10 +61,17 @@ uchar EventConverter_JP::getVKCode(Key key)
 	return VK_NEXT;
   case Key_Shift:
 	return VK_SHIFT;
+#if defined(Q_OS_MAC)
+  case Key_Control:	// On Mac OS X, Command key
+	return VK_LWIN;
+  case Key_Meta:	// On Mac OS X, Control key. On Windows, Windows key.
+	return VK_CONTROL;
+#else // defined(Q_OS_MAC)
   case Key_Control:	// On Mac OS X, Command key
 	return VK_CONTROL;
   case Key_Meta:	// On Mac OS X, Control key. On Windows, Windows key.
 	return VK_LWIN;
+#endif // defined(Q_OS_MAC)
   case Key_Alt:
 	return VK_MENU;
   case Key_CapsLock:
@@ -259,6 +266,7 @@ uchar EventConverter_JP::getVKCode(Key key)
   case Key_BraceLeft:		// '{'
 	return VK_OEM_4;
   case Key_Backslash:		// '\'
+  case Key_yen:				// '\' for Darwin
   case Key_Bar:				// '|'
 	return VK_OEM_5;
   case Key_Underscore:		// '_'

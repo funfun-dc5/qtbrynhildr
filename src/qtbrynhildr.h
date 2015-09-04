@@ -34,10 +34,10 @@
 #include "recorder.h"
 #endif // QTB_RECORDER
 #include "settings.h"
-#include "software_button.h"
-#include "software_keyboard.h"
-#include "software_keyboard_jp.h"
-#include "software_keyboard_us.h"
+#include "touchpanel/software_button.h"
+#include "touchpanel/software_keyboard.h"
+#include "touchpanel/software_keyboard_jp.h"
+#include "touchpanel/software_keyboard_us.h"
 
 // thread
 #include "controlthread.h"

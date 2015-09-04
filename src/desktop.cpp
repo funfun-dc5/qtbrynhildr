@@ -74,7 +74,13 @@ Desktop::Desktop()
 #if defined(Q_OS_WIN)
   // OS Version
   QString kernelVersion = QSysInfo::kernelVersion();
-  if (kernelVersion.startsWith("6.3")){			// Windows 8.1
+  if (kernelVersion.startsWith("10.")){			// Windows 10
+	correctWindowWidth = 2;
+	correctWindowHeight = 3;
+	heightOfMenuBarInHiding = -1;
+	heightOfStatusBarInHiding = -2;
+  }
+  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
 	correctWindowWidth = 2;
 	correctWindowHeight = 3;
 	heightOfMenuBarInHiding = -1;

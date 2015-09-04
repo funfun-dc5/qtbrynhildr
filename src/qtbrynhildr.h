@@ -22,11 +22,11 @@
 #include <QtGlobal>
 
 // Local Header
-#if QTB_CRYPTOGRAM
-#include "cipher.h"
-#endif // QTB_CRYPTGRAM
 #include "dialog/connect_to_server_dialog.h"
 #include "dialog/desktop_scaling_dialog.h"
+#if QTB_CRYPTOGRAM
+#include "function/cipher.h"
+#endif // QTB_CRYPTGRAM
 #include "logmessage.h"
 #include "mainwindow.h"
 #include "option.h"

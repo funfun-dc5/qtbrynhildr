@@ -29,8 +29,8 @@ LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp
 # for crypto++
 #INCLUDEPATH += ../lib/cryptopp562
 #LIBS += -L../lib/cryptopp562 -lcryptopp
-#HEADERS += cipher.h
-#SOURCES += cipher.cpp
+#HEADERS += function/cipher.h
+#SOURCES += function/cipher.cpp
 
 # Input
 HEADERS += version.h config.h parameters.h

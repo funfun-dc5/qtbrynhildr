@@ -11,12 +11,12 @@
 
 // Local Header
 #include "common/netthread.h"
+#if QTB_RECORDER
+#include "function/recorder.h"
+#endif // QTB_RECORDER
 #include "keybuffer.h"
 #include "mainwindow.h"
 #include "mousebuffer.h"
-#if QTB_RECORDER
-#include "recorder.h"
-#endif // QTB_RECORDER
 #include "settings.h"
 
 namespace qtbrynhildr {

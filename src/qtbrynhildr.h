@@ -31,7 +31,7 @@
 #include "mainwindow.h"
 #include "option.h"
 #if QTB_RECORDER
-#include "recorder.h"
+#include "function/recorder.h"
 #endif // QTB_RECORDER
 #include "settings.h"
 #include "touchpanel/software_button.h"

@@ -52,7 +52,7 @@ HEADERS += graphics/graphicsthread.h
 HEADERS += sound/soundthread.h
 HEADERS += sound/soundbuffer.h
 HEADERS += windows/keycodes.h windows/eventconverter.h windows/eventconverter_jp.h windows/eventconverter_us.h
-HEADERS += recorder.h
+HEADERS += function/recorder.h
 
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
@@ -70,4 +70,4 @@ SOURCES += graphics/graphicsthread.cpp
 SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/eventconverter_jp.cpp windows/eventconverter_us.cpp
-SOURCES += recorder.cpp
+SOURCES += function/recorder.cpp

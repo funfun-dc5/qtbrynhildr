@@ -107,7 +107,7 @@ Desktop::Desktop()
   heightOfStatusBarInHiding = 0;
 #elif defined(Q_OS_MAC)
   // Darwin
-  correctWindowWidth = 2;
+  correctWindowWidth = 0;
   correctWindowHeight = 0;
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;

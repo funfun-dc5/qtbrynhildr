@@ -5,7 +5,7 @@
 #ifndef LOGMESSAGE_H
 #define LOGMESSAGE_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // System Header
 

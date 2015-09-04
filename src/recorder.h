@@ -9,7 +9,7 @@
 #include <fstream>
 
 // Local Header
-#include "protocols.h"
+#include "common/protocols.h"
 #include "settings.h"
 
 // magic

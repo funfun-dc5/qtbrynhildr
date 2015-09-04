@@ -5,7 +5,7 @@
 #ifndef KEYBUFFER_H
 #define KEYBUFFER_H
 // Local Header
-#include "protocols.h"
+#include "common/protocols.h"
 
 namespace qtbrynhildr {
 

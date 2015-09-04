@@ -5,7 +5,7 @@
 #ifndef QTBRYNHILDR_H
 #define QTBRYNHILDR_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 #include <QAction>

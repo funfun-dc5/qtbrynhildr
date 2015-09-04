@@ -5,7 +5,7 @@
 #ifndef PROTOCOLS_x86_H
 #define PROTOCOLS_x86_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 namespace qtbrynhildr {
 

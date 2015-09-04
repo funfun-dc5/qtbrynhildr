@@ -3,7 +3,7 @@
 // mainwindow.cpp
 
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // System Header
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)

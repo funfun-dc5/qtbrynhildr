@@ -5,7 +5,7 @@
 #ifndef SOUNDBUFFER_H
 #define SOUNDBUFFER_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 

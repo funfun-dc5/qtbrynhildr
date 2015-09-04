@@ -3,7 +3,7 @@
 // software_keyboard_jp.cpp
 
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // System Header
 #include <iostream>

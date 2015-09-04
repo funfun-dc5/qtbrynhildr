@@ -5,7 +5,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 #if defined(Q_OS_WIN)

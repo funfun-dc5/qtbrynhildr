@@ -5,7 +5,7 @@
 #ifndef MOUSEBUFFER_H
 #define MOUSEBUFFER_H
 // Local Header
-#include "protocols.h"
+#include "common/protocols.h"
 
 namespace qtbrynhildr {
 

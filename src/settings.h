@@ -5,7 +5,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 #include <QtCore>
@@ -16,8 +16,8 @@
 #if QTB_CRYPTOGRAM
 #include "cipher.h"
 #endif // QTB_CRYPTGRAM
+#include "common/protocols.h"
 #include "desktop.h"
-#include "protocols.h"
 
 // for Settings
 // author

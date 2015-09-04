@@ -3,7 +3,7 @@
 // recorder.cpp
 
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 #if QTB_RECORDER
 

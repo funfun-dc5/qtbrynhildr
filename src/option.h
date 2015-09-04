@@ -5,7 +5,7 @@
 #ifndef OPTION_H
 #define OPTION_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 namespace qtbrynhildr {
 

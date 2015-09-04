@@ -3,7 +3,7 @@
 // desktop_scaling_dialog.cpp
 
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // System Header
 #include <iostream>

@@ -5,7 +5,7 @@
 #ifndef SOUNDTHREAD_H
 #define SOUNDTHREAD_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 #include <QAudioFormat>
@@ -13,7 +13,7 @@
 #include <QIODevice>
 
 // Local Header
-#include "netthread.h"
+#include "common/netthread.h"
 #include "soundbuffer.h"
 
 namespace qtbrynhildr {

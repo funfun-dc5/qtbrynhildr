@@ -5,7 +5,7 @@
 #ifndef DESKTOP_H
 #define DESKTOP_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 #include <QDesktopWidget>

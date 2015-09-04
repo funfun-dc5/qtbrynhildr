@@ -5,7 +5,7 @@
 #ifndef CIPHER_H
 #define CIPHER_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // System Header
 #include <string>

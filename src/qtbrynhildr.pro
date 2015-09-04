@@ -33,7 +33,8 @@ LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp
 #SOURCES += cipher.cpp
 
 # Input
-HEADERS += version.h common.h config.h util.h parameters.h
+HEADERS += version.h config.h parameters.h
+HEADERS += common/common.h common/util.h common/protocols.h
 HEADERS += machine/protocols_x86.h machine/protocols_x64.h
 
 HEADERS += qtbrynhildr.h
@@ -44,7 +45,7 @@ HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h
 HEADERS += touchpanel/software_keyboard.h touchpanel/software_keyboard_jp.h touchpanel/software_keyboard_us.h
 HEADERS += touchpanel/software_button.h
 HEADERS += settings.h
-HEADERS += netthread.h
+HEADERS += common/netthread.h
 HEADERS += control/controlthread.h
 HEADERS += control/keybuffer.h control/mousebuffer.h
 HEADERS += graphics/graphicsthread.h
@@ -62,7 +63,7 @@ SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp
 SOURCES += touchpanel/software_keyboard.cpp touchpanel/software_keyboard_jp.cpp touchpanel/software_keyboard_us.cpp
 SOURCES += touchpanel/software_button.cpp
 SOURCES += settings.cpp
-SOURCES += netthread.cpp
+SOURCES += common/netthread.cpp
 SOURCES += control/controlthread.cpp
 SOURCES += control/keybuffer.cpp control/mousebuffer.cpp
 SOURCES += graphics/graphicsthread.cpp

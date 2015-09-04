@@ -5,15 +5,15 @@
 #ifndef CONTROLTHREAD_H
 #define CONTROLTHREAD_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 
 // Local Header
+#include "common/netthread.h"
 #include "keybuffer.h"
 #include "mainwindow.h"
 #include "mousebuffer.h"
-#include "netthread.h"
 #if QTB_RECORDER
 #include "recorder.h"
 #endif // QTB_RECORDER

@@ -3,13 +3,13 @@
 // debug.cpp
 
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // System Header
 #include <iostream>
 
 // Local Header
-#include "protocols.h"
+#include "common/protocols.h"
 
 namespace qtbrynhildr {
 

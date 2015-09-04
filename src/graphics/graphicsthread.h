@@ -5,13 +5,13 @@
 #ifndef GRAPHICSTHREAD_H
 #define GRAPHICSTHREAD_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 #include <QImage>
 
 // Local Header
-#include "netthread.h"
+#include "common/netthread.h"
 
 namespace qtbrynhildr {
 

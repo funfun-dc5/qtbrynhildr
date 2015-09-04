@@ -5,7 +5,7 @@
 #ifndef NETTHREAD_H
 #define NETTHREAD_H
 // Common Header
-#include "common.h"
+#include "common/common.h"
 
 // Qt Header
 #include <QThread>

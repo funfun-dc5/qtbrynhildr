@@ -22,8 +22,8 @@
 #include <QWheelEvent>
 
 // Local Header
-#include "keybuffer.h"
-#include "mousebuffer.h"
+#include "control/keybuffer.h"
+#include "control/mousebuffer.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
 

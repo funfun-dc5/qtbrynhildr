@@ -9,7 +9,7 @@
 #include <QWidget>
 
 // Local Header
-#include "mousebuffer.h"
+#include "control/mousebuffer.h"
 #include "settings.h"
 #include "ui_software_button.h"
 

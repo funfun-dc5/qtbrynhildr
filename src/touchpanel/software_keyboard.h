@@ -12,7 +12,7 @@
 #include <QWidget>
 
 // Local Header
-#include "keybuffer.h"
+#include "control/keybuffer.h"
 #include "settings.h"
 #include "ui_software_keyboard.h"
 

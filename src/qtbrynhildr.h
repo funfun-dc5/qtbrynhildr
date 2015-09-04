@@ -40,9 +40,9 @@
 #include "touchpanel/software_keyboard_us.h"
 
 // thread
-#include "controlthread.h"
-#include "graphicsthread.h"
-#include "soundthread.h"
+#include "control/controlthread.h"
+#include "graphics/graphicsthread.h"
+#include "sound/soundthread.h"
 
 // event converter
 #include "windows/eventconverter_jp.h"

@@ -22,7 +22,7 @@
 #include "parameters.h"
 #include "qtbrynhildr.h"
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-#include "desktop_scaling_dialog.h"
+#include "dialog/desktop_scaling_dialog.h"
 #endif // defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 
 namespace qtbrynhildr {

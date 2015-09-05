@@ -53,14 +53,14 @@ namespace qtbrynhildr {
 // ----------------------------------------------
 // global objects
 // ----------------------------------------------
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
 // socket for control
 extern SOCKET sock_control;
 // socket for graphics
 extern SOCKET sock_graphics;
 // socket for sound
 extern SOCKET sock_sound;
-#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
 
 // counter for control
 extern int counter_control;

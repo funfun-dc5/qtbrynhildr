@@ -33,14 +33,17 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
   QWidget(parent),
   settings(settings),
   eventConverter(0),
-  // for DEBUG
-  outputLog(false),
-  outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
-  outputLogForMouse(QTB_DEBUG_MOUSE),
   heightOfMenuBar(0),
   heightOfStatusBar(0),
   heightOfMenuBarInHiding(0),
-  heightOfStatusBarInHiding(0)
+  heightOfStatusBarInHiding(0),
+#if defined(Q_OS_OSX)
+  previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
+#endif // defined(Q_OS_OSX)
+  // for DEBUG
+  outputLog(false),
+  outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
+  outputLogForMouse(QTB_DEBUG_MOUSE)
 {
   // save parent
   this->parent = parent;
@@ -463,6 +466,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	  settings->getOnControl()){
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
+#if defined(Q_OS_OSX)
+  // set previous KEYCODE_FLG
+  previous_KEYCODE_FLG = KEYCODE_FLG_KEYDOWN;
+#endif // defined(Q_OS_OSX)
   }
 }
 
@@ -492,8 +499,29 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+#if defined(Q_OS_OSX)
+	// check previous KEYCODE_FLG
+	if (previous_KEYCODE_FLG == KEYCODE_FLG_KEYUP){
+	  // check VK_TAB and VK_SPACE(Eisu and Kana)
+	  switch(VK_Code){
+	  case VK_SPACE:
+		VK_Code = VK_KANJI;
+		// Fall Through
+	  case VK_TAB:
+		keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
+		break;
+	  default:
+		// Nothing to do
+		break;
+	  }
+	}
+#endif // defined(Q_OS_OSX)
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYUP);
+#if defined(Q_OS_OSX)
+	// set previous KEYCODE_FLG
+	previous_KEYCODE_FLG = KEYCODE_FLG_KEYUP;
+#endif // defined(Q_OS_OSX)
   }
 }
 

@@ -153,6 +153,20 @@ private:
   // mouse buffer
   MouseBuffer *mouseBuffer;
 
+  // height of status bar
+  int heightOfStatusBar;
+
+  // height of menu bar in hiding
+  int heightOfMenuBarInHiding;
+
+  // height of status bar in hiding
+  int heightOfStatusBarInHiding;
+
+#if defined(Q_OS_OSX)
+  // previous KEYCODE_FLG
+  KEYCODE_FLG previous_KEYCODE_FLG;
+#endif // defined(Q_OS_OSX)
+
   // output log flag
   bool outputLog;
 
@@ -164,15 +178,6 @@ private:
 
   // height of menu bar
   int heightOfMenuBar;
-
-  // height of status bar
-  int heightOfStatusBar;
-
-  // height of menu bar in hiding
-  int heightOfMenuBarInHiding;
-
-  // height of status bar in hiding
-  int heightOfStatusBarInHiding;
 };
 
 } // end of namespace qtbrynhildr

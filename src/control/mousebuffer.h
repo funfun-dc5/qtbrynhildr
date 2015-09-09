@@ -11,6 +11,7 @@ namespace qtbrynhildr {
 
 // type of mouse information
 typedef enum {
+  TYPE_MOUSE_INVALID,
   TYPE_MOUSE_RIGHT_BUTTON,
   TYPE_MOUSE_LEFT_BUTTON,
   TYPE_MOUSE_MIDDLE_BUTTON,

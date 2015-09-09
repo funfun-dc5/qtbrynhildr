@@ -28,6 +28,8 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   onShowSoundQualityButton(true),
   onShowVideoQualityButton(true),
   onShowSoundButton(true),
+  previousClick(TYPE_MOUSE_INVALID),
+  previousClickTime(QDateTime::currentDateTime()),
   // for DEBUG
   outputLog(true)
 {
@@ -319,12 +321,34 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	// Mouse Right Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	  QDateTime currentTime = QDateTime::currentDateTime();
+	  qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousClickTime.toMSecsSinceEpoch();
+	  if (previousClick == TYPE_MOUSE_RIGHT_BUTTON && diffMSeconds < 500){
+		value.button = MOUSE_BUTTON_DBLCLK;
+		mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+		if (outputLog){
+		  cout << "Double Click!!" << endl << flush;
+		}
+	  }
+	  previousClick = TYPE_MOUSE_RIGHT_BUTTON;
+	  previousClickTime = currentTime;
 	}
 	break;
   case ID_BUTTON_27:
 	// Mouse Left Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	  QDateTime currentTime = QDateTime::currentDateTime();
+	  qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousClickTime.toMSecsSinceEpoch();
+	  if (previousClick == TYPE_MOUSE_LEFT_BUTTON && diffMSeconds < 500){
+		value.button = MOUSE_BUTTON_DBLCLK;
+		mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+		if (outputLog){
+		  cout << "Double Click!!" << endl << flush;
+		}
+	  }
+	  previousClick = TYPE_MOUSE_LEFT_BUTTON;
+	  previousClickTime = currentTime;
 	}
 	break;
   case ID_BUTTON_28:

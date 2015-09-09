@@ -5,6 +5,7 @@
 #ifndef SOFTWARE_BUTTON_H
 #define SOFTWARE_BUTTON_H
 // Qt Header
+#include <QDateTime>
 #include <QSize>
 #include <QWidget>
 
@@ -176,6 +177,12 @@ private:
 
   // show sound button flag
   bool onShowSoundButton;
+
+  // previous click button
+  MouseInfoType previousClick;
+
+  // previous click time
+  QDateTime previousClickTime;
 
   // output log flag
   bool outputLog;

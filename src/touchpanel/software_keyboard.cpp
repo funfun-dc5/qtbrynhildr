@@ -535,6 +535,15 @@ SoftwareKeyboard::SoftwareKeyboard(Settings *settings, KeyBuffer *keyBuffer, QWi
   buttons[ID_KEY_65] = pushButton_65;
   buttons[ID_KEY_66] = pushButton_66;
   buttons[ID_KEY_67] = pushButton_67;
+
+  // update size
+  updateSize();
+}
+
+// size hint
+QSize SoftwareKeyboard::sizeHint() const
+{
+  return size();
 }
 
 //---------------------------------------------------------------------------
@@ -546,17 +555,10 @@ string SoftwareKeyboard::getVKCodeByString(uchar vkcode)
   return nameTableOfVKCode[vkcode];
 }
 
-QSize SoftwareKeyboard::sizeHint() const
+// update size
+void SoftwareKeyboard::updateSize()
 {
-  //  return QSize(1170,350);
-  return size();
 }
-#if 0
-QSize SoftwareKeyboard::minimumSizeHint() const
-{
-  return QSize(1170,350);
-}
-#endif
 
 //---------------------------------------------------------------------------
 // private

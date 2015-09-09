@@ -156,6 +156,30 @@
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Wheel +</translation>
     </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>ON</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>ON</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>OFF</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>OFF</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Sound</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>サウンド</translation>
+    </message>
+    <message>
+        <location filename="../GUI/software_button.ui"/>
+        <source>Info</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>Info</translation>
+    </message>
 </context>
 <context>
     <name>qtbrynhildr::LogMessage</name>

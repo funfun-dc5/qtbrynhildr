@@ -112,18 +112,21 @@ public:
 	} keyTopWithFn;
   } KeyTopInfo;
 
+  // size hint
+  QSize sizeHint() const;
+
 protected:
+  // get name of virtual keycode
+  string getVKCodeByString(uchar vkcode);
+
+  // update size
+  void updateSize();
+
   // pressed key
   virtual void pressedKey(ID_KEY id) = 0;
 
   // released key
   virtual void releasedKey(ID_KEY id) = 0;
-
-  // get name of virtual keycode
-  string getVKCodeByString(uchar vkcode);
-
-  QSize sizeHint() const;
-  //  QSize minimumSizeHint() const;
 
 private slots:
   // pressed slots

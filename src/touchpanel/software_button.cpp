@@ -27,6 +27,7 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   onShowMonitorButton(true),
   onShowSoundQualityButton(true),
   onShowVideoQualityButton(true),
+  onShowSoundButton(true),
   // for DEBUG
   outputLog(true)
 {
@@ -61,6 +62,10 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   connect(pushButton_25, SIGNAL(pressed()), this, SLOT(pressedButton_25()));
   connect(pushButton_26, SIGNAL(pressed()), this, SLOT(pressedButton_26()));
   connect(pushButton_27, SIGNAL(pressed()), this, SLOT(pressedButton_27()));
+  connect(pushButton_28, SIGNAL(pressed()), this, SLOT(pressedButton_28()));
+  connect(pushButton_29, SIGNAL(pressed()), this, SLOT(pressedButton_29()));
+  connect(pushButton_30, SIGNAL(pressed()), this, SLOT(pressedButton_30()));
+  connect(pushButton_31, SIGNAL(pressed()), this, SLOT(pressedButton_31()));
 
   // released signals
   connect(pushButton_1, SIGNAL(released()), this, SLOT(releasedButton_1()));
@@ -90,27 +95,31 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   connect(pushButton_25, SIGNAL(released()), this, SLOT(releasedButton_25()));
   connect(pushButton_26, SIGNAL(released()), this, SLOT(releasedButton_26()));
   connect(pushButton_27, SIGNAL(released()), this, SLOT(releasedButton_27()));
+  connect(pushButton_28, SIGNAL(released()), this, SLOT(releasedButton_28()));
+  connect(pushButton_29, SIGNAL(released()), this, SLOT(releasedButton_29()));
+  connect(pushButton_30, SIGNAL(released()), this, SLOT(releasedButton_30()));
+  connect(pushButton_31, SIGNAL(released()), this, SLOT(releasedButton_31()));
 
   // initialization
   toggleOptionButton();
+
+  // update size
+  updateSize();
+}
+
+// size hint
+QSize SoftwareButton::sizeHint() const
+{
+  return size();
 }
 
 //---------------------------------------------------------------------------
 // protected
 //---------------------------------------------------------------------------
 
-QSize SoftwareButton::sizeHint() const
-{
-  //  return QSize(1170,350);
-  return size();
-}
-#if 0
-QSize SoftwareButton::minimumSizeHint() const
-{
-  return QSize(1170,350);
-}
-#endif
-
+//---------------------------------------------------------------------------
+// private
+//---------------------------------------------------------------------------
 // toggle option button
 void SoftwareButton::toggleOptionButton()
 {
@@ -122,6 +131,8 @@ void SoftwareButton::toggleOptionButton()
   pushButton_13->setVisible(onOptionButton);
   // sound video option button
   pushButton_20->setVisible(onOptionButton);
+  // sound option button
+  pushButton_29->setVisible(onOptionButton);
 
   if(!onOptionButton){
 	// clear buttons
@@ -131,6 +142,8 @@ void SoftwareButton::toggleOptionButton()
 	  toggleShowSoundQualityButton();
 	if (onShowVideoQualityButton)
 	  toggleShowVideoQualityButton();
+	if (onShowSoundButton)
+	  toggleShowSoundButton();
   }
 }
 
@@ -171,14 +184,24 @@ void SoftwareButton::toggleShowVideoQualityButton()
   pushButton_25->setVisible(onShowVideoQualityButton);
 }
 
-//---------------------------------------------------------------------------
-// private
-//---------------------------------------------------------------------------
+// toggle sound button
+void SoftwareButton::toggleShowSoundButton()
+{
+  onShowSoundButton = !onShowSoundButton;
+  pushButton_30->setVisible(onShowSoundButton);
+  pushButton_31->setVisible(onShowSoundButton);
+}
+
+// update size
+void SoftwareButton::updateSize()
+{
+}
+
 // pressed button
 void SoftwareButton::pressedButton(ID_BUTTON id)
 {
   if (outputLog){
-	cout << "Pressed Button! id = " << id << endl << flush;
+	cout << "Pressed  Button! id = " << id << endl << flush;
   }
 
   // check id
@@ -304,6 +327,21 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
 	}
 	break;
+  case ID_BUTTON_28:
+	// Info Button
+	break;
+  case ID_BUTTON_29:
+	// Sound Button
+	toggleShowSoundButton();
+	break;
+  case ID_BUTTON_30:
+	// Sound OFF Button
+	settings->setOnSound(false);
+	break;
+  case ID_BUTTON_31:
+	// Sound ON Button
+	settings->setOnSound(true);
+	break;
   default:
 	// error
 	ABORT();
@@ -401,6 +439,18 @@ void SoftwareButton::releasedButton(ID_BUTTON id)
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
 	}
+	break;
+  case ID_BUTTON_28:
+	// Info Button
+	break;
+  case ID_BUTTON_29:
+	// Sound Button
+	break;
+  case ID_BUTTON_30:
+	// Sound OFF Button
+	break;
+  case ID_BUTTON_31:
+	// Sound ON Button
 	break;
   default:
 	// error
@@ -545,6 +595,26 @@ void SoftwareButton::pressedButton_27()
   pressedButton(ID_BUTTON_27);
 }
 
+void SoftwareButton::pressedButton_28()
+{
+  pressedButton(ID_BUTTON_28);
+}
+
+void SoftwareButton::pressedButton_29()
+{
+  pressedButton(ID_BUTTON_29);
+}
+
+void SoftwareButton::pressedButton_30()
+{
+  pressedButton(ID_BUTTON_30);
+}
+
+void SoftwareButton::pressedButton_31()
+{
+  pressedButton(ID_BUTTON_31);
+}
+
 // released slots
 void SoftwareButton::releasedButton_1()
 {
@@ -679,6 +749,26 @@ void SoftwareButton::releasedButton_26()
 void SoftwareButton::releasedButton_27()
 {
   releasedButton(ID_BUTTON_27);
+}
+
+void SoftwareButton::releasedButton_28()
+{
+  releasedButton(ID_BUTTON_28);
+}
+
+void SoftwareButton::releasedButton_29()
+{
+  releasedButton(ID_BUTTON_29);
+}
+
+void SoftwareButton::releasedButton_30()
+{
+  releasedButton(ID_BUTTON_30);
+}
+
+void SoftwareButton::releasedButton_31()
+{
+  releasedButton(ID_BUTTON_31);
 }
 
 } // end of namespace qtbrynhildr

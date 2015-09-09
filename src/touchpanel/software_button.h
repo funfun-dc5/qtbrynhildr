@@ -24,6 +24,9 @@ public:
   // constructor
   SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent = 0);
 
+  // size hint
+  QSize sizeHint() const;
+
 private:
   // button id
   typedef enum {
@@ -54,18 +57,13 @@ private:
 	ID_BUTTON_25,
 	ID_BUTTON_26,
 	ID_BUTTON_27,
-	ID_BUTTON_NUM = ID_BUTTON_27
+	ID_BUTTON_28,
+	ID_BUTTON_29,
+	ID_BUTTON_30,
+	ID_BUTTON_31,
+	ID_BUTTON_NUM = ID_BUTTON_31
   } ID_BUTTON;
 	
-  // pressed key
-  void pressedButton(ID_BUTTON id);
-
-  // released key
-  void releasedButton(ID_BUTTON id);
-
-  QSize sizeHint() const;
-  //  QSize minimumSizeHint() const;
-
   // toggle option button
   void toggleOptionButton();
 
@@ -77,6 +75,18 @@ private:
 
   // toggle video quality button
   void toggleShowVideoQualityButton();
+
+  // toggle sound button
+  void toggleShowSoundButton();
+
+  // update size
+  void updateSize();
+
+  // pressed key
+  void pressedButton(ID_BUTTON id);
+
+  // released key
+  void releasedButton(ID_BUTTON id);
 
 private slots:
   // pressed slots
@@ -107,6 +117,10 @@ private slots:
   void pressedButton_25();
   void pressedButton_26();
   void pressedButton_27();
+  void pressedButton_28();
+  void pressedButton_29();
+  void pressedButton_30();
+  void pressedButton_31();
 
   // released slots
   void releasedButton_1();
@@ -136,6 +150,10 @@ private slots:
   void releasedButton_25();
   void releasedButton_26();
   void releasedButton_27();
+  void releasedButton_28();
+  void releasedButton_29();
+  void releasedButton_30();
+  void releasedButton_31();
 
 private:
   // settings
@@ -155,6 +173,9 @@ private:
 
   // show video quality button flag
   bool onShowVideoQualityButton;
+
+  // show sound button flag
+  bool onShowSoundButton;
 
   // output log flag
   bool outputLog;

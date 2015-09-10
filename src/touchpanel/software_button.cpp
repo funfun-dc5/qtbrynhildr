@@ -323,7 +323,7 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
 	  QDateTime currentTime = QDateTime::currentDateTime();
 	  qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousClickTime.toMSecsSinceEpoch();
-	  if (previousClick == TYPE_MOUSE_RIGHT_BUTTON && diffMSeconds < 500){
+	  if (previousClick == TYPE_MOUSE_RIGHT_BUTTON && diffMSeconds < settings->getDoubleClickThreshold()){
 		value.button = MOUSE_BUTTON_DBLCLK;
 		mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
 		if (outputLog){
@@ -340,7 +340,7 @@ void SoftwareButton::pressedButton(ID_BUTTON id)
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
 	  QDateTime currentTime = QDateTime::currentDateTime();
 	  qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousClickTime.toMSecsSinceEpoch();
-	  if (previousClick == TYPE_MOUSE_LEFT_BUTTON && diffMSeconds < 500){
+	  if (previousClick == TYPE_MOUSE_LEFT_BUTTON && diffMSeconds < settings->getDoubleClickThreshold()){
 		value.button = MOUSE_BUTTON_DBLCLK;
 		mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
 		if (outputLog){

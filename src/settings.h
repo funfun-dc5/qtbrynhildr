@@ -190,6 +190,10 @@ typedef int SCALING_TYPE;
 #define QTB_SOUNDBUFFERSIZE				"soundBufferSize"
 #define QTB_SOUNDBUFFERSIZE_DEFAULT		(1024 * 1024)
 
+// for doubleClickThreshold
+#define QTB_DOUBLECLICKTHRESHOLD			"doubleClickThreshold"
+#define QTB_DOUBLECLICKTHRESHOLD_DEFAULT	500
+
 // for outputGraphicsDataToFile
 #define QTB_OUTPUTGRAPHICSDATATOFILE			"outputGraphicsDataToFile"
 #define QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT	false
@@ -941,6 +945,18 @@ public:
 	soundBufferSize = size;
   }
 
+  // get double click threshold
+  int getDoubleClickThreshold() const
+  {
+	return doubleClickThreshold;
+  }
+
+  // set double click threshold
+  void setDoubleClickThreshold(int threshold)
+  {
+	doubleClickThreshold = threshold;
+  }
+
   // get output graphics flag
   bool getOutputGraphicsDataToFile() const
   {
@@ -1111,6 +1127,9 @@ private:
   // buffer
   volatile int graphicsBufferSize;
   volatile int soundBufferSize;
+
+  // threshold
+  volatile int doubleClickThreshold;
 
   // Debug
   volatile bool outputGraphicsDataToFile;

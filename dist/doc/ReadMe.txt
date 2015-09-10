@@ -463,6 +463,7 @@ onShowFrameRate=true
 onStaysOnTop=false
 graphicsBufferSize=1048576
 soundBufferSize=1048576
+doubleClickThreshold=500
 outputGraphicsDataToFile=false
 outputSoundDataToFile=false
 outputLog=false

@@ -92,6 +92,8 @@ Settings::Settings(const char *iniFileName)
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
 
+  setDoubleClickThreshold(QTB_DOUBLECLICKTHRESHOLD_DEFAULT);
+
   setOutputGraphicsDataToFile(QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT);
   setOutputSoundDataToFile(QTB_OUTPUTSOUNDDATATOFILE_DEFAULT);
   setOutputLog(QTB_OUTPUTLOG_DEFAULT);
@@ -224,7 +226,7 @@ void Settings::readSettings()
 
   // load onShowFrameRate
   setOnShowFrameRate(settings->value(QTB_ONSHOWFRAMERATE,
-							   QTB_ONSHOWFRAMERATE_DEFAULT).toBool());
+									 QTB_ONSHOWFRAMERATE_DEFAULT).toBool());
 
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
@@ -233,6 +235,10 @@ void Settings::readSettings()
   // load soundBufferSize
   setSoundBufferSize(settings->value(QTB_SOUNDBUFFERSIZE,
 									 QTB_SOUNDBUFFERSIZE_DEFAULT).toInt());
+
+  // load doubleClickThreshold
+  setDoubleClickThreshold(settings->value(QTB_DOUBLECLICKTHRESHOLD,
+										  QTB_DOUBLECLICKTHRESHOLD_DEFAULT).toInt());
 
   // load outputGraphicsDataToFile
   setOutputGraphicsDataToFile(settings->value(QTB_OUTPUTGRAPHICSDATATOFILE,
@@ -244,7 +250,7 @@ void Settings::readSettings()
 
   // load outputLog
   setOutputLog(settings->value(QTB_OUTPUTLOG,
-							  QTB_OUTPUTLOG_DEFAULT).toBool());
+							   QTB_OUTPUTLOG_DEFAULT).toBool());
 }
 
 // save settings to setting file or registry
@@ -343,6 +349,9 @@ void Settings::writeSettings()
   // save soundBufferSize
   settings->setValue(QTB_SOUNDBUFFERSIZE, soundBufferSize);
 
+  // save doubleClickThreshold
+  settings->setValue(QTB_DOUBLECLICKTHRESHOLD, doubleClickThreshold);
+
   // save outputGraphicsDataToFile
   settings->setValue(QTB_OUTPUTGRAPHICSDATATOFILE, outputGraphicsDataToFile);
 
@@ -397,6 +406,8 @@ void Settings::printSettings() const
   qDebug() << "------------------------------------------";
   qDebug() << "Graphics Buffer Size (bytes) : " << graphicsBufferSize;
   qDebug() << "Sound    Buffer Size (bytes) : " << soundBufferSize;
+
+  qDebug() << "Double Click Threshold(msecond) : " << doubleClickThreshold;
 
   qDebug() << "------------------------------------------";
   qDebug() << "DBG: output Graphics Data To File : " << outputGraphicsDataToFile;

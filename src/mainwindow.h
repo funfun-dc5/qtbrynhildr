@@ -162,6 +162,9 @@ private:
   // height of status bar in hiding
   int heightOfStatusBarInHiding;
 
+  // height of menu bar
+  int heightOfMenuBar;
+
 #if defined(Q_OS_OSX)
   // previous KEYCODE_FLG
   KEYCODE_FLG previous_KEYCODE_FLG;
@@ -175,9 +178,6 @@ private:
 
   // output log flag for mouse
   bool outputLogForMouse;
-
-  // height of menu bar
-  int heightOfMenuBar;
 };
 
 } // end of namespace qtbrynhildr

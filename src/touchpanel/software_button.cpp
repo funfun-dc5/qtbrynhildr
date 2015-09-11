@@ -21,6 +21,7 @@ namespace qtbrynhildr {
 // constructor
 SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent)
   :
+  QWidget(parent),
   settings(settings),
   mouseBuffer(mouseBuffer),
   onOptionButton(true),

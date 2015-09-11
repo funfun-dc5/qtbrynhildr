@@ -316,6 +316,7 @@ string nameTableOfVKCode[256] = {
 // constructor
 SoftwareKeyboard::SoftwareKeyboard(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent)
   :
+  QWidget(parent),
   settings(settings),
   keyBuffer(keyBuffer),
   onShiftKey(false),

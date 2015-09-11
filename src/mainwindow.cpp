@@ -33,10 +33,10 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
   QWidget(parent),
   settings(settings),
   eventConverter(0),
-  heightOfMenuBar(0),
   heightOfStatusBar(0),
   heightOfMenuBarInHiding(0),
   heightOfStatusBarInHiding(0),
+  heightOfMenuBar(0),
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
 #endif // defined(Q_OS_OSX)
@@ -226,6 +226,8 @@ QSize MainWindow::getDesktopSize() const
 // paint event
 void MainWindow::paintEvent(QPaintEvent *event)
 {
+  Q_UNUSED(event)
+
   if (image.isNull()){
 	return;
   }
@@ -579,6 +581,8 @@ bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)
 // get desktop scaling factor
 qreal MainWindow::getDesktopScalingFactor(QSize size)
 {
+  Q_UNUSED(size)
+
   qreal scalingFactor = settings->getDesktopScalingFactor();
 
   if (scalingFactor != 1.0){
@@ -674,6 +678,8 @@ QSize MainWindow::sizeHint() const
 #if defined(Q_OS_WIN)
 bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
 {
+  Q_UNUSED(result)
+
   if (!(settings->getConnected()) ||
 	  !(settings->getOnControl())){
 	return false;

@@ -61,6 +61,8 @@ void DesktopScalingDialog::setSettingFromSliderPosition()
 // show Event
 void DesktopScalingDialog::showEvent(QShowEvent *event)
 {
+  Q_UNUSED(event)
+
   // for cancel
   originalFactor = settings->getDesktopScalingFactor();
 }

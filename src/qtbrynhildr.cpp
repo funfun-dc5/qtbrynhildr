@@ -273,9 +273,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	desktopScalingDialog = new DesktopScalingDialog(settings, this);
   }
 
-  // Software Keyboard and Button
+  // Software Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
+	softwareButton->setVisible(false);
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
   }
 
@@ -1369,6 +1370,7 @@ void QtBrynhildr::connectToServer()
 	  ABORT();
 	  break;
 	}
+	softwareKeyboard->setVisible(false);
 	if (softwareKeyboardDockWidget != 0){
 	  removeDockWidget(softwareKeyboardDockWidget);
 	  delete softwareKeyboardDockWidget;

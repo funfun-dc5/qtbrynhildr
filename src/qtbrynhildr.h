@@ -158,7 +158,8 @@ private slots:
   // record and replay
   void startRecordingControl();
   void stopRecordingControl();
-  void replayRecordingControl();
+  void startReplayRecordingControl();
+  void stopReplayRecordingControl();
 #endif // QTB_RECORDER
 
   // send key
@@ -255,6 +256,11 @@ private:
 
   // sound quality
   void refreshSoundQualityMenu();
+
+#if QTB_RECORDER
+  // recording and replaying
+  void refreshRecordingAndReplayMenu();
+#endif // QTB_RECORDER
 
 private:
   // GUI
@@ -409,7 +415,9 @@ private:
   // stop recording control
   QAction *stopRecordingControl_Action;
   // replay recorded control
-  QAction *replayRecordingControl_Action;
+  QAction *startReplayRecordingControl_Action;
+  // stop replay recorded control
+  QAction *stopReplayRecordingControl_Action;
 #endif // QTB_RECORDER
 
   // send key

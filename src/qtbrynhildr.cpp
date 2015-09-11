@@ -475,6 +475,11 @@ void QtBrynhildr::refreshMenu()
 
   // monitor menu
   refreshMonitorMenu();
+
+#if QTB_RECORDER
+  // recording and replaying
+  refreshRecordingAndReplayMenu();
+#endif // QTB_RECORDER
 }
 
 // refresh video quality menu
@@ -592,6 +597,49 @@ void QtBrynhildr::refreshMonitorMenu()
 	break;
   }
 }
+
+#if QTB_RECORDER
+// recording and replaying
+void QtBrynhildr::refreshRecordingAndReplayMenu()
+{
+  if (settings->getConnected()){
+	if (settings->getOnRecordingControl() || settings->getOnReplayingControl()){
+	  startRecordingControl_Action->setEnabled(false);
+	}
+	else {
+	  startRecordingControl_Action->setEnabled(true);
+	}
+	startRecordingControl_Action->setChecked(settings->getOnRecordingControl());
+	if (settings->getOnRecordingControl()){
+	  stopRecordingControl_Action->setEnabled(true);
+	}
+	else {
+	  stopRecordingControl_Action->setEnabled(false);
+	}
+	if (settings->getOnRecordingControl() || settings->getOnReplayingControl()){
+	  startReplayRecordingControl_Action->setEnabled(false);
+	}
+	else {
+	  startReplayRecordingControl_Action->setEnabled(true);
+	}
+	startReplayRecordingControl_Action->setChecked(settings->getOnReplayingControl());
+	if (settings->getOnReplayingControl()){
+	  stopReplayRecordingControl_Action->setEnabled(true);
+	}
+	else {
+	  stopReplayRecordingControl_Action->setEnabled(false);
+	}
+  }
+  else {
+	startRecordingControl_Action->setEnabled(false);
+	stopRecordingControl_Action->setEnabled(false);
+	startReplayRecordingControl_Action->setEnabled(false);
+	stopReplayRecordingControl_Action->setEnabled(false);
+	startRecordingControl_Action->setChecked(false);
+	startReplayRecordingControl_Action->setChecked(false);
+  }
+}
+#endif // QTB_RECORDER
 
 // get shutdown flag
 bool QtBrynhildr::getShutdownFlag() const
@@ -943,6 +991,7 @@ void QtBrynhildr::createActions()
 #if QTB_RECORDER
   // start recording control
   startRecordingControl_Action = new QAction(tr("Start Recodrding"), this);
+  startRecordingControl_Action->setEnabled(false);
   startRecordingControl_Action->setCheckable(true);
   startRecordingControl_Action->setChecked(settings->getOnRecordingControl());
   startRecordingControl_Action->setStatusTip(tr("Start Recodrding"));
@@ -950,13 +999,22 @@ void QtBrynhildr::createActions()
 
   // stop recording control
   stopRecordingControl_Action = new QAction(tr("Stop Recodrding"), this);
+  stopRecordingControl_Action->setEnabled(false);
   stopRecordingControl_Action->setStatusTip(tr("Stop Recodrding"));
   connect(stopRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopRecordingControl()));
 
   // replay recorded control
-  replayRecordingControl_Action = new QAction(tr("Replay"), this);
-  replayRecordingControl_Action->setStatusTip(tr("Replay"));
-  connect(replayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(replayRecordingControl()));
+  startReplayRecordingControl_Action = new QAction(tr("Start Replay"), this);
+  startReplayRecordingControl_Action->setEnabled(false);
+  startReplayRecordingControl_Action->setCheckable(true);
+  startReplayRecordingControl_Action->setStatusTip(tr("Start Replay"));
+  connect(startReplayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(startReplayRecordingControl()));
+
+  // stop replay recorded control
+  stopReplayRecordingControl_Action = new QAction(tr("Stop Replay"), this);
+  stopReplayRecordingControl_Action->setEnabled(false);
+  stopReplayRecordingControl_Action->setStatusTip(tr("Stop Replay"));
+  connect(stopReplayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopReplayRecordingControl()));
 #endif // QTB_RECORDER
 
   // send key Action
@@ -1090,7 +1148,9 @@ void QtBrynhildr::createMenus()
   recordAndReplaySubMenu = controlMenu->addMenu(tr("Record and Replay"));
   recordAndReplaySubMenu->addAction(startRecordingControl_Action);
   recordAndReplaySubMenu->addAction(stopRecordingControl_Action);
-  recordAndReplaySubMenu->addAction(replayRecordingControl_Action);
+  recordAndReplaySubMenu->addSeparator();
+  recordAndReplaySubMenu->addAction(startReplayRecordingControl_Action);
+  recordAndReplaySubMenu->addAction(stopReplayRecordingControl_Action);
 #endif // QTB_RECORDER
 
   // option menu
@@ -1221,6 +1281,9 @@ void QtBrynhildr::connected()
 
   // reset frameCounter
   frameCounter = 0;
+
+  // refresh menu
+  refreshMenu();
 }
 
 // connected
@@ -1738,6 +1801,9 @@ void QtBrynhildr::startRecordingControl()
 
   // start to record
   recorder->startRecording();
+
+  // refresh menu
+  refreshRecordingAndReplayMenu();
 }
 
 // stop recording control
@@ -1755,15 +1821,19 @@ void QtBrynhildr::stopRecordingControl()
 								 tr("Save file"),
 								 ".",
 								 tr("Control Record File (*.qtb)"));
+  if (fileName == ""){
+	// Nothing to do
+	return;
+  }
   // stop to record
   recorder->stopRecording(qPrintable(fileName));
 
-  // checked
-  startRecordingControl_Action->setChecked(false);
+  // refresh menu
+  refreshRecordingAndReplayMenu();
 }
 
 // replay recorded control
-void QtBrynhildr::replayRecordingControl()
+void QtBrynhildr::startReplayRecordingControl()
 {
   static char filename[QTB_MAXPATHLEN+1];
 
@@ -1779,11 +1849,34 @@ void QtBrynhildr::replayRecordingControl()
 								 tr("Open file"),
 								 ".",
 								 tr("Control Record File (*.qtb)"));
+  if (fileName == ""){
+	// Nothing to do
+	return;
+  }
   strncpy(filename, qPrintable(fileName), QTB_MAXPATHLEN);
   settings->setReplayingControlFileName(filename);
 
   // start to replay
   recorder->startReplaying();
+
+  // refresh menu
+  refreshRecordingAndReplayMenu();
+}
+
+// stop replay recorded control
+void QtBrynhildr::stopReplayRecordingControl()
+{
+  // check
+  if (!settings->getOnReplayingControl()){
+	// Now NOT in replaying
+	return;
+  }
+
+  // stop to replay
+  recorder->stopReplaying();
+
+  // refresh menu
+  refreshRecordingAndReplayMenu();
 }
 #endif // QTB_RECORDER
 

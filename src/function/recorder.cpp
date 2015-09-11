@@ -184,10 +184,12 @@ COM_DATA *Recorder::getCOM_DATA()
 	}
 	else {
 	  // file is closed
+	  settings->setOnReplayingControl(false);
 	  return 0;
 	}
   }
   else if (bodyEntry.counter < 0){
+	settings->setOnReplayingControl(false);
 	return 0;
   }
 

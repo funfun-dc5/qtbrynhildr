@@ -35,6 +35,10 @@ Settings::Settings(const char *iniFileName)
 #if QTB_RECORDER
   onRecordingControl(false),
   onReplayingControl(false),
+#if 0
+  inRecordingControl(false),
+  inReplayingControl(false),
+#endif
 #endif // QTB_RECORDER
   onScrollMode(false)
 {

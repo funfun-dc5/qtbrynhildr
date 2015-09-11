@@ -883,6 +883,32 @@ public:
   {
 	this->replayingControlFileName = replayingControlFileName;
   }
+
+#if 0
+  // get in recording control flag
+  bool getInRecordingControl() const
+  {
+	return inRecordingControl;
+  }
+
+  // set in recording control flag
+  void setInRecordingControl(bool inRecordingControl)
+  {
+	this->inRecordingControl = inRecordingControl;
+  }
+
+  // get in replaying control flag
+  bool getInReplayingControl() const
+  {
+	return inReplayingControl;
+  }
+
+  // set in replaying control flag
+  void setInReplayingControl(bool inReplayingControl)
+  {
+	this->inReplayingControl = inReplayingControl;
+  }
+#endif
 #endif // QTB_RECORDER
 
   // get on scroll mode flag
@@ -1119,6 +1145,13 @@ private:
   volatile bool onReplayingControl;
   const char *replayingControlFileName;
 
+#if 0
+  // in recording flag
+  volatile bool inRecordingControl;
+
+  // in replaying flag
+  volatile bool inReplayingControl;
+#endif
 #endif // QTB_RECORDER
 
   // scroll mode

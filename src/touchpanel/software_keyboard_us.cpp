@@ -18,79 +18,79 @@ namespace qtbrynhildr {
 
   // key information table
   const static SoftwareKeyboard::KeyTopInfo keyTopInfo[SoftwareKeyboard::ID_KEY_NUM+1] = {
-	{{"",		"",		VK_NONE_00		},	{"",		VK_NONE_00	}},	// DUMMY
+	{{"",		"",		(char)VK_NONE_00	},	{"",		(char)VK_NONE_00	}},	// DUMMY
 
-	{{"ESC",	"ESC",	VK_ESCAPE		},	{"ESC",		VK_ESCAPE	}},	// ID_KEY_1
-	{{"1",		"!",	VK_1			},	{"F1",		VK_F1		}},	// ID_KEY_2
-	{{"2",		"@",	VK_2			},	{"F2",		VK_F2		}},	// ID_KEY_3
-	{{"3",		"#",	VK_3			},	{"F3",		VK_F3		}},	// ID_KEY_4
-	{{"4",		"$",	VK_4			},	{"F4",		VK_F4		}},	// ID_KEY_5
-	{{"5",		"%",	VK_5			},	{"F5",		VK_F5		}},	// ID_KEY_6
-	{{"6",		"^",	VK_6			},	{"F6",		VK_F6		}},	// ID_KEY_7
-	{{"7",		"&&",	VK_7			},	{"F7",		VK_F7		}},	// ID_KEY_8
-	{{"8",		"*",	VK_8			},	{"F8",		VK_F8		}},	// ID_KEY_9
-	{{"9",		"(",	VK_9			},	{"F9",		VK_F9		}},	// ID_KEY_10
-	{{"0",		")",	VK_0			},	{"F10",		VK_F10		}},	// ID_KEY_11
-	{{"-",		"_",	VK_OEM_MINUS	},	{"F11",		VK_F11		}},	// ID_KEY_12
-	{{"=",		"+",	VK_OEM_7		},	{"F12",		VK_F12		}},	// ID_KEY_13
-	{{"",		"",		VK_NONE_00		},	{"Ins",		VK_INSERT	}},	// ID_KEY_14
-	{{"BS",		"BS",	VK_BACK			},	{"Del",		VK_DELETE	}},	// ID_KEY_15
+	{{"ESC",	"ESC",	(char)VK_ESCAPE		},	{"ESC",		(char)VK_ESCAPE		}},	// ID_KEY_1
+	{{"1",		"!",	(char)VK_1			},	{"F1",		(char)VK_F1			}},	// ID_KEY_2
+	{{"2",		"@",	(char)VK_2			},	{"F2",		(char)VK_F2			}},	// ID_KEY_3
+	{{"3",		"#",	(char)VK_3			},	{"F3",		(char)VK_F3			}},	// ID_KEY_4
+	{{"4",		"$",	(char)VK_4			},	{"F4",		(char)VK_F4			}},	// ID_KEY_5
+	{{"5",		"%",	(char)VK_5			},	{"F5",		(char)VK_F5			}},	// ID_KEY_6
+	{{"6",		"^",	(char)VK_6			},	{"F6",		(char)VK_F6			}},	// ID_KEY_7
+	{{"7",		"&&",	(char)VK_7			},	{"F7",		(char)VK_F7			}},	// ID_KEY_8
+	{{"8",		"*",	(char)VK_8			},	{"F8",		(char)VK_F8			}},	// ID_KEY_9
+	{{"9",		"(",	(char)VK_9			},	{"F9",		(char)VK_F9			}},	// ID_KEY_10
+	{{"0",		")",	(char)VK_0			},	{"F10",		(char)VK_F10		}},	// ID_KEY_11
+	{{"-",		"_",	(char)VK_OEM_MINUS	},	{"F11",		(char)VK_F11		}},	// ID_KEY_12
+	{{"=",		"+",	(char)VK_OEM_7		},	{"F12",		(char)VK_F12		}},	// ID_KEY_13
+	{{"",		"",		(char)VK_NONE_00	},	{"Ins",		(char)VK_INSERT		}},	// ID_KEY_14
+	{{"BS",		"BS",	(char)VK_BACK		},	{"Del",		(char)VK_DELETE		}},	// ID_KEY_15
 
-	{{"Tab",	"Tab",	VK_TAB			},	{"Tab",		VK_TAB		}},	// ID_KEY_16
-	{{"Q",		"Q",	VK_Q			},	{"Q",		VK_Q		}},	// ID_KEY_17
-	{{"W",		"W",	VK_W			},	{"W",		VK_W		}},	// ID_KEY_18
-	{{"E",		"E",	VK_E			},	{"E",		VK_E		}},	// ID_KEY_19
-	{{"R",		"R",	VK_R			},	{"R",		VK_R		}},	// ID_KEY_20
-	{{"T",		"T",	VK_T			},	{"T",		VK_T		}},	// ID_KEY_21
-	{{"Y",		"Y",	VK_Y			},	{"Y",		VK_Y		}},	// ID_KEY_22
-	{{"U",		"U",	VK_U			},	{"U",		VK_U		}},	// ID_KEY_23
-	{{"I",		"I",	VK_I			},	{"I",		VK_I		}},	// ID_KEY_24
-	{{"O",		"O",	VK_O			},	{"O",		VK_O		}},	// ID_KEY_25
-	{{"P",		"P",	VK_P			},	{"P",		VK_P		}},	// ID_KEY_26
-	{{"[",		"{",	VK_OEM_3		},	{"",		VK_NONE_00	}},	// ID_KEY_27
-	{{"]",		"}",	VK_OEM_4		},	{"",		VK_NONE_00	}},	// ID_KEY_28
-	{{"RET",	"RET",	VK_RETURN		},	{"RET",		VK_RETURN	}},	// ID_KEY_29
+	{{"Tab",	"Tab",	(char)VK_TAB		},	{"Tab",		(char)VK_TAB		}},	// ID_KEY_16
+	{{"Q",		"Q",	(char)VK_Q			},	{"Q",		(char)VK_Q			}},	// ID_KEY_17
+	{{"W",		"W",	(char)VK_W			},	{"W",		(char)VK_W			}},	// ID_KEY_18
+	{{"E",		"E",	(char)VK_E			},	{"E",		(char)VK_E			}},	// ID_KEY_19
+	{{"R",		"R",	(char)VK_R			},	{"R",		(char)VK_R			}},	// ID_KEY_20
+	{{"T",		"T",	(char)VK_T			},	{"T",		(char)VK_T			}},	// ID_KEY_21
+	{{"Y",		"Y",	(char)VK_Y			},	{"Y",		(char)VK_Y			}},	// ID_KEY_22
+	{{"U",		"U",	(char)VK_U			},	{"U",		(char)VK_U			}},	// ID_KEY_23
+	{{"I",		"I",	(char)VK_I			},	{"I",		(char)VK_I			}},	// ID_KEY_24
+	{{"O",		"O",	(char)VK_O			},	{"O",		(char)VK_O			}},	// ID_KEY_25
+	{{"P",		"P",	(char)VK_P			},	{"P",		(char)VK_P			}},	// ID_KEY_26
+	{{"[",		"{",	(char)VK_OEM_3		},	{"",		(char)VK_NONE_00	}},	// ID_KEY_27
+	{{"]",		"}",	(char)VK_OEM_4		},	{"",		(char)VK_NONE_00	}},	// ID_KEY_28
+	{{"RET",	"RET",	(char)VK_RETURN		},	{"RET",		(char)VK_RETURN		}},	// ID_KEY_29
 
-	{{"Ctrl",	"Ctrl",	VK_LCONTROL		},	{"Ctrl",	VK_LCONTROL	}},	// ID_KEY_30
-	{{"A",		"A",	VK_A			},	{"A",		VK_A		}},	// ID_KEY_31
-	{{"S",		"S",	VK_S			},	{"S",		VK_S		}},	// ID_KEY_32
-	{{"D",		"D",	VK_D			},	{"D",		VK_D		}},	// ID_KEY_33
-	{{"F",		"F",	VK_F			},	{"F",		VK_F		}},	// ID_KEY_34
-	{{"G",		"G",	VK_G			},	{"G",		VK_G		}},	// ID_KEY_35
-	{{"H",		"H",	VK_H			},	{"H",		VK_H		}},	// ID_KEY_36
-	{{"J",		"J",	VK_J			},	{"J",		VK_J		}},	// ID_KEY_37
-	{{"K",		"K",	VK_K			},	{"K",		VK_K		}},	// ID_KEY_38
-	{{"L",		"L",	VK_L			},	{"L",		VK_L		}},	// ID_KEY_39
-	{{";",		":",	VK_OEM_PLUS		},	{"",		VK_NONE_00	}},	// ID_KEY_40
-	{{"'",		"\"",	VK_OEM_1		},	{"Pause",	VK_PAUSE	}},	// ID_KEY_41
-	{{"\\",		"|",	VK_OEM_6		},	{"PrtS",	VK_SNAPSHOT	}},	// ID_KEY_42
+	{{"Ctrl",	"Ctrl",	(char)VK_LCONTROL	},	{"Ctrl",	(char)VK_LCONTROL	}},	// ID_KEY_30
+	{{"A",		"A",	(char)VK_A			},	{"A",		(char)VK_A			}},	// ID_KEY_31
+	{{"S",		"S",	(char)VK_S			},	{"S",		(char)VK_S			}},	// ID_KEY_32
+	{{"D",		"D",	(char)VK_D			},	{"D",		(char)VK_D			}},	// ID_KEY_33
+	{{"F",		"F",	(char)VK_F			},	{"F",		(char)VK_F			}},	// ID_KEY_34
+	{{"G",		"G",	(char)VK_G			},	{"G",		(char)VK_G			}},	// ID_KEY_35
+	{{"H",		"H",	(char)VK_H			},	{"H",		(char)VK_H			}},	// ID_KEY_36
+	{{"J",		"J",	(char)VK_J			},	{"J",		(char)VK_J			}},	// ID_KEY_37
+	{{"K",		"K",	(char)VK_K			},	{"K",		(char)VK_K			}},	// ID_KEY_38
+	{{"L",		"L",	(char)VK_L			},	{"L",		(char)VK_L			}},	// ID_KEY_39
+	{{";",		":",	(char)VK_OEM_PLUS	},	{"",		(char)VK_NONE_00	}},	// ID_KEY_40
+	{{"'",		"\"",	(char)VK_OEM_1		},	{"Pause",	(char)VK_PAUSE		}},	// ID_KEY_41
+	{{"\\",		"|",	(char)VK_OEM_6		},	{"PrtS",	(char)VK_SNAPSHOT	}},	// ID_KEY_42
 
-	{{"Shift",	"Shift",VK_LSHIFT		},	{"Shift",	VK_LSHIFT	}},	// ID_KEY_43
-	{{"Z",		"Z",	VK_Z			},	{"Z",		VK_A		}},	// ID_KEY_44
-	{{"X",		"X",	VK_X			},	{"X",		VK_Z		}},	// ID_KEY_45
-	{{"C",		"C",	VK_C			},	{"C",		VK_C		}},	// ID_KEY_46
-	{{"V",		"V",	VK_V			},	{"V",		VK_V		}},	// ID_KEY_47
-	{{"B",		"B",	VK_B			},	{"B",		VK_B		}},	// ID_KEY_48
-	{{"N",		"N",	VK_N			},	{"N",		VK_N		}},	// ID_KEY_49
-	{{"M",		"M",	VK_M			},	{"M",		VK_M		}},	// ID_KEY_50
-	{{",",		"<",	VK_OEM_COMMA	},	{"",		VK_NONE_00	}},	// ID_KEY_51
-	{{".",		">",	VK_OEM_PERIOD	},	{"",		VK_NONE_00	}},	// ID_KEY_52
-	{{"\\",		"?",	VK_OEM_2		},	{"",		VK_NONE_00	}},	// ID_KEY_53
-	{{"",		"",		VK_NONE_00		},	{"",		VK_NONE_00	}},	// ID_KEY_54
-	{{"↑",		"↑",	VK_UP			},	{"PgU",		VK_PRIOR	}},	// ID_KEY_55
-	{{"Shift",	"Shift",VK_RSHIFT		},	{"Shift",	VK_RSHIFT	}},	// ID_KEY_56
+	{{"Shift",	"Shift",(char)VK_LSHIFT		},	{"Shift",	(char)VK_LSHIFT		}},	// ID_KEY_43
+	{{"Z",		"Z",	(char)VK_Z			},	{"Z",		(char)VK_A			}},	// ID_KEY_44
+	{{"X",		"X",	(char)VK_X			},	{"X",		(char)VK_Z			}},	// ID_KEY_45
+	{{"C",		"C",	(char)VK_C			},	{"C",		(char)VK_C			}},	// ID_KEY_46
+	{{"V",		"V",	(char)VK_V			},	{"V",		(char)VK_V			}},	// ID_KEY_47
+	{{"B",		"B",	(char)VK_B			},	{"B",		(char)VK_B			}},	// ID_KEY_48
+	{{"N",		"N",	(char)VK_N			},	{"N",		(char)VK_N			}},	// ID_KEY_49
+	{{"M",		"M",	(char)VK_M			},	{"M",		(char)VK_M			}},	// ID_KEY_50
+	{{",",		"<",	(char)VK_OEM_COMMA	},	{"",		(char)VK_NONE_00	}},	// ID_KEY_51
+	{{".",		">",	(char)VK_OEM_PERIOD	},	{"",		(char)VK_NONE_00	}},	// ID_KEY_52
+	{{"\\",		"?",	(char)VK_OEM_2		},	{"",		(char)VK_NONE_00	}},	// ID_KEY_53
+	{{"",		"",		(char)VK_NONE_00	},	{"",		(char)VK_NONE_00	}},	// ID_KEY_54
+	{{"↑",		"↑",	(char)VK_UP			},	{"PgU",		(char)VK_PRIOR		}},	// ID_KEY_55
+	{{"Shift",	"Shift",(char)VK_RSHIFT		},	{"Shift",	(char)VK_RSHIFT		}},	// ID_KEY_56
 
-	{{"Fn",		"Fn",	VK_NONE_00		},	{"Fn",		VK_NONE_00	}},	// ID_KEY_57
-	{{"Alt",	"Alt",	VK_LMENU		},	{"Alt",		VK_LMENU	}},	// ID_KEY_58
-	{{"Win",	"Win",	VK_LWIN			},	{"Win",		VK_LWIN		}},	// ID_KEY_59
-	{{"`",		"~",	VK_OEM_7		},	{"`",		VK_OEM_7	}},	// ID_KEY_60
-	{{"Space",	"Space",VK_SPACE		},	{"Space",	VK_SPACE	}},	// ID_KEY_61
-	{{"Ctrl",	"Ctrl",	VK_RCONTROL		},	{"Ctrl",	VK_RCONTROL	}},	// ID_KEY_62
-	{{"Alt",	"Alt",	VK_RMENU		},	{"Alt",		VK_RMENU	}},	// ID_KEY_63
-	{{"Fn",		"Fn",	VK_NONE_00		},	{"Fn",		VK_NONE_00	}},	// ID_KEY_64
-	{{"←",		"←",	VK_LEFT			},	{"Home",	VK_HOME		}},	// ID_KEY_65
-	{{"↓",		"↓",	VK_DOWN			},	{"PgD",		VK_NEXT		}},	// ID_KEY_66
-	{{"→",		"→",	VK_RIGHT		},	{"End",		VK_END		}},	// ID_KEY_67
+	{{"Fn",		"Fn",	(char)VK_NONE_00	},	{"Fn",		(char)VK_NONE_00	}},	// ID_KEY_57
+	{{"Alt",	"Alt",	(char)VK_LMENU		},	{"Alt",		(char)VK_LMENU		}},	// ID_KEY_58
+	{{"Win",	"Win",	(char)VK_LWIN		},	{"Win",		(char)VK_LWIN		}},	// ID_KEY_59
+	{{"`",		"~",	(char)VK_OEM_7		},	{"`",		(char)VK_OEM_7		}},	// ID_KEY_60
+	{{"Space",	"Space",(char)VK_SPACE		},	{"Space",	(char)VK_SPACE		}},	// ID_KEY_61
+	{{"Ctrl",	"Ctrl",	(char)VK_RCONTROL	},	{"Ctrl",	(char)VK_RCONTROL	}},	// ID_KEY_62
+	{{"Alt",	"Alt",	(char)VK_RMENU		},	{"Alt",		(char)VK_RMENU		}},	// ID_KEY_63
+	{{"Fn",		"Fn",	(char)VK_NONE_00	},	{"Fn",		(char)VK_NONE_00	}},	// ID_KEY_64
+	{{"←",		"←",	(char)VK_LEFT		},	{"Home",	(char)VK_HOME		}},	// ID_KEY_65
+	{{"↓",		"↓",	(char)VK_DOWN		},	{"PgD",		(char)VK_NEXT		}},	// ID_KEY_66
+	{{"→",		"→",	(char)VK_RIGHT		},	{"End",		(char)VK_END		}},	// ID_KEY_67
   };
 
 //---------------------------------------------------------------------------

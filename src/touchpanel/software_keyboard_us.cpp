@@ -247,12 +247,15 @@ void SoftwareKeyboard_US::releasedKey(ID_KEY id)
 	  }
 	  if (onAltKey){
 		keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYUP);
+		onAltKey = false;
 	  }
 	  if (onControlKey){
 		keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP);
+		onControlKey = false;
 	  }
 	  if (onShiftKey){
 		keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
+		onShiftKey = false;
 	  }
 	}
 	break;

@@ -12,6 +12,7 @@
 
 // Local Header
 #include "software_button.h"
+#include "version.h"
 
 namespace qtbrynhildr {
 
@@ -102,6 +103,9 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   connect(pushButton_29, SIGNAL(released()), this, SLOT(releasedButton_29()));
   connect(pushButton_30, SIGNAL(released()), this, SLOT(releasedButton_30()));
   connect(pushButton_31, SIGNAL(released()), this, SLOT(releasedButton_31()));
+
+  // set information
+  pushButton_28->setText("Ver. " QTB_VERSION);
 
   // initialization
   toggleOptionButton();

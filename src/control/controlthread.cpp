@@ -320,7 +320,7 @@ void ControlThread::connectedToServer()
 }
 
 // shutdown connection
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
 void ControlThread::shutdownConnection()
 {
   if (sock_control != INVALID_SOCKET){
@@ -339,7 +339,7 @@ void ControlThread::shutdownConnection()
 	sock_sound = INVALID_SOCKET;
   }
 }
-#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
 
 //---------------------------------------------------------------------------
 // private

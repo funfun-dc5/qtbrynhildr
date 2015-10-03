@@ -61,17 +61,17 @@ uchar EventConverter_JP::getVKCode(Key key)
 	return VK_NEXT;
   case Key_Shift:
 	return VK_SHIFT;
-#if defined(Q_OS_MAC)
+#if defined(Q_OS_OSX)
   case Key_Control:	// On Mac OS X, Command key
 	return VK_LWIN;
   case Key_Meta:	// On Mac OS X, Control key. On Windows, Windows key.
 	return VK_CONTROL;
-#else // defined(Q_OS_MAC)
+#else // defined(Q_OS_OSX)
   case Key_Control:	// On Mac OS X, Command key
 	return VK_CONTROL;
   case Key_Meta:	// On Mac OS X, Control key. On Windows, Windows key.
 	return VK_LWIN;
-#endif // defined(Q_OS_MAC)
+#endif // defined(Q_OS_OSX)
   case Key_Alt:
 	return VK_MENU;
   case Key_CapsLock:

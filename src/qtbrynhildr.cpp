@@ -1230,7 +1230,7 @@ void QtBrynhildr::updateConnected()
   }
   else {
 	// connection
-	connectionLabel->setText(tr("connected : ") + "None");
+	connectionLabel->setText(tr("Not connected"));
   }
 
   // set minimum size

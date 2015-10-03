@@ -653,6 +653,12 @@
         <translation>スクロールモード</translation>
     </message>
     <message>
+        <location filename="../qtbrynhildr.cpp" line="1233"/>
+        <source>Not connected</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>未接続</translation>
+    </message>
+    <message>
         <location filename="../qtbrynhildr.cpp" line="1442"/>
         <source>Software Keyboard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
@@ -714,13 +720,13 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1823"/>
-        <location filename="../qtbrynhildr.cpp" line="1847"/>
+        <location filename="../qtbrynhildr.cpp" line="1851"/>
         <source>Control Record File (*.qtb)</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Control Record File (*.qtb)</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1845"/>
+        <location filename="../qtbrynhildr.cpp" line="1849"/>
         <source>Open file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルを開く</translation>
@@ -784,10 +790,9 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1229"/>
-        <location filename="../qtbrynhildr.cpp" line="1233"/>
         <source>connected : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>connected: </translation>
+        <translation>接続中 : </translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1544"/>

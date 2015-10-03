@@ -2,7 +2,7 @@
  Setup Development Environment for Qt Brynhildr on Linux (Ubuntu-14.04 LTS)
 ---------------------------------------------------------------------------
 
-0) install Qt5.4.2 and g++
+1) install Qt5.4.2 and g++
 
  [64bit]
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x64-5.4.2.run
@@ -16,11 +16,11 @@
  (*) If you don't have g++ command, do "sudo apt-get install g++"
      and you may have to do "sudo apt-get install libglu1-mesa-dev" for openGL.
 
-1) check setup script for Qt5 (src/setup_qt5)
+2) check setup script for Qt5 (src/setup_qt5)
 
-2) run src/setup
+3) run src/setup
 
  cd qtbrynhildr/src
  ./setup
 
-3) make
+4) make

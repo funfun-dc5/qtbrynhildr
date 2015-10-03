@@ -2,18 +2,18 @@
  Setup Development Environment for Qt Brynhildr on Windows.
 ---------------------------------------------------------------------------
 
-0) install Qt5.4.2 (for MinGW-4.9.1) and MinGW-W64 and Cygwin
+1) install Qt5.4.2 (for MinGW-4.9.1) and MinGW-W64 and Cygwin
 
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-windows-x86-mingw491_opengl-5.4.2.exe
 
-1) check setup script for Qt5 (src/setup_qt5)
+2) check setup script for Qt5 (src/setup_qt5)
 
-2) run src/setup
+3) run src/setup
 
  cd qtbrynhildr/src
  ./setup
 
-3) make
+4) make
 
  (*) If you use both of cygwin and MinGW and Qt, check PATH environment variable.
     PATH order : Qt -> MinGW -> cygwin

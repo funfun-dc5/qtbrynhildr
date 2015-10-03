@@ -1,0 +1,20 @@
+---------------------------------------------------------------------------
+ Setup Development Environment for Qt Brynhildr on MacOSX (10.10 or later)
+---------------------------------------------------------------------------
+
+1) install Xcode
+
+Install Xcode at App Store.
+
+2) install Qt5.4.2
+
+http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-mac-x64-clang-5.4.2.dmg
+
+3) check setup script for Qt5 (src/setup_qt5)
+
+4) run src/setup
+
+ cd qtbrynhildr/src
+ ./setup
+
+5) make

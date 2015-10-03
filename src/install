@@ -56,11 +56,9 @@ case $UNAME in
 		UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
-#				DISTDIR="../dist/macosx/dist_macosx_x64"
-#				PKGNAME="macosx_x64"
+				DISTDIR="../dist/macosx/dist_macosx_x64"
+				PKGNAME="macosx_x64"
 				echo "Installing for Darwin x64..."
-				echo "Now NOT support Darwin."
-				exit 1;
 				;;
 		esac
 		;;
@@ -86,6 +84,7 @@ if [ "$1" = "clean" ] ; then
 			;;
 		Darwin)
 			# clean
+			\rm -rf ${DISTDIR}/*
 			;;
 		*)
 			echo "Not support platform."
@@ -119,6 +118,10 @@ if [ "$1" = "man" ] ; then
 			;;
 		Darwin)
 			# copy manual file
+			pushd ../doc/manual
+			make html
+			make install
+			popd
 			exit 0;
 			;;
 		*)
@@ -221,6 +224,22 @@ case $UNAME in
 		echo "Done."
 		;;
 	Darwin)
+		echo "Installing for Darwin..."
+		if [ ! -x ./${APP}.app ] ; then
+			echo "NOT Found ${APP}.app"
+			exit 1;
+		fi
+		VERSION=`${APP}.app/Contents/MacOS/${APP} -vv`
+		# make package string
+		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
+		# for darwin
+		# create directory
+		mkdir -p ${DISTDIR}
+		# make dmg
+		${QTROOT}/bin/macdeployqt ${APP}.app -dmg
+		# mv dist directory
+		mv ${APP}.dmg ${DISTDIR}/${PKGSTRING}.dmg
 		echo "Done."
 		;;
     *)

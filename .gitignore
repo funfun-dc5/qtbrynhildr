@@ -10,6 +10,8 @@ build/
 # for Sphinx
 doctrees/
 html/
+# for Darwin
+.DS_Store
 #-----------------------
 # ignore source files
 #-----------------------

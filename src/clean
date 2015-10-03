@@ -33,7 +33,7 @@ case $UNAME in
 	Darwin)
 		make clean
 		# delete executable file
-		rm -f ${APP}
+		rm -rf ${APP}.app
 		pushd ../doc/manual
 		# delete manual
 		make clean

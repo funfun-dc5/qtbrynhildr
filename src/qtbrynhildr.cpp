@@ -1600,7 +1600,7 @@ void QtBrynhildr::exit()
 	  //	  cout << "FPS of last session: " << averageFrameRate << endl << flush;
 	  QString averageFrameRateString;
 	  averageFrameRateString.setNum(averageFrameRate);
-	  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("FPS of last session: ") + averageFrameRateString + " FPS");
+	  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("FPS of last session : ") + averageFrameRateString + " FPS");
 	}
   }
 

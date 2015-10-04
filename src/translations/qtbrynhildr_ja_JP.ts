@@ -708,9 +708,9 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1603"/>
-        <source>FPS of last session: </source>
+        <source>FPS of last session : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>最後の接続の平均フレームレート :</translation>
+        <translation>最後の接続の平均フレームレート : </translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1821"/>

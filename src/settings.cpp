@@ -30,6 +30,7 @@ Settings::Settings(const char *iniFileName)
   bootupFlag(false),
   shutdownFlag(false),
   connected(false),
+  monitorCount(0),
   onShowSoftwareKeyboard(false),
   onShowSoftwareButton(false),
 #if QTB_RECORDER

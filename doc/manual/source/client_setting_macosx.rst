@@ -6,13 +6,13 @@
 1. ダウンロード
 ----------------
 
-.dmgファイルをマウントし、qtbrynhildr を /Applications にコピーしてください。
+.dmgファイルをマウントし、qtbrynhildr.app を /Applications にコピーしてください。
 
 
 2. アンインストール
 ----------------------------------
 
-/Applications/qtbrynhildr を削除してください。
+/Applications/qtbrynhildr.app を削除してください。
 
 3. 起動/終了と設定ファイル
 --------------------------

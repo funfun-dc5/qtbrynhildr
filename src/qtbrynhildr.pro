@@ -26,6 +26,11 @@ RC_FILE = resource/qtbrynhildr_resource.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp
 }
 
+# for MacOSX
+macx {
+ICON = images/qtbrynhildr.icns
+}
+
 # for crypto++
 #INCLUDEPATH += ../lib/cryptopp562
 #LIBS += -L../lib/cryptopp562 -lcryptopp

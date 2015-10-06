@@ -71,11 +71,15 @@ void NetThread::run()
 		continue;
 	  }
 	  if (result_connect == CONNECT_FAILED){
+#if 0 // for TEST
 		cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
+#endif // for TEST
 		shutdownConnection();
 		emit networkError();
 		runThread = false;
+#if 0 // for TEST
 		emit outputLogMessage(QTB_MSG_CONNECT_ERROR);
+#endif // for TEST
 		break;
 	  }
 	  if (result_connect == CONNECT_FAILED_RETRY){
@@ -89,8 +93,10 @@ void NetThread::run()
 	PROCESS_RESULT result_process = processForHeader();
 	if (result_process != PROCESS_SUCCEEDED){
 	  if (result_process == PROCESS_NETWORK_ERROR){
-		// error
+		// erro
+#if 0 // for TEST
 		cout << "[" << name << "]" << " Network Error: processForHeader()" << endl << flush; // error
+#endif // for TEST
 		shutdownConnection();
 		emit networkError();
 		continue;

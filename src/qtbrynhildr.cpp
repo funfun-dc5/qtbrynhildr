@@ -316,6 +316,15 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(soundThread,
 		  SIGNAL(outputLogMessage(int, const QString)),
 		  SLOT(outputLogMessage(int, const QString)));
+  connect(controlThread,
+		  SIGNAL(networkError()),
+		  SLOT(onNetworkError()));
+  connect(graphicsThread,
+		  SIGNAL(networkError()),
+		  SLOT(onNetworkError()));
+  connect(soundThread,
+		  SIGNAL(networkError()),
+		  SLOT(onNetworkError()));
 
   // control thread
   connect(controlThread,
@@ -329,9 +338,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(controlThread,
 		  SIGNAL(finished()),
 		  SLOT(finishedNetThread()));
-  connect(controlThread,
-		  SIGNAL(networkError()),
-		  SLOT(onNetworkError()));
 
   connect(controlThread,
 		  SIGNAL(exitApplication()),
@@ -675,9 +681,13 @@ void QtBrynhildr::onDesktopClear()
 // network error handler
 void QtBrynhildr::onNetworkError()
 {
+#if 1 // for TEST
+  reconnectToServer();
+#else
   settings->setConnected(false);
   mainWindow->clearDesktop();
   refreshWindow();
+#endif
 }
 
 // exit applilcation
@@ -1465,6 +1475,51 @@ void QtBrynhildr::connectToServer()
 
   // initialize socket
   initSocket();
+
+  // counter for control
+  counter_control = 0;
+  // counter for graphics
+  counter_graphics = 0;
+
+  // start all thread
+  controlThread->start();
+  graphicsThread->start();
+  soundThread->start();
+
+  // connected
+  connected();
+}
+
+// reconnect to server
+void QtBrynhildr::reconnectToServer()
+{
+  // disconnected
+  if (!settings->getConnected()){
+	// Nothing to do
+	return;
+  }
+
+  // exit all threads
+  controlThread->exitThread();
+  graphicsThread->exitThread();
+  soundThread->exitThread();
+
+  controlThread->exit();
+  controlThread->wait();
+  graphicsThread->exit();
+  graphicsThread->wait();
+  soundThread->exit();
+  soundThread->wait();
+
+  // disconnect
+  settings->setConnected(false);
+
+  // clear buffer for control
+  mainWindow->getKeyBuffer()->clear();
+  mainWindow->getMouseBuffer()->clear();
+
+  // close and initialize socket
+  closeSocket();
 
   // counter for control
   counter_control = 0;

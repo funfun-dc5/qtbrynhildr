@@ -120,6 +120,9 @@ private slots:
   // connect to server
   void connectToServer();
 
+  // reconnect to server
+  void reconnectToServer();
+
   // disconnect to server
   void disconnectToServer();
 

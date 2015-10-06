@@ -113,9 +113,13 @@ CONNECT_RESULT SoundThread::connectToServer()
 PROCESS_RESULT SoundThread::processForHeader()
 {
   // receive header
-  if (receiveData(sock_sound, (char *)com_data, sizeof(COM_DATA)) != sizeof(COM_DATA)){
+  long dataSize;
+  dataSize = receiveData(sock_sound, (char *)com_data, sizeof(COM_DATA));
+  if (dataSize != sizeof(COM_DATA)){
 	// error
-	cout << "[" << name << "]" << " received data size != sizeof(COM_DATA)" << endl << flush; // error
+#if 0 // for TEST
+	cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << endl << flush; // error
+#endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
 

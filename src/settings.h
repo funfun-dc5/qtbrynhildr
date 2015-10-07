@@ -206,6 +206,9 @@ typedef int SCALING_TYPE;
 #define QTB_OUTPUTLOG							"outputLog"
 #define QTB_OUTPUTLOG_DEFAULT					false
 
+// for logFile
+#define QTB_LOGFILE								"logFile"
+
 // -- other settings --
 // for geometry
 #define QTB_GEOMETRY			"geometry"
@@ -318,9 +321,6 @@ public:
 	ASSERT(keyboardType >= KEYBOARD_TYPE_JP && keyboardType < KEYBOARD_TYPE_NUM);
 	this->keyboardType = keyboardType;
   }
-
-  // get default keyboard type
-  KEYBOARD_TYPE getDefaultKeyboardType() const;
 
   // get keyboard type string
   QString getKeyboardTypeByString() const
@@ -996,6 +996,25 @@ public:
 	return outputLog;
   }
 
+  // get log file
+  QString getLogFile() const
+  {
+	return logFile;
+  }
+
+  // set log file
+  void setLogFile(QString logFile)
+  {
+	this->logFile = logFile;
+  }
+
+private:
+  // get default keyboard type
+  KEYBOARD_TYPE getDefaultKeyboardType() const;
+
+  // get Default Log File
+  QString getDefaultLogFile() const;
+
 private:
   // settings
   QSettings *settings;
@@ -1134,6 +1153,9 @@ private:
   volatile bool outputGraphicsDataToFile;
   volatile bool outputSoundDataToFile;
   volatile bool outputLog;
+
+  // for logFile
+  QString logFile;
 };
 
 } // end of namespace qtbrynhildr

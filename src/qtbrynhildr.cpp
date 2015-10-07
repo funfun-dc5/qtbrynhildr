@@ -77,27 +77,8 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   heightOfMenuBar(0),
   heightOfStatusBar(0)
 {
-  // initialize platform
-  if (!initPlatform()){
-	// Failed to initialize platform
-	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "error: initPlatform()");
-  }
-
-  // open Log File
-  if (!logMessage->openLogFile(QTB_LOG_FILENAME)){
-	// Failed to open log file
-#if 1 // for DEBUG
-	QMessageBox::warning(this,
-						 tr("warning"),
-						 tr("Failed to open log file"),
-						 QMessageBox::Ok,
-						 QMessageBox::Ok);
-#endif
-  }
-
   // bootTime
   bootTime = QDateTime::currentDateTime();
-  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Bootup."));
 
 #if QTB_CRYPTOGRAM
   // create cipher
@@ -130,6 +111,24 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // restore settings
   readSettings();
+
+  // open Log File
+  if (!logMessage->openLogFile(settings->getLogFile())){
+	// Failed to open log file
+#if 1 // for DEBUG
+	QMessageBox::warning(this,
+						 tr("warning"),
+						 tr("Failed to open log file"),
+						 QMessageBox::Ok,
+						 QMessageBox::Ok);
+#endif
+  }
+
+  // initialize platform
+  if (!initPlatform()){
+	// Failed to initialize platform
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "error: initPlatform()");
+  }
 
   // set option to settings
   if (option->getServerName() != 0){
@@ -352,6 +351,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 		  SLOT(onDesktopClear()));
 
   // bootTime
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Bootup."));
   if (settings->getOutputLog())
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "Boot : " +

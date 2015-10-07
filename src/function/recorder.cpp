@@ -12,6 +12,7 @@
 #include <iostream>
 
 // Qt Header
+#include <QDir>
 
 // Local Header
 #include "parameters.h"
@@ -31,12 +32,17 @@ Recorder::Recorder(Settings *settings)
   counter(0),
   dataSize(0),
   checkSum(0),
-  filename(RECORDER_TMP_FILENAME),
   // for DEBUG
   outputLog(false)
 {
   // initialization
   bodyEntry.counter = 0;
+
+  // filename
+  QString tempFileName = QDir::toNativeSeparators(QDir::tempPath() + QDir::separator() +
+												  RECORDER_TMP_FILENAME);
+  filename = qPrintable(tempFileName);
+  //  cout << "filename = " << filename << endl << flush;
 }
 
 // destructor

@@ -1076,7 +1076,9 @@ void QtBrynhildr::createMenus()
 
   // display menu
   displayMenu = menuBar()->addMenu(tr("&Display"));
+#if 0 // for TEST
   displayMenu->addAction(showMenuBar_Action);
+#endif // if 1
   displayMenu->addAction(showStatusBar_Action);
   displayMenu->addAction(showFrameRate_Action);
   // for stays on top

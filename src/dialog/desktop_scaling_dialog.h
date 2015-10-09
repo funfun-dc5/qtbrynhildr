@@ -57,7 +57,7 @@ private:
 
 public:
   // FACTOR for slider
-  static const qreal SLIDER_FACTOR = 10.0;
+  constexpr static const qreal SLIDER_FACTOR = 10.0;
 
 private:
   // MINIMUM for slider

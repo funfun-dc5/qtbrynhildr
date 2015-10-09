@@ -743,7 +743,11 @@ void QtBrynhildr::createActions()
   // Show Menu Bar
   showMenuBar_Action = new QAction(tr("Show Menu Bar"), this);
   showMenuBar_Action->setStatusTip(tr("Show Menu Bar"));
-  showMenuBar_Action->setEnabled(false); // for TEST
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+  showMenuBar_Action->setEnabled(true);
+#else // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+  showMenuBar_Action->setEnabled(false);
+#endif // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
   showMenuBar_Action->setCheckable(true);
   showMenuBar_Action->setChecked(settings->getOnShowMenuBar());
   connect(showMenuBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowMenuBar()));

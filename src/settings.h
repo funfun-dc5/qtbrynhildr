@@ -172,7 +172,11 @@ typedef int SCALING_TYPE;
 
 // for onShowMenuBar
 #define QTB_ONSHOWMENUBAR					"onShowMenuBar"
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#define QTB_ONSHOWMENUBAR_DEFAULT			false
+#else // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #define QTB_ONSHOWMENUBAR_DEFAULT			true
+#endif // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 
 // for onShowStatusBar
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"

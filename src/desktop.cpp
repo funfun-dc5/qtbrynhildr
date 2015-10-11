@@ -106,11 +106,19 @@ Desktop::Desktop()
 	heightOfStatusBarInHiding = -2;
   }
 #elif defined(Q_OS_LINUX)
-  // Linux
+#if defined(Q_OS_ANDROID)
+  // Android
+  correctWindowWidth = 2;
+  correctWindowHeight = 4;
+  heightOfMenuBarInHiding = -1;
+  heightOfStatusBarInHiding = 0;
+#else // defined(Q_OS_ANDROID)
+  // Linux Desktop
   correctWindowWidth = 2;
   correctWindowHeight = 2;
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
+#endif // defined(Q_OS_ANDROID)
 #elif defined(Q_OS_OSX)
   // Darwin
   correctWindowWidth = 0;

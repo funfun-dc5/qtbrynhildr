@@ -784,6 +784,22 @@ void QtBrynhildr::createActions()
 	connect(staysOnTop_Action, SIGNAL(triggered()), this, SLOT(toggleStaysOnTop()));
   }
 
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	// Show Software Keyboard
+	showSoftwareKeyboard_Action = new QAction(tr("Show Software Keyboard"), this);
+	showSoftwareKeyboard_Action->setStatusTip(tr("Show Software Keyboard"));
+	showSoftwareKeyboard_Action->setCheckable(true);
+	showSoftwareKeyboard_Action->setChecked(settings->getOnShowSoftwareKeyboard());
+	connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
+
+	// Show Software Button
+	showSoftwareButton_Action = new QAction(tr("Show Software Button"), this);
+	showSoftwareButton_Action->setStatusTip(tr("Show Software Button"));
+	showSoftwareButton_Action->setCheckable(true);
+	showSoftwareButton_Action->setChecked(settings->getOnShowSoftwareButton());
+	connect(showSoftwareButton_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareButton()));
+  }
+
   // Video Quality Action MINIMUM
   videoQuality_MINIMUM_Action = new QAction(tr("Video Quality: Minimum"), this);
   videoQuality_MINIMUM_Action->setCheckable(true);
@@ -1081,6 +1097,7 @@ void QtBrynhildr::createMenus()
 #endif // if 1
   displayMenu->addAction(showStatusBar_Action);
   displayMenu->addAction(showFrameRate_Action);
+
   // for stays on top
   if (QTB_DESKTOP_STAYS_ON_TOP){
 	displayMenu->addSeparator();
@@ -1091,6 +1108,15 @@ void QtBrynhildr::createMenus()
 	displayMenu->addSeparator();
 	displayMenu->addAction(fullScreen_Action);
   }
+
+  // software keyboard and button
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	displayMenu->addSeparator();
+	displayMenu->addAction(showSoftwareKeyboard_Action);
+	displayMenu->addAction(showSoftwareButton_Action);
+  }
+#endif // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 
   // video menu
   videoMenu = menuBar()->addMenu(tr("&Video"));
@@ -2094,6 +2120,36 @@ void QtBrynhildr::desktopScaling()
 	desktopScalingDialog->setSliderPositionFromSetting();
 	desktopScalingDialog->show();
   }
+}
+
+// toggle show software keyboard
+void QtBrynhildr::toggleShowSoftwareKeyboard()
+{
+  if (!QTB_SOFTWARE_KEYBOARD_AND_BUTTON)
+	return;
+
+  if (settings->getOnShowSoftwareKeyboard()){
+	settings->setOnShowSoftwareKeyboard(false);
+  }
+  else {
+	settings->setOnShowSoftwareKeyboard(true);
+  }
+  softwareKeyboardDockWidget->setVisible(settings->getOnShowSoftwareKeyboard());
+}
+
+// toggle show software button
+void QtBrynhildr::toggleShowSoftwareButton()
+{
+  if (!QTB_SOFTWARE_KEYBOARD_AND_BUTTON)
+	return;
+
+  if (settings->getOnShowSoftwareButton()){
+	settings->setOnShowSoftwareButton(false);
+  }
+  else {
+	settings->setOnShowSoftwareButton(true);
+  }
+  softwareButtonDockWidget->setVisible(settings->getOnShowSoftwareButton());
 }
 
 // select frame rate

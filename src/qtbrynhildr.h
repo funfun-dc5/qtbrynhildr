@@ -191,6 +191,12 @@ private slots:
   // desktop scaling
   void desktopScaling();
 
+  // toggle show software keyboard
+  void toggleShowSoftwareKeyboard();
+
+  // toggle show software button
+  void toggleShowSoftwareButton();
+
   // select frame rate
   void selectFrameRate5();
   void selectFrameRate10();
@@ -369,6 +375,12 @@ private:
 
   // desktop scaling
   QAction *desktopScalingDialog_Action;
+
+  // show software keyboard
+  QAction *showSoftwareKeyboard_Action;
+
+  // show software button
+  QAction *showSoftwareButton_Action;
 
   // frame rate
   QAction *selectFrameRate5_Action;

@@ -27,6 +27,7 @@ fi
 
 # setting
 APP="qtbrynhildr"
+APPNAME="QtBrynhildr"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
 INSTALLFLAGS="-C"
@@ -236,10 +237,14 @@ case $UNAME in
 		# for darwin
 		# create directory
 		mkdir -p ${DISTDIR}
+		# rename to APPNAME
+		mv ${APP}.app ${APPNAME}.app
 		# make dmg
-		${QTROOT}/bin/macdeployqt ${APP}.app -dmg
+		${QTROOT}/bin/macdeployqt ${APPNAME}.app -dmg
+		# rename to APP
+		mv ${APPNAME}.app ${APP}.app
 		# mv dist directory
-		mv ${APP}.dmg ${DISTDIR}/${PKGSTRING}.dmg
+		mv ${APPNAME}.dmg ${DISTDIR}/${PKGSTRING}.dmg
 		echo "Done."
 		;;
     *)

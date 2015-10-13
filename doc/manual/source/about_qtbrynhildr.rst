@@ -39,3 +39,7 @@ Qt Brynhildrとは
  Ubuntu版 Qt Brynhildr
 
  .. image:: images/qtbrynhildr_on_ubuntu.png
+
+ Mac OSX版 Qt Brynhildr
+
+ .. image:: images/qtbrynhildr_on_macosx.png

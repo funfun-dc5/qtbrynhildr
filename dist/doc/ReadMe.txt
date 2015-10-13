@@ -45,7 +45,7 @@
 
  Ubuntu 14.04 LTS以降 (x64/x86)
 
- Mac OS X 10.10
+ Mac OS X 10.10以降
 
  (*1) 全てのエディションで試したわけではありません。
       現在確認済みの環境は
@@ -55,7 +55,7 @@
       Windows 10 Pro (64bit/32bit)
       Ubuntu 14.04 LTS (x64/x86)
       Ubuntu 15.04 (x64)
-      Mac OS X 10.10
+      Mac OS X 10.10(Yosemite)/10.11(El Capitan)
 
       のみです。
 

@@ -6,6 +6,7 @@
 #define SOFTWARE_BUTTON_H
 // Qt Header
 #include <QDateTime>
+#include <QResizeEvent>
 #include <QSize>
 #include <QWidget>
 
@@ -27,6 +28,9 @@ public:
 
   // size hint
   QSize sizeHint() const;
+
+  // resize event
+  void resizeEvent(QResizeEvent *event);
 
 private:
   // button id

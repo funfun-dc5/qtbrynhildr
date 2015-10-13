@@ -547,6 +547,12 @@ QSize SoftwareKeyboard::sizeHint() const
   return size();
 }
 
+// resize event
+void SoftwareKeyboard::resizeEvent(QResizeEvent *event)
+{
+  Q_UNUSED(event)
+}
+
 //---------------------------------------------------------------------------
 // protected
 //---------------------------------------------------------------------------

@@ -1110,13 +1110,11 @@ void QtBrynhildr::createMenus()
   }
 
   // software keyboard and button
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	displayMenu->addSeparator();
 	displayMenu->addAction(showSoftwareKeyboard_Action);
 	displayMenu->addAction(showSoftwareButton_Action);
   }
-#endif // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 
   // video menu
   videoMenu = menuBar()->addMenu(tr("&Video"));

@@ -53,6 +53,15 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
   // port no field
   spinBox_portno->setValue(settings->getPortNo());
+
+  // show password field
+  checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
+}
+
+// resize event
+void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
+{
+  Q_UNUSED(event)
 }
 
 //---------------------------------------------------------------------------
@@ -100,6 +109,20 @@ void ConnectToServerDialog::on_lineEdit_password_textChanged()
   }
 }
 
+// show password field
+void ConnectToServerDialog::on_checkBox_showPassword_stateChanged(int state)
+{
+  if (outputLog)
+	cout << "state Changed : show Password" << endl << flush; // for DEBUG
+
+  if (state == Qt::Checked){
+	lineEdit_password->setEchoMode(QLineEdit::Normal);
+  }
+  else {
+	lineEdit_password->setEchoMode(QLineEdit::Password);
+  }
+}
+
 // accept button
 void ConnectToServerDialog::accept()
 {
@@ -120,6 +143,9 @@ void ConnectToServerDialog::accept()
 
   // password
   settings->setPassword(lineEdit_password->text());
+
+  // show password field
+  settings->setOnShowPassword(checkBox_showPassword->checkState() == Qt::Checked);
 
   hide();
 }

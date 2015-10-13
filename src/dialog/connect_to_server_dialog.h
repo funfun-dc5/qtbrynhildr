@@ -6,6 +6,7 @@
 #define CONNECT_TO_SERVER_DIALOG_H
 // Qt Header
 #include <QDialog>
+#include <QResizeEvent>
 
 // Local Header
 #include "settings.h"
@@ -22,6 +23,9 @@ public:
   // constructor
   ConnectToServerDialog(Settings *settings, QWidget *parent = 0);
 
+  // resize event
+  void resizeEvent(QResizeEvent *event);
+
 private slots:
   // hostname field
   void on_lineEdit_hostname_textChanged();
@@ -33,6 +37,8 @@ private slots:
   void on_spinBox_portno_valueChanged(int i);
   // password field
   void on_lineEdit_password_textChanged();
+  // show password field
+  void on_checkBox_showPassword_stateChanged(int state);
 
   // accept button
   void accept();

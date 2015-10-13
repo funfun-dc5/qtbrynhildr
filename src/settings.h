@@ -186,6 +186,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
 #define QTB_ONSHOWFRAMERATE_DEFAULT			false
 
+// for onShowPassword
+#define QTB_ONSHOWPASSWORD					"onShowPassword"
+#define QTB_ONSHOWPASSWORD_DEFAULT			false
+
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE			"graphicsBufferSize"
 #define QTB_GRAPHICSBUFFERSIZE_DEFAULT	(1024 * 1024)
@@ -827,13 +831,13 @@ public:
 	this->onShowStatusBar = onShowStatusBar;
   }
 
-  // get show flag
+  // get show frame rate flag
   bool getOnShowFrameRate() const
   {
 	return onShowFrameRate;
   }
 
-  // set show status bar flag
+  // set show frame rate flag
   void setOnShowFrameRate(bool onShowFrameRate)
   {
 	this->onShowFrameRate = onShowFrameRate;
@@ -899,6 +903,18 @@ public:
   void setOnScrollMode(bool onScrollMode)
   {
 	this->onScrollMode = onScrollMode;
+  }
+
+  // get show password flag
+  bool getOnShowPassword() const
+  {
+	return onShowPassword;
+  }
+
+  // set show password flag
+  void setOnShowPassword(bool onShowPassword)
+  {
+	this->onShowPassword = onShowPassword;
   }
 
   // get on show Software Keyboard flag
@@ -1145,6 +1161,9 @@ private:
 
   // scroll mode
   volatile bool onScrollMode;
+
+  // show password
+  volatile bool onShowPassword;
 
   // buffer
   volatile int graphicsBufferSize;

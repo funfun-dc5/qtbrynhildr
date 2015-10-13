@@ -6,324 +6,245 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>935</width>
-    <height>189</height>
+    <width>910</width>
+    <height>160</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string notr="true">SoftwareButton</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>5</x>
-     <y>5</y>
-     <width>920</width>
-     <height>186</height>
+     <x>10</x>
+     <y>10</y>
+     <width>891</width>
+     <height>141</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_1">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_1">
-      <item>
-       <spacer name="horizontalSpacer_1">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_11">
-        <property name="text">
-         <string notr="true">9</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_10">
-        <property name="text">
-         <string notr="true">8</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_9">
-        <property name="text">
-         <string notr="true">7</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_8">
-        <property name="text">
-         <string notr="true">6</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_7">
-        <property name="text">
-         <string notr="true">5</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_6">
-        <property name="text">
-         <string notr="true">4</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_5">
-        <property name="text">
-         <string notr="true">3</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_4">
-        <property name="text">
-         <string notr="true">2</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_3">
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>Monitor</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_1">
-        <property name="text">
-         <string>Option</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pushButton_11">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string notr="true">9</string>
+      </property>
+     </widget>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_31">
-        <property name="text">
-         <string>ON</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_30">
-        <property name="text">
-         <string>OFF</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_29">
-        <property name="text">
-         <string>Sound</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_28">
-        <property name="text">
-         <string>Info</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="pushButton_10">
+      <property name="text">
+       <string notr="true">8</string>
+      </property>
+     </widget>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_18">
-        <property name="text">
-         <string>Highest</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_17">
-        <property name="text">
-         <string>High</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_16">
-        <property name="text">
-         <string>Standard</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_15">
-        <property name="text">
-         <string>Low</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_14">
-        <property name="text">
-         <string>Lowest</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_13">
-        <property name="text">
-         <string>Sound Quality</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_12">
-        <property name="text">
-         <string>Wheel +</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="pushButton_9">
+      <property name="text">
+       <string notr="true">7</string>
+      </property>
+     </widget>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_25">
-        <property name="text">
-         <string>Highest</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_24">
-        <property name="text">
-         <string>High</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_23">
-        <property name="text">
-         <string>Standard</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_22">
-        <property name="text">
-         <string>Low</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_21">
-        <property name="text">
-         <string>Lowest</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_20">
-        <property name="text">
-         <string>Video Quality</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_19">
-        <property name="text">
-         <string>Wheel -</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="0" column="3">
+     <widget class="QPushButton" name="pushButton_8">
+      <property name="text">
+       <string notr="true">6</string>
+      </property>
+     </widget>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_27">
-        <property name="text">
-         <string>Left</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_26">
-        <property name="text">
-         <string>Right</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+    <item row="0" column="4">
+     <widget class="QPushButton" name="pushButton_7">
+      <property name="text">
+       <string notr="true">5</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QPushButton" name="pushButton_6">
+      <property name="text">
+       <string notr="true">4</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="6">
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="text">
+       <string notr="true">3</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="7">
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="text">
+       <string notr="true">2</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="8">
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="9">
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="text">
+       <string>Monitor</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="10">
+     <widget class="QPushButton" name="pushButton_1">
+      <property name="text">
+       <string>Option</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="7">
+     <widget class="QPushButton" name="pushButton_31">
+      <property name="text">
+       <string>ON</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="8">
+     <widget class="QPushButton" name="pushButton_30">
+      <property name="text">
+       <string>OFF</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="9">
+     <widget class="QPushButton" name="pushButton_29">
+      <property name="text">
+       <string>Sound</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="10">
+     <widget class="QPushButton" name="pushButton_28">
+      <property name="text">
+       <string>Info</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QPushButton" name="pushButton_18">
+      <property name="text">
+       <string>Highest</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="5">
+     <widget class="QPushButton" name="pushButton_17">
+      <property name="text">
+       <string>High</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="6">
+     <widget class="QPushButton" name="pushButton_16">
+      <property name="text">
+       <string>Standard</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="7">
+     <widget class="QPushButton" name="pushButton_15">
+      <property name="text">
+       <string>Low</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="8">
+     <widget class="QPushButton" name="pushButton_14">
+      <property name="text">
+       <string>Lowest</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="9">
+     <widget class="QPushButton" name="pushButton_13">
+      <property name="text">
+       <string>Sound Quality</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="10">
+     <widget class="QPushButton" name="pushButton_12">
+      <property name="text">
+       <string>Wheel +</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="4">
+     <widget class="QPushButton" name="pushButton_25">
+      <property name="text">
+       <string>Highest</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="5">
+     <widget class="QPushButton" name="pushButton_24">
+      <property name="text">
+       <string>High</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="6">
+     <widget class="QPushButton" name="pushButton_23">
+      <property name="text">
+       <string>Standard</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="7">
+     <widget class="QPushButton" name="pushButton_22">
+      <property name="text">
+       <string>Low</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="8">
+     <widget class="QPushButton" name="pushButton_21">
+      <property name="text">
+       <string>Lowest</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="9">
+     <widget class="QPushButton" name="pushButton_20">
+      <property name="text">
+       <string>Video Quality</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="10">
+     <widget class="QPushButton" name="pushButton_19">
+      <property name="text">
+       <string>Wheel -</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="9">
+     <widget class="QPushButton" name="pushButton_27">
+      <property name="text">
+       <string>Left</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="10">
+     <widget class="QPushButton" name="pushButton_26">
+      <property name="text">
+       <string>Right</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

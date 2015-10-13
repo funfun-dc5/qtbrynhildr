@@ -120,6 +120,12 @@ QSize SoftwareButton::sizeHint() const
   return size();
 }
 
+// resize event
+void SoftwareButton::resizeEvent(QResizeEvent *event)
+{
+  Q_UNUSED(event)
+}
+
 //---------------------------------------------------------------------------
 // protected
 //---------------------------------------------------------------------------
@@ -202,6 +208,7 @@ void SoftwareButton::toggleShowSoundButton()
 // update size
 void SoftwareButton::updateSize()
 {
+  //  widget->setGeometry(QRect(10, 10, 450, 141));
 }
 
 // pressed button

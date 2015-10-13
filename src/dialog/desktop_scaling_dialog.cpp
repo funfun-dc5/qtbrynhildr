@@ -40,6 +40,12 @@ DesktopScalingDialog::DesktopScalingDialog(Settings *settings,
   horizontalSlider->setTickPosition(QSlider::TicksAbove);
 }
 
+// resize event
+void DesktopScalingDialog::resizeEvent(QResizeEvent *event)
+{
+  Q_UNUSED(event)
+}
+
 // set scale slider position from stting
 void DesktopScalingDialog::setSliderPositionFromSetting()
 {

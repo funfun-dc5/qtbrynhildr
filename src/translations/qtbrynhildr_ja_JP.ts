@@ -39,6 +39,12 @@
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パスワード</translation>
     </message>
+    <message>
+        <location filename="../GUI/connect_to_server_dialog.ui"/>
+        <source>show Password</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>パスワードを表示する</translation>
+    </message>
 </context>
 <context>
     <name>DesktopScalingDialog</name>

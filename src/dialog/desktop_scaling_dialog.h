@@ -6,6 +6,7 @@
 #define DESKTOP_SCALING_DIALOG_H
 // Qt Header
 #include <QDialog>
+#include <QResizeEvent>
 
 // Local Header
 #include "settings.h"
@@ -21,6 +22,9 @@ class DesktopScalingDialog : public QDialog, public Ui::DesktopScalingDialog
 public:
   // constructor
   DesktopScalingDialog(Settings *settings, QWidget *parent = 0);
+
+  // resize event
+  void resizeEvent(QResizeEvent *event);
 
   // set scale slider position
   void setSliderPositionFromSetting();

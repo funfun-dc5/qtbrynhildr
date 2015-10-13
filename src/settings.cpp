@@ -91,6 +91,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnShowFrameRate(QTB_ONSHOWFRAMERATE_DEFAULT);
 
+  setOnShowPassword(QTB_ONSHOWPASSWORD_DEFAULT);
+
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
 
@@ -232,6 +234,10 @@ void Settings::readSettings()
   setOnShowFrameRate(settings->value(QTB_ONSHOWFRAMERATE,
 									 QTB_ONSHOWFRAMERATE_DEFAULT).toBool());
 
+  // load onShowPassword
+  setOnShowPassword(settings->value(QTB_ONSHOWPASSWORD,
+									QTB_ONSHOWPASSWORD_DEFAULT).toBool());
+
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
 										QTB_GRAPHICSBUFFERSIZE_DEFAULT).toInt());
@@ -351,6 +357,9 @@ void Settings::writeSettings()
   // save onShowFrameRate
   settings->setValue(QTB_ONSHOWFRAMERATE, onShowFrameRate);
 
+  // save onShowPassword
+  settings->setValue(QTB_ONSHOWPASSWORD, onShowPassword);
+
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
 
@@ -413,6 +422,7 @@ void Settings::printSettings() const
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
+  qDebug() << "ShowPassword            : " << onShowPassword;
 
   qDebug() << "------------------------------------------";
   qDebug() << "Graphics Buffer Size (bytes) : " << graphicsBufferSize;

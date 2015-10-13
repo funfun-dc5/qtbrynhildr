@@ -8,6 +8,7 @@
 #include <string>
 
 // Qt Header
+#include <QResizeEvent>
 #include <QSize>
 #include <QWidget>
 
@@ -114,6 +115,9 @@ public:
 
   // size hint
   QSize sizeHint() const;
+
+  // resize event
+  void resizeEvent(QResizeEvent *event);
 
 protected:
   // get name of virtual keycode

@@ -82,8 +82,8 @@ english.BeveledLabel=English
 [CustomMessages]
 japanese.MakeShortcut=デスクトップにショートカットアイコンを作成する
 english.MakeShortcut=Make shortcut icon on desktop
-japanese.ManualShortcut=はじめて の Qt Brynhildr(Ver.0.9.2)
-english.ManualShortcut=First step of Qt Brynhildr(Ver.0.9.2)
+japanese.ManualShortcut=はじめて の Qt Brynhildr(Ver.0.9.3)
+english.ManualShortcut=First step of Qt Brynhildr(Ver.0.9.3)
 
 [Files]
 ; ランタイム

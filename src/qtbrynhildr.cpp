@@ -1098,6 +1098,13 @@ void QtBrynhildr::createMenus()
   displayMenu->addAction(showStatusBar_Action);
   displayMenu->addAction(showFrameRate_Action);
 
+  // software keyboard and button
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	displayMenu->addSeparator();
+	displayMenu->addAction(showSoftwareKeyboard_Action);
+	displayMenu->addAction(showSoftwareButton_Action);
+  }
+
   // for stays on top
   if (QTB_DESKTOP_STAYS_ON_TOP){
 	displayMenu->addSeparator();
@@ -1107,13 +1114,6 @@ void QtBrynhildr::createMenus()
   if (QTB_DESKTOP_FULL_SCREEN){
 	displayMenu->addSeparator();
 	displayMenu->addAction(fullScreen_Action);
-  }
-
-  // software keyboard and button
-  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	displayMenu->addSeparator();
-	displayMenu->addAction(showSoftwareKeyboard_Action);
-	displayMenu->addAction(showSoftwareButton_Action);
   }
 
   // video menu

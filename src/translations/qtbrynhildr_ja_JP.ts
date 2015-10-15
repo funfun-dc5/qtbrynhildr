@@ -7,7 +7,7 @@
         <location filename="../GUI/confirm_dialog.ui"/>
         <source>Confirm Dialog</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>確認ダイアログ</translation>
+        <translation>確認</translation>
     </message>
     <message>
         <location filename="../GUI/confirm_dialog.ui"/>

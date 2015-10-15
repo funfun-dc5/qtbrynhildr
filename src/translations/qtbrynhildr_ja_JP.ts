@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ja_JP">
 <context>
+    <name>ConfirmDialog</name>
+    <message>
+        <location filename="../GUI/confirm_dialog.ui"/>
+        <source>Confirm Dialog</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>確認ダイアログ</translation>
+    </message>
+    <message>
+        <location filename="../GUI/confirm_dialog.ui"/>
+        <source> Confirm at next time</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>次回も確認ダイアログを表示する</translation>
+    </message>
+</context>
+<context>
     <name>ConnectToServerDialog</name>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
@@ -673,19 +688,19 @@
         <translation>スクロールモード</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1273"/>
+        <location filename="../qtbrynhildr.cpp" line="1274"/>
         <source>Not connected</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>未接続</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1482"/>
+        <location filename="../qtbrynhildr.cpp" line="1483"/>
         <source>Software Keyboard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ソフトウェア・キーボード</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1492"/>
+        <location filename="../qtbrynhildr.cpp" line="1493"/>
         <source>Software Button</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ソフトウェア・ボタン</translation>
@@ -727,26 +742,26 @@
         <translation>記録と再生</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1688"/>
+        <location filename="../qtbrynhildr.cpp" line="1705"/>
         <source>FPS of last session : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>最後の接続の平均フレームレート : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1906"/>
+        <location filename="../qtbrynhildr.cpp" line="1923"/>
         <source>Save file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルに保存</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1908"/>
-        <location filename="../qtbrynhildr.cpp" line="1936"/>
+        <location filename="../qtbrynhildr.cpp" line="1925"/>
+        <location filename="../qtbrynhildr.cpp" line="1953"/>
         <source>Control Record File (*.qtb)</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Control Record File (*.qtb)</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1934"/>
+        <location filename="../qtbrynhildr.cpp" line="1951"/>
         <source>Open file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルを開く</translation>
@@ -802,32 +817,33 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1236"/>
-        <location filename="../qtbrynhildr.cpp" line="1292"/>
-        <location filename="../qtbrynhildr.cpp" line="1295"/>
+        <location filename="../qtbrynhildr.cpp" line="1293"/>
+        <location filename="../qtbrynhildr.cpp" line="1296"/>
         <source>FrameRate: </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フレームレート: </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1269"/>
+        <location filename="../qtbrynhildr.cpp" line="1270"/>
         <source>connected : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>接続中 : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1629"/>
+        <location filename="../qtbrynhildr.cpp" line="1645"/>
         <source>Confirm</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1630"/>
+        <location filename="../qtbrynhildr.cpp" line="1629"/>
+        <location filename="../qtbrynhildr.cpp" line="1646"/>
         <source>exit application?</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>アプリケーションを終了しますか?</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1675"/>
+        <location filename="../qtbrynhildr.cpp" line="1692"/>
         <source>Shutdown.</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>終了しました。</translation>

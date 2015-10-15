@@ -22,6 +22,7 @@
 #include <QtGlobal>
 
 // Local Header
+#include "dialog/confirm_dialog.h"
 #include "dialog/connect_to_server_dialog.h"
 #include "dialog/desktop_scaling_dialog.h"
 #if QTB_CRYPTOGRAM

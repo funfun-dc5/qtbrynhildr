@@ -1623,6 +1623,21 @@ void QtBrynhildr::finishedNetThread()
 // exit process for Application exit
 void QtBrynhildr::exit()
 {
+#if 1 // for TEST
+  if (settings->getOnConfirmAtExit()){
+	ConfirmDialog *confirmDialog =
+	  new ConfirmDialog(tr("exit application?"),
+						settings->getOnConfirmAtExit());
+	if (confirmDialog->exec() == QDialog::Accepted){
+	  settings->setOnConfirmAtExit(confirmDialog->getConfirmFlag());
+	  delete confirmDialog;
+	}
+	else {
+	  delete confirmDialog;
+	  return;
+	}
+  }
+#else // for TEST
   int ret;
 
   if (settings->getOnConfirmAtExit()){
@@ -1636,6 +1651,7 @@ void QtBrynhildr::exit()
 	  return;
 	}
   }
+#endif // for TEST
 
   // disconnected
   if (settings->getConnected()){

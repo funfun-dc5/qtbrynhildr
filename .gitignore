@@ -16,10 +16,7 @@ html/
 # ignore source files
 #-----------------------
 src/qtbrynhildr_plugin_import.cpp
-src/ui_connect_to_server_dialog.h
-src/ui_desktop_scaling_dialog.h
-src/ui_software_keyboard.h
-src/ui_software_button.h
+src/ui_*.h
 #-----------------------
 # ignore files
 #-----------------------

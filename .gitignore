@@ -12,11 +12,14 @@ doctrees/
 html/
 # for Darwin
 .DS_Store
+*.app/
 #-----------------------
 # ignore source files
 #-----------------------
 src/qtbrynhildr_plugin_import.cpp
 src/ui_*.h
+src/moc_*.cpp
+src/qrc_*.cpp
 #-----------------------
 # ignore files
 #-----------------------

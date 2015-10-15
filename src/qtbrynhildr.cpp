@@ -1229,10 +1229,10 @@ void QtBrynhildr::createToolBars()
 void QtBrynhildr::createStatusBar()
 {
   connectionLabel = new QLabel;
-  connectionLabel->setAlignment(Qt::AlignHCenter);
+  connectionLabel->setAlignment(Qt::AlignLeft);
 
   frameRateLabel = new QLabel;
-  frameRateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignLeft);
+  frameRateLabel->setAlignment(Qt::AlignRight);
   frameRateLabel->setText(tr("FrameRate: ")+"00.00");
   // set initial size
   //  frameRateLabel->setMinimumSize(frameRateLabel->sizeHint());
@@ -1264,6 +1264,7 @@ void QtBrynhildr::updateConnected()
 	return;
   }
 
+  // set label
   if (settings->getConnected()){
 	// connection
 	connectionLabel->setText(tr("connected : ") + settings->getServerName());

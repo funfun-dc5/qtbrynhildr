@@ -48,6 +48,15 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_DEBUG_KEYBOARD			false
 #define QTB_DEBUG_MOUSE				false
 
+// os type
+#if defined(Q_OS_WIN)
+// windows type
+#define QTB_OS_WIN	1
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX)
+// unix type
+#define QTB_OS_UNIX	1
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX)
+
 } // end of namespace qtbrynhildr
 
 #endif // CONFIG_H

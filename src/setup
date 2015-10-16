@@ -23,10 +23,13 @@ case $UNAME in
 	Linux)
 		echo "Done."
 		;;
+	FreeBSD)
+		echo "Done."
+		;;
 	Darwin)
 		echo "Done."
 		;;
     *)
-		echo "Not support platform."
+		echo "setup : Not support platform."
 		;;
 esac

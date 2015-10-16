@@ -10,7 +10,6 @@
 #include <iostream>
 
 // Local Header
-#include "config.h"
 
 using namespace std;
 

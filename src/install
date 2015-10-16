@@ -53,6 +53,16 @@ case $UNAME in
 				;;
 		esac
 		;;
+	FreeBSD)
+		UNAMEM=`uname -m`
+		case $UNAMEM in
+			amd64)
+				DISTDIR="../dist/linux/dist_freebsd_x64"
+				PKGNAME="freebsd_x64"
+				echo "Installing for FreeBSD x64..."
+				;;
+		esac
+		;;
 	Darwin)
 		UNAMEM=`uname -m`
 		case $UNAMEM in
@@ -110,6 +120,14 @@ if [ "$1" = "man" ] ; then
 			exit 0;
 			;;
 		Linux)
+			# copy manual file
+			pushd ../doc/manual
+			make html
+			make install
+			popd
+			exit 0;
+			;;
+		FreeBSD)
 			# copy manual file
 			pushd ../doc/manual
 			make html
@@ -224,6 +242,37 @@ case $UNAME in
 		(cd ../dist/linux; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
 		echo "Done."
 		;;
+	FreeBSD)
+		# check
+		echo "Installing for freebsd..."
+		if [ ! -x ./${APP} ] ; then
+			echo "NOT Found ${APP}"
+			exit 1;
+		fi
+		VERSION=`${APP} -vv`
+		# for freebsd
+		# create directory
+		mkdir -p ${DISTDIR}/bin
+		mkdir -p ${DISTDIR}/doc/manual
+		# copy executable file
+		echo "copy executable file..."
+		${INSTALL} ${INSTALLFLAGS} ${APP} ${DISTDIR}/bin
+		# copy document file
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+		# copy manual file
+		pushd ../doc/manual
+		make html
+		make install
+		popd
+		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
+		# make package string
+		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
+		(cd ../dist/freebsd; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
+#		(cd ../dist/freebsd; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
+		echo "Done."
+		;;
 	Darwin)
 		echo "Installing for Darwin..."
 		if [ ! -x ./${APP}.app ] ; then
@@ -248,6 +297,6 @@ case $UNAME in
 		echo "Done."
 		;;
     *)
-		echo "Not support platform."
+		echo "install : Not support platform."
 		;;
 esac

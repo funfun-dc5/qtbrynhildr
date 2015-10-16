@@ -15,7 +15,7 @@ case $UNAME in
 					# ignore
 					;;
 				*)
-					echo "Unkown argument : $1"
+					echo "setup_qt5 : Unkown argument : $1"
 					exit 1
 					;;
 			esac
@@ -33,7 +33,18 @@ case $UNAME in
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
 				;;
 			*)
-				echo "Not Support $UNAMEM"
+				echo "setup_qt5 : Not Support $UNAMEM"
+				return;;
+		esac
+		;;
+	FreeBSD)
+		export UNAMEM=`uname -m`
+		case $UNAMEM in
+			amd64)
+				QTROOT=/usr/local/lib/qt5
+				;;
+			*)
+				echo "setup_qt5 : Not Support $UNAMEM"
 				return;;
 		esac
 		;;
@@ -44,11 +55,11 @@ case $UNAME in
 				QTROOT=/opt/Qt5.4.2/5.4/clang_64
 				;;
 			*)
-				echo "Not Support $UNAMEM"
+				echo "setup_qt5 : Not Support $UNAMEM"
 				return;;
 		esac
 		;;
     *)
-		echo "Not support platform."
+		echo "setup_qt5 : Not support platform."
 		;;
 esac

@@ -8,9 +8,9 @@
 #include "common/common.h"
 
 // Qt Header
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
 #include <QAbstractNativeEventFilter>
-#endif // defined(Q_OS_WIN)
+#endif // defined(QTB_OS_WIN)
 #include <QEvent>
 #include <QImage>
 #include <QKeyEvent>
@@ -30,11 +30,11 @@
 namespace qtbrynhildr {
 
 // MainWindow
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
 class MainWindow : public QWidget, public QAbstractNativeEventFilter
-#else // defined(Q_OS_WIN)
+#else // defined(QTB_OS_WIN)
 class MainWindow : public QWidget
-#endif // defined(Q_OS_WIN)
+#endif // defined(QTB_OS_WIN)
 {
   Q_OBJECT
 
@@ -102,10 +102,10 @@ protected:
   void keyReleaseEvent(QKeyEvent *event);
 
 private:
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
   // native event filter
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
-#endif // defined(Q_OS_WIN)
+#endif // defined(QTB_OS_WIN)
 
   // print mouse button event
   void printMouseButtonEvent(QMouseEvent *event);

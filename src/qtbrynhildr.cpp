@@ -33,14 +33,14 @@
 
 namespace qtbrynhildr {
 
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
 // socket for control
 SOCKET sock_control = INVALID_SOCKET;
 // socket for graphics
 SOCKET sock_graphics = INVALID_SOCKET;
 // socket for sound
 SOCKET sock_sound = INVALID_SOCKET;
-#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
 
 // counter for control
 int counter_control = 0;
@@ -2117,13 +2117,13 @@ void QtBrynhildr::toggleStaysOnTop()
 	settings->setOnStaysOnTop(true);
   }
   staysOnTop_Action->setChecked(settings->getOnStaysOnTop());
-#if defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_UNIX)
   QPoint topLeft = QPoint(geometry().x(), geometry().y() + 28);
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_UNIX)
   setWindowFlags(flags);
-#if defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_UNIX)
   move(topLeft);
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_UNIX)
   show();
 }
 
@@ -2315,7 +2315,7 @@ void QtBrynhildr::toggleOutputLog()
   }
 }
 
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
 // initialize socket
 void QtBrynhildr::initSocket()
 {
@@ -2343,10 +2343,10 @@ void QtBrynhildr::closeSocket()
 	sock_sound = INVALID_SOCKET;
   }
 }
-#endif // defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
 
 // for Windows
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
 // initialize platform
 bool QtBrynhildr::initPlatform()
 {
@@ -2374,10 +2374,10 @@ bool QtBrynhildr::shutdownPlatform()
 
   return true;
 }
-#endif // defined(Q_OS_WIN)
+#endif // defined(QTB_OS_WIN)
 
-// for Linux and Darwin
-#if defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+// for UNIX
+#if defined(QTB_OS_UNIX)
 // initialize platform
 bool QtBrynhildr::initPlatform()
 {
@@ -2391,6 +2391,6 @@ bool QtBrynhildr::shutdownPlatform()
   // Nothing to do
   return true;
 }
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_UNIX)
 
 } // end of namespace qtbrynhildr

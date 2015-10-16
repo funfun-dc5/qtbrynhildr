@@ -8,6 +8,7 @@
 #include <Qt>
 
 // Local Header
+#include "config.h"
 #include "util.h"
 
 // Utilities

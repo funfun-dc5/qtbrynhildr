@@ -71,7 +71,7 @@ Desktop::Desktop()
 #endif
 
   // set correct window width and height
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
   // OS Version
   QString kernelVersion = QSysInfo::kernelVersion();
   if (kernelVersion.startsWith("10.")){			// Windows 10
@@ -119,6 +119,12 @@ Desktop::Desktop()
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
 #endif // defined(Q_OS_ANDROID)
+#elif defined(Q_OS_FREEBSD)
+  // FreeBSD
+  correctWindowWidth = 0;
+  correctWindowHeight = 0;
+  heightOfMenuBarInHiding = -1;
+  heightOfStatusBarInHiding = 0;
 #elif defined(Q_OS_OSX)
   // Darwin
   correctWindowWidth = 0;

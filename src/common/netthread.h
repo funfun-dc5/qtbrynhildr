@@ -11,18 +11,18 @@
 #include <QThread>
 
 // Windows Header
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#endif // defined(Q_OS_WIN)
+#endif // defined(QTB_OS_WIN)
 
 // UNIX Header
-#if defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_UNIX)
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_UNIX)
 
 // Local Header
 #include "logmessage.h"
@@ -31,7 +31,7 @@
 
 namespace qtbrynhildr {
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_UNIX)
 typedef int SOCKET;
 typedef struct addrinfo ADDRINFO;
 // constant
@@ -40,7 +40,7 @@ typedef struct addrinfo ADDRINFO;
 #define SD_BOTH SHUT_RDWR
 // function name
 #define closesocket ::close
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_UNIX)
 
 // result of connectToServer()
 enum CONNECT_RESULT {

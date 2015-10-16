@@ -6,9 +6,9 @@
 #include "common/common.h"
 
 // System Header
-#if defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_UNIX)
 #include <unistd.h>
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_UNIX)
 
 // Qt Header
 #include <QKeyEvent>
@@ -21,9 +21,9 @@
 #include "mainwindow.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
-#if defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#if defined(QTB_OS_UNIX)
 #include "dialog/desktop_scaling_dialog.h"
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_OSX)
+#endif // defined(QTB_OS_UNIX)
 
 namespace qtbrynhildr {
 
@@ -593,8 +593,14 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 	  }
 	  return scalingFactor;
 	}
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
 	else {
+	  // Internal Error: Unkown State
+	  ABORT();
+	}
+#elif defined(Q_OS_FREEBSD)
+	else {
+	  // Yet
 	  // Internal Error: Unkown State
 	  ABORT();
 	}
@@ -675,7 +681,7 @@ QSize MainWindow::sizeHint() const
 //----------------------------------------------------------------------
 // native event filter
 //----------------------------------------------------------------------
-#if defined(Q_OS_WIN)
+#if defined(QTB_OS_WIN)
 bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
 {
   Q_UNUSED(result)
@@ -754,10 +760,10 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
   }
   return false;
 }
-#endif // defined(Q_OS_WIN)
+#endif // defined(QTB_OS_WIN)
 
 #if 0 // for TEST
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 // for X11
 #include <xcb/xcb.h>
 
@@ -772,7 +778,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
   }
   return false;
 }
-#endif // defined(Q_OS_LINUX)
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #endif
 
 } // end of namespace qtbrynhildr

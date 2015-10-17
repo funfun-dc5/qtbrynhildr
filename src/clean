@@ -2,7 +2,7 @@
 APP="qtbrynhildr"
 
 case $UNAME in
-    CYGWIN*)
+	CYGWIN*)
 		mingw32-make clean
 		# for static build
 		rm -f ${APP}_plugin_import.cpp
@@ -56,7 +56,7 @@ case $UNAME in
 		./install clean
 		echo "Done."
 		;;
-    *)
+	*)
 		echo "Not support platform."
 		;;
 esac

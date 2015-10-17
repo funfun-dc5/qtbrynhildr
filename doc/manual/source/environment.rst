@@ -28,3 +28,7 @@
 (3) Mac OS X版
 ^^^^^^^^^^^^^^
   * Mac OS X 10.10 (Yosemite)/ 10.11 (El Capitan)
+
+(4) FreeBSD版
+^^^^^^^^^^^^^
+  * FreeBSD 10.2 (x64/x86)

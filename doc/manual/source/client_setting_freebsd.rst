@@ -13,7 +13,13 @@
 
  <https://github.com/funfun-dc5/qtbrynhildr/releases>
 
+ [64bit版]
+
    qtbrynhildr-freebsd_x64-v100.tar.xz
+
+ [32bit版]
+
+   qtbrynhildr-freebsd_x86-v100.tar.xz
 
 2. Qt5パッケージのインストール
 -------------------------------

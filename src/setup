@@ -29,7 +29,7 @@ case $UNAME in
 	Darwin)
 		echo "Done."
 		;;
-    *)
+	*)
 		echo "setup : Not support platform."
 		;;
 esac

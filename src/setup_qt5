@@ -1,7 +1,7 @@
 # setup for Qt5
 #
 UNAME=`uname`
-UNAMEM=`uname -m`
+export UNAMEM=`uname -m`
 case $UNAME in
 	CYGWIN*)
 		QTROOT="/c/Tools/develop/Qt/Qt5.4.2/5.4/mingw491_32"
@@ -24,7 +24,6 @@ case $UNAME in
 		fi
 	;;
 	Linux)
-		export UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
 				QTROOT=/opt/Qt5.4.2/5.4/gcc_64
@@ -38,9 +37,11 @@ case $UNAME in
 		esac
 		;;
 	FreeBSD)
-		export UNAMEM=`uname -m`
 		case $UNAMEM in
 			amd64)
+				QTROOT=/usr/local/lib/qt5
+				;;
+			i386)
 				QTROOT=/usr/local/lib/qt5
 				;;
 			*)
@@ -49,7 +50,6 @@ case $UNAME in
 		esac
 		;;
 	Darwin)
-		export UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
 				QTROOT=/opt/Qt5.4.2/5.4/clang_64
@@ -59,7 +59,7 @@ case $UNAME in
 				return;;
 		esac
 		;;
-    *)
+	*)
 		echo "setup_qt5 : Not support platform."
 		;;
 esac

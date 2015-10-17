@@ -35,7 +35,7 @@ DATE=`date +%Y%m%d`
 
 # check environment
 case $UNAME in
-    CYGWIN*)
+	CYGWIN*)
 		DISTDIR="../dist/windows/dist_win"
 		;;
 	Linux)
@@ -61,6 +61,11 @@ case $UNAME in
 				PKGNAME="freebsd_x64"
 				echo "Installing for FreeBSD x64..."
 				;;
+			i386)
+				DISTDIR="../dist/linux/dist_freebsd_x86"
+				PKGNAME="freebsd_x86"
+				echo "Installing for FreeBSD x86..."
+				;;
 		esac
 		;;
 	Darwin)
@@ -73,7 +78,7 @@ case $UNAME in
 				;;
 		esac
 		;;
-    *)
+	*)
 		echo "Not support platform."
 		exit 1;
 		;;
@@ -155,7 +160,7 @@ fi
 
 # install
 case $UNAME in
-    CYGWIN*)
+	CYGWIN*)
 		# check
 		echo "Installing for windows..."
 		if [ ! -x release/${APP}.exe ] ; then
@@ -296,7 +301,7 @@ case $UNAME in
 		mv ${APPNAME}.dmg ${DISTDIR}/${PKGSTRING}.dmg
 		echo "Done."
 		;;
-    *)
+	*)
 		echo "install : Not support platform."
 		;;
 esac

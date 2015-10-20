@@ -788,6 +788,7 @@ void QtBrynhildr::createActions()
 	// Show Software Keyboard
 	showSoftwareKeyboard_Action = new QAction(tr("Show Software Keyboard"), this);
 	showSoftwareKeyboard_Action->setStatusTip(tr("Show Software Keyboard"));
+	showSoftwareKeyboard_Action->setEnabled(false);
 	showSoftwareKeyboard_Action->setCheckable(true);
 	showSoftwareKeyboard_Action->setChecked(settings->getOnShowSoftwareKeyboard());
 	connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
@@ -795,6 +796,7 @@ void QtBrynhildr::createActions()
 	// Show Software Button
 	showSoftwareButton_Action = new QAction(tr("Show Software Button"), this);
 	showSoftwareButton_Action->setStatusTip(tr("Show Software Button"));
+	showSoftwareButton_Action->setEnabled(false);
 	showSoftwareButton_Action->setCheckable(true);
 	showSoftwareButton_Action->setChecked(settings->getOnShowSoftwareButton());
 	connect(showSoftwareButton_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareButton()));
@@ -1304,6 +1306,15 @@ void QtBrynhildr::updateFrameRate()
 // connected
 void QtBrynhildr::connected()
 {
+  // enabled software keyboard/button
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	if (showSoftwareKeyboard_Action != 0)
+	  showSoftwareKeyboard_Action->setEnabled(true);
+
+	if (showSoftwareButton_Action != 0)
+	  showSoftwareButton_Action->setEnabled(true);
+  }
+
   // enabled send key
   if (sendKey1_Action != 0)
     sendKey1_Action->setEnabled(true);
@@ -1330,6 +1341,15 @@ void QtBrynhildr::connected()
 // connected
 void QtBrynhildr::disconnected()
 {
+  // disabled software keyboard/button
+  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	if (showSoftwareKeyboard_Action != 0)
+	  showSoftwareKeyboard_Action->setEnabled(false);
+
+	if (showSoftwareButton_Action != 0)
+	  showSoftwareButton_Action->setEnabled(false);
+  }
+
   // disabled send key
   if (sendKey1_Action != 0)
     sendKey1_Action->setEnabled(false);

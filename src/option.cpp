@@ -24,6 +24,7 @@ Option::Option(int argc, char *argv[])
   serverName(0),
   portNo(0),
   password(0),
+  hostType(0),
   iniFileName(0),
   debug(0),
 #if QTB_RECORDER
@@ -71,6 +72,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  // -server 192.168.10.1:mcz-xoxo:55500
 		  // -server urd-PC:mcz-xoxo
 		  // -server urd-PC:mcz-xoxo:30000
+		  // -server urd-PC:mcz-xoxo:30000:xp
 		  const char* server =  strtok(buf, ":");
 		  const char* passwd = strtok(NULL, ":");
 		  if (passwd != NULL){
@@ -90,9 +92,11 @@ bool Option::analyzeOptions(int argc, char *argv[])
 			break;
 		  }
 		  const char* port = strtok(NULL, ":");
+		  const char* hostType = strtok(NULL, ":");
 		  // set information
 		  serverName = server;
 		  password = passwd;
+		  // port no
 		  if (port != NULL){
 			int portNo = atoi(port);
 			if (portNo > 0 && portNo < 65536){
@@ -102,6 +106,10 @@ bool Option::analyzeOptions(int argc, char *argv[])
 			  // error
 			  cout << "illegal port no. : " << port << " (ignored)" << endl << flush;
 			}
+		  }
+		  // host type
+		  if (hostType != NULL){
+			this->hostType = hostType;
 		  }
 
 		  // boot up ON
@@ -255,31 +263,38 @@ void Option::printHelp() const
   cout << QTB_APPLICATION << " [options] <.ini file>" << endl;
   cout << "-------------------------------------------------------" << endl;
 
-  // -server <server name|IP address>:<password>[:<port no>]
-  cout << "-server <server name|IP address>:<password>[:<port no>]" << endl;
+  // -server <server name|IP address>:<password>[:<port no>[:<host type>]]
+  cout << "-server <server name|IP address>:<password>[:<port no>[:<host type>]]" << endl;
   cout << "        " << "bootup for server." << endl;
+  cout << "        " << "host type : xp/vista/7/8/8.1/10" << endl;
+  cout << endl;
 
 #if QTB_RECORDER
   // -record <file>
   cout << "-record <file>" << endl;
   cout << "        " << "record operations to <file>." << endl;
+  cout << endl;
 
   // -replay <file>
   cout << "-replay <file>" << endl;
   cout << "        " << "replay operations from <file>." << endl;
+  cout << endl;
 #endif // QTB_RECORDER
 
   // -debug <on|off>
   cout << "-debug <on|off>" << endl;
   cout << "        " << "set debug mode to on/off." << endl;
+  cout << endl;
 
   // -version (-v)
   cout << "-version (-v)" << endl;
   cout << "        " << "display version." << endl;
+  cout << endl;
 
   // -help (-h)
   cout << "-help (-h)" << endl;
   cout << "        " << "display this help message." << endl << flush;
+  cout << endl;
 
   // .ini file
   cout << "<.ini file>" << endl;

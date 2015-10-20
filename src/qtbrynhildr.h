@@ -504,6 +504,9 @@ private:
   // setting
   Settings *settings;
 
+  // write settingAtExit
+  bool writeSettingsAtExit;
+
 #if QTB_CRYPTOGRAM
   // cipher
   Cipher *cipher;

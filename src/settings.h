@@ -7,6 +7,9 @@
 // Common Header
 #include "common/common.h"
 
+// System Header
+#include <cstring>
+
 // Qt Header
 #include <QtCore>
 #include <QSettings>
@@ -160,6 +163,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"
 #define QTB_ONCONFIRMATEXIT_DEFAULT		true
 
+// for onSaveSettingsAtExit
+#define QTB_ONSAVESETTINGSATEXIT				"onSaveSettingsAtExit"
+#define QTB_ONSAVESETTINGSATEXIT_DEFAULT		false
+
 // for onExitAfterRelpay
 #define QTB_ONEXITAFTERREPLAY			"onExitAfterReplay"
 #define QTB_ONEXITAFTERREPLAY_DEFAULT	false
@@ -304,6 +311,27 @@ public:
 	  ABORT();
 	  break;
 	}
+  }
+
+  // set server type
+  void setServerType(const char *hostType)
+  {
+	const char* hostTypeTable[SERVER_TYPE_NUM] = {
+	  "xp",
+	  "vista",
+	  "7",
+	  "8",
+	  "8.1",
+	  "10"
+	};
+	for(int i = 0; i < SERVER_TYPE_NUM; i++){
+	  if (strncmp(hostTypeTable[i], hostType, strlen(hostType)) == 0){
+		setServerType(i);
+		return;
+	  }
+	}
+
+	// Nothing to do
   }
 
   // get server type string
@@ -775,6 +803,18 @@ public:
 	this->onConfirmAtExit = onConfirmAtExit;
   }
 
+  // get save settings at exit flag
+  bool getOnSaveSettingsAtExit() const
+  {
+	return onSaveSettingsAtExit;
+  }
+
+  // set save settings at exit flag
+  void setOnSaveSettingsAtExit(bool onSaveSettingsAtExit)
+  {
+	this->onSaveSettingsAtExit = onSaveSettingsAtExit;
+  }
+
   // get exit after replaying flag
   bool getOnExitAfterReplay() const
   {
@@ -1128,6 +1168,9 @@ private:
 
   // confirm at exit
   volatile bool onConfirmAtExit;
+
+  // save settings at exit
+  volatile bool onSaveSettingsAtExit;
 
   // exit after replaying
   volatile bool onExitAfterReplay;

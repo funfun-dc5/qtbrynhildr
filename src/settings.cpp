@@ -80,6 +80,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnConfirmAtExit(QTB_ONCONFIRMATEXIT_DEFAULT);
 
+  setOnSaveSettingsAtExit(QTB_ONSAVESETTINGSATEXIT_DEFAULT);
+
   setOnExitAfterReplay(QTB_ONEXITAFTERREPLAY_DEFAULT);
 
   setOnStaysOnTop(QTB_ONSTAYSONTOP_DEFAULT);
@@ -210,6 +212,10 @@ void Settings::readSettings()
   setOnConfirmAtExit(settings->value(QTB_ONCONFIRMATEXIT,
 									 QTB_ONCONFIRMATEXIT_DEFAULT).toBool());
 
+  // load onSaveSettingsAtExit
+  setOnSaveSettingsAtExit(settings->value(QTB_ONSAVESETTINGSATEXIT,
+										  QTB_ONSAVESETTINGSATEXIT_DEFAULT).toBool());
+
   // load onExitAfterReplay
   setOnExitAfterReplay(settings->value(QTB_ONEXITAFTERREPLAY,
 									   QTB_ONEXITAFTERREPLAY_DEFAULT).toBool());
@@ -339,6 +345,9 @@ void Settings::writeSettings()
   // save confirmAtExit
   settings->setValue(QTB_ONCONFIRMATEXIT, onConfirmAtExit);
 
+  // save saveSettingsAtExit
+  settings->setValue(QTB_ONSAVESETTINGSATEXIT, onSaveSettingsAtExit);
+
   // save exit after replay
   settings->setValue(QTB_ONEXITAFTERREPLAY, onExitAfterReplay);
 
@@ -416,6 +425,7 @@ void Settings::printSettings() const
 
   qDebug() << "MonitorNo               : " << monitorNo;
   qDebug() << "ConfirmAtExit           : " << onConfirmAtExit;
+  qDebug() << "SaveSettingsAtExit      : " << onSaveSettingsAtExit;
   qDebug() << "ExitAfterReplay         : " << onExitAfterReplay;
   qDebug() << "StaysOnTop              : " << onStaysOnTop;
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;

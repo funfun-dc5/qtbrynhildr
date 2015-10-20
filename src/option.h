@@ -36,6 +36,12 @@ public:
 	return password;
   }
 
+  // get host type
+  const char *getHostType() const
+  {
+	return hostType;
+  }
+
   // get ini file name
   const char *getIniFileName() const
   {
@@ -114,6 +120,9 @@ private:
 
   // password
   const char *password;
+
+  // host type
+  const char *hostType;
 
   // ini filename
   const char *iniFileName;

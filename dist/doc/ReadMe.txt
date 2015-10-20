@@ -519,6 +519,7 @@ desktopOffsetX=0
 desktopOffsetY=0
 monitorNo=1
 onConfirmAtExit=true
+onSaveSettingsAtExit=false
 onExitAfterReplay=false
 onFrameLessWindow=false
 onShowMenuBar=true
@@ -542,10 +543,12 @@ geometry=@Rect(200 200 800 600)
 
  (1) -serverオプション
 
- -server <server name|IP address>:<password>[:<port no>]
+ -server <server name|IP address>:<password>[:<port no>[:<host type>]]
 
  サーバを指定して、起動後すぐに接続します。
  (*)キーボードタイプは指定できません。.iniの設定をそのまま使います。
+
+ host typeは、xp/vista/7/8/8.1/10 を指定します。
 
  (2) -recordオプション
 
@@ -725,6 +728,7 @@ Ver.1.2.0 : [新規機能]
              ・Mac OS X 10.10をサポートOSに追加
              ・ソースコードの配置構成整理
              ・マニュアル修正 (FAQ追加)
+             ・-serverオプションにホストタイプ指定を追加
 
             [不具合修正]
              ・UACの制御が入った時に起こる通信切断に対応していなかった不具合修正

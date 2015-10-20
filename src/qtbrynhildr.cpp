@@ -63,6 +63,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   option(0),
   iniFileName(0),
   settings(0),
+  writeSettingsAtExit(true),
 #if QTB_RECORDER
   recorder(0),
 #endif // QTB_RECORDER
@@ -132,15 +133,23 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // set option to settings
   if (option->getServerName() != 0){
+	writeSettingsAtExit = false;
 	settings->setServerName(option->getServerName());
   }
   if (option->getPortNo() > 0){
+	writeSettingsAtExit = false;
 	settings->setPortNo(option->getPortNo());
   }
   if (option->getPassword() != 0){
+	writeSettingsAtExit = false;
 	settings->setPassword(option->getPassword());
   }
+  if (option->getHostType() != 0){
+	writeSettingsAtExit = false;
+	settings->setServerType(option->getHostType());
+  }
   if (option->getDebug() != 0){
+	writeSettingsAtExit = false;
 	if (strncmp(option->getDebug(), "on", sizeof("on")) == 0){
 	  settings->setOutputLog(true);
 	}
@@ -1700,7 +1709,8 @@ void QtBrynhildr::exit()
   }
 
   // save settings
-  writeSettings();
+  if (writeSettingsAtExit || settings->getOnSaveSettingsAtExit())
+	writeSettings();
 
   // log
   QDateTime shutdownTime = QDateTime::currentDateTime();

@@ -49,13 +49,15 @@ typedef int SERVER_TYPE;
 #define	SERVER_TYPE_WINDOWS_7		2
 #define	SERVER_TYPE_WINDOWS_8		3
 #define	SERVER_TYPE_WINDOWS_8_1		4
-#define	SERVER_TYPE_NUM				5
+#define	SERVER_TYPE_WINDOWS_10		5
+#define	SERVER_TYPE_NUM				6
 
 #define	STRING_SERVER_TYPE_WINDOWS_XP		"Windows XP"
 #define	STRING_SERVER_TYPE_WINDOWS_VISTA	"Windows Vista"
 #define	STRING_SERVER_TYPE_WINDOWS_7		"Windows 7"
 #define	STRING_SERVER_TYPE_WINDOWS_8		"Windows 8"
 #define	STRING_SERVER_TYPE_WINDOWS_8_1		"Windows 8.1"
+#define	STRING_SERVER_TYPE_WINDOWS_10		"Windows 10"
 
 // for keyboardType
 #define QTB_KEYBOARDTYPE		"keyboardType"
@@ -294,6 +296,7 @@ public:
 	case SERVER_TYPE_WINDOWS_7:
 	case SERVER_TYPE_WINDOWS_8:
 	case SERVER_TYPE_WINDOWS_8_1:
+	case SERVER_TYPE_WINDOWS_10:
 	  setSoundCapture(SOUND_CAPTURE_CORE_AUDIO);
 	  break;
 	default:
@@ -312,6 +315,7 @@ public:
 	  "SERVER_TYPE_WINDOWS_7",
 	  "SERVER_TYPE_WINDOWS_8",
 	  "SERVER_TYPE_WINDOWS_8.1",
+	  "SERVER_TYPE_WINDOWS_10",
 	};
 
 	return stringTable[serverType];
@@ -338,7 +342,7 @@ public:
 	  "KEYBOARD_TYPE_WINDOWS_US",
 	};
 
-	return stringTable[serverType];
+	return stringTable[keyboardType];
   }
 
   // get port No.

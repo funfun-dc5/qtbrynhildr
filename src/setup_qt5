@@ -5,10 +5,12 @@ export UNAMEM=`uname -m`
 case $UNAME in
 	CYGWIN*)
 		QTROOT="/c/Tools/develop/Qt/Qt5.4.2/5.4/mingw491_32"
+#		QTROOT="/c/Tools/develop/Qt/Qt5.5.1/5.5/mingw492_32"
 		if [ -n "$1" ] ; then
 			case $1 in
 				static)
 					QTROOT="/d/QtInstall/src/qt5.4.2static/qtbase"
+#					QTROOT="/d/QtInstall/src/qt5.5.1static/qtbase"
 					echo "set up for Static link."
 					;;
 				clean)
@@ -26,9 +28,11 @@ case $UNAME in
 	Linux)
 		case $UNAMEM in
 			x86_64)
+#				QTROOT=/opt/Qt5.5.1/5.5/gcc_64
 				QTROOT=/opt/Qt5.4.2/5.4/gcc_64
 				;;
 			i686)
+#				QTROOT=/opt/Qt5.5.1/5.5/gcc
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
 				;;
 			*)
@@ -52,6 +56,7 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
+#				QTROOT=/opt/Qt5.5.1/5.5/clang_64
 				QTROOT=/opt/Qt5.4.2/5.4/clang_64
 				;;
 			*)

@@ -178,7 +178,6 @@ case $UNAME in
 			echo "copy DLL files..."
 			# for Qt DLL
 			mkdir -p ${DISTDIR}/bin/platforms
-			mkdir -p ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Core.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Gui.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
@@ -187,11 +186,9 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
-#			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuin53.dll ${DISTDIR}/bin
-#			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuuc53.dll ${DISTDIR}/bin
-#			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icudt53.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuin53.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuuc53.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/imageformats/qico.dll ${DISTDIR}/bin/imageformats
 		fi
 		# copy executable file
 		echo "copy executable file..."

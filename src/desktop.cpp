@@ -78,7 +78,7 @@ Desktop::Desktop()
 	correctWindowWidth = 2;
 	correctWindowHeight = 3;
 	heightOfMenuBarInHiding = -1;
-	heightOfStatusBarInHiding = -2;
+	heightOfStatusBarInHiding = 0;
   }
   else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
 	correctWindowWidth = 2;

@@ -37,6 +37,7 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
   heightOfMenuBarInHiding(0),
   heightOfStatusBarInHiding(0),
   heightOfMenuBar(0),
+  onFullScreen(false),
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
 #endif // defined(Q_OS_OSX)
@@ -173,20 +174,22 @@ void MainWindow::refreshDesktop()
   }
 
   // set maximum width & height
-  int targetWidth = size.width() + settings->getDesktop()->getCorrectWindowWidth();
-  int targetHeight = size.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
-  QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
-  if (targetWidth > screenSize.width()){
-	targetWidth = screenSize.width();
-  }
-  if (targetHeight > screenSize.height()){
-	targetHeight = screenSize.height();
-  }
-  parent->setMaximumWidth(targetWidth);
-  parent->setMaximumHeight(targetHeight);
-  if (QTB_FIXED_MAINWINDOW_SIZE){
-	if (settings->getOnKeepOriginalDesktopSize()){
-	  parent->resize(targetWidth, targetHeight);
+  if (!onFullScreen){
+	int targetWidth = size.width() + settings->getDesktop()->getCorrectWindowWidth();
+	int targetHeight = size.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+	if (targetWidth > screenSize.width()){
+	  targetWidth = screenSize.width();
+	}
+	if (targetHeight > screenSize.height()){
+	  targetHeight = screenSize.height();
+	}
+	parent->setMaximumWidth(targetWidth);
+	parent->setMaximumHeight(targetHeight);
+	if (QTB_FIXED_MAINWINDOW_SIZE){
+	  if (settings->getOnKeepOriginalDesktopSize()){
+		parent->resize(targetWidth, targetHeight);
+	  }
 	}
   }
 
@@ -219,6 +222,14 @@ QSize MainWindow::getSize() const
 QSize MainWindow::getDesktopSize() const
 {
   return desktopSize;
+}
+
+// set full screen flag
+void MainWindow::setOnFullScreen(bool onFullScreen)
+{
+  if (QTB_DESKTOP_FULL_SCREEN){
+	this->onFullScreen = onFullScreen;
+  }
 }
 
 // event handler

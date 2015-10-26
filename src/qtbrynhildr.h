@@ -535,8 +535,15 @@ private:
   // event converter
   EventConverter *eventConverter;
 
+  // get full screen scaling factor
+  qreal getFullScreenScalingFactor(QSize desktopSize);
+
   // full screen
   bool fullScreenMode;
+
+  // current status
+  bool onShowMenuBar;
+  bool onShowStatusBar;
 
   // height of menu bar
   int heightOfMenuBar;

@@ -10,6 +10,7 @@
 // Qt Header
 #include <QDesktopWidget>
 #include <QRect>
+#include <QSize>
 
 namespace qtbrynhildr {
 

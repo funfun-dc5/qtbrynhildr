@@ -80,6 +80,9 @@ public:
 	this->heightOfStatusBar = heightOfStatusBar;
   }
 
+  // set full screen flag
+  void setOnFullScreen(bool onFullScreen);
+
   // minimum size hint
   QSize minimumSizeHint() const;
   // size hint
@@ -164,6 +167,9 @@ private:
 
   // height of menu bar
   int heightOfMenuBar;
+
+  // full screel flag
+  bool onFullScreen;
 
 #if defined(Q_OS_OSX)
   // previous KEYCODE_FLG

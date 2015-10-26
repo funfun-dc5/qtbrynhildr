@@ -338,7 +338,7 @@
         <location filename="../qtbrynhildr.cpp" line="772"/>
         <source>Full Screen</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>フルスクリーン</translation>
+        <translation>フルスクリーンにする</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="744"/>

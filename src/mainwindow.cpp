@@ -52,7 +52,8 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
   // setting main window
   setBackgroundRole(QPalette::Dark);
   setAutoFillBackground(true);
-  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true); // mouse tracking mode on
 

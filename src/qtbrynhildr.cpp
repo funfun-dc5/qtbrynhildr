@@ -2206,8 +2206,10 @@ void QtBrynhildr::fullScreen()
 	mainWindow->setOnFullScreen(false);
 	showNormal();
   }
+#if 0 // for TEST
   // menu control
   desktopScalingDialog_Action->setEnabled(!fullScreenMode);
+#endif
 }
 
 // toggle stays on top

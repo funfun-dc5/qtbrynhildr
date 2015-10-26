@@ -254,9 +254,19 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   setWindowTitle(tr(QTB_APPLICATION));
 
   // set window flags
+  Qt::WindowFlags flags = windowFlags();
+#if 0 // defined(Q_OS_OSX)
+  flags |= Qt::CustomizeWindowHint;
+  flags |= Qt::WindowTitleHint;
+  flags |= Qt::WindowSystemMenuHint;
+  flags |= Qt::WindowCloseButtonHint;
+  flags |= Qt::WindowMinimizeButtonHint;
+  flags |= Qt::WindowMaximizeButtonHint;
+#endif // defined(Q_OS_OSX)
   if (settings->getOnFrameLessWindow()){
-	setWindowFlags(Qt::FramelessWindowHint);
+	flags |= Qt::FramelessWindowHint;
   }
+  setWindowFlags(flags);
 
   // refresh window
   refreshWindow();

@@ -72,7 +72,7 @@ case $UNAME in
 		UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
-				DISTDIR="../dist/macosx/dist_macosx_x64"
+				DISTDIR="../dist/macosx"
 				PKGNAME="macosx_x64"
 				echo "Installing for Darwin x64..."
 				;;

@@ -8,7 +8,7 @@
 
 * 原作者IchiGekiさんのブログ
 
- 「リモートデスクトップを開発するIchiGekiのブログ。」<http://blog.x-row.net/>
+ 「リモートデスクトップを開発してるエンジニアのブログ。」<http://blog.x-row.net/>
 
 * Brynhildr/Siegfriedのページ
 

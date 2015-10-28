@@ -6,9 +6,9 @@
 #include "common/common.h"
 
 // System Header
-#if defined(QTB_OS_UNIX)
+#if defined(QTB_NET_UNIX)
 #include <unistd.h>
-#endif // defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_UNIX)
 
 // Qt Header
 #include <QKeyEvent>
@@ -21,9 +21,9 @@
 #include "mainwindow.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
-#if defined(QTB_OS_UNIX)
+#if defined(QTB_NET_UNIX)
 #include "dialog/desktop_scaling_dialog.h"
-#endif // defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_UNIX)
 
 namespace qtbrynhildr {
 

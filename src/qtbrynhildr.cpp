@@ -2235,13 +2235,13 @@ void QtBrynhildr::toggleStaysOnTop()
 	settings->setOnStaysOnTop(true);
   }
   staysOnTop_Action->setChecked(settings->getOnStaysOnTop());
-#if defined(QTB_OS_UNIX)
+#if defined(QTB_NET_UNIX)
   QPoint topLeft = QPoint(geometry().x(), geometry().y() + 28);
-#endif // defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_UNIX)
   setWindowFlags(flags);
-#if defined(QTB_OS_UNIX)
+#if defined(QTB_NET_UNIX)
   move(topLeft);
-#endif // defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_UNIX)
   show();
 }
 

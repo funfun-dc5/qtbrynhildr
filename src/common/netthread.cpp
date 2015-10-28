@@ -214,7 +214,7 @@ SOCKET NetThread::socketToServer()
 	  const QString text = QString("socketToServer() : getaddrinfo(): strerror = ") + gai_strerror(error);
 	  emit outputLogMessage(PHASE_DEBUG, text);
 	}
-#endif // defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_UNIX)
 	return INVALID_SOCKET;
   }
 
@@ -235,9 +235,9 @@ SOCKET NetThread::socketToServer()
   // for socket option
   if (sock != INVALID_SOCKET){
 	// set socket option
-#if defined(QTB_OS_UNIX)
+#if defined(QTB_NET_UNIX)
 	setSocketOption(sock);
-#endif // defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_UNIX)
 #if defined(DEBUG)
 	// check socket option
 	checkSocketOption(sock);

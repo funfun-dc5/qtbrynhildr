@@ -39,10 +39,10 @@ int main(int argc, char *argv[])
   }
 #endif
 
-#if defined(QTB_OS_WIN)
+#if defined(Q_OS_WIN)
   // disabled IME
   ImmDisableIME(0);
-#endif // defined(QTB_OS_WIN)
+#endif // defined(Q_OS_WIN)
 
   QApplication app(argc, argv);
 
@@ -85,10 +85,10 @@ int main(int argc, char *argv[])
   QThread::sleep(1);
 #endif /* QTB_SPLASH_SCREEN */
 
-#if defined(QTB_OS_WIN)
+#if defined(Q_OS_WIN)
   // install native event filter
   app.installNativeEventFilter(qtbrynhildr.getMainWindow());
-#endif // defined(QTB_OS_WIN)
+#endif // defined(Q_OS_WIN)
 
   // display main window
   qtbrynhildr.setFocus(Qt::ActiveWindowFocusReason);

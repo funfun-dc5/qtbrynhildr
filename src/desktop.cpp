@@ -71,7 +71,7 @@ Desktop::Desktop()
 #endif
 
   // set correct window width and height
-#if defined(QTB_OS_WIN)
+#if defined(Q_OS_WIN)
   // OS Version
   QString kernelVersion = QSysInfo::kernelVersion();
   if (kernelVersion.startsWith("10.")){			// Windows 10

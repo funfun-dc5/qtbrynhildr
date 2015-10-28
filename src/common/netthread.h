@@ -11,10 +11,10 @@
 #include <QThread>
 
 // Windows Header
-#if defined(QTB_OS_WIN)
+#if defined(QTB_NET_WIN)
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#endif // defined(QTB_OS_WIN)
+#endif // defined(QTB_NET_WIN)
 
 // UNIX Header
 #if defined(QTB_OS_UNIX)

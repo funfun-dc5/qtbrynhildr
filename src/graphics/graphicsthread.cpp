@@ -243,7 +243,7 @@ void GraphicsThread::connectedToServer()
 }
 
 // shutdown connection
-#if defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 void GraphicsThread::shutdownConnection()
 {
   if (sock_control != INVALID_SOCKET){
@@ -262,6 +262,6 @@ void GraphicsThread::shutdownConnection()
 	sock_sound = INVALID_SOCKET;
   }
 }
-#endif // defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 } // end of namespace qtbrynhildr

@@ -33,14 +33,14 @@
 
 namespace qtbrynhildr {
 
-#if defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 // socket for control
 SOCKET sock_control = INVALID_SOCKET;
 // socket for graphics
 SOCKET sock_graphics = INVALID_SOCKET;
 // socket for sound
 SOCKET sock_sound = INVALID_SOCKET;
-#endif // defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 // counter for control
 int counter_control = 0;
@@ -2433,7 +2433,7 @@ void QtBrynhildr::toggleOutputLog()
   }
 }
 
-#if defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 // initialize socket
 void QtBrynhildr::initSocket()
 {
@@ -2461,10 +2461,10 @@ void QtBrynhildr::closeSocket()
 	sock_sound = INVALID_SOCKET;
   }
 }
-#endif // defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 // for Windows
-#if defined(QTB_OS_WIN)
+#if defined(QTB_NET_WIN)
 // initialize platform
 bool QtBrynhildr::initPlatform()
 {
@@ -2492,10 +2492,10 @@ bool QtBrynhildr::shutdownPlatform()
 
   return true;
 }
-#endif // defined(QTB_OS_WIN)
+#endif // defined(Q_NET_WIN)
 
 // for UNIX
-#if defined(QTB_OS_UNIX)
+#if defined(QTB_NET_UNIX)
 // initialize platform
 bool QtBrynhildr::initPlatform()
 {
@@ -2509,6 +2509,6 @@ bool QtBrynhildr::shutdownPlatform()
   // Nothing to do
   return true;
 }
-#endif // defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_UNIX)
 
 } // end of namespace qtbrynhildr

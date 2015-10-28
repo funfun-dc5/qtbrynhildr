@@ -605,7 +605,7 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 	  }
 	  return scalingFactor;
 	}
-#if defined(QTB_OS_WIN)
+#if defined(Q_OS_WIN)
 	else {
 	  // Internal Error: Unkown State
 	  ABORT();
@@ -693,7 +693,7 @@ QSize MainWindow::sizeHint() const
 //----------------------------------------------------------------------
 // native event filter
 //----------------------------------------------------------------------
-#if defined(QTB_OS_WIN)
+#if defined(Q_OS_WIN)
 bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
 {
   Q_UNUSED(result)
@@ -772,7 +772,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
   }
   return false;
 }
-#endif // defined(QTB_OS_WIN)
+#endif // defined(Q_OS_WIN)
 
 #if 0 // for TEST
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)

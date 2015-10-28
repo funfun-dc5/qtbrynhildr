@@ -166,7 +166,7 @@ void NetThread::connectedToServer()
 {
 }
 
-#if defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 // socket to server
 SOCKET NetThread::socketToServer()
 {
@@ -204,12 +204,12 @@ SOCKET NetThread::socketToServer()
   }
   error = getaddrinfo(server, port, &addrinfo_hints, &addrinfo);
   if (error != 0){
-#if defined(QTB_OS_WIN)
+#if defined(QTB_NET_WIN)
 	if (settings->getOutputLog()){
 	  const QString text = QString("socketToServer() : getaddrinfo(): error = ") + QString::number(error);
 	  emit outputLogMessage(PHASE_DEBUG, text);
 	}
-#elif defined(QTB_OS_UNIX)
+#elif defined(QTB_NET_UNIX)
 	if (settings->getOutputLog()){
 	  const QString text = QString("socketToServer() : getaddrinfo(): strerror = ") + gai_strerror(error);
 	  emit outputLogMessage(PHASE_DEBUG, text);
@@ -325,9 +325,9 @@ void NetThread::setSocketOption(SOCKET sock)
 {
   int val = 1;
   socklen_t len = sizeof(val);
-#if defined(QTB_OS_WIN)
+#if defined(QTB_NET_WIN)
   if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char*)&val, len) == -1){
-#elif defined(QTB_OS_UNIX)
+#elif defined(QTB_NET_UNIX)
   if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const void*)&val, len) == -1){
 #endif
 	cout << "[" << name << "] sockopt: SO_KEEPALIVE : setsockopt() error";
@@ -353,9 +353,9 @@ void NetThread::checkSocketOption(SOCKET sock)
   len = sizeof(val);
 
   // SO_KEEPALIVE
-#if defined(QTB_OS_WIN)
+#if defined(QTB_NET_WIN)
   if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char*)&val, &len) == -1){
-#elif defined(QTB_OS_UNIX)
+#elif defined(QTB_NET_UNIX)
   if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (void*)&val, &len) == -1){
 #endif
 	cout << "[" << name << "] sockopt: SO_KEEPALIVE : getsockopt() error";
@@ -397,7 +397,7 @@ int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t 
   return SOCKET_ERROR;
 }
 
-#endif // defined(QTB_OS_WIN) || defined(QTB_OS_UNIX)
+#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 // print protocol header
 void NetThread::printHeader()

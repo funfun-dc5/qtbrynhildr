@@ -127,11 +127,12 @@ PROCESS_RESULT ControlThread::processForHeader()
 		}
 		else {
 		  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-			if (com_data->zoom != 1.0){
-			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * com_data->zoom
-															+ settings->getDesktopOffsetX();
-			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * com_data->zoom
-				+ settings->getDesktopOffsetY();
+			qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
+			if (scalingFactor > 1.0){
+			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor
+								+ settings->getDesktopOffsetX();
+			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor
+								+ settings->getDesktopOffsetY();
 			}
 			else {
 			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()

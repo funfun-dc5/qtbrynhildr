@@ -41,7 +41,12 @@
 // -- settings --
 // for serverName
 #define QTB_SERVERNAME			"serverName"
+#if defined(QTB_DEV_TABLET)
+// for TEST
+#define QTB_SERVERNAME_DEFAULT	"192.168.10.5"
+#else // defined(QTB_DEV_TABLET)
 #define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
+#endif // defined(QTB_DEV_TABLET)
 
 // for serverType
 #define QTB_SERVERTYPE			"serverType"
@@ -98,7 +103,11 @@ typedef int KEYBOARD_TYPE;
 
 // for videoQuality
 #define QTB_VIDEOQUALITY			"videoQuality"
+#if defined(QTB_DEV_TABLET)
+#define QTB_VIDEOQUALITY_DEFAULT	VIDEO_QUALITY_MINIMUM
+#else // defined(QTB_DEV_TABLET)
 #define QTB_VIDEOQUALITY_DEFAULT	VIDEO_QUALITY_STANDARD
+#endif // defined(QTB_DEV_TABLET)
 
 // for frameRate
 #define QTB_FRAMERATE			"frameRate"
@@ -111,7 +120,11 @@ typedef int KEYBOARD_TYPE;
 
 // for soundQuality
 #define QTB_SOUNDQUALITY			"soundQuality"
+#if defined(QTB_DEV_TABLET)
+#define QTB_SOUNDQUALITY_DEFAULT	SOUND_QUALITY_MINIMUM
+#else // defined(QTB_DEV_TABLET)
 #define QTB_SOUNDQUALITY_DEFAULT	SOUND_QUALITY_STANDARD
+#endif // defined(QTB_DEV_TABLET)
 
 // for soundCapture
 #define QTB_SOUNDCAPTURE			"soundCapture"
@@ -181,11 +194,11 @@ typedef int SCALING_TYPE;
 
 // for onShowMenuBar
 #define QTB_ONSHOWMENUBAR					"onShowMenuBar"
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#if defined(QTB_DEV_TABLET)
 #define QTB_ONSHOWMENUBAR_DEFAULT			false
-#else // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#else // defined(QTB_DEV_TABLET)
 #define QTB_ONSHOWMENUBAR_DEFAULT			true
-#endif // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#endif // defined(QTB_DEV_TABLET)
 
 // for onShowStatusBar
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"

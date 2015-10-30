@@ -385,11 +385,15 @@ int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t 
 
 	// check exit
 	if (!runThread){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
 	  return SOCKET_ERROR;
 	}
 
 	// sleep for next try
 	if (numsec <= MAXSLEEP/2){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
 	  QThread::sleep(numsec);
 	}
   }

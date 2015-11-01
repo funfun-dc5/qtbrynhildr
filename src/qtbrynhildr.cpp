@@ -496,6 +496,7 @@ void QtBrynhildr::refreshWindow()
   updateStatusBar();
 
   // recalc scaling factor
+#if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
 	if (fullScreenMode){
 	  if (onShowMenuBar ^ settings->getOnShowMenuBar() ||
@@ -505,6 +506,7 @@ void QtBrynhildr::refreshWindow()
 	  }
 	}
   }
+#endif // defined(QTB_DEV_DESKTOP)
 }
 
 // refresh menu
@@ -1145,15 +1147,18 @@ void QtBrynhildr::createMenus()
   }
 
   // for stays on top
+#if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_STAYS_ON_TOP){
 	displayMenu->addSeparator();
 	displayMenu->addAction(staysOnTop_Action);
   }
+#endif // defined(QTB_DEV_DESKTOP)
   // for full screen
+#if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
-	displayMenu->addSeparator();
 	displayMenu->addAction(fullScreen_Action);
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // video menu
   videoMenu = menuBar()->addMenu(tr("&Video"));
@@ -2202,8 +2207,10 @@ qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize)
 // full screen
 void QtBrynhildr::fullScreen()
 {
+#if defined(QTB_DESKTOP)
   if (!QTB_DESKTOP_FULL_SCREEN)
 	return;
+#endif // defined(QTB_DESKTOP)
 
 #if 0 // for TEST
   QSize size = mainWindow->getSize();

@@ -13,10 +13,12 @@
 
 (1) Windows版  [#]_ 
 ^^^^^^^^^^^^^^^^^^^^
-  * Windows 7   (64bit/32bit)
-  * Windows 8   (64bit/32bit)
-  * Windows 8.1 (64bit/32bit)
-  * Windows 10  (64bit/32bit)
+  * Windows XP      (64bit/32bit)
+  * Windows Vista   (64bit/32bit)
+  * Windows 7       (64bit/32bit)
+  * Windows 8       (64bit/32bit)
+  * Windows 8.1     (64bit/32bit)
+  * Windows 10      (64bit/32bit)
 
  .. [#] すべてのエディションで確認したわけではありません。
 

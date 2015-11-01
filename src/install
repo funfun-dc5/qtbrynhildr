@@ -178,6 +178,8 @@ case $UNAME in
 			echo "copy DLL files..."
 			# for Qt DLL
 			mkdir -p ${DISTDIR}/bin/platforms
+			mkdir -p ${DISTDIR}/bin/imageformats
+			mkdir -p ${DISTDIR}/bin/audio
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Core.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Gui.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
@@ -190,6 +192,8 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuin53.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuuc53.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
+			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
 		fi
 		# copy executable file
 		echo "copy executable file..."

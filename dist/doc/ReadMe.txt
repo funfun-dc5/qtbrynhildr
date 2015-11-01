@@ -38,10 +38,12 @@
  [対応OS]
 ==============================
 
- Windows 7   (64bit/32bit)
- Windows 8   (64bit/32bit)
- Windows 8.1 (64bit/32bit)
- Windows 10  (64bit/32bit)
+ Windows XP    (64bit/32bit)
+ Windows Vista (64bit/32bit)
+ Windows 7     (64bit/32bit)
+ Windows 8     (64bit/32bit)
+ Windows 8.1   (64bit/32bit)
+ Windows 10    (64bit/32bit)
 
  Ubuntu 14.04 LTS以降 (x64/x86)
 
@@ -50,6 +52,7 @@
  (*1) 全てのエディションで試したわけではありません。
       現在確認済みの環境は
 
+      Windows XP Professional (32bit)
       Windows 7 Home Premium (64bit)
       Windows 8.1 Pro update (64bit)
       Windows 10 Pro (64bit/32bit)
@@ -747,6 +750,7 @@ Ver.1.2.0 : [新規機能]
              ・変数の未初期化により起動時に内部エラーとなる場合がある不具合修正(Ver.1.2.0 RC2-RC3のみ)
              ・サーバに接続していない状態でソフトウェア・キーボード/ボタンを表示しようとすると
                クラッシュする不具合修正(Ver.1.2.0 RC5のみ)
+             ・デスクトップの表示、サウンドの再生が正常にできない不具合(Windows版(ダイナミックリンク版))
 
 Ver.1.1.1 : [不具合修正]
              ・他のサウンド再生アプリケーションと同時に利用できない不具合への対応

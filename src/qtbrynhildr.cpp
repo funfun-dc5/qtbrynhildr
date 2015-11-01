@@ -215,6 +215,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 								 "[QtBrynhildr()] QLocale::system().name() : " +
 								 QLocale::system().name());
   }
+  // settings file name
+  if (settings->getOutputLog()){
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "[QtBrynhildr()] Settings: " +
+								 settings->getSettings()->fileName());
+  }
 
   //------------------------------------------------------------
   // create window

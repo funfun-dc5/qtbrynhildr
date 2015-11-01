@@ -1409,12 +1409,18 @@ void QtBrynhildr::closeEvent(QCloseEvent *event)
 // load settings from setting files or registry
 void QtBrynhildr::readSettings()
 {
-  // read global settings
-  settings->readSettings();
+  QRect defaultRect = QRect(200, 200, 800, 600);
+  QRect rect = settings->getSettings()->value(QTB_GEOMETRY, defaultRect).toRect();
 
+  // read global settings
+  if (!option->getInitFlag()){
+	settings->readSettings();
+  }
+  else {
+	// set default rect
+	rect = defaultRect;
+  }
   // restore geometry
-  QRect rect = settings->getSettings()->value(QTB_GEOMETRY,
-											 QRect(200, 200, 800, 600)).toRect();
   move(rect.topLeft());
   resize(rect.size());
 

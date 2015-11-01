@@ -26,6 +26,7 @@ Option::Option(int argc, char *argv[])
   password(0),
   hostType(0),
   iniFileName(0),
+  initFlag(false),
   debug(0),
 #if QTB_RECORDER
   recordingFlag(false),
@@ -148,6 +149,9 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  argc--;
 		  argv++;
 		}
+	  }
+	  else if (strncmp("init", optionName, sizeof("init")) == 0){
+		initFlag = true;
 	  }
 #if QTB_RECORDER
 	  else if (strncmp("record", optionName, sizeof("record")) == 0){
@@ -293,12 +297,20 @@ void Option::printHelp() const
 
   // -help (-h)
   cout << "-help (-h)" << endl;
-  cout << "        " << "display this help message." << endl << flush;
+  cout << "        " << "display this help message." << endl;
+  cout << endl;
+
+  // -init
+  cout << "-init" << endl;
+  cout << "        " << "initialize settings." << endl;
   cout << endl;
 
   // .ini file
   cout << "<.ini file>" << endl;
-  cout << "        " << ".ini filename." << endl << flush;
+  cout << "        " << ".ini filename." << endl;
+
+
+  cout << flush;
 }
 
 } // end of namespace qtbrynhildr

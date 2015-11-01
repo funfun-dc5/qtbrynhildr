@@ -48,6 +48,12 @@ public:
 	return iniFileName;
   }
 
+  // get init flag
+  bool getInitFlag() const
+  {
+	return initFlag;
+  }
+
   // get bootup flag
   bool getBootupFlag() const
   {
@@ -126,6 +132,9 @@ private:
 
   // ini filename
   const char *iniFileName;
+
+  // init flag
+  bool initFlag;
 
   // debug
   const char *debug;

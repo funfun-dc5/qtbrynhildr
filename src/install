@@ -188,9 +188,9 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icudt53.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuin53.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuuc53.dll ${DISTDIR}/bin
+#			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icudt54.dll ${DISTDIR}/bin
+#			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuin54.dll ${DISTDIR}/bin
+#			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/icuuc54.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio

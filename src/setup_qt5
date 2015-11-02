@@ -4,13 +4,13 @@ UNAME=`uname`
 export UNAMEM=`uname -m`
 case $UNAME in
 	CYGWIN*)
-		QTROOT="/c/Tools/develop/Qt/Qt5.4.2/5.4/mingw491_32"
-#		QTROOT="/c/Tools/develop/Qt/Qt5.5.1/5.5/mingw492_32"
+#		QTROOT="/c/Tools/develop/Qt/Qt5.4.2/5.4/mingw491_32"
+		QTROOT="/c/Tools/develop/Qt/Qt5.5.1/5.5/mingw492_32"
 		if [ -n "$1" ] ; then
 			case $1 in
 				static)
-					QTROOT="/d/QtInstall/src/qt5.4.2static/qtbase"
-#					QTROOT="/d/QtInstall/src/qt5.5.1static/qtbase"
+#					QTROOT="/d/QtInstall/src/qt5.4.2static/qtbase"
+					QTROOT="/d/QtInstall/src/qt5.5.1static/qtbase"
 					echo "set up for Static link."
 					;;
 				clean)

@@ -49,7 +49,7 @@
 
  .. image:: images/confirm_dialog.jpg
 
-* 「表示」メニュー [#]_
+* 「表示」メニュー
 
  .. image:: images/menu_display.jpg
 

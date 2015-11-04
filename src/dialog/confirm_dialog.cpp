@@ -37,6 +37,9 @@ ConfirmDialog::ConfirmDialog(QString msg,
   // confirm field
   this->confirmFlag = confirmFlag;
   checkBox_confirm->setCheckState(confirmFlag ? Qt::Checked : Qt::Unchecked);
+
+  // resetting
+  resetting();
 }
 
 // resize event
@@ -52,6 +55,24 @@ bool ConfirmDialog::getConfirmFlag() const
 	cout << "getConfirmFlag() : confirmFlag : " << confirmFlag << endl << flush; // for DEBUG
   return confirmFlag;
 }
+
+#if defined(QTB_DEV_TABLET)
+  // settings for Tablet
+void ConfirmDialog::resetting()
+{
+  // resetting dialog window size and font size
+  resize(600, 300);
+  layoutWidget->setGeometry(QRect(20, 20, 540, 260));
+  QFont currentFont = font();
+  currentFont.setPointSize(14);
+  setFont(currentFont);
+}
+#else // defined(QTB_DEV_TABLET)
+void ConfirmDialog::resetting()
+{
+  // Nothing to do
+}
+#endif // defined(QTB_DEV_TABLET)
 
 //---------------------------------------------------------------------------
 // private slot

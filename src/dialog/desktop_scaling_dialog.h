@@ -6,6 +6,7 @@
 #define DESKTOP_SCALING_DIALOG_H
 // Qt Header
 #include <QDialog>
+#include <QFont>
 #include <QResizeEvent>
 
 // Local Header
@@ -36,6 +37,9 @@ protected:
 private:
   // set setting from scale slider position
   void setSettingFromSliderPosition();
+
+  // resettings for dialog
+  void resetting();
 
 private slots:
   // scale slider

@@ -38,6 +38,9 @@ DesktopScalingDialog::DesktopScalingDialog(Settings *settings,
   horizontalSlider->setPageStep(1);
   horizontalSlider->setTickInterval(1);
   horizontalSlider->setTickPosition(QSlider::TicksAbove);
+
+  // resetting
+  resetting();
 }
 
 // resize event
@@ -63,6 +66,24 @@ void DesktopScalingDialog::setSettingFromSliderPosition()
 	cout << "scaling factor: " << settings->getDesktopScalingFactor() << endl << flush; // for DEBUG
   }
 }
+
+#if defined(QTB_DEV_TABLET)
+  // settings for Tablet
+void DesktopScalingDialog::resetting()
+{
+  // resetting dialog window size and font size
+  resize(600, 300);
+  layoutWidget->setGeometry(QRect(20, 20, 540, 260));
+  QFont currentFont = font();
+  currentFont.setPointSize(14);
+  setFont(currentFont);
+}
+#else // defined(QTB_DEV_TABLET)
+void DesktopScalingDialog::resetting()
+{
+  // Nothing to do
+}
+#endif // defined(QTB_DEV_TABLET)
 
 // show Event
 void DesktopScalingDialog::showEvent(QShowEvent *event)

@@ -29,6 +29,10 @@ public:
   // get confirm flag
   bool getConfirmFlag() const;
 
+private:
+  // resettings for dialog
+  void resetting();
+
 private slots:
   // confirm field
   void on_checkBox_confirm_stateChanged(int state);

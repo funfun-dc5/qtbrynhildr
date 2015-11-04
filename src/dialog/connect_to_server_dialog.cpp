@@ -10,6 +10,7 @@
 
 // Qt header
 #include <QDialog>
+#include <QFont>
 
 // Local Header
 #include "connect_to_server_dialog.h"
@@ -57,6 +58,9 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
   // show password field
   checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
+
+  // resetting
+  resetting();
 }
 
 // resize event
@@ -64,6 +68,24 @@ void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
 {
   Q_UNUSED(event)
 }
+
+#if defined(QTB_DEV_TABLET)
+  // settings for Tablet
+void ConnectToServerDialog::resetting()
+{
+  // resetting dialog window size and font size
+  resize(500, 400);
+  layoutWidget->setGeometry(QRect(20, 20, 440, 360));
+  QFont currentFont = font();
+  currentFont.setPointSize(14);
+  setFont(currentFont);
+}
+#else // defined(QTB_DEV_TABLET)
+void ConnectToServerDialog::resetting()
+{
+  // Nothing to do
+}
+#endif // defined(QTB_DEV_TABLET)
 
 //---------------------------------------------------------------------------
 // private slot

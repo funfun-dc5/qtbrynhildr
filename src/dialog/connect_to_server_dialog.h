@@ -26,6 +26,10 @@ public:
   // resize event
   void resizeEvent(QResizeEvent *event);
 
+private:
+  // resettings for dialog
+  void resetting();
+
 private slots:
   // hostname field
   void on_lineEdit_hostname_textChanged();

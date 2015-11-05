@@ -1114,12 +1114,14 @@ void QtBrynhildr::createActions()
   connect(sendKey4_Action, SIGNAL(triggered()), this, SLOT(sendKey_WINDOWS()));
 
   // on Scroll Mode Action
-  onScrollMode_Action = new QAction(tr("Scroll Mode"), this);
-  onScrollMode_Action->setEnabled(false);
-  onScrollMode_Action->setCheckable(true);
-  onScrollMode_Action->setChecked(settings->getOnScrollMode());
-  onScrollMode_Action->setStatusTip(tr("Scroll Mode"));
-  connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
+  if (QTB_SCROLL_MODE){
+	onScrollMode_Action = new QAction(tr("Scroll Mode"), this);
+	onScrollMode_Action->setEnabled(false);
+	onScrollMode_Action->setCheckable(true);
+	onScrollMode_Action->setChecked(settings->getOnScrollMode());
+	onScrollMode_Action->setStatusTip(tr("Scroll Mode"));
+	connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
+  }
 }
 
 // create Menus
@@ -1239,8 +1241,10 @@ void QtBrynhildr::createMenus()
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("&Option"));
-  modeSubMenu = optionMenu->addMenu(tr("Mode"));
-  modeSubMenu->addAction(onScrollMode_Action);
+  if (QTB_SCROLL_MODE){
+	modeSubMenu = optionMenu->addMenu(tr("Mode"));
+	modeSubMenu->addAction(onScrollMode_Action);
+  }
   optionMenu->addSeparator();
   optionMenu->addAction(outputLog_Action);
 
@@ -1371,7 +1375,9 @@ void QtBrynhildr::connected()
   desktopScalingDialog_Action->setEnabled(true);
 
   // enable scroll mode
-  onScrollMode_Action->setEnabled(true);
+  if (QTB_SCROLL_MODE){
+	onScrollMode_Action->setEnabled(true);
+  }
 
   // reset frameCounter
   frameCounter = 0;
@@ -1406,7 +1412,9 @@ void QtBrynhildr::disconnected()
   desktopScalingDialog_Action->setEnabled(false);
 
   // disabled scroll mode
-  onScrollMode_Action->setEnabled(false);
+  if (QTB_SCROLL_MODE){
+	onScrollMode_Action->setEnabled(false);
+  }
 }
 
 // close event by window close
@@ -2419,6 +2427,9 @@ void QtBrynhildr::setSelectMonitorNoAll()
 // toggle scroll mode
 void QtBrynhildr::toggleOnScrollMode()
 {
+  if (!QTB_SCROLL_MODE)
+	return;
+
   if (settings->getOnScrollMode()){
 	settings->setOnScrollMode(false);
   }

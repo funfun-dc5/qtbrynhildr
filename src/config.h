@@ -49,8 +49,15 @@ const bool QTB_DESKTOP_STAYS_ON_TOP		= true;
 // desktop frame control
 const bool QTB_DESKTOP_FRAME_CONTROL	= true;
 
-// software keyboard
+// software keyboard and button
 const bool QTB_SOFTWARE_KEYBOARD_AND_BUTTON		= true;
+
+// scroll mode
+#if defined(QTB_DEV_DESKTOP)
+const bool QTB_SCROLL_MODE				= true;
+#else // defined(QTB_DEV_DESKTOP)
+const bool QTB_SCROLL_MODE				= false;
+#endif // defined(QTB_DEV_DESKTOP)
 
 // translation
 const bool QTB_TRANSLATION				= true;
@@ -59,7 +66,11 @@ const bool QTB_TRANSLATION				= true;
 const bool QTB_IN_TESTING				= false;
 
 // recorder
+#if defined(QTB_DEV_TABLET)
+#define QTB_RECORDER				0
+#else // defined(QTB_DEV_TABLET)
 #define QTB_RECORDER				1
+#endif // defined(QTB_DEV_TABLET)
 
 // splash screen
 #define QTB_SPLASH_SCREEN			0

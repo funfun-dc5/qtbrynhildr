@@ -41,8 +41,7 @@
 // -- settings --
 // for serverName
 #define QTB_SERVERNAME			"serverName"
-#if defined(QTB_DEV_TABLET)
-// for TEST
+#if defined(QTB_DEV_TABLET) // for TEST
 #define QTB_SERVERNAME_DEFAULT	"192.168.10.5"
 #else // defined(QTB_DEV_TABLET)
 #define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"

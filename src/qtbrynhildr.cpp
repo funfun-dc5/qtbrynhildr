@@ -399,6 +399,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	// clear boot flag
 	option->setBootupFlag(false);
   }
+
+#if defined(QTB_DEV_TABLET)
+  // enable full screen
+  fullScreen();
+#endif // defined(QTB_DEV_TABLET)
 }
 
 // destructor
@@ -1703,7 +1708,8 @@ void QtBrynhildr::exit()
   if (settings->getOnConfirmAtExit()){
 	ConfirmDialog *confirmDialog =
 	  new ConfirmDialog(tr("exit application?"),
-						settings->getOnConfirmAtExit());
+						settings->getOnConfirmAtExit(),
+						settings);
 	if (confirmDialog->exec() == QDialog::Accepted){
 	  settings->setOnConfirmAtExit(confirmDialog->getConfirmFlag());
 	  delete confirmDialog;

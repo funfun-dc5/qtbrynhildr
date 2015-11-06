@@ -10,6 +10,7 @@
 #include <QString>
 
 // Local Header
+#include "settings.h"
 #include "ui_confirm_dialog.h"
 
 namespace qtbrynhildr {
@@ -21,7 +22,7 @@ class ConfirmDialog : public QDialog, public Ui::ConfirmDialog
 
 public:
   // constructor
-  ConfirmDialog(QString msg, bool confirmFlag, QWidget *parent = 0);
+  ConfirmDialog(QString msg, bool confirmFlag, Settings *settings, QWidget *parent = 0);
 
   // resize event
   void resizeEvent(QResizeEvent *event);
@@ -40,6 +41,9 @@ private slots:
 private:
   // confirm flag
   bool confirmFlag;
+
+  // settings
+  Settings *settings;
 
   // output log flag
   bool outputLog;

@@ -10,6 +10,7 @@
 
 // Qt header
 #include <QDialog>
+#include <QRect>
 
 // Local Header
 #include "desktop_scaling_dialog.h"
@@ -67,23 +68,26 @@ void DesktopScalingDialog::setSettingFromSliderPosition()
   }
 }
 
-#if defined(QTB_DEV_TABLET)
   // settings for Tablet
 void DesktopScalingDialog::resetting()
 {
+#if defined(QTB_DEV_TABLET)
+  QRect currentScreen = settings->getDesktop()->getCurrentScreen();
+  int desktopWidth = currentScreen.width();
+  int desktopHeight = currentScreen.height();
+
+  int dialogWidth = desktopWidth/3;
+  int dialogHeight = desktopHeight/3;
+  int fontPointSize = 14;
+
   // resetting dialog window size and font size
-  resize(600, 300);
-  layoutWidget->setGeometry(QRect(20, 20, 540, 260));
+  resize(dialogWidth, dialogHeight);
+  layoutWidget->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
   QFont currentFont = font();
-  currentFont.setPointSize(14);
+  currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-}
-#else // defined(QTB_DEV_TABLET)
-void DesktopScalingDialog::resetting()
-{
-  // Nothing to do
-}
 #endif // defined(QTB_DEV_TABLET)
+}
 
 // show Event
 void DesktopScalingDialog::showEvent(QShowEvent *event)

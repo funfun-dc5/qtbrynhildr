@@ -11,6 +11,7 @@
 // Qt header
 #include <QDialog>
 #include <QFont>
+#include <QRect>
 
 // Local Header
 #include "connect_to_server_dialog.h"
@@ -69,23 +70,25 @@ void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
   Q_UNUSED(event)
 }
 
-#if defined(QTB_DEV_TABLET)
   // settings for Tablet
 void ConnectToServerDialog::resetting()
 {
+#if defined(QTB_DEV_TABLET)
+  QRect currentScreen = settings->getDesktop()->getCurrentScreen();
+  int desktopWidth = currentScreen.width();
+  int desktopHeight = currentScreen.height();
+  int dialogWidth = desktopWidth/3;
+  int dialogHeight = desktopHeight*0.8;
+  int fontPointSize = 14;
+
   // resetting dialog window size and font size
-  resize(500, 400);
-  layoutWidget->setGeometry(QRect(20, 20, 440, 360));
+  resize(dialogWidth, dialogHeight);
+  layoutWidget->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
   QFont currentFont = font();
-  currentFont.setPointSize(14);
+  currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-}
-#else // defined(QTB_DEV_TABLET)
-void ConnectToServerDialog::resetting()
-{
-  // Nothing to do
-}
 #endif // defined(QTB_DEV_TABLET)
+}
 
 //---------------------------------------------------------------------------
 // private slot

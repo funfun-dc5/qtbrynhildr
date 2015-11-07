@@ -79,7 +79,7 @@ case $UNAME in
 		esac
 		;;
 	*)
-		echo "Not support platform."
+		echo "install : Not support platform. $UNAME"
 		exit 1;
 		;;
 esac
@@ -103,12 +103,12 @@ if [ "$1" = "clean" ] ; then
 			\rm -rf ${DISTDIR}/*
 			;;
 		*)
-			echo "Not support platform."
+			echo "install : Not support platform."
 			exit 1;
 			;;
 	esac
 
-	echo "Done."
+	echo "install : Done."
 	exit 0;
 fi
 
@@ -149,12 +149,12 @@ if [ "$1" = "man" ] ; then
 			exit 0;
 			;;
 		*)
-			echo "Not support platform."
+			echo "install : Not support platform."
 			exit 1;
 			;;
 	esac
 
-	echo "Done."
+	echo "install : Done."
 	exit 0;
 fi
 
@@ -216,7 +216,7 @@ case $UNAME in
 		cat windows/dist_win/${ISS}.template windows/dist_win/tmp_bin.iss tmp.iss > windows/dist_win/${ISS}
 		rm -f windows/dist_win/tmp_bin.iss tmp.iss
 		popd
-		echo "Done."
+		echo "install : Done."
 		;;
 	Linux)
 		# check
@@ -247,7 +247,7 @@ case $UNAME in
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
 		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
 		(cd ../dist/linux; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
-		echo "Done."
+		echo "install : Done."
 		;;
 	FreeBSD)
 		# check
@@ -278,7 +278,7 @@ case $UNAME in
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
 		(cd ../dist/freebsd; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
 #		(cd ../dist/freebsd; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
-		echo "Done."
+		echo "install : Done."
 		;;
 	Darwin)
 		echo "Installing for Darwin..."
@@ -301,7 +301,7 @@ case $UNAME in
 		mv ${APPNAME}.app ${APP}.app
 		# mv dist directory
 		mv ${APPNAME}.dmg ${DISTDIR}/${PKGSTRING}.dmg
-		echo "Done."
+		echo "install : Done."
 		;;
 	*)
 		echo "install : Not support platform."

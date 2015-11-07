@@ -18,16 +18,16 @@ case $UNAME in
 		if [ -e Makefile.Debug ]; then
 			chmod 644 Makefile.Debug
 		fi
-		echo "Done."
+		echo "setup : Done."
 		;;
 	Linux)
-		echo "Done."
+		echo "setup : Done."
 		;;
 	FreeBSD)
-		echo "Done."
+		echo "setup : Done."
 		;;
 	Darwin)
-		echo "Done."
+		echo "setup : Done."
 		;;
 	*)
 		echo "setup : Not support platform."

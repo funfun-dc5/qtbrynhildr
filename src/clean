@@ -15,7 +15,7 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "Done."
+		echo "claen : Done."
 		;;
 	Linux)
 		make clean
@@ -28,7 +28,7 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "Done."
+		echo "claen : Done."
 		;;
 	FreeBSD)
 		make clean
@@ -41,7 +41,7 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "Done."
+		echo "claen : Done."
 		;;
 	Darwin)
 		make clean
@@ -54,10 +54,10 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "Done."
+		echo "claen : Done."
 		;;
 	*)
-		echo "Not support platform."
+		echo "clean : Not support platform. $UNAME"
 		;;
 esac
 

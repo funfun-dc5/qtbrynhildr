@@ -1,6 +1,6 @@
 .. -*- mode: rst; coding: utf-8-unix -*-
 
-クライアントのインストールと設定 (Ubuntu版)
+クライアントのインストールと設定 (Linux版)
 ============================================
 
 1. ダウンロード
@@ -15,11 +15,11 @@
 
  [64bit版]
 
-   qtbrynhildr-ubuntu_x64-v100.run
+   qtbrynhildr-linux_x64-v100.run
 
  [32bit版]
 
-   qtbrynhildr-ubuntu_x86-v100.run
+   qtbrynhildr-linux_x86-v100.run
 
 (2).Qt5のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^
@@ -103,25 +103,25 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
  自己解凍ファイルは以下のようにして展開します。 ::
 
-  funfun@ubuntu-PC-x64:~$ chmod 500 ./qtbrynhildr-ubuntu_x64-v100.run
-  funfun@ubuntu-PC-x64:~$ ./qtbrynhildr-ubuntu_x64-v100.run
+  funfun@ubuntu-PC-x64:~$ chmod 500 ./qtbrynhildr-linux_x64-v100.run
+  funfun@ubuntu-PC-x64:~$ ./qtbrynhildr-linux_x64-v100.run
   UnZipSFX 5.52 of 28 February 2005, by Info-ZIP (http://www.info-zip.org).
-   creating: dist_ubuntu_x64/
-   creating: dist_ubuntu_x64/bin/
-  inflating: dist_ubuntu_x64/bin/qtbrynhildr
-   creating: dist_ubuntu_x64/doc/
-  inflating: dist_ubuntu_x64/doc/LICENSE.txt
-   creating: dist_ubuntu_x64/doc/manual/
-   creating: dist_ubuntu_x64/doc/manual/doctrees/
-  inflating: dist_ubuntu_x64/doc/manual/doctrees/port_forwarding.doctree
+   creating: linux_x64/
+   creating: linux_x64/bin/
+  inflating: linux_x64/bin/qtbrynhildr
+   creating: linux_x64/doc/
+  inflating: linux_x64/doc/LICENSE.txt
+   creating: linux_x64/doc/manual/
+   creating: linux_x64/doc/manual/doctrees/
+  inflating: linux_x64/doc/manual/doctrees/port_forwarding.doctree
 
   :
   略
   :
 
-  inflating: dist_ubuntu_x64/doc/manual/html/index.html
-  inflating: dist_ubuntu_x64/doc/manual/html/genindex.html
-  inflating: dist_ubuntu_x64/doc/ReadMe.txt
+  inflating: linux_x64/doc/manual/html/index.html
+  inflating: linux_x64/doc/manual/html/genindex.html
+  inflating: linux_x64/doc/ReadMe.txt
 
 
 5. Qt Brynhildrのアンインストール
@@ -129,7 +129,7 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
  以下のようにして展開したディレクトリと設定ファイルを含むディレクトリを手動で削除してください。 ::
 
-  funfun@ubuntu-PC-x64:~$ rm -rf ./dist_ubuntu_x64
+  funfun@ubuntu-PC-x64:~$ rm -rf ./linux_x64
   funfun@ubuntu-PC-x64:~$ rm -rf ~/.config/mcz-xoxo
 
 6. 起動/終了と設定ファイル
@@ -150,6 +150,6 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
        同じウィンドウにメニューバーを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
        Qt Brynhildrを起動してください。Qt Brynhildr実行時だけ変えたい場合は例えば
 
-       env UBUNTU_MENUPROXY=0 ./dist_ubuntu_x64/bin/qtbrynhildr
+       env UBUNTU_MENUPROXY=0 ./linux_x64/bin/qtbrynhildr
 
        という感じです。

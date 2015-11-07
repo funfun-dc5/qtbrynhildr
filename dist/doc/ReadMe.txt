@@ -38,6 +38,8 @@
  [対応OS]
 ==============================
 
+[Windows版]
+
  Windows XP    (64bit/32bit)
  Windows Vista (64bit/32bit)
  Windows 7     (64bit/32bit)
@@ -45,7 +47,12 @@
  Windows 8.1   (64bit/32bit)
  Windows 10    (64bit/32bit)
 
+[Linux版]
+
  Ubuntu 14.04 LTS以降 (x64/x86)
+ CentOS 7      (x64)
+
+[Mac版]
 
  Mac OS X 10.10(Yosemite)以降
 
@@ -53,11 +60,12 @@
       現在確認済みの環境は
 
       Windows XP Professional (32bit)
-      Windows 7 Home Premium (64bit)
-      Windows 8.1 Pro update (64bit)
-      Windows 10 Pro (64bit/32bit)
-      Ubuntu 14.04 LTS (x64/x86)
-      Ubuntu 15.04 (x64)
+      Windows 7 Home Premium  (64bit)
+      Windows 8.1 Pro update  (64bit)
+      Windows 10 Pro          (64bit/32bit)
+      Ubuntu 14.04 LTS        (x64/x86)
+      Ubuntu 15.04            (x64)
+      CentOS 7                (x64)
       Mac OS X 10.10(Yosemite)/10.11(El Capitan)
 
       のみです。
@@ -78,7 +86,7 @@
  iOS     : ビルド確認中
 
 ----------------------------------------------------------------------
-1-1. インストール (Windows)
+1-1. インストール (Windows版)
 ----------------------------------------------------------------------
 ==============================
 [インストール]
@@ -95,7 +103,7 @@
  インストール/作成されたすべてのファイルが削除されます。レジストリは使用しません。
 
 ----------------------------------------------------------------------
-1-2. インストール (Ubuntu 14.04 LTS x64/x86)
+1-2. インストール (Linux版)
 ----------------------------------------------------------------------
 ==============================
 [インストール]
@@ -125,21 +133,23 @@
 
  例)
 
-  chmod 500 ./qtbrynhildr-ubuntu_x64-v100.run
-  ./qtbrynhildr-ubuntu_x64-v100.run
+  chmod 500 ./qtbrynhildr-linux_x64-v100.run
+  ./qtbrynhildr-linux_x64-v100.run
 
  (3) 起動確認します。
 
  [64bit]
- ./dist_ubuntu_x64/bin/qtbrynhildr
+ ./linux_x64/bin/qtbrynhildr
 
  [32bit]
- ./dist_ubuntu_x86/bin/qtbrynhildr
+ ./linux_x86/bin/qtbrynhildr
 
  (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
      ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
 
   例えばlibglu1-mesaなどが必要かもしれません。以下のようにインストールしてください。
+
+  [Ubuntuの場合]
 
   sudo apt-get install libglu1-mesa
 
@@ -152,7 +162,7 @@
 
  (1) 以下を削除してください。
 
-  ~/.config/mcz-xoxoとdist_ubuntu_x64/dist_ubuntu_x86以下
+  ~/.config/mcz-xoxoとlinux_x64/linux_x86以下
 
  (2) 気になる人はインストールした以下のパッケージもアンインストールしてください。
 
@@ -165,7 +175,7 @@
      アンインストールが実行できます。
 
 ----------------------------------------------------------------------
-1-3. インストール (Mac OS X)
+1-3. インストール (Mac版)
 ----------------------------------------------------------------------
 ==============================
 [インストール]
@@ -180,7 +190,7 @@
 /Applications/QtBrynhildr.app を削除してください。
 
 ----------------------------------------------------------------------
-1-4. インストール (FreeBSD)
+1-4. インストール (FreeBSD版)
 ----------------------------------------------------------------------
 ==============================
 [インストール]
@@ -203,10 +213,10 @@
  (3) 起動確認します。
 
  [64bit]
- ./dist_freebsd_x64/bin/qtbrynhildr
+ ./freebsd_x64/bin/qtbrynhildr
 
  [32bit]
- ./dist_freebsd_x86/bin/qtbrynhildr
+ ./freebsd_x86/bin/qtbrynhildr
 
 ==============================
 [アンインストール]
@@ -214,7 +224,7 @@
 
  (1) 以下を削除してください。
 
-  ~/.config/mcz-xoxoとdist_freebsd_x64以下
+  ~/.config/mcz-xoxoとfreebsd_x64/freebsd_x86以下
 
  (2) 気になる人はインストールした以下のパッケージもアンインストールしてください。
 
@@ -260,8 +270,7 @@
  サーバへの接続
 ==============================
 
- (1) Windowsの場合はデスクトップのショートカットをダブルクリックしてQt Brynhildrを
-     起動してください。Ubuntuの場合は端末からbin/qtbrynhildrを起動してください。
+ (1) Qt Brynhildrを起動します。
 
  (2)「ファイル」メニューから「接続」を選んで、「サーバに接続」ダイアログを
      表示してください。
@@ -476,12 +485,12 @@
 アプリケーション用の設定は終了時に保存され、次回起動時に読み込まれます。
 保存場所はプラットフォームによって異なります。
 
-[Windows]
+[Windows版]
 ユーザフォルダの以下のファイルに保存されます。
 
 C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 
-[Ubuntu/Mac OS X]
+[Linux/Mac版]
 ホームディレクトリの以下のファイルに保存されます。
 
 ~/.config/mcz-xoxo/Qt Brynhildr.ini
@@ -642,7 +651,7 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
  なし
 
 ----------------------------------------------------------------------
-8-3. Ubuntu版のみの制限
+8-3. Linux版のみの制限
 ----------------------------------------------------------------------
 
  (1) 端末に以下のメッセージが表示されることがあります。
@@ -690,11 +699,11 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
  [1] OS名
 
- [2] 64bit/32bit [Windows/Ubuntu版]
+ [2] 64bit/32bit
 
- [3] サービスパックの適用(ServicePack/update) [Windows版のみ]
+ [3] サービスパックの適用(ServicePack/update)の有無 [Windows版のみ]
 
- [4] カーネルのバージョン [Ubuntu版のみ]
+ [4] カーネルのバージョン [Linux版のみ]
 
  [5] 接続形態 (LAN/WAN)
 
@@ -742,7 +751,7 @@ Ver.1.2.0 : [新規機能]
              ・ソースコードの配置構成整理
              ・マニュアル修正 (FAQ追加)
              ・-serverオプションにホストタイプ指定を追加
-             ・Ubuntu版以外はQt5.5.1でビルドするように変更 (ダイナミックリンク版に移行)
+             ・Linux版以外はQt5.5.1でビルドするように変更 (ダイナミックリンク版に移行)
 
             [不具合修正]
              ・UACの制御が入った時に起こる通信切断に対応していなかった不具合修正

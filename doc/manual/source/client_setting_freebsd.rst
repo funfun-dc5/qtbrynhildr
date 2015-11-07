@@ -48,7 +48,7 @@
 
  以下のようにして展開したディレクトリと設定ファイルを含むディレクトリを手動で削除してください。 ::
 
-  funfun@freebsd-PC-x64:~$ rm -rf ./dist_freebsd_x64
+  funfun@freebsd-PC-x64:~$ rm -rf ./freebsd_x64
   funfun@freebsd-PC-x64:~$ rm -rf ~/.config/mcz-xoxo
 
 6. 起動/終了と設定ファイル

@@ -18,7 +18,7 @@ Contents:
    environment
    server_setting
    client_setting_windows
-   client_setting_ubuntu
+   client_setting_linux
    client_setting_macosx
    client_setting_freebsd
    use_qtbrynhildr

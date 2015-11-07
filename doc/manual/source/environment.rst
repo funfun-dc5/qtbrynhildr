@@ -22,14 +22,14 @@
 
  .. [#] すべてのエディションで確認したわけではありません。
 
-(2) Ubuntu版
+(2) Linux版
 ^^^^^^^^^^^^^
-  * Ubuntu 14.04 LTS (x64/x86)
-  * Ubuntu 15.04 (x64)
+  * Ubuntu 14.04 LTS (x64/x86)以降
+  * CentOS 7 (x64)
 
-(3) Mac OS X版
-^^^^^^^^^^^^^^
-  * Mac OS X 10.10 (Yosemite)/ 10.11 (El Capitan)
+(3) Mac版
+^^^^^^^^^^
+  * Mac OS X 10.10 (Yosemite)以降
 
 (4) FreeBSD版
 ^^^^^^^^^^^^^

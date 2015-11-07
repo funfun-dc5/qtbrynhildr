@@ -16,7 +16,7 @@
 
  なし
 
-3. Ubuntu版のみの制限
+3. Linnux版のみの制限
 ---------------------
 
  1. 端末に以下のメッセージが表示されることがあります。
@@ -59,11 +59,11 @@
 
   [1] OS名
 
-  [2] 32bit/64bit [Windows/Ubuntu版]
+  [2] 32bit/64bit [Windows/Linux版]
 
   [3] サービスパックの適用(ServicePack/update) [Windows版のみ]
 
-  [4] カーネルのバージョン [Ubuntu版のみ]
+  [4] カーネルのバージョン [Linux版のみ]
 
   [5] 接続形態 (LAN/WAN)
 

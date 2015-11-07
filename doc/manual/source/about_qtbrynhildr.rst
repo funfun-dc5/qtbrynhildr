@@ -36,7 +36,7 @@ Qt Brynhildrとは
  .. image:: images/qtbrynhildr_on_windows.jpg
 
            
- Ubuntu版 Qt Brynhildr
+Linux(Ubuntu)版 Qt Brynhildr
 
  .. image:: images/qtbrynhildr_on_ubuntu.png
 

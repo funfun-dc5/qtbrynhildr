@@ -42,14 +42,14 @@ case $UNAME in
 		UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
-				DISTDIR="../dist/linux/dist_ubuntu_x64"
-				PKGNAME="ubuntu_x64"
-				echo "Installing for Ubuntu x64..."
+				DISTDIR="../dist/linux/linux_x64"
+				PKGNAME="linux_x64"
+				echo "Installing for Linux x64..."
 				;;
 			i686)
-				DISTDIR="../dist/linux/dist_ubuntu_x86"
-				PKGNAME="ubuntu_x86"
-				echo "Installing for Ubuntu x86..."
+				DISTDIR="../dist/linux/linux_x86"
+				PKGNAME="linux_x86"
+				echo "Installing for Linux x86..."
 				;;
 		esac
 		;;
@@ -57,12 +57,12 @@ case $UNAME in
 		UNAMEM=`uname -m`
 		case $UNAMEM in
 			amd64)
-				DISTDIR="../dist/linux/dist_freebsd_x64"
+				DISTDIR="../dist/linux/freebsd_x64"
 				PKGNAME="freebsd_x64"
 				echo "Installing for FreeBSD x64..."
 				;;
 			i386)
-				DISTDIR="../dist/linux/dist_freebsd_x86"
+				DISTDIR="../dist/linux/freebsd_x86"
 				PKGNAME="freebsd_x86"
 				echo "Installing for FreeBSD x86..."
 				;;
@@ -245,8 +245,8 @@ case $UNAME in
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
-		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
-		(cd ../dist/linux; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
+		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
+		(cd ../dist/linux; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
 		echo "install : Done."
 		;;
 	FreeBSD)
@@ -276,8 +276,8 @@ case $UNAME in
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
-		(cd ../dist/freebsd; tar cvfJ ${PKGSTRING}.tar.xz dist_${PKGNAME})
-#		(cd ../dist/freebsd; zip -r -9 ${PKGSTRING}.zip dist_${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}.zip)
+		(cd ../dist/freebsd; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
+#		(cd ../dist/freebsd; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
 		echo "install : Done."
 		;;
 	Darwin)

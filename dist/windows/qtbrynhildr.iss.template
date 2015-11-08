@@ -26,7 +26,7 @@ TouchTime=03:15
 VersionInfoVersion={#AppVer}
 VersionInfoDescription=Qt Brynhildrをセットアップするプログラム
 AppCopyright=Copyright(C) 2015 FunFun @ mcz-xoxo, All rights reserved.
-SetupIconFile=..\..\..\src\images\qtbrynhildr48.ico
+SetupIconFile=..\..\src\images\qtbrynhildr48.ico
 ;ウィザードページに表示されるグラフィック（*.bmp: 164 x 314）
 ;WizardImageFile=bmp\installer_pic.bmp
 ;ウィザードページに表示されるグラフィックが拡大されない
@@ -46,12 +46,12 @@ ShowLanguageDialog=yes
 ;----------------------------------------------------------------------
 ; インストール前に
 ;----------------------------------------------------------------------
-;;InfoBeforeFile="..\..\doc\NEED.txt"
+;;InfoBeforeFile="..\doc\NEED.txt"
 
 ;----------------------------------------------------------------------
 ; ライセンス
 ;----------------------------------------------------------------------
-LicenseFile="..\..\doc\LICENSE.txt"
+LicenseFile="..\doc\LICENSE.txt"
 
 ;----------------------------------------------------------------------
 ;「プログラムの追加と削除」ダイアログ情報
@@ -89,23 +89,9 @@ english.ManualShortcut=First step of Qt Brynhildr(Ver.0.9.3)
 ; ランタイム
 ;; Source: "vcredist\vcredist_x86.exe"; DestDir: "{app}\vcredist"; Flags: ignoreversion touch
 ; LICENSE.txt
-Source: "..\..\doc\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion touch
+Source: "..\doc\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion touch
 ; ReadMe.txt
-Source: "..\..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
-; executable files
-;; Source: "bin\qtbrynhildr.exe"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\libgcc_s_dw2-1.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\libstdc++-6.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\libwinpthread-1.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\icudt53.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\icuin53.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\icuuc53.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\Qt5Core.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\Qt5Gui.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\Qt5Multimedia.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\Qt5Network.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\Qt5Widgets.dll"; DestDir: "{app}\bin"; Flags: ignoreversion touch
-;; Source: "bin\platforms\qwindows.dll"; DestDir: "{app}\bin\platforms"; Flags: ignoreversion touch
+Source: "..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
 
 [Registry]
 ;（アンインストール時に）動作設定を削除

@@ -36,7 +36,7 @@ DATE=`date +%Y%m%d`
 # check environment
 case $UNAME in
 	CYGWIN*)
-		DISTDIR="../dist/windows/dist_win"
+		DISTDIR="../dist/windows"
 		;;
 	Linux)
 		UNAMEM=`uname -m`
@@ -209,12 +209,12 @@ case $UNAME in
 		# create .iss
 		echo "create .iss file"
 		pushd ../dist
-		cd windows/dist_win
-		find bin -type f -print | sed -f ../../script/iss.sed | awk -f ../../script/iss_bin.awk > tmp_bin.iss
-		cd ../..
+		cd windows
+		find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss_bin.awk > tmp_bin.iss
+		cd ..
 		find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss.awk > tmp.iss
-		cat windows/dist_win/${ISS}.template windows/dist_win/tmp_bin.iss tmp.iss > windows/dist_win/${ISS}
-		rm -f windows/dist_win/tmp_bin.iss tmp.iss
+		cat windows/${ISS}.template windows/tmp_bin.iss tmp.iss > windows/${ISS}
+		rm -f windows/tmp_bin.iss tmp.iss
 		popd
 		echo "install : Done."
 		;;

@@ -7,5 +7,5 @@ BEGIN {
 {
   match($1, /.*\\/)
   DIR=substr($1, 1, RLENGTH-1)
-  printf("%s..\\..\\%s%s%s%s\n", PART1, $1, PART2, DIR, PART3);
+  printf("%s..\\%s%s%s%s\n", PART1, $1, PART2, DIR, PART3);
 }

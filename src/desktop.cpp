@@ -119,6 +119,12 @@ Desktop::Desktop()
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
 #endif // defined(Q_OS_ANDROID)
+#elif defined(Q_OS_CYGWIN)
+  // Cygwin
+  correctWindowWidth = 2;
+  correctWindowHeight = 2;
+  heightOfMenuBarInHiding = -1;
+  heightOfStatusBarInHiding = 0;
 #elif defined(Q_OS_FREEBSD)
   // FreeBSD
   correctWindowWidth = 0;

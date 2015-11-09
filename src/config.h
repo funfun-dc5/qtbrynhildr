@@ -11,7 +11,7 @@ namespace qtbrynhildr {
 #if defined(Q_OS_WIN)
 // windows socket (WinSock)
 #define QTB_NET_WIN	1
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_CYGWIN)
 // unix socket
 #define QTB_NET_UNIX	1
 #else
@@ -21,7 +21,7 @@ namespace qtbrynhildr {
 // for device type
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #define QTB_DEV_TABLET 1
-#elif defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX)
+#elif defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_CYGWIN)
 #define QTB_DEV_DESKTOP 1
 #else
 #error "Not support Q_OS for QTB_DEV_*"

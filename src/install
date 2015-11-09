@@ -242,6 +242,7 @@ case $UNAME in
 		make install
 		popd
 		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
+		rm ${DISTDIR}/doc/manual/.gitkeep
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
@@ -273,6 +274,7 @@ case $UNAME in
 		make install
 		popd
 		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
+		rm ${DISTDIR}/doc/manual/.gitkeep
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"

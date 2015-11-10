@@ -11,7 +11,7 @@ namespace qtbrynhildr {
 #if defined(Q_OS_WIN)
 // windows socket (WinSock)
 #define QTB_NET_WIN	1
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_CYGWIN)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN)
 // unix socket
 #define QTB_NET_UNIX	1
 #else

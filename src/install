@@ -2,7 +2,7 @@
 UNAME=`uname`
 UNAMEM=`uname -m`
 
-source ./setup_qt5
+source ./setup_qt5 $1
 
 # check arg1
 if [ -n "$1" ] ; then
@@ -17,6 +17,8 @@ if [ -n "$1" ] ; then
 			   echo "Not exist: qtbrynhildr_plugin_import.cpp. Please check static build."
 			   exit 1;
 			fi
+			;;
+		cygwin)
 			;;
 		*)
 			echo "Unkown argument : $1"
@@ -36,7 +38,31 @@ DATE=`date +%Y%m%d`
 # check environment
 case $UNAME in
 	CYGWIN*)
-		DISTDIR="../dist/windows"
+		if [ -n "$1" ] ; then
+			case $1 in
+				cygwin)
+					UNAMEM=`uname -m`
+					case $UNAMEM in
+						x86_64)
+							DISTDIR="../dist/cygwin/cygwin_x64"
+							PKGNAME="cygwin_x64"
+							echo "Installing for Cygwin x64..."
+							;;
+						x86)
+							DISTDIR="../dist/cygwin/cygwin_x86"
+							PKGNAME="cygwin_x86"
+							echo "Installing for Cygwin x86..."
+							;;
+					esac
+					;;
+				clean)
+					# for Text
+					DISTDIR="../dist/windows"
+					;;
+			esac
+		else
+			DISTDIR="../dist/windows"
+		fi
 		;;
 	Linux)
 		UNAMEM=`uname -m`
@@ -79,7 +105,7 @@ case $UNAME in
 		esac
 		;;
 	*)
-		echo "install : Not support platform. $UNAME"
+		echo "$0 : Not support platform. $UNAME"
 		exit 1;
 		;;
 esac
@@ -87,6 +113,10 @@ esac
 # clean
 if [ "$1" = "clean" ] ; then
 	echo "Cleaning..."
+	if [ "${DISTDIR}" = "" ] ; then
+		echo "DISTDIR is empty!! Please check!"
+		exit 1;
+	fi
 	case $UNAME in
 		CYGWIN*)
 			# clean
@@ -103,12 +133,12 @@ if [ "$1" = "clean" ] ; then
 			\rm -rf ${DISTDIR}/*
 			;;
 		*)
-			echo "install : Not support platform."
+			echo "$0 : Not support platform."
 			exit 1;
 			;;
 	esac
 
-	echo "install : Done."
+	echo "$0 : Done."
 	exit 0;
 fi
 
@@ -149,12 +179,12 @@ if [ "$1" = "man" ] ; then
 			exit 0;
 			;;
 		*)
-			echo "install : Not support platform."
+			echo "$0 : Not support platform."
 			exit 1;
 			;;
 	esac
 
-	echo "install : Done."
+	echo "$0 : Done."
 	exit 0;
 fi
 
@@ -162,19 +192,18 @@ fi
 case $UNAME in
 	CYGWIN*)
 		# check
-		echo "Installing for windows..."
-		if [ ! -x release/${APP}.exe ] ; then
-			echo "NOT Found ${APP}.exe"
-			exit 1;
-		fi
-		VERSION=`release/${APP}.exe -vv`
-		# make package string
-		PKGSTRING="${APP}-windows-v${VERSION}-${DATE}.exe"
-		# for windows
-		# create directory
-		mkdir -p ${DISTDIR}/bin
-		# install files (DLL)
-		if [ "$1" != "static" ] ; then
+		if [ "$1" = "" ] ; then
+			echo "Installing for windows..."
+			if [ ! -x release/${APP}.exe ] ; then
+				echo "NOT Found ${APP}.exe"
+				exit 1;
+			fi
+			VERSION=`release/${APP}.exe -vv`
+			# make package string
+			PKGSTRING="${APP}-windows-v${VERSION}-${DATE}.exe"
+			# for windows
+			# create directory
+			mkdir -p ${DISTDIR}/bin
 			echo "copy DLL files..."
 			# for Qt DLL
 			mkdir -p ${DISTDIR}/bin/platforms
@@ -194,29 +223,58 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
+			# copy executable file
+			echo "copy executable file..."
+			${INSTALL} ${INSTALLFLAGS} release/${APP}.exe ${DISTDIR}/bin
+			# copy document file
+			#mkdir -p ${DISTDIR}/doc
+			#${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+			# copy manual file
+			pushd ../doc/manual
+			make html
+			make install
+			popd
+			# create .iss
+			echo "create .iss file"
+			pushd ../dist
+			cd windows
+			find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss_bin.awk > tmp_bin.iss
+			cd ..
+			find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss.awk > tmp.iss
+			cat windows/${ISS}.template windows/tmp_bin.iss tmp.iss > windows/${ISS}
+			rm -f windows/tmp_bin.iss tmp.iss
+			popd
 		fi
-		# copy executable file
-		echo "copy executable file..."
-		${INSTALL} ${INSTALLFLAGS} release/${APP}.exe ${DISTDIR}/bin
-		# copy document file
-		#mkdir -p ${DISTDIR}/doc
-		#${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
-		# copy manual file
-		pushd ../doc/manual
-		make html
-		make install
-		popd
-		# create .iss
-		echo "create .iss file"
-		pushd ../dist
-		cd windows
-		find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss_bin.awk > tmp_bin.iss
-		cd ..
-		find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss.awk > tmp.iss
-		cat windows/${ISS}.template windows/tmp_bin.iss tmp.iss > windows/${ISS}
-		rm -f windows/tmp_bin.iss tmp.iss
-		popd
-		echo "install : Done."
+		if [ "$1" = "cygwin" ] ; then
+			# check
+			echo "Installing for cygwin..."
+			if [ ! -x ./${APP} ] ; then
+				echo "NOT Found ${APP}"
+				exit 1;
+			fi
+			VERSION=`${APP} -vv`
+			# for cygwin
+			# create directory
+			mkdir -p ${DISTDIR}/bin
+			mkdir -p ${DISTDIR}/doc/manual
+			# copy executable file
+			echo "copy executable file..."
+			${INSTALL} ${INSTALLFLAGS} ${APP} ${DISTDIR}/bin
+			# copy document file
+			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
+			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+			# copy manual file
+			pushd ../doc/manual
+			make html
+			make install
+			popd
+			cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
+			rm ${DISTDIR}/doc/manual/.gitkeep
+			# make package string
+			#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
+			PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
+			(cd ../dist/cygwin; tar cvfj ${PKGSTRING}.tar.bz2 ${PKGNAME})
+		fi
 		;;
 	Linux)
 		# check
@@ -248,7 +306,6 @@ case $UNAME in
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
 		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
 		(cd ../dist/linux; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
-		echo "install : Done."
 		;;
 	FreeBSD)
 		# check
@@ -280,7 +337,6 @@ case $UNAME in
 		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
 		(cd ../dist/freebsd; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
 #		(cd ../dist/freebsd; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
-		echo "install : Done."
 		;;
 	Darwin)
 		echo "Installing for Darwin..."
@@ -303,9 +359,10 @@ case $UNAME in
 		mv ${APPNAME}.app ${APP}.app
 		# mv dist directory
 		mv ${APPNAME}.dmg ${DISTDIR}/${PKGSTRING}.dmg
-		echo "install : Done."
 		;;
 	*)
-		echo "install : Not support platform."
+		echo "$0 : Not support platform. $UNAME"
+		exit 1;
 		;;
 esac
+echo "$0 : Done."

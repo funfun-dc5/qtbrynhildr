@@ -3,11 +3,18 @@ APP="qtbrynhildr"
 
 case $UNAME in
 	CYGWIN*)
-		mingw32-make clean
-		# for static build
-		rm -f ${APP}_plugin_import.cpp
-		# delete executable file
-		rm -f release/${APP}.exe debug/${APP}.exe
+		if [ "$1" = "" ] ; then
+			mingw32-make clean
+			# for static build
+			rm -f ${APP}_plugin_import.cpp
+			# delete executable file
+			rm -f release/${APP}.exe debug/${APP}.exe
+		fi
+		if [ "$1" = "cygwin" ] ; then
+			make clean
+			# delete executable file
+			rm -f ${APP}.exe
+		fi
 		# delete manual
 		pushd ../doc/manual
 		make clean
@@ -15,7 +22,6 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "claen : Done."
 		;;
 	Linux)
 		make clean
@@ -28,7 +34,6 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "claen : Done."
 		;;
 	FreeBSD)
 		make clean
@@ -41,7 +46,6 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "claen : Done."
 		;;
 	Darwin)
 		make clean
@@ -54,11 +58,13 @@ case $UNAME in
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
 		./install clean
-		echo "claen : Done."
 		;;
 	*)
 		echo "clean : Not support platform. $UNAME"
+		exit 1;
 		;;
 esac
+
+echo "claen : Done."
 
 rm -f ${APP}.log

@@ -2,14 +2,18 @@
 #
 UNAME=`uname`
 export UNAMEM=`uname -m`
+QMAKE=qmake
 case $UNAME in
 	CYGWIN*)
-		QTROOT="/c/Tools/develop/Qt/Qt5.5.1/5.5/mingw492_32"
 		if [ -n "$1" ] ; then
 			case $1 in
 				static)
 					QTROOT="/d/QtInstall/src/qt5.5.1static/qtbase"
 					echo "set up for Static link."
+					;;
+				cygwin)
+					QTROOT="/usr"
+					QMAKE="qmake-qt5"
 					;;
 				clean)
 					# ignore
@@ -20,7 +24,7 @@ case $UNAME in
 					;;
 			esac
 		else
-			echo "set up for Dynamic link."
+			QTROOT="/c/Tools/develop/Qt/Qt5.5.1/5.5/mingw492_32"
 		fi
 	;;
 	Linux)
@@ -34,7 +38,7 @@ case $UNAME in
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
 				;;
 			*)
-				echo "setup_qt5 : Not Support $UNAMEM"
+				echo "$0 : Not Support $UNAMEM"
 				return;;
 		esac
 		;;
@@ -47,7 +51,7 @@ case $UNAME in
 				QTROOT=/usr/local/lib/qt5
 				;;
 			*)
-				echo "setup_qt5 : Not Support $UNAMEM"
+				echo "$0 : Not Support $UNAMEM"
 				return;;
 		esac
 		;;
@@ -57,11 +61,11 @@ case $UNAME in
 				QTROOT=/opt/Qt5.5.1/5.5/clang_64
 				;;
 			*)
-				echo "setup_qt5 : Not Support $UNAMEM"
+				echo "$0 : Not Support $UNAMEM"
 				return;;
 		esac
 		;;
 	*)
-		echo "setup_qt5 : Not support platform."
+		echo "$0 : Not support platform."
 		;;
 esac

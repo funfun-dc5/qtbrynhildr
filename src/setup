@@ -5,9 +5,9 @@ PRO="qtbrynhildr.pro"
 
 source ./setup_qt5 $1
 
-./clean
+./clean $1
 rm -f Makefile Makefile.Release Makefile.Debug
-${QTROOT}/bin/qmake ${PRO}
+${QTROOT}/bin/${QMAKE} ${PRO}
 
 case $UNAME in
 	CYGWIN*)
@@ -18,18 +18,16 @@ case $UNAME in
 		if [ -e Makefile.Debug ]; then
 			chmod 644 Makefile.Debug
 		fi
-		echo "setup : Done."
 		;;
 	Linux)
-		echo "setup : Done."
 		;;
 	FreeBSD)
-		echo "setup : Done."
 		;;
 	Darwin)
-		echo "setup : Done."
 		;;
 	*)
-		echo "setup : Not support platform."
+		echo "$0 : Not support platform."
+		exit 1;
 		;;
 esac
+echo "$0 : Done."

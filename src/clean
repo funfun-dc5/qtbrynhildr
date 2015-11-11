@@ -5,8 +5,6 @@ case $UNAME in
 	CYGWIN*)
 		if [ "$1" = "" ] ; then
 			mingw32-make clean
-			# for static build
-			rm -f ${APP}_plugin_import.cpp
 			# delete executable file
 			rm -f release/${APP}.exe debug/${APP}.exe
 		fi

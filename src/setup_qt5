@@ -7,10 +7,6 @@ case $UNAME in
 	CYGWIN*)
 		if [ -n "$1" ] ; then
 			case $1 in
-				static)
-					QTROOT="/d/QtInstall/src/qt5.5.1static/qtbase"
-					echo "set up for Static link."
-					;;
 				cygwin)
 					QTROOT="/usr"
 					QMAKE="qmake-qt5"

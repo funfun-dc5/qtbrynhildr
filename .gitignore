@@ -16,7 +16,6 @@ html/
 #-----------------------
 # ignore source files
 #-----------------------
-src/qtbrynhildr_plugin_import.cpp
 src/ui_*.h
 src/moc_*.cpp
 src/qrc_*.cpp

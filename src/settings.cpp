@@ -95,6 +95,10 @@ Settings::Settings(const char *iniFileName)
 
   setOnShowPassword(QTB_ONSHOWPASSWORD_DEFAULT);
 
+#if QTB_SUPPORT_PUBLIC_MODE6
+  setOnDisableClipboard(QTB_ONDISABLECLIPBOARD_DEFAULT);
+#endif // QTB_SUPPORT_PUBLIC_MODE6
+
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
 
@@ -243,6 +247,11 @@ void Settings::readSettings()
   // load onShowPassword
   setOnShowPassword(settings->value(QTB_ONSHOWPASSWORD,
 									QTB_ONSHOWPASSWORD_DEFAULT).toBool());
+#if QTB_SUPPORT_PUBLIC_MODE6
+  // load onDisableClipboard
+  setOnDisableClipboard(settings->value(QTB_ONDISABLECLIPBOARD,
+										QTB_ONDISABLECLIPBOARD_DEFAULT).toBool());
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
@@ -369,6 +378,11 @@ void Settings::writeSettings()
   // save onShowPassword
   settings->setValue(QTB_ONSHOWPASSWORD, onShowPassword);
 
+#if QTB_SUPPORT_PUBLIC_MODE6
+  // save onDisableClipboard
+  settings->setValue(QTB_ONDISABLECLIPBOARD, onDisableClipboard);
+#endif // QTB_SUPPORT_PUBLIC_MODE6
+
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
 
@@ -433,6 +447,9 @@ void Settings::printSettings() const
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
   qDebug() << "ShowPassword            : " << onShowPassword;
+#if QTB_SUPPORT_PUBLIC_MODE6
+  qDebug() << "DisableClipboard        : " << onDisableClipboard;
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 
   qDebug() << "------------------------------------------";
   qDebug() << "Graphics Buffer Size (bytes) : " << graphicsBufferSize;

@@ -180,12 +180,12 @@ typedef int SCALING_TYPE;
 #define QTB_ONCONFIRMATEXIT_DEFAULT		true
 
 // for onSaveSettingsAtExit
-#define QTB_ONSAVESETTINGSATEXIT				"onSaveSettingsAtExit"
-#define QTB_ONSAVESETTINGSATEXIT_DEFAULT		false
+#define QTB_ONSAVESETTINGSATEXIT			"onSaveSettingsAtExit"
+#define QTB_ONSAVESETTINGSATEXIT_DEFAULT	false
 
 // for onExitAfterRelpay
-#define QTB_ONEXITAFTERREPLAY			"onExitAfterReplay"
-#define QTB_ONEXITAFTERREPLAY_DEFAULT	false
+#define QTB_ONEXITAFTERREPLAY				"onExitAfterReplay"
+#define QTB_ONEXITAFTERREPLAY_DEFAULT		false
 
 // for onStaysOnTop
 #define QTB_ONSTAYSONTOP					"onStaysOnTop"
@@ -214,6 +214,14 @@ typedef int SCALING_TYPE;
 // for onShowPassword
 #define QTB_ONSHOWPASSWORD					"onShowPassword"
 #define QTB_ONSHOWPASSWORD_DEFAULT			false
+
+#if QTB_SUPPORT_PUBLIC_MODE6
+
+// for onDisableClipboard
+#define QTB_ONDISABLECLIPBOARD				"onDisableClipboard"
+#define QTB_ONDISABLECLIPBOARD_DEFAULT		false
+
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE			"graphicsBufferSize"
@@ -977,6 +985,22 @@ public:
 	this->onShowPassword = onShowPassword;
   }
 
+#if QTB_SUPPORT_PUBLIC_MODE6
+
+  // get disable clilpboard flag
+  bool getOnDisableClipboard() const
+  {
+	return onDisableClipboard;
+  }
+
+  // set disable clipboard flag
+  void setOnDisableClipboard(bool onDisableClipboard)
+  {
+	this->onDisableClipboard = onDisableClipboard;
+  }
+
+#endif // QTB_SUPPORT_PUBLIC_MODE6
+
   // get on show Software Keyboard flag
   bool getOnShowSoftwareKeyboard() const
   {
@@ -1227,6 +1251,13 @@ private:
 
   // show password
   volatile bool onShowPassword;
+
+#if QTB_SUPPORT_PUBLIC_MODE6
+
+  // disable clip board
+  volatile bool onDisableClipboard;
+
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 
   // buffer
   volatile int graphicsBufferSize;

@@ -78,7 +78,7 @@ const bool QTB_IN_TESTING				= false;
 // cryptogram
 #define QTB_CRYPTOGRAM				0
 
-// public mode 6 supprt
+// public mode 6 support
 #define QTB_SUPPORT_PUBLIC_MODE6	1
 
 // debug

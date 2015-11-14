@@ -47,7 +47,7 @@
  Windows 8.1   (64bit/32bit)
  Windows 10    (64bit/32bit)
 
-[Linux版]
+[Linux(x64/x86)版]
 
  Ubuntu 14.04 LTS以降 (x64/x86)
  CentOS 7      (x64)

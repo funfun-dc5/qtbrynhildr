@@ -88,9 +88,9 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONCONTROL			"onControl"
 #define QTB_ONCONTROL_DEFAULT	true
 
-// for onHoldControl
-#define QTB_ONHOLDCONTROL			"onHoldControl"
-#define QTB_ONHOLDCONTROL_DEFAULT	false
+// for onHoldMouseControl
+#define QTB_ONHOLDMOUSECONTROL			"onHoldMouseControl"
+#define QTB_ONHOLDMOUSECONTROL_DEFAULT	false
 
 // for onControlOffWithGraphicsOff
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF			"onControlOffWithGraphicsOff"
@@ -458,16 +458,16 @@ public:
 	return true;
   }
 
-  // get hold control flag
-  bool getOnHoldControl() const
+  // get hold mouse control flag
+  bool getOnHoldMouseControl() const
   {
-	return onHoldControl;
+	return onHoldMouseControl;
   }
 
-  // set hold control flag
-  bool setOnHoldControl(bool onHoldControl)
+  // set hold mouse control flag
+  bool setOnHoldMouseControl(bool onHoldMouseControl)
   {
-	this->onHoldControl = onHoldControl;
+	this->onHoldMouseControl = onHoldMouseControl;
 	return true;
   }
 
@@ -1137,7 +1137,7 @@ private:
 
   // Control
   volatile bool onControl;
-  volatile bool onHoldControl;
+  volatile bool onHoldMouseControl;
   volatile bool onControlOffWithGraphicsOff;
 
   // Graphics

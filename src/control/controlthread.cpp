@@ -114,7 +114,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	// mouse position
 	MOUSE_POS pos = mouseBuffer->getMousePos();
 	// if mouse cursor is moved.
-	if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldControl()){
+	if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	  // set information
 	  com_data->mouse_move = MOUSE_MOVE_ON;
 	  if (QTB_DESKTOP_IMAGE_SCALING){

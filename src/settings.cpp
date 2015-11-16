@@ -55,7 +55,7 @@ Settings::Settings(const char *iniFileName)
   setPortNo(QTB_PORTNO_DEFAULT);
   setPassword(QTB_PASSWORD_DEFAULT);
   setOnControl(QTB_ONCONTROL_DEFAULT);
-  setOnHoldControl(QTB_ONHOLDCONTROL_DEFAULT);
+  setOnHoldMouseControl(QTB_ONHOLDMOUSECONTROL_DEFAULT);
   setOnControlOffWithGraphicsOff(QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT);
   setOnGraphics(QTB_ONGRAPHICS_DEFAULT);
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
@@ -145,9 +145,9 @@ void Settings::readSettings()
   setOnControl(settings->value(QTB_ONCONTROL,
 							   QTB_ONCONTROL_DEFAULT).toBool());
 
-  // load onHoldControl
-  setOnHoldControl(settings->value(QTB_ONHOLDCONTROL,
-								   QTB_ONHOLDCONTROL_DEFAULT).toBool());
+  // load onHoldMouseControl
+  setOnHoldMouseControl(settings->value(QTB_ONHOLDMOUSECONTROL,
+										QTB_ONHOLDMOUSECONTROL_DEFAULT).toBool());
 
   // load onControlOffWithGraphicsOff
   setOnControlOffWithGraphicsOff(settings->value(QTB_ONCONTROLOFFWITHGRAPHICSOFF,
@@ -294,8 +294,8 @@ void Settings::writeSettings()
   // save onControl
   settings->setValue(QTB_ONCONTROL, onControl);
 
-  // save onHoldControl
-  settings->setValue(QTB_ONHOLDCONTROL, onHoldControl);
+  // save onHoldMouseControl
+  settings->setValue(QTB_ONHOLDMOUSECONTROL, onHoldMouseControl);
 
   // save onControlOffWithGraphicsOff
   settings->setValue(QTB_ONCONTROLOFFWITHGRAPHICSOFF, onControlOffWithGraphicsOff);
@@ -404,7 +404,7 @@ void Settings::printSettings() const
   qDebug() << "Port No       : " << portNo;
   qDebug() << "Password      : " << password;
   qDebug() << "Control       : " << onControl;
-  qDebug() << "  HoldControl : " << onHoldControl;
+  qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
   qDebug() << "Graphics      : " << onGraphics;
   qDebug() << "    QUALITY   : " << getVideoQualityByString();

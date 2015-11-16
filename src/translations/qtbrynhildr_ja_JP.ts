@@ -477,7 +477,7 @@
         <location filename="../qtbrynhildr.cpp" line="896"/>
         <source>maximum FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>maximum FPS</translation>
+        <translation>最大 FPS</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="900"/>

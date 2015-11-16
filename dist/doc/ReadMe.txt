@@ -63,6 +63,7 @@
       Windows 7 Home Premium  (64bit)
       Windows 8.1 Pro update  (64bit)
       Windows 10 Pro          (64bit/32bit)
+      Windows 10 Home         (64bit)
       Ubuntu 14.04 LTS        (x64/x86)
       Ubuntu 15.04            (x64)
       CentOS 7                (x64)
@@ -487,7 +488,7 @@
 
 C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 
-[Linux/Mac版]
+[Linux/Mac/FreeBSD版]
 ホームディレクトリの以下のファイルに保存されます。
 
 ~/.config/mcz-xoxo/Qt Brynhildr.ini

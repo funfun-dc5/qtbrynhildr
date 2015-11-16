@@ -111,7 +111,11 @@ typedef int KEYBOARD_TYPE;
 // for frameRate
 #define QTB_FRAMERATE			"frameRate"
 #define FRAMERATE_MAXIMUM		0
+#if defined(QTB_DEV_TABLET)
+#define QTB_FRAMERATE_DEFAULT	5
+#else // defined(QTB_DEV_TABLET)
 #define QTB_FRAMERATE_DEFAULT	30
+#endif // defined(QTB_DEV_TABLET)
 
 // for onSound
 #define QTB_ONSOUND				"onSound"

@@ -614,14 +614,14 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="1023"/>
         <location filename="../qtbrynhildr.cpp" line="1027"/>
-        <source>Start Recodrding</source>
+        <source>Start Recording</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>記録開始</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1031"/>
         <location filename="../qtbrynhildr.cpp" line="1033"/>
-        <source>Stop Recodrding</source>
+        <source>Stop Recording</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>記録終了</translation>
     </message>

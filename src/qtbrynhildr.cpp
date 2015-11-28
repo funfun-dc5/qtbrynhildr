@@ -1066,17 +1066,17 @@ void QtBrynhildr::createActions()
 
 #if QTB_RECORDER
   // start recording control
-  startRecordingControl_Action = new QAction(tr("Start Recodrding"), this);
+  startRecordingControl_Action = new QAction(tr("Start Recording"), this);
   startRecordingControl_Action->setEnabled(false);
   startRecordingControl_Action->setCheckable(true);
   startRecordingControl_Action->setChecked(settings->getOnRecordingControl());
-  startRecordingControl_Action->setStatusTip(tr("Start Recodrding"));
+  startRecordingControl_Action->setStatusTip(tr("Start Recording"));
   connect(startRecordingControl_Action, SIGNAL(triggered()), this, SLOT(startRecordingControl()));
 
   // stop recording control
-  stopRecordingControl_Action = new QAction(tr("Stop Recodrding"), this);
+  stopRecordingControl_Action = new QAction(tr("Stop Recording"), this);
   stopRecordingControl_Action->setEnabled(false);
-  stopRecordingControl_Action->setStatusTip(tr("Stop Recodrding"));
+  stopRecordingControl_Action->setStatusTip(tr("Stop Recording"));
   connect(stopRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopRecordingControl()));
 
   // replay recorded control

@@ -184,12 +184,12 @@ typedef int SCALING_TYPE;
 #define QTB_ONCONFIRMATEXIT_DEFAULT		true
 
 // for onSaveSettingsAtExit
-#define QTB_ONSAVESETTINGSATEXIT				"onSaveSettingsAtExit"
-#define QTB_ONSAVESETTINGSATEXIT_DEFAULT		false
+#define QTB_ONSAVESETTINGSATEXIT			"onSaveSettingsAtExit"
+#define QTB_ONSAVESETTINGSATEXIT_DEFAULT	false
 
 // for onExitAfterRelpay
-#define QTB_ONEXITAFTERREPLAY			"onExitAfterReplay"
-#define QTB_ONEXITAFTERREPLAY_DEFAULT	false
+#define QTB_ONEXITAFTERREPLAY				"onExitAfterReplay"
+#define QTB_ONEXITAFTERREPLAY_DEFAULT		false
 
 // for onStaysOnTop
 #define QTB_ONSTAYSONTOP					"onStaysOnTop"
@@ -220,12 +220,12 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWPASSWORD_DEFAULT			false
 
 // for graphicsBufferSize
-#define QTB_GRAPHICSBUFFERSIZE			"graphicsBufferSize"
-#define QTB_GRAPHICSBUFFERSIZE_DEFAULT	(1024 * 1024)
+#define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"
+#define QTB_GRAPHICSBUFFERSIZE_DEFAULT		(1024 * 1024)
 
 // for soundBufferSize
-#define QTB_SOUNDBUFFERSIZE				"soundBufferSize"
-#define QTB_SOUNDBUFFERSIZE_DEFAULT		(1024 * 1024)
+#define QTB_SOUNDBUFFERSIZE					"soundBufferSize"
+#define QTB_SOUNDBUFFERSIZE_DEFAULT			(1024 * 1024)
 
 // for doubleClickThreshold
 #define QTB_DOUBLECLICKTHRESHOLD			"doubleClickThreshold"

@@ -1160,6 +1160,7 @@ void QtBrynhildr::createMenus()
 	displayMenu->addAction(staysOnTop_Action);
   }
 #endif // defined(QTB_DEV_DESKTOP)
+
   // for full screen
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){

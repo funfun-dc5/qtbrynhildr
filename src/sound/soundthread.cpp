@@ -123,6 +123,11 @@ PROCESS_RESULT SoundThread::processForHeader()
 	return PROCESS_NETWORK_ERROR;
   }
 
+  // print received header
+  if (outputLog){
+	printHeader();
+  }
+
   // Nothing to do for sound
   return PROCESS_SUCCEEDED;
 }

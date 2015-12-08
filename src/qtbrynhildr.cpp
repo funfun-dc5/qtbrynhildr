@@ -1126,6 +1126,16 @@ void QtBrynhildr::createActions()
   sendKey4_Action->setStatusTip(tr("Send key: Windows"));
   connect(sendKey4_Action, SIGNAL(triggered()), this, SLOT(sendKey_WINDOWS()));
 
+  sendKey5_Action = new QAction(tr("PrintScreen"), this);
+  sendKey5_Action->setEnabled(false);
+  sendKey5_Action->setStatusTip(tr("Send key: PrintScreen"));
+  connect(sendKey5_Action, SIGNAL(triggered()), this, SLOT(sendKey_PrintScreen()));
+
+  sendKey6_Action = new QAction(tr("Alt + PrintScreen"), this);
+  sendKey6_Action->setEnabled(false);
+  sendKey6_Action->setStatusTip(tr("Send key: Alt + PrintScreen"));
+  connect(sendKey6_Action, SIGNAL(triggered()), this, SLOT(sendKey_ALT_PrintScreen()));
+
   // on Scroll Mode Action
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action = new QAction(tr("Scroll Mode"), this);
@@ -1220,6 +1230,8 @@ void QtBrynhildr::createMenus()
   sendKeySubMenu->addAction(sendKey2_Action);
   sendKeySubMenu->addAction(sendKey3_Action);
   sendKeySubMenu->addAction(sendKey4_Action);
+  sendKeySubMenu->addAction(sendKey5_Action);
+  sendKeySubMenu->addAction(sendKey6_Action);
 
   // for select monitor
   selectMonitorNoSubMenu = controlMenu->addMenu(tr("Select Monitor"));
@@ -1385,6 +1397,10 @@ void QtBrynhildr::connected()
     sendKey3_Action->setEnabled(true);
   if (sendKey4_Action != 0)
     sendKey4_Action->setEnabled(true);
+  if (sendKey5_Action != 0)
+    sendKey5_Action->setEnabled(true);
+  if (sendKey6_Action != 0)
+    sendKey6_Action->setEnabled(true);
 
   // enabled scaling dialog
   desktopScalingDialog_Action->setEnabled(true);
@@ -1422,6 +1438,10 @@ void QtBrynhildr::disconnected()
     sendKey3_Action->setEnabled(false);
   if (sendKey4_Action != 0)
     sendKey4_Action->setEnabled(false);
+  if (sendKey5_Action != 0)
+    sendKey5_Action->setEnabled(false);
+  if (sendKey6_Action != 0)
+    sendKey6_Action->setEnabled(false);
 
   // disabled scaling dialog
   desktopScalingDialog_Action->setEnabled(false);
@@ -2142,6 +2162,38 @@ void QtBrynhildr::sendKey_WINDOWS()
 
 	// release
 	keyBuffer->put(VK_LWIN,	KEYCODE_FLG_KEYUP); // Windows key release
+  }
+}
+
+// send key for PrintScreen
+void QtBrynhildr::sendKey_PrintScreen()
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	KeyBuffer *keyBuffer = mainWindow->getKeyBuffer();
+
+	// press
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYDOWN); // PrintScreen key press
+
+	// release
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYUP); // PrintScreen key release
+  }
+}
+
+// send key for ALT + PrintScreen
+void QtBrynhildr::sendKey_ALT_PrintScreen()
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	KeyBuffer *keyBuffer = mainWindow->getKeyBuffer();
+
+	// press
+	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYDOWN); // ALT key press
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYDOWN); // PrintScreen key press
+
+	// release
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYUP); // PrintScreen key release
+	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYUP); // ALT key press
   }
 }
 

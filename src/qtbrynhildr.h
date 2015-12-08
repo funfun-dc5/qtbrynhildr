@@ -173,6 +173,8 @@ private slots:
   void sendKey_ALT_F4(); // ALT + F4
   void sendKey_CTRL_ESC(); // CTRL + ESC
   void sendKey_WINDOWS(); // WINDOWS
+  void sendKey_PrintScreen(); // PrintScreen
+  void sendKey_ALT_PrintScreen(); // ALT + PrintScreen
 
   // toggle show menu bar
   void toggleShowMenuBar();
@@ -441,6 +443,8 @@ private:
   QAction *sendKey2_Action;
   QAction *sendKey3_Action;
   QAction *sendKey4_Action;
+  QAction *sendKey5_Action;
+  QAction *sendKey6_Action;
 
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;

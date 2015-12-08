@@ -131,6 +131,10 @@
 
  3. Windows キー
 
+ 4. PrintScreen キー
+
+ 5. Alt キー + PrintScreen キー
+
  * 「モニタ選択」
 
  .. image:: images/menu_control_monitor.jpg

@@ -49,7 +49,7 @@
 
 // for serverType
 #define QTB_SERVERTYPE			"serverType"
-#define QTB_SERVERTYPE_DEFAULT	SERVER_TYPE_WINDOWS_7
+#define QTB_SERVERTYPE_DEFAULT	SERVER_TYPE_WINDOWS_10
 typedef int SERVER_TYPE;
 #define	SERVER_TYPE_WINDOWS_XP		0
 #define	SERVER_TYPE_WINDOWS_VISTA	1
@@ -112,7 +112,7 @@ typedef int KEYBOARD_TYPE;
 #define QTB_FRAMERATE			"frameRate"
 #define FRAMERATE_MAXIMUM		0
 #if defined(QTB_DEV_TABLET)
-#define QTB_FRAMERATE_DEFAULT	5
+#define QTB_FRAMERATE_DEFAULT	FRAMERATE_MAXIMUM
 #else // defined(QTB_DEV_TABLET)
 #define QTB_FRAMERATE_DEFAULT	30
 #endif // defined(QTB_DEV_TABLET)
@@ -213,7 +213,7 @@ typedef int SCALING_TYPE;
 
 // for onShowFrameRate
 #define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
-#define QTB_ONSHOWFRAMERATE_DEFAULT			false
+#define QTB_ONSHOWFRAMERATE_DEFAULT			true
 
 // for onShowPassword
 #define QTB_ONSHOWPASSWORD					"onShowPassword"

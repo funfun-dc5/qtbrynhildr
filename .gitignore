@@ -28,6 +28,9 @@ Makefile
 *.bak
 *.log
 *~
+# for Qt Creator
+build-*/
+*.pro.user
 # for windows
 *.exe
 *.dll

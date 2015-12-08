@@ -495,6 +495,9 @@ private:
   // current frame rate
   double currentFrameRate;
 
+  // current data rate
+  double currentDataRate;
+
   // option
   Option *option;
 

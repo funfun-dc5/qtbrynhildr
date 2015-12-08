@@ -707,7 +707,15 @@ void QtBrynhildr::onDesktopChanged(QImage image)
   if (settings->getOnShowFrameRate()){
 	static int refreshCounter = 1;
 	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
+	  // frame rate
 	  currentFrameRate = graphicsThread->getFrameRate();
+	  // data rate
+	  long controlDataRate = controlThread->getDataRate();
+	  long graphicsDataRate = graphicsThread->getDataRate();
+	  long soundDataRate = soundThread->getDataRate();
+	  // Mbps
+	  currentDataRate = (double)((controlDataRate + graphicsDataRate + soundDataRate)
+								 * 8 / (1024*1024));
 	  updateFrameRate();
 	  refreshCounter = 1;
 	}
@@ -1344,10 +1352,11 @@ void QtBrynhildr::updateFrameRate()
   // update fps
   if (settings->getOnShowFrameRate()){
 	if (settings->getConnected()){
-	  frameRateLabel->setText(tr("FrameRate: ")+QString::number(currentFrameRate, 'f', 2));
+	  frameRateLabel->setText(tr("FrameRate: ")+QString::number(currentFrameRate, 'f', 2) +
+							  " [" + QString::number(currentDataRate, 'f', 1) + " Mbps]");
 	}
 	else {
-	  frameRateLabel->setText(tr("FrameRate: ")+"00.00");
+	  frameRateLabel->setText(tr("FrameRate: ")+"00.00 [0.0 Mbps]");
 	}
   }
   else {

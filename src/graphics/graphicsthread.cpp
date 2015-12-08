@@ -63,23 +63,23 @@ GraphicsThread::~GraphicsThread()
 }
 
 // get frame rate
-double GraphicsThread::getFrameRate() const
+double GraphicsThread::getFrameRate()
 {
   static QDateTime previsouTime;
-  static unsigned int previousFrameCount;
+  static unsigned int previousFrameCounter;
   QDateTime currentTime = QDateTime::currentDateTime();
-  unsigned int currentFrameCount = getFrameCounter();
+  unsigned int currentFrameCounter = getFrameCounter();
   double fps = 0.0;
 
   if (!previsouTime.isNull()){
 	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previsouTime.toMSecsSinceEpoch();
-	qint64 diffFrameCount = currentFrameCount - previousFrameCount;
-	fps = diffFrameCount / ((double)diffMSeconds/1000);
+	qint64 diffFrameCounter = currentFrameCounter - previousFrameCounter;
+	fps = diffFrameCounter / ((double)diffMSeconds/1000);
 	//	cout << "diffMSeconds   = " << diffMSeconds << endl << flush;
-	//	cout << "diffFrameCount = " << diffFrameCount << endl << flush;
+	//	cout << "diffFrameCounter = " << diffFrameCounter << endl << flush;
   }
   previsouTime = currentTime;
-  previousFrameCount = currentFrameCount;
+  previousFrameCounter = currentFrameCounter;
   return fps;
 }
 
@@ -240,6 +240,8 @@ void GraphicsThread::connectedToServer()
 
   // frame counter
   frameCounter = 0;
+
+  NetThread::connectedToServer();
 }
 
 // shutdown connection

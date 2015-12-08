@@ -63,7 +63,7 @@
 
  * 「フレームレートを表示」
 
-   フレームレート(FPS)の表示のON/OFFを変更します。
+   フレームレート(FPSおよびデータレート)の表示のON/OFFを変更します。
 
  .. image:: images/framerate.jpg
 

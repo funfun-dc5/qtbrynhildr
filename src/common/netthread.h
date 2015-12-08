@@ -83,6 +83,9 @@ public:
   // exit thread
   void exitThread();
 
+  // get data rate (bytes/second)
+  long getDataRate();
+
 protected:
   // thread body
   void run();
@@ -131,8 +134,15 @@ protected:
   // run thread flag
   bool runThread;
 
+  // received data counter
+  long receivedDataCounter;
+
   // output log flag
   bool outputLog;
+
+private:
+  // previous time
+  QDateTime previsouTime;
 
 private:
   // set socket option

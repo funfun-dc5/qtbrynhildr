@@ -33,7 +33,7 @@ public:
   };
 
   // get frame rate
-  double getFrameRate() const;
+  double getFrameRate();
 
 protected:
   // connect to server

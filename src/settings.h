@@ -49,7 +49,7 @@
 
 // for serverType
 #define QTB_SERVERTYPE			"serverType"
-#define QTB_SERVERTYPE_DEFAULT	SERVER_TYPE_WINDOWS_7
+#define QTB_SERVERTYPE_DEFAULT	SERVER_TYPE_WINDOWS_10
 typedef int SERVER_TYPE;
 #define	SERVER_TYPE_WINDOWS_XP		0
 #define	SERVER_TYPE_WINDOWS_VISTA	1
@@ -88,9 +88,9 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONCONTROL			"onControl"
 #define QTB_ONCONTROL_DEFAULT	true
 
-// for onHoldControl
-#define QTB_ONHOLDCONTROL			"onHoldControl"
-#define QTB_ONHOLDCONTROL_DEFAULT	false
+// for onHoldMouseControl
+#define QTB_ONHOLDMOUSECONTROL			"onHoldMouseControl"
+#define QTB_ONHOLDMOUSECONTROL_DEFAULT	false
 
 // for onControlOffWithGraphicsOff
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF			"onControlOffWithGraphicsOff"
@@ -111,7 +111,11 @@ typedef int KEYBOARD_TYPE;
 // for frameRate
 #define QTB_FRAMERATE			"frameRate"
 #define FRAMERATE_MAXIMUM		0
+#if defined(QTB_DEV_TABLET)
+#define QTB_FRAMERATE_DEFAULT	FRAMERATE_MAXIMUM
+#else // defined(QTB_DEV_TABLET)
 #define QTB_FRAMERATE_DEFAULT	30
+#endif // defined(QTB_DEV_TABLET)
 
 // for onSound
 #define QTB_ONSOUND				"onSound"
@@ -209,7 +213,7 @@ typedef int SCALING_TYPE;
 
 // for onShowFrameRate
 #define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
-#define QTB_ONSHOWFRAMERATE_DEFAULT			false
+#define QTB_ONSHOWFRAMERATE_DEFAULT			true
 
 // for onShowPassword
 #define QTB_ONSHOWPASSWORD					"onShowPassword"
@@ -224,12 +228,12 @@ typedef int SCALING_TYPE;
 #endif // QTB_SUPPORT_PUBLIC_MODE6
 
 // for graphicsBufferSize
-#define QTB_GRAPHICSBUFFERSIZE			"graphicsBufferSize"
-#define QTB_GRAPHICSBUFFERSIZE_DEFAULT	(1024 * 1024)
+#define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"
+#define QTB_GRAPHICSBUFFERSIZE_DEFAULT		(1024 * 1024)
 
 // for soundBufferSize
-#define QTB_SOUNDBUFFERSIZE				"soundBufferSize"
-#define QTB_SOUNDBUFFERSIZE_DEFAULT		(1024 * 1024)
+#define QTB_SOUNDBUFFERSIZE					"soundBufferSize"
+#define QTB_SOUNDBUFFERSIZE_DEFAULT			(1024 * 1024)
 
 // for doubleClickThreshold
 #define QTB_DOUBLECLICKTHRESHOLD			"doubleClickThreshold"
@@ -462,16 +466,16 @@ public:
 	return true;
   }
 
-  // get hold control flag
-  bool getOnHoldControl() const
+  // get hold mouse control flag
+  bool getOnHoldMouseControl() const
   {
-	return onHoldControl;
+	return onHoldMouseControl;
   }
 
-  // set hold control flag
-  bool setOnHoldControl(bool onHoldControl)
+  // set hold mouse control flag
+  bool setOnHoldMouseControl(bool onHoldMouseControl)
   {
-	this->onHoldControl = onHoldControl;
+	this->onHoldMouseControl = onHoldMouseControl;
 	return true;
   }
 
@@ -911,7 +915,7 @@ public:
 	this->onShowFrameRate = onShowFrameRate;
   }
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // get on recording control flag
   bool getOnRecordingControl() const
   {
@@ -959,7 +963,7 @@ public:
   {
 	this->replayingControlFileName = replayingControlFileName;
   }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // get on scroll mode flag
   bool getOnScrollMode() const
@@ -1157,7 +1161,7 @@ private:
 
   // Control
   volatile bool onControl;
-  volatile bool onHoldControl;
+  volatile bool onHoldMouseControl;
   volatile bool onControlOffWithGraphicsOff;
 
   // Graphics
@@ -1236,7 +1240,7 @@ private:
   // software button
   volatile bool onShowSoftwareButton;
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // recording
   volatile bool onRecordingControl;
   const char *recordingControlFileName;
@@ -1244,7 +1248,7 @@ private:
   // reply
   volatile bool onReplayingControl;
   const char *replayingControlFileName;
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // scroll mode
   volatile bool onScrollMode;

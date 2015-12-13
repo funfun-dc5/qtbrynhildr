@@ -20,18 +20,18 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder)
-#else  // QTB_RECORDER
+#else  // defined(QTB_RECORDER)
 ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
   :
   NetThread("ControlThread", settings, mainWindow),
   keyBuffer(0),
   mouseBuffer(0),
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   recorder(recorder),
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
   monitorCount(0),
   sentMode(0)
 {
@@ -114,7 +114,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	// mouse position
 	MOUSE_POS pos = mouseBuffer->getMousePos();
 	// if mouse cursor is moved.
-	if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldControl()){
+	if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	  // set information
 	  com_data->mouse_move = MOUSE_MOVE_ON;
 	  if (QTB_DESKTOP_IMAGE_SCALING){
@@ -198,7 +198,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 #endif
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // replaying
   if (settings->getOnReplayingControl()){
 	// replay
@@ -220,7 +220,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   else if (settings->getOnRecordingControl()){
 	recorder->putCOM_DATA(com_data);
   }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // save mode
   sentMode = com_data->mode;

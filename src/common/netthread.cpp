@@ -33,7 +33,8 @@ NetThread::NetThread(const char *name, Settings *settings, MainWindow *mainWindo
   name(name),
   settings(settings),
   com_data(0),
-  runThread(true)
+  runThread(true),
+  receivedDataCounter(0)
 {
 }
 
@@ -47,6 +48,21 @@ void NetThread::exitThread()
 {
   //  cout << "[" << name << "]" << " exitThread()" << endl << flush;
   runThread = false;
+}
+
+// get data rate
+long NetThread::getDataRate()
+{
+  QDateTime currentTime = QDateTime::currentDateTime();
+  long bps = 0;
+
+  if (!previsouTime.isNull()){
+	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previsouTime.toMSecsSinceEpoch();
+	bps = (long)(receivedDataCounter / ((double)diffMSeconds/1000));
+  }
+  previsouTime = currentTime;
+  receivedDataCounter = 0;
+  return bps;
 }
 
 //---------------------------------------------------------------------------
@@ -164,6 +180,8 @@ void NetThread::run()
 // connected
 void NetThread::connectedToServer()
 {
+  // reset counter
+  receivedDataCounter = 0;
 }
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
@@ -309,6 +327,7 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 	long ret = recv(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
 	  received_size += ret;
+	  receivedDataCounter += ret;
 	}
 	else {
 	  received_size = -1;

@@ -47,7 +47,7 @@
  Windows 8.1   (64bit/32bit)
  Windows 10    (64bit/32bit)
 
-[Linux版]
+[Linux(x64/x86)版]
 
  Ubuntu 14.04 LTS以降 (x64/x86)
  CentOS 7      (x64)
@@ -63,8 +63,10 @@
       Windows 7 Home Premium  (64bit)
       Windows 8.1 Pro update  (64bit)
       Windows 10 Pro          (64bit/32bit)
+      Windows 10 Home         (64bit)
       Ubuntu 14.04 LTS        (x64/x86)
       Ubuntu 15.04            (x64)
+      Ubuntu 15.10            (x64)
       CentOS 7                (x64)
       Mac OS X 10.10(Yosemite)/10.11(El Capitan)
 
@@ -83,7 +85,7 @@
 
  Android : なんとなく動くのを確認 (日本語、サウンド再生確認済み)
  FreeBSD : なんとなく動くのを確認 (日本語、サウンド再生未確認)
- Cygwin  : パッケージに含まれるQt5.5.1でビルドできることまで確認
+ Cygwin  : パッケージに含まれるQt5.5.1でビルド、起動まで確認
  iOS     : iOSシミュレータでの起動まで確認
 
 ----------------------------------------------------------------------
@@ -344,7 +346,7 @@
 
      [3] フレームレートを表示
 
-     フレームレート(FPS)の表示のON/OFFを変更します。
+     フレームレート(FPSおよびデータレート)の表示のON/OFFを変更します。
 
      [4] ソフトウェア・キーボードを表示
 
@@ -398,6 +400,10 @@
          (2) Ctrl キー + Esc キー
 
          (3) Windows キー
+
+         (4) PrintScreen キー
+
+         (5) Alt キー + PrintScreen キー
 
      [2] モニタの選択
 
@@ -487,7 +493,7 @@
 
 C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 
-[Linux/Mac版]
+[Linux/Mac/FreeBSD版]
 ホームディレクトリの以下のファイルに保存されます。
 
 ~/.config/mcz-xoxo/Qt Brynhildr.ini
@@ -515,7 +521,7 @@ serverType=2
 keyboardType=0
 portNo=55500
 onControl=true
-onHoldControl=false
+onHoldMouseControl=false
 onControlOffWithGraphicsOff=true
 onGraphics=true
 videoQuality=5
@@ -729,12 +735,13 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 Ver.1.2.0 : [新規機能]
              ・リモート操作のファイル記録/再生機能を追加
                メニュー項目及び起動オプションを追加
-             ・ステータスバーへのフレームレート(FPS)表示機能を追加
+             ・ステータスバーへのフレームレート(FPSおよびデータレート)表示機能を追加
                メニュー項目を追加
              ・フルスクリーン機能を再実装
                メニュー項目を追加
              ・ソフトウェア・キーボード/ボタンのテスト実装のマージ
              ・設定を初期化する-initオプションを追加
+             ・PrintScreen キー/Alt キー + PrintScreen キーを「キーを送る」に追加
 
             [その他変更]
              ・メニューバーの表示/非表示選択メニューを削除
@@ -749,6 +756,7 @@ Ver.1.2.0 : [新規機能]
              ・マニュアル修正 (FAQ追加)
              ・-serverオプションにホストタイプ指定を追加
              ・Linux版以外はQt5.5.1でビルドするように変更 (ダイナミックリンク版に移行)
+             ・サーバタイプの初期値を"Windows 7"から"Windows 10"に変更
 
             [不具合修正]
              ・UACの制御が入った時に起こる通信切断に対応していなかった不具合修正
@@ -756,10 +764,6 @@ Ver.1.2.0 : [新規機能]
              ・メニューバーにキーボード・ニーモニックが表示されない不具合修正(Windows版)
              ・ステータスバーを非表示にした時に必ずスクロールバーが表示される不具合
                (Windows10のみ)
-             ・変数の未初期化により起動時に内部エラーとなる場合がある不具合修正
-               (Ver.1.2.0 RC2-RC3のみ)
-             ・サーバに接続していない状態でソフトウェア・キーボード/ボタンを表示しようとすると
-               クラッシュする不具合修正(Ver.1.2.0 RC5のみ)
              ・デスクトップの表示、サウンドの再生が正常にできない不具合
                (Windows版(ダイナミックリンク版):未リリース)
 

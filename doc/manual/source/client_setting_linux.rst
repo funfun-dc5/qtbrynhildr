@@ -85,8 +85,8 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
 .. image:: images/ubuntu_uninstaller1.png
 
-(2) インストールの準備完了
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(2) アンインストールの準備完了
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: images/ubuntu_uninstaller2.png
 
 (3) アンインストール

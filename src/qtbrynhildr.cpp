@@ -16,9 +16,9 @@
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 #include <QFileDialog>
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -64,9 +64,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   iniFileName(0),
   settings(0),
   writeSettingsAtExit(true),
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   recorder(0),
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 #if QTB_CRYPTOGRAM
   cipher(0),
 #endif // QTB_CRYPTGRAM
@@ -158,7 +158,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	}
   }
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // record
   settings->setOnRecordingControl(option->getRecordingFlag());
   if (option->getRecordingFlag()){
@@ -178,7 +178,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   else if (settings->getOnRecordingControl()){
 	recorder->startRecording();
   }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION);
@@ -313,11 +313,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   //------------------------------------------------------------
   // create threads
   //------------------------------------------------------------
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   controlThread = new ControlThread(settings, mainWindow, recorder);
-#else // QTB_RECORDER
+#else // defined(QTB_RECORDER)
   controlThread = new ControlThread(settings, mainWindow);
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
@@ -452,13 +452,13 @@ QtBrynhildr::~QtBrynhildr()
   }
 #endif
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // delete recorder
   if (recorder != 0){
 	delete recorder;
 	recorder = 0;
   }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // settings
   if (settings != 0){
@@ -526,10 +526,10 @@ void QtBrynhildr::refreshMenu()
   // monitor menu
   refreshMonitorMenu();
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // recording and replaying
   refreshRecordingAndReplayMenu();
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 }
 
 // refresh video quality menu
@@ -648,7 +648,7 @@ void QtBrynhildr::refreshMonitorMenu()
   }
 }
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 // recording and replaying
 void QtBrynhildr::refreshRecordingAndReplayMenu()
 {
@@ -689,7 +689,7 @@ void QtBrynhildr::refreshRecordingAndReplayMenu()
 	startReplayRecordingControl_Action->setChecked(false);
   }
 }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
 // get shutdown flag
 bool QtBrynhildr::getShutdownFlag() const
@@ -707,7 +707,15 @@ void QtBrynhildr::onDesktopChanged(QImage image)
   if (settings->getOnShowFrameRate()){
 	static int refreshCounter = 1;
 	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
+	  // frame rate
 	  currentFrameRate = graphicsThread->getFrameRate();
+	  // data rate
+	  long controlDataRate = controlThread->getDataRate();
+	  long graphicsDataRate = graphicsThread->getDataRate();
+	  long soundDataRate = soundThread->getDataRate();
+	  // Mbps
+	  currentDataRate = (double)((controlDataRate + graphicsDataRate + soundDataRate)
+								 * 8 / (1024*1024));
 	  updateFrameRate();
 	  refreshCounter = 1;
 	}
@@ -1064,19 +1072,19 @@ void QtBrynhildr::createActions()
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // start recording control
-  startRecordingControl_Action = new QAction(tr("Start Recodrding"), this);
+  startRecordingControl_Action = new QAction(tr("Start Recording"), this);
   startRecordingControl_Action->setEnabled(false);
   startRecordingControl_Action->setCheckable(true);
   startRecordingControl_Action->setChecked(settings->getOnRecordingControl());
-  startRecordingControl_Action->setStatusTip(tr("Start Recodrding"));
+  startRecordingControl_Action->setStatusTip(tr("Start Recording"));
   connect(startRecordingControl_Action, SIGNAL(triggered()), this, SLOT(startRecordingControl()));
 
   // stop recording control
-  stopRecordingControl_Action = new QAction(tr("Stop Recodrding"), this);
+  stopRecordingControl_Action = new QAction(tr("Stop Recording"), this);
   stopRecordingControl_Action->setEnabled(false);
-  stopRecordingControl_Action->setStatusTip(tr("Stop Recodrding"));
+  stopRecordingControl_Action->setStatusTip(tr("Stop Recording"));
   connect(stopRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopRecordingControl()));
 
   // replay recorded control
@@ -1091,7 +1099,7 @@ void QtBrynhildr::createActions()
   stopReplayRecordingControl_Action->setEnabled(false);
   stopReplayRecordingControl_Action->setStatusTip(tr("Stop Replay"));
   connect(stopReplayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopReplayRecordingControl()));
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // send key Action
 #if 0 // for TEST
@@ -1117,6 +1125,16 @@ void QtBrynhildr::createActions()
   sendKey4_Action->setEnabled(false);
   sendKey4_Action->setStatusTip(tr("Send key: Windows"));
   connect(sendKey4_Action, SIGNAL(triggered()), this, SLOT(sendKey_WINDOWS()));
+
+  sendKey5_Action = new QAction(tr("PrintScreen"), this);
+  sendKey5_Action->setEnabled(false);
+  sendKey5_Action->setStatusTip(tr("Send key: PrintScreen"));
+  connect(sendKey5_Action, SIGNAL(triggered()), this, SLOT(sendKey_PrintScreen()));
+
+  sendKey6_Action = new QAction(tr("Alt + PrintScreen"), this);
+  sendKey6_Action->setEnabled(false);
+  sendKey6_Action->setStatusTip(tr("Send key: Alt + PrintScreen"));
+  connect(sendKey6_Action, SIGNAL(triggered()), this, SLOT(sendKey_ALT_PrintScreen()));
 
   // on Scroll Mode Action
   if (QTB_SCROLL_MODE){
@@ -1179,6 +1197,7 @@ void QtBrynhildr::createMenus()
 	displayMenu->addAction(staysOnTop_Action);
   }
 #endif // defined(QTB_DEV_DESKTOP)
+
   // for full screen
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -1230,6 +1249,8 @@ void QtBrynhildr::createMenus()
   sendKeySubMenu->addAction(sendKey2_Action);
   sendKeySubMenu->addAction(sendKey3_Action);
   sendKeySubMenu->addAction(sendKey4_Action);
+  sendKeySubMenu->addAction(sendKey5_Action);
+  sendKeySubMenu->addAction(sendKey6_Action);
 
   // for select monitor
   selectMonitorNoSubMenu = controlMenu->addMenu(tr("Select Monitor"));
@@ -1252,7 +1273,7 @@ void QtBrynhildr::createMenus()
   controlMenu->addAction(onGraphics_Action);
   controlMenu->addAction(onSound_Action);
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // for record and replay
   controlMenu->addSeparator();
   recordAndReplaySubMenu = controlMenu->addMenu(tr("Record and Replay"));
@@ -1261,7 +1282,7 @@ void QtBrynhildr::createMenus()
   recordAndReplaySubMenu->addSeparator();
   recordAndReplaySubMenu->addAction(startReplayRecordingControl_Action);
   recordAndReplaySubMenu->addAction(stopReplayRecordingControl_Action);
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("&Option"));
@@ -1362,10 +1383,11 @@ void QtBrynhildr::updateFrameRate()
   // update fps
   if (settings->getOnShowFrameRate()){
 	if (settings->getConnected()){
-	  frameRateLabel->setText(tr("FrameRate: ")+QString::number(currentFrameRate, 'f', 2));
+	  frameRateLabel->setText(tr("FrameRate: ")+QString::number(currentFrameRate, 'f', 2) +
+							  " [" + QString::number(currentDataRate, 'f', 1) + " Mbps]");
 	}
 	else {
-	  frameRateLabel->setText(tr("FrameRate: ")+"00.00");
+	  frameRateLabel->setText(tr("FrameRate: ")+"00.00 [0.0 Mbps]");
 	}
   }
   else {
@@ -1394,6 +1416,10 @@ void QtBrynhildr::connected()
     sendKey3_Action->setEnabled(true);
   if (sendKey4_Action != 0)
     sendKey4_Action->setEnabled(true);
+  if (sendKey5_Action != 0)
+    sendKey5_Action->setEnabled(true);
+  if (sendKey6_Action != 0)
+    sendKey6_Action->setEnabled(true);
 
   // enabled scaling dialog
   desktopScalingDialog_Action->setEnabled(true);
@@ -1439,6 +1465,10 @@ void QtBrynhildr::disconnected()
     sendKey3_Action->setEnabled(false);
   if (sendKey4_Action != 0)
     sendKey4_Action->setEnabled(false);
+  if (sendKey5_Action != 0)
+    sendKey5_Action->setEnabled(false);
+  if (sendKey6_Action != 0)
+    sendKey6_Action->setEnabled(false);
 
   // disabled scaling dialog
   desktopScalingDialog_Action->setEnabled(false);
@@ -1690,7 +1720,7 @@ void QtBrynhildr::disconnectToServer()
 	return;
   }
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // stop record and replay
   if (settings->getOnReplayingControl()){
 	recorder->stopReplaying();
@@ -1698,7 +1728,7 @@ void QtBrynhildr::disconnectToServer()
   if (settings->getOnRecordingControl()){
 	recorder->stopRecording(settings->getRecordingControlFileName());
   }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // exit all threads
   controlThread->exitThread();
@@ -2023,7 +2053,7 @@ void QtBrynhildr::toggleOnSound()
   }
 }
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 // start recording control
 void QtBrynhildr::startRecordingControl()
 {
@@ -2112,7 +2142,7 @@ void QtBrynhildr::stopReplayRecordingControl()
   // refresh menu
   refreshRecordingAndReplayMenu();
 }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
 #if 0 // for TEST
 // send key for CTRL + ALT + DEL
@@ -2181,6 +2211,38 @@ void QtBrynhildr::sendKey_WINDOWS()
 
 	// release
 	keyBuffer->put(VK_LWIN,	KEYCODE_FLG_KEYUP); // Windows key release
+  }
+}
+
+// send key for PrintScreen
+void QtBrynhildr::sendKey_PrintScreen()
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	KeyBuffer *keyBuffer = mainWindow->getKeyBuffer();
+
+	// press
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYDOWN); // PrintScreen key press
+
+	// release
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYUP); // PrintScreen key release
+  }
+}
+
+// send key for ALT + PrintScreen
+void QtBrynhildr::sendKey_ALT_PrintScreen()
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	KeyBuffer *keyBuffer = mainWindow->getKeyBuffer();
+
+	// press
+	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYDOWN); // ALT key press
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYDOWN); // PrintScreen key press
+
+	// release
+	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYUP); // PrintScreen key release
+	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYUP); // ALT key press
   }
 }
 

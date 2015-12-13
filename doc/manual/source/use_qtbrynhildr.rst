@@ -63,7 +63,7 @@
 
  * 「フレームレートを表示」
 
-   フレームレート(FPS)の表示のON/OFFを変更します。
+   フレームレート(FPSおよびデータレート)の表示のON/OFFを変更します。
 
  .. image:: images/framerate.jpg
 
@@ -130,6 +130,10 @@
  2. Ctrl キー + Esc キー
 
  3. Windows キー
+
+ 4. PrintScreen キー
+
+ 5. Alt キー + PrintScreen キー
 
  * 「モニタ選択」
 

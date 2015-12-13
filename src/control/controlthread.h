@@ -11,9 +11,9 @@
 
 // Local Header
 #include "common/netthread.h"
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 #include "function/recorder.h"
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 #include "keybuffer.h"
 #include "mainwindow.h"
 #include "mousebuffer.h"
@@ -28,11 +28,11 @@ class ControlThread : public NetThread
 
 public:
   // constructor
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder);
-#else  // QTB_RECORDER
+#else  // defined(QTB_RECORDER)
 ControlThread(Settings *settings, MainWindow *mainWindow);
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
   // destructor
   ~ControlThread();
 
@@ -63,10 +63,10 @@ private:
   // mouse buffer
   MouseBuffer *mouseBuffer;
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // recorder
   Recorder *recorder;
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // mouse position
   MOUSE_POS prevPos;

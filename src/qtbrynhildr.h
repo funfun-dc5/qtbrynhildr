@@ -31,9 +31,9 @@
 #include "logmessage.h"
 #include "mainwindow.h"
 #include "option.h"
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 #include "function/recorder.h"
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 #include "settings.h"
 #include "touchpanel/software_button.h"
 #include "touchpanel/software_keyboard.h"
@@ -158,13 +158,13 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // record and replay
   void startRecordingControl();
   void stopRecordingControl();
   void startReplayRecordingControl();
   void stopReplayRecordingControl();
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // send key
 #if 0 // for TEST
@@ -269,10 +269,10 @@ private:
   // sound quality
   void refreshSoundQualityMenu();
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // recording and replaying
   void refreshRecordingAndReplayMenu();
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
 private:
   // GUI
@@ -316,10 +316,10 @@ private:
   // Send Key Sub Menu
   QMenu *sendKeySubMenu;
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // Record and Replay Sub Menu
   QMenu *recordAndReplaySubMenu;
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // Option Menu
   QMenu *optionMenu;
@@ -427,7 +427,7 @@ private:
   // toggle onSound
   QAction *onSound_Action;
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // start recording control
   QAction *startRecordingControl_Action;
   // stop recording control
@@ -436,7 +436,7 @@ private:
   QAction *startReplayRecordingControl_Action;
   // stop replay recorded control
   QAction *stopReplayRecordingControl_Action;
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // send key
   QAction *sendKey1_Action;
@@ -519,10 +519,10 @@ private:
   Cipher *cipher;
 #endif // QTB_CRYPTGRAM
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // recorder
   Recorder *recorder;
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // current path
   QString currentPath;

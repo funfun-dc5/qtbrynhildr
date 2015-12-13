@@ -34,10 +34,10 @@ Settings::Settings(const char *iniFileName)
   monitorCount(0),
   onShowSoftwareKeyboard(false),
   onShowSoftwareButton(false),
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   onRecordingControl(false),
   onReplayingControl(false),
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
   onScrollMode(false)
 {
   if (iniFileName != 0){

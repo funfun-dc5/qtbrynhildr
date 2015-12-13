@@ -907,7 +907,7 @@ public:
 	this->onShowFrameRate = onShowFrameRate;
   }
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // get on recording control flag
   bool getOnRecordingControl() const
   {
@@ -955,7 +955,7 @@ public:
   {
 	this->replayingControlFileName = replayingControlFileName;
   }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // get on scroll mode flag
   bool getOnScrollMode() const
@@ -1216,7 +1216,7 @@ private:
   // software button
   volatile bool onShowSoftwareButton;
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // recording
   volatile bool onRecordingControl;
   const char *recordingControlFileName;
@@ -1224,7 +1224,7 @@ private:
   // reply
   volatile bool onReplayingControl;
   const char *replayingControlFileName;
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // scroll mode
   volatile bool onScrollMode;

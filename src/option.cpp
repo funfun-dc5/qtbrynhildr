@@ -32,12 +32,12 @@ Option::Option(int argc, char *argv[])
   initFlag(false),
 #endif // defined(QTB_DEV_TABLET)
   debug(0),
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   recordingFlag(false),
   recordingFileName(0),
   replayingFlag(false),
   replayingFileName(0),
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
   bootupFlag(false),
   shutdownFlag(false)
 {
@@ -157,7 +157,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  else if (strncmp("init", optionName, sizeof("init")) == 0){
 		initFlag = true;
 	  }
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
 	  else if (strncmp("record", optionName, sizeof("record")) == 0){
 		// check argument
 		if (argc < 3){
@@ -212,7 +212,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  argv++;
 		}
 	  }
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 	  else if ((strncmp("version", optionName, sizeof("version")) == 0)||
 			   (strncmp("v", optionName, sizeof("v")) == 0)){
 		printVersion();
@@ -277,7 +277,7 @@ void Option::printHelp() const
   cout << "        " << "host type : xp/vista/7/8/8.1/10" << endl;
   cout << endl;
 
-#if QTB_RECORDER
+#if defined(QTB_RECORDER)
   // -record <file>
   cout << "-record <file>" << endl;
   cout << "        " << "record operations to <file>." << endl;
@@ -287,7 +287,7 @@ void Option::printHelp() const
   cout << "-replay <file>" << endl;
   cout << "        " << "replay operations from <file>." << endl;
   cout << endl;
-#endif // QTB_RECORDER
+#endif // defined(QTB_RECORDER)
 
   // -debug <on|off>
   cout << "-debug <on|off>" << endl;

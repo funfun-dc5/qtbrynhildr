@@ -66,11 +66,9 @@ const bool QTB_TRANSLATION				= true;
 const bool QTB_IN_TESTING				= false;
 
 // recorder
-#if defined(QTB_DEV_TABLET)
-#define QTB_RECORDER				0
-#else // defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_DESKTOP)
 #define QTB_RECORDER				1
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_DESKTOP)
 
 // splash screen
 #define QTB_SPLASH_SCREEN			0

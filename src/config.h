@@ -76,6 +76,9 @@ const bool QTB_IN_TESTING				= false;
 // cryptogram
 #define QTB_CRYPTOGRAM				0
 
+// Brynhildr 2 support
+#define QTB_BRYNHILDR2_SUPPORT		1
+
 // debug
 #define QTB_DEBUG					1
 #define QTB_DEBUG_KEYBOARD			false

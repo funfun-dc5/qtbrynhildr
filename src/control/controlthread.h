@@ -8,6 +8,9 @@
 #include "common/common.h"
 
 // Qt Header
+#if !defined(QTB_BRYNHILDR2_SUPPORT)
+#include <QCursor>
+#endif // !defined(QTB_BRYNHILDR2_SUPPORT)
 
 // Local Header
 #include "common/netthread.h"
@@ -57,6 +60,11 @@ private:
   void initHeader();
 
 private:
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  // server version
+  SERVER_VERSION serverVersion;
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+
   // keyboard buffer
   KeyBuffer *keyBuffer;
 
@@ -86,6 +94,11 @@ signals:
 
   // refresh menu
   void refreshMenu();
+
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  // change mouse cursor
+  void changeMouseCursor(const QCursor &cursor);
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
   // exit application
   void exitApplication();

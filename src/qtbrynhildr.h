@@ -9,6 +9,9 @@
 
 // Qt Header
 #include <QAction>
+#if !defined(QTB_BRYNHILDR2_SUPPORT)
+#include <QCursor>
+#endif // !defined(QTB_BRYNHILDR2_SUPPORT)
 #include <QDateTime>
 #include <QDockWidget>
 #include <QLabel>
@@ -97,6 +100,11 @@ public slots:
 
   // Desktop clear
   void onDesktopClear();
+
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  // change mouse cursor
+  void changeMouseCursor(const QCursor &cursor);
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
   // network error handler
   void onNetworkError();

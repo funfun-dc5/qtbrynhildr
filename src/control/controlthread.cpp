@@ -27,6 +27,9 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
 #endif // defined(QTB_RECORDER)
   :
   NetThread("ControlThread", settings, mainWindow),
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  serverVersion(SERVER_VERSION_BRYNHILDR2),
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
   keyBuffer(0),
   mouseBuffer(0),
 #if defined(QTB_RECORDER)
@@ -283,6 +286,22 @@ PROCESS_RESULT ControlThread::processForHeader()
 	//	cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
 	settings->setDesktopWidth(com_data->server_cx);
 	settings->setDesktopHeight(com_data->server_cy);
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+	// save server version
+	if (serverVersion != com_data->server_version){
+	  serverVersion = com_data->server_version;
+	  if (serverVersion == SERVER_VERSION_BRYNHILDR){
+		// change to Qt::CrossCursor for Brynhildr (<= 1.1.5)
+		// change mouse cursor
+		emit changeMouseCursor(Qt::CrossCursor);
+	  }
+	  else if (serverVersion == SERVER_VERSION_BRYNHILDR2){
+		// change to Qt::CrossCursor for Brynhildr (>= 2.0.0)
+		// change mouse cursor
+		emit changeMouseCursor(Qt::ArrowCursor);
+	  }
+	}
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
   }
 
   // check monitor no
@@ -367,6 +386,12 @@ void ControlThread::initHeader()
   com_data->thread		= THREAD_CONTROL;
   com_data->mode		= MODE_PUBLIC;
   com_data->monitor_no	= settings->getMonitorNo();
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  if (serverVersion == SERVER_VERSION_BRYNHILDR2){
+	com_data->mouse_cursor= settings->getOnDisplayCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
+  }
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+
 
   // for control
   com_data->control		= settings->getOnControl() ? CONTROL_ON : CONTROL_OFF;

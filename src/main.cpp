@@ -10,7 +10,9 @@
 
 // Qt Header
 #include <QApplication>
+#if !defined(QTB_BRYNHILDR2_SUPPORT)
 #include <QCursor>
+#endif // !defined(QTB_BRYNHILDR2_SUPPORT)
 #include <QLocale>
 #include <QThread>
 #include <QTranslator>
@@ -50,8 +52,10 @@ int main(int argc, char *argv[])
   QIcon windowIcon(QPixmap(QTB_ICON_FILENAME));
   app.setWindowIcon(windowIcon);
 
+#if !defined(QTB_BRYNHILDR2_SUPPORT)
   // set cursor
   app.setOverrideCursor(Qt::CrossCursor);
+#endif // !defined(QTB_BRYNHILDR2_SUPPORT)
 
   // for Translation
   QTranslator appTranslator;

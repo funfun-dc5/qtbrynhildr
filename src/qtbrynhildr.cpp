@@ -367,6 +367,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(controlThread,
 		  SIGNAL(exitApplication()),
 		  SLOT(exitApplication()));
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  connect(controlThread,
+		  SIGNAL(changeMouseCursor(const QCursor &)),
+		  SLOT(changeMouseCursor(const QCursor &)));
+#endif // !defined(QTB_BRYNHILDR2_SUPPORT)
 
   // graphics thread
   connect(graphicsThread,
@@ -729,6 +734,14 @@ void QtBrynhildr::onDesktopClear()
   mainWindow->clearDesktop();
   refreshWindow();
 }
+
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+// change mouse cursor
+void QtBrynhildr::changeMouseCursor(const QCursor &cursor)
+{
+  setCursor(cursor);
+}
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
 // network error handler
 void QtBrynhildr::onNetworkError()

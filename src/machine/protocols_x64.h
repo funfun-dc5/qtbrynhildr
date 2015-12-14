@@ -12,6 +12,13 @@ namespace qtbrynhildr {
 // Protocol Header for PUBLIC MODE of Brynhildr
 // for x64 architecture
 
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+// server version
+typedef int	SERVER_VERSION;
+#define SERVER_VERSION_BRYNHILDR	1	// brynhildr
+#define SERVER_VERSION_BRYNHILDR2	2	// brynhildr 2
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+
 // data type
 typedef char	DATA_TYPE;
 #define DATA_TYPE_DATA		1	// fixed value
@@ -86,6 +93,14 @@ typedef int		VIDEO_QUALITY;
 #define VIDEO_QUALITY_HIGH			7	// high quality
 #define VIDEO_QUALITY_MAXIMUM		9	// maximum quality
 
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+// mouse cursor
+typedef int	MOUSE_CURSOR;
+#define MOUSE_CURSOR_AUTO			0	// auto
+#define MOUSE_CURSOR_ON				1	// display mouse cursor
+#define MOUSE_CURSOR_OFF			2	// undisplay mouse cursor
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+
 // mode
 typedef	int		MODE;
 #define MODE_PUBLIC						5	// public mode
@@ -150,10 +165,21 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   BYTE				dummy6[40];			// padding 40 bytes
   KEYDOWN			keydown;
   VIDEO_QUALITY		video_quality;
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  MOUSE_CURSOR		mouse_cursor;		// mouse cursor
+  BYTE				dummy7[36];			// padding 36 bytes
+#else // defined(QTB_BRYNHILDR2_SUPPORT)
   BYTE				dummy7[40];			// padding 40 bytes
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
   POS				client_scroll_x;
   POS				client_scroll_y;
+
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  BYTE				dummy8[20];			// padding 20 bytes
+  SERVER_VERSION	server_version;		// version of server
+#else // defined(QTB_BRYNHILDR2_SUPPORT)
   BYTE				dummy8[24];			// padding 24 bytes
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
   ZOOM				zoom;
   BYTE				dummy9[4];			// padding 4 bytes
   MODE				mode;

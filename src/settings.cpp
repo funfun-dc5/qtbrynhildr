@@ -31,6 +31,9 @@ Settings::Settings(const char *iniFileName)
   bootupFlag(false),
   shutdownFlag(false),
   connected(false),
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  onDisplayCursor(false),
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
   monitorCount(0),
   onShowSoftwareKeyboard(false),
   onShowSoftwareButton(false),
@@ -59,6 +62,9 @@ Settings::Settings(const char *iniFileName)
   setOnControlOffWithGraphicsOff(QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT);
   setOnGraphics(QTB_ONGRAPHICS_DEFAULT);
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  setOnDisplayCursor(QTB_ONDISPLAYCURSOR_DEFAULT);
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
   setFrameRate(QTB_FRAMERATE_DEFAULT);
   setOnSound(QTB_ONSOUND_DEFAULT);
   setSoundQuality(QTB_SOUNDQUALITY_DEFAULT);
@@ -404,6 +410,9 @@ void Settings::printSettings() const
   qDebug() << "Port No       : " << portNo;
   qDebug() << "Password      : " << password;
   qDebug() << "Control       : " << onControl;
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  qDebug() << "DisplayCursor : " << onDisplayCursor;
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
   qDebug() << "Graphics      : " << onGraphics;

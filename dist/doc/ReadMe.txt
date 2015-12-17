@@ -517,7 +517,7 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 ------------------- ここから -------------------
 [General]
 serverName=mcz.world.idol.jp
-serverType=2
+serverType=5
 keyboardType=0
 portNo=55500
 onControl=true
@@ -540,11 +540,11 @@ monitorNo=1
 onConfirmAtExit=true
 onSaveSettingsAtExit=false
 onExitAfterReplay=false
+onStaysOnTop=false
 onFrameLessWindow=false
 onShowMenuBar=true
-onShowStatusBar=true
 onShowFrameRate=true
-onStaysOnTop=false
+onShowPassword=false
 graphicsBufferSize=1048576
 soundBufferSize=1048576
 doubleClickThreshold=500
@@ -552,7 +552,6 @@ outputGraphicsDataToFile=false
 outputSoundDataToFile=false
 outputLog=false
 logFile=D:\\tmp\\qtbrynhildr.log
-onShowPassword=false
 geometry=@Rect(200 200 800 600)
 ------------------- ここまで -------------------
 

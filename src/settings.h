@@ -124,6 +124,9 @@ typedef int KEYBOARD_TYPE;
 #else // defined(QTB_DEV_TABLET)
 #define QTB_ONDISPLAYCURSOR_DEFAULT		false
 #endif // defined(QTB_DEV_TABLET)
+// for onDisableBrynhildr2Support
+#define QTB_ONDISABLEBRYNHILDR2SUPPORT			"onDisableBrynhildr2Support"
+#define QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT	false
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
 // for onSound
@@ -562,6 +565,17 @@ public:
   void setOnDisplayCursor(bool onDisplayCursor)
   {
 	this->onDisplayCursor = onDisplayCursor;
+  }
+  // get disable brynhildr2 flag
+  bool getOnDisableBrynhildr2Support()
+  {
+	return onDisableBrynhildr2Support;
+  }
+
+  // set disable brynhildr2 flag
+  void setOnDisableBrynhildr2Support(bool onDisableBrynhildr2Support)
+  {
+	this->onDisableBrynhildr2Support = onDisableBrynhildr2Support;
   }
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
@@ -1169,6 +1183,7 @@ private:
 
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   volatile bool onDisplayCursor;
+  volatile bool onDisableBrynhildr2Support;
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;

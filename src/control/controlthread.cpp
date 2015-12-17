@@ -287,6 +287,10 @@ PROCESS_RESULT ControlThread::processForHeader()
 	settings->setDesktopWidth(com_data->server_cx);
 	settings->setDesktopHeight(com_data->server_cy);
 #if defined(QTB_BRYNHILDR2_SUPPORT)
+	if (settings->getOnDisableBrynhildr2Support()){
+	  // same as Brynhildr (<= 1.1.5)
+	  com_data->server_version = SERVER_VERSION_BRYNHILDR;
+	}
 	// save server version
 	if (serverVersion != com_data->server_version){
 	  serverVersion = com_data->server_version;
@@ -388,7 +392,7 @@ void ControlThread::initHeader()
   com_data->monitor_no	= settings->getMonitorNo();
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
-	com_data->mouse_cursor= settings->getOnDisplayCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
+	com_data->mouse_cursor = settings->getOnDisplayCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
   }
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
 

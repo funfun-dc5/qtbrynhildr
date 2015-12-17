@@ -525,6 +525,7 @@ onHoldMouseControl=false
 onControlOffWithGraphicsOff=true
 onGraphics=true
 videoQuality=5
+onDisableBrynhildr2Support=false
 frameRate=30
 onSound=true
 soundQuality=3

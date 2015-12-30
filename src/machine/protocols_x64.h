@@ -35,12 +35,13 @@ typedef	char	SOUND_TYPE;
 #define SOUNT_TYPE_ON		1	// sound ON
 
 // encryption
-typedef int		ENCRYPTION;
+typedef char	ENCRYPTION;
 #define ENCRYPTION_OFF		0	// encryption OFF
 #define ENCRYPTION_ON		1	// encryption ON
 
 // check digit
 typedef char	CHECK_DIGIT;
+typedef int		CHECK_DIGIT_VALUE;
 
 // sample rate
 typedef int		SAMPLERATE;
@@ -99,6 +100,9 @@ typedef int	MOUSE_CURSOR;
 #define MOUSE_CURSOR_AUTO			0	// auto
 #define MOUSE_CURSOR_ON				1	// display mouse cursor
 #define MOUSE_CURSOR_OFF			2	// undisplay mouse cursor
+
+// gamepad value
+typedef int	GAMEPAD_VALUE;
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
 // mode
@@ -131,61 +135,7 @@ typedef int			WORD;	// 4 byte
 typedef long		DWORD;	// 8 byte
 
 // Protocol Header Structure (256 byte fixed)
-typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatibility
-  DATA_TYPE			data_type;			// fixed(DATA_TYPE_DATA)
-  THREAD			thread;
-  BYTE				dummy1[1];			// padding 1 byte
-  SOUND_TYPE		sound_type;
-  ENCRYPTION		encryption;
-  SIZE				data_size;
-  BYTE				dummy2[4];			// padding 4 bytes
-  CHECK_DIGIT		check_digit_enc[ENCRYPTION_KEY_LENGTH];
-  int				check_digit;
-  char				ver[PROTOCOL_VERSION_STRING_LENGTH];
-  SAMPLERATE		samplerate;
-  SIZE				image_cx;			// width of image
-  SIZE				image_cy;			// hight of image
-  SIZE				server_cx;			// width of image for server.
-  SIZE				server_cy;			// hight of image for server.
-  CONTROL			control;			// fixed(CONTROL_ON)
-  MOUSE_MOVE		mouse_move;
-  POS			    mouse_x;			// mouse position x
-  POS			    mouse_y;			// mouse position y
-  MOUSE_BUTTON		mouse_left;			// mouse button status for left button
-  MOUSE_BUTTON		mouse_right;		// mouse button status for right button
-  BYTE				dummy3[1];			// padding 1 byte
-  MOUSE_WHEEL		mouse_wheel;
-  char				keycode;
-  KEYCODE_FLG		keycode_flg;
-  BYTE				dummy4[2];			// padding 2 bytes
-  MONITOR_NO		monitor_no;
-  MONITOR_COUNT		monitor_count;
-  BYTE				dummy5[6];			// padding 6 bytes
-  SOUND_CAPTURE		sound_capture;
-  BYTE				dummy6[40];			// padding 40 bytes
-  KEYDOWN			keydown;
-  VIDEO_QUALITY		video_quality;
-#if defined(QTB_BRYNHILDR2_SUPPORT)
-  MOUSE_CURSOR		mouse_cursor;		// mouse cursor
-  BYTE				dummy7[36];			// padding 36 bytes
-#else // defined(QTB_BRYNHILDR2_SUPPORT)
-  BYTE				dummy7[40];			// padding 40 bytes
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
-  POS				client_scroll_x;
-  POS				client_scroll_y;
-
-#if defined(QTB_BRYNHILDR2_SUPPORT)
-  BYTE				dummy8[20];			// padding 20 bytes
-  SERVER_VERSION	server_version;		// version of server
-#else // defined(QTB_BRYNHILDR2_SUPPORT)
-  BYTE				dummy8[24];			// padding 24 bytes
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
-  ZOOM				zoom;
-  BYTE				dummy9[4];			// padding 4 bytes
-  MODE				mode;
-  SOUND_QUALITY		sound_quality;
-  BYTE				dummy10[20];
-} COM_DATA;
+#include "protocols_common.h"
 
 } // end of namespace qtbrynhildr
 

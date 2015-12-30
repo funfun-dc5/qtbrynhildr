@@ -33,6 +33,7 @@ Settings::Settings(const char *iniFileName)
   connected(false),
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   onDisplayCursor(false),
+  onSupportGamePad(false),
   onDisableBrynhildr2Support(false),
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
   monitorCount(0),
@@ -65,6 +66,7 @@ Settings::Settings(const char *iniFileName)
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   setOnDisplayCursor(QTB_ONDISPLAYCURSOR_DEFAULT);
+  setOnSupportGamePad(QTB_ONSUPPORTGAMEPAD_DEFAULT);
   setOnDisableBrynhildr2Support(QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT);
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
   setFrameRate(QTB_FRAMERATE_DEFAULT);
@@ -170,6 +172,10 @@ void Settings::readSettings()
 								  (qint32)QTB_VIDEOQUALITY_DEFAULT).toInt());
 
 #if defined(QTB_BRYNHILDR2_SUPPORT)
+  // load onSupportGamePad
+  setOnSupportGamePad(settings->value(QTB_ONSUPPORTGAMEPAD,
+									  QTB_ONSUPPORTGAMEPAD_DEFAULT).toBool());
+
   // load onDisableBrynhildr2Support
   setOnDisableBrynhildr2Support(settings->value(QTB_ONDISABLEBRYNHILDR2SUPPORT,
 												QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT).toBool());
@@ -321,7 +327,10 @@ void Settings::writeSettings()
   settings->setValue(QTB_VIDEOQUALITY, (qint32)videoQuality);
 
 #if defined(QTB_BRYNHILDR2_SUPPORT)
-  // load onDisableBrynhildr2Support
+  // save onSupportGamePad
+  settings->setValue(QTB_ONSUPPORTGAMEPAD, onSupportGamePad);
+
+  // save onDisableBrynhildr2Support
   settings->setValue(QTB_ONDISABLEBRYNHILDR2SUPPORT, onDisableBrynhildr2Support);
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
@@ -425,6 +434,7 @@ void Settings::printSettings() const
   qDebug() << "Control       : " << onControl;
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   qDebug() << "DisplayCursor : " << onDisplayCursor;
+  qDebug() << "SupportGamePad: " << onSupportGamePad;
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;

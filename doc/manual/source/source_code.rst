@@ -23,7 +23,7 @@
 
  <http://mcz-xoxo.cocolog-nifty.com/blog/2015/06/ver101-8e35.html>
 
- .. [#] Windowsネイティブに特化するなら「ブリュンヒルデ零式改(zeroshikikai.cpp)」をベースに
+ .. [#] Windowsネイティブに特化するなら「ブリュンヒルデ零式改弐」をベースに
         するという解もありますよ。
 
-        「ブリュンヒルデ零式改。」    <http://blog.x-row.net/?p=6911>
+        「ブリュンヒルデ零式改弐」    <http://blog.x-row.net/?p=10682>

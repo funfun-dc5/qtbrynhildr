@@ -53,7 +53,7 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy2[0]) - (char*)&com_data;
   cout << "dummy2 offset = " << offset;
-  if (offset == 12){
+  if (offset == 5){
 	cout << " : ok" << endl;
   }
   else {
@@ -61,7 +61,7 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy3[0]) - (char*)&com_data;
   cout << "dummy3 offset = " << offset;
-  if (offset == 78){
+  if (offset == 12){
 	cout << " : ok" << endl;
   }
   else {
@@ -69,7 +69,7 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy4[0]) - (char*)&com_data;
   cout << "dummy4 offset = " << offset;
-  if (offset == 82){
+  if (offset == 78){
 	cout << " : ok" << endl;
   }
   else {
@@ -77,7 +77,7 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy5[0]) - (char*)&com_data;
   cout << "dummy5 offset = " << offset;
-  if (offset == 86){
+  if (offset == 82){
 	cout << " : ok" << endl;
   }
   else {
@@ -85,7 +85,7 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy6[0]) - (char*)&com_data;
   cout << "dummy6 offset = " << offset;
-  if (offset == 96){
+  if (offset == 86){
 	cout << " : ok" << endl;
   }
   else {
@@ -93,7 +93,7 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy7[0]) - (char*)&com_data;
   cout << "dummy7 offset = " << offset;
-  if (offset == 144){
+  if (offset == 96){
 	cout << " : ok" << endl;
   }
   else {
@@ -101,7 +101,11 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy8[0]) - (char*)&com_data;
   cout << "dummy8 offset = " << offset;
-  if (offset == 192){
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+  if (offset == 148){
+#else // defined(QTB_BRYNHILDR2_SUPPORT)
+  if (offset == 144){
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
 	cout << " : ok" << endl;
   }
   else {
@@ -109,7 +113,7 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy9[0]) - (char*)&com_data;
   cout << "dummy9 offset = " << offset;
-  if (offset == 224){
+  if (offset == 192){
 	cout << " : ok" << endl;
   }
   else {
@@ -117,6 +121,14 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy10[0]) - (char*)&com_data;
   cout << "dummy10 offset = " << offset;
+  if (offset == 224){
+	cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+  }
+  offset = (char*)&(com_data.dummy11[0]) - (char*)&com_data;
+  cout << "dummy11 offset = " << offset;
   if (offset == 236){
 	cout << " : ok" << endl;
   }

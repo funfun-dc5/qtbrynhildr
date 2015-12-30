@@ -159,6 +159,13 @@
   [エラーメッセージの例]
   qtbrynhildr: error while loading shared libraries: libGL.so.1: cannot open shared object file: No such file or directory
 
+  [CentOSの場合]
+
+  EPELリポジトリを追加(sudo yum install epel-release)して以下のパッケージをインストールしてください。
+
+  sudo yum install libqtxdg-qt5
+  sudo yum install qt5-qtmultimedia
+
 ==============================
 [アンインストール]
 ==============================
@@ -525,6 +532,7 @@ onHoldMouseControl=false
 onControlOffWithGraphicsOff=true
 onGraphics=true
 videoQuality=5
+onSupportGamePad=true
 onDisableBrynhildr2Support=false
 frameRate=30
 onSound=true
@@ -732,9 +740,10 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
-Ver.1.2.x : [新規機能]
+Ver.1.2.1 : [新規機能]
              ・Brynhildr2対応
                マウスカーソル描画をクライアント側へ
+               ゲームパッド対応(Windows版のみ)
 
 Ver.1.2.0 : [新規機能]
              ・リモート操作のファイル記録/再生機能を追加
@@ -997,6 +1006,8 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 「ブリュンヒルデ零式。」      : http://blog.x-row.net/?p=6818
 
 「ブリュンヒルデ零式改。」    : http://blog.x-row.net/?p=6911
+
+「ブリュンヒルデ零式改弐」    : http://blog.x-row.net/?p=10682
 
 (3) Qt Projectのページ
 

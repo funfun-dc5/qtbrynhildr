@@ -124,6 +124,9 @@ typedef int KEYBOARD_TYPE;
 #else // defined(QTB_DEV_TABLET)
 #define QTB_ONDISPLAYCURSOR_DEFAULT		false
 #endif // defined(QTB_DEV_TABLET)
+// for onSupportGamePad
+#define QTB_ONSUPPORTGAMEPAD	"onSupportGamePad"
+#define QTB_ONSUPPORTGAMEPAD_DEFAULT	true
 // for onDisableBrynhildr2Support
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT			"onDisableBrynhildr2Support"
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT	false
@@ -566,6 +569,19 @@ public:
   {
 	this->onDisplayCursor = onDisplayCursor;
   }
+
+  // get support gamepad flag
+  bool getOnSupportGamePad()
+  {
+	return onSupportGamePad;
+  }
+
+  // set support gamepad flag
+  void setOnSupportGamePad(bool onSupportGamePad)
+  {
+	this->onSupportGamePad = onSupportGamePad;
+  }
+
   // get disable brynhildr2 flag
   bool getOnDisableBrynhildr2Support()
   {
@@ -1183,6 +1199,7 @@ private:
 
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   volatile bool onDisplayCursor;
+  volatile bool onSupportGamePad;
   volatile bool onDisableBrynhildr2Support;
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
   volatile unsigned int frameRate;

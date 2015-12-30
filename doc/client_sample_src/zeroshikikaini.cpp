@@ -4,9 +4,10 @@
 #include					<audioclient.h>
 #include					"dsound.h"
 
-#pragma comment(lib,"wsock32")
-#pragma comment(lib,"dsound")
-#pragma comment(lib,"imm32")
+#pragma						comment(lib,"wsock32")
+#pragma						comment(lib,"dsound")
+#pragma						comment(lib,"imm32")
+#pragma						comment(lib,"winmm.lib")
 
 char						*g_connect_ver;						//通信バージョン
 char						*g_ip;								//IP
@@ -49,9 +50,10 @@ struct COM_DATA													//ヘッダー(256byte)
 	char					thread;								//1:操作系,2:画像系,3:音声系
 	char					___filler_1[1];
 	char					sound_type;							//0:音声なし,1:音声あり
-	long					encryption;							//0:非暗号化通信
+	char					encryption;							//0:非暗号化通信
+	char					___filler_2[3];
 	long					data_size;							//データサイズ
-	char					___filler_2[4];
+	char					___filler_3[4];
 	char					check_digit_enc[16];				//チェックデジット(ハッシュ化)
 	long					check_digit;						//チェックデジット
 	char					ver[4];								//通信バージョン
@@ -66,27 +68,36 @@ struct COM_DATA													//ヘッダー(256byte)
 	long					mouse_y;							//マウス座標Ｙ軸
 	char					mouse_left;							//1:マウス左ボタンダウン,2:マウス左ボタンアップ,3:マウス左ボタンダブルクリック
 	char					mouse_right;						//1:マウス右ボタンダウン,2:マウス右ボタンアップ,3:マウス右ボタンダブルクリック
-	char					___filler_3[1];
+	char					___filler_4[1];
 	char					mouse_wheel;						//マウスホイール移動量
 	char					keycode;							//キーコード
-	char					keycode_flg;						//キーフラグ(0x00:KEYUP,0x80:KEYDOWN)
-	char					___filler_4[2];
+	char					keycode_flg;						//キーフラグ(0x00:KeyUp,0x80:KeyDown)
+	char					___filler_5[2];
 	char					monitor_no;							//モニター番号
 	char					monitor_count;						//モニター数
-	char					___filler_5[3];
+	char					___filler_6[3];
 	long					sound_capture;						//0:DirectSound,1:CoreAudio
-	char					___filler_6[40];
+	char					___filler_7[40];
 	long					keydown;							//キー押下(1:押下あり,0:押下なし)
 	long					video_quality;						//画質(1:最低画質,3:低画質,5:標準画質,7:高画質,9:最高画質)
-	char					___filler_7[40];
+	long					mouse_cursor;						//マウスカーソル表示(0:自動,1:表示固定,2:非表示固定)
+	char					___filler_8[20];
+	long					gamepad1;							//ゲームパッド(Xpos)
+	long					gamepad2;							//ゲームパッド(Ypos)
+	long					gamepad3;							//ゲームパッド(Zpos)
+	long					gamepad4;							//ゲームパッド(Rpos)
 	long					client_scroll_x;					//スクロール位置Ｘ軸
 	long					client_scroll_y;					//スクロール位置Ｙ軸
-	char					___filler_8[24];
+	char					___filler_9[24];
 	double					zoom;								//拡大率(1.0:等倍)
-	char					___filler_9[4];
+	char					___filler_10[4];
 	long					mode;								//5:パブリックモード
 	long					sound_quality;						//音質(1:最低音質,2:低音質,3:標準音質,4:高音質,5:最高音質)
-	char					___filler_10[20];
+	char					___filler_11[4];
+	long					gamepad5;							//ゲームパッド(Pov)
+	long					gamepad6;							//ゲームパッド(Buttons)
+	long					gamepad7;							//ゲームパッド(Upos)
+	long					gamepad8;							//ゲームパッド(Vpos)
 };
 
 //音声処理初期化
@@ -314,6 +325,7 @@ DWORD WINAPI thread1(LPVOID p_arg)
 		//操作系
 
 		com_data.control = 1;
+		com_data.mouse_cursor = 0;
 
 		if (mouse_x_old == -1 && 
 			mouse_y_old == -1)
@@ -462,6 +474,34 @@ DWORD WINAPI thread1(LPVOID p_arg)
 
 			g_keyboard1[255] = 0;
 			g_keyboard2[255] = 0;
+		}
+
+		JOYINFOEX gamepad_btn;
+
+		gamepad_btn.dwFlags = JOY_RETURNALL;
+		gamepad_btn.dwSize = sizeof(JOYINFOEX);
+
+		if (::joyGetPosEx(JOYSTICKID1,&gamepad_btn) == JOYERR_NOERROR)
+		{
+			com_data.gamepad1 = gamepad_btn.dwXpos;
+			com_data.gamepad2 = gamepad_btn.dwYpos;
+			com_data.gamepad3 = gamepad_btn.dwZpos;
+			com_data.gamepad4 = gamepad_btn.dwRpos;
+			com_data.gamepad5 = gamepad_btn.dwPOV;
+			com_data.gamepad6 = gamepad_btn.dwButtons;
+			com_data.gamepad7 = gamepad_btn.dwUpos;
+			com_data.gamepad8 = gamepad_btn.dwVpos;
+		}
+		else
+		{
+			com_data.gamepad1 = 32768;
+			com_data.gamepad2 = 32768;
+			com_data.gamepad3 = 32768;
+			com_data.gamepad4 = 32768;
+			com_data.gamepad5 = 65535;
+			com_data.gamepad6 = 0;
+			com_data.gamepad7 = 0;
+			com_data.gamepad8 = 0;
 		}
 
 		//画像系
@@ -938,7 +978,7 @@ int WINAPI WinMain(HINSTANCE hInst,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int n
 	WNDCLASSEX wc;
 	memset(&wc,0,sizeof(WNDCLASSEX));
 	wc.cbSize			= sizeof(wc);
-	wc.lpszClassName	= L"ZeroShikiKai";
+	wc.lpszClassName	= L"ZeroShikiKaiNi";
 	wc.lpfnWndProc		= proc;
 	wc.style			= CS_VREDRAW | CS_HREDRAW;
 	wc.hCursor			= LoadCursor(0,IDC_ARROW);

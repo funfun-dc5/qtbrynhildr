@@ -24,7 +24,7 @@ win32 {
 DEFINES += QWT_DLL
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr_resource.rc
-LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp
+LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 }
 
 # for MacOSX
@@ -41,7 +41,7 @@ ICON = images/qtbrynhildr.icns
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h
-HEADERS += machine/protocols_x86.h machine/protocols_x64.h
+HEADERS += machine/protocols_x86.h machine/protocols_x64.h machine/protocols_common.h
 
 HEADERS += qtbrynhildr.h
 HEADERS += option.h desktop.h

@@ -191,13 +191,13 @@
 [インストール]
 ==============================
 
-.dmgファイルをマウントし、QtBrynhildr.app を /Applications にコピーしてください。
+ .dmgファイルをマウントし、QtBrynhildr.app を /Applications にコピーしてください。
 
 ==============================
 [アンインストール]
 ==============================
 
-/Applications/QtBrynhildr.app を削除してください。
+ ~/.config/mcz-xoxoと/Applications/QtBrynhildr.app を削除してください。
 
 ----------------------------------------------------------------------
 1-4. インストール (FreeBSD版)
@@ -994,6 +994,8 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
  「Brynhildr - 高速度型リモートデスクトップ」: http://blog.x-row.net/?p=2455
 
  「Siegfried - 高圧縮型リモートデスクトップ」: http://blog.x-row.net/?p=7879
+
+ (*) SiegfriedとBrynhildrは統合されBrynhildr2となる予定だそうです。
 
 (2) パブリックモード、クライアントサンプルソースに関するページ
 

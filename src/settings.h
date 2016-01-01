@@ -125,8 +125,12 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONDISPLAYCURSOR_DEFAULT		false
 #endif // defined(QTB_DEV_TABLET)
 // for onSupportGamePad
-#define QTB_ONSUPPORTGAMEPAD	"onSupportGamePad"
+#define QTB_ONSUPPORTGAMEPAD			"onSupportGamePad"
+#if defined(Q_OS_WIN)
 #define QTB_ONSUPPORTGAMEPAD_DEFAULT	true
+#else // defined(Q_OS_WIN)
+#define QTB_ONSUPPORTGAMEPAD_DEFAULT	false
+#endif // defined(Q_OS_WIN)
 // for onDisableBrynhildr2Support
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT			"onDisableBrynhildr2Support"
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT	false

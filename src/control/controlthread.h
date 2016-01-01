@@ -59,6 +59,9 @@ private:
   // initialize protocol header
   void initHeader();
 
+  // set gamepad control
+  void setGamePadControl();
+
 private:
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   // server version

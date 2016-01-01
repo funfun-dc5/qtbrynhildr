@@ -195,64 +195,9 @@ PROCESS_RESULT ControlThread::processForHeader()
 
 #if defined(QTB_BRYNHILDR2_SUPPORT)
   // for GamePad
-#if defined(Q_OS_WIN)
   if (settings->getOnSupportGamePad()){
-	JOYINFOEX gamepad_btn;
-
-	gamepad_btn.dwFlags = JOY_RETURNALL;
-	gamepad_btn.dwSize = sizeof(JOYINFOEX);
-
-	// get status of GamePad(1)
-	MMRESULT result = ::joyGetPosEx(JOYSTICKID1,&gamepad_btn);
-
-	// set information
-	if (result == JOYERR_NOERROR){
-	  // found gamepad
-	  com_data->gamepad1 = gamepad_btn.dwXpos;
-	  com_data->gamepad2 = gamepad_btn.dwYpos;
-	  com_data->gamepad3 = gamepad_btn.dwZpos;
-	  com_data->gamepad4 = gamepad_btn.dwRpos;
-	  com_data->gamepad5 = gamepad_btn.dwPOV;
-	  com_data->gamepad6 = gamepad_btn.dwButtons;
-	  com_data->gamepad7 = gamepad_btn.dwUpos;
-	  com_data->gamepad8 = gamepad_btn.dwVpos;
-	}
-	else if (result == MMSYSERR_NODRIVER){
-	  // NOT exist driver for gamepad
-	}
-	else if (result == MMSYSERR_INVALPARAM){
-	  // invalid parameter
-	  // internal error
-	}
-	else if (result == MMSYSERR_BADDEVICEID){
-	  // bad device id for gamepad
-	  // internal error
-	}
-	else if (result == JOYERR_UNPLUGGED){
-	  // not found gamepad
-	  com_data->gamepad1 = 32768;
-	  com_data->gamepad2 = 32768;
-	  com_data->gamepad3 = 32768;
-	  com_data->gamepad4 = 32768;
-	  com_data->gamepad5 = 65535;
-	  com_data->gamepad6 = 0;
-	  com_data->gamepad7 = 0;
-	  com_data->gamepad8 = 0;
-	}
-	else {
-	  // Unknown Error
-	  com_data->gamepad1 = 0;
-	  com_data->gamepad2 = 0;
-	  com_data->gamepad3 = 0;
-	  com_data->gamepad4 = 0;
-	  com_data->gamepad5 = 0;
-	  com_data->gamepad6 = 0;
-	  com_data->gamepad7 = 0;
-	  com_data->gamepad8 = 0;
-	}
+	setGamePadControl();
   }
-#endif // defined(Q_OS_WIN)
-
 #endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
 #if 0 // for DEBUG
@@ -502,5 +447,73 @@ void ControlThread::initHeader()
   com_data->sound_capture	= settings->getSoundCapture();
   com_data->sound_quality	= settings->getSoundQuality();
 }
+
+// set gamepad
+#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if defined(Q_OS_WIN)
+void ControlThread::setGamePadControl()
+{
+  JOYINFOEX gamepad_btn;
+
+  gamepad_btn.dwFlags = JOY_RETURNALL;
+  gamepad_btn.dwSize = sizeof(JOYINFOEX);
+
+  // get status of GamePad(1)
+  MMRESULT result = ::joyGetPosEx(JOYSTICKID1,&gamepad_btn);
+
+  // set information
+  if (result == JOYERR_NOERROR){
+	// found gamepad
+	com_data->gamepad1 = gamepad_btn.dwXpos;
+	com_data->gamepad2 = gamepad_btn.dwYpos;
+	com_data->gamepad3 = gamepad_btn.dwZpos;
+	com_data->gamepad4 = gamepad_btn.dwRpos;
+	com_data->gamepad5 = gamepad_btn.dwPOV;
+	com_data->gamepad6 = gamepad_btn.dwButtons;
+	com_data->gamepad7 = gamepad_btn.dwUpos;
+	com_data->gamepad8 = gamepad_btn.dwVpos;
+  }
+  else if (result == MMSYSERR_NODRIVER){
+	// NOT exist driver for gamepad
+  }
+  else if (result == MMSYSERR_INVALPARAM){
+	// invalid parameter
+	// internal error
+  }
+  else if (result == MMSYSERR_BADDEVICEID){
+	// bad device id for gamepad
+	// internal error
+  }
+  else if (result == JOYERR_UNPLUGGED){
+	// not found gamepad
+	com_data->gamepad1 = 32768;
+	com_data->gamepad2 = 32768;
+	com_data->gamepad3 = 32768;
+	com_data->gamepad4 = 32768;
+	com_data->gamepad5 = 65535;
+	com_data->gamepad6 = 0;
+	com_data->gamepad7 = 0;
+	com_data->gamepad8 = 0;
+  }
+  else {
+	// Unknown Error
+	com_data->gamepad1 = 0;
+	com_data->gamepad2 = 0;
+	com_data->gamepad3 = 0;
+	com_data->gamepad4 = 0;
+	com_data->gamepad5 = 0;
+	com_data->gamepad6 = 0;
+	com_data->gamepad7 = 0;
+	com_data->gamepad8 = 0;
+  }
+}
+#else // defined(Q_OS_WIN)
+void ControlThread::setGamePadControl()
+{
+  // Yet
+}
+#endif // defined(Q_OS_WIN)
+
+#endif // defined(QTB_BRYNHILDR2_SUPPORT)
 
 } // end of namespace qtbrynhildr

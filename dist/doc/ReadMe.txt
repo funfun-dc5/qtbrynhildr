@@ -38,16 +38,16 @@
  [対応OS]
 ==============================
 
-[Windows版]
+[Windows版(64bit/32bit)]
 
- Windows XP    (64bit/32bit)
- Windows Vista (64bit/32bit)
- Windows 7     (64bit/32bit)
- Windows 8     (64bit/32bit)
- Windows 8.1   (64bit/32bit)
- Windows 10    (64bit/32bit)
+ Windows XP
+ Windows Vista
+ Windows 7
+ Windows 8
+ Windows 8.1
+ Windows 10
 
-[Linux(x64/x86)版]
+[Linux版(x64/x86)]
 
  Ubuntu 14.04 LTS以降 (x64/x86)
  CentOS 7      (x64)
@@ -161,7 +161,8 @@
 
   [CentOSの場合]
 
-  EPELリポジトリを追加(sudo yum install epel-release)して以下のパッケージをインストールしてください。
+  EPELリポジトリを追加(sudo yum install epel-release)して以下のパッケージを
+  インストールしてください。
 
   sudo yum install libqtxdg-qt5
   sudo yum install qt5-qtmultimedia
@@ -312,7 +313,7 @@
 
    [6] 「パスワードを表示する」
 
-      入力中のパスワードを平文で表示するようにします。
+      チェックを入れると入力中のパスワードを平文で表示するようになります。
 
   (4) 「OK」ボタンを押してサーバに接続してください。
 
@@ -325,6 +326,9 @@
 
  (2) 「確認」ダイアログが出るので、終了して良い場合には「OK」ボタンを押して
       Qt Brynhildrを終了してください。
+
+      「次回も確認ダイアログを表示する」のチェックを外すと次回から「確認」ダイアログを
+      表示せずにすぐに終了します。
 
 ==============================
  使い方
@@ -679,7 +683,7 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 8-4. Mac版のみの制限
 ----------------------------------------------------------------------
 
- (1) 1つのTabを入力するためにTabキーを2回押す必要があります。
+ (1) 1つのTabを入力するためにTabキーを2回押す必要があります。(実装上の怠慢です…)
 
  (2) 端末から起動した場合、かなキーが反映され、端末上でIMがONになることがあります。
 
@@ -742,7 +746,7 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 Ver.1.2.1 : [新規機能]
              ・Brynhildr2対応
-               マウスカーソル描画をクライアント側へ
+               マウスカーソルをクライアント側で表示するように変更
                ゲームパッド対応(Windows版のみ)
 
 Ver.1.2.0 : [新規機能]
@@ -1010,6 +1014,8 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 「ブリュンヒルデ零式改。」    : http://blog.x-row.net/?p=6911
 
 「ブリュンヒルデ零式改弐」    : http://blog.x-row.net/?p=10682
+
+ (*) 1番下のURL(↑)からダウンロードできるソースコードが最新です。
 
 (3) Qt Projectのページ
 

@@ -59,6 +59,9 @@ const bool QTB_SCROLL_MODE				= true;
 const bool QTB_SCROLL_MODE				= false;
 #endif // defined(QTB_DEV_DESKTOP)
 
+// log view dialog
+const bool QTB_LOG_VIEW					= true;
+
 // translation
 const bool QTB_TRANSLATION				= true;
 

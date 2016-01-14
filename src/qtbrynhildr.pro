@@ -15,6 +15,7 @@ FORMS += GUI/desktop_scaling_dialog.ui
 FORMS += GUI/confirm_dialog.ui
 FORMS += GUI/software_keyboard.ui
 FORMS += GUI/software_button.ui
+FORMS += GUI/log_view_dialog.ui
 
 # for DEBUG
 #CONFIG += console
@@ -53,7 +54,7 @@ HEADERS += qtbrynhildr.h
 HEADERS += option.h desktop.h
 HEADERS += debug.h
 HEADERS += mainwindow.h logmessage.h
-HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dialog/confirm_dialog.h
+HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dialog/confirm_dialog.h dialog/log_view_dialog.h
 HEADERS += touchpanel/software_keyboard.h touchpanel/software_keyboard_jp.h touchpanel/software_keyboard_us.h
 HEADERS += touchpanel/software_button.h
 HEADERS += settings.h
@@ -71,7 +72,7 @@ SOURCES += qtbrynhildr.cpp
 SOURCES += option.cpp desktop.cpp
 SOURCES += debug.cpp
 SOURCES += mainwindow.cpp logmessage.cpp
-SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp  dialog/confirm_dialog.cpp
+SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp dialog/confirm_dialog.cpp dialog/log_view_dialog.cpp
 SOURCES += touchpanel/software_keyboard.cpp touchpanel/software_keyboard_jp.cpp touchpanel/software_keyboard_us.cpp
 SOURCES += touchpanel/software_button.cpp
 SOURCES += settings.cpp

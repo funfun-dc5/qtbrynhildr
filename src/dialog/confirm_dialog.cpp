@@ -59,7 +59,7 @@ bool ConfirmDialog::getConfirmFlag() const
   return confirmFlag;
 }
 
-  // settings for Tablet
+// settings for Tablet
 void ConfirmDialog::resetting()
 {
 #if defined(QTB_DEV_TABLET)

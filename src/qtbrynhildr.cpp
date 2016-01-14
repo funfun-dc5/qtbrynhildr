@@ -54,6 +54,7 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   :
   desktopScalingDialog(0),
+  logViewDialog(0),
   softwareKeyboard(0),
   softwareButton(0),
   softwareKeyboardDockWidget(0),
@@ -296,6 +297,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
 	desktopScalingDialog = new DesktopScalingDialog(settings, this);
+  }
+
+  // set up log view dialog
+  if (QTB_LOG_VIEW){
+	logViewDialog = new LogViewDialog(settings, this);
   }
 
   // Software Button
@@ -910,6 +916,13 @@ void QtBrynhildr::createActions()
 	connect(desktopScalingDialog_Action, SIGNAL(triggered()), this, SLOT(desktopScaling()));
   }
 
+  // Log Action
+  if (QTB_LOG_VIEW){
+	logViewDialog_Action = new QAction(tr("Log View"), this);
+	logViewDialog_Action->setStatusTip(tr("Log View"));
+	connect(logViewDialog_Action, SIGNAL(triggered()), this, SLOT(logView()));
+  }
+
   // select frame rate Action
   selectFrameRate5_Action = new QAction(tr("5 FPS"), this);
   //  selectFrameRate5_Action->setEnabled(false);
@@ -1317,6 +1330,11 @@ void QtBrynhildr::createMenus()
 
   // help menu
   helpMenu = menuBar()->addMenu(tr("&Help"));
+  // for log view
+  if (QTB_LOG_VIEW){
+	helpMenu->addAction(logViewDialog_Action);
+	helpMenu->addSeparator();
+  }
   helpMenu->addAction(about_Action);
 }
 
@@ -2409,6 +2427,15 @@ void QtBrynhildr::desktopScaling()
   if (QTB_DESKTOP_IMAGE_SCALING){
 	desktopScalingDialog->setSliderPositionFromSetting();
 	desktopScalingDialog->show();
+  }
+}
+
+// log view
+void QtBrynhildr::logView()
+{
+  // display log view dialog
+  if (QTB_LOG_VIEW){
+	logViewDialog->show();
   }
 }
 

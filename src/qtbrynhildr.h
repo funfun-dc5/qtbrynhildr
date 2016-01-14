@@ -28,6 +28,7 @@
 #include "dialog/confirm_dialog.h"
 #include "dialog/connect_to_server_dialog.h"
 #include "dialog/desktop_scaling_dialog.h"
+#include "dialog/log_view_dialog.h"
 #if QTB_CRYPTOGRAM
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
@@ -209,6 +210,9 @@ private slots:
 
   // desktop scaling
   void desktopScaling();
+
+  // log view
+  void logView();
 
   // toggle show software keyboard
   void toggleShowSoftwareKeyboard();
@@ -395,6 +399,9 @@ private:
   // desktop scaling
   QAction *desktopScalingDialog_Action;
 
+  // log view
+  QAction *logViewDialog_Action;
+
   // show software keyboard
   QAction *showSoftwareKeyboard_Action;
 
@@ -478,6 +485,9 @@ private:
 
   // desktop scling dialog
   DesktopScalingDialog *desktopScalingDialog;
+
+  // log view dialog
+  LogViewDialog *logViewDialog;
 
   // software keyboard and button
   SoftwareKeyboard *softwareKeyboard;

@@ -1158,6 +1158,20 @@ void QtBrynhildr::createActions()
 	onScrollMode_Action->setStatusTip(tr("Scroll Mode"));
 	connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
   }
+
+#if QTB_SUPPORT_PUBLIC_MODE6
+  // send file
+  sendFile_Action = new QAction(tr("&Send File"), this);
+  sendFile_Action->setEnabled(false);
+  sendFile_Action->setStatusTip(tr("Send File"));
+  connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
+
+  // receive file
+  receiveFile_Action = new QAction(tr("&Receive File"), this);
+  receiveFile_Action->setEnabled(false);
+  receiveFile_Action->setStatusTip(tr("Receive File"));
+  connect(receiveFile_Action, SIGNAL(triggered()), this, SLOT(receiveFile()));
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 }
 
 // create Menus
@@ -1166,6 +1180,11 @@ void QtBrynhildr::createMenus()
   // file menu
   fileMenu = menuBar()->addMenu(tr("&File"));
   fileMenu->addAction(connectToServer_Action);
+#if QTB_SUPPORT_PUBLIC_MODE6
+  fileMenu->addSeparator();
+  fileMenu->addAction(sendFile_Action);
+  fileMenu->addAction(receiveFile_Action);
+#endif // QTB_SUPPORT_PUBLIC_MODE6
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
 
@@ -1423,6 +1442,14 @@ void QtBrynhildr::connected()
 	onScrollMode_Action->setEnabled(true);
   }
 
+#if QTB_SUPPORT_PUBLIC_MODE6
+  // send file
+  sendFile_Action->setEnabled(true);
+
+  // receive file
+  receiveFile_Action->setEnabled(true);
+#endif // QTB_SUPPORT_PUBLIC_MODE6
+
   // reset frameCounter
   frameCounter = 0;
 
@@ -1463,6 +1490,14 @@ void QtBrynhildr::disconnected()
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action->setEnabled(false);
   }
+
+#if QTB_SUPPORT_PUBLIC_MODE6
+  // send file
+  sendFile_Action->setEnabled(false);
+
+  // receive file
+  receiveFile_Action->setEnabled(false);
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 }
 
 // close event by window close
@@ -1835,6 +1870,20 @@ void QtBrynhildr::exit()
   // quit
   qApp->quit();
 }
+
+#if QTB_SUPPORT_PUBLIC_MODE6
+// send file
+void QtBrynhildr::sendFile()
+{
+  cout << "Called sendFile()" << endl << flush;
+}
+
+// receive file
+void QtBrynhildr::receiveFile()
+{
+  cout << "Called receiveFile()" << endl << flush;
+}
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 
 // clear Video Quality check
 void QtBrynhildr::clearVideoQualityCheck()

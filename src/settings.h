@@ -238,6 +238,14 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWPASSWORD					"onShowPassword"
 #define QTB_ONSHOWPASSWORD_DEFAULT			false
 
+#if QTB_SUPPORT_PUBLIC_MODE6
+
+// for onDisableClipboard
+#define QTB_ONDISABLECLIPBOARD				"onDisableClipboard"
+#define QTB_ONDISABLECLIPBOARD_DEFAULT		false
+
+#endif // QTB_SUPPORT_PUBLIC_MODE6
+
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"
 #define QTB_GRAPHICSBUFFERSIZE_DEFAULT		(1024 * 1024)
@@ -1038,6 +1046,22 @@ public:
 	this->onShowPassword = onShowPassword;
   }
 
+#if QTB_SUPPORT_PUBLIC_MODE6
+
+  // get disable clilpboard flag
+  bool getOnDisableClipboard() const
+  {
+	return onDisableClipboard;
+  }
+
+  // set disable clipboard flag
+  void setOnDisableClipboard(bool onDisableClipboard)
+  {
+	this->onDisableClipboard = onDisableClipboard;
+  }
+
+#endif // QTB_SUPPORT_PUBLIC_MODE6
+
   // get on show Software Keyboard flag
   bool getOnShowSoftwareKeyboard() const
   {
@@ -1293,6 +1317,13 @@ private:
 
   // show password
   volatile bool onShowPassword;
+
+#if QTB_SUPPORT_PUBLIC_MODE6
+
+  // disable clip board
+  volatile bool onDisableClipboard;
+
+#endif // QTB_SUPPORT_PUBLIC_MODE6
 
   // buffer
   volatile int graphicsBufferSize;

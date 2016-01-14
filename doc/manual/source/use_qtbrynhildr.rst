@@ -200,6 +200,10 @@
 
  .. image:: images/menu_help.jpg
 
+ * ログの表示
+
+   Qt Brynhildr のログを表示します。
+
  * 「Qt Brynhildrについて」
 
    Qt Brynhildr についてバージョン情報などを表示します。

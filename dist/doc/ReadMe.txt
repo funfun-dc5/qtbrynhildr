@@ -488,7 +488,11 @@
 
  (7) 「ヘルプ」メニュー
 
-     [1] Qt Brynhildr について
+     [1] ログの表示
+
+       Qt Brynhildr のログを表示します。
+
+     [2] Qt Brynhildr について
 
        Qt Brynhildr についてバージョン情報などを表示します。
 

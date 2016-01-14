@@ -27,6 +27,11 @@ RC_FILE = resource/qtbrynhildr_resource.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 }
 
+# for UNIX
+unix {
+DEFINES += QTB_RECORDER
+}
+
 # for MacOSX
 macx {
 DEFINES += QTB_RECORDER

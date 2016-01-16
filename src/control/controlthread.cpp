@@ -307,7 +307,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 		emit changeMouseCursor(Qt::CrossCursor);
 	  }
 	  else if (serverVersion == SERVER_VERSION_BRYNHILDR2){
-		// change to Qt::CrossCursor for Brynhildr (>= 2.0.0)
+		// change to Qt::ArrowCursor for Brynhildr (>= 2.0.0)
 		// change mouse cursor
 		emit changeMouseCursor(Qt::ArrowCursor);
 	  }
@@ -448,7 +448,7 @@ void ControlThread::initHeader()
   com_data->sound_quality	= settings->getSoundQuality();
 }
 
-// set gamepad
+// set gamepad control info.
 #if defined(QTB_BRYNHILDR2_SUPPORT)
 #if defined(Q_OS_WIN)
 void ControlThread::setGamePadControl()

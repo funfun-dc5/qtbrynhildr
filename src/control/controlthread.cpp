@@ -455,6 +455,13 @@ void ControlThread::setGamePadControl()
 {
   JOYINFOEX gamepad_btn;
 
+  // check server version and
+  if (serverVersion < SERVER_VERSION_BRYNHILDR2 ||
+	  settings->getOnDisableBrynhildr2Support()){
+	// Nothing to do
+	return;
+  }
+
   gamepad_btn.dwFlags = JOY_RETURNALL;
   gamepad_btn.dwSize = sizeof(JOYINFOEX);
 

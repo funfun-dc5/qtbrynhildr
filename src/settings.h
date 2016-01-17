@@ -117,7 +117,7 @@ typedef int KEYBOARD_TYPE;
 #define QTB_FRAMERATE_DEFAULT	30
 #endif // defined(QTB_DEV_TABLET)
 
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
 // for displayCursor
 #if defined(QTB_DEV_TABLET)
 #define QTB_ONDISPLAYCURSOR_DEFAULT		true
@@ -134,7 +134,7 @@ typedef int KEYBOARD_TYPE;
 // for onDisableBrynhildr2Support
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT			"onDisableBrynhildr2Support"
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT	false
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
 // for onSound
 #define QTB_ONSOUND				"onSound"
@@ -569,7 +569,7 @@ public:
 	return stringTable[videoQuality];
   }
 
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   // get display cursor flag
   bool getOnDisplayCursor()
   {
@@ -605,7 +605,7 @@ public:
   {
 	this->onDisableBrynhildr2Support = onDisableBrynhildr2Support;
   }
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
   // get frame rate (FPS)
   unsigned int getFrameRate()
@@ -972,7 +972,7 @@ public:
 	this->onShowFrameRate = onShowFrameRate;
   }
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // get on recording control flag
   bool getOnRecordingControl() const
   {
@@ -1020,7 +1020,7 @@ public:
   {
 	this->replayingControlFileName = replayingControlFileName;
   }
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // get on scroll mode flag
   bool getOnScrollMode() const
@@ -1225,11 +1225,11 @@ private:
   volatile bool onGraphics;
   volatile VIDEO_QUALITY videoQuality;
 
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   volatile bool onDisplayCursor;
   volatile bool onSupportGamePad;
   volatile bool onDisableBrynhildr2Support;
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;
 
@@ -1302,7 +1302,7 @@ private:
   // software button
   volatile bool onShowSoftwareButton;
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // recording
   volatile bool onRecordingControl;
   const char *recordingControlFileName;
@@ -1310,7 +1310,7 @@ private:
   // reply
   volatile bool onReplayingControl;
   const char *replayingControlFileName;
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // scroll mode
   volatile bool onScrollMode;

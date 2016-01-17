@@ -78,7 +78,7 @@ public:
 	return debug;
   }
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // recording flag
   bool getRecordingFlag() const
   {
@@ -102,7 +102,7 @@ public:
   {
 	return replayingFileName;
   }
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
 private:
   // analyze command line options
@@ -139,7 +139,7 @@ private:
   // debug
   const char *debug;
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // recording flag
   bool recordingFlag;
 
@@ -151,7 +151,7 @@ private:
 
   // replaying filename
   const char *replayingFileName;
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // bootup flag
   bool bootupFlag;

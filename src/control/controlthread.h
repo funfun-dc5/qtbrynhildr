@@ -8,15 +8,15 @@
 #include "common/common.h"
 
 // Qt Header
-#if !defined(QTB_BRYNHILDR2_SUPPORT)
+#if !QTB_BRYNHILDR2_SUPPORT
 #include <QCursor>
-#endif // !defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // !QTB_BRYNHILDR2_SUPPORT
 
 // Local Header
 #include "common/netthread.h"
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
 #include "function/recorder.h"
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 #include "keybuffer.h"
 #include "mainwindow.h"
 #include "mousebuffer.h"
@@ -31,11 +31,11 @@ class ControlThread : public NetThread
 
 public:
   // constructor
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
 ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder);
-#else  // defined(QTB_RECORDER)
+#else  // QTB_RECORDER
 ControlThread(Settings *settings, MainWindow *mainWindow);
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
   // destructor
   ~ControlThread();
 
@@ -63,10 +63,10 @@ private:
   void setGamePadControl();
 
 private:
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   // server version
   SERVER_VERSION serverVersion;
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
   // keyboard buffer
   KeyBuffer *keyBuffer;
@@ -74,10 +74,10 @@ private:
   // mouse buffer
   MouseBuffer *mouseBuffer;
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // recorder
   Recorder *recorder;
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // mouse position
   MOUSE_POS prevPos;
@@ -98,10 +98,10 @@ signals:
   // refresh menu
   void refreshMenu();
 
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   // change mouse cursor
   void changeMouseCursor(const QCursor &cursor);
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
   // exit application
   void exitApplication();

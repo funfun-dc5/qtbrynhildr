@@ -20,21 +20,21 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
 ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder)
-#else  // defined(QTB_RECORDER)
+#else  // QTB_RECORDER
 ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
   :
   NetThread("ControlThread", settings, mainWindow),
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   serverVersion(SERVER_VERSION_BRYNHILDR2),
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
   keyBuffer(0),
   mouseBuffer(0),
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   recorder(recorder),
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
   monitorCount(0),
   sentMode(0)
 {
@@ -193,12 +193,12 @@ PROCESS_RESULT ControlThread::processForHeader()
   cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
 #endif
 
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   // for GamePad
   if (settings->getOnSupportGamePad()){
 	setGamePadControl();
   }
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
 #if 0 // for DEBUG
   static bool oneFlag = true;
@@ -208,7 +208,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 #endif
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // replaying
   if (settings->getOnReplayingControl()){
 	// replay
@@ -230,7 +230,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   else if (settings->getOnRecordingControl()){
 	recorder->putCOM_DATA(com_data);
   }
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // save mode
   sentMode = com_data->mode;
@@ -293,7 +293,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	//	cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
 	settings->setDesktopWidth(com_data->server_cx);
 	settings->setDesktopHeight(com_data->server_cy);
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
 	if (settings->getOnDisableBrynhildr2Support()){
 	  // same as Brynhildr (<= 1.1.5)
 	  com_data->server_version = SERVER_VERSION_BRYNHILDR;
@@ -312,7 +312,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 		emit changeMouseCursor(Qt::ArrowCursor);
 	  }
 	}
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
   }
 
   // check monitor no
@@ -397,11 +397,11 @@ void ControlThread::initHeader()
   com_data->thread		= THREAD_CONTROL;
   com_data->mode		= MODE_PUBLIC;
   com_data->monitor_no	= settings->getMonitorNo();
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
 	com_data->mouse_cursor = settings->getOnDisplayCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
   }
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
 
   // for control
@@ -449,7 +449,7 @@ void ControlThread::initHeader()
 }
 
 // set gamepad control info.
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
 #if defined(Q_OS_WIN)
 void ControlThread::setGamePadControl()
 {
@@ -521,6 +521,6 @@ void ControlThread::setGamePadControl()
 }
 #endif // defined(Q_OS_WIN)
 
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
 } // end of namespace qtbrynhildr

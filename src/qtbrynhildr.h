@@ -9,9 +9,9 @@
 
 // Qt Header
 #include <QAction>
-#if !defined(QTB_BRYNHILDR2_SUPPORT)
+#if !QTB_BRYNHILDR2_SUPPORT
 #include <QCursor>
-#endif // !defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // !QTB_BRYNHILDR2_SUPPORT
 #include <QDateTime>
 #include <QDockWidget>
 #include <QLabel>
@@ -35,9 +35,9 @@
 #include "logmessage.h"
 #include "mainwindow.h"
 #include "option.h"
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
 #include "function/recorder.h"
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 #include "settings.h"
 #include "touchpanel/software_button.h"
 #include "touchpanel/software_keyboard.h"
@@ -102,10 +102,10 @@ public slots:
   // Desktop clear
   void onDesktopClear();
 
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   // change mouse cursor
   void changeMouseCursor(const QCursor &cursor);
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 
   // network error handler
   void onNetworkError();
@@ -175,7 +175,7 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
-#if defined(QTB_RECORDER)
+#if defined(QTB_RECORDER) // for moc compiler bug on Linux/Mac(?)
   // record and replay
   void startRecordingControl();
   void stopRecordingControl();
@@ -289,10 +289,10 @@ private:
   // sound quality
   void refreshSoundQualityMenu();
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // recording and replaying
   void refreshRecordingAndReplayMenu();
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
 private:
   // GUI
@@ -336,10 +336,10 @@ private:
   // Send Key Sub Menu
   QMenu *sendKeySubMenu;
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // Record and Replay Sub Menu
   QMenu *recordAndReplaySubMenu;
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // Option Menu
   QMenu *optionMenu;
@@ -450,7 +450,7 @@ private:
   // toggle onSound
   QAction *onSound_Action;
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // start recording control
   QAction *startRecordingControl_Action;
   // stop recording control
@@ -459,7 +459,7 @@ private:
   QAction *startReplayRecordingControl_Action;
   // stop replay recorded control
   QAction *stopReplayRecordingControl_Action;
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // send key
   QAction *sendKey1_Action;
@@ -553,10 +553,10 @@ private:
   Cipher *cipher;
 #endif // QTB_CRYPTGRAM
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
   // recorder
   Recorder *recorder;
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // current path
   QString currentPath;

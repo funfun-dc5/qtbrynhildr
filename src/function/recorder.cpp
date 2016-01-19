@@ -5,7 +5,7 @@
 // Common Header
 #include "common/common.h"
 
-#if defined(QTB_RECORDER)
+#if QTB_RECORDER
 
 // System Header
 #include <cstring>
@@ -263,4 +263,4 @@ bool Recorder::checkFileHeader()
 
 } // end of namespace qtbrynhildr
 
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER

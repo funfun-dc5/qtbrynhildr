@@ -30,12 +30,12 @@ LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 
 # for UNIX
 unix {
-DEFINES += QTB_RECORDER
+DEFINES += QTB_RECORDER=1
 }
 
 # for MacOSX
 macx {
-DEFINES += QTB_RECORDER
+DEFINES += QTB_RECORDER=1
 ICON = images/qtbrynhildr.icns
 }
 

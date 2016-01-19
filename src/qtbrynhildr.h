@@ -175,13 +175,13 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
-#if defined(QTB_RECORDER) // for moc compiler bug on Linux/Mac(?)
+#if QTB_RECORDER
   // record and replay
   void startRecordingControl();
   void stopRecordingControl();
   void startReplayRecordingControl();
   void stopReplayRecordingControl();
-#endif // defined(QTB_RECORDER)
+#endif // QTB_RECORDER
 
   // send key
 #if 0 // for TEST

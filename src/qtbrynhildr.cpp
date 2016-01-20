@@ -411,6 +411,17 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	option->setBootupFlag(false);
   }
 
+  // desktop size information
+  if (settings->getOutputLog()){
+	QRect currentScreen = settings->getDesktop()->getCurrentScreen();
+	int desktopWidth = currentScreen.width();
+	int desktopHeight = currentScreen.height();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 (QString)"Desktop Width  = " + QString::number(desktopWidth));
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 (QString)"Desktop Height = " + QString::number(desktopHeight));
+  }
+
 #if defined(QTB_DEV_TABLET)
   // enable full screen
   fullScreen();

@@ -37,11 +37,7 @@ const bool QTB_DESKTOP_IMAGE_SCALING	= true;
 const bool QTB_CUT_DESKTOP_BLANK_AREA	= true;
 
 // desktop full screen mode
-#if defined(Q_OS_OSX) || defined(QTB_DEV_TABLET)
-const bool QTB_DESKTOP_FULL_SCREEN		= false;
-#else // defined(Q_OS_OSX) || defined(QTB_DEV_TABLET)
 const bool QTB_DESKTOP_FULL_SCREEN		= true;
-#endif // defined(Q_OS_OSX) || defined(QTB_DEV_TABLET)
 
 // stays on top
 const bool QTB_DESKTOP_STAYS_ON_TOP		= true;

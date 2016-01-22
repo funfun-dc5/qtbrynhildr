@@ -2324,6 +2324,10 @@ void QtBrynhildr::toggleShowFrameRate()
 // get full screen scaling factor
 qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize)
 {
+  if (!desktopSize.isValid()){
+	return (qreal)1.0;
+  }
+
   int desktopWidth = desktopSize.width();
   int desktopHeight = desktopSize.height();
 
@@ -2382,7 +2386,10 @@ void QtBrynhildr::fullScreen()
   fullScreenMode = !fullScreenMode;
   if (fullScreenMode){
 	scalingFactorAtNormal = settings->getDesktopScalingFactor();
-	settings->setDesktopScalingFactor(getFullScreenScalingFactor(mainWindow->getDesktopSize()));
+	QSize desktopSize = mainWindow->getDesktopSize();
+	if (desktopSize.isValid()){
+	  settings->setDesktopScalingFactor(getFullScreenScalingFactor(desktopSize));
+	}
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	mainWindow->setOnFullScreen(true);

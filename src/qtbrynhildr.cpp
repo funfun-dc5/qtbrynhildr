@@ -1230,12 +1230,10 @@ void QtBrynhildr::createMenus()
   }
 #endif // defined(QTB_DEV_DESKTOP)
 
-  // for full screen
-#if defined(QTB_DEV_DESKTOP)
+  // full screen
   if (QTB_DESKTOP_FULL_SCREEN){
 	displayMenu->addAction(fullScreen_Action);
   }
-#endif // defined(QTB_DEV_DESKTOP)
 
   // video menu
   videoMenu = menuBar()->addMenu(tr("&Video"));

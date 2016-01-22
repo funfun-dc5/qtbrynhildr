@@ -2,7 +2,7 @@
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
 #define AppVer "1.2.1"
-#define RCName "-RC1"
+#define RCName "-RC2"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"
@@ -25,7 +25,7 @@ TouchTime=03:15
 ;----------------------------------------------------------------------
 VersionInfoVersion={#AppVer}
 VersionInfoDescription=Qt Brynhildrをセットアップするプログラム
-AppCopyright=Copyright(C) 2015 FunFun @ mcz-xoxo, All rights reserved.
+AppCopyright=Copyright(C) 2016 FunFun @ mcz-xoxo, All rights reserved.
 SetupIconFile=..\..\src\images\qtbrynhildr48.ico
 ;ウィザードページに表示されるグラフィック（*.bmp: 164 x 314）
 ;WizardImageFile=bmp\installer_pic.bmp

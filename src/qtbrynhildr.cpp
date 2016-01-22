@@ -847,6 +847,7 @@ void QtBrynhildr::createActions()
   if (QTB_DESKTOP_FULL_SCREEN){
 	fullScreen_Action = new QAction(tr("Full Screen"), this);
 	fullScreen_Action->setStatusTip(tr("Full Screen"));
+	fullScreen_Action->setEnabled(false);
 	fullScreen_Action->setCheckable(true);
 	fullScreen_Action->setChecked(false);
 	connect(fullScreen_Action, SIGNAL(triggered()), this, SLOT(fullScreen()));
@@ -1464,6 +1465,11 @@ void QtBrynhildr::connected()
 	onScrollMode_Action->setEnabled(true);
   }
 
+  // enable full screen
+  if (QTB_DESKTOP_FULL_SCREEN){
+	fullScreen_Action->setEnabled(true);
+  }
+
 #if QTB_SUPPORT_PUBLIC_MODE6
   // send file
   sendFile_Action->setEnabled(true);
@@ -1511,6 +1517,11 @@ void QtBrynhildr::disconnected()
   // disabled scroll mode
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action->setEnabled(false);
+  }
+
+  // disabled full screen
+  if (QTB_DESKTOP_FULL_SCREEN){
+	fullScreen_Action->setEnabled(false);
   }
 
 #if QTB_SUPPORT_PUBLIC_MODE6

@@ -1361,13 +1361,7 @@ void QtBrynhildr::createStatusBar()
 
   frameRateLabel = new QLabel;
   frameRateLabel->setAlignment(Qt::AlignRight);
-  frameRateLabel->setText(tr("FrameRate: ")+"00.00");
-  // set initial size
-  //  frameRateLabel->setMinimumSize(frameRateLabel->sizeHint());
-  frameRateLabel->setMinimumSize(QSize(frameRateLabel->sizeHint().width() * 2,
-									   frameRateLabel->sizeHint().height()));
-  //  cout << "size.width  = " << frameRateLabel->sizeHint().width() << endl << flush;
-  //  cout << "size.height = " << frameRateLabel->sizeHint().height() << endl << flush;
+  frameRateLabel->setText(" "); // dummy text
 
   statusBar()->addWidget(connectionLabel);
   statusBar()->addPermanentWidget(frameRateLabel);
@@ -1417,13 +1411,14 @@ void QtBrynhildr::updateFrameRate()
 
   // update fps
   if (settings->getOnShowFrameRate()){
-	if (settings->getConnected()){
-	  frameRateLabel->setText(tr("FrameRate: ")+QString::number(currentFrameRate, 'f', 1) +
-							  " [" + QString::number(currentDataRate, 'f', 1) + " Mbps]");
+	if (!settings->getConnected()){
+	  currentFrameRate = 0;
+	  currentDataRate = 0;
 	}
-	else {
-	  frameRateLabel->setText(tr("FrameRate: ")+"00.0 [00.0 Mbps]");
-	}
+	QString str = QString(tr("FrameRate: ")+"%1 [%2 Mbps]").
+	  arg(currentFrameRate, 4, 'f', 1, ' ').
+	  arg(currentDataRate, 4, 'f', 1, ' ');
+	frameRateLabel->setText(str);
   }
   else {
 	frameRateLabel->clear();

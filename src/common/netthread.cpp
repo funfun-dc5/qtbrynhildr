@@ -173,6 +173,9 @@ void NetThread::run()
 	}
   }
 
+  // disconnect
+  shutdownConnection();
+
   if (settings->getOutputLog())
 	cout << "[" << name << "]" << " stop thread...exit run()" << endl << flush;
 }

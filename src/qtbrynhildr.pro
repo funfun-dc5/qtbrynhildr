@@ -69,6 +69,7 @@ HEADERS += control/keybuffer.h control/mousebuffer.h
 HEADERS += graphics/graphicsthread.h
 HEADERS += sound/soundthread.h
 HEADERS += sound/soundbuffer.h
+HEADERS += sound/wave.h
 HEADERS += windows/keycodes.h windows/eventconverter.h windows/eventconverter_jp.h windows/eventconverter_us.h
 HEADERS += function/recorder.h
 

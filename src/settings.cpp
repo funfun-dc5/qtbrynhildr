@@ -116,6 +116,7 @@ Settings::Settings(const char *iniFileName)
 
   setOutputGraphicsDataToFile(QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT);
   setOutputSoundDataToFile(QTB_OUTPUTSOUNDDATATOFILE_DEFAULT);
+  setOutputSoundDataToWavFile(QTB_OUTPUTSOUNDDATATOWAVFILE_DEFAULT);
   setOutputLog(QTB_OUTPUTLOG_DEFAULT);
 
   setLogFile(getDefaultLogFile());
@@ -293,6 +294,10 @@ void Settings::readSettings()
   setOutputSoundDataToFile(settings->value(QTB_OUTPUTSOUNDDATATOFILE,
 										   QTB_OUTPUTSOUNDDATATOFILE_DEFAULT).toBool());
 
+  // load outputSoundDataToWavFile
+  setOutputSoundDataToWavFile(settings->value(QTB_OUTPUTSOUNDDATATOWAVFILE,
+											  QTB_OUTPUTSOUNDDATATOWAVFILE_DEFAULT).toBool());
+
   // load outputLog
   setOutputLog(settings->value(QTB_OUTPUTLOG,
 							   QTB_OUTPUTLOG_DEFAULT).toBool());
@@ -426,6 +431,9 @@ void Settings::writeSettings()
   // save outputSoundDataToFile
   settings->setValue(QTB_OUTPUTSOUNDDATATOFILE, outputSoundDataToFile);
 
+  // save outputSoundDataToWavFile
+  settings->setValue(QTB_OUTPUTSOUNDDATATOWAVFILE, outputSoundDataToWavFile);
+
   // save outputLog
   settings->setValue(QTB_OUTPUTLOG, outputLog);
 
@@ -494,8 +502,9 @@ void Settings::printSettings() const
   qDebug() << "Double Click Threshold(msecond) : " << doubleClickThreshold;
 
   qDebug() << "------------------------------------------";
-  qDebug() << "DBG: output Graphics Data To File : " << outputGraphicsDataToFile;
-  qDebug() << "DBG: output Sound    Data To File : " << outputSoundDataToFile;
+  qDebug() << "DBG: output Graphics Data To File    : " << outputGraphicsDataToFile;
+  qDebug() << "DBG: output Sound    Data To File    : " << outputSoundDataToFile;
+  qDebug() << "DBG: output Sound    Data To WavFile : " << outputSoundDataToWavFile;
   qDebug() << "DBG: output Log : " << outputLog;
   qDebug() << "------------------------------------------";
   qDebug() << "Log File : " << logFile;

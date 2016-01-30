@@ -266,6 +266,10 @@ typedef int SCALING_TYPE;
 #define QTB_OUTPUTSOUNDDATATOFILE				"outputSoundDataToFile"
 #define QTB_OUTPUTSOUNDDATATOFILE_DEFAULT		false
 
+// for outputSoundDataToWavFile
+#define QTB_OUTPUTSOUNDDATATOWAVFILE			"outputSoundDataToWavFile"
+#define QTB_OUTPUTSOUNDDATATOWAVFILE_DEFAULT	false
+
 // for outputLog
 #define QTB_OUTPUTLOG							"outputLog"
 #define QTB_OUTPUTLOG_DEFAULT					false
@@ -1148,6 +1152,19 @@ public:
 	return outputSoundDataToFile;
   }
 
+  // get output sound flag
+  bool getOutputSoundDataToWavFile() const
+  {
+	return outputSoundDataToWavFile;
+  }
+
+  // set output sound flag
+  bool setOutputSoundDataToWavFile(bool outputSoundDataToWavFile)
+  {
+	this->outputSoundDataToWavFile = outputSoundDataToWavFile;
+	return outputSoundDataToWavFile;
+  }
+
   // get output log flag
   bool getOutputLog() const
   {
@@ -1335,6 +1352,7 @@ private:
   // Debug
   volatile bool outputGraphicsDataToFile;
   volatile bool outputSoundDataToFile;
+  volatile bool outputSoundDataToWavFile;
   volatile bool outputLog;
 
   // for logFile
@@ -1356,5 +1374,6 @@ private:
 // for DEBUG
 #define QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX	"graphics_output"
 #define QTB_SOUND_OUTPUT_FILENAME			"sound_output.pcm"
+#define QTB_SOUND_OUTPUT_WAV_FILENAME		"sound_output.wav"
 
 #endif // SETTINGS_H

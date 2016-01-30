@@ -78,7 +78,7 @@ void Recorder::stopRecording(const char* saveFileName)
   settings->setOnRecordingControl(false);
 
   // make fileName (header + raw)
-#if 1 // copy for TEST
+#if 0 // copy for TEST
   fstream in_file;
   fstream out_file;
   in_file.open(filename, ios::in | ios::binary);

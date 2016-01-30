@@ -39,12 +39,18 @@ protected:
   // transmit local buffer to global buffer
   TRANSMIT_RESULT transmitBuffer();
 
+  // connected
+  void connectedToServer();
+
   // shutdown connection
   void shutdownConnection();
 
 private:
   // change samplerate
   bool changeSamplerate(SAMPLERATE samplerate);
+
+  // create .wav file
+  void createWavFile(int dataSize);
 
 private:
   // sound buffer
@@ -70,6 +76,9 @@ private slots:
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif
+
+  // samplerate change count
+  int samplerateChangeCount;
 
 private:
   // local buffer

@@ -566,6 +566,7 @@ soundBufferSize=1048576
 doubleClickThreshold=500
 outputGraphicsDataToFile=false
 outputSoundDataToFile=false
+outputSoundDataToWavFile=false
 outputLog=false
 logFile=D:\\tmp\\qtbrynhildr.log
 geometry=@Rect(200 200 800 600)

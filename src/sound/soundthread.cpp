@@ -17,6 +17,7 @@
 #include "soundthread.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
+#include "wave.h"
 
 namespace qtbrynhildr {
 
@@ -29,6 +30,7 @@ SoundThread::SoundThread(Settings *settings, MainWindow *mainWindow)
   format(0),
   audioOutput(0),
   output(0),
+  samplerateChangeCount(0),
   buffer(0)
 {
   outputLog = false; // for DEBUG
@@ -76,6 +78,17 @@ SoundThread::~SoundThread()
 	delete format;
 	format = 0;
   }
+
+  // output wav file
+  if (settings->getOutputSoundDataToFile() && settings->getOutputSoundDataToWavFile() &&
+	  samplerateChangeCount == 1){
+	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
+	// create wav file
+	int pcmFileSize = pcmFile.size();
+	if (pcmFileSize > 0){
+	  createWavFile(pcmFileSize);
+	}
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -105,6 +118,9 @@ CONNECT_RESULT SoundThread::connectToServer()
 
   // connected
   connectedToServer();
+
+  // reset state
+  samplerateChangeCount = 0;
 
   return CONNECT_SUCCEEDED;
 }
@@ -180,21 +196,11 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   // for DEBUG : save PCM Data (append)
   if (settings->getOutputSoundDataToFile()){
 	fstream file;
-	char filename[QTB_MAXPATHLEN+1];
-	int result;
-	result = snprintf(filename, QTB_MAXPATHLEN, "pcm/%s", QTB_SOUND_OUTPUT_FILENAME);
-	if (result > 0 && result <= QTB_MAXPATHLEN){
-	  file.open(filename, ios::out | ios::binary | ios::app);
-	  if (file.is_open()){
-		file.write(buffer, receivedDataSize);
-		file.close();
-	  }
-	}
-	else {
-	  // snprintf() error
-	  if (settings->getOutputLog()){
-		cout << "[SoundThread] snprintf() error!" << endl << flush;
-	  }
+	char filename[] = "pcm/" QTB_SOUND_OUTPUT_FILENAME;
+	file.open(filename, ios::out | ios::binary | ios::app);
+	if (file.is_open()){
+	  file.write(buffer, receivedDataSize);
+	  file.close();
 	}
   }
 
@@ -252,6 +258,18 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   }
 
   return TRANSMIT_SUCCEEDED;
+}
+
+// connected
+void SoundThread::connectedToServer()
+{
+  // delete files
+  if (settings->getOutputSoundDataToFile()){
+	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
+	pcmFile.remove();
+  }
+
+  NetThread::connectedToServer();
 }
 
 // shutdown connection
@@ -331,7 +349,66 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // output
   output = audioOutput->start();
 
+  // change count up
+  samplerateChangeCount++;
+
   return true;
+}
+
+// create .wav file
+void SoundThread::createWavFile(int pcmFileSize)
+{
+  // check
+  if (pcmFileSize <= 0)
+	return;
+
+  fstream file;
+  char filename[] = "pcm/" QTB_SOUND_OUTPUT_WAV_FILENAME;
+  file.open(filename, ios::out | ios::binary);
+  if (file.is_open()){
+	// 1) Riff Header
+	RiffHeader riffHeader;
+	strncpy((char *)&riffHeader.riff, RIFF_ID, sizeof(riffHeader.riff));
+	riffHeader.size = pcmFileSize + sizeof(RiffHeader) + sizeof(FormatChunk) + sizeof(DataChunk) - 8;
+	strncpy((char *)&riffHeader.type, RIFF_TYPE, sizeof(riffHeader.type));
+	file.write((char *)&riffHeader, sizeof(riffHeader));
+
+	// 2) FormatChunk
+	FormatChunk formatChunk;
+	strncpy((char *)&formatChunk.id, FORMAT_CHUNK_ID, sizeof(formatChunk.id));
+	formatChunk.size = FORMAT_CHUNK_SIZE;
+	formatChunk.format = WAVE_FORMAT_PCM;
+	formatChunk.channels = 2;
+	formatChunk.samplerate = samplerate;
+	formatChunk.bytepersec = 16/8 * formatChunk.channels * formatChunk.samplerate;
+	formatChunk.blockalign = 16/8 * formatChunk.channels;
+	formatChunk.bitswidth = 16; // 16 bits (2 bytes)
+	file.write((char *)&formatChunk, sizeof(formatChunk));
+
+	// 3) DataChunk
+	DataChunk dataChunk;
+	strncpy((char *)&dataChunk.id, DATA_CHUNK_ID, sizeof(dataChunk.id));
+	dataChunk.size = pcmFileSize;
+	file.write((char *)&dataChunk, sizeof(dataChunk));
+
+	// copy PCM raw data to DataChunk(waveformData[])
+	char in_filename[] = "pcm/" QTB_SOUND_OUTPUT_FILENAME;
+	fstream in_file;
+	in_file.open(in_filename, ios::in | ios::binary);
+	if (in_file.is_open()){
+	  while(pcmFileSize > 0){
+		char buf[512*1024]; // 512KB buffer
+		in_file.read(buf, 512*1024);
+		int size = in_file.gcount();
+		if (size > 0){
+		  file.write(buf, size);
+		  pcmFileSize -= size;
+		}
+	  }
+	  in_file.close();
+	}
+	file.close();
+  }
 }
 
 #if defined(DEBUG)

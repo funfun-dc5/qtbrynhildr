@@ -1735,8 +1735,10 @@ void QtBrynhildr::reconnectToServer()
   mainWindow->getKeyBuffer()->clear();
   mainWindow->getMouseBuffer()->clear();
 
+#if 0 // for TEST
   // close and initialize socket
   closeSocket();
+#endif
 
   // counter for control
   counter_control = 0;
@@ -1782,8 +1784,10 @@ void QtBrynhildr::disconnectToServer()
   soundThread->exit();
   soundThread->wait();
 
+#if 0 // for TEST
   // close socket
   closeSocket();
+#endif
 
   // disconnected
   disconnected();

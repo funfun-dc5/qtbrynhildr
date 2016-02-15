@@ -705,6 +705,16 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
   if (eventType == "windows_generic_MSG"){
 	MSG *msg = static_cast<MSG *>(message);
 	// KEY
+#if 0 // send All key event in nativeEventFilter
+	if (msg->message == WM_KEYDOWN){
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
+		return true;
+	}
+	else if (msg->message == WM_KEYUP){
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
+		return true;
+	}
+#else
 	if (msg->message == WM_KEYDOWN){
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
@@ -746,6 +756,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 		break;
 	  }
 	}
+#endif
 	// SYSKEY
 	else if (msg->message == WM_SYSKEYDOWN){
 	  switch(msg->wParam){

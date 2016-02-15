@@ -248,6 +248,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   mainWindow = new MainWindow(settings, this);
   // set Widget
   scrollArea->setWidget(mainWindow);
+  scrollArea->setFocusProxy(mainWindow);
   setCentralWidget(scrollArea);
 #else
   // Main Window Widget

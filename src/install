@@ -70,6 +70,16 @@ case $UNAME in
 				PKGNAME="linux_x86"
 				echo "Installing for Linux x86..."
 				;;
+			armv6l)
+				DISTDIR="../dist/linux/linux_armv6l"
+				PKGNAME="linux_armv6l"
+				echo "Installing for Linux armv6l..."
+				;;
+			armv7l)
+				DISTDIR="../dist/linux/linux_armv7l"
+				PKGNAME="linux_armv7l"
+				echo "Installing for Linux armv7l..."
+				;;
 		esac
 		;;
 	FreeBSD)

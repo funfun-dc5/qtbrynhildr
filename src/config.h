@@ -75,7 +75,7 @@ const bool QTB_IN_TESTING				= false;
 // cryptogram
 #define QTB_CRYPTOGRAM				0
 
-// brynhildr 2 support
+// brynhildr version 2 support
 #define QTB_BRYNHILDR2_SUPPORT		1
 
 // public mode 6 support

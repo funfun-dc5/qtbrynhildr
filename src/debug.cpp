@@ -101,11 +101,11 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy8[0]) - (char*)&com_data;
   cout << "dummy8 offset = " << offset;
-#if defined(QTB_BRYNHILDR2_SUPPORT)
+#if QTB_BRYNHILDR2_SUPPORT
   if (offset == 148){
-#else // defined(QTB_BRYNHILDR2_SUPPORT)
+#else // QTB_BRYNHILDR2_SUPPORT
   if (offset == 144){
-#endif // defined(QTB_BRYNHILDR2_SUPPORT)
+#endif // QTB_BRYNHILDR2_SUPPORT
 	cout << " : ok" << endl;
   }
   else {

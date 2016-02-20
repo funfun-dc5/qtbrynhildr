@@ -6,8 +6,8 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"1.2.1"
-#define QTB_VERSION_NUMBER		121
+#define QTB_VERSION				"1.2.2-RC1"
+#define QTB_VERSION_NUMBER		122
 
 // year
 #define QTB_YEAR		"2015-2016"

@@ -814,7 +814,7 @@ void QtBrynhildr::createActions()
 
   // about Action
   about_Action = new QAction(tr("About"), this);
-  about_Action->setStatusTip(tr("Show Qt Brynhildr"));
+  about_Action->setStatusTip(tr("About Qt Brynhildr"));
   connect(about_Action, SIGNAL(triggered()), this, SLOT(about()));
 
   // Show Menu Bar

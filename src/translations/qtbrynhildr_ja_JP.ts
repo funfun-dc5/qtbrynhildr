@@ -291,7 +291,7 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="811"/>
-        <source>Show Qt Brynhildr</source>
+        <source>About Qt Brynhildr</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Qt Brynhildr について</translation>
     </message>

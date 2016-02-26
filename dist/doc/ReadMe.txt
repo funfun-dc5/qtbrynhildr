@@ -728,6 +728,8 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
  [6] メモリ容量
 
+ [7] モニタの解像度と接続方法(D-Sub/DVI/HDMIなど)
+
 (2) サーバについて
 
  [1] お使いのBrynhildr/Siegfriedのバージョン

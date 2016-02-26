@@ -512,7 +512,7 @@ void QtBrynhildr::refreshWindow()
 
   // refresh desktop
   if (settings->getConnected()){
-	mainWindow->refreshDesktop();
+	mainWindow->refreshDesktop(true);
   }
 
   // update status bar

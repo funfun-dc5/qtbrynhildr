@@ -24,7 +24,7 @@ Desktop::Desktop()
   // for DEBUG
   outputLog(false)
 {
-  QDesktopWidget *desktop = QApplication::desktop();
+  desktop = QApplication::desktop();
 
   if (outputLog){
 	cout << "[Desktop] desktop total width  = " << desktop->width() << endl;
@@ -41,10 +41,10 @@ Desktop::Desktop()
 	}
   }
 
-  int screenNumber = desktop->screenNumber();
-  currentScreen = desktop->screenGeometry(screenNumber);
+  currentScreenNumber = desktop->screenNumber();
+  currentScreen = desktop->screenGeometry(currentScreenNumber);
   if (outputLog){
-	cout << "[Desktop] current screen : " << screenNumber << endl;
+	cout << "[Desktop] current screen : " << currentScreenNumber << endl;
 	cout << "[Desktop] width  = " << currentScreen.width() << endl;
 	cout << "[Desktop] height = " << currentScreen.height() << endl;
   }

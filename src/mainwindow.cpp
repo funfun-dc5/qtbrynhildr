@@ -160,12 +160,17 @@ void MainWindow::refreshDesktop(QImage image)
 	resize(size.width(), size.height());
 
 	// refresh
-	refreshDesktop();
+	refreshDesktop(true);
+  }
+  else if (settings->getDesktop()->isChangedCurrentScreen()) {
+	// if current screen is changed.
+	// refresh
+	refreshDesktop(false);
   }
 }
 
 // reflesh desktop window
-void MainWindow::refreshDesktop()
+void MainWindow::refreshDesktop(bool doResize)
 {
   // check size
   if (size.width() < 0 || size.height() < 0){
@@ -187,7 +192,7 @@ void MainWindow::refreshDesktop()
 	}
 	parent->setMaximumWidth(targetWidth);
 	parent->setMaximumHeight(targetHeight);
-	if (QTB_FIXED_MAINWINDOW_SIZE){
+	if (QTB_FIXED_MAINWINDOW_SIZE && doResize){
 	  if (settings->getOnKeepOriginalDesktopSize()){
 		parent->resize(targetWidth, targetHeight);
 	  }
@@ -705,16 +710,20 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
   if (eventType == "windows_generic_MSG"){
 	MSG *msg = static_cast<MSG *>(message);
 	// KEY
-#if 0 // send All key event in nativeEventFilter
-	if (msg->message == WM_KEYDOWN){
+	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
+	  // send All key event in nativeEventFilter
+	  if (msg->message == WM_KEYDOWN){
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
-	}
-	else if (msg->message == WM_KEYUP){
+	  }
+	  else if (msg->message == WM_KEYUP){
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
+	  }
+	  // NOTE: never fall through
 	}
-#else
+
+	// except for KEYBOARD_TYPE_NATIVE
 	if (msg->message == WM_KEYDOWN){
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
@@ -756,7 +765,6 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 		break;
 	  }
 	}
-#endif
 	// SYSKEY
 	else if (msg->message == WM_SYSKEYDOWN){
 	  switch(msg->wParam){

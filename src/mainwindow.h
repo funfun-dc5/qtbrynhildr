@@ -57,7 +57,7 @@ public:
   void refreshDesktop(QImage image);
 
   // refresh desktop window
-  void refreshDesktop();
+  void refreshDesktop(bool doResize);
 
   // clear desktop window
   void clearDesktop();

@@ -24,9 +24,18 @@ public:
   ~Desktop();
 
   // get current screen
-  QRect getCurrentScreen() const
+  QRect getCurrentScreen()
   {
+	if (currentScreenNumber != desktop->screenNumber()){
+	  currentScreen = desktop->screenGeometry(currentScreenNumber);
+	}
 	return currentScreen;
+  }
+
+  // check current screen is changed
+  bool isChangedCurrentScreen()
+  {
+	return currentScreenNumber != desktop->screenNumber();
   }
 
   // get max image size
@@ -60,6 +69,12 @@ public:
   }
 
 private:
+  // desktop informaation
+  QDesktopWidget *desktop;
+
+  // current screen number
+  int currentScreenNumber;
+
   // current screen
   QRect currentScreen;
 

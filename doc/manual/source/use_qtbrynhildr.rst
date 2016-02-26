@@ -12,9 +12,11 @@
 
  .. image:: images/connect_to_server_dialog1.jpg
 
- 3. 「サーバに接続」ダイアログにIP(もしくはサーバ名)/Port/Passwordを入力してください
-
+ 3. 「サーバに接続」ダイアログにIP(もしくはサーバ名)/Port/Passwordを入力、キーボードタイプを選択してください
     「パスワードを表示する」にチェックを入れると入力中のパスワードが表示されます。
+
+     Windows版のみ"Native Keyboard"を選択できます。サーバとクライアントのキーボードタイプが
+     同じである必要がありますが、日本語および英語以外のサポートしていないキーボードを利用できます。
 
  .. image:: images/connect_to_server_dialog2.jpg
 

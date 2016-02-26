@@ -1431,11 +1431,21 @@ void QtBrynhildr::connected()
 {
   // enabled software keyboard/button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+#if defined(Q_OS_WIN)
+	if (settings->getKeyboardType() != KEYBOARD_TYPE_NATIVE){
+	  if (showSoftwareKeyboard_Action != 0)
+		showSoftwareKeyboard_Action->setEnabled(true);
+
+	  if (showSoftwareButton_Action != 0)
+		showSoftwareButton_Action->setEnabled(true);
+	}
+#else // defined(Q_OS_WIN)
 	if (showSoftwareKeyboard_Action != 0)
 	  showSoftwareKeyboard_Action->setEnabled(true);
 
 	if (showSoftwareButton_Action != 0)
 	  showSoftwareButton_Action->setEnabled(true);
+#endif // defined(Q_OS_WIN)
   }
 
   // enabled send key
@@ -1632,6 +1642,11 @@ void QtBrynhildr::connectToServer()
   case KEYBOARD_TYPE_US:
 	eventConverter = new EventConverter_US();
 	break;
+#if defined(Q_OS_WIN)
+  case KEYBOARD_TYPE_NATIVE:
+	eventConverter = new EventConverter_JP(); // dummy object
+	break;
+#endif // defined(Q_OS_WIN)
   default:
 	// unknown keyboard type
 	ABORT();
@@ -1656,6 +1671,11 @@ void QtBrynhildr::connectToServer()
 	case KEYBOARD_TYPE_US:
 	  softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
 	  break;
+#if defined(Q_OS_WIN)
+	case KEYBOARD_TYPE_NATIVE:
+	  softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this); // dummy object
+	  break;
+#endif // defined(Q_OS_WIN)
 	default:
 	  // unknown keyboard type
 	  ABORT();

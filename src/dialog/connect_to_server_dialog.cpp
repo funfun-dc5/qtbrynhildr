@@ -50,6 +50,9 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   // keyboard type field
   comboBox_keyboardtype->insertItem(KEYBOARD_TYPE_JP, STRING_KEYBOARD_TYPE_JP);
   comboBox_keyboardtype->insertItem(KEYBOARD_TYPE_US, STRING_KEYBOARD_TYPE_US);
+#if defined(Q_OS_WIN)
+  comboBox_keyboardtype->insertItem(KEYBOARD_TYPE_NATIVE, STRING_KEYBOARD_TYPE_NATIVE);
+#endif // defined(Q_OS_WIN)
 
   // keyboard type field
   comboBox_keyboardtype->setCurrentIndex(settings->getKeyboardType());

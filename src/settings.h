@@ -71,10 +71,12 @@ typedef int SERVER_TYPE;
 typedef int KEYBOARD_TYPE;
 #define KEYBOARD_TYPE_JP		0
 #define KEYBOARD_TYPE_US		1
-#define KEYBOARD_TYPE_NUM		2
+#define KEYBOARD_TYPE_NATIVE	2
+#define KEYBOARD_TYPE_NUM		3
 
 #define STRING_KEYBOARD_TYPE_JP		"JP Keyboard"
 #define STRING_KEYBOARD_TYPE_US		"US Keyboard"
+#define STRING_KEYBOARD_TYPE_NATIVE	"Native Keyboard"
 
 // for portNo
 #define QTB_PORTNO				"portNo"

@@ -118,8 +118,10 @@ Settings::Settings(const char *iniFileName)
   setOutputSoundDataToFile(QTB_OUTPUTSOUNDDATATOFILE_DEFAULT);
   setOutputSoundDataToWavFile(QTB_OUTPUTSOUNDDATATOWAVFILE_DEFAULT);
   setOutputLog(QTB_OUTPUTLOG_DEFAULT);
+  setOutputKeyboardLog(QTB_OUTPUTKEYBOARDLOG_DEFAULT);
 
   setLogFile(getDefaultLogFile());
+  setKeyboardLogFile(getDefaultKeyboardLogFile());
 }
 
 // destructor
@@ -302,9 +304,17 @@ void Settings::readSettings()
   setOutputLog(settings->value(QTB_OUTPUTLOG,
 							   QTB_OUTPUTLOG_DEFAULT).toBool());
 
+  // load outputKeyboardLog
+  //  setOutputKeyboardLog(settings->value(QTB_OUTPUTKEYBOARDLOG,
+  //									   QTB_OUTPUTKEYBOARDLOG_DEFAULT).toBool());
+
   // load log file
   setLogFile(settings->value(QTB_LOGFILE,
 							 getDefaultLogFile()).toString());
+
+  // load keyboard log file
+  setKeyboardLogFile(settings->value(QTB_KEYBOARDLOGFILE,
+									 getDefaultKeyboardLogFile()).toString());
 }
 
 // save settings to setting file or registry
@@ -437,8 +447,14 @@ void Settings::writeSettings()
   // save outputLog
   settings->setValue(QTB_OUTPUTLOG, outputLog);
 
+  // save outputKeyboardLog
+  //  settings->setValue(QTB_OUTPUTKEYBOARDLOG, outputKeyboardLog);
+
   // save logFile
   settings->setValue(QTB_LOGFILE, logFile);
+
+  // save keyboardLogFile
+  settings->setValue(QTB_KEYBOARDLOGFILE, keyboardLogFile);
 
   // sync
   settings->sync();
@@ -505,9 +521,11 @@ void Settings::printSettings() const
   qDebug() << "DBG: output Graphics Data To File    : " << outputGraphicsDataToFile;
   qDebug() << "DBG: output Sound    Data To File    : " << outputSoundDataToFile;
   qDebug() << "DBG: output Sound    Data To WavFile : " << outputSoundDataToWavFile;
-  qDebug() << "DBG: output Log : " << outputLog;
+  qDebug() << "DBG: output Log                      : " << outputLog;
+  qDebug() << "DBG: output Keyboard Log             : " << outputKeyboardLog;
   qDebug() << "------------------------------------------";
-  qDebug() << "Log File : " << logFile;
+  qDebug() << "Log File          : " << logFile;
+  qDebug() << "Keyboard Log File : " << keyboardLogFile;
 }
 
 // get default keyboard type
@@ -525,6 +543,12 @@ KEYBOARD_TYPE Settings::getDefaultKeyboardType() const
 QString Settings::getDefaultLogFile() const
 {
   return QDir::toNativeSeparators(QDir::tempPath() + QDir::separator() + QTB_LOG_FILENAME);
+}
+
+// get Default Keyboard Log File
+QString Settings::getDefaultKeyboardLogFile() const
+{
+  return QDir::toNativeSeparators(QDir::tempPath() + QDir::separator() + QTB_KEYBOARDLOG_FILENAME);
 }
 
 } // end of namespace qtbrynhildr

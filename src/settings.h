@@ -276,8 +276,15 @@ typedef int SCALING_TYPE;
 #define QTB_OUTPUTLOG							"outputLog"
 #define QTB_OUTPUTLOG_DEFAULT					false
 
+// for outputKeyboardLog
+#define QTB_OUTPUTKEYBOARDLOG					"outputKeyboardLog"
+#define QTB_OUTPUTKEYBOARDLOG_DEFAULT			false
+
 // for logFile
 #define QTB_LOGFILE								"logFile"
+
+// for keyboardLogFile
+#define QTB_KEYBOARDLOGFILE						"keyboardLogFile"
 
 // -- other settings --
 // for geometry
@@ -1180,6 +1187,19 @@ public:
 	return outputLog;
   }
 
+  // get output keyboard log flag
+  bool getOutputKeyboardLog() const
+  {
+	return outputKeyboardLog;
+  }
+
+  // set output keyboard log flag
+  bool setOutputKeyboardLog(bool outputKeyboardLog)
+  {
+	this->outputKeyboardLog = outputKeyboardLog;
+	return outputKeyboardLog;
+  }
+
   // get log file
   QString getLogFile() const
   {
@@ -1192,12 +1212,27 @@ public:
 	this->logFile = logFile;
   }
 
+  // get keyboard log file
+  QString getKeyboardLogFile() const
+  {
+	return keyboardLogFile;
+  }
+
+  // set keyboard log file
+  void setKeyboardLogFile(QString keyboardLogFile)
+  {
+	this->keyboardLogFile = keyboardLogFile;
+  }
+
 private:
   // get default keyboard type
   KEYBOARD_TYPE getDefaultKeyboardType() const;
 
   // get Default Log File
   QString getDefaultLogFile() const;
+
+  // get Default Keyboard Log File
+  QString getDefaultKeyboardLogFile() const;
 
 private:
   // settings
@@ -1356,9 +1391,13 @@ private:
   volatile bool outputSoundDataToFile;
   volatile bool outputSoundDataToWavFile;
   volatile bool outputLog;
+  volatile bool outputKeyboardLog;
 
   // for logFile
   QString logFile;
+
+  // for keyboardLogFile
+  QString keyboardLogFile;
 };
 
 } // end of namespace qtbrynhildr
@@ -1369,6 +1408,9 @@ private:
 
 // for log file
 #define QTB_LOG_FILENAME	"qtbrynhildr.log"
+
+// for keyboard log file
+#define QTB_KEYBOARDLOG_FILENAME	"keyboard.log"
 
 // date format for log
 #define QTB_LOG_DATE_FORMAT "yyyy.MM.dd HH:mm:ss.zzz"

@@ -799,6 +799,13 @@ void QtBrynhildr::createActions()
   //  connectToServer_Action->setShortcut(tr("Ctrl+C"));
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
 
+  // output keyboardlog Action
+  outputKeyboardLog_Action = new QAction(tr("output Keyboard Log ON/OFF"), this);
+  outputKeyboardLog_Action->setCheckable(true);
+  outputKeyboardLog_Action->setChecked(settings->getOutputKeyboardLog());
+  outputKeyboardLog_Action->setStatusTip(tr("output Keyboard Log ON/OFF"));
+  connect(outputKeyboardLog_Action, SIGNAL(triggered()), this, SLOT(toggleOutputKeyboardLog()));
+
   // output log Action
   outputLog_Action = new QAction(tr("output Log ON/OFF"), this);
   outputLog_Action->setCheckable(true);
@@ -1322,6 +1329,7 @@ void QtBrynhildr::createMenus()
 	modeSubMenu->addAction(onScrollMode_Action);
   }
   optionMenu->addSeparator();
+  optionMenu->addAction(outputKeyboardLog_Action);
   optionMenu->addAction(outputLog_Action);
 
   // in testing sub menu
@@ -2646,6 +2654,19 @@ void QtBrynhildr::visibilityChangedSoftwareKeyboard(bool visible)
 void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
 {
   settings->setOnShowSoftwareButton(visible);
+}
+
+// toggle outputKeyboardLog
+void QtBrynhildr::toggleOutputKeyboardLog()
+{
+  if (settings->getOutputKeyboardLog()){
+	settings->setOutputKeyboardLog(false);
+	outputKeyboardLog_Action->setChecked(false);
+  }
+  else {
+	settings->setOutputKeyboardLog(true);
+	outputKeyboardLog_Action->setChecked(true);
+  }
 }
 
 // toggle outputLog

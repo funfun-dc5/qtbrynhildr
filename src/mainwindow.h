@@ -110,6 +110,12 @@ private:
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 #endif // defined(Q_OS_WIN)
 
+  // open keyboard log file
+  bool openKeyboardLogFile(QString filename);
+
+  // close keyboard log file
+  bool closeKeyboardLogFile();
+
   // print mouse button event
   void printMouseButtonEvent(QMouseEvent *event);
 
@@ -175,6 +181,12 @@ private:
   // previous KEYCODE_FLG
   KEYCODE_FLG previous_KEYCODE_FLG;
 #endif // defined(Q_OS_OSX)
+
+  // keyboard log file
+  QFile	*keyboardLogFile;
+
+  // keyboard log file stream
+  QTextStream *keyboardLogFileStream;
 
   // output log flag
   bool outputLog;

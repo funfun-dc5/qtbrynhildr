@@ -139,6 +139,9 @@ private slots:
   // finished thread
   void finishedNetThread();
 
+  // toggle output keyboard log mode
+  void toggleOutputKeyboardLog();
+
   // toggle output log mode
   void toggleOutputLog();
 
@@ -360,6 +363,9 @@ private:
   // ------------------------------------------------------------
   // connect to server
   QAction *connectToServer_Action;
+
+  // output keyboard log
+  QAction *outputKeyboardLog_Action;
 
   // output log
   QAction *outputLog_Action;

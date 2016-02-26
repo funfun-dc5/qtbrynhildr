@@ -41,6 +41,8 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
 #endif // defined(Q_OS_OSX)
+  keyboardLogFile(0),
+  keyboardLogFileStream(0),
   // for DEBUG
   outputLog(false),
   outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
@@ -66,11 +68,17 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
   // set parameters
   heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
   heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
+
+  // open keyboard log file
+  openKeyboardLogFile(settings->getKeyboardLogFile());
 }
 
 // destructor
 MainWindow::~MainWindow()
 {
+  // close keyboard log file
+  closeKeyboardLogFile();
+
   // delete objects
   if (keyBuffer != 0){
 	delete keyBuffer;
@@ -474,6 +482,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	  ":" << hex << VK_Code;
   }
 
+  // output Keyboard Log
+  if (settings->getOutputKeyboardLog()){
+	(*keyboardLogFileStream) << "Press   - Qt : " << (Key)event->key()
+							 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
+							 << " => Sent" << endl << flush;
+  }
+
   // on Scroll Mode
   if (settings->getOnScrollMode()){
 	if (scrollArea(VK_Code, true)){
@@ -507,6 +522,13 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 	qDebug() << "[MainWindow]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Release : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
 	  ":" << hex << VK_Code;
+  }
+
+  // output Keyboard Log
+  if (settings->getOutputKeyboardLog()){
+	(*keyboardLogFileStream) << "Release - Qt : " << (Key)event->key()
+							 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
+							 << " => Sent" << endl << flush;
   }
 
   // on Scroll Mode
@@ -811,5 +833,55 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 }
 #endif // defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #endif
+
+//----------------------------------------------------------------------
+// keyboard log file
+//----------------------------------------------------------------------
+// open keyboard log file
+bool MainWindow::openKeyboardLogFile(QString filename)
+{
+  if (keyboardLogFile != 0)
+	return false;
+
+  keyboardLogFile = new QFile(filename);
+
+  // check
+  if (!keyboardLogFile->open(QFile::WriteOnly | QFile::Append)) {
+	return false;
+  }
+
+  // create QTextStrem
+  keyboardLogFileStream = new QTextStream(keyboardLogFile);
+  keyboardLogFileStream->setCodec("UTF-8");
+
+  return true;
+}
+
+// close keyboard log file
+bool MainWindow::closeKeyboardLogFile()
+{
+  if (keyboardLogFile == 0)
+	return false;
+
+  if (keyboardLogFileStream == 0)
+	return false;
+
+  // flush
+  keyboardLogFileStream->flush();
+
+  // close
+  if (keyboardLogFile->isOpen()){
+	keyboardLogFile->close();
+  }
+
+  // delete object
+  delete keyboardLogFileStream;
+  keyboardLogFileStream = 0;
+
+  delete keyboardLogFile;
+  keyboardLogFile = 0;
+
+  return true;
+}
 
 } // end of namespace qtbrynhildr

@@ -419,6 +419,12 @@ public:
   void setKeyboardType(KEYBOARD_TYPE keyboardType)
   {
 	ASSERT(keyboardType >= KEYBOARD_TYPE_JP && keyboardType < KEYBOARD_TYPE_NUM);
+#if !defined(Q_OS_WIN)
+	if (keyboardType == KEYBOARD_TYPE_NATIVE){
+	  // NOT available except for windows
+	  return;
+	}
+#endif // !defined(Q_OS_WIN)
 	this->keyboardType = keyboardType;
   }
 

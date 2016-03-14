@@ -182,7 +182,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #endif // QTB_RECORDER
 
   // version
-  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION);
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION QTB_RCNAME);
   // kernel type
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "OS Type    : " + QSysInfo::kernelType());
   // kernel version
@@ -1608,7 +1608,7 @@ void QtBrynhildr::about()
 					 "<h2>"
 					 QTB_APPLICATION
 					 " Ver. "
-					 QTB_VERSION
+					 QTB_VERSION QTB_RCNAME
 					 "</h2>"
 					 "<p>Copyright &copy;"
 					 " "

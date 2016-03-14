@@ -249,14 +249,14 @@ bool Option::analyzeOptions(int argc, char *argv[])
 void Option::printVersion() const
 {
   cout << QTB_APPLICATION <<
-	" Ver." << QTB_VERSION <<
+	" Ver." << QTB_VERSION QTB_RCNAME <<
 	" Copyright (c) " << QTB_YEAR << " " << QTB_AUTHOR << " @ " << QTB_ORGANIZATION << endl << flush;
 }
 
 // print version string
 void Option::printVersionString() const
 {
-  string str = QTB_VERSION;
+  string str = QTB_VERSION QTB_RCNAME;
   for (string::size_type pos = str.find(".") ; pos != string::npos; pos = str.find(".")){
 	str.erase(pos,1);
   }

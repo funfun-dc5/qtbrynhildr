@@ -105,7 +105,7 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   connect(pushButton_31, SIGNAL(released()), this, SLOT(releasedButton_31()));
 
   // set information
-  pushButton_28->setText("Ver. " QTB_VERSION);
+  pushButton_28->setText("Ver. " QTB_VERSION QTB_RCNAME);
 
   // initialization
   toggleOptionButton();

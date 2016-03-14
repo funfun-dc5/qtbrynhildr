@@ -135,7 +135,7 @@ typedef int KEYBOARD_TYPE;
 #endif // defined(Q_OS_WIN)
 // for onDisableBrynhildr2Support
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT			"onDisableBrynhildr2Support"
-#define QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT	true
+#define QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT	false
 #endif // QTB_BRYNHILDR2_SUPPORT
 
 // for onSound

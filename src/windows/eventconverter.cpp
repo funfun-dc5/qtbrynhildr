@@ -16,8 +16,15 @@ namespace qtbrynhildr {
 // constructor
 EventConverter::EventConverter()
   :
+  needShiftKey(false),
   outputLog(true)
 {
+}
+
+// get need shift key
+bool EventConverter::getNeedShiftKey()
+{
+  return needShiftKey;
 }
 
 // for DEBUG

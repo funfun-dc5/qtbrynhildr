@@ -22,6 +22,8 @@ namespace qtbrynhildr {
 // for JP Keyboard
 uchar EventConverter_JP::getVKCode(Key key)
 {
+  needShiftKey = false;
+
   switch(key){
   case Key_Escape:
 	return VK_ESCAPE;
@@ -216,26 +218,37 @@ uchar EventConverter_JP::getVKCode(Key key)
   //
   //------------------------------------------------------------
   case Key_Exclam:			// '!'
+	needShiftKey = true;
 	return VK_1;
   case Key_QuoteDbl:		// '"'
+	needShiftKey = true;
 	return VK_2;
   case Key_NumberSign:		// '#'
+	needShiftKey = true;
 	return VK_3;
   case Key_Dollar:			// '$'
+	needShiftKey = true;
 	return VK_4;
   case Key_Percent:			// '%'
+	needShiftKey = true;
 	return VK_5;
   case Key_Ampersand:		// '&'
+	needShiftKey = true;
 	return VK_6;
   case Key_Apostrophe:		// '''
+	needShiftKey = true;
 	return VK_7;
   case Key_ParenLeft:		// '('
+	needShiftKey = true;
 	return VK_8;
   case Key_ParenRight:		// ')'
+	needShiftKey = true;
 	return VK_9;
   case Key_Asterisk:		// '*'
+	needShiftKey = true;
 	return VK_OEM_1;
   case Key_Plus:			// '+'
+	needShiftKey = true;
 	return VK_OEM_PLUS;
   case Key_Comma:			// ','
 	return VK_OEM_COMMA;
@@ -251,30 +264,45 @@ uchar EventConverter_JP::getVKCode(Key key)
   case Key_Semicolon:		// ';'
 	return VK_OEM_PLUS;
   case Key_Less:			// '<'
+	needShiftKey = true;
 	return VK_OEM_COMMA;
   case Key_Equal:			// '='
+	needShiftKey = true;
 	return VK_OEM_MINUS;
   case Key_Greater:			// '>'
+	needShiftKey = true;
 	return VK_OEM_PERIOD;
   case Key_Question:		// '?'
+	needShiftKey = true;
 	return VK_OEM_2;
   case Key_At:				// '@'
+	return VK_OEM_3;
   case Key_QuoteLeft:		// '`'
+	needShiftKey = true;
 	return VK_OEM_3;
 
   case Key_BracketLeft:		// '['
+	return VK_OEM_4;
   case Key_BraceLeft:		// '{'
+	needShiftKey = true;
 	return VK_OEM_4;
   case Key_Backslash:		// '\'
   case Key_yen:				// '\' for Darwin
+	return VK_OEM_5;
   case Key_Bar:				// '|'
+	needShiftKey = true;
 	return VK_OEM_5;
   case Key_Underscore:		// '_'
+	needShiftKey = true;
 	return VK_OEM_102;
   case Key_BracketRight:	// ']'
+	return VK_OEM_6;
   case Key_BraceRight:		// '}'
+	needShiftKey = true;
 	return VK_OEM_6;
   case Key_AsciiTilde:		// '~'
+	needShiftKey = true;
+	return VK_OEM_7;
   case Key_AsciiCircum:		// '^'
 	return VK_OEM_7;
 

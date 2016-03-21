@@ -156,6 +156,9 @@ private:
   // event converter
   EventConverter *eventConverter;
 
+  // on shift key
+  bool onShiftKey;
+
   // keyboard buffer
   KeyBuffer *keyBuffer;
 

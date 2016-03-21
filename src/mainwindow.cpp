@@ -33,6 +33,7 @@ MainWindow::MainWindow(Settings *settings, QWidget *parent)
   QWidget(parent),
   settings(settings),
   eventConverter(0),
+  onShiftKey(false),
   heightOfStatusBar(0),
   heightOfMenuBarInHiding(0),
   heightOfStatusBarInHiding(0),
@@ -498,8 +499,38 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+	// check shift key status
+	if (onShiftKey && !eventConverter->getNeedShiftKey()){
+	  // release shift key
+	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
+	  onShiftKey = false;
+	  // output Keyboard Log
+	  if (settings->getOutputKeyboardLog()){
+		(*keyboardLogFileStream) << "Release - Qt : " << (Key)event->key()
+								 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
+								 << " => Sent" << endl << flush;
+	  }
+	}
+	else if (!onShiftKey && eventConverter->getNeedShiftKey()){
+	  // need shift key
+	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYDOWN);
+	  onShiftKey = true;
+	  // output Keyboard Log
+	  if (settings->getOutputKeyboardLog()){
+		(*keyboardLogFileStream) << "Press   - Qt : " << (Key)event->key()
+								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
+								 << " => Sent" << endl << flush;
+	  }
+	}
+
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
+
+	// set shift key status
+	if (VK_Code == VK_SHIFT){
+	  onShiftKey = true;
+	}
+
 #if defined(Q_OS_OSX)
   // set previous KEYCODE_FLG
   previous_KEYCODE_FLG = KEYCODE_FLG_KEYDOWN;
@@ -559,6 +590,25 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 #endif // defined(Q_OS_OSX)
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYUP);
+
+	// set shift key status
+	if (VK_Code == VK_SHIFT){
+	  onShiftKey = false;
+	}
+
+	// check shift key status
+	if (!onShiftKey && eventConverter->getNeedShiftKey()){
+	  // need shift key
+	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
+	  onShiftKey = false;
+	  // output Keyboard Log
+	  if (settings->getOutputKeyboardLog()){
+		(*keyboardLogFileStream) << "Release - Qt : " << (Key)event->key()
+								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
+								 << " => Sent" << endl << flush;
+	  }
+	}
+
 #if defined(Q_OS_OSX)
 	// set previous KEYCODE_FLG
 	previous_KEYCODE_FLG = KEYCODE_FLG_KEYUP;
@@ -721,7 +771,7 @@ QSize MainWindow::sizeHint() const
 // native event filter
 //----------------------------------------------------------------------
 #if defined(Q_OS_WIN)
-bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
+bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
   Q_UNUSED(result)
 

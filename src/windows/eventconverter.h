@@ -26,6 +26,9 @@ public:
   // get Virtual Keycode
   virtual uchar getVKCode(Key key) = 0;
 
+  // get need shift key
+  bool getNeedShiftKey();
+
   // get name
   virtual QString getEventConverterName() = 0;
 
@@ -33,6 +36,9 @@ public:
   static QString getVKCodeByString(uchar vkcode);
 
 protected:
+  // need shift key
+  bool needShiftKey;
+
   // output log flag
   bool outputLog;
 };

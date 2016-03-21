@@ -292,7 +292,7 @@ uchar EventConverter_US::getVKCode(Key key)
 	return VK_OEM_5;
   case Key_Underscore:		// '_'
 	needShiftKey = true;
-	return VK_OEM_8;
+	return VK_OEM_MINUS;
   case Key_BracketRight:	// ']'
 	return VK_OEM_6;
   case Key_BraceRight:		// '}'

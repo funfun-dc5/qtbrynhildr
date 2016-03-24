@@ -854,7 +854,7 @@
         <location filename="../qtbrynhildr.cpp" line="1281"/>
         <source>&amp;Control</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation type="unfinished">コントロール (&amp;C)</translation>
+        <translation>コントロール (&amp;C)</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1283"/>

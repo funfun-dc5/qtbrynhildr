@@ -539,6 +539,8 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 
 ------------------- ここから -------------------
 [General]
+generatedVersion=123
+currentVersion=124
 serverName=mcz.world.idol.jp
 serverType=5
 keyboardType=0
@@ -577,6 +579,7 @@ outputSoundDataToFile=false
 outputSoundDataToWavFile=false
 outputLog=false
 logFile=D:\\tmp\\qtbrynhildr.log
+keyboardLogFile=D:\\tmp\\keyboard.log
 geometry=@Rect(200 200 800 600)
 ------------------- ここまで -------------------
 

@@ -1054,7 +1054,9 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 
  「Siegfried - 高圧縮型リモートデスクトップ」: http://blog.x-row.net/?p=7879
 
- (*) SiegfriedとBrynhildrは統合されBrynhildr2となる予定だそうです。
+ (*) SiegfriedとBrynhildrはBrynhildr2に統合されました。(2016/03/14)
+
+  「Brynhildr「2.0.0」リリース」: http://blog.x-row.net/?p=11297
 
 (2) パブリックモード、クライアントサンプルソースに関するページ
 

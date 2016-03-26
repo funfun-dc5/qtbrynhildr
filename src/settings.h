@@ -21,6 +21,7 @@
 #endif // QTB_CRYPTGRAM
 #include "common/protocols.h"
 #include "desktop.h"
+#include "version.h"
 
 // for Settings
 // author
@@ -39,6 +40,12 @@
 #define QTB_TRANSLATION_FILE_PREFIX	"qtbrynhildr_"
 
 // -- settings --
+// for version information
+#define QTB_GENERATEDVERSION			"generatedVersion"
+#define QTB_GENERATEDVERSION_DEFAULT	QTB_VERSION_NUMBER
+#define QTB_CURRENTVERSION				"currentVersion"
+#define QTB_CURRENTVERSION_DEFAULT		QTB_VERSION_NUMBER
+
 // for serverName
 #define QTB_SERVERNAME			"serverName"
 #if defined(QTB_DEV_TABLET) // for TEST
@@ -328,6 +335,30 @@ public:
   Desktop *getDesktop() const
   {
 	return desktop;
+  }
+
+  // get generated version
+  int getGenaratedVersion() const
+  {
+	return generatedVersion;
+  }
+
+  // set generated version
+  void setGeneratedVersion(int generatedVersion)
+  {
+	this->generatedVersion = generatedVersion;
+  }
+
+  // get current version
+  int getCurrentVersion() const
+  {
+	return currentVersion;
+  }
+
+  // set current version
+  void setCurrentVersion(int currentVersion)
+  {
+	this->currentVersion = currentVersion;
   }
 
   // get server name
@@ -1257,6 +1288,12 @@ private:
   // cipher
   Cipher *cipher;
 #endif // QTB_CRYPTGRAM
+
+  // generated version
+  volatile int generatedVersion;
+
+  // current version
+  volatile int currentVersion;
 
   // server name
   QString serverName;

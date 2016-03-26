@@ -53,6 +53,10 @@ Settings::Settings(const char *iniFileName)
 	  new QSettings(QSettings::IniFormat, QSettings::UserScope, QTB_ORGANIZATION, QTB_APPLICATION);
   }
 
+  // set version information
+  setGeneratedVersion(QTB_GENERATEDVERSION_DEFAULT);
+  setCurrentVersion(QTB_CURRENTVERSION_DEFAULT);
+
   // set default
   setServerName(QTB_SERVERNAME_DEFAULT);
   setServerType(QTB_SERVERTYPE_DEFAULT);
@@ -138,6 +142,10 @@ QSettings *Settings::getSettings() const
 // load settings from setting files or registry
 void Settings::readSettings()
 {
+  // load version information
+  setGeneratedVersion(settings->value(QTB_GENERATEDVERSION,
+									  (qint32)QTB_GENERATEDVERSION_DEFAULT).toInt());
+
   // load serverName
   setServerName(settings->value(QTB_SERVERNAME,
 								QTB_SERVERNAME_DEFAULT).toString());
@@ -320,6 +328,10 @@ void Settings::readSettings()
 // save settings to setting file or registry
 void Settings::writeSettings()
 {
+  // save version information
+  settings->setValue(QTB_GENERATEDVERSION, (qint32)generatedVersion);
+  settings->setValue(QTB_CURRENTVERSION, (qint32)currentVersion);
+
   // save serverName
   settings->setValue(QTB_SERVERNAME, serverName);
 
@@ -464,6 +476,9 @@ void Settings::writeSettings()
 void Settings::printSettings() const
 {
   qDebug() << "---------------- Settings ----------------";
+  qDebug() << "Generated Version : " << generatedVersion;
+  qDebug() << "Current Version   : " << currentVersion;
+  qDebug() << "------------------------------------------";
   qDebug() << "Server Name   : " << serverName;
   qDebug() << "Server Type   : " << getServerTypeByString();
   qDebug() << "Keyboard Type : " << getKeyboardTypeByString();

@@ -33,6 +33,7 @@
 
  (*3) Siegfriedのパブリックモードにも対応しています。
       その場合"brynhildr.ini"は"siegfried.ini"と読み替えてください。
+      (SiegfriedはBrynhildr2に統合されました)
 
 ==============================
  [対応OS]

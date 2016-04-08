@@ -272,6 +272,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
 #endif // for TEST
 }
 
+// widget leave event
+void MainWindow::leaveEvent(QEvent *event)
+{
+  Q_UNUSED(event)
+
+  if (settings->getOnClipCursor()){
+	QCursor::setPos(mapToGlobal(currentMousePos));
+  }
+}
+
 //----------------------------------------------------------------------
 // mouse events
 //----------------------------------------------------------------------
@@ -446,19 +456,13 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
+	  currentMousePos = event->pos();
 	  MOUSE_POS pos;
-	  pos.x = event->pos().x();
-	  pos.y = event->pos().y();
+	  pos.x = currentMousePos.x();
+	  pos.y = currentMousePos.y();
 	  mouseBuffer->setMousePos(pos);
 	}
-#else // for TEST
-	MOUSE_POS pos;
-	pos.x = event->pos().x();
-	pos.y = event->pos().y();
-	mouseBuffer->setMousePos(pos);
-#endif // for TEST
   }
 }
 

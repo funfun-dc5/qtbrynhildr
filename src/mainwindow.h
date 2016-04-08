@@ -93,6 +93,9 @@ protected:
   // window event
   void paintEvent(QPaintEvent *event);
 
+  // widget leave event
+  void leaveEvent(QEvent *event);
+
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
@@ -164,6 +167,9 @@ private:
 
   // mouse buffer
   MouseBuffer *mouseBuffer;
+
+  // current mouse position
+  QPoint currentMousePos;
 
   // height of status bar
   int heightOfStatusBar;

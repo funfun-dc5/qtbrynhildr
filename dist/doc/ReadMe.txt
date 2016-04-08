@@ -573,6 +573,7 @@ onFrameLessWindow=false
 onShowMenuBar=true
 onShowFrameRate=true
 onShowPassword=false
+onClipCursor=false
 graphicsBufferSize=1048576
 soundBufferSize=1048576
 doubleClickThreshold=500

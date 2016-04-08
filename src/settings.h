@@ -247,6 +247,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWPASSWORD					"onShowPassword"
 #define QTB_ONSHOWPASSWORD_DEFAULT			false
 
+// for onClipCursor
+#define QTB_ONCLIPCURSOR					"onClipCursor"
+#define QTB_ONCLIPCURSOR_DEFAULT			false
+
 #if QTB_SUPPORT_PUBLIC_MODE6
 
 // for onDisableClipboard
@@ -1096,6 +1100,18 @@ public:
 	this->onShowPassword = onShowPassword;
   }
 
+  // get clip cursor flag
+  bool getOnClipCursor() const
+  {
+	return onClipCursor;
+  }
+
+  // set clip cursor flag
+  void setOnClipCursor(bool onClipCursor)
+  {
+	this->onClipCursor = onClipCursor;
+  }
+
 #if QTB_SUPPORT_PUBLIC_MODE6
 
   // get disable clilpboard flag
@@ -1414,6 +1430,9 @@ private:
 
   // show password
   volatile bool onShowPassword;
+
+  // clip cursor
+  volatile bool onClipCursor;
 
 #if QTB_SUPPORT_PUBLIC_MODE6
 

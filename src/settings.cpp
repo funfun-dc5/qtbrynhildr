@@ -109,6 +109,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnShowPassword(QTB_ONSHOWPASSWORD_DEFAULT);
 
+  setOnClipCursor(QTB_ONCLIPCURSOR_DEFAULT);
+
 #if QTB_SUPPORT_PUBLIC_MODE6
   setOnDisableClipboard(QTB_ONDISABLECLIPBOARD_DEFAULT);
 #endif // QTB_SUPPORT_PUBLIC_MODE6
@@ -278,6 +280,11 @@ void Settings::readSettings()
   // load onShowPassword
   setOnShowPassword(settings->value(QTB_ONSHOWPASSWORD,
 									QTB_ONSHOWPASSWORD_DEFAULT).toBool());
+
+  // load onClipCursor
+  setOnClipCursor(settings->value(QTB_ONCLIPCURSOR,
+								  QTB_ONCLIPCURSOR_DEFAULT).toBool());
+
 #if QTB_SUPPORT_PUBLIC_MODE6
   // load onDisableClipboard
   setOnDisableClipboard(settings->value(QTB_ONDISABLECLIPBOARD,
@@ -433,6 +440,9 @@ void Settings::writeSettings()
   // save onShowPassword
   settings->setValue(QTB_ONSHOWPASSWORD, onShowPassword);
 
+  // save onClipCursor
+  settings->setValue(QTB_ONCLIPCURSOR, onClipCursor);
+
 #if QTB_SUPPORT_PUBLIC_MODE6
   // save onDisableClipboard
   settings->setValue(QTB_ONDISABLECLIPBOARD, onDisableClipboard);
@@ -518,6 +528,7 @@ void Settings::printSettings() const
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
   qDebug() << "ShowPassword            : " << onShowPassword;
+  qDebug() << "ClipCursor              : " << onClipCursor;
 #if QTB_SUPPORT_PUBLIC_MODE6
   qDebug() << "DisableClipboard        : " << onDisableClipboard;
 #endif // QTB_SUPPORT_PUBLIC_MODE6

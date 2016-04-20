@@ -291,11 +291,18 @@ typedef int SCALING_TYPE;
 #define QTB_OUTPUTKEYBOARDLOG					"outputKeyboardLog"
 #define QTB_OUTPUTKEYBOARDLOG_DEFAULT			false
 
+// for outputPath
+#define QTB_OUTPUTPATH							"outputPath"
+
 // for logFile
 #define QTB_LOGFILE								"logFile"
 
 // for keyboardLogFile
 #define QTB_KEYBOARDLOGFILE						"keyboardLogFile"
+
+// for desktop capture format
+#define QTB_DESKTOPCAPTUREFORMAT				"desktopCaptureFormat"
+#define QTB_DESKTOPCAPTUREFORMAT_DEFAULT		".jpg"
 
 // -- other settings --
 // for geometry
@@ -1088,6 +1095,18 @@ public:
 	this->onScrollMode = onScrollMode;
   }
 
+  // get on desktop capture flag
+  bool getOnDesktopCapture() const
+  {
+	return onDesktopCapture;
+  }
+
+  // set on desktop capture flag
+  void setOnDesktopCapture(bool onDesktopCapture)
+  {
+	this->onDesktopCapture = onDesktopCapture;
+  }
+
   // get show password flag
   bool getOnShowPassword() const
   {
@@ -1253,6 +1272,18 @@ public:
 	return outputKeyboardLog;
   }
 
+  // get output path
+  QString getOutputPath() const
+  {
+	return outputPath;
+  }
+
+  // set output path
+  void setOutputPath(QString outputPath)
+  {
+	this->outputPath = outputPath;
+  }
+
   // get log file
   QString getLogFile() const
   {
@@ -1277,9 +1308,24 @@ public:
 	this->keyboardLogFile = keyboardLogFile;
   }
 
+  // get desktop capture format
+  QString getDesktopCaptureFormat() const
+  {
+	return desktopCaptureFormat;
+  }
+
+  // set desktop capture format
+  void setDesktopCaptureFormat(QString desktopCaptureFormat)
+  {
+	this->desktopCaptureFormat = desktopCaptureFormat;
+  }
+
 private:
   // get default keyboard type
   KEYBOARD_TYPE getDefaultKeyboardType() const;
+
+  // get default output path
+  QString getDefaultOutputPath() const;
 
   // get Default Log File
   QString getDefaultLogFile() const;
@@ -1425,6 +1471,9 @@ private:
   const char *replayingControlFileName;
 #endif // QTB_RECORDER
 
+  // desktop capture
+  volatile bool onDesktopCapture;
+
   // scroll mode
   volatile bool onScrollMode;
 
@@ -1455,11 +1504,17 @@ private:
   volatile bool outputLog;
   volatile bool outputKeyboardLog;
 
+  // for outputPath
+  QString outputPath;
+
   // for logFile
   QString logFile;
 
   // for keyboardLogFile
   QString keyboardLogFile;
+
+  // for desktopCaptureFormat
+  QString desktopCaptureFormat;
 };
 
 } // end of namespace qtbrynhildr
@@ -1476,6 +1531,10 @@ private:
 
 // date format for log
 #define QTB_LOG_DATE_FORMAT "yyyy.MM.dd HH:mm:ss.zzz"
+
+// for desktop capture
+#define QTB_DESKTOP_CAPTURE_FILENAME_PREFIX			"Desktopshot-"
+#define QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT	"yyyy-MM-dd-HH-mm-ss"
 
 // for DEBUG
 #define QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX	"graphics_output"

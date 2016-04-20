@@ -930,6 +930,14 @@ void QtBrynhildr::createActions()
 	connect(desktopScalingDialog_Action, SIGNAL(triggered()), this, SLOT(desktopScaling()));
   }
 
+  // Deskop Capture Action
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	desktopCapture_Action = new QAction(tr("Desktop Capture"), this);
+	desktopCapture_Action->setStatusTip(tr("Desktop Capture"));
+	desktopCapture_Action->setEnabled(false);
+	connect(desktopCapture_Action, SIGNAL(triggered()), this, SLOT(desktopCapture()));
+  }
+
   // Log Action
   if (QTB_LOG_VIEW){
 	logViewDialog_Action = new QAction(tr("Log View"), this);
@@ -1269,6 +1277,12 @@ void QtBrynhildr::createMenus()
 	videoMenu->addAction(desktopScalingDialog_Action);
   }
 
+  // for capture
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	videoMenu->addSeparator();
+	videoMenu->addAction(desktopCapture_Action);
+  }
+
   // sound menu
   soundMenu = menuBar()->addMenu(tr("&Sound"));
   soundMenu->addAction(soundQuality_MINIMUM_Action);
@@ -1471,7 +1485,14 @@ void QtBrynhildr::connected()
     sendKey6_Action->setEnabled(true);
 
   // enabled scaling dialog
-  desktopScalingDialog_Action->setEnabled(true);
+  if (QTB_DESKTOP_IMAGE_SCALING){
+	desktopScalingDialog_Action->setEnabled(true);
+  }
+
+  // enabled capture
+  if (QTB_DESKTOP_IMAGE_SCALING){
+	desktopCapture_Action->setEnabled(true);
+  }
 
   // enable scroll mode
   if (QTB_SCROLL_MODE){
@@ -1525,7 +1546,14 @@ void QtBrynhildr::disconnected()
     sendKey6_Action->setEnabled(false);
 
   // disabled scaling dialog
-  desktopScalingDialog_Action->setEnabled(false);
+  if (QTB_DESKTOP_IMAGE_SCALING){
+	desktopScalingDialog_Action->setEnabled(false);
+  }
+
+  // disabled capture
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	desktopCapture_Action->setEnabled(false);
+  }
 
   // disabled scroll mode
   if (QTB_SCROLL_MODE){
@@ -2476,6 +2504,16 @@ void QtBrynhildr::desktopScaling()
   if (QTB_DESKTOP_IMAGE_SCALING){
 	desktopScalingDialog->setSliderPositionFromSetting();
 	desktopScalingDialog->show();
+  }
+}
+
+// desktop capture
+void QtBrynhildr::desktopCapture()
+{
+  // desktop capture
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	// desktop capture flag ON
+	settings->setOnDesktopCapture(true);
   }
 }
 

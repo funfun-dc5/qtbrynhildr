@@ -43,6 +43,7 @@ Settings::Settings(const char *iniFileName)
   onRecordingControl(false),
   onReplayingControl(false),
 #endif // QTB_RECORDER
+  onDesktopCapture(false),
   onScrollMode(false)
 {
   if (iniFileName != 0){
@@ -126,8 +127,11 @@ Settings::Settings(const char *iniFileName)
   setOutputLog(QTB_OUTPUTLOG_DEFAULT);
   setOutputKeyboardLog(QTB_OUTPUTKEYBOARDLOG_DEFAULT);
 
+  setOutputPath(getDefaultOutputPath());
   setLogFile(getDefaultLogFile());
   setKeyboardLogFile(getDefaultKeyboardLogFile());
+
+  setDesktopCaptureFormat(QTB_DESKTOPCAPTUREFORMAT_DEFAULT);
 }
 
 // destructor
@@ -323,6 +327,10 @@ void Settings::readSettings()
   //  setOutputKeyboardLog(settings->value(QTB_OUTPUTKEYBOARDLOG,
   //									   QTB_OUTPUTKEYBOARDLOG_DEFAULT).toBool());
 
+  // load output path
+  setOutputPath(settings->value(QTB_OUTPUTPATH,
+								getDefaultOutputPath()).toString());
+
   // load log file
   setLogFile(settings->value(QTB_LOGFILE,
 							 getDefaultLogFile()).toString());
@@ -330,6 +338,10 @@ void Settings::readSettings()
   // load keyboard log file
   setKeyboardLogFile(settings->value(QTB_KEYBOARDLOGFILE,
 									 getDefaultKeyboardLogFile()).toString());
+
+  // load desktop capture format
+  setDesktopCaptureFormat(settings->value(QTB_DESKTOPCAPTUREFORMAT,
+										  QTB_DESKTOPCAPTUREFORMAT_DEFAULT).toString());
 }
 
 // save settings to setting file or registry
@@ -472,11 +484,17 @@ void Settings::writeSettings()
   // save outputKeyboardLog
   //  settings->setValue(QTB_OUTPUTKEYBOARDLOG, outputKeyboardLog);
 
+  // save outputPath
+  settings->setValue(QTB_OUTPUTPATH, outputPath);
+
   // save logFile
   settings->setValue(QTB_LOGFILE, logFile);
 
   // save keyboardLogFile
   settings->setValue(QTB_KEYBOARDLOGFILE, keyboardLogFile);
+
+  // save desktopCaptureFormat
+  settings->setValue(QTB_DESKTOPCAPTUREFORMAT, desktopCaptureFormat);
 
   // sync
   settings->sync();
@@ -550,8 +568,10 @@ void Settings::printSettings() const
   qDebug() << "DBG: output Log                      : " << outputLog;
   qDebug() << "DBG: output Keyboard Log             : " << outputKeyboardLog;
   qDebug() << "------------------------------------------";
+  qDebug() << "Output Path       : " << outputPath;
   qDebug() << "Log File          : " << logFile;
   qDebug() << "Keyboard Log File : " << keyboardLogFile;
+  qDebug() << "Desktop Capture Format : " << desktopCaptureFormat;
 }
 
 // get default keyboard type
@@ -563,6 +583,12 @@ KEYBOARD_TYPE Settings::getDefaultKeyboardType() const
   else {
 	return KEYBOARD_TYPE_US;
   }
+}
+
+// get default output path
+QString Settings::getDefaultOutputPath() const
+{
+  return QDir::toNativeSeparators(QDir::homePath() + QDir::separator());
 }
 
 // get Default Log File

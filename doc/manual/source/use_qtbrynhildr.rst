@@ -110,6 +110,13 @@
 
  .. image:: images/desktop_scaling_dialog.jpg
 
+ * 「デスクトップのキャプチャ」
+
+   デスクトップ画像をキャプチャします。保存される画像はスケーリング後のサイズになります。
+   ホームディレクトリに"Desktopshot-YYYY-MM-DD-hh-mm-ss.jpg"のフォーマットで保存されます。
+   保存場所/フォーマットは.iniを書き換えることにより変更できます。
+   対応フォーマットは.bmp/.jpg/.png/.ppm/.xpmなどです。
+
 * 「サウンド」メニュー
 
  .. image:: images/menu_sound.jpg

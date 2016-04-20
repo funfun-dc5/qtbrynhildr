@@ -11,6 +11,7 @@
 #endif // defined(QTB_NET_UNIX)
 
 // Qt Header
+#include <QDateTime>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QPoint>
@@ -148,6 +149,23 @@ void MainWindow::refreshDesktop(QImage image)
 	  if (scalingFactor != settings->getDesktopScalingFactor()){
 		settings->setDesktopScalingFactor(scalingFactor);
 	  }
+	}
+  }
+
+  // capture desktop image
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	if (settings->getOnDesktopCapture()){
+	  QDateTime now = QDateTime::currentDateTime();
+	  QString filename = settings->getOutputPath() +
+		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
+		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
+		settings->getDesktopCaptureFormat();
+
+	  // save to file
+	  image.save(filename);
+
+	  // reset desktop capture flag
+	  settings->setOnDesktopCapture(false);
 	}
   }
 

@@ -401,6 +401,15 @@
      「キャンセル」ボタンを押すと変更が無効になり、以前のサイズとなります。
      「リセット」ボタンを押すと等倍サイズに戻ります。
 
+     [4] デスクトップのキャプチャ
+
+     デスクトップ画像をキャプチャします。保存される画像はスケーリング後の
+     サイズになります。
+
+     ホームディレクトリに"Desktopshot-YYYY-MM-DD-hh-mm-ss.jpg"のフォーマットで
+     保存されます。保存場所/フォーマットは.iniを書き換えることにより変更できます。
+     対応フォーマットは.bmp/.jpg/.png/.ppm/.xpmなどです。
+
  (4) 「サウンド」メニュー
 
      サウンドの音質を変更します。サンプリング周波数を変更することで転送する
@@ -542,7 +551,7 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 ------------------- ここから -------------------
 [General]
 generatedVersion=123
-currentVersion=124
+currentVersion=125
 serverName=mcz.world.idol.jp
 serverType=5
 keyboardType=0
@@ -581,8 +590,10 @@ outputGraphicsDataToFile=false
 outputSoundDataToFile=false
 outputSoundDataToWavFile=false
 outputLog=false
+outputPath=C:\\Users\\funfun\\
 logFile=D:\\tmp\\qtbrynhildr.log
 keyboardLogFile=D:\\tmp\\keyboard.log
+desktopCaptureFormat=.jpg
 geometry=@Rect(200 200 800 600)
 ------------------- ここまで -------------------
 
@@ -763,6 +774,10 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.1.2.5 : [新規機能]
+             ・デスクトップのキャプチャ機能追加
+               メニュー項目を追加
+
 Ver.1.2.4 : [新規機能]
              ・デスクトップ外へのマウスカーソル移動を禁止する機能を追加
 

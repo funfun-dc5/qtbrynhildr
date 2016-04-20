@@ -214,6 +214,9 @@ private slots:
   // desktop scaling
   void desktopScaling();
 
+  // desktop capture
+  void desktopCapture();
+
   // log view
   void logView();
 
@@ -404,6 +407,9 @@ private:
 
   // desktop scaling
   QAction *desktopScalingDialog_Action;
+
+  // desktop capture
+  QAction *desktopCapture_Action;
 
   // log view
   QAction *logViewDialog_Action;

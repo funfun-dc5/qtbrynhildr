@@ -136,6 +136,24 @@ void MainWindow::refreshDesktop(QImage image)
   // save size
   size = desktopSize = image.size();
 
+  // capture desktop image for original size
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	if (settings->getOnDesktopCapture() &&
+		!settings->getDesktopCaptureFormat().startsWith(".")){
+	  QDateTime now = QDateTime::currentDateTime();
+	  QString filename = settings->getOutputPath() +
+		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
+		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
+		"." + settings->getDesktopCaptureFormat();
+
+	  // save to file
+	  image.save(filename);
+
+	  // reset desktop capture flag
+	  settings->setOnDesktopCapture(false);
+	}
+  }
+
   // scaling image
   if (QTB_DESKTOP_IMAGE_SCALING){
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){

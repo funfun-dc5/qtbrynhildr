@@ -389,7 +389,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(controlThread,
 		  SIGNAL(changeMouseCursor(const QCursor &)),
 		  SLOT(changeMouseCursor(const QCursor &)));
-#endif // !QTB_BRYNHILDR2_SUPPORT
+#endif // QTB_BRYNHILDR2_SUPPORT
 
   // graphics thread
   connect(graphicsThread,

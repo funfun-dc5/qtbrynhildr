@@ -251,13 +251,13 @@ typedef int SCALING_TYPE;
 #define QTB_ONCLIPCURSOR					"onClipCursor"
 #define QTB_ONCLIPCURSOR_DEFAULT			false
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
 
 // for onDisableClipboard
 #define QTB_ONDISABLECLIPBOARD				"onDisableClipboard"
 #define QTB_ONDISABLECLIPBOARD_DEFAULT		false
 
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"
@@ -1131,7 +1131,7 @@ public:
 	this->onClipCursor = onClipCursor;
   }
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
 
   // get disable clilpboard flag
   bool getOnDisableClipboard() const
@@ -1145,7 +1145,7 @@ public:
 	this->onDisableClipboard = onDisableClipboard;
   }
 
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get on show Software Keyboard flag
   bool getOnShowSoftwareKeyboard() const
@@ -1483,12 +1483,12 @@ private:
   // clip cursor
   volatile bool onClipCursor;
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
 
   // disable clip board
   volatile bool onDisableClipboard;
 
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // buffer
   volatile int graphicsBufferSize;

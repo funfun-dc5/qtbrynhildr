@@ -82,7 +82,7 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_BRYNHILDR2_SUPPORT		1
 
 // public mode 6 support
-#define QTB_SUPPORT_PUBLIC_MODE6	0
+#define QTB_PUBLIC_MODE6_SUPPORT	0
 
 // debug
 #define QTB_DEBUG					1

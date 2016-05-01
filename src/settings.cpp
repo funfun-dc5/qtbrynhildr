@@ -112,9 +112,9 @@ Settings::Settings(const char *iniFileName)
 
   setOnClipCursor(QTB_ONCLIPCURSOR_DEFAULT);
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
   setOnDisableClipboard(QTB_ONDISABLECLIPBOARD_DEFAULT);
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
@@ -289,11 +289,11 @@ void Settings::readSettings()
   setOnClipCursor(settings->value(QTB_ONCLIPCURSOR,
 								  QTB_ONCLIPCURSOR_DEFAULT).toBool());
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
   // load onDisableClipboard
   setOnDisableClipboard(settings->value(QTB_ONDISABLECLIPBOARD,
 										QTB_ONDISABLECLIPBOARD_DEFAULT).toBool());
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
@@ -455,10 +455,10 @@ void Settings::writeSettings()
   // save onClipCursor
   settings->setValue(QTB_ONCLIPCURSOR, onClipCursor);
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
   // save onDisableClipboard
   settings->setValue(QTB_ONDISABLECLIPBOARD, onDisableClipboard);
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
@@ -547,9 +547,9 @@ void Settings::printSettings() const
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
   qDebug() << "ShowPassword            : " << onShowPassword;
   qDebug() << "ClipCursor              : " << onClipCursor;
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "DisableClipboard        : " << onDisableClipboard;
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_BRYNHILDR2_SUPPORT
   qDebug() << "DisableBrynhildr2Support: " << onDisableBrynhildr2Support;

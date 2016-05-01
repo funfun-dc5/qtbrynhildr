@@ -151,13 +151,13 @@ private slots:
   // exit from QtBynhildr
   void exit();
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
   // send file
   void sendFile();
 
   // receive file
   void receiveFile();
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set video quality
   void setVideoQuality_MINIMUM();
@@ -484,13 +484,13 @@ private:
   // toggle scroll mode
   QAction *onScrollMode_Action;
 
-#if QTB_SUPPORT_PUBLIC_MODE6
+#if QTB_PUBLIC_MODE6_SUPPORT
   // send file
   QAction *sendFile_Action;
 
   // receive file
   QAction *receiveFile_Action;
-#endif // QTB_SUPPORT_PUBLIC_MODE6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;

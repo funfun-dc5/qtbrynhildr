@@ -69,7 +69,11 @@ bool do_check()
   }
   offset = (char*)&(com_data.dummy4[0]) - (char*)&com_data;
   cout << "dummy4 offset = " << offset;
+#if QTB_EXTRA_BUTTON_SUPPORT
+  if (offset == 65){
+#else // QTB_EXTRA_BUTTON_SUPPORT
   if (offset == 78){
+#endif // QTB_EXTRA_BUTTON_SUPPORT
 	cout << " : ok" << endl;
   }
   else {

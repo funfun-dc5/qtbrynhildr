@@ -101,6 +101,12 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONHOLDMOUSECONTROL			"onHoldMouseControl"
 #define QTB_ONHOLDMOUSECONTROL_DEFAULT	false
 
+#if QTB_EXTRA_BUTTON_SUPPORT
+// for onExtraButtonSupport
+#define QTB_ONEXTRABUTTONSUPPORT			"onExtraButtonSupport"
+#define QTB_ONEXTRABUTTONSUPPORT_DEFAULT	true
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+
 // for onControlOffWithGraphicsOff
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF			"onControlOffWithGraphicsOff"
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT	true
@@ -558,6 +564,21 @@ public:
 	this->onHoldMouseControl = onHoldMouseControl;
 	return true;
   }
+
+#if QTB_EXTRA_BUTTON_SUPPORT
+  // get extra button support flag
+  bool getOnExtraButtonSupport() const
+  {
+	return onExtraButtonSupport;
+  }
+
+  // set extra button support flag
+  bool setOnExtraButtonSupport(bool onExtraButtonSupport)
+  {
+	this->onExtraButtonSupport = onExtraButtonSupport;
+	return true;
+  }
+#endif // QTB_EXTRA_BUTTON_SUPPORT
 
   // get control off with graphics off flag
   bool getOnControlOffWithGraphicsOff() const
@@ -1378,6 +1399,9 @@ private:
   // Control
   volatile bool onControl;
   volatile bool onHoldMouseControl;
+#if QTB_EXTRA_BUTTON_SUPPORT
+  volatile bool onExtraButtonSupport;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onControlOffWithGraphicsOff;
 
   // Graphics

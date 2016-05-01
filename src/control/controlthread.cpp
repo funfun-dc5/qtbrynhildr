@@ -105,6 +105,23 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  case TYPE_MOUSE_LEFT_BUTTON:
 		com_data->mouse_left = mouseInfo->value.button;
 		break;
+#if QTB_EXTRA_BUTTON_SUPPORT
+	  case TYPE_MOUSE_MIDDLE_BUTTON:
+		if (settings->getOnExtraButtonSupport()){
+		  com_data->mouse_middle = mouseInfo->value.button;
+		}
+		break;
+	  case TYPE_MOUSE_BACK_BUTTON:
+		if (settings->getOnExtraButtonSupport()){
+		  com_data->mouse_x1 = mouseInfo->value.button;
+		}
+		break;
+	  case TYPE_MOUSE_FORWARD_BUTTON:
+		if (settings->getOnExtraButtonSupport()){
+		  com_data->mouse_x2 = mouseInfo->value.button;
+		}
+		break;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
 	  case TYPE_MOUSE_WHEEL:
 		com_data->mouse_wheel = mouseInfo->value.wheel;
 		break;

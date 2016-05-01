@@ -26,12 +26,23 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   SIZE				server_cx;			// width of image for server.
   SIZE				server_cy;			// hight of image for server.
   CONTROL			control;			// fixed(CONTROL_ON)
-  MOUSE_MOVE		mouse_move;
+#if QTB_EXTRA_BUTTON_SUPPORT
+  MOUSE_MOVE		mouse_move;			// 1 byte
+  BYTE				dummy4[1];
+  MOUSE_BUTTON		mouse_x1;			// mouse button status for back button
+  MOUSE_BUTTON		mouse_x2;			// mouse button status for forward button
+#else // QTB_EXTRA_BUTTON_SUPPORT
+  MOUSE_MOVE		mouse_move;			// 4 bytes
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   POS			    mouse_x;			// mouse position x
   POS			    mouse_y;			// mouse position y
   MOUSE_BUTTON		mouse_left;			// mouse button status for left button
   MOUSE_BUTTON		mouse_right;		// mouse button status for right button
+#if QTB_EXTRA_BUTTON_SUPPORT
+  MOUSE_BUTTON		mouse_middle;		// mouse button status for middle button
+#else // QTB_EXTRA_BUTTON_SUPPORT
   BYTE				dummy4[1];			// padding 1 byte
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_WHEEL		mouse_wheel;
   char				keycode;
   KEYCODE_FLG		keycode_flg;

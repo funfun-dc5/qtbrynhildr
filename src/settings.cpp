@@ -66,6 +66,9 @@ Settings::Settings(const char *iniFileName)
   setPassword(QTB_PASSWORD_DEFAULT);
   setOnControl(QTB_ONCONTROL_DEFAULT);
   setOnHoldMouseControl(QTB_ONHOLDMOUSECONTROL_DEFAULT);
+#if QTB_EXTRA_BUTTON_SUPPORT
+  setOnExtraButtonSupport(QTB_ONEXTRABUTTONSUPPORT_DEFAULT);
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   setOnControlOffWithGraphicsOff(QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT);
   setOnGraphics(QTB_ONGRAPHICS_DEFAULT);
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
@@ -179,6 +182,11 @@ void Settings::readSettings()
   // load onHoldMouseControl
   setOnHoldMouseControl(settings->value(QTB_ONHOLDMOUSECONTROL,
 										QTB_ONHOLDMOUSECONTROL_DEFAULT).toBool());
+
+#if QTB_EXTRA_BUTTON_SUPPORT
+  setOnExtraButtonSupport(settings->value(QTB_ONEXTRABUTTONSUPPORT,
+										  QTB_ONEXTRABUTTONSUPPORT_DEFAULT).toBool());
+#endif // QTB_EXTRA_BUTTON_SUPPORT
 
   // load onControlOffWithGraphicsOff
   setOnControlOffWithGraphicsOff(settings->value(QTB_ONCONTROLOFFWITHGRAPHICSOFF,
@@ -372,6 +380,11 @@ void Settings::writeSettings()
   // save onHoldMouseControl
   settings->setValue(QTB_ONHOLDMOUSECONTROL, onHoldMouseControl);
 
+#if QTB_EXTRA_BUTTON_SUPPORT
+  // save onExtraButtonSupport
+  settings->setValue(QTB_ONEXTRABUTTONSUPPORT, onExtraButtonSupport);
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+
   // save onControlOffWithGraphicsOff
   settings->setValue(QTB_ONCONTROLOFFWITHGRAPHICSOFF, onControlOffWithGraphicsOff);
 
@@ -518,6 +531,9 @@ void Settings::printSettings() const
   qDebug() << "SupportGamePad: " << onSupportGamePad;
 #endif // QTB_BRYNHILDR2_SUPPORT
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
+#if QTB_EXTRA_BUTTON_SUPPORT
+  qDebug() << "  ExtraButtonSupport : " << onExtraButtonSupport;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
   qDebug() << "Graphics      : " << onGraphics;
   qDebug() << "    QUALITY   : " << getVideoQualityByString();

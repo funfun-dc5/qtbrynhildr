@@ -558,6 +558,7 @@ keyboardType=0
 portNo=55500
 onControl=true
 onHoldMouseControl=false
+onExtraButtonSupport=true
 onControlOffWithGraphicsOff=true
 onGraphics=true
 videoQuality=5
@@ -774,6 +775,9 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.1.2.6 : [新規機能]
+             ・5ボタンマウス(Middle/Back/Forward Button)(Brynhildr 2.0.4)対応
+
 Ver.1.2.5 : [新規機能]
              ・デスクトップのキャプチャ機能追加
                メニュー項目を追加
@@ -1094,6 +1098,8 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 「ブリュンヒルデ零式改。」    : http://blog.x-row.net/?p=6911
 
 「ブリュンヒルデ零式改弐」    : http://blog.x-row.net/?p=10682
+
+「ブリュンヒルデ零式改参」    : http://blog.x-row.net/?p=11892
 
  (*) 1番下のURL(↑)からダウンロードできるソースコードが最新です。
 

@@ -357,7 +357,7 @@ void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
   case Qt::RightButton:
 	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
 	break;
-#if 0 // for TEST
+#if QTB_EXTRA_BUTTON_SUPPORT
   case Qt::MiddleButton:
 	mouseBuffer->put(TYPE_MOUSE_MIDDLE_BUTTON, value);
 	break;
@@ -367,7 +367,7 @@ void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
   case Qt::BackButton:
 	mouseBuffer->put(TYPE_MOUSE_BACK_BUTTON, value);
 	break;
-#endif // for TEST
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   default:
 	// Not support button
 	break;

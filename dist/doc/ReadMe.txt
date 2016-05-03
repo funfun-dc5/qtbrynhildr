@@ -780,6 +780,7 @@ Ver.1.2.7 : [新規機能]
 
             [その他変更]
              ・英語/日本語表記の修正
+             ・「About Qt Brynhildr」ダイアログのブログURLをハイパーリンクへ変更
 
 Ver.1.2.6 : [新規機能]
              ・5ボタンマウス(Middle/Back/Forward Button)(Brynhildr 2.0.4)対応

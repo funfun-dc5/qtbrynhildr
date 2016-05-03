@@ -14,6 +14,6 @@
 #define QTB_YEAR		"2015-2016"
 
 // URI of blog
-#define QTB_BLOG		"http://mcz-xoxo.cocolog-nifty.com/blog/"
+#define QTB_BLOG		"<a href=\"http://mcz-xoxo.cocolog-nifty.com/blog/\">http://mcz-xoxo.cocolog-nifty.com/blog/</a>"
 
 #endif // VERSION_H

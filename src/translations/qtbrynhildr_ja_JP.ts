@@ -20,43 +20,43 @@
     <name>ConnectToServerDialog</name>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>connect To Server</source>
+        <source>Connect To Server</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サーバに接続</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>HostName</source>
+        <source>Host Name :</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ホスト名/IPアドレス</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>HostType</source>
+        <source>Host Type :</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ホストタイプ</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>KeyboardType</source>
+        <source>Keyboard Type</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>キーボードタイプ</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>PortNo</source>
+        <source>Port :</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ポート番号</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>Password</source>
+        <source>Password :</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パスワード</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>show Password</source>
+        <source>Show Password</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パスワードを表示する</translation>
     </message>
@@ -267,9 +267,9 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="810"/>
         <location filename="../qtbrynhildr.cpp" line="813"/>
-        <source>output Log ON/OFF</source>
+        <source>Output Log</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>デバッグログ出力 ON/OFF</translation>
+        <translation>デバッグログ出力</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="817"/>
@@ -352,9 +352,9 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="803"/>
         <location filename="../qtbrynhildr.cpp" line="806"/>
-        <source>output Keyboard Log ON/OFF</source>
+        <source>Output Keyboard Log</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>キーボードログ出力 ON/OFF</translation>
+        <translation>キーボードログ出力</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="828"/>
@@ -373,7 +373,7 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="847"/>
         <location filename="../qtbrynhildr.cpp" line="848"/>
-        <source>Show FrameRate</source>
+        <source>Show Frame Rate</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フレームレートを表示</translation>
     </message>
@@ -498,9 +498,9 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="998"/>
-        <source>maximum FPS</source>
+        <source>Maximum FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>maximum FPS</translation>
+        <translation>Maximum FPS</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1002"/>
@@ -746,7 +746,7 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1419"/>
-        <source>Not connected</source>
+        <source>Not Connected</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>未接続</translation>
     </message>
@@ -895,13 +895,13 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1441"/>
-        <source>FrameRate: </source>
+        <source>Frame Rate: </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フレームレート: </translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1415"/>
-        <source>connected : </source>
+        <source>Connected : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>接続中 : </translation>
     </message>

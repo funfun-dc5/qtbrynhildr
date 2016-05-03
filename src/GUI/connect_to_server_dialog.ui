@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>connect To Server</string>
+   <string>Connect To Server</string>
   </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
@@ -28,7 +28,7 @@
       <item>
        <widget class="QLabel" name="label_hostname">
         <property name="text">
-         <string>HostName</string>
+         <string>Host Name :</string>
         </property>
         <property name="buddy">
          <cstring>lineEdit_hostname</cstring>
@@ -58,7 +58,7 @@
       <item>
        <widget class="QLabel" name="label_hosttype">
         <property name="text">
-         <string>HostType</string>
+         <string>Host Type :</string>
         </property>
         <property name="buddy">
          <cstring>comboBox_hosttype</cstring>
@@ -88,7 +88,7 @@
       <item>
        <widget class="QLabel" name="label_keyboardtype">
         <property name="text">
-         <string>KeyboardType</string>
+         <string>Keyboard Type</string>
         </property>
         <property name="buddy">
          <cstring>comboBox_keyboardtype</cstring>
@@ -118,7 +118,7 @@
       <item>
        <widget class="QLabel" name="label_portno">
         <property name="text">
-         <string>PortNo</string>
+         <string>Port :</string>
         </property>
         <property name="buddy">
          <cstring>spinBox_portno</cstring>
@@ -161,7 +161,7 @@
       <item>
        <widget class="QLabel" name="label_password">
         <property name="text">
-         <string>Password</string>
+         <string>Password :</string>
         </property>
         <property name="buddy">
          <cstring>lineEdit_password</cstring>
@@ -199,7 +199,7 @@
     <item>
      <widget class="QCheckBox" name="checkBox_showPassword">
       <property name="text">
-       <string>show Password</string>
+       <string>Show Password</string>
       </property>
      </widget>
     </item>

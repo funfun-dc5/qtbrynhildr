@@ -800,17 +800,17 @@ void QtBrynhildr::createActions()
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
 
   // output keyboardlog Action
-  outputKeyboardLog_Action = new QAction(tr("output Keyboard Log ON/OFF"), this);
+  outputKeyboardLog_Action = new QAction(tr("Output Keyboard Log"), this);
   outputKeyboardLog_Action->setCheckable(true);
   outputKeyboardLog_Action->setChecked(settings->getOutputKeyboardLog());
-  outputKeyboardLog_Action->setStatusTip(tr("output Keyboard Log ON/OFF"));
+  outputKeyboardLog_Action->setStatusTip(tr("Output Keyboard Log"));
   connect(outputKeyboardLog_Action, SIGNAL(triggered()), this, SLOT(toggleOutputKeyboardLog()));
 
   // output log Action
-  outputLog_Action = new QAction(tr("output Log ON/OFF"), this);
+  outputLog_Action = new QAction(tr("Output Log"), this);
   outputLog_Action->setCheckable(true);
   outputLog_Action->setChecked(settings->getOutputLog());
-  outputLog_Action->setStatusTip(tr("output Log ON/OFF"));
+  outputLog_Action->setStatusTip(tr("Output Log"));
   connect(outputLog_Action, SIGNAL(triggered()), this, SLOT(toggleOutputLog()));
 
   // exit Action
@@ -844,8 +844,8 @@ void QtBrynhildr::createActions()
   connect(showStatusBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowStatusBar()));
 
   // Show FrameRate
-  showFrameRate_Action = new QAction(tr("Show FrameRate"), this);
-  showFrameRate_Action->setStatusTip(tr("Show FrameRate"));
+  showFrameRate_Action = new QAction(tr("Show Frame Rate"), this);
+  showFrameRate_Action->setStatusTip(tr("Show Frame Rate"));
   showFrameRate_Action->setCheckable(true);
   showFrameRate_Action->setChecked(settings->getOnShowFrameRate());
   connect(showFrameRate_Action, SIGNAL(triggered()), this, SLOT(toggleShowFrameRate()));
@@ -995,7 +995,7 @@ void QtBrynhildr::createActions()
   selectFrameRate60_Action->setStatusTip(tr("maxfps 60 FPS"));
   connect(selectFrameRate60_Action, SIGNAL(triggered()), this, SLOT(selectFrameRate60()));
 
-  selectFrameRateMaximum_Action = new QAction(tr("maximum FPS"), this);
+  selectFrameRateMaximum_Action = new QAction(tr("Maximum FPS"), this);
   //  selectFrameRateMaximum_Action->setEnabled(false);
   selectFrameRateMaximum_Action->setCheckable(true);
   selectFrameRateMaximum_Action->setChecked(settings->getFrameRate() == 0);
@@ -1412,11 +1412,11 @@ void QtBrynhildr::updateConnected()
   // set label
   if (settings->getConnected()){
 	// connection
-	connectionLabel->setText(tr("connected : ") + settings->getServerName());
+	connectionLabel->setText(tr("Connected : ") + settings->getServerName());
   }
   else {
 	// connection
-	connectionLabel->setText(tr("Not connected"));
+	connectionLabel->setText(tr("Not Connected"));
   }
 
   // set minimum size
@@ -1438,7 +1438,7 @@ void QtBrynhildr::updateFrameRate()
 	  currentFrameRate = 0;
 	  currentDataRate = 0;
 	}
-	QString str = QString(tr("FrameRate: ")+"%1 [%2 Mbps]").
+	QString str = QString(tr("Frame Rate: ")+"%1 [%2 Mbps]").
 	  arg(currentFrameRate, 4, 'f', 1, ' ').
 	  arg(currentDataRate, 4, 'f', 1, ' ');
 	frameRateLabel->setText(str);

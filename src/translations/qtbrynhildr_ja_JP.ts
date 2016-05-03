@@ -26,13 +26,13 @@
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>Host Name :</source>
+        <source>Host Name</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ホスト名/IPアドレス</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>Host Type :</source>
+        <source>Host Type</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ホストタイプ</translation>
     </message>
@@ -44,13 +44,13 @@
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>Port :</source>
+        <source>Port</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ポート番号</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
-        <source>Password :</source>
+        <source>Password</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パスワード</translation>
     </message>

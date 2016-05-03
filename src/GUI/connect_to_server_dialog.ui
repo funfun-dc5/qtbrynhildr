@@ -28,7 +28,7 @@
       <item>
        <widget class="QLabel" name="label_hostname">
         <property name="text">
-         <string>Host Name :</string>
+         <string>Host Name</string>
         </property>
         <property name="buddy">
          <cstring>lineEdit_hostname</cstring>
@@ -58,7 +58,7 @@
       <item>
        <widget class="QLabel" name="label_hosttype">
         <property name="text">
-         <string>Host Type :</string>
+         <string>Host Type</string>
         </property>
         <property name="buddy">
          <cstring>comboBox_hosttype</cstring>
@@ -118,7 +118,7 @@
       <item>
        <widget class="QLabel" name="label_portno">
         <property name="text">
-         <string>Port :</string>
+         <string>Port</string>
         </property>
         <property name="buddy">
          <cstring>spinBox_portno</cstring>
@@ -161,7 +161,7 @@
       <item>
        <widget class="QLabel" name="label_password">
         <property name="text">
-         <string>Password :</string>
+         <string>Password</string>
         </property>
         <property name="buddy">
          <cstring>lineEdit_password</cstring>

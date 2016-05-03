@@ -114,7 +114,7 @@
  以下を環境に合わせてダウンロードします。
 
  [64bit]
- http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x64-5.4.2.run
+ http://download.qt.io/archive/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.0.run
 
  [32bit]
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run
@@ -123,8 +123,8 @@
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.4.2.run
- sudo ./qt-opensource-linux-x64-5.4.2.run
+ chmod 755 ./qt-opensource-linux-x64-5.6.0.run
+ sudo ./qt-opensource-linux-x64-5.6.0.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
@@ -781,6 +781,7 @@ Ver.1.2.7 : [新規機能]
             [その他変更]
              ・英語/日本語表記の修正
              ・「About Qt Brynhildr」ダイアログのブログURLをハイパーリンクへ変更
+             ・Linux(x64)版もQt5.6.0でビルドするように変更(Linux(x86)版は5.4.2のまま)
 
 Ver.1.2.6 : [新規機能]
              ・5ボタンマウス(Middle/Back/Forward Button)(Brynhildr 2.0.4)対応

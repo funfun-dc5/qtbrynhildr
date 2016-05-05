@@ -6,9 +6,11 @@
 
 Install Xcode at App Store.
 
-2) install Qt5.4.2
+2) install Qt5
 
-http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-mac-x64-clang-5.4.2.dmg
+for example)
+
+ http://download.qt.io/archive/qt/5.6/5.6.0/qt-opensource-mac-x64-clang-5.6.0.dmg
 
 3) check setup script for Qt5 (src/setup_qt5)
 

@@ -133,24 +133,34 @@ uchar EventConverter_US::getVKCode(Key key)
 	return VK_F24;
 
   case Key_0:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_0;
   case Key_1:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_1;
   case Key_2:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_2;
   case Key_3:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_3;
   case Key_4:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_4;
   case Key_5:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_5;
   case Key_6:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_6;
   case Key_7:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_7;
   case Key_8:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_8;
   case Key_9:
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_9;
 
   case Key_A:

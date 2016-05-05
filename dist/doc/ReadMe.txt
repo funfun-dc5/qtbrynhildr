@@ -755,6 +755,8 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
  [7] モニタの解像度と接続方法(D-Sub/DVI/HDMIなど)
 
+ [8] 接続しているキーボード、マウス
+
 (2) サーバについて
 
  [1] お使いのBrynhildr/Siegfriedのバージョン
@@ -766,7 +768,9 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
  [1] お使いのQt Brynhildrのバージョン
 
- [2] 不具合発生時のqtbrynhildr.logの内容
+ [2] 不具合発生時のqtbrynhildr.log/keyboard.logの内容
+
+ [3] キーボードタイプ (JP/US/Native Keyboard)
 
 (4) 不具合内容
 
@@ -775,8 +779,11 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
-Ver.1.2.7 : [新規機能]
-             なし
+Ver.1.2.7 : [不具合修正]
+             ・英小文字 + SHIFTキー操作が不正となる不具合(SHIFTキーが効かない)修正
+              (Ver.1.2.3からVer.1.2.6)
+             ・"Native Keyboard"でSHIFT/CONTROL/ALTキーの操作が不正となる場合がある不具合修正
+              (Windows版)
 
             [その他変更]
              ・英語/日本語表記の修正

@@ -39,7 +39,7 @@ KeyBuffer::~KeyBuffer()
 }
 
 // put data to ring buffer
-int KeyBuffer::put(char keycode, KEYCODE_FLG keycode_flg)
+int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 {
   if (size() == bufferSize){ // Full
 	return -1;

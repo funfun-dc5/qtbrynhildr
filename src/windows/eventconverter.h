@@ -20,14 +20,22 @@ namespace qtbrynhildr {
 class EventConverter
 {
 public:
+  // shift key control
+  typedef enum {
+	SHIFTKEY_THROUGH,
+	SHIFTKEY_NEED,
+	SHIFTKEY_NONEED,
+  } ShiftKeyControl;
+
+public:
   // constructor
   EventConverter();
 
   // get Virtual Keycode
   virtual uchar getVKCode(Key key) = 0;
 
-  // get need shift key
-  bool getNeedShiftKey();
+  // get shift key control
+  ShiftKeyControl getShiftKeyControl();
 
   // get name
   virtual QString getEventConverterName() = 0;
@@ -36,8 +44,8 @@ public:
   static QString getVKCodeByString(uchar vkcode);
 
 protected:
-  // need shift key
-  bool needShiftKey;
+  // shift key control
+  ShiftKeyControl shiftKeyControl;
 
   // output log flag
   bool outputLog;

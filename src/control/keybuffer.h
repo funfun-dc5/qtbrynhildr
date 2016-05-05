@@ -11,7 +11,7 @@ namespace qtbrynhildr {
 
 // key information
 struct KeyInfo {
-  char			keycode;		// keycode (VK_*)
+  uchar			keycode;		// keycode (VK_*)
   KEYCODE_FLG	keycode_flg;	// KEYCODE_FLG_KEYUP/KEYDOWN
 };
 
@@ -25,7 +25,7 @@ public:
   ~KeyBuffer();
 
   // put data to ring buffer
-  int put(char keycode, KEYCODE_FLG keycode_flg);
+  int put(uchar keycode, KEYCODE_FLG keycode_flg);
 
   // get data from ring buffer
   KeyInfo *get();

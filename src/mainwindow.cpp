@@ -540,7 +540,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
   if (settings->getConnected() &&
 	  settings->getOnControl()){
 	// check shift key status
-	if (onShiftKey && !eventConverter->getNeedShiftKey()){
+	if (onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NONEED){
 	  // release shift key
 	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
 	  onShiftKey = false;
@@ -551,7 +551,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 								 << " => Sent" << endl << flush;
 	  }
 	}
-	else if (!onShiftKey && eventConverter->getNeedShiftKey()){
+	else if (!onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NEED){
 	  // need shift key
 	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYDOWN);
 	  onShiftKey = true;
@@ -637,7 +637,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 	}
 
 	// check shift key status
-	if (!onShiftKey && eventConverter->getNeedShiftKey()){
+	if (!onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NEED){
 	  // need shift key
 	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
 	  onShiftKey = false;
@@ -825,10 +825,40 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
 	  // send All key event in nativeEventFilter
 	  if (msg->message == WM_KEYDOWN){
+		// VK_LXXXX/RXXXX -> VK_XXXX
+		switch(msg->wParam){
+		case VK_LSHIFT:
+		case VK_RSHIFT:
+		  msg->wParam = VK_SHIFT;
+		  break;
+		case VK_LCONTROL:
+		case VK_RCONTROL:
+		  msg->wParam = VK_CONTROL;
+		  break;
+		case VK_LMENU:
+		case VK_RMENU:
+		  msg->wParam = VK_MENU;
+		  break;
+		}
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
 	  }
 	  else if (msg->message == WM_KEYUP){
+		// VK_LXXXX/RXXXX -> VK_XXXX
+		switch(msg->wParam){
+		case VK_LSHIFT:
+		case VK_RSHIFT:
+		  msg->wParam = VK_SHIFT;
+		  break;
+		case VK_LCONTROL:
+		case VK_RCONTROL:
+		  msg->wParam = VK_CONTROL;
+		  break;
+		case VK_LMENU:
+		case VK_RMENU:
+		  msg->wParam = VK_MENU;
+		  break;
+		}
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
 	  }

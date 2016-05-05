@@ -16,15 +16,15 @@ namespace qtbrynhildr {
 // constructor
 EventConverter::EventConverter()
   :
-  needShiftKey(false),
+  shiftKeyControl(SHIFTKEY_THROUGH),
   outputLog(true)
 {
 }
 
-// get need shift key
-bool EventConverter::getNeedShiftKey()
+// get shift key control
+EventConverter::ShiftKeyControl EventConverter::getShiftKeyControl()
 {
-  return needShiftKey;
+  return shiftKeyControl;
 }
 
 // for DEBUG

@@ -22,7 +22,7 @@ namespace qtbrynhildr {
 // for US Keyboard
 uchar EventConverter_US::getVKCode(Key key)
 {
-  needShiftKey = false;
+  shiftKeyControl = SHIFTKEY_THROUGH;
 
   switch(key){
   case Key_Escape:
@@ -218,90 +218,102 @@ uchar EventConverter_US::getVKCode(Key key)
   //
   //------------------------------------------------------------
   case Key_Exclam:			// '!'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_1;
   case Key_QuoteDbl:		// '"'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_7;
   case Key_NumberSign:		// '#'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_3;
   case Key_Dollar:			// '$'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_4;
   case Key_Percent:			// '%'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_5;
   case Key_Ampersand:		// '&'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_7;
   case Key_Apostrophe:		// '''
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_7;
   case Key_ParenLeft:		// '('
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_9;
   case Key_ParenRight:		// ')'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_0;
   case Key_Asterisk:		// '*'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_8;
   case Key_Plus:			// '+'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_PLUS;
   case Key_Comma:			// ','
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_COMMA;
   case Key_Minus:			// '-'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_MINUS;
   case Key_Period:			// '.'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_PERIOD;
   case Key_Slash:			// '/'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_2;
 
   case Key_Colon:			// ':'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_1;
   case Key_Semicolon:		// ';'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_1;
   case Key_Less:			// '<'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_COMMA;
   case Key_Equal:			// '='
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_PLUS;
   case Key_Greater:			// '>'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_PERIOD;
   case Key_Question:		// '?'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_2;
   case Key_At:				// '@'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_2;
   case Key_QuoteLeft:		// '`'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_3;
 
   case Key_BracketLeft:		// '['
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_4;
   case Key_BraceLeft:		// '{'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_4;
   case Key_Backslash:		// '\'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_5;
   case Key_Bar:				// '|'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_5;
   case Key_Underscore:		// '_'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_MINUS;
   case Key_BracketRight:	// ']'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_6;
   case Key_BraceRight:		// '}'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_OEM_6;
   case Key_AsciiTilde:		// '~'
+	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_3;
   case Key_AsciiCircum:		// '^'
-	needShiftKey = true;
+	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_6;
 
   default:					// NOT support key

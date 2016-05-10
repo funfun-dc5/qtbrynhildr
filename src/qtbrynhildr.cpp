@@ -827,7 +827,7 @@ void QtBrynhildr::createActions()
   connect(exit_Action, SIGNAL(triggered()), this, SLOT(exit()));
 
   // about Action
-  about_Action = new QAction(tr("About"), this);
+  about_Action = new QAction(tr("&About"), this);
   about_Action->setStatusTip(tr("About Qt Brynhildr"));
   connect(about_Action, SIGNAL(triggered()), this, SLOT(about()));
 
@@ -931,7 +931,7 @@ void QtBrynhildr::createActions()
 
   // Deskop Scaling Action
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog_Action = new QAction(tr("Desktop Scaling"), this);
+	desktopScalingDialog_Action = new QAction(tr("Desktop &Scaling"), this);
 	desktopScalingDialog_Action->setStatusTip(tr("Desktop Scaling"));
 	desktopScalingDialog_Action->setEnabled(false);
 	connect(desktopScalingDialog_Action, SIGNAL(triggered()), this, SLOT(desktopScaling()));
@@ -939,7 +939,7 @@ void QtBrynhildr::createActions()
 
   // Deskop Capture Action
   if (QTB_DESKTOP_IMAGE_CAPTURE){
-	desktopCapture_Action = new QAction(tr("Desktop Capture"), this);
+	desktopCapture_Action = new QAction(tr("Desktop &Capture"), this);
 	desktopCapture_Action->setStatusTip(tr("Desktop Capture"));
 	desktopCapture_Action->setEnabled(false);
 	connect(desktopCapture_Action, SIGNAL(triggered()), this, SLOT(desktopCapture()));
@@ -947,7 +947,7 @@ void QtBrynhildr::createActions()
 
   // Log Action
   if (QTB_LOG_VIEW){
-	logViewDialog_Action = new QAction(tr("Log View"), this);
+	logViewDialog_Action = new QAction(tr("&Log View"), this);
 	logViewDialog_Action->setStatusTip(tr("Log View"));
 	connect(logViewDialog_Action, SIGNAL(triggered()), this, SLOT(logView()));
   }

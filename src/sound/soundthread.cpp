@@ -281,6 +281,8 @@ void SoundThread::shutdownConnection()
 	closesocket(sock_sound);
 	sock_sound = INVALID_SOCKET;
   }
+
+  NetThread::shutdownConnection();
 }
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 

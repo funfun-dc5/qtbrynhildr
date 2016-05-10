@@ -100,7 +100,7 @@ protected:
   virtual TRANSMIT_RESULT transmitBuffer() = 0;
 
   // shutdown connection
-  virtual void shutdownConnection() = 0;
+  void shutdownConnection();
 
   // connected
   void connectedToServer();
@@ -142,7 +142,7 @@ protected:
 
 private:
   // previous time
-  QDateTime previsouTime;
+  QDateTime previousTime;
 
 private:
   // set socket option

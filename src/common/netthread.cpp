@@ -56,11 +56,11 @@ long NetThread::getDataRate()
   QDateTime currentTime = QDateTime::currentDateTime();
   long bps = 0;
 
-  if (!previsouTime.isNull()){
-	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previsouTime.toMSecsSinceEpoch();
+  if (!previousTime.isNull()){
+	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousTime.toMSecsSinceEpoch();
 	bps = (long)(receivedDataCounter / ((double)diffMSeconds/1000));
   }
-  previsouTime = currentTime;
+  previousTime = currentTime;
   receivedDataCounter = 0;
   return bps;
 }
@@ -180,11 +180,23 @@ void NetThread::run()
 	cout << "[" << name << "]" << " stop thread...exit run()" << endl << flush;
 }
 
+// shutdown connection
+#if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
+void NetThread::shutdownConnection()
+{
+  // reset previous time to Null
+  previousTime = QDateTime();
+}
+#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
+
 // connected
 void NetThread::connectedToServer()
 {
   // reset counter
   receivedDataCounter = 0;
+
+  // reset previous time to Null
+  previousTime = QDateTime();
 }
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)

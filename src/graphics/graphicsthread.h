@@ -58,6 +58,9 @@ private:
   // frame counter
   unsigned int frameCounter;
 
+  // previous frame time
+  QDateTime previousFrameTime;
+
   // clearDesktop
   bool onClearDesktop;
 

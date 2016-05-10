@@ -45,6 +45,10 @@
  
  .. image:: images/connect_to_server_dialog1.jpg
 
+ * 「切断」
+
+   サーバから切断します。
+
  * 「終了」
 
    Qt Brynhildr を終了します。「確認」ダイアログが表示されので「OK」ボタンを押すと終了します。

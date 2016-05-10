@@ -127,6 +127,9 @@ private slots:
   // popup connect to server dialog
   void popUpConnectToServer();
 
+  // disconnect to server
+  void popUpDisconnectToServer();
+
   // connect to server
   void connectToServer();
 
@@ -366,6 +369,9 @@ private:
   // ------------------------------------------------------------
   // connect to server
   QAction *connectToServer_Action;
+
+  // disconnect to server
+  QAction *disconnectToServer_Action;
 
   // output keyboard log
   QAction *outputKeyboardLog_Action;

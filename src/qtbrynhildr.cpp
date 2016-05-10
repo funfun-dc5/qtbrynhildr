@@ -794,10 +794,17 @@ void QtBrynhildr::outputLogMessage(int id, const QString text)
 void QtBrynhildr::createActions()
 {
   // connect to server
-  connectToServer_Action = new QAction(tr("&Connect"), this);
-  connectToServer_Action->setStatusTip(tr("Connect to Brynhildr Server"));
+  connectToServer_Action = new QAction(tr("&Connect/Reconnect"), this);
+  connectToServer_Action->setStatusTip(tr("Connec/Reconnect to Brynhildr Server"));
   //  connectToServer_Action->setShortcut(tr("Ctrl+C"));
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
+
+  // disconnect to server
+  disconnectToServer_Action = new QAction(tr("&Disconnect"), this);
+  disconnectToServer_Action->setStatusTip(tr("Disconnect to Brynhildr Server"));
+  //  connectToServer_Action->setShortcut(tr("Ctrl+D"));
+  disconnectToServer_Action->setEnabled(false);
+  connect(disconnectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpDisconnectToServer()));
 
   // output keyboardlog Action
   outputKeyboardLog_Action = new QAction(tr("Output Keyboard Log"), this);
@@ -1215,6 +1222,7 @@ void QtBrynhildr::createMenus()
   // file menu
   fileMenu = menuBar()->addMenu(tr("&File"));
   fileMenu->addAction(connectToServer_Action);
+  fileMenu->addAction(disconnectToServer_Action);
 #if QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(sendFile_Action);
@@ -1470,6 +1478,9 @@ void QtBrynhildr::connected()
 #endif // defined(Q_OS_WIN)
   }
 
+  // enabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
+
   // enabled send key
   if (sendKey1_Action != 0)
     sendKey1_Action->setEnabled(true);
@@ -1530,6 +1541,9 @@ void QtBrynhildr::disconnected()
 	if (showSoftwareButton_Action != 0)
 	  showSoftwareButton_Action->setEnabled(false);
   }
+
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(false);
 
   // disabled send key
   if (sendKey1_Action != 0)
@@ -1655,6 +1669,20 @@ void QtBrynhildr::popUpConnectToServer()
 {
   // pop up connect to server dialog
   connectToServerDialog->show();
+}
+
+// popup disconnect to server
+void QtBrynhildr::popUpDisconnectToServer()
+{
+  if (!settings->getConnected()){
+	// Nothing to do
+  }
+
+  // disconnect
+  disconnectToServer();
+
+  // desktop clear
+  onDesktopClear();
 }
 
 // connect to server

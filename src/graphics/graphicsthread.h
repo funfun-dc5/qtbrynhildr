@@ -26,14 +26,14 @@ public:
   // destructor
   ~GraphicsThread();
 
-  // get frame counter
-  unsigned int getFrameCounter() const
-  {
-	return frameCounter;
-  };
-
   // get frame rate
   double getFrameRate();
+
+  // get total frame counter
+  unsigned int getTotalFrameCounter() const
+  {
+	return totalFrameCounter;
+  }
 
 protected:
   // connect to server
@@ -60,6 +60,9 @@ private:
 
   // previous frame time
   QDateTime previousFrameTime;
+
+  // total frame counter
+  unsigned int totalFrameCounter;
 
   // clearDesktop
   bool onClearDesktop;

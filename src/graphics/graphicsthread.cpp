@@ -27,6 +27,7 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   NetThread("GraphicsThread", settings, mainWindow),
   image(0),
   frameCounter(0),
+  totalFrameCounter(0),
   onClearDesktop(false),
   buffer(0)
 {
@@ -65,20 +66,18 @@ GraphicsThread::~GraphicsThread()
 // get frame rate
 double GraphicsThread::getFrameRate()
 {
-  static unsigned int previousFrameCounter;
   QDateTime currentTime = QDateTime::currentDateTime();
-  unsigned int currentFrameCounter = getFrameCounter();
   double fps = 0.0;
 
   if (!previousFrameTime.isNull()){
 	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousFrameTime.toMSecsSinceEpoch();
-	qint64 diffFrameCounter = currentFrameCounter - previousFrameCounter;
-	fps = diffFrameCounter / ((double)diffMSeconds/1000);
-	//	cout << "diffMSeconds   = " << diffMSeconds << endl << flush;
-	//	cout << "diffFrameCounter = " << diffFrameCounter << endl << flush;
+	if (diffMSeconds != 0){
+	  fps = frameCounter / ((double)diffMSeconds/1000);
+	}
   }
   previousFrameTime = currentTime;
-  previousFrameCounter = currentFrameCounter;
+  totalFrameCounter += frameCounter;
+  frameCounter = 0;
   return fps;
 }
 

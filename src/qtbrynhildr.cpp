@@ -59,7 +59,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   softwareButton(0),
   softwareKeyboardDockWidget(0),
   softwareButtonDockWidget(0),
-  frameCounter(0),
+  totalFrameCounter(0),
   currentFrameRate(0),
   option(0),
   iniFileName(0),
@@ -1512,8 +1512,8 @@ void QtBrynhildr::connected()
   receiveFile_Action->setEnabled(true);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
-  // reset frameCounter
-  frameCounter = 0;
+  // reset total frame counter
+  totalFrameCounter = 0;
 
   // refresh menu
   refreshMenu();
@@ -1941,13 +1941,13 @@ void QtBrynhildr::exit()
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Shutdown."));
 
   // output average of frame rate
-  // get frame counter
-  frameCounter = graphicsThread->getFrameCounter();
-  if (frameCounter != 0){
-	//	cout << "frameCounter = " << frameCounter << endl << flush;
+  // get total frame counter
+  totalFrameCounter = graphicsThread->getTotalFrameCounter();
+  if (totalFrameCounter != 0){
+	//	cout << "totalFrameCounter = " << totalFrameCounter << endl << flush;
 	uint diffSeconds = shutdownTime.toTime_t() - bootTime.toTime_t();
 	if (diffSeconds != 0){
-	  float averageFrameRate = (float)frameCounter/diffSeconds;
+	  float averageFrameRate = (float)totalFrameCounter/diffSeconds;
 	  //	  cout << "FPS of last session: " << averageFrameRate << endl << flush;
 	  QString averageFrameRateString;
 	  averageFrameRateString.setNum(averageFrameRate);

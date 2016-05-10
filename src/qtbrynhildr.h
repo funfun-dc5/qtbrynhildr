@@ -539,8 +539,8 @@ private:
   // for logging
   QDateTime bootTime;
 
-  // frameCounter
-  unsigned int frameCounter;
+  // total frame counter
+  unsigned int totalFrameCounter;
 
   // current frame rate
   double currentFrameRate;

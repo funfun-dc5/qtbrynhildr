@@ -58,7 +58,9 @@ long NetThread::getDataRate()
 
   if (!previousTime.isNull()){
 	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousTime.toMSecsSinceEpoch();
-	bps = (long)(receivedDataCounter / ((double)diffMSeconds/1000));
+	if (diffMSeconds != 0){
+	  bps = (long)(receivedDataCounter / ((double)diffMSeconds/1000));
+	}
   }
   previousTime = currentTime;
   receivedDataCounter = 0;

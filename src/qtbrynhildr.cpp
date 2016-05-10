@@ -824,11 +824,13 @@ void QtBrynhildr::createActions()
   exit_Action = new QAction(tr("&Exit"), this);
   exit_Action->setStatusTip(tr("Exit Qt Brynhildr"));
   //  exit_Action->setShortcut(tr("Ctrl+E"));
+  //  exit_Action->setMenuRole(QAction::QuitRole);
   connect(exit_Action, SIGNAL(triggered()), this, SLOT(exit()));
 
   // about Action
   about_Action = new QAction(tr("&About"), this);
   about_Action->setStatusTip(tr("About Qt Brynhildr"));
+  //  about_Action->setMenuRole(QAction::AboutRole);
   connect(about_Action, SIGNAL(triggered()), this, SLOT(about()));
 
   // Show Menu Bar
@@ -861,6 +863,7 @@ void QtBrynhildr::createActions()
   if (QTB_DESKTOP_FULL_SCREEN){
 	fullScreen_Action = new QAction(tr("Full Screen"), this);
 	fullScreen_Action->setStatusTip(tr("Full Screen"));
+	fullScreen_Action->setMenuRole(QAction::NoRole);
 	fullScreen_Action->setEnabled(false);
 	fullScreen_Action->setCheckable(true);
 	fullScreen_Action->setChecked(false);

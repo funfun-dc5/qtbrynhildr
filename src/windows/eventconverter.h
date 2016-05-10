@@ -6,6 +6,7 @@
 #define EVENTCONVERTER_H
 
 // Qt Header
+#include <QKeyEvent>
 #include <QString>
 #include <Qt>
 
@@ -32,7 +33,7 @@ public:
   EventConverter();
 
   // get Virtual Keycode
-  virtual uchar getVKCode(Key key) = 0;
+  virtual uchar getVKCode(QKeyEvent *keyEvent) = 0;
 
   // get shift key control
   ShiftKeyControl getShiftKeyControl();

@@ -20,8 +20,11 @@ namespace qtbrynhildr {
 
 // get VK code for windows from Qt::Key
 // for US Keyboard
-uchar EventConverter_US::getVKCode(Key key)
+uchar EventConverter_US::getVKCode(QKeyEvent *keyEvent)
 {
+  Key key = (Key)keyEvent->key();
+  bool onKeypadModifier = (keyEvent->modifiers() & KeypadModifier) == KeypadModifier;
+
   shiftKeyControl = SHIFTKEY_THROUGH;
 
   switch(key){
@@ -255,23 +258,48 @@ uchar EventConverter_US::getVKCode(Key key)
 	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_0;
   case Key_Asterisk:		// '*'
-	shiftKeyControl = SHIFTKEY_NEED;
-	return VK_8;
+	if (onKeypadModifier){
+	  return VK_MULTIPLY;
+	}
+	else {
+	  shiftKeyControl = SHIFTKEY_NEED;
+	  return VK_8;
+	}
   case Key_Plus:			// '+'
-	shiftKeyControl = SHIFTKEY_NEED;
-	return VK_OEM_PLUS;
+	if (onKeypadModifier){
+	  return VK_ADD;
+	}
+	else {
+	  shiftKeyControl = SHIFTKEY_NEED;
+	  return VK_OEM_PLUS;
+	}
   case Key_Comma:			// ','
 	shiftKeyControl = SHIFTKEY_NONEED;
 	return VK_OEM_COMMA;
   case Key_Minus:			// '-'
-	shiftKeyControl = SHIFTKEY_NONEED;
-	return VK_OEM_MINUS;
+	if (onKeypadModifier){
+	  return VK_SUBTRACT;
+	}
+	else {
+	  shiftKeyControl = SHIFTKEY_NONEED;
+	  return VK_OEM_MINUS;
+	}
   case Key_Period:			// '.'
-	shiftKeyControl = SHIFTKEY_NONEED;
-	return VK_OEM_PERIOD;
+	if (onKeypadModifier){
+	  return VK_DECIMAL;
+	}
+	else {
+	  shiftKeyControl = SHIFTKEY_NONEED;
+	  return VK_OEM_PERIOD;
+	}
   case Key_Slash:			// '/'
-	shiftKeyControl = SHIFTKEY_NONEED;
-	return VK_OEM_2;
+	if (onKeypadModifier){
+	  return VK_DIVIDE;
+	}
+	else {
+	  shiftKeyControl = SHIFTKEY_NONEED;
+	  return VK_OEM_2;
+	}
 
   case Key_Colon:			// ':'
 	shiftKeyControl = SHIFTKEY_NEED;
@@ -325,6 +353,40 @@ uchar EventConverter_US::getVKCode(Key key)
   case Key_AsciiCircum:		// '^'
 	shiftKeyControl = SHIFTKEY_NEED;
 	return VK_6;
+
+  //------------------------------------------------------------
+  // Extra Keys
+  //------------------------------------------------------------
+  case Key_Back:
+	return VK_BROWSER_BACK;
+  case Key_Forward:
+	return VK_BROWSER_FORWARD;
+  case Key_Refresh:
+	return VK_BROWSER_REFRESH;
+  case Key_Stop:
+	return VK_BROWSER_STOP;
+  case Key_Search:
+	return VK_BROWSER_SEARCH;
+  case Key_Favorites:
+	return VK_BROWSER_FAVORITES;
+  case Key_HomePage:
+	return VK_BROWSER_HOME;
+  case Key_VolumeMute:
+	return VK_VOLUME_MUTE;
+  case Key_VolumeDown:
+	return VK_VOLUME_DOWN;
+  case Key_VolumeUp:
+	return VK_VOLUME_UP;
+  case Key_MediaNext:
+	return VK_MEDIA_NEXT_TRACK;
+  case Key_MediaPrevious:
+	return VK_MEDIA_PREV_TRACK;
+  case Key_MediaStop:
+	return VK_MEDIA_NEXT_TRACK;
+  case Key_MediaTogglePlayPause:
+	return VK_MEDIA_PLAY_PAUSE;
+  case Key_LaunchMail:
+	return VK_LAUNCH_MAIL;
 
   default:					// NOT support key
 	if (outputLog){

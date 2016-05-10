@@ -18,7 +18,7 @@ class EventConverter_JP : public EventConverter
 {
 protected:
   // get Virtual Keycode
-  uchar getVKCode(Key key);
+  uchar getVKCode(QKeyEvent *keyEvent);
 
   // get name
   QString getEventConverterName();

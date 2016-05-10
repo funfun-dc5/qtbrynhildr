@@ -516,7 +516,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
   }
 
   // get VK_Code from Key_*
-  uchar VK_Code = eventConverter->getVKCode((Key)event->key());
+  uchar VK_Code = eventConverter->getVKCode(event);
   if (outputLogForKeyboard){
 	qDebug() << "[MainWindow]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Press   : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
@@ -588,7 +588,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
   }
 
   // get VK_Code from Key_*
-  uchar VK_Code = eventConverter->getVKCode((Key)event->key());
+  uchar VK_Code = eventConverter->getVKCode(event);
   if (outputLogForKeyboard){
 	qDebug() << "[MainWindow]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Release : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
@@ -825,6 +825,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
 	  // send All key event in nativeEventFilter
 	  if (msg->message == WM_KEYDOWN){
+#if 0 // for TEST
 		// VK_LXXXX/RXXXX -> VK_XXXX
 		switch(msg->wParam){
 		case VK_LSHIFT:
@@ -840,10 +841,12 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 		  msg->wParam = VK_MENU;
 		  break;
 		}
+#endif // for TEST
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
 	  }
 	  else if (msg->message == WM_KEYUP){
+#if 0 // for TEST
 		// VK_LXXXX/RXXXX -> VK_XXXX
 		switch(msg->wParam){
 		case VK_LSHIFT:
@@ -859,6 +862,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 		  msg->wParam = VK_MENU;
 		  break;
 		}
+#endif // for TEST
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
 	  }

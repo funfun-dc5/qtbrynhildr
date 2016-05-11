@@ -21,7 +21,11 @@ typedef int	SERVER_VERSION;
 
 // data type
 typedef char	DATA_TYPE;
-#define DATA_TYPE_DATA		1	// fixed value
+#define DATA_TYPE_DATA		1	// data
+#if QTB_PUBLIC_MODE6_SUPPORT
+#define DATA_TYPE_CLIPBOARD	2	// clipboard
+#define DATA_TYPE_FILE		3	// file
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // thread
 typedef char	THREAD;
@@ -111,7 +115,10 @@ typedef int	GAMEPAD_VALUE;
 
 // mode
 typedef	int		MODE;
-#define MODE_PUBLIC						5	// public mode
+#define MODE_PUBLIC5					5	// public mode 5
+#if QTB_PUBLIC_MODE6_SUPPORT
+#define MODE_PUBLIC6					6	// public mode 6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 // result value
 #define MODE_RESULT_PASSWORD_ERROR		0	// password error
 #define MODE_RESULT_CONNECT_ERROR		-1	// connect error

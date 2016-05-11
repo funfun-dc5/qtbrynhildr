@@ -414,7 +414,7 @@ void ControlThread::initHeader()
   // common
   com_data->data_type	= DATA_TYPE_DATA;
   com_data->thread		= THREAD_CONTROL;
-  com_data->mode		= MODE_PUBLIC;
+  com_data->mode		= MODE_PUBLIC5;
   com_data->monitor_no	= settings->getMonitorNo();
 #if QTB_BRYNHILDR2_SUPPORT
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){

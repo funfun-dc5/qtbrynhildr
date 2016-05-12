@@ -52,6 +52,7 @@
 // event converter
 #include "windows/eventconverter_jp.h"
 #include "windows/eventconverter_us.h"
+#include "windows/ntfs.h"
 
 namespace qtbrynhildr {
 
@@ -609,6 +610,9 @@ private:
 
   // height of status bar
   int heightOfStatusBar;
+
+  // utilities
+  NTFS ntfs;
 };
 
 } // end of namespace qtbrynhildr

@@ -70,7 +70,7 @@ HEADERS += graphics/graphicsthread.h
 HEADERS += sound/soundthread.h
 HEADERS += sound/soundbuffer.h
 HEADERS += sound/wave.h
-HEADERS += windows/keycodes.h windows/eventconverter.h windows/eventconverter_jp.h windows/eventconverter_us.h
+HEADERS += windows/keycodes.h windows/eventconverter.h windows/eventconverter_jp.h windows/eventconverter_us.h windows/ntfs.h
 HEADERS += function/recorder.h
 
 SOURCES += main.cpp
@@ -88,5 +88,5 @@ SOURCES += control/keybuffer.cpp control/mousebuffer.cpp
 SOURCES += graphics/graphicsthread.cpp
 SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
-SOURCES += windows/eventconverter.cpp windows/eventconverter_jp.cpp windows/eventconverter_us.cpp
+SOURCES += windows/eventconverter.cpp windows/eventconverter_jp.cpp windows/eventconverter_us.cpp windows/ntfs.cpp
 SOURCES += function/recorder.cpp

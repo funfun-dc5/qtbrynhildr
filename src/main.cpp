@@ -95,9 +95,7 @@ int main(int argc, char *argv[])
 #endif // defined(Q_OS_WIN)
 
   // display main window
-#if 0 // for TEST
   qtbrynhildr.setFocus(Qt::ActiveWindowFocusReason);
-#endif // for TEST
   qtbrynhildr.show();
 
 #if QTB_SPLASH_SCREEN

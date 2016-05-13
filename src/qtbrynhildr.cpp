@@ -794,13 +794,13 @@ void QtBrynhildr::outputLogMessage(int id, const QString text)
 void QtBrynhildr::createActions()
 {
   // connect to server
-  connectToServer_Action = new QAction(tr("&Connect/Reconnect"), this);
+  connectToServer_Action = new QAction(tr("Connect/Reconnect"), this);
   connectToServer_Action->setStatusTip(tr("Connec/Reconnect to Brynhildr Server"));
   //  connectToServer_Action->setShortcut(tr("Ctrl+C"));
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
 
   // disconnect to server
-  disconnectToServer_Action = new QAction(tr("&Disconnect"), this);
+  disconnectToServer_Action = new QAction(tr("Disconnect"), this);
   disconnectToServer_Action->setStatusTip(tr("Disconnect to Brynhildr Server"));
   //  connectToServer_Action->setShortcut(tr("Ctrl+D"));
   disconnectToServer_Action->setEnabled(false);
@@ -821,14 +821,14 @@ void QtBrynhildr::createActions()
   connect(outputLog_Action, SIGNAL(triggered()), this, SLOT(toggleOutputLog()));
 
   // exit Action
-  exit_Action = new QAction(tr("&Exit"), this);
+  exit_Action = new QAction(tr("Exit"), this);
   exit_Action->setStatusTip(tr("Exit Qt Brynhildr"));
   //  exit_Action->setShortcut(tr("Ctrl+E"));
   //  exit_Action->setMenuRole(QAction::QuitRole);
   connect(exit_Action, SIGNAL(triggered()), this, SLOT(exit()));
 
   // about Action
-  about_Action = new QAction(tr("&About"), this);
+  about_Action = new QAction(tr("About"), this);
   about_Action->setStatusTip(tr("About Qt Brynhildr"));
   //  about_Action->setMenuRole(QAction::AboutRole);
   connect(about_Action, SIGNAL(triggered()), this, SLOT(about()));
@@ -934,7 +934,7 @@ void QtBrynhildr::createActions()
 
   // Deskop Scaling Action
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog_Action = new QAction(tr("Desktop &Scaling"), this);
+	desktopScalingDialog_Action = new QAction(tr("Desktop Scaling"), this);
 	desktopScalingDialog_Action->setStatusTip(tr("Desktop Scaling"));
 	desktopScalingDialog_Action->setEnabled(false);
 	connect(desktopScalingDialog_Action, SIGNAL(triggered()), this, SLOT(desktopScaling()));
@@ -942,7 +942,7 @@ void QtBrynhildr::createActions()
 
   // Deskop Capture Action
   if (QTB_DESKTOP_IMAGE_CAPTURE){
-	desktopCapture_Action = new QAction(tr("Desktop &Capture"), this);
+	desktopCapture_Action = new QAction(tr("Desktop Capture"), this);
 	desktopCapture_Action->setStatusTip(tr("Desktop Capture"));
 	desktopCapture_Action->setEnabled(false);
 	connect(desktopCapture_Action, SIGNAL(triggered()), this, SLOT(desktopCapture()));
@@ -950,7 +950,7 @@ void QtBrynhildr::createActions()
 
   // Log Action
   if (QTB_LOG_VIEW){
-	logViewDialog_Action = new QAction(tr("&Log View"), this);
+	logViewDialog_Action = new QAction(tr("Log View"), this);
 	logViewDialog_Action->setStatusTip(tr("Log View"));
 	connect(logViewDialog_Action, SIGNAL(triggered()), this, SLOT(logView()));
   }
@@ -1206,13 +1206,13 @@ void QtBrynhildr::createActions()
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // send file
-  sendFile_Action = new QAction(tr("&Send File"), this);
+  sendFile_Action = new QAction(tr("Send File"), this);
   sendFile_Action->setEnabled(false);
   sendFile_Action->setStatusTip(tr("Send File"));
   connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
 
   // receive file
-  receiveFile_Action = new QAction(tr("&Receive File"), this);
+  receiveFile_Action = new QAction(tr("Receive File"), this);
   receiveFile_Action->setEnabled(false);
   receiveFile_Action->setStatusTip(tr("Receive File"));
   connect(receiveFile_Action, SIGNAL(triggered()), this, SLOT(receiveFile()));
@@ -1223,7 +1223,7 @@ void QtBrynhildr::createActions()
 void QtBrynhildr::createMenus()
 {
   // file menu
-  fileMenu = menuBar()->addMenu(tr("&File"));
+  fileMenu = menuBar()->addMenu(tr("File"));
   fileMenu->addAction(connectToServer_Action);
   fileMenu->addAction(disconnectToServer_Action);
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -1235,7 +1235,7 @@ void QtBrynhildr::createMenus()
   fileMenu->addAction(exit_Action);
 
   // display menu
-  displayMenu = menuBar()->addMenu(tr("&Display"));
+  displayMenu = menuBar()->addMenu(tr("Display"));
 #if 0 // for TEST
   displayMenu->addAction(showMenuBar_Action);
 #endif // if 1
@@ -1263,7 +1263,7 @@ void QtBrynhildr::createMenus()
   }
 
   // video menu
-  videoMenu = menuBar()->addMenu(tr("&Video"));
+  videoMenu = menuBar()->addMenu(tr("Video"));
   videoMenu->addAction(videoQuality_MINIMUM_Action);
   videoMenu->addAction(videoQuality_LOW_Action);
   videoMenu->addAction(videoQuality_STANDARD_Action);
@@ -1295,7 +1295,7 @@ void QtBrynhildr::createMenus()
   }
 
   // sound menu
-  soundMenu = menuBar()->addMenu(tr("&Sound"));
+  soundMenu = menuBar()->addMenu(tr("Sound"));
   soundMenu->addAction(soundQuality_MINIMUM_Action);
   soundMenu->addAction(soundQuality_LOW_Action);
   soundMenu->addAction(soundQuality_STANDARD_Action);
@@ -1303,7 +1303,7 @@ void QtBrynhildr::createMenus()
   soundMenu->addAction(soundQuality_MAXIMUM_Action);
 
   // control menu
-  controlMenu = menuBar()->addMenu(tr("&Control"));
+  controlMenu = menuBar()->addMenu(tr("Control"));
   // for send key
   sendKeySubMenu = controlMenu->addMenu(tr("Send Key"));
 #if 0 // for TEST
@@ -1348,7 +1348,7 @@ void QtBrynhildr::createMenus()
 #endif // QTB_RECORDER
 
   // option menu
-  optionMenu = menuBar()->addMenu(tr("&Option"));
+  optionMenu = menuBar()->addMenu(tr("Option"));
   if (QTB_SCROLL_MODE){
 	modeSubMenu = optionMenu->addMenu(tr("Mode"));
 	modeSubMenu->addAction(onScrollMode_Action);
@@ -1367,7 +1367,7 @@ void QtBrynhildr::createMenus()
   menuBar()->addSeparator();
 
   // help menu
-  helpMenu = menuBar()->addMenu(tr("&Help"));
+  helpMenu = menuBar()->addMenu(tr("Help"));
   // for log view
   if (QTB_LOG_VIEW){
 	helpMenu->addAction(logViewDialog_Action);
@@ -1384,7 +1384,7 @@ void QtBrynhildr::createContextMenu()
 // create Tool Bar
 void QtBrynhildr::createToolBars()
 {
-  // fileToolBar = addToolBar(tr("&File"));
+  // fileToolBar = addToolBar(tr("File"));
 }
 
 // create Status Bar

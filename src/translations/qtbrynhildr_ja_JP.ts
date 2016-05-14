@@ -254,9 +254,9 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="797"/>
-        <source>Connect/Reconnect</source>
+        <source>Connect</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>接続/再接続</translation>
+        <translation>接続</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="817"/>

@@ -794,8 +794,8 @@ void QtBrynhildr::outputLogMessage(int id, const QString text)
 void QtBrynhildr::createActions()
 {
   // connect to server
-  connectToServer_Action = new QAction(tr("Connect/Reconnect"), this);
-  connectToServer_Action->setStatusTip(tr("Connec/Reconnect to Brynhildr Server"));
+  connectToServer_Action = new QAction(tr("Connect"), this);
+  connectToServer_Action->setStatusTip(tr("Connec to Brynhildr Server"));
   //  connectToServer_Action->setShortcut(tr("Ctrl+C"));
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
 

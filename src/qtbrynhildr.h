@@ -159,8 +159,8 @@ private slots:
   // send file
   void sendFile();
 
-  // receive file
-  void receiveFile();
+  // send clipboard
+  void sendClipboard();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set video quality
@@ -495,8 +495,8 @@ private:
   // send file
   QAction *sendFile_Action;
 
-  // receive file
-  QAction *receiveFile_Action;
+  // send clipboard
+  QAction *sendClipboard_Action;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // connect to server dialog

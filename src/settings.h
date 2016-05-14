@@ -46,6 +46,17 @@
 #define QTB_CURRENTVERSION				"currentVersion"
 #define QTB_CURRENTVERSION_DEFAULT		QTB_VERSION_NUMBER
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+
+// for publicModeVersion
+#define QTB_PUBLICMODEVERSION	"publicModeVersion"
+#define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION6
+typedef int PUBLIC_MODEVERSION;
+#define PUBLICMODE_VERSION5		5
+#define PUBLICMODE_VERSION6		6
+
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
 // for serverName
 #define QTB_SERVERNAME			"serverName"
 #if defined(QTB_DEV_TABLET) // for TEST
@@ -259,9 +270,13 @@ typedef int SCALING_TYPE;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 
-// for onDisableClipboard
-#define QTB_ONDISABLECLIPBOARD				"onDisableClipboard"
-#define QTB_ONDISABLECLIPBOARD_DEFAULT		false
+// for onDisableTransferFile
+#define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
+#define QTB_ONDISABLETRANSFERFILE_DEFAULT	false
+
+// for onDisableTransferClipboard
+#define QTB_ONDISABLETRANSFERCLIPBOARD			"onDisableTransferClipboard"
+#define QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT	false
 
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -377,6 +392,49 @@ public:
   {
 	this->currentVersion = currentVersion;
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+
+  // get public mode version
+  PUBLIC_MODEVERSION getPublicModeVersion() const
+  {
+	return publicModeVersion;
+  }
+
+  // set public mode version
+  void setPublicModeVersion(PUBLIC_MODEVERSION publicModeVersion)
+  {
+	ASSERT(publicModeVersion == PUBLICMODE_VERSION5 ||
+		   publicModeVersion == PUBLICMODE_VERSION6);
+
+	switch(publicModeVersion){
+	case PUBLICMODE_VERSION5:
+	case PUBLICMODE_VERSION6:
+	  this->publicModeVersion = publicModeVersion;
+	  break;
+	default:
+	  // Error
+	  ABORT();
+	  break;
+	}
+  }
+
+  // get public mode version string
+  QString getPublicModeVersionByString() const
+  {
+	switch(publicModeVersion){
+	case PUBLICMODE_VERSION5:
+	  return "PUBLICMODE_VERSION5";
+	  break;
+	case PUBLICMODE_VERSION6:
+	  return "PUBLICMODE_VERSION6";
+	  break;
+	}
+
+	return "UNKNOWN PUBLICMODE_VERSION";
+  }
+
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get server name
   QString getServerName() const
@@ -1154,16 +1212,28 @@ public:
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 
-  // get disable clilpboard flag
-  bool getOnDisableClipboard() const
+  // get disable transfer clilpboard flag
+  bool getOnDisableTransferFile() const
   {
-	return onDisableClipboard;
+	return onDisableTransferFile;
   }
 
-  // set disable clipboard flag
-  void setOnDisableClipboard(bool onDisableClipboard)
+  // set disable transfer file flag
+  void setOnDisableTransferFile(bool onDisableTransferFile)
   {
-	this->onDisableClipboard = onDisableClipboard;
+	this->onDisableTransferFile = onDisableTransferFile;
+  }
+
+  // get disable transfer clilpboard flag
+  bool getOnDisableTransferClipboard() const
+  {
+	return onDisableTransferClipboard;
+  }
+
+  // set disable transfer clipboard flag
+  void setOnDisableTransferClipboard(bool onDisableTransferClipboard)
+  {
+	this->onDisableTransferClipboard = onDisableTransferClipboard;
   }
 
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -1378,6 +1448,13 @@ private:
   // current version
   volatile int currentVersion;
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+
+  // public mode version
+  volatile PUBLIC_MODEVERSION publicModeVersion;
+
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   // server name
   QString serverName;
 
@@ -1509,8 +1586,11 @@ private:
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 
-  // disable clip board
-  volatile bool onDisableClipboard;
+  // disable send/receive file
+  volatile bool onDisableTransferFile;
+
+  // disable send/receive clipboard
+  volatile bool onDisableTransferClipboard;
 
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

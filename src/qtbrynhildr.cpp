@@ -1211,11 +1211,11 @@ void QtBrynhildr::createActions()
   sendFile_Action->setStatusTip(tr("Send File"));
   connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
 
-  // receive file
-  receiveFile_Action = new QAction(tr("Receive File"), this);
-  receiveFile_Action->setEnabled(false);
-  receiveFile_Action->setStatusTip(tr("Receive File"));
-  connect(receiveFile_Action, SIGNAL(triggered()), this, SLOT(receiveFile()));
+  // send clipboard
+  sendClipboard_Action = new QAction(tr("Send Clipboard"), this);
+  sendClipboard_Action->setEnabled(false);
+  sendClipboard_Action->setStatusTip(tr("Send Clipboard"));
+  connect(sendClipboard_Action, SIGNAL(triggered()), this, SLOT(sendClipboard()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -1229,7 +1229,7 @@ void QtBrynhildr::createMenus()
 #if QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(sendFile_Action);
-  fileMenu->addAction(receiveFile_Action);
+  fileMenu->addAction(sendClipboard_Action);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -1522,8 +1522,8 @@ void QtBrynhildr::connected()
   // send file
   sendFile_Action->setEnabled(true);
 
-  // receive file
-  receiveFile_Action->setEnabled(true);
+  // send clipboard
+  sendClipboard_Action->setEnabled(true);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // reset total frame counter
@@ -1586,8 +1586,8 @@ void QtBrynhildr::disconnected()
   // send file
   sendFile_Action->setEnabled(false);
 
-  // receive file
-  receiveFile_Action->setEnabled(false);
+  // send clipboard
+  sendClipboard_Action->setEnabled(false);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -1997,10 +1997,10 @@ void QtBrynhildr::sendFile()
   cout << "Called sendFile()" << endl << flush;
 }
 
-// receive file
-void QtBrynhildr::receiveFile()
+// send clipboard
+void QtBrynhildr::sendClipboard()
 {
-  cout << "Called receiveFile()" << endl << flush;
+  cout << "Called sendClipboard()" << endl << flush;
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

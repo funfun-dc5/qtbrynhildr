@@ -478,8 +478,8 @@ void Settings::writeSettings()
   // save onShowMenuBar
   settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
 
-  // save onShowMenuBar
-  settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
+  // save onShowStatusBar
+  settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
 
   // save onShowFrameRate
   settings->setValue(QTB_ONSHOWFRAMERATE, onShowFrameRate);

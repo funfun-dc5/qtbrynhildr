@@ -245,6 +245,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
 
+// for onHideMenuAndStatusBarAtFullScreen
+#define QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN			"onHideMenuAndStatusBarAtFullScreen"
+#define QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN_DEFAULT	true
+
 // for onShowFrameRate
 #define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
 #define QTB_ONSHOWFRAMERATE_DEFAULT			true
@@ -1042,6 +1046,18 @@ public:
 	this->onShowStatusBar = onShowStatusBar;
   }
 
+  // get hide menu and status bar at full screen flag
+  bool getOnHideMenuAndStatusBarAtFullScreen() const
+  {
+	return onHideMenuAndStatusBarAtFullScreen;
+  }
+
+  // set hide menu and status bar at full screen flag
+  void setOnHideMenuAndStatusBarAtFullScreen(bool onHideMenuAndStatusBarAtFullScreen)
+  {
+	this->onHideMenuAndStatusBarAtFullScreen = onHideMenuAndStatusBarAtFullScreen;
+  }
+
   // get show frame rate flag
   bool getOnShowFrameRate() const
   {
@@ -1475,6 +1491,9 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+  // hide menu and status bar at full screen
+  volatile bool onHideMenuAndStatusBarAtFullScreen;
 
   // show frame rate
   volatile bool onShowFrameRate;

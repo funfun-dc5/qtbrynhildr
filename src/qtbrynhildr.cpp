@@ -497,6 +497,13 @@ MainWindow *QtBrynhildr::getMainWindow() const
   return mainWindow;
 }
 
+// exit full screen
+void QtBrynhildr::exitFullScreen()
+{
+  if (fullScreenMode)
+	fullScreen();
+}
+
 // refresh window
 void QtBrynhildr::refreshWindow()
 {
@@ -2482,6 +2489,13 @@ void QtBrynhildr::fullScreen()
   static qreal scalingFactorAtNormal = 1.0;
   fullScreenMode = !fullScreenMode;
   if (fullScreenMode){
+	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
+	  // hide menu and status bar
+	  settings->setOnShowMenuBar(false);
+	  settings->setOnShowStatusBar(false);
+	  menuBar()->setVisible(false);
+	  statusBar()->setVisible(false);
+	}
 	scalingFactorAtNormal = settings->getDesktopScalingFactor();
 	QSize desktopSize = mainWindow->getDesktopSize();
 	if (desktopSize.isValid()){
@@ -2493,12 +2507,21 @@ void QtBrynhildr::fullScreen()
 	showFullScreen();
   }
   else {
+	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
+	  // restore menu and status bar
+	  settings->setOnShowMenuBar(onShowMenuBar);
+	  settings->setOnShowStatusBar(onShowStatusBar);
+	  menuBar()->setVisible(settings->getOnShowMenuBar());
+	  statusBar()->setVisible(settings->getOnShowStatusBar());
+	}
 	settings->setDesktopScalingFactor(scalingFactorAtNormal);
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	mainWindow->setOnFullScreen(false);
 	showNormal();
   }
+  // set checked flag
+  fullScreen_Action->setChecked(fullScreenMode);
 #if 0 // for TEST
   // menu control
   desktopScalingDialog_Action->setEnabled(!fullScreenMode);

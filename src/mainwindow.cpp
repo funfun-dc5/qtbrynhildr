@@ -29,7 +29,7 @@
 namespace qtbrynhildr {
 
 // constructor
-MainWindow::MainWindow(Settings *settings, QWidget *parent)
+MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   :
   QWidget(parent),
   settings(settings),
@@ -539,6 +539,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+	// exit full screen
+	if (onFullScreen && VK_Code == VK_ESCAPE){
+	  parent->exitFullScreen();
+	  return;
+	}
 	// check shift key status
 	if (onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NONEED){
 	  // release shift key

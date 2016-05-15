@@ -89,6 +89,9 @@ public:
   // shutdown flag
   bool getShutdownFlag() const;
 
+  // exit full screen
+  void exitFullScreen();
+
 public slots:
   // refresh window
   void refreshWindow();

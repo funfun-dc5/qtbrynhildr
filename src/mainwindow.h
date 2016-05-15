@@ -29,6 +29,8 @@
 
 namespace qtbrynhildr {
 
+class QtBrynhildr;
+
 // MainWindow
 #if defined(Q_OS_WIN)
 class MainWindow : public QWidget, public QAbstractNativeEventFilter
@@ -40,7 +42,7 @@ class MainWindow : public QWidget
 
 public:
   // constructor
-  MainWindow(Settings *settings, QWidget *parent);
+  MainWindow(Settings *settings, QtBrynhildr *parent);
   // destructor
   ~MainWindow();
 
@@ -142,7 +144,7 @@ private:
   Settings *settings;
 
   // parent
-  QWidget *parent;
+  QtBrynhildr *parent;
 
   // image
   QImage image;

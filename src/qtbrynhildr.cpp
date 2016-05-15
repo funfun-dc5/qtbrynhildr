@@ -1227,9 +1227,13 @@ void QtBrynhildr::createMenus()
   fileMenu->addAction(connectToServer_Action);
   fileMenu->addAction(disconnectToServer_Action);
 #if QTB_PUBLIC_MODE6_SUPPORT
-  fileMenu->addSeparator();
-  fileMenu->addAction(sendFile_Action);
-  fileMenu->addAction(sendClipboard_Action);
+  if (!settings->getOnDisableTransferFile() || !settings->getOnDisableTransferClipboard()){
+	fileMenu->addSeparator();
+  }
+  if (!settings->getOnDisableTransferFile())
+	fileMenu->addAction(sendFile_Action);
+  if (!settings->getOnDisableTransferClipboard())
+	fileMenu->addAction(sendClipboard_Action);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -1519,11 +1523,13 @@ void QtBrynhildr::connected()
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  sendFile_Action->setEnabled(true);
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// send file
+	sendFile_Action->setEnabled(true);
 
-  // send clipboard
-  sendClipboard_Action->setEnabled(true);
+	// send clipboard
+	sendClipboard_Action->setEnabled(true);
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // reset total frame counter
@@ -1583,11 +1589,13 @@ void QtBrynhildr::disconnected()
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  sendFile_Action->setEnabled(false);
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// send file
+	sendFile_Action->setEnabled(false);
 
-  // send clipboard
-  sendClipboard_Action->setEnabled(false);
+	// send clipboard
+	sendClipboard_Action->setEnabled(false);
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 

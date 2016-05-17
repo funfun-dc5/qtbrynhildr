@@ -8,13 +8,18 @@
 namespace qtbrynhildr {
 
 //---------------------------------------------------------------------------
-// for keyboard & mouse
+// for control
 //---------------------------------------------------------------------------
 // keyboard buffer size (entry)
 const int QTB_KEYBOARD_BUFFER_SIZE = 256;
 
 // mouse buffer size (entry)
 const int QTB_MOUSE_BUFFER_SIZE	= 256;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+// local data buffer size for control (byte)
+const int QTB_CONTROL_LOCAL_BUFFER_SIZE = 1024 * 1024;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 //---------------------------------------------------------------------------
 // for graphics

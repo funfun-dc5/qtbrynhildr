@@ -270,7 +270,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   //  setWindowIcon(QIcon(QTB_ICON_FILENAME));
 
   // set window title
+#if QTB_PUBLIC_MODE6_SUPPORT
+  setWindowTitle(tr(QTB_APPLICATION)+"  - MODE  " + QString::number(settings->getPublicModeVersion()) +" -");
+#else // QTB_PUBLIC_MODE6_SUPPORT
   setWindowTitle(tr(QTB_APPLICATION));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set window flags
   Qt::WindowFlags flags = windowFlags();

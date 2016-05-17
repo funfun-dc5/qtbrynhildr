@@ -37,7 +37,7 @@ private:
   qint64 epochDiff;
 
   // diff from UTC
-  int diffUTC;
+  qint64 diffUTC;
 };
 
 } // end of namespace qtbrynhildr

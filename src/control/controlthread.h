@@ -24,6 +24,9 @@
 #include "parameters.h"
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #include "settings.h"
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include "windows/ntfs.h"
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 namespace qtbrynhildr {
 
@@ -127,6 +130,9 @@ signals:
 private:
   // local buffer
   char *buffer;
+
+  // ntfs utility
+  NTFS *ntfs;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 };
 

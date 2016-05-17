@@ -47,14 +47,12 @@
 #define QTB_CURRENTVERSION_DEFAULT		QTB_VERSION_NUMBER
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
 // for publicModeVersion
 #define QTB_PUBLICMODEVERSION	"publicModeVersion"
 #define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION5
 typedef int PUBLIC_MODEVERSION;
 #define PUBLICMODE_VERSION5		5
 #define PUBLICMODE_VERSION6		6
-
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for serverName
@@ -269,7 +267,6 @@ typedef int SCALING_TYPE;
 #define QTB_ONCLIPCURSOR_DEFAULT			false
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
 // for onDisableTransferFile
 #define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
 #define QTB_ONDISABLETRANSFERFILE_DEFAULT	false
@@ -277,7 +274,6 @@ typedef int SCALING_TYPE;
 // for onDisableTransferClipboard
 #define QTB_ONDISABLETRANSFERCLIPBOARD			"onDisableTransferClipboard"
 #define QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT	false
-
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for graphicsBufferSize
@@ -394,7 +390,6 @@ public:
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
   // get public mode version
   PUBLIC_MODEVERSION getPublicModeVersion() const
   {
@@ -433,7 +428,6 @@ public:
 
 	return "UNKNOWN PUBLICMODE_VERSION";
   }
-
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get server name
@@ -650,6 +644,46 @@ public:
 	this->onControlOffWithGraphicsOff = onControlOffWithGraphicsOff;
 	return true;
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // get send file flag
+  bool getOnSendFile() const
+  {
+	return onSendFile;
+  }
+
+  // set send file flag
+  bool setOnSendFile(bool onSendFile)
+  {
+	this->onSendFile = onSendFile;
+	return true;
+  }
+
+  // get send file name
+  QString getSendFileName() const
+  {
+	return sendFileName;
+  }
+
+  // set send file name
+  void setSendFileName(QString sendFileName)
+  {
+	this->sendFileName = sendFileName;
+  }
+
+  // get send clipboard flag
+  bool getOnSendClipboard() const
+  {
+	return onSendClipboard;
+  }
+
+  // set send clipboard flag
+  bool setOnSendClipboard(bool onSendClipboard)
+  {
+	this->onSendClipboard = onSendClipboard;
+	return true;
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get graphics flag
   bool getOnGraphics() const
@@ -1211,7 +1245,6 @@ public:
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
   // get disable transfer clilpboard flag
   bool getOnDisableTransferFile() const
   {
@@ -1235,7 +1268,6 @@ public:
   {
 	this->onDisableTransferClipboard = onDisableTransferClipboard;
   }
-
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get on show Software Keyboard flag
@@ -1449,10 +1481,8 @@ private:
   volatile int currentVersion;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
   // public mode version
   volatile PUBLIC_MODEVERSION publicModeVersion;
-
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // server name
@@ -1480,6 +1510,14 @@ private:
   volatile bool onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onControlOffWithGraphicsOff;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // send file
+  volatile bool onSendFile;
+  // send file
+  QString sendFileName;
+  // send clipboard
+  volatile bool onSendClipboard;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // Graphics
   volatile bool onGraphics;
@@ -1585,13 +1623,11 @@ private:
   volatile bool onClipCursor;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
   // disable send/receive file
   volatile bool onDisableTransferFile;
 
   // disable send/receive clipboard
   volatile bool onDisableTransferClipboard;
-
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // buffer

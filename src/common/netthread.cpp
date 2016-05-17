@@ -290,7 +290,7 @@ SOCKET NetThread::socketToServer()
 }
 
 // send data
-long NetThread::sendData(SOCKET sock, const char *buf, long size)
+long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 {
   //                                      0123456789ABCDEF
   char key[ENCRYPTION_KEY_LENGTH + 1] = {"@@@@@@@@@@@@@@@@"};
@@ -331,6 +331,13 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
   }
 #endif
 
+  // send
+  return send(sock, buf, size, 0);
+}
+
+// send data
+long NetThread::sendData(SOCKET sock, const char *buf, long size)
+{
   // send
   return send(sock, buf, size, 0);
 }

@@ -31,6 +31,10 @@ Settings::Settings(const char *iniFileName)
   bootupFlag(false),
   shutdownFlag(false),
   connected(false),
+#if QTB_PUBLIC_MODE6_SUPPORT
+  onSendFile(false),
+  onSendClipboard(false),
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   onDisplayCursor(false),
   onSupportGamePad(false),
@@ -160,11 +164,9 @@ void Settings::readSettings()
 									  (qint32)QTB_GENERATEDVERSION_DEFAULT).toInt());
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
   // load publicModeVersion
   setPublicModeVersion(settings->value(QTB_PUBLICMODEVERSION,
 									   (qint32)QTB_PUBLICMODEVERSION_DEFAULT).toInt());
-
 #endif //QTB_PUBLIC_MODE6_SUPPORT
 
   // load serverName
@@ -375,10 +377,8 @@ void Settings::writeSettings()
   settings->setValue(QTB_CURRENTVERSION, (qint32)currentVersion);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
   // save publicModeVersion
   settings->setValue(QTB_PUBLICMODEVERSION, (qint32)publicModeVersion);
-
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // save serverName
@@ -563,6 +563,10 @@ void Settings::printSettings() const
   qDebug() << "  ExtraButtonSupport : " << onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  qDebug() << "  SendFile      : " << onSendFile;
+  qDebug() << "  SendClipboard : " << onSendClipboard;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "Graphics      : " << onGraphics;
   qDebug() << "    QUALITY   : " << getVideoQualityByString();
   qDebug() << "    FrameRate : " << frameRate;

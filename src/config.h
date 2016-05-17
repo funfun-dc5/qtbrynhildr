@@ -81,11 +81,23 @@ const bool QTB_IN_TESTING				= false;
 // brynhildr version 2 support
 #define QTB_BRYNHILDR2_SUPPORT		1
 
+#if QTB_BRYNHILDR2_SUPPORT
+
 // extra mouse button support
 #define QTB_EXTRA_BUTTON_SUPPORT	1
 
 // public mode 6 support
 #define QTB_PUBLIC_MODE6_SUPPORT	1
+
+#else // QTB_BRYNHILDR2_SUPPORT
+
+// extra mouse button support
+#define QTB_EXTRA_BUTTON_SUPPORT	0
+
+// public mode 6 support
+#define QTB_PUBLIC_MODE6_SUPPORT	0
+
+#endif // QTB_BRYNHILDR2_SUPPORT
 
 // debug
 #define QTB_DEBUG					1

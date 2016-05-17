@@ -12,6 +12,9 @@
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // Qt Header
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <QFileInfo>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QSize>
 
 // Local Header
@@ -53,6 +56,9 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
 #if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE];
+
+  // NTFS utility
+  ntfs = new NTFS();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -263,7 +269,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 
   // send header for next communication
   long dataSize;
-  dataSize = sendData(sock_control, (char *)com_data, sizeof(COM_DATA));
+  dataSize = sendHeader(sock_control, (char *)com_data, sizeof(COM_DATA));
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
@@ -459,6 +465,19 @@ void ControlThread::initHeader()
 
   // common
   com_data->data_type	= DATA_TYPE_DATA;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  if (settings->getOnSendFile()){
+	com_data->data_type	= DATA_TYPE_FILE;
+	// set data size
+	QFileInfo fileInfo(settings->getSendFileName());
+	com_data->data_size = fileInfo.size();
+  }
+  else if (settings->getOnSendClipboard()){
+	com_data->data_type	= DATA_TYPE_CLIPBOARD;
+	// set data size
+	// Yet
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->thread		= THREAD_CONTROL;
 #if QTB_PUBLIC_MODE6_SUPPORT
   com_data->mode		= settings->getPublicModeVersion();
@@ -598,14 +617,93 @@ void ControlThread::setGamePadControl()
 bool ControlThread::sendClipboard()
 {
   // Yet
+
+  // flag clear
+  settings->setOnSendClipboard(false);
+
   return true;
 }
 
 // send file
 bool ControlThread::sendFile()
 {
-  // Yet
-  return true;
+  char filename[260+1] = {0};
+  char fileTimeStamp[24+1] = {0};
+
+  SIZE fileSize = com_data->data_size;
+  SIZE sentDataSize;
+
+  // send filename
+  QFileInfo fileInfo(settings->getSendFileName());
+  strncpy(filename, qPrintable(fileInfo.fileName()), 260);
+  sentDataSize = sendData(sock_control, filename, 260);
+
+  // send time stamp
+  qint64 CreationTime = ntfs->toFILETIME(fileInfo.created()); // UTC
+  fileTimeStamp[0] = (CreationTime >>  0) & 0xFF;
+  fileTimeStamp[1] = (CreationTime >>  8) & 0xFF;
+  fileTimeStamp[2] = (CreationTime >> 16) & 0xFF;
+  fileTimeStamp[3] = (CreationTime >> 24) & 0xFF;
+  fileTimeStamp[4] = (CreationTime >> 32) & 0xFF;
+  fileTimeStamp[5] = (CreationTime >> 40) & 0xFF;
+  fileTimeStamp[6] = (CreationTime >> 48) & 0xFF;
+  fileTimeStamp[7] = (CreationTime >> 56) & 0xFF;
+  qint64 LastAccessTime = ntfs->toFILETIME(fileInfo.lastRead()); // UTC
+  fileTimeStamp[8]  = (LastAccessTime >>  0) & 0xFF;
+  fileTimeStamp[9]  = (LastAccessTime >>  8) & 0xFF;
+  fileTimeStamp[10] = (LastAccessTime >> 16) & 0xFF;
+  fileTimeStamp[11] = (LastAccessTime >> 24) & 0xFF;
+  fileTimeStamp[12] = (LastAccessTime >> 32) & 0xFF;
+  fileTimeStamp[13] = (LastAccessTime >> 40) & 0xFF;
+  fileTimeStamp[14] = (LastAccessTime >> 48) & 0xFF;
+  fileTimeStamp[15] = (LastAccessTime >> 56) & 0xFF;
+  qint64 LastWriteTime = ntfs->toFILETIME(fileInfo.lastModified()); // UTC
+  fileTimeStamp[16] = (LastWriteTime >>  0) & 0xFF;
+  fileTimeStamp[17] = (LastWriteTime >>  8) & 0xFF;
+  fileTimeStamp[18] = (LastWriteTime >> 16) & 0xFF;
+  fileTimeStamp[19] = (LastWriteTime >> 24) & 0xFF;
+  fileTimeStamp[20] = (LastWriteTime >> 32) & 0xFF;
+  fileTimeStamp[21] = (LastWriteTime >> 40) & 0xFF;
+  fileTimeStamp[22] = (LastWriteTime >> 48) & 0xFF;
+  fileTimeStamp[23] = (LastWriteTime >> 56) & 0xFF;
+  sentDataSize = sendData(sock_control, fileTimeStamp, 24);
+
+  // send file image
+  fstream file;
+  file.open(qPrintable(settings->getSendFileName()), ios::in | ios::binary);
+  if (file.is_open()){
+	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
+	  // read to buffer
+	  file.read(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  // send to server
+	  sentDataSize = sendData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  fileSize -= sentDataSize;
+	}
+	if (fileSize > 0){
+	  // read to buffer
+	  file.read(buffer, fileSize);
+	  // send to server
+	  sentDataSize = sendData(sock_control, buffer, fileSize);
+	  fileSize -= sentDataSize;
+	}
+	file.close();
+  }
+#if 1 // for DEBUG
+  else {
+	cout << "open error!" << endl << flush;
+  }
+#endif // for DEBUG
+
+  // flag clear
+  settings->setOnSendFile(false);
+
+  // check result
+  if (fileSize == 0){
+	return true;
+  }
+  else {
+	return false;
+  }
 }
 
 // receive clipboard

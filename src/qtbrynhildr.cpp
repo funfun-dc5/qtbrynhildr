@@ -2006,7 +2006,19 @@ void QtBrynhildr::exit()
 // send file
 void QtBrynhildr::sendFile()
 {
-  cout << "Called sendFile()" << endl << flush;
+  // prepare for send file
+  QString fileName =
+	QFileDialog::getOpenFileName(this,
+								 tr("Open file"),
+								 settings->getOutputPath());
+  if (fileName == ""){
+	// Nothing to do
+	return;
+  }
+
+  // send file flag ON
+  settings->setSendFileName(QDir::toNativeSeparators(fileName));
+  settings->setOnSendFile(true);
 }
 
 // send clipboard

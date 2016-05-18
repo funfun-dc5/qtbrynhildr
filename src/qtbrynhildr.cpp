@@ -51,7 +51,11 @@ int counter_graphics = 0;
 const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
 // constructor
+#if QTB_PUBLIC_MODE6_SUPPORT
+QtBrynhildr::QtBrynhildr(int argc, char *argv[], QClipboard *clipboard)
+#else // QTB_PUBLIC_MODE6_SUPPORT
 QtBrynhildr::QtBrynhildr(int argc, char *argv[])
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   :
   desktopScalingDialog(0),
   logViewDialog(0),
@@ -75,6 +79,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
+  eventConverter(0),
+#if QTB_PUBLIC_MODE6_SUPPORT
+  clipboard(clipboard),
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   fullScreenMode(false),
   heightOfMenuBar(0),
   heightOfStatusBar(0)
@@ -332,6 +340,13 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	mainWindow->setEventConverter(new EventConverter_JP());
   }
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // clipboard dataChanged
+  if (!settings->getOnDisableTransferClipboard()){
+	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   //------------------------------------------------------------
   // create threads
   //------------------------------------------------------------
@@ -389,6 +404,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(controlThread,
 		  SIGNAL(exitApplication()),
 		  SLOT(exitApplication()));
+#if QTB_PUBLIC_MODE6_SUPPORT
+  connect(controlThread,
+		  SIGNAL(setClipboard(QString)),
+		  SLOT(setClipboard(QString)));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   connect(controlThread,
 		  SIGNAL(changeMouseCursor(const QCursor &)),
@@ -776,6 +796,21 @@ void QtBrynhildr::exitApplication()
 {
   exit();
 }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+// set clipboard
+void QtBrynhildr::setClipboard(QString clipboardString)
+{
+  if (clipboard != 0){
+	//	cout << "setClipboard = " << qPrintable(clipboardString) << endl << flush;
+	clipboard->setText(clipboardString);
+	//	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
+  }
+  else {
+	cout << "clipboard is null" << endl << flush;
+  }
+}
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // output Log Message
 void QtBrynhildr::outputLogMessage(int msgID)
@@ -1236,8 +1271,10 @@ void QtBrynhildr::createMenus()
   }
   if (!settings->getOnDisableTransferFile())
 	fileMenu->addAction(sendFile_Action);
+#if 0 // for TEST
   if (!settings->getOnDisableTransferClipboard())
 	fileMenu->addAction(sendClipboard_Action);
+#endif
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -2024,7 +2061,11 @@ void QtBrynhildr::sendFile()
 // send clipboard
 void QtBrynhildr::sendClipboard()
 {
-  cout << "Called sendClipboard()" << endl << flush;
+  QString text = clipboard->text();
+
+  // send clipboard flag ON
+  settings->setSendClipboardString(text);
+  settings->setOnSendClipboard(true);
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

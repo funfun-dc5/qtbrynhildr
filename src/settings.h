@@ -683,6 +683,18 @@ public:
 	this->onSendClipboard = onSendClipboard;
 	return true;
   }
+
+  // get send clipboard string
+  QString getSendClipboardString() const
+  {
+	return sendClipboardString;
+  }
+
+  // set send clipboard string
+  void setSendClipboardString(QString sendClipboardString)
+  {
+	this->sendClipboardString = sendClipboardString;
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get graphics flag
@@ -1513,10 +1525,12 @@ private:
 #if QTB_PUBLIC_MODE6_SUPPORT
   // send file
   volatile bool onSendFile;
-  // send file
+  // send file name
   QString sendFileName;
   // send clipboard
   volatile bool onSendClipboard;
+  // send clipboard string
+  QString sendClipboardString;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // Graphics

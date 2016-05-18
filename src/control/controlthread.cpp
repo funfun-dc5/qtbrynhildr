@@ -13,6 +13,7 @@
 
 // Qt Header
 #if QTB_PUBLIC_MODE6_SUPPORT
+#include <QByteArray>
 #include <QFileInfo>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QSize>
@@ -57,6 +58,9 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   // local buffer
   buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE];
 
+  // clipboard top address
+  clipboardTop = &buffer[16];
+
   // NTFS utility
   ntfs = new NTFS();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -70,6 +74,15 @@ ControlThread::~ControlThread()
 	delete com_data;
 	com_data = 0;
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // local buffer
+  if (buffer != 0){
+	delete [] buffer;
+	buffer = 0;
+	clipboardTop = 0;
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
 //---------------------------------------------------------------------------
@@ -475,7 +488,7 @@ void ControlThread::initHeader()
   else if (settings->getOnSendClipboard()){
 	com_data->data_type	= DATA_TYPE_CLIPBOARD;
 	// set data size
-	// Yet
+	com_data->data_size = settings->getSendClipboardString().size() * 2 + 16;
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->thread		= THREAD_CONTROL;
@@ -616,12 +629,36 @@ void ControlThread::setGamePadControl()
 // send clipboard
 bool ControlThread::sendClipboard()
 {
-  // Yet
+  QString clipboardString = settings->getSendClipboardString();
+  SIZE stringSize = clipboardString.size() * 2;
+  SIZE sentDataSize = 0;
+  char localBuffer[stringSize + 16 + 1];
+
+  // check
+  if (stringSize == 0){
+	// Nothing to do
+	return true;
+  }
+
+  //  cout << "sendClipboard = " << qPrintable(clipboardString) << endl << flush;
+  //  cout << "sendClipboard.size = " << stringSize << endl << flush;
+
+  // copy to local buffer and send to server
+  memset(localBuffer, 0, stringSize + 16 + 1);
+  memcpy(&localBuffer[16], clipboardString.unicode(), stringSize);
+  sentDataSize = sendData(sock_control, localBuffer, stringSize + 16);
+  stringSize -= sentDataSize - 16;
 
   // flag clear
   settings->setOnSendClipboard(false);
 
-  return true;
+  // check result
+  if (stringSize == 0){
+	return true;
+  }
+  else {
+	return false;
+  }
 }
 
 // send file
@@ -710,7 +747,7 @@ bool ControlThread::sendFile()
 bool ControlThread::receiveClipboard()
 {
   SIZE clipboardSize = com_data->data_size;
-  SIZE receivedDataSize;
+  SIZE receivedDataSize = 0;
 
   // get cliboard
   while(clipboardSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
@@ -720,8 +757,13 @@ bool ControlThread::receiveClipboard()
   if (clipboardSize > 0){
 	receivedDataSize = receiveData(sock_control, buffer, clipboardSize);
 	clipboardSize -= receivedDataSize;
+	buffer[receivedDataSize] = '\0';
   }
   if (clipboardSize == 0){
+	// set cliboard
+	QString clipboardString = QString((const QChar *)clipboardTop, -1);
+	//	cout << "receiveClipboard = " << qPrintable(clipboardString) << endl << flush;
+	emit setClipboard(clipboardString);
 	return true;
   }
   else {
@@ -730,13 +772,13 @@ bool ControlThread::receiveClipboard()
 }
 
 // receive file
-  bool ControlThread::receiveFile()
+bool ControlThread::receiveFile()
 {
   char filename[260+1];
   char fileTimeStamp[24+1]; // dummy read
 
   SIZE fileSize = com_data->data_size;
-  SIZE receivedDataSize;
+  SIZE receivedDataSize = 0;
 
   // get filename
   receivedDataSize = receiveData(sock_control, filename, 260);

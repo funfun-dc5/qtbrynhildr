@@ -9,6 +9,9 @@
 
 // Qt Header
 #include <QAction>
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <QClipboard>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if !QTB_BRYNHILDR2_SUPPORT
 #include <QCursor>
 #endif // !QTB_BRYNHILDR2_SUPPORT
@@ -79,7 +82,11 @@ class QtBrynhildr : public QMainWindow
 
 public:
   // constructor
+#if QTB_PUBLIC_MODE6_SUPPORT
+  QtBrynhildr(int argc, char *argv[], QClipboard *clipboard);
+#else // QTB_PUBLIC_MODE6_SUPPORT
   QtBrynhildr(int argc, char *argv[]);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   // destructor
   ~QtBrynhildr();
 
@@ -112,6 +119,11 @@ public slots:
 
   // exit applilcation
   void exitApplication();
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // set clipboard
+  void setClipboard(QString clipboardString);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // output Log Message
   void outputLogMessage(int msgID);
@@ -593,6 +605,11 @@ private:
 
   // event converter
   EventConverter *eventConverter;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // clipboard
+  QClipboard *clipboard;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get full screen scaling factor
   qreal getFullScreenScalingFactor(QSize desktopSize);

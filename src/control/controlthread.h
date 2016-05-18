@@ -127,9 +127,17 @@ signals:
   void exitApplication();
 
 #if QTB_PUBLIC_MODE6_SUPPORT
+  // set clipboard
+  void setClipboard(QString clipboardString);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_PUBLIC_MODE6_SUPPORT
 private:
   // local buffer
   char *buffer;
+
+  // clipboard top address
+  char *clipboardTop;
 
   // ntfs utility
   NTFS *ntfs;

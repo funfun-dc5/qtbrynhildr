@@ -141,6 +141,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   }
 
   // set option to settings
+#if QTB_PUBLIC_MODE6_SUPPORT
+  if (option->getPublicModeVersion() > 0){
+	writeSettingsAtExit = false;
+	settings->setPublicModeVersion(option->getPublicModeVersion());
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   if (option->getServerName() != 0){
 	writeSettingsAtExit = false;
 	settings->setServerName(option->getServerName());

@@ -18,6 +18,14 @@ public:
   // destructor
   ~Option();
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // get public mode version
+  int getPublicModeVersion() const
+  {
+	return publicModeVersion;
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   // get server name
   const char *getServerName() const
   {
@@ -118,6 +126,11 @@ private:
   void printHelp() const;
 
 private:
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // public mode version
+  int publicModeVersion;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   // server name
   const char *serverName;
 

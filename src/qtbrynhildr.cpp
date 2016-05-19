@@ -1779,6 +1779,21 @@ void QtBrynhildr::connectToServer()
   }
   mainWindow->setEventConverter(eventConverter);
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // mode
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "MODE : " +
+							   QString::number(settings->getPublicModeVersion()));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // keyboard type
+  if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){ // Native Keyboard
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "KeyboardType : Native");
+  }
+  else {
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "KeyboardType : " +
+								 eventConverter->getEventConverterName());
+  }
+
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	// software keyboard

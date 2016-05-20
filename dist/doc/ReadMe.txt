@@ -53,20 +53,6 @@
  Mac OS X 10.10(Yosemite)以降
 
  (*1) 全てのエディションで試したわけではありません。
-      現在確認済みの環境は、
-
-      Windows XP Professional (32bit)
-      Windows 7 Home Premium  (64bit)
-      Windows 8.1 Pro update  (64bit)
-      Windows 10 Pro          (64bit/32bit)
-      Windows 10 Home         (64bit)
-      Ubuntu 14.04 LTS        (x64/x86)
-      Ubuntu 15.04            (x64)
-      Ubuntu 15.10            (x64)
-      CentOS 7                (x64)
-      Mac OS X 10.10(Yosemite)/10.11(El Capitan)
-
-      のみです。
 
  (*2) Qt5のサポートする環境(OS)で動作させられたらいいなぁと思っていますが、
       お約束は出来ません。

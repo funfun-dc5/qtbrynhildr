@@ -59,6 +59,12 @@ public:
   // get available data size
   int size() const;
 
+  // set enabled flag
+  void setEnabled(bool enabled)
+  {
+	this->enabled = enabled;
+  }
+
   // set mouse position
   void setMousePos(MOUSE_POS curPos);
 
@@ -80,6 +86,9 @@ private:
 
   // mouse position
   MOUSE_POS pos;
+
+  // enabled flag
+  bool enabled;
 
   // output log flag
   const bool outputLog;

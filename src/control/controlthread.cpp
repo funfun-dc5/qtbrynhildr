@@ -304,7 +304,11 @@ PROCESS_RESULT ControlThread::processForHeader()
 	else if (com_data->data_type == DATA_TYPE_FILE &&
 			 !settings->getOnDisableTransferFile()){
 	  // send file
+	  keyBuffer->setEnabled(false); // disabled keyboard
+	  mouseBuffer->setEnabled(false); // disabled mouse
 	  sendFile();
+	  keyBuffer->setEnabled(true);
+	  mouseBuffer->setEnabled(true);
 	}
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -410,7 +414,11 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 	else if (com_data->data_type == DATA_TYPE_FILE &&
 			 !settings->getOnDisableTransferFile()){
 	  // receive file
+	  keyBuffer->setEnabled(false); // disabled keyboard
+	  mouseBuffer->setEnabled(false); // disabled mouse
 	  receiveFile();
+	  keyBuffer->setEnabled(true);
+	  mouseBuffer->setEnabled(true);
 	}
   }
   return TRANSMIT_SUCCEEDED;

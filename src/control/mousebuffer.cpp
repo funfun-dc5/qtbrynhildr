@@ -19,6 +19,7 @@ MouseBuffer::MouseBuffer(int size)
   :
   topPos(0),
   nextPos(0),
+  enabled(true),
   // for DEBUG
   outputLog(false)
 {
@@ -39,6 +40,9 @@ MouseBuffer::~MouseBuffer()
 // put data to ring buffer
 int MouseBuffer::put(MouseInfoType type, MouseInfoValue value)
 {
+  if (!enabled){ // NOT enabled
+	return 0;
+  }
   if (size() == bufferSize){ // Full
 	return -1;
   }
@@ -75,7 +79,7 @@ int MouseBuffer::put(MouseInfoType type, MouseInfoValue value)
 MouseInfo *MouseBuffer::get()
 {
   MouseInfo *ret = 0;
-  if (size() != 0){
+  if (enabled && size() != 0){
 	ret = &buffer[topPos];
 	topPos++;
 	if (topPos == bufferSize){

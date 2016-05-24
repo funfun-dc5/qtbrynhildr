@@ -21,6 +21,7 @@ KeyBuffer::KeyBuffer(int size)
   :
   topPos(0),
   nextPos(0),
+  enabled(true),
   // for DEBUG
   outputLog(false)
 {
@@ -41,6 +42,9 @@ KeyBuffer::~KeyBuffer()
 // put data to ring buffer
 int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 {
+  if (!enabled){ // NOT enabled
+	return 0;
+  }
   if (size() == bufferSize){ // Full
 	return -1;
   }
@@ -76,7 +80,7 @@ int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 KeyInfo *KeyBuffer::get()
 {
   KeyInfo *ret = 0;
-  if (size() != 0){
+  if (enabled && size() != 0){
 	ret = &buffer[topPos];
 	topPos++;
 	if (topPos == bufferSize){

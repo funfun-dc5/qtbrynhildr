@@ -36,6 +36,12 @@ public:
   // get available data size
   int size() const;
 
+  // set enabled flag
+  void setEnabled(bool enabled)
+  {
+	this->enabled = enabled;
+  }
+
 private:
   // buffer
   KeyInfo *buffer;
@@ -48,6 +54,9 @@ private:
 
   // buffer next index
   int nextPos;
+
+  // enabled flag
+  bool enabled;
 
   // output log flag
   bool outputLog;

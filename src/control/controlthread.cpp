@@ -487,16 +487,17 @@ void ControlThread::initHeader()
   // common
   com_data->data_type	= DATA_TYPE_DATA;
 #if QTB_PUBLIC_MODE6_SUPPORT
-  if (settings->getOnSendFile()){
-	com_data->data_type	= DATA_TYPE_FILE;
-	// set data size
-	QFileInfo fileInfo(settings->getSendFileName());
-	com_data->data_size = fileInfo.size();
-  }
-  else if (settings->getOnSendClipboard()){
+  int sendFileCount = settings->getSendFileCount();
+  if (settings->getOnSendClipboard()){
 	com_data->data_type	= DATA_TYPE_CLIPBOARD;
 	// set data size
 	com_data->data_size = settings->getSendClipboardString().size() * 2 + 16;
+  }
+  else if (sendFileCount > 0){
+	com_data->data_type	= DATA_TYPE_FILE;
+	// set data size
+	QFileInfo fileInfo((QString)settings->getSendFileNames().at(sendFileCount-1));
+	com_data->data_size = fileInfo.size();
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->thread		= THREAD_CONTROL;
@@ -669,6 +670,34 @@ bool ControlThread::sendClipboard()
   }
 }
 
+// receive clipboard
+bool ControlThread::receiveClipboard()
+{
+  SIZE clipboardSize = com_data->data_size;
+  SIZE receivedDataSize = 0;
+
+  // get cliboard
+  while(clipboardSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
+	receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	clipboardSize -= receivedDataSize;
+  }
+  if (clipboardSize > 0){
+	receivedDataSize = receiveData(sock_control, buffer, clipboardSize);
+	clipboardSize -= receivedDataSize;
+	buffer[receivedDataSize] = '\0';
+  }
+  if (clipboardSize == 0){
+	// set cliboard
+	QString clipboardString = QString((const QChar *)clipboardTop, -1);
+	//	cout << "receiveClipboard = " << qPrintable(clipboardString) << endl << flush;
+	emit setClipboard(clipboardString);
+	return true;
+  }
+  else {
+	return false;
+  }
+}
+
 // send file
 bool ControlThread::sendFile()
 {
@@ -679,7 +708,9 @@ bool ControlThread::sendFile()
   SIZE sentDataSize;
 
   // send filename
-  QFileInfo fileInfo(settings->getSendFileName());
+  int sendFileCount = settings->getSendFileCount()-1;
+  QString fileName = settings->getSendFileNames().at(sendFileCount);
+  QFileInfo fileInfo(fileName);
   strncpy(filename, qPrintable(fileInfo.fileName()), 260);
   sentDataSize = sendData(sock_control, filename, 260);
 
@@ -715,7 +746,7 @@ bool ControlThread::sendFile()
 
   // send file image
   fstream file;
-  file.open(qPrintable(settings->getSendFileName()), ios::in | ios::binary);
+  file.open(qPrintable(fileName), ios::in | ios::binary);
   if (file.is_open()){
 	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
 	  // read to buffer
@@ -739,39 +770,13 @@ bool ControlThread::sendFile()
   }
 #endif // for DEBUG
 
-  // flag clear
-  settings->setOnSendFile(false);
+  // sent a file
+  settings->setSendFileCount(sendFileCount);
+  //  cout << "SendFile = " << qPrintable(fileName) << endl << flush;
+  //  cout << "SendFileCount = " << settings->getSendFileCount() << endl << flush;
 
   // check result
   if (fileSize == 0){
-	return true;
-  }
-  else {
-	return false;
-  }
-}
-
-// receive clipboard
-bool ControlThread::receiveClipboard()
-{
-  SIZE clipboardSize = com_data->data_size;
-  SIZE receivedDataSize = 0;
-
-  // get cliboard
-  while(clipboardSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
-	receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
-	clipboardSize -= receivedDataSize;
-  }
-  if (clipboardSize > 0){
-	receivedDataSize = receiveData(sock_control, buffer, clipboardSize);
-	clipboardSize -= receivedDataSize;
-	buffer[receivedDataSize] = '\0';
-  }
-  if (clipboardSize == 0){
-	// set cliboard
-	QString clipboardString = QString((const QChar *)clipboardTop, -1);
-	//	cout << "receiveClipboard = " << qPrintable(clipboardString) << endl << flush;
-	emit setClipboard(clipboardString);
 	return true;
   }
   else {

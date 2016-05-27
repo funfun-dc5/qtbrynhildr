@@ -72,11 +72,11 @@ private:
   // send clipboard
   bool sendClipboard();
 
-  // send file
-  bool sendFile();
-
   // receive clipboard
   bool receiveClipboard();
+
+  // send file
+  bool sendFile();
 
   // sreceive file
   bool receiveFile();

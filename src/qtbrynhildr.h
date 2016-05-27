@@ -170,11 +170,11 @@ private slots:
   void exit();
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  void sendFile();
-
   // send clipboard
   void sendClipboard();
+
+  // send file
+  void sendFile();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set video quality
@@ -506,11 +506,11 @@ private:
   QAction *onScrollMode_Action;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  QAction *sendFile_Action;
-
   // send clipboard
   QAction *sendClipboard_Action;
+
+  // send file
+  QAction *sendFile_Action;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // connect to server dialog

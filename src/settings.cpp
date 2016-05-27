@@ -32,8 +32,8 @@ Settings::Settings(const char *iniFileName)
   shutdownFlag(false),
   connected(false),
 #if QTB_PUBLIC_MODE6_SUPPORT
-  onSendFile(false),
   onSendClipboard(false),
+  sendFileCount(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   onDisplayCursor(false),
@@ -126,6 +126,7 @@ Settings::Settings(const char *iniFileName)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   setOnDisableTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
+  setOnDisableTransferFileByDragAndDrop(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT);
   setOnDisableTransferClipboard(QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -321,6 +322,10 @@ void Settings::readSettings()
   // load onDisableTansferFile
   setOnDisableTransferFile(settings->value(QTB_ONDISABLETRANSFERFILE,
 										   QTB_ONDISABLETRANSFERFILE_DEFAULT).toBool());
+  // load onDisableTansferFileByDragAndDrop
+  setOnDisableTransferFileByDragAndDrop(settings->value(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP,
+														QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT).toBool());
+
   // load onDisableTansferClipboard
   setOnDisableTransferClipboard(settings->value(QTB_ONDISABLETRANSFERCLIPBOARD,
 												QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT).toBool());
@@ -502,7 +507,8 @@ void Settings::writeSettings()
 #if QTB_PUBLIC_MODE6_SUPPORT
   // save onDisableTransferFile
   settings->setValue(QTB_ONDISABLETRANSFERFILE, onDisableTransferFile);
-
+  // save onDisableTransferFileByDragAndDrop
+  settings->setValue(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP, onDisableTransferFileByDragAndDrop);
   // save onDisableTransferClipboard
   settings->setValue(QTB_ONDISABLETRANSFERCLIPBOARD, onDisableTransferClipboard);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -573,8 +579,8 @@ void Settings::printSettings() const
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
 #if QTB_PUBLIC_MODE6_SUPPORT
-  qDebug() << "  SendFile      : " << onSendFile;
   qDebug() << "  SendClipboard : " << onSendClipboard;
+  qDebug() << "  SendFileCount : " << sendFileCount;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "Graphics      : " << onGraphics;
   qDebug() << "    QUALITY   : " << getVideoQualityByString();
@@ -607,6 +613,7 @@ void Settings::printSettings() const
   qDebug() << "ClipCursor              : " << onClipCursor;
 #if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "DisableTransferFile     : " << onDisableTransferFile;
+  qDebug() << "DisableTransferFileByDragAndDrop     : " << onDisableTransferFileByDragAndDrop;
   qDebug() << "DisableTransferClipboard: " << onDisableTransferClipboard;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

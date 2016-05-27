@@ -12,6 +12,10 @@
 #include <QAbstractNativeEventFilter>
 #endif // defined(Q_OS_WIN)
 #include <QEvent>
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QImage>
 #include <QKeyEvent>
 #include <QLabel>
@@ -108,6 +112,12 @@ protected:
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // drag and drop
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dropEvent(QDropEvent *event);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 private:
 #if defined(Q_OS_WIN)

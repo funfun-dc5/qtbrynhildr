@@ -1257,17 +1257,17 @@ void QtBrynhildr::createActions()
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  sendFile_Action = new QAction(tr("Send File"), this);
-  sendFile_Action->setEnabled(false);
-  sendFile_Action->setStatusTip(tr("Send File"));
-  connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
-
   // send clipboard
   sendClipboard_Action = new QAction(tr("Send Clipboard"), this);
   sendClipboard_Action->setEnabled(false);
   sendClipboard_Action->setStatusTip(tr("Send Clipboard"));
   connect(sendClipboard_Action, SIGNAL(triggered()), this, SLOT(sendClipboard()));
+
+  // send file
+  sendFile_Action = new QAction(tr("Send File"), this);
+  sendFile_Action->setEnabled(false);
+  sendFile_Action->setStatusTip(tr("Send File"));
+  connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -1282,12 +1282,12 @@ void QtBrynhildr::createMenus()
   if (!settings->getOnDisableTransferFile() || !settings->getOnDisableTransferClipboard()){
 	fileMenu->addSeparator();
   }
-  if (!settings->getOnDisableTransferFile())
-	fileMenu->addAction(sendFile_Action);
 #if 0 // for TEST
   if (!settings->getOnDisableTransferClipboard())
 	fileMenu->addAction(sendClipboard_Action);
 #endif
+  if (!settings->getOnDisableTransferFile())
+	fileMenu->addAction(sendFile_Action);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -1578,11 +1578,14 @@ void QtBrynhildr::connected()
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// send clipboard
+	sendClipboard_Action->setEnabled(true);
+
 	// send file
 	sendFile_Action->setEnabled(true);
 
-	// send clipboard
-	sendClipboard_Action->setEnabled(true);
+	// drag and drop
+	mainWindow->setAcceptDrops(true);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -1644,11 +1647,14 @@ void QtBrynhildr::disconnected()
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// send clipboard
+	sendClipboard_Action->setEnabled(false);
+
 	// send file
 	sendFile_Action->setEnabled(false);
 
-	// send clipboard
-	sendClipboard_Action->setEnabled(false);
+	// drag and drop
+	mainWindow->setAcceptDrops(false);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
@@ -2068,24 +2074,6 @@ void QtBrynhildr::exit()
 }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-// send file
-void QtBrynhildr::sendFile()
-{
-  // prepare for send file
-  QString fileName =
-	QFileDialog::getOpenFileName(this,
-								 tr("Open file"),
-								 settings->getOutputPath());
-  if (fileName == ""){
-	// Nothing to do
-	return;
-  }
-
-  // send file flag ON
-  settings->setSendFileName(QDir::toNativeSeparators(fileName));
-  settings->setOnSendFile(true);
-}
-
 // send clipboard
 void QtBrynhildr::sendClipboard()
 {
@@ -2094,6 +2082,24 @@ void QtBrynhildr::sendClipboard()
   // send clipboard flag ON
   settings->setSendClipboardString(text);
   settings->setOnSendClipboard(true);
+}
+
+// send file
+void QtBrynhildr::sendFile()
+{
+  // prepare for send file
+  QStringList fileNames =
+	QFileDialog::getOpenFileNames(this,
+								  tr("Open file"),
+								  settings->getOutputPath());
+  if (fileNames.count() == 0){
+	// Nothing to do
+	return;
+  }
+
+  // send files
+  settings->setSendFileNames(fileNames);
+  settings->setSendFileCount(fileNames.count());
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

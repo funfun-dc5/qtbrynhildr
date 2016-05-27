@@ -275,6 +275,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
 #define QTB_ONDISABLETRANSFERFILE_DEFAULT	false
 
+// for onDisableTransferFileByDragAndDrop
+#define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP			"onDisableTransferFileByDragAndDrop"
+#define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT	false
+
 // for onDisableTransferClipboard
 #define QTB_ONDISABLETRANSFERCLIPBOARD			"onDisableTransferClipboard"
 #define QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT	false
@@ -650,31 +654,6 @@ public:
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // get send file flag
-  bool getOnSendFile() const
-  {
-	return onSendFile;
-  }
-
-  // set send file flag
-  bool setOnSendFile(bool onSendFile)
-  {
-	this->onSendFile = onSendFile;
-	return true;
-  }
-
-  // get send file name
-  QString getSendFileName() const
-  {
-	return sendFileName;
-  }
-
-  // set send file name
-  void setSendFileName(QString sendFileName)
-  {
-	this->sendFileName = sendFileName;
-  }
-
   // get send clipboard flag
   bool getOnSendClipboard() const
   {
@@ -698,6 +677,30 @@ public:
   void setSendClipboardString(QString sendClipboardString)
   {
 	this->sendClipboardString = sendClipboardString;
+  }
+
+  // get send file count
+  int getSendFileCount() const
+  {
+	return sendFileCount;
+  }
+
+  // set send file count
+  void setSendFileCount(int sendFileCount)
+  {
+	this->sendFileCount = sendFileCount;
+  }
+
+  // get send file name list
+  QStringList getSendFileNames() const
+  {
+	return sendFileNames;
+  }
+
+  // set send file name list
+  void setSendFileNames(QStringList sendFileNames)
+  {
+	this->sendFileNames = sendFileNames;
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -1273,7 +1276,7 @@ public:
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // get disable transfer clilpboard flag
+  // get disable transfer file flag
   bool getOnDisableTransferFile() const
   {
 	return onDisableTransferFile;
@@ -1283,6 +1286,18 @@ public:
   void setOnDisableTransferFile(bool onDisableTransferFile)
   {
 	this->onDisableTransferFile = onDisableTransferFile;
+  }
+
+  // get disable transfer file by drag and drop flag
+  bool getOnDisableTransferFileByDragAndDrop() const
+  {
+	return onDisableTransferFileByDragAndDrop;
+  }
+
+  // set disable transfer file by drag and drop flag
+  void setOnDisableTransferFileByDragAndDrop(bool onDisableTransferFileByDragAndDrop)
+  {
+	this->onDisableTransferFileByDragAndDrop = onDisableTransferFileByDragAndDrop;
   }
 
   // get disable transfer clilpboard flag
@@ -1539,14 +1554,14 @@ private:
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onControlOffWithGraphicsOff;
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  volatile bool onSendFile;
-  // send file name
-  QString sendFileName;
   // send clipboard
   volatile bool onSendClipboard;
   // send clipboard string
   QString sendClipboardString;
+  // send file count
+  volatile int sendFileCount;
+  // send file name
+  QStringList sendFileNames;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // Graphics
@@ -1658,6 +1673,9 @@ private:
 #if QTB_PUBLIC_MODE6_SUPPORT
   // disable send/receive file
   volatile bool onDisableTransferFile;
+
+  // disable send/receive file by drag and drop
+  volatile bool onDisableTransferFileByDragAndDrop;
 
   // disable send/receive clipboard
   volatile bool onDisableTransferClipboard;

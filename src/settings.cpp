@@ -126,7 +126,9 @@ Settings::Settings(const char *iniFileName)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   setOnDisableTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
+#if QTB_DRAG_AND_DROP_SUPPORT
   setOnDisableTransferFileByDragAndDrop(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
   setOnDisableTransferClipboard(QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -322,9 +324,11 @@ void Settings::readSettings()
   // load onDisableTansferFile
   setOnDisableTransferFile(settings->value(QTB_ONDISABLETRANSFERFILE,
 										   QTB_ONDISABLETRANSFERFILE_DEFAULT).toBool());
+#if QTB_DRAG_AND_DROP_SUPPORT
   // load onDisableTansferFileByDragAndDrop
   setOnDisableTransferFileByDragAndDrop(settings->value(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP,
 														QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT).toBool());
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
   // load onDisableTansferClipboard
   setOnDisableTransferClipboard(settings->value(QTB_ONDISABLETRANSFERCLIPBOARD,
@@ -507,8 +511,10 @@ void Settings::writeSettings()
 #if QTB_PUBLIC_MODE6_SUPPORT
   // save onDisableTransferFile
   settings->setValue(QTB_ONDISABLETRANSFERFILE, onDisableTransferFile);
+#if QTB_DRAG_AND_DROP_SUPPORT
   // save onDisableTransferFileByDragAndDrop
   settings->setValue(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP, onDisableTransferFileByDragAndDrop);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
   // save onDisableTransferClipboard
   settings->setValue(QTB_ONDISABLETRANSFERCLIPBOARD, onDisableTransferClipboard);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -613,7 +619,9 @@ void Settings::printSettings() const
   qDebug() << "ClipCursor              : " << onClipCursor;
 #if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "DisableTransferFile     : " << onDisableTransferFile;
+#if QTB_DRAG_AND_DROP_SUPPORT
   qDebug() << "DisableTransferFileByDragAndDrop     : " << onDisableTransferFileByDragAndDrop;
+#endif // QTB_DRAG_AND_DROP_SUPPORT
   qDebug() << "DisableTransferClipboard: " << onDisableTransferClipboard;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

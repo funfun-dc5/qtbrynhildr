@@ -275,9 +275,11 @@ typedef int SCALING_TYPE;
 #define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
 #define QTB_ONDISABLETRANSFERFILE_DEFAULT	false
 
+#if QTB_DRAG_AND_DROP_SUPPORT
 // for onDisableTransferFileByDragAndDrop
 #define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP			"onDisableTransferFileByDragAndDrop"
 #define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT	false
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
 // for onDisableTransferClipboard
 #define QTB_ONDISABLETRANSFERCLIPBOARD			"onDisableTransferClipboard"
@@ -1288,6 +1290,7 @@ public:
 	this->onDisableTransferFile = onDisableTransferFile;
   }
 
+#if QTB_DRAG_AND_DROP_SUPPORT
   // get disable transfer file by drag and drop flag
   bool getOnDisableTransferFileByDragAndDrop() const
   {
@@ -1299,6 +1302,7 @@ public:
   {
 	this->onDisableTransferFileByDragAndDrop = onDisableTransferFileByDragAndDrop;
   }
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
   // get disable transfer clilpboard flag
   bool getOnDisableTransferClipboard() const

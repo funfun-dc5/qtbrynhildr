@@ -665,7 +665,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
   }
 }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
+#if QTB_DRAG_AND_DROP_SUPPORT
 //----------------------------------------------------------------------
 // drag and drop events
 //----------------------------------------------------------------------
@@ -695,7 +695,6 @@ void MainWindow::dropEvent(QDropEvent *event)
 	return;
   }
 
-#if 1 // for TEST
   // get files
   QStringList fileNames;
   for(QList<QUrl>::iterator i = urls.begin(); i != urls.end(); i++){
@@ -705,20 +704,12 @@ void MainWindow::dropEvent(QDropEvent *event)
 	// NOT Found file name
 	return;
   }
-#else
-  // get 1 file name
-  QString fileName = urls.first().toLocalFile();
-  if (fileName.isEmpty()){
-	// NOT Found file name
-	return;
-  }
-#endif
 
   // send files
   settings->setSendFileNames(fileNames);
   settings->setSendFileCount(fileNames.count());
 }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
 // scroll area
 bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)

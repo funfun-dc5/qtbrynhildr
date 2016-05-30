@@ -153,6 +153,11 @@ Settings::Settings(const char *iniFileName)
 // destructor
 Settings::~Settings()
 {
+  // delete objects
+  if (desktop != 0){
+	delete desktop;
+	desktop = 0;
+  }
 }
 
 // get settings

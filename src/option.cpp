@@ -53,6 +53,11 @@ Option::Option(int argc, char *argv[])
 // destructor
 Option::~Option()
 {
+  // delete objects
+  if (iniFileName != 0){
+	free(iniFileName);
+	iniFileName = 0;
+  }
 }
 
 // analyze command line options
@@ -71,7 +76,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  shutdownFlag = true;
 		}
 		else {
-		  char *buf= new char[QTB_MAXPATHLEN+1];
+		  char buf[QTB_MAXPATHLEN+1];
 		  const char *arg = (char*)(&argv[2][0]);
 		  strncpy(buf, arg, QTB_MAXPATHLEN);
 		  // analyze option argument

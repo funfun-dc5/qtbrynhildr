@@ -144,7 +144,7 @@ private:
   const char *hostType;
 
   // ini filename
-  const char *iniFileName;
+  char *iniFileName;
 
   // init flag
   bool initFlag;

@@ -255,6 +255,7 @@ SOCKET NetThread::socketToServer()
 	return INVALID_SOCKET;
   }
 
+  ADDRINFO *topAddrinfo = addrinfo;
   for (; addrinfo != NULL; addrinfo = addrinfo->ai_next){
 	sock = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
 	if (sock == INVALID_SOCKET){
@@ -267,7 +268,12 @@ SOCKET NetThread::socketToServer()
 	}
 	break;
   }
-  freeaddrinfo(addrinfo);
+  // free all addrinfo
+  while (topAddrinfo != NULL){
+	addrinfo = topAddrinfo;
+	topAddrinfo = addrinfo->ai_next;
+	freeaddrinfo(addrinfo);
+  }
 
   // for socket option
   if (sock != INVALID_SOCKET){

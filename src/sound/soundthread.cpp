@@ -6,6 +6,7 @@
 #include "common/common.h"
 
 // System Header
+#include <cstring>
 #include <fstream>
 #include <iostream>
 
@@ -371,14 +372,26 @@ void SoundThread::createWavFile(int pcmFileSize)
   if (file.is_open()){
 	// 1) Riff Header
 	RiffHeader riffHeader;
+#if 1 // for Coverity Scan
+	memcpy(&riffHeader.riff, RIFF_ID, sizeof(riffHeader.riff));
+#else
 	strncpy((char *)&riffHeader.riff, RIFF_ID, sizeof(riffHeader.riff));
+#endif
 	riffHeader.size = pcmFileSize + sizeof(RiffHeader) + sizeof(FormatChunk) + sizeof(DataChunk) - 8;
+#if 1 // for Coverity Scan
+	memcpy(&riffHeader.type, RIFF_TYPE, sizeof(riffHeader.type));
+#else
 	strncpy((char *)&riffHeader.type, RIFF_TYPE, sizeof(riffHeader.type));
+#endif
 	file.write((char *)&riffHeader, sizeof(riffHeader));
 
 	// 2) FormatChunk
 	FormatChunk formatChunk;
+#if 1 // for Coverity Scan
+	memcpy(&formatChunk.id, FORMAT_CHUNK_ID, sizeof(formatChunk.id));
+#else
 	strncpy((char *)&formatChunk.id, FORMAT_CHUNK_ID, sizeof(formatChunk.id));
+#endif
 	formatChunk.size = FORMAT_CHUNK_SIZE;
 	formatChunk.format = WAVE_FORMAT_PCM;
 	formatChunk.channels = 2;
@@ -390,7 +403,11 @@ void SoundThread::createWavFile(int pcmFileSize)
 
 	// 3) DataChunk
 	DataChunk dataChunk;
+#if 1 // for Coverity Scan
+	memcpy(&dataChunk.id, DATA_CHUNK_ID, sizeof(dataChunk.id));
+#else
 	strncpy((char *)&dataChunk.id, DATA_CHUNK_ID, sizeof(dataChunk.id));
+#endif
 	dataChunk.size = pcmFileSize;
 	file.write((char *)&dataChunk, sizeof(dataChunk));
 

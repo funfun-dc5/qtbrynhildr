@@ -54,6 +54,11 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   // mouse buffer
   mouseBuffer = mainWindow->getMouseBuffer();
 
+  // initialize key and mouse information
+  keydown = KEYDOWN_OFF;
+  prevPos.x = 0;
+  prevPos.y = 0;
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE];

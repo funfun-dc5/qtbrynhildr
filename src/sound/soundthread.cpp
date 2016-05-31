@@ -27,6 +27,7 @@ SoundThread::SoundThread(Settings *settings, MainWindow *mainWindow)
   NetThread("SoundThread", settings, mainWindow),
   soundBuffer(0),
   soundBufferSize(0),
+  samplerate(0),
   format(0),
   audioOutput(0),
   output(0),

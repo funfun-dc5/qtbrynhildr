@@ -26,6 +26,10 @@ MouseBuffer::MouseBuffer(int size)
   // allocate buffer
   buffer = new MouseInfo[size];
   bufferSize = size;
+
+  // initialize mouse position
+  pos.x = 0;
+  pos.y = 0;
 }
 
 // destructor

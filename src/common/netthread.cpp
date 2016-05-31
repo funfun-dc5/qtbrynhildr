@@ -34,7 +34,9 @@ NetThread::NetThread(const char *name, Settings *settings, MainWindow *mainWindo
   settings(settings),
   com_data(0),
   runThread(true),
-  receivedDataCounter(0)
+  receivedDataCounter(0),
+  // for DEBUG
+  outputLog(false)
 {
 }
 

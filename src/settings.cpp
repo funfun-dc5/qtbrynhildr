@@ -45,7 +45,9 @@ Settings::Settings(const char *iniFileName)
   onShowSoftwareButton(false),
 #if QTB_RECORDER
   onRecordingControl(false),
+  recordingControlFileName(0),
   onReplayingControl(false),
+  replayingControlFileName(0),
 #endif // QTB_RECORDER
   onDesktopCapture(false),
   onScrollMode(false)

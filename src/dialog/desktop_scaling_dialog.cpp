@@ -40,6 +40,9 @@ DesktopScalingDialog::DesktopScalingDialog(Settings *settings,
   horizontalSlider->setTickInterval(1);
   horizontalSlider->setTickPosition(QSlider::TicksAbove);
 
+  // initialize original scaling factor
+  originalFactor = 1.0;
+
   // resetting
   resetting();
 }

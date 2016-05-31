@@ -37,6 +37,7 @@ Recorder::Recorder(Settings *settings)
 {
   // initialization
   bodyEntry.counter = 0;
+  memset(&bodyEntry.com_data, 0, sizeof(COM_DATA)); // for warning
 
   // filename
   QString tempFileName = QDir::toNativeSeparators(QDir::tempPath() + QDir::separator() +

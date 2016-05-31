@@ -550,6 +550,14 @@
  サーバ側でクリップボードを更新するとクライアント側のマシンの
  クリップボードも同様に更新されます。逆も同様です。
 
+
+ (*) パブリックモード6でうまく動作しない場合は設定ファイルを
+     以下のように変更することで従来の動作となります。
+
+        publicModeVersion=5
+
+     この場合ファイル転送、クリップボード共有機能は利用できません。
+
 ----------------------------------------------------------------------
 4. Qt Brynhildr の設定の保存場所 (内部資料)
 ----------------------------------------------------------------------
@@ -587,7 +595,7 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 [General]
 generatedVersion=150
 currentVersion=150
-publicModeVersion=5
+publicModeVersion=6
 serverName=mcz.world.idol.jp
 serverType=5
 keyboardType=0
@@ -621,6 +629,7 @@ onShowFrameRate=true
 onShowPassword=false
 onClipCursor=false
 onDisableTransferFile=false
+onDisableTransferFileByDragAndDrop=false
 onDisableTransferClipboard=false
 graphicsBufferSize=1048576
 soundBufferSize=1048576

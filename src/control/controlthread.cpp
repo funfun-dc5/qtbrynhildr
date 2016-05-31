@@ -811,8 +811,10 @@ bool ControlThread::receiveFile()
   if (file.is_open()){
 	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
 	  receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
-	  file.write(buffer, receivedDataSize);
-	  fileSize -= receivedDataSize;
+	  if (receivedDataSize > 0){
+		file.write(buffer, receivedDataSize);
+		fileSize -= receivedDataSize;
+	  }
 	}
 	if (fileSize > 0){
 	  receivedDataSize = receiveData(sock_control, buffer, fileSize);

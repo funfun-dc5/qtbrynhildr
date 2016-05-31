@@ -13,6 +13,8 @@ html/
 # for Darwin
 .DS_Store
 *.app/
+# for Coverity Scan
+cov-int/
 #-----------------------
 # ignore source files
 #-----------------------

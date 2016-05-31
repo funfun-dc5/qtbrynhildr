@@ -25,7 +25,7 @@ NTFS::NTFS()
 
   epochDiff = ntfsEpoch.msecsTo(unixEpoch); // msecs
 
-  diffUTC = ntfsEpoch.offsetFromUtc() * 1000; // msecs
+  diffUTC = ntfsEpoch.offsetFromUtc() * (qint64)1000; // msecs
 }
 
 // get FILETIME (64bit:UTC) from QDateTime (LocalTime)

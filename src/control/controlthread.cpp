@@ -238,9 +238,11 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 
 #if 0 // for DEBUG
+  ios::fmtflags flags = cout.flags();
   cout << "keycode     = " << hex << (int)com_data->keycode << endl;
   cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
   cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
+  cout.flags(flags);
 #endif
 
 #if QTB_BRYNHILDR2_SUPPORT

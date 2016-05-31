@@ -399,7 +399,9 @@ uchar EventConverter_JP::getVKCode(QKeyEvent *keyEvent)
 
   default:					// NOT support key
 	if (outputLog){
+	  ios::fmtflags flags = cout.flags();
 	  cout << "[EventConverter_JP] Unknown Key: " << hex << key << endl << flush;
+	  cout.flags(flags);
 	}
 	return VK_NONE_00;
   }

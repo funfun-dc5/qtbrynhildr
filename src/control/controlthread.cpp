@@ -818,8 +818,10 @@ bool ControlThread::receiveFile()
 	}
 	if (fileSize > 0){
 	  receivedDataSize = receiveData(sock_control, buffer, fileSize);
-	  file.write(buffer, receivedDataSize);
-	  fileSize -= receivedDataSize;
+	  if (receivedDataSize > 0){
+		file.write(buffer, receivedDataSize);
+		fileSize -= receivedDataSize;
+	  }
 	}
 	file.close();
   }

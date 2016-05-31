@@ -76,7 +76,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  shutdownFlag = true;
 		}
 		else {
-		  char buf[QTB_MAXPATHLEN+1];
+		  static char buf[QTB_MAXPATHLEN+1];
 		  const char *arg = (char*)(&argv[2][0]);
 		  strncpy(buf, arg, QTB_MAXPATHLEN);
 		  // analyze option argument

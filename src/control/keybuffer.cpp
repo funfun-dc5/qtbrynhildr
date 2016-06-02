@@ -21,6 +21,7 @@ KeyBuffer::KeyBuffer(int size)
   :
   topPos(0),
   nextPos(0),
+  enabled(true),
   // for DEBUG
   outputLog(false)
 {
@@ -41,6 +42,9 @@ KeyBuffer::~KeyBuffer()
 // put data to ring buffer
 int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 {
+  if (!enabled){ // NOT enabled
+	return 0;
+  }
   if (size() == bufferSize){ // Full
 	return -1;
   }
@@ -55,6 +59,7 @@ int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 
   // for DEBUG
   if (outputLog){
+	ios::fmtflags flags = cout.flags();
 	switch(keycode_flg){
 	case KEYCODE_FLG_KEYUP:
 	  cout << "[KeyBuffer] : KEYUP   : VK_Code = " << hex << (int)keycode << ": size() = " << dec << size() << endl << flush;
@@ -67,6 +72,7 @@ int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 	  ABORT();
 	  break;
 	}
+	cout.flags(flags);
   }
 
   return 1;
@@ -76,7 +82,7 @@ int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 KeyInfo *KeyBuffer::get()
 {
   KeyInfo *ret = 0;
-  if (size() != 0){
+  if (enabled && size() != 0){
 	ret = &buffer[topPos];
 	topPos++;
 	if (topPos == bufferSize){

@@ -749,9 +749,9 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="1215"/>
         <location filename="../qtbrynhildr.cpp" line="1217"/>
-        <source>Receive File</source>
+        <source>Send Clipboard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>ファイルを受信</translation>
+        <translation>クリップボードを送信</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1430"/>

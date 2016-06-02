@@ -16,6 +16,10 @@
 #include <QPainter>
 #include <QPoint>
 #include <QSize>
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <QList>
+#include <QUrl>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // Local Header
 #include "config.h"
@@ -660,6 +664,52 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 #endif // defined(Q_OS_OSX)
   }
 }
+
+#if QTB_DRAG_AND_DROP_SUPPORT
+//----------------------------------------------------------------------
+// drag and drop events
+//----------------------------------------------------------------------
+// drag enter event
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+  if (settings->getOnDisableTransferFile() ||
+	  settings->getOnDisableTransferFileByDragAndDrop()){
+	return;
+  }
+  if (event->mimeData()->hasFormat("text/uri-list")){
+	event->acceptProposedAction();
+  }
+}
+
+// drop event
+void MainWindow::dropEvent(QDropEvent *event)
+{
+  if (settings->getOnDisableTransferFile() ||
+	  settings->getOnDisableTransferFileByDragAndDrop()){
+	return;
+  }
+
+  QList<QUrl> urls = event->mimeData()->urls();
+  if (urls.isEmpty()){
+	// Nothing to do
+	return;
+  }
+
+  // get files
+  QStringList fileNames;
+  for(QList<QUrl>::iterator i = urls.begin(); i != urls.end(); i++){
+	fileNames.append((*i).toLocalFile());
+  }
+  if (fileNames.isEmpty()){
+	// NOT Found file name
+	return;
+  }
+
+  // send files
+  settings->setSendFileNames(fileNames);
+  settings->setSendFileCount(fileNames.count());
+}
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
 // scroll area
 bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)

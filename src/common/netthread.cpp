@@ -34,7 +34,9 @@ NetThread::NetThread(const char *name, Settings *settings, MainWindow *mainWindo
   settings(settings),
   com_data(0),
   runThread(true),
-  receivedDataCounter(0)
+  receivedDataCounter(0),
+  // for DEBUG
+  outputLog(false)
 {
 }
 
@@ -253,6 +255,7 @@ SOCKET NetThread::socketToServer()
 	return INVALID_SOCKET;
   }
 
+  ADDRINFO *topAddrinfo = addrinfo;
   for (; addrinfo != NULL; addrinfo = addrinfo->ai_next){
 	sock = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
 	if (sock == INVALID_SOCKET){
@@ -265,7 +268,12 @@ SOCKET NetThread::socketToServer()
 	}
 	break;
   }
-  freeaddrinfo(addrinfo);
+  // free all addrinfo
+  while (topAddrinfo != NULL){
+	addrinfo = topAddrinfo;
+	topAddrinfo = addrinfo->ai_next;
+	freeaddrinfo(addrinfo);
+  }
 
   // for socket option
   if (sock != INVALID_SOCKET){
@@ -290,7 +298,7 @@ SOCKET NetThread::socketToServer()
 }
 
 // send data
-long NetThread::sendData(SOCKET sock, const char *buf, long size)
+long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 {
   //                                      0123456789ABCDEF
   char key[ENCRYPTION_KEY_LENGTH + 1] = {"@@@@@@@@@@@@@@@@"};
@@ -331,6 +339,13 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
   }
 #endif
 
+  // send
+  return send(sock, buf, size, 0);
+}
+
+// send data
+long NetThread::sendData(SOCKET sock, const char *buf, long size)
+{
   // send
   return send(sock, buf, size, 0);
 }

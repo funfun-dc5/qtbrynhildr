@@ -51,8 +51,96 @@ int counter_graphics = 0;
 const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
 // constructor
+#if QTB_PUBLIC_MODE6_SUPPORT
+QtBrynhildr::QtBrynhildr(int argc, char *argv[], QClipboard *clipboard)
+#else // QTB_PUBLIC_MODE6_SUPPORT
 QtBrynhildr::QtBrynhildr(int argc, char *argv[])
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   :
+  scrollArea(0),
+  mainWindow(0),
+  connectionLabel(0),
+  frameRateLabel(0),
+  fileMenu(0),
+  displayMenu(0),
+  videoMenu(0),
+  selectMonitorNoSubMenu(0),
+  selectFrameRateSubMenu(0),
+  soundMenu(0),
+  controlMenu(0),
+  sendKeySubMenu(0),
+#if QTB_RECORDER
+  recordAndReplaySubMenu(0),
+#endif // QTB_RECORDER
+  optionMenu(0),
+  modeSubMenu(0),
+  inTestingSubMenu(0),
+  helpMenu(0),
+  connectToServer_Action(0),
+  disconnectToServer_Action(0),
+  outputKeyboardLog_Action(0),
+  outputLog_Action(0),
+  exit_Action(0),
+  about_Action(0),
+  videoQuality_MINIMUM_Action(0),
+  videoQuality_LOW_Action(0),
+  videoQuality_STANDARD_Action(0),
+  videoQuality_HIGH_Action(0),
+  videoQuality_MAXIMUM_Action(0),
+  showMenuBar_Action(0),
+  showStatusBar_Action(0),
+  showFrameRate_Action(0),
+  staysOnTop_Action(0),
+  fullScreen_Action(0),
+  desktopScalingDialog_Action(0),
+  desktopCapture_Action(0),
+  logViewDialog_Action(0),
+  showSoftwareKeyboard_Action(0),
+  showSoftwareButton_Action(0),
+  selectFrameRate5_Action(0),
+  selectFrameRate10_Action(0),
+  selectFrameRate20_Action(0),
+  selectFrameRate30_Action(0),
+  selectFrameRate40_Action(0),
+  selectFrameRate50_Action(0),
+  selectFrameRate60_Action(0),
+  selectFrameRateMaximum_Action(0),
+  selectMonitorNo1_Action(0),
+  selectMonitorNo2_Action(0),
+  selectMonitorNo3_Action(0),
+  selectMonitorNo4_Action(0),
+  selectMonitorNo5_Action(0),
+  selectMonitorNo6_Action(0),
+  selectMonitorNo7_Action(0),
+  selectMonitorNo8_Action(0),
+  selectMonitorNo9_Action(0),
+  selectMonitorNoAll_Action(0),
+  soundQuality_MINIMUM_Action(0),
+  soundQuality_LOW_Action(0),
+  soundQuality_STANDARD_Action(0),
+  soundQuality_HIGH_Action(0),
+  soundQuality_MAXIMUM_Action(0),
+  onControl_Action(0),
+  onGraphics_Action(0),
+  onSound_Action(0),
+#if QTB_RECORDER
+  startRecordingControl_Action(0),
+  stopRecordingControl_Action(0),
+  startReplayRecordingControl_Action(0),
+  stopReplayRecordingControl_Action(0),
+#endif // QTB_RECORDER
+  sendKey1_Action(0),
+  sendKey2_Action(0),
+  sendKey3_Action(0),
+  sendKey4_Action(0),
+  sendKey5_Action(0),
+  sendKey6_Action(0),
+  onScrollMode_Action(0),
+#if QTB_PUBLIC_MODE6_SUPPORT
+  sendClipboard_Action(0),
+  sendFile_Action(0),
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+  connectToServerDialog(0),
   desktopScalingDialog(0),
   logViewDialog(0),
   softwareKeyboard(0),
@@ -61,6 +149,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   softwareButtonDockWidget(0),
   totalFrameCounter(0),
   currentFrameRate(0),
+  currentDataRate(0),
   option(0),
   iniFileName(0),
   settings(0),
@@ -75,7 +164,13 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
+  eventConverter(0),
+#if QTB_PUBLIC_MODE6_SUPPORT
+  clipboard(clipboard),
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   fullScreenMode(false),
+  onShowMenuBar(0),
+  onShowStatusBar(0),
   heightOfMenuBar(0),
   heightOfStatusBar(0)
 {
@@ -133,6 +228,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   }
 
   // set option to settings
+#if QTB_PUBLIC_MODE6_SUPPORT
+  if (option->getPublicModeVersion() > 0){
+	writeSettingsAtExit = false;
+	settings->setPublicModeVersion(option->getPublicModeVersion());
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   if (option->getServerName() != 0){
 	writeSettingsAtExit = false;
 	settings->setServerName(option->getServerName());
@@ -270,7 +371,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   //  setWindowIcon(QIcon(QTB_ICON_FILENAME));
 
   // set window title
+#if QTB_PUBLIC_MODE6_SUPPORT
+  setWindowTitle(tr(QTB_APPLICATION)+"  - MODE  " + QString::number(settings->getPublicModeVersion()) +" -");
+#else // QTB_PUBLIC_MODE6_SUPPORT
   setWindowTitle(tr(QTB_APPLICATION));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set window flags
   Qt::WindowFlags flags = windowFlags();
@@ -327,6 +432,13 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   if (QTB_DEBUG_KEYBOARD || QTB_DEBUG_MOUSE){
 	mainWindow->setEventConverter(new EventConverter_JP());
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // clipboard dataChanged
+  if (!settings->getOnDisableTransferClipboard()){
+	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   //------------------------------------------------------------
   // create threads
@@ -385,6 +497,11 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(controlThread,
 		  SIGNAL(exitApplication()),
 		  SLOT(exitApplication()));
+#if QTB_PUBLIC_MODE6_SUPPORT
+  connect(controlThread,
+		  SIGNAL(setClipboard(QString)),
+		  SLOT(setClipboard(QString)));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   connect(controlThread,
 		  SIGNAL(changeMouseCursor(const QCursor &)),
@@ -779,6 +896,21 @@ void QtBrynhildr::exitApplication()
 {
   exit();
 }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+// set clipboard
+void QtBrynhildr::setClipboard(QString clipboardString)
+{
+  if (clipboard != 0){
+	//	cout << "setClipboard = " << qPrintable(clipboardString) << endl << flush;
+	clipboard->setText(clipboardString);
+	//	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
+  }
+  else {
+	cout << "clipboard is null" << endl << flush;
+  }
+}
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // output Log Message
 void QtBrynhildr::outputLogMessage(int msgID)
@@ -1212,17 +1344,17 @@ void QtBrynhildr::createActions()
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
+  // send clipboard
+  sendClipboard_Action = new QAction(tr("Send Clipboard"), this);
+  sendClipboard_Action->setEnabled(false);
+  sendClipboard_Action->setStatusTip(tr("Send Clipboard"));
+  connect(sendClipboard_Action, SIGNAL(triggered()), this, SLOT(sendClipboard()));
+
   // send file
   sendFile_Action = new QAction(tr("Send File"), this);
   sendFile_Action->setEnabled(false);
   sendFile_Action->setStatusTip(tr("Send File"));
   connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
-
-  // receive file
-  receiveFile_Action = new QAction(tr("Receive File"), this);
-  receiveFile_Action->setEnabled(false);
-  receiveFile_Action->setStatusTip(tr("Receive File"));
-  connect(receiveFile_Action, SIGNAL(triggered()), this, SLOT(receiveFile()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -1234,9 +1366,15 @@ void QtBrynhildr::createMenus()
   fileMenu->addAction(connectToServer_Action);
   fileMenu->addAction(disconnectToServer_Action);
 #if QTB_PUBLIC_MODE6_SUPPORT
-  fileMenu->addSeparator();
-  fileMenu->addAction(sendFile_Action);
-  fileMenu->addAction(receiveFile_Action);
+  if (!settings->getOnDisableTransferFile() || !settings->getOnDisableTransferClipboard()){
+	fileMenu->addSeparator();
+  }
+#if 0 // for TEST
+  if (!settings->getOnDisableTransferClipboard())
+	fileMenu->addAction(sendClipboard_Action);
+#endif
+  if (!settings->getOnDisableTransferFile())
+	fileMenu->addAction(sendFile_Action);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -1526,11 +1664,16 @@ void QtBrynhildr::connected()
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  sendFile_Action->setEnabled(true);
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// send clipboard
+	sendClipboard_Action->setEnabled(true);
 
-  // receive file
-  receiveFile_Action->setEnabled(true);
+	// send file
+	sendFile_Action->setEnabled(true);
+
+	// drag and drop
+	mainWindow->setAcceptDrops(true);
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // reset total frame counter
@@ -1590,11 +1733,16 @@ void QtBrynhildr::disconnected()
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send file
-  sendFile_Action->setEnabled(false);
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// send clipboard
+	sendClipboard_Action->setEnabled(false);
 
-  // receive file
-  receiveFile_Action->setEnabled(false);
+	// send file
+	sendFile_Action->setEnabled(false);
+
+	// drag and drop
+	mainWindow->setAcceptDrops(false);
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -1730,6 +1878,21 @@ void QtBrynhildr::connectToServer()
 	return;
   }
   mainWindow->setEventConverter(eventConverter);
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // mode
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "MODE : " +
+							   QString::number(settings->getPublicModeVersion()));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // keyboard type
+  if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){ // Native Keyboard
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "KeyboardType : Native");
+  }
+  else {
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "KeyboardType : " +
+								 eventConverter->getEventConverterName());
+  }
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
@@ -1998,16 +2161,32 @@ void QtBrynhildr::exit()
 }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
+// send clipboard
+void QtBrynhildr::sendClipboard()
+{
+  QString text = clipboard->text();
+
+  // send clipboard flag ON
+  settings->setSendClipboardString(text);
+  settings->setOnSendClipboard(true);
+}
+
 // send file
 void QtBrynhildr::sendFile()
 {
-  cout << "Called sendFile()" << endl << flush;
-}
+  // prepare for send file
+  QStringList fileNames =
+	QFileDialog::getOpenFileNames(this,
+								  tr("Open file"),
+								  settings->getOutputPath());
+  if (fileNames.count() == 0){
+	// Nothing to do
+	return;
+  }
 
-// receive file
-void QtBrynhildr::receiveFile()
-{
-  cout << "Called receiveFile()" << endl << flush;
+  // send files
+  settings->setSendFileNames(fileNames);
+  settings->setSendFileCount(fileNames.count());
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

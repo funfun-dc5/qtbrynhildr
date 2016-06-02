@@ -31,6 +31,10 @@ Settings::Settings(const char *iniFileName)
   bootupFlag(false),
   shutdownFlag(false),
   connected(false),
+#if QTB_PUBLIC_MODE6_SUPPORT
+  onSendClipboard(false),
+  sendFileCount(0),
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   onDisplayCursor(false),
   onSupportGamePad(false),
@@ -41,7 +45,9 @@ Settings::Settings(const char *iniFileName)
   onShowSoftwareButton(false),
 #if QTB_RECORDER
   onRecordingControl(false),
+  recordingControlFileName(0),
   onReplayingControl(false),
+  replayingControlFileName(0),
 #endif // QTB_RECORDER
   onDesktopCapture(false),
   onScrollMode(false)
@@ -59,6 +65,9 @@ Settings::Settings(const char *iniFileName)
   setCurrentVersion(QTB_CURRENTVERSION_DEFAULT);
 
   // set default
+#if QTB_PUBLIC_MODE6_SUPPORT
+  setPublicModeVersion(QTB_PUBLICMODEVERSION_DEFAULT);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   setServerName(QTB_SERVERNAME_DEFAULT);
   setServerType(QTB_SERVERTYPE_DEFAULT);
   setKeyboardType(getDefaultKeyboardType());
@@ -118,7 +127,11 @@ Settings::Settings(const char *iniFileName)
   setOnClipCursor(QTB_ONCLIPCURSOR_DEFAULT);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  setOnDisableClipboard(QTB_ONDISABLECLIPBOARD_DEFAULT);
+  setOnDisableTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
+#if QTB_DRAG_AND_DROP_SUPPORT
+  setOnDisableTransferFileByDragAndDrop(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+  setOnDisableTransferClipboard(QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
@@ -142,6 +155,11 @@ Settings::Settings(const char *iniFileName)
 // destructor
 Settings::~Settings()
 {
+  // delete objects
+  if (desktop != 0){
+	delete desktop;
+	desktop = 0;
+  }
 }
 
 // get settings
@@ -156,6 +174,12 @@ void Settings::readSettings()
   // load version information
   setGeneratedVersion(settings->value(QTB_GENERATEDVERSION,
 									  (qint32)QTB_GENERATEDVERSION_DEFAULT).toInt());
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // load publicModeVersion
+  setPublicModeVersion(settings->value(QTB_PUBLICMODEVERSION,
+									   (qint32)QTB_PUBLICMODEVERSION_DEFAULT).toInt());
+#endif //QTB_PUBLIC_MODE6_SUPPORT
 
   // load serverName
   setServerName(settings->value(QTB_SERVERNAME,
@@ -304,9 +328,18 @@ void Settings::readSettings()
 								  QTB_ONCLIPCURSOR_DEFAULT).toBool());
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // load onDisableClipboard
-  setOnDisableClipboard(settings->value(QTB_ONDISABLECLIPBOARD,
-										QTB_ONDISABLECLIPBOARD_DEFAULT).toBool());
+  // load onDisableTansferFile
+  setOnDisableTransferFile(settings->value(QTB_ONDISABLETRANSFERFILE,
+										   QTB_ONDISABLETRANSFERFILE_DEFAULT).toBool());
+#if QTB_DRAG_AND_DROP_SUPPORT
+  // load onDisableTansferFileByDragAndDrop
+  setOnDisableTransferFileByDragAndDrop(settings->value(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP,
+														QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT).toBool());
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
+  // load onDisableTansferClipboard
+  setOnDisableTransferClipboard(settings->value(QTB_ONDISABLETRANSFERCLIPBOARD,
+												QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT).toBool());
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // load graphicsBufferSize
@@ -364,6 +397,11 @@ void Settings::writeSettings()
   // save version information
   settings->setValue(QTB_GENERATEDVERSION, (qint32)generatedVersion);
   settings->setValue(QTB_CURRENTVERSION, (qint32)currentVersion);
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // save publicModeVersion
+  settings->setValue(QTB_PUBLICMODEVERSION, (qint32)publicModeVersion);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // save serverName
   settings->setValue(QTB_SERVERNAME, serverName);
@@ -478,8 +516,14 @@ void Settings::writeSettings()
   settings->setValue(QTB_ONCLIPCURSOR, onClipCursor);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // save onDisableClipboard
-  settings->setValue(QTB_ONDISABLECLIPBOARD, onDisableClipboard);
+  // save onDisableTransferFile
+  settings->setValue(QTB_ONDISABLETRANSFERFILE, onDisableTransferFile);
+#if QTB_DRAG_AND_DROP_SUPPORT
+  // save onDisableTransferFileByDragAndDrop
+  settings->setValue(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP, onDisableTransferFileByDragAndDrop);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+  // save onDisableTransferClipboard
+  settings->setValue(QTB_ONDISABLETRANSFERCLIPBOARD, onDisableTransferClipboard);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // save graphicsBufferSize
@@ -528,6 +572,9 @@ void Settings::printSettings() const
   qDebug() << "---------------- Settings ----------------";
   qDebug() << "Generated Version : " << generatedVersion;
   qDebug() << "Current Version   : " << currentVersion;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  qDebug() << "Public Mode Version: " << getPublicModeVersionByString();
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "------------------------------------------";
   qDebug() << "Server Name   : " << serverName;
   qDebug() << "Server Type   : " << getServerTypeByString();
@@ -544,6 +591,10 @@ void Settings::printSettings() const
   qDebug() << "  ExtraButtonSupport : " << onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  qDebug() << "  SendClipboard : " << onSendClipboard;
+  qDebug() << "  SendFileCount : " << sendFileCount;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "Graphics      : " << onGraphics;
   qDebug() << "    QUALITY   : " << getVideoQualityByString();
   qDebug() << "    FrameRate : " << frameRate;
@@ -574,7 +625,11 @@ void Settings::printSettings() const
   qDebug() << "ShowPassword            : " << onShowPassword;
   qDebug() << "ClipCursor              : " << onClipCursor;
 #if QTB_PUBLIC_MODE6_SUPPORT
-  qDebug() << "DisableClipboard        : " << onDisableClipboard;
+  qDebug() << "DisableTransferFile     : " << onDisableTransferFile;
+#if QTB_DRAG_AND_DROP_SUPPORT
+  qDebug() << "DisableTransferFileByDragAndDrop     : " << onDisableTransferFileByDragAndDrop;
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+  qDebug() << "DisableTransferClipboard: " << onDisableTransferClipboard;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_BRYNHILDR2_SUPPORT

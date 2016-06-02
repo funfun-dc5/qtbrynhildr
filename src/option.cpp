@@ -21,6 +21,9 @@ namespace qtbrynhildr {
 // constructor
 Option::Option(int argc, char *argv[])
   :
+#if QTB_PUBLIC_MODE6_SUPPORT
+  publicModeVersion(0),
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   serverName(0),
   portNo(0),
   password(0),
@@ -50,6 +53,11 @@ Option::Option(int argc, char *argv[])
 // destructor
 Option::~Option()
 {
+  // delete objects
+  if (iniFileName != 0){
+	free(iniFileName);
+	iniFileName = 0;
+  }
 }
 
 // analyze command line options
@@ -68,7 +76,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  shutdownFlag = true;
 		}
 		else {
-		  char *buf= new char[QTB_MAXPATHLEN+1];
+		  static char buf[QTB_MAXPATHLEN+1];
 		  const char *arg = (char*)(&argv[2][0]);
 		  strncpy(buf, arg, QTB_MAXPATHLEN);
 		  // analyze option argument
@@ -213,6 +221,14 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		}
 	  }
 #endif // QTB_RECORDER
+#if QTB_PUBLIC_MODE6_SUPPORT
+	  else if (strncmp("mode5", optionName, sizeof("mode5")) == 0){
+		publicModeVersion = 5;
+	  }
+	  else if (strncmp("mode6", optionName, sizeof("mode6")) == 0){
+		publicModeVersion = 6;
+	  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 	  else if ((strncmp("version", optionName, sizeof("version")) == 0)||
 			   (strncmp("v", optionName, sizeof("v")) == 0)){
 		printVersion();

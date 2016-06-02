@@ -46,6 +46,15 @@
 #define QTB_CURRENTVERSION				"currentVersion"
 #define QTB_CURRENTVERSION_DEFAULT		QTB_VERSION_NUMBER
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+// for publicModeVersion
+#define QTB_PUBLICMODEVERSION	"publicModeVersion"
+#define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION6
+typedef int PUBLIC_MODEVERSION;
+#define PUBLICMODE_VERSION5		5
+#define PUBLICMODE_VERSION6		6
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
 // for serverName
 #define QTB_SERVERNAME			"serverName"
 #if defined(QTB_DEV_TABLET) // for TEST
@@ -262,11 +271,19 @@ typedef int SCALING_TYPE;
 #define QTB_ONCLIPCURSOR_DEFAULT			false
 
 #if QTB_PUBLIC_MODE6_SUPPORT
+// for onDisableTransferFile
+#define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
+#define QTB_ONDISABLETRANSFERFILE_DEFAULT	false
 
-// for onDisableClipboard
-#define QTB_ONDISABLECLIPBOARD				"onDisableClipboard"
-#define QTB_ONDISABLECLIPBOARD_DEFAULT		false
+#if QTB_DRAG_AND_DROP_SUPPORT
+// for onDisableTransferFileByDragAndDrop
+#define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP			"onDisableTransferFileByDragAndDrop"
+#define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT	false
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
+// for onDisableTransferClipboard
+#define QTB_ONDISABLETRANSFERCLIPBOARD			"onDisableTransferClipboard"
+#define QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT	false
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for graphicsBufferSize
@@ -381,6 +398,47 @@ public:
   {
 	this->currentVersion = currentVersion;
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // get public mode version
+  PUBLIC_MODEVERSION getPublicModeVersion() const
+  {
+	return publicModeVersion;
+  }
+
+  // set public mode version
+  void setPublicModeVersion(PUBLIC_MODEVERSION publicModeVersion)
+  {
+	ASSERT(publicModeVersion == PUBLICMODE_VERSION5 ||
+		   publicModeVersion == PUBLICMODE_VERSION6);
+
+	switch(publicModeVersion){
+	case PUBLICMODE_VERSION5:
+	case PUBLICMODE_VERSION6:
+	  this->publicModeVersion = publicModeVersion;
+	  break;
+	default:
+	  // Error
+	  ABORT();
+	  break;
+	}
+  }
+
+  // get public mode version string
+  QString getPublicModeVersionByString() const
+  {
+	switch(publicModeVersion){
+	case PUBLICMODE_VERSION5:
+	  return "PUBLICMODE_VERSION5";
+	  break;
+	case PUBLICMODE_VERSION6:
+	  return "PUBLICMODE_VERSION6";
+	  break;
+	}
+
+	return "UNKNOWN PUBLICMODE_VERSION";
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get server name
   QString getServerName() const
@@ -596,6 +654,57 @@ public:
 	this->onControlOffWithGraphicsOff = onControlOffWithGraphicsOff;
 	return true;
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // get send clipboard flag
+  bool getOnSendClipboard() const
+  {
+	return onSendClipboard;
+  }
+
+  // set send clipboard flag
+  bool setOnSendClipboard(bool onSendClipboard)
+  {
+	this->onSendClipboard = onSendClipboard;
+	return true;
+  }
+
+  // get send clipboard string
+  QString getSendClipboardString() const
+  {
+	return sendClipboardString;
+  }
+
+  // set send clipboard string
+  void setSendClipboardString(QString sendClipboardString)
+  {
+	this->sendClipboardString = sendClipboardString;
+  }
+
+  // get send file count
+  int getSendFileCount() const
+  {
+	return sendFileCount;
+  }
+
+  // set send file count
+  void setSendFileCount(int sendFileCount)
+  {
+	this->sendFileCount = sendFileCount;
+  }
+
+  // get send file name list
+  QStringList getSendFileNames() const
+  {
+	return sendFileNames;
+  }
+
+  // set send file name list
+  void setSendFileNames(QStringList sendFileNames)
+  {
+	this->sendFileNames = sendFileNames;
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get graphics flag
   bool getOnGraphics() const
@@ -1169,19 +1278,43 @@ public:
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-
-  // get disable clilpboard flag
-  bool getOnDisableClipboard() const
+  // get disable transfer file flag
+  bool getOnDisableTransferFile() const
   {
-	return onDisableClipboard;
+	return onDisableTransferFile;
   }
 
-  // set disable clipboard flag
-  void setOnDisableClipboard(bool onDisableClipboard)
+  // set disable transfer file flag
+  void setOnDisableTransferFile(bool onDisableTransferFile)
   {
-	this->onDisableClipboard = onDisableClipboard;
+	this->onDisableTransferFile = onDisableTransferFile;
   }
 
+#if QTB_DRAG_AND_DROP_SUPPORT
+  // get disable transfer file by drag and drop flag
+  bool getOnDisableTransferFileByDragAndDrop() const
+  {
+	return onDisableTransferFileByDragAndDrop;
+  }
+
+  // set disable transfer file by drag and drop flag
+  void setOnDisableTransferFileByDragAndDrop(bool onDisableTransferFileByDragAndDrop)
+  {
+	this->onDisableTransferFileByDragAndDrop = onDisableTransferFileByDragAndDrop;
+  }
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
+  // get disable transfer clilpboard flag
+  bool getOnDisableTransferClipboard() const
+  {
+	return onDisableTransferClipboard;
+  }
+
+  // set disable transfer clipboard flag
+  void setOnDisableTransferClipboard(bool onDisableTransferClipboard)
+  {
+	this->onDisableTransferClipboard = onDisableTransferClipboard;
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get on show Software Keyboard flag
@@ -1394,6 +1527,11 @@ private:
   // current version
   volatile int currentVersion;
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // public mode version
+  volatile PUBLIC_MODEVERSION publicModeVersion;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   // server name
   QString serverName;
 
@@ -1419,6 +1557,16 @@ private:
   volatile bool onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onControlOffWithGraphicsOff;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // send clipboard
+  volatile bool onSendClipboard;
+  // send clipboard string
+  QString sendClipboardString;
+  // send file count
+  volatile int sendFileCount;
+  // send file name
+  QStringList sendFileNames;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // Graphics
   volatile bool onGraphics;
@@ -1527,10 +1675,14 @@ private:
   volatile bool onClipCursor;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
+  // disable send/receive file
+  volatile bool onDisableTransferFile;
 
-  // disable clip board
-  volatile bool onDisableClipboard;
+  // disable send/receive file by drag and drop
+  volatile bool onDisableTransferFileByDragAndDrop;
 
+  // disable send/receive clipboard
+  volatile bool onDisableTransferClipboard;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // buffer

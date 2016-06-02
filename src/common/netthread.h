@@ -112,6 +112,9 @@ protected:
   void printHeader();
 
 protected:
+  // send eader
+  long sendHeader(SOCKET sock, const char *buf, long size);
+
   // send data
   long sendData(SOCKET sock, const char *buf, long size);
 

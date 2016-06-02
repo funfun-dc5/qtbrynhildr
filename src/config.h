@@ -81,11 +81,33 @@ const bool QTB_IN_TESTING				= false;
 // brynhildr version 2 support
 #define QTB_BRYNHILDR2_SUPPORT		1
 
+#if QTB_BRYNHILDR2_SUPPORT
+
 // extra mouse button support
 #define QTB_EXTRA_BUTTON_SUPPORT	1
 
 // public mode 6 support
+#define QTB_PUBLIC_MODE6_SUPPORT	1
+
+// drag and drop support
+#if defined(QTB_DEV_DESKTOP)
+#define QTB_DRAG_AND_DROP_SUPPORT	1
+#else // defined(QTB_DEV_DESKTOP)
+#define QTB_DRAG_AND_DROP_SUPPORT	0
+#endif // defined(QTB_DEV_DESKTOP)
+
+#else // QTB_BRYNHILDR2_SUPPORT
+
+// extra mouse button support
+#define QTB_EXTRA_BUTTON_SUPPORT	0
+
+// public mode 6 support
 #define QTB_PUBLIC_MODE6_SUPPORT	0
+
+// drag and drop support
+#define QTB_DRAG_AND_DROP_SUPPORT	0
+
+#endif // QTB_BRYNHILDR2_SUPPORT
 
 // debug
 #define QTB_DEBUG					1

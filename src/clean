@@ -13,6 +13,8 @@ case $UNAME in
 			# delete executable file
 			rm -f ${APP}.exe
 		fi
+		# delete coverity scan directory
+		rm -rf cov-int
 		# delete manual
 		pushd ../doc/manual
 		make clean

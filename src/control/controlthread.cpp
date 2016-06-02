@@ -6,8 +6,16 @@
 #include "common/common.h"
 
 // System Header
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <fstream>
+#include <iostream>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // Qt Header
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <QByteArray>
+#include <QFileInfo>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QSize>
 
 // Local Header
@@ -45,6 +53,22 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
 
   // mouse buffer
   mouseBuffer = mainWindow->getMouseBuffer();
+
+  // initialize key and mouse information
+  keydown = KEYDOWN_OFF;
+  prevPos.x = 0;
+  prevPos.y = 0;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // local buffer
+  buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE+2];
+
+  // clipboard top address
+  clipboardTop = &buffer[16];
+
+  // NTFS utility
+  ntfs = new NTFS();
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
 // destructor
@@ -55,6 +79,15 @@ ControlThread::~ControlThread()
 	delete com_data;
 	com_data = 0;
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // local buffer
+  if (buffer != 0){
+	delete [] buffer;
+	buffer = 0;
+	clipboardTop = 0;
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
 //---------------------------------------------------------------------------
@@ -205,9 +238,11 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 
 #if 0 // for DEBUG
+  ios::fmtflags flags = cout.flags();
   cout << "keycode     = " << hex << (int)com_data->keycode << endl;
   cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
   cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
+  cout.flags(flags);
 #endif
 
 #if QTB_BRYNHILDR2_SUPPORT
@@ -254,7 +289,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 
   // send header for next communication
   long dataSize;
-  dataSize = sendData(sock_control, (char *)com_data, sizeof(COM_DATA));
+  dataSize = sendHeader(sock_control, (char *)com_data, sizeof(COM_DATA));
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
@@ -262,6 +297,28 @@ PROCESS_RESULT ControlThread::processForHeader()
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // send clilpboard/file
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// cliboard
+	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
+		!settings->getOnDisableTransferClipboard()){
+	  // send clipboard
+	  sendClipboard();
+	}
+	// file
+	else if (com_data->data_type == DATA_TYPE_FILE &&
+			 !settings->getOnDisableTransferFile()){
+	  // send file
+	  keyBuffer->setEnabled(false); // disabled keyboard
+	  mouseBuffer->setEnabled(false); // disabled mouse
+	  sendFile();
+	  keyBuffer->setEnabled(true);
+	  mouseBuffer->setEnabled(true);
+	}
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // receive header
   dataSize = receiveData(sock_control, (char *)com_data, sizeof(COM_DATA));
@@ -351,8 +408,31 @@ PROCESS_RESULT ControlThread::processForHeader()
 // transmit local buffer to global buffer
 TRANSMIT_RESULT ControlThread::transmitBuffer()
 {
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // receive clilpboard/file
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// cliboard
+	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
+		!settings->getOnDisableTransferClipboard()){
+	  // receive clipboard
+	  receiveClipboard();
+	}
+	// file
+	else if (com_data->data_type == DATA_TYPE_FILE &&
+			 !settings->getOnDisableTransferFile()){
+	  // receive file
+	  keyBuffer->setEnabled(false); // disabled keyboard
+	  mouseBuffer->setEnabled(false); // disabled mouse
+	  receiveFile();
+	  keyBuffer->setEnabled(true);
+	  mouseBuffer->setEnabled(true);
+	}
+  }
+  return TRANSMIT_SUCCEEDED;
+#else // QTB_PUBLIC_MODE6_SUPPORT
   // Nothing to do
   return TRANSMIT_SUCCEEDED;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
 // connected
@@ -413,8 +493,26 @@ void ControlThread::initHeader()
 
   // common
   com_data->data_type	= DATA_TYPE_DATA;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  int sendFileCount = settings->getSendFileCount();
+  if (settings->getOnSendClipboard()){
+	com_data->data_type	= DATA_TYPE_CLIPBOARD;
+	// set data size
+	com_data->data_size = settings->getSendClipboardString().size() * 2 + 16;
+  }
+  else if (sendFileCount > 0){
+	com_data->data_type	= DATA_TYPE_FILE;
+	// set data size
+	QFileInfo fileInfo((QString)settings->getSendFileNames().at(sendFileCount-1));
+	com_data->data_size = fileInfo.size();
+  }
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->thread		= THREAD_CONTROL;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  com_data->mode		= settings->getPublicModeVersion();
+#else // QTB_PUBLIC_MODE6_SUPPORT
   com_data->mode		= MODE_PUBLIC5;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->monitor_no	= settings->getMonitorNo();
 #if QTB_BRYNHILDR2_SUPPORT
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
@@ -512,14 +610,14 @@ void ControlThread::setGamePadControl()
   }
   else if (result == JOYERR_UNPLUGGED){
 	// not found gamepad
-	com_data->gamepad1 = 32768;
-	com_data->gamepad2 = 32768;
-	com_data->gamepad3 = 32768;
-	com_data->gamepad4 = 32768;
-	com_data->gamepad5 = 65535;
-	com_data->gamepad6 = 0;
-	com_data->gamepad7 = 0;
-	com_data->gamepad8 = 0;
+	com_data->gamepad1 = 0x7FFF;
+	com_data->gamepad2 = 0x7FFF;
+	com_data->gamepad3 = 0x7FFF;
+	com_data->gamepad4 = 0x7FFF;
+	com_data->gamepad5 = 0xFFFF;
+	com_data->gamepad6 = 0x0000;
+	com_data->gamepad7 = 0x0000;
+	com_data->gamepad8 = 0x0000;
   }
   else {
 	// Unknown Error
@@ -541,5 +639,205 @@ void ControlThread::setGamePadControl()
 #endif // defined(Q_OS_WIN)
 
 #endif // QTB_BRYNHILDR2_SUPPORT
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+
+// send clipboard
+bool ControlThread::sendClipboard()
+{
+  QString clipboardString = settings->getSendClipboardString();
+  SIZE stringSize = clipboardString.size() * 2;
+  SIZE sentDataSize = 0;
+  char localBuffer[stringSize + 16 + 2];
+
+  // check
+  if (stringSize == 0){
+	// Nothing to do
+	return true;
+  }
+
+  //  cout << "sendClipboard = " << qPrintable(clipboardString) << endl << flush;
+  //  cout << "sendClipboard.size = " << stringSize << endl << flush;
+
+  // copy to local buffer and send to server
+  memset(localBuffer, 0, stringSize + 16 + 2);
+  memcpy(&localBuffer[16], clipboardString.unicode(), stringSize);
+  sentDataSize = sendData(sock_control, localBuffer, stringSize + 16);
+  stringSize -= sentDataSize - 16;
+
+  // flag clear
+  settings->setOnSendClipboard(false);
+
+  // check result
+  if (stringSize == 0){
+	return true;
+  }
+  else {
+	return false;
+  }
+}
+
+// receive clipboard
+bool ControlThread::receiveClipboard()
+{
+  SIZE clipboardSize = com_data->data_size;
+  SIZE receivedDataSize = 0;
+
+  // get cliboard
+  while(clipboardSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
+	receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	clipboardSize -= receivedDataSize;
+  }
+  if (clipboardSize > 0){
+	receivedDataSize = receiveData(sock_control, buffer, clipboardSize);
+	clipboardSize -= receivedDataSize;
+	buffer[receivedDataSize] = '\0';
+	buffer[receivedDataSize+1] = '\0';
+  }
+  if (clipboardSize == 0){
+	// set cliboard
+	QString clipboardString = QString((const QChar *)clipboardTop, -1);
+	//	cout << "receiveClipboard = " << qPrintable(clipboardString) << endl << flush;
+	emit setClipboard(clipboardString);
+	return true;
+  }
+  else {
+	return false;
+  }
+}
+
+// send file
+bool ControlThread::sendFile()
+{
+  char filename[260+1] = {0};
+  char fileTimeStamp[24+1] = {0};
+
+  SIZE fileSize = com_data->data_size;
+  SIZE sentDataSize;
+
+  // send filename
+  int sendFileCount = settings->getSendFileCount()-1;
+  QString fileName = settings->getSendFileNames().at(sendFileCount);
+  QFileInfo fileInfo(fileName);
+  strncpy(filename, qPrintable(fileInfo.fileName()), 260);
+  sentDataSize = sendData(sock_control, filename, 260);
+
+  // send time stamp
+  qint64 CreationTime = ntfs->toFILETIME(fileInfo.created()); // UTC
+  fileTimeStamp[0] = (CreationTime >>  0) & 0xFF;
+  fileTimeStamp[1] = (CreationTime >>  8) & 0xFF;
+  fileTimeStamp[2] = (CreationTime >> 16) & 0xFF;
+  fileTimeStamp[3] = (CreationTime >> 24) & 0xFF;
+  fileTimeStamp[4] = (CreationTime >> 32) & 0xFF;
+  fileTimeStamp[5] = (CreationTime >> 40) & 0xFF;
+  fileTimeStamp[6] = (CreationTime >> 48) & 0xFF;
+  fileTimeStamp[7] = (CreationTime >> 56) & 0xFF;
+  qint64 LastAccessTime = ntfs->toFILETIME(fileInfo.lastRead()); // UTC
+  fileTimeStamp[8]  = (LastAccessTime >>  0) & 0xFF;
+  fileTimeStamp[9]  = (LastAccessTime >>  8) & 0xFF;
+  fileTimeStamp[10] = (LastAccessTime >> 16) & 0xFF;
+  fileTimeStamp[11] = (LastAccessTime >> 24) & 0xFF;
+  fileTimeStamp[12] = (LastAccessTime >> 32) & 0xFF;
+  fileTimeStamp[13] = (LastAccessTime >> 40) & 0xFF;
+  fileTimeStamp[14] = (LastAccessTime >> 48) & 0xFF;
+  fileTimeStamp[15] = (LastAccessTime >> 56) & 0xFF;
+  qint64 LastWriteTime = ntfs->toFILETIME(fileInfo.lastModified()); // UTC
+  fileTimeStamp[16] = (LastWriteTime >>  0) & 0xFF;
+  fileTimeStamp[17] = (LastWriteTime >>  8) & 0xFF;
+  fileTimeStamp[18] = (LastWriteTime >> 16) & 0xFF;
+  fileTimeStamp[19] = (LastWriteTime >> 24) & 0xFF;
+  fileTimeStamp[20] = (LastWriteTime >> 32) & 0xFF;
+  fileTimeStamp[21] = (LastWriteTime >> 40) & 0xFF;
+  fileTimeStamp[22] = (LastWriteTime >> 48) & 0xFF;
+  fileTimeStamp[23] = (LastWriteTime >> 56) & 0xFF;
+  sentDataSize = sendData(sock_control, fileTimeStamp, 24);
+
+  // send file image
+  fstream file;
+  file.open(qPrintable(fileName), ios::in | ios::binary);
+  if (file.is_open()){
+	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
+	  // read to buffer
+	  file.read(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  // send to server
+	  sentDataSize = sendData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  fileSize -= sentDataSize;
+	}
+	if (fileSize > 0){
+	  // read to buffer
+	  file.read(buffer, fileSize);
+	  // send to server
+	  sentDataSize = sendData(sock_control, buffer, fileSize);
+	  fileSize -= sentDataSize;
+	}
+	file.close();
+  }
+#if 1 // for DEBUG
+  else {
+	cout << "open error!" << endl << flush;
+  }
+#endif // for DEBUG
+
+  // sent a file
+  settings->setSendFileCount(sendFileCount);
+  //  cout << "SendFile = " << qPrintable(fileName) << endl << flush;
+  //  cout << "SendFileCount = " << settings->getSendFileCount() << endl << flush;
+
+  // check result
+  if (fileSize == 0){
+	return true;
+  }
+  else {
+	return false;
+  }
+}
+
+// receive file
+bool ControlThread::receiveFile()
+{
+  char filename[260+1];
+  char fileTimeStamp[24+1]; // dummy read
+
+  SIZE fileSize = com_data->data_size;
+  SIZE receivedDataSize = 0;
+
+  // get filename
+  receivedDataSize = receiveData(sock_control, filename, 260);
+
+  // get file time stamp
+  receivedDataSize = receiveData(sock_control, fileTimeStamp, 24);
+
+  // get file image
+  fstream file;
+  QString localFilename = settings->getOutputPath() + filename;
+  file.open(qPrintable(localFilename), ios::out | ios::binary);
+  if (file.is_open()){
+	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
+	  receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  if (receivedDataSize > 0){
+		file.write(buffer, receivedDataSize);
+		fileSize -= receivedDataSize;
+	  }
+	}
+	if (fileSize > 0){
+	  receivedDataSize = receiveData(sock_control, buffer, fileSize);
+	  if (receivedDataSize > 0){
+		file.write(buffer, receivedDataSize);
+		fileSize -= receivedDataSize;
+	  }
+	}
+	file.close();
+  }
+
+  // check result
+  if (fileSize == 0){
+	return true;
+  }
+  else {
+	return false;
+  }
+}
+
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 } // end of namespace qtbrynhildr

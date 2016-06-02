@@ -17,7 +17,7 @@ namespace qtbrynhildr {
 EventConverter::EventConverter()
   :
   shiftKeyControl(SHIFTKEY_THROUGH),
-  outputLog(true)
+  outputLog(false)
 {
 }
 

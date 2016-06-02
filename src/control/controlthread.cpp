@@ -61,7 +61,7 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
-  buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE];
+  buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE+2];
 
   // clipboard top address
   clipboardTop = &buffer[16];
@@ -648,7 +648,7 @@ bool ControlThread::sendClipboard()
   QString clipboardString = settings->getSendClipboardString();
   SIZE stringSize = clipboardString.size() * 2;
   SIZE sentDataSize = 0;
-  char localBuffer[stringSize + 16 + 1];
+  char localBuffer[stringSize + 16 + 2];
 
   // check
   if (stringSize == 0){
@@ -660,7 +660,7 @@ bool ControlThread::sendClipboard()
   //  cout << "sendClipboard.size = " << stringSize << endl << flush;
 
   // copy to local buffer and send to server
-  memset(localBuffer, 0, stringSize + 16 + 1);
+  memset(localBuffer, 0, stringSize + 16 + 2);
   memcpy(&localBuffer[16], clipboardString.unicode(), stringSize);
   sentDataSize = sendData(sock_control, localBuffer, stringSize + 16);
   stringSize -= sentDataSize - 16;
@@ -692,6 +692,7 @@ bool ControlThread::receiveClipboard()
 	receivedDataSize = receiveData(sock_control, buffer, clipboardSize);
 	clipboardSize -= receivedDataSize;
 	buffer[receivedDataSize] = '\0';
+	buffer[receivedDataSize+1] = '\0';
   }
   if (clipboardSize == 0){
 	// set cliboard

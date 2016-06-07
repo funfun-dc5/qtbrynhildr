@@ -169,8 +169,8 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   clipboard(clipboard),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fullScreenMode(false),
-  onShowMenuBar(0),
-  onShowStatusBar(0),
+  onShowMenuBar(false),
+  onShowStatusBar(false),
   heightOfMenuBar(0),
   heightOfStatusBar(0)
 {
@@ -366,6 +366,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   // show or hide
   menuBar()->setVisible(settings->getOnShowMenuBar());
   statusBar()->setVisible(settings->getOnShowStatusBar());
+  // save onShow* flags
+  onShowMenuBar = settings->getOnShowMenuBar();
+  onShowStatusBar = settings->getOnShowStatusBar();
 
   // set icon
   //  setWindowIcon(QIcon(QTB_ICON_FILENAME));

@@ -21,6 +21,7 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QObject>
+#include <QPalette>
 #include <QScrollArea>
 #include <QSize>
 #include <QString>
@@ -629,6 +630,10 @@ private:
 
   // height of status bar
   int heightOfStatusBar;
+
+  // palettes
+  QPalette originalPalette;
+  QPalette fullScreenPalette;
 };
 
 } // end of namespace qtbrynhildr

@@ -58,8 +58,6 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   this->parent = parent;
 
   // setting main window
-  setBackgroundRole(QPalette::Dark);
-  setAutoFillBackground(true);
   //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setFocusPolicy(Qt::StrongFocus);

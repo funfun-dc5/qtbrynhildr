@@ -338,7 +338,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   //------------------------------------------------------------
   // create window
   //------------------------------------------------------------
-#if 1 // for scroll area TEST
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -351,11 +350,13 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   scrollArea->setWidget(mainWindow);
   scrollArea->setFocusProxy(mainWindow);
   setCentralWidget(scrollArea);
-#else
-  // Main Window Widget
-  mainWindow = new MainWindow(settings, this);
-  setCentralWidget(mainWindow);
-#endif
+  // initialize palette
+  originalPalette = fullScreenPalette = scrollArea->palette();
+  // for original
+  originalPalette.setColor(QPalette::Window, Qt::gray);
+  scrollArea->setPalette(originalPalette); // change QPalette::Window to black
+  // for full screen
+  fullScreenPalette.setColor(QPalette::Window, Qt::black);
 
   // create Main Window
   createActions();
@@ -2686,6 +2687,7 @@ void QtBrynhildr::fullScreen()
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	mainWindow->setOnFullScreen(true);
+	scrollArea->setPalette(fullScreenPalette); // change QPalette::Window to black
 	showFullScreen();
   }
   else {
@@ -2700,6 +2702,7 @@ void QtBrynhildr::fullScreen()
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	mainWindow->setOnFullScreen(false);
+	scrollArea->setPalette(originalPalette); // restore original QPalette::Window
 	showNormal();
   }
   // set checked flag

@@ -96,7 +96,7 @@ void NetThread::run()
 		cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
 #endif // for TEST
 		shutdownConnection();
-		emit networkError();
+		emit networkError(false);
 		runThread = false;
 #if 0 // for TEST
 		emit outputLogMessage(QTB_MSG_CONNECT_ERROR);
@@ -119,7 +119,7 @@ void NetThread::run()
 		cout << "[" << name << "]" << " Network Error: processForHeader()" << endl << flush; // error
 #endif // for TEST
 		shutdownConnection();
-		emit networkError();
+		emit networkError(false);
 		continue;
 	  }
 	  if (result_process == PROCESS_PASSWORD_ERROR){
@@ -156,7 +156,7 @@ void NetThread::run()
 	case TRANSMIT_NETWORK_ERROR:
 	  cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << endl << flush; // error
 	  shutdownConnection();
-	  emit networkError();
+	  emit networkError(false);
 	  continue;
 	  break;
 	case TRANSMIT_DATASIZE_ERROR:

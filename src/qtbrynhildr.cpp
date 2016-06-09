@@ -476,14 +476,14 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 		  SIGNAL(outputLogMessage(int, const QString)),
 		  SLOT(outputLogMessage(int, const QString)));
   connect(controlThread,
-		  SIGNAL(networkError()),
-		  SLOT(onNetworkError()));
+		  SIGNAL(networkError(bool)),
+		  SLOT(onNetworkError(bool)));
   connect(graphicsThread,
-		  SIGNAL(networkError()),
-		  SLOT(onNetworkError()));
+		  SIGNAL(networkError(bool)),
+		  SLOT(onNetworkError(bool)));
   connect(soundThread,
-		  SIGNAL(networkError()),
-		  SLOT(onNetworkError()));
+		  SIGNAL(networkError(bool)),
+		  SLOT(onNetworkError(bool)));
 
   // control thread
   connect(controlThread,
@@ -884,15 +884,14 @@ void QtBrynhildr::changeMouseCursor(const QCursor &cursor)
 #endif // QTB_BRYNHILDR2_SUPPORT
 
 // network error handler
-void QtBrynhildr::onNetworkError()
+void QtBrynhildr::onNetworkError(bool exit)
 {
-#if 1 // for TEST
-  reconnectToServer();
-#else
-  settings->setConnected(false);
-  mainWindow->clearDesktop();
-  refreshWindow();
-#endif
+  if (exit){
+	disconnectToServer();
+  }
+  else {
+	reconnectToServer();
+  }
 }
 
 // exit applilcation

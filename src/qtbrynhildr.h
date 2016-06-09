@@ -119,7 +119,7 @@ public slots:
 #endif // QTB_BRYNHILDR2_SUPPORT
 
   // network error handler
-  void onNetworkError();
+  void onNetworkError(bool exit);
 
   // exit applilcation
   void exitApplication();

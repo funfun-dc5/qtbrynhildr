@@ -8,6 +8,7 @@
 // System Header
 #include <cstdio>
 #include <cstring>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 
@@ -329,14 +330,7 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
   }
 
 #if 0 // for TEST
-  {
-	fstream file;
-	file.open("header.dat", ios::out | ios::binary | ios::trunc);
-	if (file.is_open()){
-	  file.write((char*)com_data, sizeof(COM_DATA));
-	  file.close();
-	}
-  }
+  saveHeader("sentHeader.dat");
 #endif
 
   // send
@@ -465,7 +459,7 @@ void NetThread::printHeader()
   cout << "com_data->data_type      :" << (int)com_data->data_type << endl;
   cout << "com_data->thread         :" << (int)com_data->thread << endl;
   cout << "com_data->sound_type     :" << (int)com_data->sound_type << endl;
-  cout << "com_data->encryption     :" << com_data->encryption << endl;
+  cout << "com_data->encryption     :" << (int)com_data->encryption << endl;
   cout << "com_data->data_size      :" << com_data->data_size << endl;
 
   ios::fmtflags flags = cout.flags();
@@ -488,7 +482,7 @@ void NetThread::printHeader()
   cout << "com_data->server_cx      :"  << com_data->server_cx << endl;
   cout << "com_data->server_cy      :"  << com_data->server_cy << endl;
   cout << "com_data->control        :"	<< com_data->control << endl;
-  cout << "com_data->mouse_move     :"	<< com_data->mouse_move << endl;
+  cout << "com_data->mouse_move     :"	<< (int)com_data->mouse_move << endl;
   cout << "com_data->mouse_x        :"  << com_data->mouse_x << endl;
   cout << "com_data->mouse_y        :"  << com_data->mouse_y << endl;
   cout << "com_data->mouse_left     :"  << (int)com_data->mouse_left << endl;
@@ -508,6 +502,20 @@ void NetThread::printHeader()
   cout << "com_data->sound_quality  :"	<< com_data->sound_quality << endl;
 
   cout << endl << flush;
+}
+
+// save protocol header
+void NetThread::saveHeader(const char* filename)
+{
+  fstream file;
+  file.open(filename, ios::out | ios::binary | ios::trunc);
+  if (file.is_open()){
+	file.write((char *)com_data, sizeof(COM_DATA));
+	file.close();
+  }
+  else {
+	// Yet: open error
+  }
 }
 
 } // end of namespace qtbrynhildr

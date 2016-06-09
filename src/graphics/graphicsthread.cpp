@@ -140,6 +140,18 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	counter_graphics++;
   }
 
+#if 0 // for TEST
+  static bool run1Time = true;
+  if (run1Time && counter_graphics == 5){
+	run1Time = false;
+	printHeader();
+	saveHeader("receivedHeader.dat");
+  }
+#endif // for TEST
+
+  // check received video_mode
+  // Yet
+
   return PROCESS_SUCCEEDED;
 }
 

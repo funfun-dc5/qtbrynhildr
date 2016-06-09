@@ -111,6 +111,9 @@ protected:
   // print protocol header
   void printHeader();
 
+  // save protocol header
+  void saveHeader(const char* filename);
+
 protected:
   // send eader
   long sendHeader(SOCKET sock, const char *buf, long size);

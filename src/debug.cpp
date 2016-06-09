@@ -38,6 +38,16 @@ bool checkProtocolHeader(bool outputLog)
 	cout << "sizeof(int) = " << sizeof(int) << endl << flush;
 	cout << "sizeof(long) = " << sizeof(long) << endl << flush;
   }
+#if __x86_64__ || __LP64__
+  if (sizeof(int) != 4){
+	cout << "sizeof(int) != 4" << endl << flush;
+	result = false;
+  }
+  else {
+	if (outputLog)
+	  cout << "sizeof(int) == 4 : ok" << endl << flush;
+  }
+#else // __x86_64__ || __LP64__
   if (sizeof(long) != 4){
 	cout << "sizeof(long) != 4" << endl << flush;
 	result = false;
@@ -46,6 +56,7 @@ bool checkProtocolHeader(bool outputLog)
 	if (outputLog)
 	  cout << "sizeof(long) == 4 : ok" << endl << flush;
   }
+#endif // __x86_64__ || __LP64__
 
   // check 3
   if (outputLog)

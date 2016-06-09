@@ -29,20 +29,17 @@
 #include "version.h"
 
 // for DEBUG
-#if defined(DEBUG)
 #include "debug.h"
-#endif
 
 //using namespace qtbrynhildr;
 
 int main(int argc, char *argv[])
 {
-#if defined(DEBUG)
-  // for DEBUG  
-  if (!qtbrynhildr::do_check()){
+  // for TEST and DEBUG
+  if (!qtbrynhildr::checkProtocolHeader(false)){
+	cout << "Failed: checkProtocolHeader(). header size or member offset error!" << endl << flush;
 	::exit(EXIT_FAILURE);
   }
-#endif
 
 #if defined(Q_OS_WIN)
   // disabled IME

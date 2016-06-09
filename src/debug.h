@@ -8,8 +8,8 @@
 namespace qtbrynhildr {
 
 // check basic parameter
-extern bool do_check();
-  
+extern bool checkProtocolHeader(bool outputLog);
+
 } // end of namespace qtbrynhildr
 
 #endif // DEBUG_H

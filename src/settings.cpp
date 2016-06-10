@@ -118,6 +118,8 @@ Settings::Settings(const char *iniFileName)
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
 
+  setOnFullScreenAtConnected(QTB_ONFULLSCREENATCONNECTED_DEFAULT);
+
   setOnHideMenuAndStatusBarAtFullScreen(QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN_DEFAULT);
 
   setOnShowFrameRate(QTB_ONSHOWFRAMERATE_DEFAULT);
@@ -311,6 +313,10 @@ void Settings::readSettings()
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
 									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
 
+  // load onFullScreenAtConnected
+  setOnFullScreenAtConnected(settings->value(QTB_ONFULLSCREENATCONNECTED,
+											 QTB_ONFULLSCREENATCONNECTED_DEFAULT).toBool());
+
   // load onHideMenuAndStatusBarAtFullScreen
   setOnHideMenuAndStatusBarAtFullScreen(settings->value(QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN,
 														QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN_DEFAULT).toBool());
@@ -503,6 +509,9 @@ void Settings::writeSettings()
   // save onShowStatusBar
   settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
 
+  // save onFullScreenAtConnected
+  settings->setValue(QTB_ONFULLSCREENATCONNECTED, onFullScreenAtConnected);
+
   // save onHideMenuAndStatusBarAtFullScreen
   settings->setValue(QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN, onHideMenuAndStatusBarAtFullScreen);
 
@@ -620,6 +629,7 @@ void Settings::printSettings() const
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
+  qDebug() << "FullScreenAtConnected   : " << onFullScreenAtConnected;
   qDebug() << "HideMenuAndStatusBarAtFullScreen : " << onHideMenuAndStatusBarAtFullScreen;
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
   qDebug() << "ShowPassword            : " << onShowPassword;

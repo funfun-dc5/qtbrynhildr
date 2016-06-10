@@ -86,6 +86,12 @@ public:
 	return debug;
   }
 
+  // get full Screen flag
+  bool getFullScreenFlag() const
+  {
+	return fullScreenFlag;
+  }
+
 #if QTB_RECORDER
   // recording flag
   bool getRecordingFlag() const
@@ -151,6 +157,9 @@ private:
 
   // debug
   const char *debug;
+
+  // full screen flag
+  bool fullScreenFlag;
 
 #if QTB_RECORDER
   // recording flag

@@ -195,8 +195,11 @@ private:
   // height of menu bar
   int heightOfMenuBar;
 
-  // full screel flag
+  // full screen flag
   bool onFullScreen;
+
+  // need calc full scaling factor
+  bool needCalcFullScalingFactor;
 
 #if defined(Q_OS_OSX)
   // previous KEYCODE_FLG

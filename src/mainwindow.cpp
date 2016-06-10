@@ -44,6 +44,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   heightOfStatusBarInHiding(0),
   heightOfMenuBar(0),
   onFullScreen(false),
+  needCalcFullScalingFactor(false),
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
 #endif // defined(Q_OS_OSX)
@@ -207,6 +208,10 @@ void MainWindow::refreshDesktop(QImage image)
 	resize(size.width(), size.height());
 
 	// refresh
+	if (needCalcFullScalingFactor){
+	  parent->refreshFullScreenScalingFactor();
+	  needCalcFullScalingFactor = false;
+	}
 	refreshDesktop(true);
   }
   else if (settings->getDesktop()->isChangedCurrentScreen()) {
@@ -282,6 +287,7 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 {
   if (QTB_DESKTOP_FULL_SCREEN){
 	this->onFullScreen = onFullScreen;
+	needCalcFullScalingFactor = onFullScreen;
   }
 }
 

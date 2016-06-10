@@ -254,6 +254,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
 
+// for onFullScreenAtConnected
+#define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
+#define QTB_ONFULLSCREENATCONNECTED_DEFAULT			false
+
 // for onHideMenuAndStatusBarAtFullScreen
 #define QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN			"onHideMenuAndStatusBarAtFullScreen"
 #define QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN_DEFAULT	true
@@ -1155,6 +1159,18 @@ public:
 	this->onShowStatusBar = onShowStatusBar;
   }
 
+  // get full screen flag
+  bool getOnFullScreenAtConnected() const
+  {
+	return onFullScreenAtConnected;
+  }
+
+  // set full screen flag
+  void setOnFullScreenAtConnected(bool onFullScreenAtConnected)
+  {
+	this->onFullScreenAtConnected = onFullScreenAtConnected;
+  }
+
   // get hide menu and status bar at full screen flag
   bool getOnHideMenuAndStatusBarAtFullScreen() const
   {
@@ -1639,6 +1655,9 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+  // full screen
+  volatile bool onFullScreenAtConnected;
 
   // hide menu and status bar at full screen
   volatile bool onHideMenuAndStatusBarAtFullScreen;

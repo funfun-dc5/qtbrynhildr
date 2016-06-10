@@ -100,6 +100,9 @@ public:
   // exit full screen
   void exitFullScreen();
 
+  // full screen scaling factor
+  void refreshFullScreenScalingFactor();
+
 public slots:
   // refresh window
   void refreshWindow();

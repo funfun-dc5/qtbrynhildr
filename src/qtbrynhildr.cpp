@@ -260,6 +260,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	}
   }
 
+  // full screen
+  settings->setOnFullScreenAtConnected(option->getFullScreenFlag());
+
 #if QTB_RECORDER
   // record
   settings->setOnRecordingControl(option->getRecordingFlag());
@@ -652,8 +655,7 @@ void QtBrynhildr::refreshWindow()
 	if (fullScreenMode){
 	  if (onShowMenuBar ^ settings->getOnShowMenuBar() ||
 		  onShowStatusBar ^ settings->getOnShowStatusBar()){
-		// change scaling factor
-		settings->setDesktopScalingFactor(getFullScreenScalingFactor(mainWindow->getDesktopSize()));
+		refreshFullScreenScalingFactor();
 	  }
 	}
   }
@@ -836,6 +838,16 @@ void QtBrynhildr::refreshRecordingAndReplayMenu()
   }
 }
 #endif // QTB_RECORDER
+
+// full screen scaling factor
+void QtBrynhildr::refreshFullScreenScalingFactor()
+{
+  // change scaling factor
+  qreal desktopScalingFactor = getFullScreenScalingFactor(mainWindow->getDesktopSize());
+  if (desktopScalingFactor != 0.0){
+	settings->setDesktopScalingFactor(desktopScalingFactor);
+  }
+}
 
 // get shutdown flag
 bool QtBrynhildr::getShutdownFlag() const
@@ -1684,6 +1696,11 @@ void QtBrynhildr::connected()
 
   // refresh menu
   refreshMenu();
+
+  // full screen at connected
+  if (settings->getOnFullScreenAtConnected()){
+	fullScreen();
+  }
 }
 
 // connected
@@ -2611,7 +2628,7 @@ void QtBrynhildr::toggleShowFrameRate()
 qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize)
 {
   if (!desktopSize.isValid()){
-	return (qreal)1.0;
+	return (qreal)0.0;
   }
 
   int desktopWidth = desktopSize.width();

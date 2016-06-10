@@ -35,6 +35,7 @@ Option::Option(int argc, char *argv[])
   initFlag(false),
 #endif // defined(QTB_DEV_TABLET)
   debug(0),
+  fullScreenFlag(false),
 #if QTB_RECORDER
   recordingFlag(false),
   recordingFileName(0),
@@ -229,6 +230,9 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		publicModeVersion = 6;
 	  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+	  else if (strncmp("fullscreen", optionName, sizeof("fullscreen")) == 0){
+		fullScreenFlag = true;
+	  }
 	  else if ((strncmp("version", optionName, sizeof("version")) == 0)||
 			   (strncmp("v", optionName, sizeof("v")) == 0)){
 		printVersion();
@@ -304,6 +308,11 @@ void Option::printHelp() const
   cout << "        " << "replay operations from <file>." << endl;
   cout << endl;
 #endif // QTB_RECORDER
+
+  // -fullscreen
+  cout << "-fullscreen" << endl;
+  cout << "        " << "full screen mode." << endl;
+  cout << endl;
 
   // -debug <on|off>
   cout << "-debug <on|off>" << endl;

@@ -59,6 +59,9 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   prevPos.x = 0;
   prevPos.y = 0;
 
+  // done check password flag
+  doneCheckPassword = false;
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE+2];
@@ -342,8 +345,14 @@ PROCESS_RESULT ControlThread::processForHeader()
   if (com_data->mode != sentMode){
 	switch(com_data->mode){
 	case MODE_RESULT_PASSWORD_ERROR:
-	  // password error
-	  return PROCESS_PASSWORD_ERROR;
+	  if (doneCheckPassword){
+		// connect error
+		return PROCESS_CONNECT_ERROR;
+	  }
+	  else {
+		// password error
+		return PROCESS_PASSWORD_ERROR;
+	  }
 	  break;
 	case MODE_RESULT_CONNECT_ERROR:
 	  // connect error
@@ -367,6 +376,9 @@ PROCESS_RESULT ControlThread::processForHeader()
 	//	cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
 	settings->setDesktopWidth(com_data->server_cx);
 	settings->setDesktopHeight(com_data->server_cy);
+	// checked password
+	doneCheckPassword = true;
+
 #if QTB_BRYNHILDR2_SUPPORT
 	if (settings->getOnDisableBrynhildr2Support()){
 	  // same as Brynhildr (<= 1.1.5)
@@ -447,6 +459,9 @@ void ControlThread::connectedToServer()
 
   // shift/alt/control status
   keydown = KEYDOWN_OFF;
+
+  // done check password flag
+  doneCheckPassword = false;
 
   // succeeded to connect
   settings->setConnected(true);

@@ -131,6 +131,10 @@ signals:
   void setClipboard(QString clipboardString);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+private:
+  // done check password flag
+  bool doneCheckPassword;
+
 #if QTB_PUBLIC_MODE6_SUPPORT
 private:
   // local buffer

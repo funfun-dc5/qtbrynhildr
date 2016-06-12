@@ -779,10 +779,13 @@ bool ControlThread::sendFile()
 	  fileSize -= sentDataSize;
 	}
 	if (fileSize > 0){
+	  int fragmentSize = fileSize % 1024;
+	  int paddingSize = ( fragmentSize < 16) ? 16 - fragmentSize : 0;
 	  // read to buffer
 	  file.read(buffer, fileSize);
 	  // send to server
-	  sentDataSize = sendData(sock_control, buffer, fileSize);
+	  sentDataSize = sendData(sock_control, buffer, fileSize + paddingSize);
+	  sentDataSize -= paddingSize;
 	  fileSize -= sentDataSize;
 	}
 	file.close();

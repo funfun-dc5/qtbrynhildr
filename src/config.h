@@ -89,12 +89,16 @@ const bool QTB_IN_TESTING				= false;
 // public mode 6 support
 #define QTB_PUBLIC_MODE6_SUPPORT	1
 
+#if QTB_PUBLIC_MODE6_SUPPORT
 // drag and drop support
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_DRAG_AND_DROP_SUPPORT	1
 #else // defined(QTB_DEV_DESKTOP)
 #define QTB_DRAG_AND_DROP_SUPPORT	0
 #endif // defined(QTB_DEV_DESKTOP)
+#else // QTB_PUBLIC_MODE6_SUPPORT
+#define QTB_DRAG_AND_DROP_SUPPORT	0
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #else // QTB_BRYNHILDR2_SUPPORT
 

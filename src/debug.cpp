@@ -98,6 +98,17 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy4[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy4 offset = " << offset;
+  if (offset == 61){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+	result = false;
+  }
+  offset = (char*)&(com_data.dummy5[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy5 offset = " << offset;
 #if QTB_EXTRA_BUTTON_SUPPORT
   if (offset == 65){
 #else // QTB_EXTRA_BUTTON_SUPPORT
@@ -110,21 +121,10 @@ bool checkProtocolHeader(bool outputLog)
 	cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy5[0]) - (char*)&com_data;
-  if (outputLog)
-	cout << "dummy5 offset = " << offset;
-  if (offset == 82){
-	if (outputLog)
-	  cout << " : ok" << endl;
-  }
-  else {
-	cout << " : ng" << endl;
-	result = false;
-  }
   offset = (char*)&(com_data.dummy6[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy6 offset = " << offset;
-  if (offset == 86){
+  if (offset == 82){
 	if (outputLog)
 	  cout << " : ok" << endl;
   }
@@ -135,7 +135,7 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy7[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy7 offset = " << offset;
-  if (offset == 96){
+  if (offset == 86){
 	if (outputLog)
 	  cout << " : ok" << endl;
   }
@@ -146,11 +146,7 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy8[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy8 offset = " << offset;
-#if QTB_BRYNHILDR2_SUPPORT
-  if (offset == 148){
-#else // QTB_BRYNHILDR2_SUPPORT
-  if (offset == 144){
-#endif // QTB_BRYNHILDR2_SUPPORT
+  if (offset == 93){
 	if (outputLog)
 	  cout << " : ok" << endl;
   }
@@ -161,7 +157,7 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy9[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy9 offset = " << offset;
-  if (offset == 193){
+  if (offset == 96){
 	if (outputLog)
 	  cout << " : ok" << endl;
   }
@@ -172,7 +168,7 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy10[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy10 offset = " << offset;
-  if (offset == 224){
+  if (offset == 141){
 	if (outputLog)
 	  cout << " : ok" << endl;
   }
@@ -183,7 +179,11 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy11[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy11 offset = " << offset;
-  if (offset == 229){
+#if QTB_BRYNHILDR2_SUPPORT
+  if (offset == 145){
+#else // QTB_BRYNHILDR2_SUPPORT
+  if (offset == 144){
+#endif // QTB_BRYNHILDR2_SUPPORT
 	if (outputLog)
 	  cout << " : ok" << endl;
   }
@@ -194,6 +194,50 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy12[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy12 offset = " << offset;
+  if (offset == 193){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+	result = false;
+  }
+  offset = (char*)&(com_data.dummy13[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy13 offset = " << offset;
+  if (offset == 224){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+	result = false;
+  }
+  offset = (char*)&(com_data.dummy14[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy14 offset = " << offset;
+  if (offset == 229){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+	result = false;
+  }
+  offset = (char*)&(com_data.dummy15[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy15 offset = " << offset;
+  if (offset == 233){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+	result = false;
+  }
+  offset = (char*)&(com_data.dummy16[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy16 offset = " << offset;
   if (offset == 236){
 	if (outputLog)
 	  cout << " : ok" << endl;

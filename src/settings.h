@@ -769,7 +769,7 @@ public:
 	  "VIDEO_QUALITY_MAXIMUM",
 	};
 
-	return stringTable[videoQuality];
+	return stringTable[(int)videoQuality];
   }
 
 #if QTB_BRYNHILDR2_SUPPORT
@@ -862,7 +862,7 @@ public:
 	  "SOUND_QUALITY_MAXIMUM",
 	};
 
-	return stringTable[soundQuality];
+	return stringTable[(int)soundQuality];
   }
 
   // get sound capture

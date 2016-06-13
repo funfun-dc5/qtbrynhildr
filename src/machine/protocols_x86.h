@@ -51,9 +51,9 @@ typedef long	CHECK_DIGIT_VALUE;
 typedef long	SAMPLERATE;
 
 // control
-typedef long	CONTROL;	
-#define CONTROL_OFF			0L	// control off
-#define CONTROL_ON			1L	// control on
+typedef char	CONTROL;
+#define CONTROL_OFF			0	// control off
+#define CONTROL_ON			1	// control on
 
 // mouse move
 #if QTB_EXTRA_BUTTON_SUPPORT
@@ -92,9 +92,9 @@ typedef long	KEYDOWN;
 #define KEYDOWN_ON	1L	// key down
 
 // sound capture
-typedef long	SOUND_CAPTURE;
-#define	SOUND_CAPTURE_DIRECT_SOUND	0L	// Direct Sound
-#define	SOUND_CAPTURE_CORE_AUDIO	1L	// Core Audio
+typedef char	SOUND_CAPTURE;
+#define	SOUND_CAPTURE_DIRECT_SOUND	0	// Direct Sound
+#define	SOUND_CAPTURE_CORE_AUDIO	1	// Core Audio
 
 // video mode
 typedef char VIDEO_MODE;
@@ -104,19 +104,19 @@ typedef char VIDEO_MODE;
 #define VIDEO_MODE_COMPRESS			3	// Compress   (VP8)
 
 // video quality
-typedef long	VIDEO_QUALITY;
-#define VIDEO_QUALITY_MINIMUM		1L	// minimum quality
-#define VIDEO_QUALITY_LOW			3L	// low quality
-#define VIDEO_QUALITY_STANDARD		5L	// standard quality
-#define VIDEO_QUALITY_HIGH			7L	// high quality
-#define VIDEO_QUALITY_MAXIMUM		9L	// maximum quality
+typedef char	VIDEO_QUALITY;
+#define VIDEO_QUALITY_MINIMUM		1	// minimum quality
+#define VIDEO_QUALITY_LOW			3	// low quality
+#define VIDEO_QUALITY_STANDARD		5	// standard quality
+#define VIDEO_QUALITY_HIGH			7	// high quality
+#define VIDEO_QUALITY_MAXIMUM		9	// maximum quality
 
 #if QTB_BRYNHILDR2_SUPPORT
 // mouse cursor
-typedef long	MOUSE_CURSOR;
-#define MOUSE_CURSOR_AUTO			0L	// auto
-#define MOUSE_CURSOR_ON				1L	// display mouse cursor
-#define MOUSE_CURSOR_OFF			2L	// undisplay mouse cursor
+typedef char	MOUSE_CURSOR;
+#define MOUSE_CURSOR_AUTO			0	// auto
+#define MOUSE_CURSOR_ON				1	// display mouse cursor
+#define MOUSE_CURSOR_OFF			2	// undisplay mouse cursor
 
 // gamepad value
 typedef long	GAMEPAD_VALUE;
@@ -134,12 +134,12 @@ typedef	char	MODE;
 #define MODE_RESULT_CONNECT_WAIT		-2	// connect wait
 
 // sound quality
-typedef	long	SOUND_QUALITY;
-#define SOUND_QUALITY_MINIMUM	1L	// minimum quality
-#define SOUND_QUALITY_LOW		2L	// low quality
-#define SOUND_QUALITY_STANDARD	3L	// standard quality
-#define SOUND_QUALITY_HIGH		4L	// high quality
-#define SOUND_QUALITY_MAXIMUM	5L	// maximum quality
+typedef	char	SOUND_QUALITY;
+#define SOUND_QUALITY_MINIMUM	1	// minimum quality
+#define SOUND_QUALITY_LOW		2	// low quality
+#define SOUND_QUALITY_STANDARD	3	// standard quality
+#define SOUND_QUALITY_HIGH		4	// high quality
+#define SOUND_QUALITY_MAXIMUM	5	// maximum quality
 
 // position
 typedef	long	POS;

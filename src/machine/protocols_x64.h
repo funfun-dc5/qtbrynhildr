@@ -51,7 +51,7 @@ typedef int		CHECK_DIGIT_VALUE;
 typedef int		SAMPLERATE;
 
 // control
-typedef int		CONTROL;	
+typedef char	CONTROL;
 #define CONTROL_OFF			0	// control off
 #define CONTROL_ON			1	// control on
 
@@ -90,19 +90,19 @@ typedef int	KEYDOWN;
 #define KEYDOWN_ON	1	// key down
 
 // sound capture
-typedef int		SOUND_CAPTURE;
+typedef char	SOUND_CAPTURE;
 #define	SOUND_CAPTURE_DIRECT_SOUND	0	// Direct Sound
 #define	SOUND_CAPTURE_CORE_AUDIO	1	// Core Audio
 
 // video mode
-typedef char VIDEO_MODE;
+typedef char	VIDEO_MODE;
 #define VIDEO_MODE_SPEED			0	// Speed      (GBVC) : NOT supoort by public mode
 #define VIDEO_MODE_HYBRID			1	// Hybrid     (GBMJ) : NOT supoort by public mode
 #define VIDEO_MODE_MJPEG			2	// MotionJPEG
 #define VIDEO_MODE_COMPRESS			3	// Compress   (VP8)
 
 // video quality
-typedef int		VIDEO_QUALITY;
+typedef char	VIDEO_QUALITY;
 #define VIDEO_QUALITY_MINIMUM		1	// minimum quality
 #define VIDEO_QUALITY_LOW			3	// low quality
 #define VIDEO_QUALITY_STANDARD		5	// standard quality
@@ -111,7 +111,7 @@ typedef int		VIDEO_QUALITY;
 
 #if QTB_BRYNHILDR2_SUPPORT
 // mouse cursor
-typedef int	MOUSE_CURSOR;
+typedef char	MOUSE_CURSOR;
 #define MOUSE_CURSOR_AUTO			0	// auto
 #define MOUSE_CURSOR_ON				1	// display mouse cursor
 #define MOUSE_CURSOR_OFF			2	// undisplay mouse cursor
@@ -132,7 +132,7 @@ typedef	char	MODE;
 #define MODE_RESULT_CONNECT_WAIT		-2	// connect wait
 
 // sound quality
-typedef	int		SOUND_QUALITY;
+typedef	char	SOUND_QUALITY;
 #define SOUND_QUALITY_MINIMUM	1	// minimum quality
 #define SOUND_QUALITY_LOW		2	// low quality
 #define SOUND_QUALITY_STANDARD	3	// standard quality

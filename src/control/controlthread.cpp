@@ -817,8 +817,8 @@ bool ControlThread::sendFile()
 	  emit setFileTransferProgressBarValue(transferFileProgress);
 	}
 	if (fileSize > 0){
-	  int fragmentSize = fileSize % 1024;
-	  int paddingSize = ( fragmentSize < 16) ? 16 - fragmentSize : 0;
+	  int fragmentSize = fileSize & 0x3FF; // fileSize % 1024(10bit)
+	  int paddingSize = (fragmentSize < 16) ? 16 - fragmentSize : 0;
 	  // read to buffer
 	  file.read(buffer, fileSize);
 	  // send to server

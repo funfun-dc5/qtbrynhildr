@@ -261,7 +261,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   }
 
   // full screen
-  settings->setOnFullScreenAtConnected(option->getFullScreenFlag());
+  if (option->getFullScreenFlag()){
+	settings->setOnFullScreenAtConnected(true);
+  }
 
 #if QTB_RECORDER
   // record

@@ -63,6 +63,9 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   // show password field
   checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
 
+  // show password field
+  checkBox_fullScreen->setCheckState(settings->getOnFullScreenAtConnected() ? Qt::Checked : Qt::Unchecked);
+
   // resetting
   resetting();
 }
@@ -152,6 +155,20 @@ void ConnectToServerDialog::on_checkBox_showPassword_stateChanged(int state)
   }
 }
 
+// full screen field
+void ConnectToServerDialog::on_checkBox_fullScreen_stateChanged(int state)
+{
+  if (outputLog){
+	cout << "state Changed : full Screen" << endl << flush; // for DEBUG
+	if (state == Qt::Checked){
+	  cout << "full Screen: checked" << endl << flush; // for DEBUG
+	}
+	else {
+	  cout << "full Screen: unchecked" << endl << flush; // for DEBUG
+	}
+  }
+}
+
 // accept button
 void ConnectToServerDialog::accept()
 {
@@ -175,6 +192,9 @@ void ConnectToServerDialog::accept()
 
   // show password field
   settings->setOnShowPassword(checkBox_showPassword->checkState() == Qt::Checked);
+
+  // full screen field
+  settings->setOnFullScreenAtConnected(checkBox_fullScreen->checkState() == Qt::Checked);
 
   hide();
 }

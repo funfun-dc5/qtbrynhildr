@@ -43,6 +43,8 @@ private slots:
   void on_lineEdit_password_textChanged();
   // show password field
   void on_checkBox_showPassword_stateChanged(int state);
+  // show password field
+  void on_checkBox_fullScreen_stateChanged(int state);
 
   // accept button
   void accept();

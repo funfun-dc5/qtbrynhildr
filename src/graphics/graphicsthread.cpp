@@ -150,7 +150,9 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 #endif // for TEST
 
   // check received video_mode
-  // Yet
+  if (com_data->video_mode != VIDEO_MODE_MJPEG){
+	return PROCESS_VIDEO_MODE_ERROR;
+  }
 
   return PROCESS_SUCCEEDED;
 }

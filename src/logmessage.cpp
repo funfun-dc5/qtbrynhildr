@@ -229,6 +229,12 @@ void LogMessage::outputMessage(int msgID)
 					QMessageBox::Ok,
 					QMessageBox::NoButton);
 	break;
+  case QTB_MSG_NOTSUPPORT_VIDEO_MODE:
+	criticalMessage(PHASE_QTBRYNHILDR,
+					tr("Not support Video Codec!"),
+					QMessageBox::Ok,
+					QMessageBox::NoButton);
+	break;
   case QTB_MSG_ALREADY_CONNECT_ANOTHER_CLIENT:
 	criticalMessage(PHASE_QTBRYNHILDR,
 					tr("Already connected another client!"),

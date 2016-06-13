@@ -138,6 +138,15 @@ void NetThread::run()
 		emit outputLogMessage(QTB_MSG_ALREADY_CONNECT_ANOTHER_CLIENT);
 		break;
 	  }
+	  if (result_process == PROCESS_VIDEO_MODE_ERROR){
+		// error
+		cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
+		shutdownConnection();
+		runThread = false;
+		emit outputLogMessage(QTB_MSG_NOTSUPPORT_VIDEO_MODE);
+		emit networkError(true);
+		break;
+	  }
 	  if (result_process == PROCESS_UNKNOWN_ERROR){
 		// error
 		cout << "[" << name << "]" << " Unkown Error: processForHeader()" << endl << flush; // error

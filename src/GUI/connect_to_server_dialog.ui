@@ -204,6 +204,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QCheckBox" name="checkBox_fullScreen">
+      <property name="text">
+       <string>Full Screen</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QDialogButtonBox" name="buttonBox">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>

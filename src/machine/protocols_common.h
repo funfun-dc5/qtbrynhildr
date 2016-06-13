@@ -7,9 +7,14 @@
 // Common Header
 #include "common/common.h"
 
+// etc
+typedef char		BYTE;	// 1 byte
+typedef short int	SHORT;	// 2 byte
+typedef int			WORD;	// 4 byte
+
 // Protocol Header Structure (256 byte fixed)
 typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatibility
-  DATA_TYPE			data_type;			// fixed(DATA_TYPE_DATA)
+  DATA_TYPE			data_type;
   THREAD			thread;
   BYTE				dummy1[1];			// padding 1 byte
   SOUND_TYPE		sound_type;
@@ -25,7 +30,7 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   SIZE				image_cy;			// hight of image
   SIZE				server_cx;			// width of image for server.
   SIZE				server_cy;			// hight of image for server.
-  CONTROL			control;			// fixed(CONTROL_ON)
+  CONTROL			control;
 #if QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_MOVE		mouse_move;			// 1 byte
   BYTE				dummy4[1];
@@ -67,23 +72,26 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   POS				client_scroll_x;
   POS				client_scroll_y;
 #if QTB_BRYNHILDR2_SUPPORT
-  BYTE				dummy9[20];			// padding 20 bytes
+  VIDEO_MODE		video_mode;
+  BYTE				dummy9[19];			// padding 19 bytes
   SERVER_VERSION	server_version;		// version of server
 #else // QTB_BRYNHILDR2_SUPPORT
-  BYTE				dummy9[24];			// padding 24 bytes
+  VIDEO_MODE		video_mode;
+  BYTE				dummy9[23];			// padding 23 bytes
 #endif // QTB_BRYNHILDR2_SUPPORT
   ZOOM				zoom;
   BYTE				dummy10[4];			// padding 4 bytes
   MODE				mode;
+  BYTE				dummy11[3];			// padding 3 bytes
   SOUND_QUALITY		sound_quality;
 #if QTB_BRYNHILDR2_SUPPORT
-  BYTE				dummy11[4];			// padding 4 bytes
+  BYTE				dummy12[4];			// padding 4 bytes
   GAMEPAD_VALUE		gamepad5;			// gamepad (Pov)
   GAMEPAD_VALUE		gamepad6;			// gamepad (Buttons)
   GAMEPAD_VALUE		gamepad7;			// gamepad (Upos)
   GAMEPAD_VALUE		gamepad8;			// gamepad (Vpos)
 #else // QTB_BRYNHILDR2_SUPPORT
-  BYTE				dummy11[20];		// padding 20 bytes
+  BYTE				dummy12[20];		// padding 20 bytes
 #endif // QTB_BRYNHILDR2_SUPPORT
 } COM_DATA;
 

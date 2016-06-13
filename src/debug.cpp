@@ -161,7 +161,7 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy9[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy9 offset = " << offset;
-  if (offset == 192){
+  if (offset == 193){
 	if (outputLog)
 	  cout << " : ok" << endl;
   }
@@ -183,6 +183,17 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy11[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy11 offset = " << offset;
+  if (offset == 229){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+	result = false;
+  }
+  offset = (char*)&(com_data.dummy12[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy12 offset = " << offset;
   if (offset == 236){
 	if (outputLog)
 	  cout << " : ok" << endl;

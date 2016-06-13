@@ -94,6 +94,13 @@ typedef int		SOUND_CAPTURE;
 #define	SOUND_CAPTURE_DIRECT_SOUND	0	// Direct Sound
 #define	SOUND_CAPTURE_CORE_AUDIO	1	// Core Audio
 
+// video mode
+typedef char VIDEO_MODE;
+#define VIDEO_MODE_SPEED			0	// Speed      (GBVC) : NOT supoort by public mode
+#define VIDEO_MODE_HYBRID			1	// Hybrid     (GBMJ) : NOT supoort by public mode
+#define VIDEO_MODE_MJPEG			2	// MotionJPEG
+#define VIDEO_MODE_COMPRESS			3	// Compress   (VP8)
+
 // video quality
 typedef int		VIDEO_QUALITY;
 #define VIDEO_QUALITY_MINIMUM		1	// minimum quality
@@ -114,13 +121,13 @@ typedef int	GAMEPAD_VALUE;
 #endif // QTB_BRYNHILDR2_SUPPORT
 
 // mode
-typedef	int		MODE;
+typedef	char	MODE;
 #define MODE_PUBLIC5					5	// public mode 5
 #if QTB_PUBLIC_MODE6_SUPPORT
 #define MODE_PUBLIC6					6	// public mode 6
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 // result value
-#define MODE_RESULT_PASSWORD_ERROR		0	// password error
+#define MODE_RESULT_PASSWORD_ERROR		 0	// password error
 #define MODE_RESULT_CONNECT_ERROR		-1	// connect error
 #define MODE_RESULT_CONNECT_WAIT		-2	// connect wait
 
@@ -138,12 +145,6 @@ typedef	int		POS;
 typedef	int		SIZE;
 // zoom
 typedef double	ZOOM;
-
-// etc
-typedef char		BYTE;	// 1 byte
-typedef short int	SHORT;	// 2 byte
-typedef int			WORD;	// 4 byte
-typedef long		DWORD;	// 8 byte
 
 // Protocol Header Structure (256 byte fixed)
 #include "protocols_common.h"

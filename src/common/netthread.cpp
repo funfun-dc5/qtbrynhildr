@@ -307,7 +307,7 @@ SOCKET NetThread::socketToServer()
   return sock;
 }
 
-// send data
+// send header
 long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 {
   //                                      0123456789ABCDEF
@@ -349,8 +349,27 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 // send data
 long NetThread::sendData(SOCKET sock, const char *buf, long size)
 {
+#if 1 // for TEST
+  long sent_size = 0;
+
+  while(sent_size < size){
+	long ret = send(sock, buf + sent_size, size - sent_size, 0);
+#if 0 // for TEST
+	if (ret < 0)
+	  cout << "errno = " << errno << endl << flush;
+#endif
+	if (ret > 0){
+	  sent_size += ret;
+	}
+	else {
+	  return -1;
+	}
+  }
+  return sent_size;
+#else // for TEST
   // send
   return send(sock, buf, size, 0);
+#endif // for TEST
 }
 
 // receive data

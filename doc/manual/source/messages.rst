@@ -24,3 +24,10 @@
 4. 「すでに他のクライアントが接続しています！(Already connected another client!)」
 
  すでにサーバに他のクライアントが接続しているかもしれません。
+
+5. 「パブリックモードでサポートしていないビデオコーデックです!(Not support Video Codec!)」
+
+ パブリックモードでサポートしていないビデオコーデックがサーバで指定されています。 [#]_
+ brynhildr.iniでvideocodec=2(MotionJPEG)と指定もしくはvideocodec自体の指定がないことを確認してください。
+
+ .. [#] 現在のところvideocode=0(Speed)/1(Hybrid)/3(Compress)はサポートしていません。

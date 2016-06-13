@@ -636,6 +636,7 @@ onShowFrameRate=true
 onShowPassword=false
 onClipCursor=false
 onDisableTransferFile=false
+onShowTotalProgressForTransferFile=false
 onDisableTransferFileByDragAndDrop=false
 onDisableTransferClipboard=false
 graphicsBufferSize=1048576
@@ -857,6 +858,12 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 10. 変更履歴
 ----------------------------------------------------------------------
 Ver.1.5.3 : 2016/xx/xx
+            [新規機能]
+             ・サーバへのファイル送信時にすべての転送処理に対しての進捗を表示する機能を追加
+               標準では無効となっているため、.iniを以下のように変更する必要がある
+
+               onShowTotalProgressForTransferFile=true
+
             [その他変更]
              ・Qt5.6.1でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
 

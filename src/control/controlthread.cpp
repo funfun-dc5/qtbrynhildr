@@ -755,7 +755,7 @@ bool ControlThread::sendFile()
   SIZE sentDataSize = 0;
 
   // initialize progress bar
-  if (false){
+  if (settings->getOnShowTotalProgressForTransferFile()){
 	if (transferFileProgress == 0){
 	  transferFileProgressUnit = 100/settings->getSendFileCount();
 	}
@@ -844,7 +844,7 @@ bool ControlThread::sendFile()
   //  cout << "SendFileCount = " << settings->getSendFileCount() << endl << flush;
 
   // reset progress bar
-  if (false){
+  if (settings->getOnShowTotalProgressForTransferFile()){
 	if (sendFileCount == 0){
 	  transferFileProgress = 0;
 	  emit setFileTransferProgressBarValue(100);

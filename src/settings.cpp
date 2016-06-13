@@ -130,6 +130,7 @@ Settings::Settings(const char *iniFileName)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   setOnDisableTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
+  setOnShowTotalProgressForTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
 #if QTB_DRAG_AND_DROP_SUPPORT
   setOnDisableTransferFileByDragAndDrop(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
@@ -337,6 +338,9 @@ void Settings::readSettings()
   // load onDisableTansferFile
   setOnDisableTransferFile(settings->value(QTB_ONDISABLETRANSFERFILE,
 										   QTB_ONDISABLETRANSFERFILE_DEFAULT).toBool());
+  // load onShowTotalProgressForTransferFile
+  setOnShowTotalProgressForTransferFile(settings->value(QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE,
+														QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE_DEFAULT).toBool());
 #if QTB_DRAG_AND_DROP_SUPPORT
   // load onDisableTansferFileByDragAndDrop
   setOnDisableTransferFileByDragAndDrop(settings->value(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP,
@@ -527,6 +531,8 @@ void Settings::writeSettings()
 #if QTB_PUBLIC_MODE6_SUPPORT
   // save onDisableTransferFile
   settings->setValue(QTB_ONDISABLETRANSFERFILE, onDisableTransferFile);
+  // save onShowTotalProgressForTransferFile
+  settings->setValue(QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE, onShowTotalProgressForTransferFile);
 #if QTB_DRAG_AND_DROP_SUPPORT
   // save onDisableTransferFileByDragAndDrop
   settings->setValue(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP, onDisableTransferFileByDragAndDrop);
@@ -636,6 +642,7 @@ void Settings::printSettings() const
   qDebug() << "ClipCursor              : " << onClipCursor;
 #if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "DisableTransferFile     : " << onDisableTransferFile;
+  qDebug() << "ShowTotalProgressForTransferFile     : " << onShowTotalProgressForTransferFile;
 #if QTB_DRAG_AND_DROP_SUPPORT
   qDebug() << "DisableTransferFileByDragAndDrop     : " << onDisableTransferFileByDragAndDrop;
 #endif // QTB_DRAG_AND_DROP_SUPPORT

@@ -279,6 +279,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
 #define QTB_ONDISABLETRANSFERFILE_DEFAULT	false
 
+// for onShowTotalProgressForTransferFile
+#define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE			"onShowTotalProgressForTransferFile"
+#define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE_DEFAULT	false
+
 #if QTB_DRAG_AND_DROP_SUPPORT
 // for onDisableTransferFileByDragAndDrop
 #define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP			"onDisableTransferFileByDragAndDrop"
@@ -1306,6 +1310,18 @@ public:
 	this->onDisableTransferFile = onDisableTransferFile;
   }
 
+  // get show total progress for transfer file flag
+  bool getOnShowTotalProgressForTransferFile() const
+  {
+	return onShowTotalProgressForTransferFile;
+  }
+
+  // set show total progress for transfer file flag
+  void setOnShowTotalProgressForTransferFile(bool onShowTotalProgressForTransferFile)
+  {
+	this->onShowTotalProgressForTransferFile = onShowTotalProgressForTransferFile;
+  }
+
 #if QTB_DRAG_AND_DROP_SUPPORT
   // get disable transfer file by drag and drop flag
   bool getOnDisableTransferFileByDragAndDrop() const
@@ -1696,6 +1712,9 @@ private:
 #if QTB_PUBLIC_MODE6_SUPPORT
   // disable send/receive file
   volatile bool onDisableTransferFile;
+
+  // disable send/receive file
+  volatile bool onShowTotalProgressForTransferFile;
 
   // disable send/receive file by drag and drop
   volatile bool onDisableTransferFileByDragAndDrop;

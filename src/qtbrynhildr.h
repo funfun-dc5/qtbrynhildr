@@ -22,6 +22,9 @@
 #include <QMenu>
 #include <QObject>
 #include <QPalette>
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <QProgressBar>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QScrollArea>
 #include <QSize>
 #include <QString>
@@ -130,6 +133,9 @@ public slots:
 #if QTB_PUBLIC_MODE6_SUPPORT
   // set clipboard
   void setClipboard(QString clipboardString);
+
+  // set progress bar value for transfer file
+  void setFileTransferProgressBarValue(int value);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // output Log Message
@@ -627,6 +633,11 @@ private:
   // current status
   bool onShowMenuBar;
   bool onShowStatusBar;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // progress bar
+  QProgressBar	*progressBar;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // height of menu bar
   int heightOfMenuBar;

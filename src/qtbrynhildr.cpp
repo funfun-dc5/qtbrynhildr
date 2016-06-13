@@ -171,6 +171,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   fullScreenMode(false),
   onShowMenuBar(false),
   onShowStatusBar(false),
+#if QTB_PUBLIC_MODE6_SUPPORT
+  progressBar(0),
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   heightOfMenuBar(0),
   heightOfStatusBar(0)
 {
@@ -510,6 +513,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   connect(controlThread,
 		  SIGNAL(setClipboard(QString)),
 		  SLOT(setClipboard(QString)));
+  connect(controlThread,
+		  SIGNAL(setFileTransferProgressBarValue(int)),
+		  SLOT(setFileTransferProgressBarValue(int)));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   connect(controlThread,
@@ -925,6 +931,21 @@ void QtBrynhildr::setClipboard(QString clipboardString)
   }
   else {
 	cout << "clipboard is null" << endl << flush;
+  }
+}
+
+// set progress bar value for transfer file
+void QtBrynhildr::setFileTransferProgressBarValue(int value)
+{
+  if (value > 0){
+	progressBar->setVisible(true);
+  }
+
+  if (value >= 100){
+	progressBar->setVisible(false);
+  }
+  else {
+	progressBar->setValue(value);
   }
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -1558,6 +1579,18 @@ void QtBrynhildr::createStatusBar()
   frameRateLabel = new QLabel;
   frameRateLabel->setAlignment(Qt::AlignRight);
   frameRateLabel->setText(" "); // dummy text
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // progress bar for transfer file
+  progressBar = new QProgressBar(this);
+  progressBar->setFixedWidth(this->width()/4);
+  progressBar->setFixedHeight(10);
+  progressBar->setValue(80); // for TEST
+  progressBar->setRange(0,100);
+  progressBar->setTextVisible(true);
+  progressBar->setVisible(false);
+  statusBar()->addPermanentWidget(progressBar);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   statusBar()->addWidget(connectionLabel);
   statusBar()->addPermanentWidget(frameRateLabel);

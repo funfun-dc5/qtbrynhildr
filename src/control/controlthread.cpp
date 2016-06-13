@@ -69,6 +69,11 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   // clipboard top address
   clipboardTop = &buffer[16];
 
+  // transfer file progress
+  transferFileProgress = 0;
+  // transfer file progress unit
+  transferFileProgressUnit = 0;
+
   // NTFS utility
   ntfs = new NTFS();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -107,6 +112,23 @@ CONNECT_RESULT ControlThread::connectToServer()
   if (sock_control == INVALID_SOCKET){
 	return CONNECT_FAILED;
   }
+
+#if 0 // for TEST
+  int ret,flag;
+  flag = 1;
+  ret = setsockopt(sock_control, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(flag) );
+  if (ret == -1){
+	cout << "Couldn't setsockopt(TCP_NODELAY)" << endl << flush;
+  }
+#endif // for TEST
+#if 0 // for TEST
+  int ret,sock_buf_size;
+  sock_buf_size = 0;
+  ret = setsockopt(sock_control, SOL_SOCKET, SO_SNDBUF, (char *)&sock_buf_size, sizeof(sock_buf_size));
+  if (ret == -1){
+	cout << "Failed: setsockopt()" << endl << flush;
+  }
+#endif // for TEST
 
   // create objects
   // header
@@ -728,10 +750,22 @@ bool ControlThread::sendFile()
   char fileTimeStamp[24+1] = {0};
 
   SIZE fileSize = com_data->data_size;
-  SIZE sentDataSize;
+  SIZE fileSizeOrg = com_data->data_size;
+  SIZE sentDataSizeTotal = 0;
+  SIZE sentDataSize = 0;
+
+  // initialize progress bar
+  if (false){
+	if (transferFileProgress == 0){
+	  transferFileProgressUnit = 100/settings->getSendFileCount();
+	}
+  }
+  else {
+	transferFileProgressUnit = 100;
+  }
 
   // send filename
-  int sendFileCount = settings->getSendFileCount()-1;
+  int sendFileCount = settings->getSendFileCount() - 1;
   QString fileName = settings->getSendFileNames().at(sendFileCount);
   QFileInfo fileInfo(fileName);
   strncpy(filename, qPrintable(fileInfo.fileName()), 260);
@@ -776,7 +810,11 @@ bool ControlThread::sendFile()
 	  file.read(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	  // send to server
 	  sentDataSize = sendData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  sentDataSizeTotal += sentDataSize;
 	  fileSize -= sentDataSize;
+	  // set progress bar
+	  transferFileProgress += transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
+	  emit setFileTransferProgressBarValue(transferFileProgress);
 	}
 	if (fileSize > 0){
 	  int fragmentSize = fileSize % 1024;
@@ -786,7 +824,11 @@ bool ControlThread::sendFile()
 	  // send to server
 	  sentDataSize = sendData(sock_control, buffer, fileSize + paddingSize);
 	  sentDataSize -= paddingSize;
+	  sentDataSizeTotal += sentDataSize;
 	  fileSize -= sentDataSize;
+	  // set progress bar
+	  transferFileProgress += transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
+	  emit setFileTransferProgressBarValue(transferFileProgress);
 	}
 	file.close();
   }
@@ -800,6 +842,18 @@ bool ControlThread::sendFile()
   settings->setSendFileCount(sendFileCount);
   //  cout << "SendFile = " << qPrintable(fileName) << endl << flush;
   //  cout << "SendFileCount = " << settings->getSendFileCount() << endl << flush;
+
+  // reset progress bar
+  if (false){
+	if (sendFileCount == 0){
+	  transferFileProgress = 0;
+	  emit setFileTransferProgressBarValue(100);
+	}
+  }
+  else {
+	  transferFileProgress = 0;
+	  emit setFileTransferProgressBarValue(100);
+  }
 
   // check result
   if (fileSize == 0){
@@ -817,7 +871,14 @@ bool ControlThread::receiveFile()
   char fileTimeStamp[24+1]; // dummy read
 
   SIZE fileSize = com_data->data_size;
+  SIZE fileSizeOrg = com_data->data_size;
+  SIZE receivedDataSizeTotal = 0;
   SIZE receivedDataSize = 0;
+
+  // initialize progress bar
+  if (transferFileProgress == 0){
+	transferFileProgressUnit = 100;
+  }
 
   // get filename
   receivedDataSize = receiveData(sock_control, filename, 260);
@@ -834,18 +895,30 @@ bool ControlThread::receiveFile()
 	  receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	  if (receivedDataSize > 0){
 		file.write(buffer, receivedDataSize);
+		receivedDataSizeTotal += receivedDataSize;
 		fileSize -= receivedDataSize;
+		// set progress bar
+		transferFileProgress += transferFileProgressUnit*(float)receivedDataSizeTotal/fileSizeOrg;
+		emit setFileTransferProgressBarValue(transferFileProgress);
 	  }
 	}
 	if (fileSize > 0){
 	  receivedDataSize = receiveData(sock_control, buffer, fileSize);
 	  if (receivedDataSize > 0){
 		file.write(buffer, receivedDataSize);
+		receivedDataSizeTotal += receivedDataSize;
 		fileSize -= receivedDataSize;
+		// set progress bar
+		transferFileProgress += transferFileProgressUnit*(float)receivedDataSizeTotal/fileSizeOrg;
+		emit setFileTransferProgressBarValue(transferFileProgress);
 	  }
 	}
 	file.close();
   }
+
+  // reset progress bar
+  transferFileProgress = 0;
+  emit setFileTransferProgressBarValue(100);
 
   // check result
   if (fileSize == 0){

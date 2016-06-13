@@ -129,6 +129,9 @@ signals:
 #if QTB_PUBLIC_MODE6_SUPPORT
   // set clipboard
   void setClipboard(QString clipboardString);
+
+  // set progress bar value for transfer file
+  void setFileTransferProgressBarValue(int value);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 private:
@@ -142,6 +145,11 @@ private:
 
   // clipboard top address
   char *clipboardTop;
+
+  // transfer file progress
+  int transferFileProgress;
+  // send file progress unit
+  int transferFileProgressUnit;
 
   // ntfs utility
   NTFS *ntfs;

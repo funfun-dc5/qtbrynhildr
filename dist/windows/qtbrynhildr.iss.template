@@ -1,7 +1,7 @@
 ;----------------------------------------------------------------------
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
-#define AppVer "1.5.1"
+#define AppVer "1.5.2"
 #define RCName ""
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
@@ -69,7 +69,7 @@ AppReadmeFile="{app}\ReadMe.txt"
 ;製品更新先のURL
 ;;AppUpdatesURL=http://mcz-xoxo.cocolog-nifty.com/blog/
 ;アプリケーションの説明
-AppComments=A client for Brynhildr/Siegfried (public mode)
+AppComments=A client software for Brynhildr (public mode)
 
 [Languages]
 Name: japanese; MessagesFile: compiler:Languages\Japanese.isl

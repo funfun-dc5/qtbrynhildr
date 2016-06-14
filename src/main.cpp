@@ -52,9 +52,11 @@ int main(int argc, char *argv[])
   QIcon windowIcon(QPixmap(QTB_ICON_FILENAME));
   app.setWindowIcon(windowIcon);
 
-#if !QTB_BRYNHILDR2_SUPPORT
   // set cursor
+#if !QTB_BRYNHILDR2_SUPPORT
   app.setOverrideCursor(Qt::CrossCursor);
+#else // !QTB_BRYNHILDR2_SUPPORT
+  app.setOverrideCursor(Qt::ArrowCursor);
 #endif // !QTB_BRYNHILDR2_SUPPORT
 
   // for Translation
@@ -110,5 +112,11 @@ int main(int argc, char *argv[])
 #endif /* QTB_SPLASH_SCREEN */
 
   // event loop
-  return app.exec();
+  int result;
+  result = app.exec();
+
+  // restore cursor
+  app.restoreOverrideCursor();
+
+  return result;
 }

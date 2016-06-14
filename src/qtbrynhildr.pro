@@ -24,7 +24,7 @@ FORMS += GUI/log_view_dialog.ui
 win32 {
 DEFINES += QWT_DLL
 RC_ICONS = images/qtbrynhildr64.ico
-RC_FILE = resource/qtbrynhildr_resource.rc
+RC_FILE = resource/qtbrynhildr.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 }
 

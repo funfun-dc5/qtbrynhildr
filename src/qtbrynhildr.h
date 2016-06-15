@@ -145,6 +145,11 @@ public slots:
   void outputLogMessage(int id, const QString text);
 
 protected:
+#if 0 // for TEST
+  // change event
+  void changeEvent(QEvent *event);
+#endif // for TEST
+
   // window close event
   void closeEvent(QCloseEvent *event);
 
@@ -625,7 +630,11 @@ private:
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get full screen scaling factor
+#if 0 // for TEST
+  qreal getFullScreenScalingFactor(QSize desktopSize, bool includeTitleBar);
+#else// for TEST
   qreal getFullScreenScalingFactor(QSize desktopSize);
+#endif // for TEST
 
   // full screen
   bool fullScreenMode;
@@ -638,6 +647,11 @@ private:
   // progress bar
   QProgressBar	*progressBar;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if 0 // for TEST
+  // height of title bar
+  int heightOfTitleBar;
+#endif // for TEST
 
   // height of menu bar
   int heightOfMenuBar;

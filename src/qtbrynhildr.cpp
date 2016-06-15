@@ -13,6 +13,9 @@
 //#include <iostream>
 
 // Qt Header
+#if 0 // for TEST
+#include <QApplication>
+#endif // for TEST
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
@@ -174,6 +177,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #if QTB_PUBLIC_MODE6_SUPPORT
   progressBar(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#if 0 // for TEST
+  heightOfTitleBar(0),
+#endif // for TEST
   heightOfMenuBar(0),
   heightOfStatusBar(0)
 {
@@ -389,16 +395,23 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   setWindowTitle(tr(QTB_APPLICATION));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if 0 // for TEST
+  // set height of title bar
+  heightOfTitleBar = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
+#endif // for TEST
+
   // set window flags
   Qt::WindowFlags flags = windowFlags();
-#if 0 // defined(Q_OS_OSX)
   flags |= Qt::CustomizeWindowHint;
   flags |= Qt::WindowTitleHint;
   flags |= Qt::WindowSystemMenuHint;
   flags |= Qt::WindowCloseButtonHint;
   flags |= Qt::WindowMinimizeButtonHint;
+#if 0 // for TEST
   flags |= Qt::WindowMaximizeButtonHint;
-#endif // defined(Q_OS_OSX)
+#else// for TEST
+  flags &= ~Qt::WindowMaximizeButtonHint; // disable Maximize Button
+#endif // for TEST
   if (settings->getOnFrameLessWindow()){
 	flags |= Qt::FramelessWindowHint;
   }
@@ -851,7 +864,11 @@ void QtBrynhildr::refreshRecordingAndReplayMenu()
 void QtBrynhildr::refreshFullScreenScalingFactor()
 {
   // change scaling factor
+#if 0 // for TEST
+  qreal desktopScalingFactor = getFullScreenScalingFactor(mainWindow->getDesktopSize(), false);
+#else // for TEST
   qreal desktopScalingFactor = getFullScreenScalingFactor(mainWindow->getDesktopSize());
+#endif // for TEST
   if (desktopScalingFactor != 0.0){
 	settings->setDesktopScalingFactor(desktopScalingFactor);
   }
@@ -1801,6 +1818,34 @@ void QtBrynhildr::disconnected()
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
+// change event
+#if 0 // for TEST
+void QtBrynhildr::changeEvent(QEvent *event)
+{
+  if (event->type() == QEvent::WindowStateChange){
+	Qt::WindowStates states = windowState();
+	switch(states){
+	case Qt::WindowNoState:
+	  cout << "Normal" << endl << flush;
+	  break;
+	case Qt::WindowMaximized:
+	  {
+		cout << "Maximized" << endl << flush;
+		QSize desktopSize = mainWindow->getDesktopSize();
+		if (desktopSize.isValid()){
+		  settings->setDesktopScalingFactor(getFullScreenScalingFactor(desktopSize, true));
+		  mainWindow->refreshDesktop(true);
+		}
+	  }
+	  break;
+	case Qt::WindowMinimized:
+	  cout << "Minimized" << endl << flush;
+	  break;
+	}
+  }
+}
+#endif // for TEST
+
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
 {
@@ -2660,7 +2705,11 @@ void QtBrynhildr::toggleShowFrameRate()
 }
 
 // get full screen scaling factor
+#if 0 // for TEST
+qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize, bool includeTitleBar)
+#else// for TEST
 qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize)
+#endif // for TEST
 {
   if (!desktopSize.isValid()){
 	return (qreal)0.0;
@@ -2676,6 +2725,11 @@ qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize)
 	screenHeight -= heightOfMenuBar;
   }
   screenWidth -= settings->getDesktop()->getCorrectWindowWidth();
+#if 0 // for TEST
+  if (includeTitleBar){
+	screenHeight -= heightOfTitleBar;
+  }
+#endif // for TEST
   if (settings->getOnShowStatusBar()){
 	screenHeight -= heightOfStatusBar;
   }
@@ -2733,7 +2787,11 @@ void QtBrynhildr::fullScreen()
 	scalingFactorAtNormal = settings->getDesktopScalingFactor();
 	QSize desktopSize = mainWindow->getDesktopSize();
 	if (desktopSize.isValid()){
+#if 0 // for TEST
+	  settings->setDesktopScalingFactor(getFullScreenScalingFactor(desktopSize, false));
+#else// for TEST
 	  settings->setDesktopScalingFactor(getFullScreenScalingFactor(desktopSize));
+#endif // for TEST
 	}
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

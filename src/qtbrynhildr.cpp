@@ -1584,7 +1584,7 @@ void QtBrynhildr::createStatusBar()
   // progress bar for transfer file
   progressBar = new QProgressBar(this);
   progressBar->setFixedWidth(this->width()/4);
-  progressBar->setFixedHeight(10);
+  progressBar->setFixedHeight((statusBar()->height())/2);
   progressBar->setValue(80); // for TEST
   progressBar->setRange(0,100);
   progressBar->setTextVisible(true);

@@ -176,7 +176,13 @@ void ConnectToServerDialog::accept()
 	cout << "accept()."; // for DEBUG
 
   // server name
-  settings->setServerName(lineEdit_hostname->text());
+  if (lineEdit_hostname->text().size() > 0){
+	settings->setServerName(lineEdit_hostname->text());
+  }
+  else {
+	// Yet: error
+	return;
+  }
 
   // host type
   settings->setServerType(comboBox_hosttype->currentIndex());
@@ -195,6 +201,9 @@ void ConnectToServerDialog::accept()
 
   // full screen field
   settings->setOnFullScreenAtConnected(checkBox_fullScreen->checkState() == Qt::Checked);
+
+  // connect to server
+  emit connectToServer();
 
   hide();
 }

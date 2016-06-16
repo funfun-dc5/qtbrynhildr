@@ -51,6 +51,10 @@ private slots:
   // reject button
   void reject();
 
+signals:
+  // connect to server
+  void connectToServer();
+
 private:
   // settings
   Settings *settings;

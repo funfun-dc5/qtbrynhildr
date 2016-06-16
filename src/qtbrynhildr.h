@@ -107,6 +107,9 @@ public:
   void refreshFullScreenScalingFactor();
 
 public slots:
+  // connect to server
+  void connectToServer();
+
   // refresh window
   void refreshWindow();
 
@@ -159,9 +162,6 @@ private slots:
 
   // disconnect to server
   void popUpDisconnectToServer();
-
-  // connect to server
-  void connectToServer();
 
   // reconnect to server
   void reconnectToServer();

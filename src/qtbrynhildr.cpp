@@ -434,7 +434,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // set up connect to server dialog
   connectToServerDialog = new ConnectToServerDialog(settings, this);
-  connect(connectToServerDialog->buttonBox, SIGNAL(accepted()), SLOT(connectToServer()));
+  connect(connectToServerDialog, SIGNAL(connectToServer()), SLOT(connectToServer()));
 
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){

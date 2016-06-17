@@ -1890,11 +1890,6 @@ void QtBrynhildr::writeSettings()
 					 QSize(geometry().width(), geometry().height()));
   settings->getSettings()->setValue(QTB_GEOMETRY, geometryInfo);
 
-#if 0 // for DEBUG
-  qDebug() << "frameGeometry : " << frameGeometry(); // for DEBUG
-  qDebug() << "geometry      : " << geometry(); // for DEBUG
-#endif // for DEBUG
-
   // sync
   settings->getSettings()->sync();
 }

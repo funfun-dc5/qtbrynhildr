@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QPaintEvent>
 #include <QSize>
+#include <QTextStream>
 #include <QWheelEvent>
 
 // Local Header

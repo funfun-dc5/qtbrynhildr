@@ -329,8 +329,13 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // supported Sample Rates
   if (settings->getOutputLog()){
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
-	qDebug() << "supported Sample Rates : " << sampleRatesList;
+	cout << "supported Sample Rates : ";
+	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
+	  cout << (int)(*i) << " ";
+	}
+	cout << endl << flush;
   }
+
   // clean sound buffer
   soundBuffer->clear();
 

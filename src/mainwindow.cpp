@@ -13,6 +13,7 @@
 // Qt Header
 #include <QDateTime>
 #include <QKeyEvent>
+#include <QMimeData>
 #include <QPainter>
 #include <QPoint>
 #include <QSize>
@@ -20,6 +21,9 @@
 #include <QList>
 #include <QUrl>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#if 1 // for qDebug()
+#include <QtCore>
+#endif
 
 // Local Header
 #include "config.h"
@@ -335,24 +339,26 @@ void MainWindow::printMouseButtonEvent(QMouseEvent *event)
 {
   switch (event->button()){
   case Qt::LeftButton:
-	qDebug() << "Left Button : " << event->pos(); // for DEBUG
+	cout << "Left Button : ";
 	break;
   case Qt::RightButton:
-	qDebug() << "Right Button : " << event->pos(); // for DEBUG
+	cout << "Right Button : ";
 	break;
   case Qt::MiddleButton:
-	qDebug() << "Middle Button : " << event->pos(); // for DEBUG
+	cout << "Middle Button : ";
 	break;
   case Qt::ForwardButton:
-	qDebug() << "Forward Button : " << event->pos(); // for DEBUG
+	cout << "Forward Button : ";
 	break;
   case Qt::BackButton:
-	qDebug() << "Back Button : " << event->pos(); // for DEBUG
+	cout << "Back Button : ";
 	break;
   default:
-	qDebug() << "Unknown Button : " << event->pos(); // for DEBUG
+	cout << "Unknown Button : ";
 	break;
   }
+
+  cout << "(x, y) = (" << event->pos().x() << "," << event->pos().y() << ")" << endl <<flush;
 }
 
 // set mouse button event
@@ -386,7 +392,7 @@ void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
   if (outputLogForMouse){
-	qDebug() << "[MainWindow] mousePressEvent: ";
+	cout << "[MainWindow] mousePressEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -419,7 +425,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	qDebug() << "[MainWindow] mouseReleaseEvent: ";
+	cout << "[MainWindow] mouseReleaseEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -444,7 +450,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	qDebug() << "[MainWindow] mouseDoubleClickEvent: ";
+	cout << "[MainWindow] mouseDoubleClickEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -471,7 +477,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
   // for DEBUG
   if (outputLogForMouse){
 	int ticks = degrees/15;
-	qDebug() << "[MainWindow] wheelEvent: " << degrees << "(ticks = " << ticks << ")"; // for DEBUG
+	cout << "[MainWindow] wheelEvent: " << degrees << "(ticks = " << ticks << ")"; // for DEBUG
   }
 
   if (settings->getConnected() &&
@@ -495,7 +501,8 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	qDebug() << "[MainWindow] mouseMoveEvent: " << event->pos(); // for DEBUG
+    cout << "[MainWindow] mouseMoveEvent: (x, y) = (" <<
+	  event->pos().x() << "," << event->pos().y() << ")" << endl <<flush; // for DEBUG
   }
 
   if (settings->getConnected() &&
@@ -933,7 +940,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
 	  case VK_OEM_ENLW:
-		//		qDebug() << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam; // for DEBUG
+		//		cout << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYDOWN);
 		return true;
 		break;
@@ -941,7 +948,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
 	  case 229:
-		//		qDebug() << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam; // for DEBUG
+		//		cout << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
 		break;
@@ -954,14 +961,14 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
 	  case VK_OEM_ENLW:
-		//		qDebug() << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam; // for DEBUG
+		//		cout << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYUP);
 		return true;
 		break;
 	  case VK_CONVERT:
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
-		//		qDebug() << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam; // for DEBUG
+		//		cout << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
 		break;

@@ -11,7 +11,6 @@
 #include <cstring>
 
 // Qt Header
-#include <QtCore>
 #include <QSettings>
 #include <QString>
 #if QTB_AUTO_COMPLETE

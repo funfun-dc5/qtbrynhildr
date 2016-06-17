@@ -8,6 +8,7 @@
 #include "common/common.h"
 
 // Qt Header
+#include <QDateTime>
 #include <QThread>
 
 // Windows Header

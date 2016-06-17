@@ -9,8 +9,10 @@
 
 // Qt Header
 #include <QDir>
-#include <QtCore>
 #include <QString>
+#if 1 // for qDebug()
+#include <QtCore>
+#endif // for TEST
 
 // Local Header
 #include "settings.h"

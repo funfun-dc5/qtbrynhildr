@@ -650,6 +650,17 @@ outputPath=C:\\Users\\funfun\\
 logFile=D:\\tmp\\qtbrynhildr.log
 keyboardLogFile=D:\\tmp\\keyboard.log
 desktopCaptureFormat=.jpg
+serverNameListSize=10
+serverName0=mcz.world.idol.jp
+serverName1=funfun-PC
+serverName2=192.168.253.128
+serverName3=
+serverName4=
+serverName5=
+serverName6=
+serverName7=
+serverName8=
+serverName9=
 geometry=@Rect(200 200 800 600)
 ------------------- ここまで -------------------
 
@@ -871,6 +882,11 @@ Ver.1.5.3 : 2016/xx/xx
                標準では無効となっているため、.iniを以下のように変更する必要がある
 
                onShowTotalProgressForTransferFile=true
+
+             ・「サーバに接続」ダイアログの「ホスト名/IPアドレス」にオートコンプリート機能を追加
+               保存する補完対象は初期値では10ホスト分、.iniの以下のエントリで変更可能
+
+               serverNameListSize=10
 
             [その他変更]
              ・Qt5.6.1でビルドするように変更(Linux(x86)版のみ5.4.2のまま)

@@ -14,6 +14,9 @@
 #include <QtCore>
 #include <QSettings>
 #include <QString>
+#if QTB_AUTO_COMPLETE
+#include <QStringList>
+#endif // QTB_AUTO_COMPLETE
 
 // Local Header
 #if QTB_CRYPTOGRAM
@@ -62,6 +65,12 @@ typedef int PUBLIC_MODEVERSION;
 #else // defined(QTB_DEV_TABLET)
 #define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
 #endif // defined(QTB_DEV_TABLET)
+
+#if QTB_AUTO_COMPLETE
+// for serverNameListSize
+#define QTB_SERVERNAMELISTSIZE			"serverNameListSize"
+#define QTB_SERVERNAMELISTSIZE_DEFAULT	10
+#endif // QTB_AUTO_COMPLETE
 
 // for serverType
 #define QTB_SERVERTYPE			"serverType"
@@ -460,6 +469,40 @@ public:
 	this->serverName = serverName;
 	return true;
   }
+
+#if QTB_AUTO_COMPLETE
+  // get server name list
+  QStringList *getServerNameList() const
+  {
+	return serverNameList;
+  }
+
+  // set server name list
+  bool setServerNameList(QStringList *serverNameList)
+  {
+	this->serverNameList = serverNameList;
+	return true;
+  }
+
+  // get server name list size
+  int getServerNameListSize() const
+  {
+	return serverNameListSize;
+  }
+
+  // set server name list size
+  bool setServerNameListSize(int serverNameListSize)
+  {
+	this->serverNameListSize = serverNameListSize;
+	return true;
+  }
+
+  // read server name list
+  void readServerNameList();
+
+  // write server name list
+  void writeServerNameList();
+#endif // QTB_AUTO_COMPLETE
 
   // get server type
   SERVER_TYPE getServerType() const
@@ -1566,6 +1609,14 @@ private:
 
   // server name
   QString serverName;
+
+#if QTB_AUTO_COMPLETE
+  // server name list size
+  volatile int serverNameListSize;
+
+  // server name list
+  QStringList *serverNameList;
+#endif // QTB_AUTO_COMPLETE
 
   // server type
   volatile SERVER_TYPE serverType;

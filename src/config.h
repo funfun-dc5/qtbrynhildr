@@ -113,6 +113,9 @@ const bool QTB_IN_TESTING				= false;
 
 #endif // QTB_BRYNHILDR2_SUPPORT
 
+// auto complete
+#define QTB_AUTO_COMPLETE			1
+
 // debug
 #define QTB_DEBUG					1
 #define QTB_DEBUG_KEYBOARD			false

@@ -4,9 +4,18 @@
 
 #ifndef CONNECT_TO_SERVER_DIALOG_H
 #define CONNECT_TO_SERVER_DIALOG_H
+// Common Header
+#include "common/common.h"
+
 // Qt Header
+#if QTB_AUTO_COMPLETE
+#include <QCompleter>
+#endif // QTB_AUTO_COMPLETE
 #include <QDialog>
 #include <QResizeEvent>
+#if QTB_AUTO_COMPLETE
+#include <QStringList>
+#endif // QTB_AUTO_COMPLETE
 
 // Local Header
 #include "settings.h"
@@ -22,6 +31,8 @@ class ConnectToServerDialog : public QDialog, public Ui::ConnectToServerDialog
 public:
   // constructor
   ConnectToServerDialog(Settings *settings, QWidget *parent = 0);
+  // destructor
+  ~ConnectToServerDialog();
 
   // resize event
   void resizeEvent(QResizeEvent *event);
@@ -58,6 +69,14 @@ signals:
 private:
   // settings
   Settings *settings;
+
+#if QTB_AUTO_COMPLETE
+  // server name list
+  QStringList *serverNameList;
+
+  // completer
+  QCompleter *completer;
+#endif // QTB_AUTO_COMPLETE
 
   // output log flag
   bool outputLog;

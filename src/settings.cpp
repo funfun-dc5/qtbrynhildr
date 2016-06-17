@@ -25,11 +25,15 @@ Settings::Settings(const char *iniFileName)
 #endif // QTB_CRYPTGRAM
   :
   desktop(new Desktop()),
+  bootupFlag(false),
+  shutdownFlag(false),
 #if QTB_CRYPTOGRAM
   cipher(cipher),
 #endif // QTB_CRYPTGRAM
-  bootupFlag(false),
-  shutdownFlag(false),
+#if QTB_AUTO_COMPLETE
+  serverNameListSize(QTB_SERVERNAMELISTSIZE_DEFAULT),
+  serverNameList(new QStringList),
+#endif // QTB_AUTO_COMPLETE
   connected(false),
 #if QTB_PUBLIC_MODE6_SUPPORT
   onSendClipboard(false),
@@ -163,6 +167,12 @@ Settings::~Settings()
 	delete desktop;
 	desktop = 0;
   }
+#if QTB_AUTO_COMPLETE
+  if (serverNameList != 0){
+	delete serverNameList;
+	serverNameList = 0;
+  }
+#endif // QTB_AUTO_COMPLETE
 }
 
 // get settings
@@ -170,6 +180,35 @@ QSettings *Settings::getSettings() const
 {
   return settings;
 }
+
+#if QTB_AUTO_COMPLETE
+// read server name list
+void Settings::readServerNameList()
+{
+  // load serverNameListSize
+  setServerNameListSize(settings->value(QTB_SERVERNAMELISTSIZE,
+										(qint32)QTB_SERVERNAMELISTSIZE_DEFAULT).toInt());
+  // load all entries
+  for (int i = 0; i < serverNameListSize; i++){
+	QString entryName = QTB_SERVERNAME + QString::number(i);
+	// load serverName
+	(*serverNameList) << settings->value(entryName, "").toString();
+  }
+}
+
+// write server name list
+void Settings::writeServerNameList()
+{
+  // save serverNameListSize
+  settings->setValue(QTB_SERVERNAMELISTSIZE, (qint32)serverNameListSize);
+  // save all entries
+  for (int i = 0; i < serverNameListSize; i++){
+	QString entryName = QTB_SERVERNAME + QString::number(i);
+	// save serverName
+	settings->setValue(entryName, serverNameList->at(i));
+  }
+}
+#endif // QTB_AUTO_COMPLETE
 
 // load settings from setting files or registry
 void Settings::readSettings()
@@ -399,6 +438,11 @@ void Settings::readSettings()
   // load desktop capture format
   setDesktopCaptureFormat(settings->value(QTB_DESKTOPCAPTUREFORMAT,
 										  QTB_DESKTOPCAPTUREFORMAT_DEFAULT).toString());
+
+#if QTB_AUTO_COMPLETE
+  // read server name list
+  readServerNameList();
+#endif // QTB_AUTO_COMPLETE
 }
 
 // save settings to setting file or registry
@@ -576,6 +620,11 @@ void Settings::writeSettings()
 
   // save desktopCaptureFormat
   settings->setValue(QTB_DESKTOPCAPTUREFORMAT, desktopCaptureFormat);
+
+#if QTB_AUTO_COMPLETE
+  // write server name list
+  writeServerNameList();
+#endif // QTB_AUTO_COMPLETE
 
   // sync
   settings->sync();

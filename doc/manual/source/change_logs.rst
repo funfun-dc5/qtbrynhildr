@@ -18,6 +18,12 @@ Ver.1.5.3
 
     onShowTotalProgressForTransferFile=true
 
+ 2. 「サーバに接続」ダイアログの「ホスト名/IPアドレス」にオートコンプリート機能を追加
+
+   保存する補完対象は初期値では10ホスト分、.iniの以下のエントリで変更可能
+
+   serverNameListSize=10
+
 * [その他変更]
 
  1. Qt5.6.1でビルドするように変更(Linux(x86)版のみ5.4.2のまま)

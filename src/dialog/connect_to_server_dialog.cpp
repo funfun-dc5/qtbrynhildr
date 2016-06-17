@@ -28,13 +28,23 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   //  QDialog(parent),
   QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
   settings(settings),
+#if QTB_AUTO_COMPLETE
+  serverNameList(0),
+  completer(0),
+#endif // QTB_AUTO_COMPLETE
   // for DEBUG
   outputLog(false)
 {
   setupUi(this);
 
   // server name field
+#if QTB_AUTO_COMPLETE
+  serverNameList = settings->getServerNameList();
+  completer = new QCompleter(*serverNameList, this);
+  lineEdit_hostname->setCompleter(completer);
+#else // QTB_AUTO_COMPLETE
   lineEdit_hostname->insert(settings->getServerName());
+#endif // QTB_AUTO_COMPLETE
 
   // server type field
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_XP,		STRING_SERVER_TYPE_WINDOWS_XP);
@@ -68,6 +78,18 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
   // resetting
   resetting();
+}
+
+// destructor
+ConnectToServerDialog::~ConnectToServerDialog()
+{
+  // delete objects
+#if QTB_AUTO_COMPLETE
+  if (completer != 0){
+	delete completer;
+	completer = 0;
+  }
+#endif // QTB_AUTO_COMPLETE
 }
 
 // resize event
@@ -177,7 +199,13 @@ void ConnectToServerDialog::accept()
 
   // server name
   if (lineEdit_hostname->text().size() > 0){
-	settings->setServerName(lineEdit_hostname->text());
+	QString serverName = lineEdit_hostname->text();
+	settings->setServerName(serverName);
+#if QTB_AUTO_COMPLETE
+	if (!(serverNameList->contains(serverName))){
+	  serverNameList->insert(0, serverName);
+	}
+#endif // QTB_AUTO_COMPLETE
   }
   else {
 	// Yet: error

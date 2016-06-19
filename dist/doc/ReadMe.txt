@@ -100,7 +100,7 @@
  以下を環境に合わせてダウンロードします。
 
  [64bit]
- http://download.qt.io/archive/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.0.run
+ http://download.qt.io/archive/qt/5.6/5.6.1/qt-opensource-linux-x64-5.6.1.run
 
  [32bit]
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run
@@ -109,8 +109,8 @@
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.6.0.run
- sudo ./qt-opensource-linux-x64-5.6.0.run
+ chmod 755 ./qt-opensource-linux-x64-5.6.1.run
+ sudo ./qt-opensource-linux-x64-5.6.1.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
@@ -598,7 +598,7 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 ------------------- ここから -------------------
 [General]
 generatedVersion=150
-currentVersion=150
+currentVersion=153
 publicModeVersion=6
 serverName=mcz.world.idol.jp
 serverType=5

@@ -15,17 +15,17 @@
 
  [64bit版]
 
-   qtbrynhildr-linux_x64-v100.run
+   QtBrynhildr-linux_x64-v100.run
 
  [32bit版]
 
-   qtbrynhildr-linux_x86-v100.run
+   QtBrynhildr-linux_x86-v100.run
 
 (2).Qt5のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^
- [64bit版 Qt5.6.0]
+ [64bit版 Qt5.7.0]
 
- <http://download.qt.io/archive/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.0.run>
+ <http://download.qt.io/archive/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run>
 
  [32bit版 Qt5.4.2]
 
@@ -103,12 +103,12 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
  自己解凍ファイルは以下のようにして展開します。 ::
 
-  funfun@ubuntu-PC-x64:~$ chmod 500 ./qtbrynhildr-linux_x64-v100.run
-  funfun@ubuntu-PC-x64:~$ ./qtbrynhildr-linux_x64-v100.run
+  funfun@ubuntu-PC-x64:~$ chmod 500 ./QtBrynhildr-linux_x64-v100.run
+  funfun@ubuntu-PC-x64:~$ ./QtBrynhildr-linux_x64-v100.run
   UnZipSFX 5.52 of 28 February 2005, by Info-ZIP (http://www.info-zip.org).
    creating: linux_x64/
    creating: linux_x64/bin/
-  inflating: linux_x64/bin/qtbrynhildr
+  inflating: linux_x64/bin/QtBrynhildr
    creating: linux_x64/doc/
   inflating: linux_x64/doc/LICENSE.txt
    creating: linux_x64/doc/manual/
@@ -150,6 +150,6 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
        同じウィンドウにメニューバーを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
        Qt Brynhildrを起動してください。Qt Brynhildr実行時だけ変えたい場合は例えば
 
-       env UBUNTU_MENUPROXY=0 ./linux_x64/bin/qtbrynhildr
+       env UBUNTU_MENUPROXY=0 ./linux_x64/bin/QtBrynhildr
 
        という感じです。

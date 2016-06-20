@@ -15,11 +15,11 @@
 
  [64bit版]
 
-   qtbrynhildr-freebsd_x64-v100.tar.xz
+   QtBrynhildr-freebsd_x64-v100.tar.xz
 
  [32bit版]
 
-   qtbrynhildr-freebsd_x86-v100.tar.xz
+   QtBrynhildr-freebsd_x86-v100.tar.xz
 
 2. Qt5パッケージのインストール
 -------------------------------
@@ -41,7 +41,7 @@
 
  アーカイブファイルを展開します。 ::
 
-  funfun@freebsd-PC-x64:~$ tar xvfJ ./qtbrynhildr-freebsd_x64-v100.tar.xz
+  funfun@freebsd-PC-x64:~$ tar xvfJ ./QtBrynhildr-freebsd_x64-v100.tar.xz
 
 5. Qt Brynhildrのアンインストール
 ----------------------------------

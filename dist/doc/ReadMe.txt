@@ -100,7 +100,7 @@
  以下を環境に合わせてダウンロードします。
 
  [64bit]
- http://download.qt.io/archive/qt/5.6/5.6.1/qt-opensource-linux-x64-5.6.1.run
+ http://download.qt.io/archive/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
 
  [32bit]
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run
@@ -109,8 +109,8 @@
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.6.1.run
- sudo ./qt-opensource-linux-x64-5.6.1.run
+ chmod 755 ./qt-opensource-linux-x64-5.7.0.run
+ sudo ./qt-opensource-linux-x64-5.7.0.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
@@ -119,16 +119,16 @@
 
  例)
 
-  chmod 500 ./qtbrynhildr-linux_x64-v100.run
-  ./qtbrynhildr-linux_x64-v100.run
+  chmod 500 ./QtBrynhildr-linux_x64-v100.run
+  ./QtBrynhildr-linux_x64-v100.run
 
  (3) 起動確認します。
 
  [64bit]
- ./linux_x64/bin/qtbrynhildr
+ ./linux_x64/bin/QtBrynhildr
 
  [32bit]
- ./linux_x86/bin/qtbrynhildr
+ ./linux_x86/bin/QtBrynhildr
 
  (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
      ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
@@ -140,7 +140,7 @@
   sudo apt-get install libglu1-mesa
 
   [エラーメッセージの例]
-  qtbrynhildr: error while loading shared libraries: libGL.so.1: cannot open shared object file: No such file or directory
+  QtBrynhildr: error while loading shared libraries: libGL.so.1: cannot open shared object file: No such file or directory
 
   [CentOSの場合]
 
@@ -207,15 +207,15 @@
 
  例)
 
- tar xvfJ ./qtbrynhildr-freebsd_x64-v100.tar.xz
+ tar xvfJ ./QtBrynhildr-freebsd_x64-v100.tar.xz
 
  (3) 起動確認します。
 
  [64bit]
- ./freebsd_x64/bin/qtbrynhildr
+ ./freebsd_x64/bin/QtBrynhildr
 
  [32bit]
- ./freebsd_x86/bin/qtbrynhildr
+ ./freebsd_x86/bin/QtBrynhildr
 
 ==============================
 [アンインストール]
@@ -871,6 +871,15 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.1.5.4 : 2016/xx/xx
+            [不具合修正]
+             ・マニュアルのオプション(-fullscreen)の出力不具合修正
+
+            [その他変更]
+             ・Qt5.7.0でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
+             ・実行ファイル名およびパッケージ名を"qtbrynhildr"から"QtBrynhildr"に変更
+             ・ドキュメント作成ツール Sphinx をバージョンアップ(1.3.6 -> 1.4.4)
+
 Ver.1.5.3 : 2016/06/20
             [不具合修正]
              ・環境によってサーバ接続時にステータスバーが表示されない場合がある不具合修正

@@ -5,7 +5,7 @@
    contain the root `toctree` directive.
 
 ===========================
-はじめて　の　Qt Brynhildr
+はじめての　Qt Brynhildr
 ===========================
 
 Contents:

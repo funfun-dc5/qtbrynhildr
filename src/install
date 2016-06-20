@@ -21,8 +21,7 @@ if [ -n "$1" ] ; then
 fi
 
 # setting
-APP="qtbrynhildr"
-APPNAME="QtBrynhildr"
+APP="QtBrynhildr"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
 INSTALLFLAGS="-C"
@@ -348,14 +347,10 @@ case $UNAME in
 		# for darwin
 		# create directory
 		mkdir -p ${DISTDIR}
-		# rename to APPNAME
-		mv ${APP}.app ${APPNAME}.app
 		# make dmg
-		${QTROOT}/bin/macdeployqt ${APPNAME}.app -dmg
-		# rename to APP
-		mv ${APPNAME}.app ${APP}.app
+		${QTROOT}/bin/macdeployqt ${APP}.app -dmg
 		# mv dist directory
-		mv ${APPNAME}.dmg ${DISTDIR}/${PKGSTRING}.dmg
+		mv ${APP}.dmg ${DISTDIR}/${PKGSTRING}.dmg
 		;;
 	*)
 		echo "$0 : Not support platform. $UNAME"

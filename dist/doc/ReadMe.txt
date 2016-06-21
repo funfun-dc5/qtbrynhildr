@@ -100,7 +100,7 @@
  以下を環境に合わせてダウンロードします。
 
  [64bit]
- http://download.qt.io/archive/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
+ http://download.qt.io/archive/qt/5.6/5.6.1/qt-opensource-linux-x64-5.6.1.run
 
  [32bit]
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run
@@ -109,8 +109,8 @@
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.7.0.run
- sudo ./qt-opensource-linux-x64-5.7.0.run
+ chmod 755 ./qt-opensource-linux-x64-5.6.1.run
+ sudo ./qt-opensource-linux-x64-5.6.1.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
@@ -871,12 +871,12 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
-Ver.1.5.4 : 2016/xx/xx
+Ver.1.5.4 : 2016/06/21
             [不具合修正]
-             ・マニュアルのオプション(-fullscreen)の出力不具合修正
+             ・前回接続した「サーバ名/IPアドレス」が「サーバに接続」ダイアログに残らない不具合修正
+             ・マニュアル(html)のオプション(-fullscreen)の出力不具合修正
 
             [その他変更]
-             ・Qt5.7.0でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
              ・実行ファイル名およびパッケージ名を"qtbrynhildr"から"QtBrynhildr"に変更
              ・ドキュメント作成ツール Sphinx をバージョンアップ(1.3.6 -> 1.4.4)
 

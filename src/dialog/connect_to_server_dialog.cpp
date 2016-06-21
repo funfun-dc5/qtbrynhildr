@@ -38,11 +38,10 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   setupUi(this);
 
   // server name field
-#if QTB_AUTO_COMPLETE
   serverNameList = settings->getServerNameList();
+#if QTB_AUTO_COMPLETE
   completer = new QCompleter(*serverNameList, this);
   lineEdit_hostname->setCompleter(completer);
-#else // QTB_AUTO_COMPLETE
   lineEdit_hostname->insert(settings->getServerName());
 #endif // QTB_AUTO_COMPLETE
 

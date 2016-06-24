@@ -23,6 +23,7 @@
 #endif // QTB_CRYPTGRAM
 #include "common/protocols.h"
 #include "desktop.h"
+#include "parameters.h"
 #include "version.h"
 
 // for Settings
@@ -870,6 +871,12 @@ public:
 	}
 	else {
 	  frameInterval = (unsigned long)1000000/frameRate; // micro second = 1000000 (1 second)
+	  if (frameInterval > QTB_THREAD_SLEEP_TIME * 1000){
+		frameInterval -= QTB_THREAD_SLEEP_TIME * 1000; // sleep time
+		if (frameInterval > frameDrawTime){
+		  frameInterval -= frameDrawTime; // drawing time of 1 frame
+		}
+	  }
 	}
   }
 
@@ -877,6 +884,18 @@ public:
   unsigned long getFrameInterval()
   {
 	return frameInterval;
+  }
+
+  // get frame draw time (micro seconds)
+  unsigned long getFrameDrawTime()
+  {
+	return frameDrawTime;
+  }
+
+  // set frame draw time (micro seconds)
+  void setFrameDrawTime(unsigned long frameDrawTime)
+  {
+	this->frameDrawTime = frameDrawTime;
   }
 
   // get sound quality
@@ -1661,6 +1680,7 @@ private:
 #endif // QTB_BRYNHILDR2_SUPPORT
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;
+  volatile unsigned long frameDrawTime;
 
   // Sound
   volatile bool onSound;

@@ -10,14 +10,22 @@
 
 (1) feature, bug毎にbranchを作成
 
-(2) branch作成後にversion.h/qtbrynhildr.iss.templateを変更
-
- 次のバージョン番号 + "-<feature name>" or "-<bug name>"
+ "branch-" + "<feature name>" or "<bug name>"
 
  ex.)
 
-  "1.5.4-publicmode7"
-  "1.5.4-mousebug"
+  "branch-publicmode7"
+  "branch-mousebug"
+
+(2) branch作成後にversion.h/qtbrynhildr.iss.templateのQTB_RCNAME/RCNameのみを変更
+    バージョン番号は変えない(元になったバージョン番号のまま)
+
+ "-<feature name>" or "-<bug name>"
+
+ ex.)
+
+  "-publicmode7"
+  "-mousebug"
 
 (3) branch上でFix/Test
 

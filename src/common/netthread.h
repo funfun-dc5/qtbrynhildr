@@ -116,6 +116,9 @@ protected:
   // save protocol header
   void saveHeader(const char* filename);
 
+  // dump protocol header
+  void dumpHeader();
+
 protected:
   // send eader
   long sendHeader(SOCKET sock, const char *buf, long size);

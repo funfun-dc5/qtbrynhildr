@@ -497,7 +497,7 @@ void NetThread::printHeader()
 	cout << setw(2) << (int)(com_data->check_digit_enc[i] & 0xff);
   }
   cout << endl;
-  cout << "com_data->check_digit    :"	<< (int)(com_data->check_digit & 0xff) << endl;
+  cout << "com_data->check_digit    :"	<< (int)(com_data->check_digit & 0xffff) << endl;
   cout << setiosflags(flags) << setfill(fill);
 
   cout << "com_data->ver            :\"" << com_data->ver[0]
@@ -509,7 +509,7 @@ void NetThread::printHeader()
   cout << "com_data->image_cy       :"  << com_data->image_cy << endl;
   cout << "com_data->server_cx      :"  << com_data->server_cx << endl;
   cout << "com_data->server_cy      :"  << com_data->server_cy << endl;
-  cout << "com_data->control        :"	<< com_data->control << endl;
+  cout << "com_data->control        :"	<< (int)com_data->control << endl;
   cout << "com_data->mouse_move     :"	<< (int)com_data->mouse_move << endl;
   cout << "com_data->mouse_x        :"  << com_data->mouse_x << endl;
   cout << "com_data->mouse_y        :"  << com_data->mouse_y << endl;
@@ -520,14 +520,14 @@ void NetThread::printHeader()
   cout << "com_data->keycode_flg    :"  << (int)com_data->keycode_flg << endl;
   cout << "com_data->monitor_no     :"	<< (int)com_data->monitor_no << endl;
   cout << "com_data->monitor_count  :"	<< (int)com_data->monitor_count << endl;
-  cout << "com_data->sound_capture  :"	<< com_data->sound_capture << endl;
+  cout << "com_data->sound_capture  :"	<< (int)com_data->sound_capture << endl;
   cout << "com_data->keydown        :"	<< com_data->keydown << endl;
-  cout << "com_data->video_quality  :"	<< com_data->video_quality << endl;
+  cout << "com_data->video_quality  :"	<< (int)com_data->video_quality << endl;
   cout << "com_data->client_scroll_x:"  << com_data->client_scroll_x << endl;
   cout << "com_data->client_scroll_y:"  << com_data->client_scroll_y << endl;
   cout << "com_data->zoom           :"  << com_data->zoom << endl;
-  cout << "com_data->mode           :"	<< com_data->mode << endl;
-  cout << "com_data->sound_quality  :"	<< com_data->sound_quality << endl;
+  cout << "com_data->mode           :"	<< (int)com_data->mode << endl;
+  cout << "com_data->sound_quality  :"	<< (int)com_data->sound_quality << endl;
 
   cout << endl << flush;
 }
@@ -544,6 +544,34 @@ void NetThread::saveHeader(const char* filename)
   else {
 	// Yet: open error
   }
+}
+
+// dump protocol header
+void NetThread::dumpHeader()
+{
+  // check
+  if (com_data == 0)
+	return;
+
+  cout << "========================== HEADER DUMP ==========================" << endl;
+
+  ios::fmtflags flags = cout.flags();
+  char fill = cout.fill();
+  cout << hex << uppercase << setfill('0');
+
+  unsigned char *ptr = (unsigned char *)com_data;
+  for (unsigned int i = 0; i < sizeof(COM_DATA); i++){
+	if (i % 16 == 0){
+	  cout << endl;
+	  cout << setw(4) << i << ": ";
+	}
+	else {
+	  cout << " ";
+	}
+	cout << setw(2) << (unsigned int)*ptr;
+	ptr++;
+  }
+  cout << endl << endl << setiosflags(flags) << setfill(fill) << flush;
 }
 
 } // end of namespace qtbrynhildr

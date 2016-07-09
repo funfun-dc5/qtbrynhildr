@@ -50,6 +50,10 @@ DEFINES += QTB_RECORDER=0
 #HEADERS += function/cipher.h
 #SOURCES += function/cipher.cpp
 
+# for CELT
+INCLUDEPATH += ../libs
+LIBS += -L../libs -lcelt0
+
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h

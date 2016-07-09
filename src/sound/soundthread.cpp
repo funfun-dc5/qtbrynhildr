@@ -195,6 +195,34 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   // buffer[]         : PCM Data
   // receivedDataSize : Size of PCM Data
 
+#if QTB_CELT_SUPPORT
+  // convert CELT to PCM Data
+  if (com_data->sound_type == SOUND_TYPE_CELT){
+	static bool firstFlag = true;
+	if (firstFlag){
+	  cout << "Received CELT Data!" << endl << flush;
+	  firstFlag = false;
+	}
+	// for DEBUG : save CELT Data (append)
+	if (settings->getOutputSoundDataToFile()){
+	  fstream file;
+	  char filename[] = "pcm/sound_output.clt";
+	  file.open(filename, ios::out | ios::binary | ios::app);
+	  if (file.is_open()){
+		file.write(buffer, receivedDataSize);
+		file.close();
+	  }
+	}
+	cout << "[SoundThread] receivedDataSize = " << receivedDataSize << endl << flush;
+#if 0 // for TEST
+	printHeader();
+	dumpHeader();
+#endif
+	// Yet
+	return TRANSMIT_SUCCEEDED; // for TEST
+  }
+#endif // QTB_CELT_SUPPORT
+
   // for DEBUG : save PCM Data (append)
   if (settings->getOutputSoundDataToFile()){
 	fstream file;

@@ -83,6 +83,9 @@ const bool QTB_IN_TESTING				= false;
 
 #if QTB_BRYNHILDR2_SUPPORT
 
+// celt support
+#define QTB_CELT_SUPPORT			1
+
 // extra mouse button support
 #define QTB_EXTRA_BUTTON_SUPPORT	1
 
@@ -101,6 +104,9 @@ const bool QTB_IN_TESTING				= false;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #else // QTB_BRYNHILDR2_SUPPORT
+
+// celt support
+#define QTB_CELT_SUPPORT			0
 
 // extra mouse button support
 #define QTB_EXTRA_BUTTON_SUPPORT	0

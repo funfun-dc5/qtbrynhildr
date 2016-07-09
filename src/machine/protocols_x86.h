@@ -36,7 +36,10 @@ typedef char	THREAD;
 // sound type
 typedef	char	SOUND_TYPE;
 #define SOUND_TYPE_OFF		0	// sound OFF
-#define SOUNT_TYPE_ON		1	// sound ON
+#define SOUND_TYPE_PCM		1	// sound PCM
+#if QTB_CELT_SUPPORT
+#define SOUND_TYPE_CELT		2	// sound CELT
+#endif // QTB_CELT_SUPPORT
 
 // encryption
 typedef char	ENCRYPTION;

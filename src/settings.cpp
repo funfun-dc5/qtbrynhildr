@@ -95,6 +95,9 @@ Settings::Settings(const char *iniFileName)
 #endif // QTB_BRYNHILDR2_SUPPORT
   setFrameRate(QTB_FRAMERATE_DEFAULT);
   setOnSound(QTB_ONSOUND_DEFAULT);
+#if QTB_CELT_SUPPORT
+  setSoundType(QTB_SOUNDTYPE_DEFAULT);
+#endif // QTB_CELT_SUPPORT
   setSoundQuality(QTB_SOUNDQUALITY_DEFAULT);
 
   setOnKeepOriginalDesktopSize(QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT);
@@ -289,7 +292,13 @@ void Settings::readSettings()
   setOnSound(settings->value(QTB_ONSOUND,
 							 QTB_ONSOUND_DEFAULT).toBool());
 
-  // load soundQualilty
+#if QTB_CELT_SUPPORT
+  // load soundType
+  setSoundType(settings->value(QTB_SOUNDTYPE,
+							   (qint32)QTB_SOUNDTYPE_DEFAULT).toInt());
+#endif // QTB_CELT_SUPPORT
+
+  // load soundQuality
   setSoundQuality(settings->value(QTB_SOUNDQUALITY,
 								 (qint32)QTB_SOUNDQUALITY_DEFAULT).toInt());
 
@@ -509,6 +518,11 @@ void Settings::writeSettings()
   // save onSound
   settings->setValue(QTB_ONSOUND, onSound);
 
+#if QTB_CELT_SUPPORT
+  // save soundType
+  settings->setValue(QTB_SOUNDTYPE, (qint32)soundType);
+#endif // QTB_CELT_SUPPORT
+
   // save soundQuality
   settings->setValue(QTB_SOUNDQUALITY, (qint32)soundQuality);
 
@@ -666,6 +680,9 @@ void Settings::printSettings() const
   qDebug() << "    QUALITY   : " << getVideoQualityByString();
   qDebug() << "    FrameRate : " << frameRate;
   qDebug() << "Sound         : " << onSound;
+#if QTB_CELT_SUPPORT
+  qDebug() << "    TYPE      : " << getSoundTypeByString();
+#endif // QTB_CELT_SUPPORT
   qDebug() << "    QUALITY   : " << getSoundQualityByString();
   qDebug() << "    CAPTURE   : " << getSoundCaptureByString();
 

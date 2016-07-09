@@ -597,7 +597,11 @@ void ControlThread::initHeader()
   }
 
   // for sound
-  com_data->sound_type		= settings->getOnSound() ? SOUNT_TYPE_ON : SOUND_TYPE_OFF;
+#if QTB_CELT_SUPPORT
+  com_data->sound_type		= settings->getOnSound() ? settings->getSoundType() : SOUND_TYPE_OFF;
+#else // QTB_CELT_SUPPORT
+  com_data->sound_type		= settings->getOnSound() ? SOUND_TYPE_PCM : SOUND_TYPE_OFF;
+#endif // QTB_CELT_SUPPORT
   com_data->sound_capture	= settings->getSoundCapture();
   com_data->sound_quality	= settings->getSoundQuality();
 }

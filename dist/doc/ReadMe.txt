@@ -614,6 +614,7 @@ onSupportGamePad=true
 onDisableBrynhildr2Support=false
 frameRate=30
 onSound=true
+soundType=1
 soundQuality=3
 onKeepOriginalDesktopSize=true
 desktopScalingFactor=1

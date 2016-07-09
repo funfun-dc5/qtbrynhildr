@@ -173,6 +173,12 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONSOUND				"onSound"
 #define QTB_ONSOUND_DEFAULT		true
 
+#if QTB_CELT_SUPPORT
+// for soundType
+#define QTB_SOUNDTYPE			"soundType"
+#define QTB_SOUNDTYPE_DEFAULT	SOUND_TYPE_PCM
+#endif // QTB_CELT_SUPPORT
+
 // for soundQuality
 #define QTB_SOUNDQUALITY			"soundQuality"
 #if defined(QTB_DEV_TABLET)
@@ -897,6 +903,33 @@ public:
   {
 	this->frameDrawTime = frameDrawTime;
   }
+
+#if QTB_CELT_SUPPORT
+  // get sound type
+  SOUND_TYPE getSoundType() const
+  {
+	return soundType;
+  }
+
+  // set sound type
+  void setSoundType(SOUND_TYPE soundType)
+  {
+	ASSERT(soundType >= SOUND_TYPE_OFF && soundType <= SOUND_TYPE_CELT);
+	this->soundType = soundType;
+  }
+
+  // get sound type string
+  QString getSoundTypeByString() const
+  {
+	static const QString stringTable[SOUND_TYPE_CELT+1] = {
+	  "SOUND_TYPE_OFF",
+	  "SOUND_TYPE_PCM",
+	  "SOUND_TYPE_CELT",
+	};
+
+	return stringTable[(int)soundType];
+  }
+#endif // QTB_CELT_SUPPORT
 
   // get sound quality
   SOUND_QUALITY getSoundQuality() const
@@ -1684,6 +1717,9 @@ private:
 
   // Sound
   volatile bool onSound;
+#if QTB_CELT_SUPPORT
+  volatile SOUND_TYPE soundType;
+#endif // QTB_CELT_SUPPORT
   volatile SOUND_QUALITY soundQuality;
   volatile SOUND_CAPTURE soundCapture;
 

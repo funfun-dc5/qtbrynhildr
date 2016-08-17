@@ -1927,8 +1927,10 @@ void QtBrynhildr::popUpConnectToServer()
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()
 {
+  // disconnected
   if (!settings->getConnected()){
 	// Nothing to do
+	return;
   }
 
   // disconnect
@@ -2063,9 +2065,9 @@ void QtBrynhildr::connectToServer()
 // reconnect to server
 void QtBrynhildr::reconnectToServer()
 {
-  // disconnected
   if (!settings->getConnected()){
-	// Nothing to do
+	// NOT connected
+	connectToServer();
 	return;
   }
 

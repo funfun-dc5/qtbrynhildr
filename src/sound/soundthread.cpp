@@ -20,6 +20,10 @@
 #include "qtbrynhildr.h"
 #include "wave.h"
 
+#if QTB_CELT_SUPPORT
+#include "converter_celt.h"
+#endif //QTB_CELT_SUPPORT
+
 namespace qtbrynhildr {
 
 // constructor
@@ -33,6 +37,9 @@ SoundThread::SoundThread(Settings *settings, MainWindow *mainWindow)
   audioOutput(0),
   output(0),
   samplerateChangeCount(0),
+#if QTB_CELT_SUPPORT
+  converter(0),
+#endif //QTB_CELT_SUPPORT
   buffer(0)
 {
   outputLog = false; // for DEBUG
@@ -196,30 +203,19 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   // receivedDataSize : Size of PCM Data
 
 #if QTB_CELT_SUPPORT
-  // convert CELT to PCM Data
-  if (com_data->sound_type == SOUND_TYPE_CELT){
-	static bool firstFlag = true;
-	if (firstFlag){
-	  cout << "Received CELT Data!" << endl << flush;
-	  firstFlag = false;
-	}
-	// for DEBUG : save CELT Data (append)
+  if (converter != 0){
+	// for DEBUG : save CELT Data (append mode)
 	if (settings->getOutputSoundDataToFile()){
 	  fstream file;
-	  char filename[] = "pcm/sound_output.clt";
+	  char filename[] = "pcm/sound_output.raw";
 	  file.open(filename, ios::out | ios::binary | ios::app);
 	  if (file.is_open()){
 		file.write(buffer, receivedDataSize);
 		file.close();
 	  }
 	}
-	cout << "[SoundThread] receivedDataSize = " << receivedDataSize << endl << flush;
-#if 0 // for TEST
-	printHeader();
-	dumpHeader();
-#endif
-	// Yet
-	return TRANSMIT_SUCCEEDED; // for TEST
+	// convert to PCM
+	receivedDataSize = converter->convertToPCM(buffer, receivedDataSize);
   }
 #endif // QTB_CELT_SUPPORT
 
@@ -388,6 +384,17 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 
   // change count up
   samplerateChangeCount++;
+
+#if QTB_CELT_SUPPORT
+  // setup converter
+  if (converter != 0){
+	delete converter;
+	converter = 0;
+  }
+  if (com_data->sound_type == SOUND_TYPE_CELT){
+	converter = new Converter_CELT(samplerate, 2);
+  }
+#endif // QTB_CELT_SUPPORT
 
   return true;
 }

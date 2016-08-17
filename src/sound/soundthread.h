@@ -16,6 +16,10 @@
 #include "common/netthread.h"
 #include "soundbuffer.h"
 
+#if QTB_CELT_SUPPORT
+#include "converter.h"
+#endif //QTB_CELT_SUPPORT
+
 namespace qtbrynhildr {
 
 // SoundThread
@@ -79,6 +83,11 @@ private slots:
 
   // samplerate change count
   int samplerateChangeCount;
+
+#if QTB_CELT_SUPPORT
+  // converter
+  Converter *converter;
+#endif //QTB_CELT_SUPPORT
 
 private:
   // local buffer

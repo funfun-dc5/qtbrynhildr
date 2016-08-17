@@ -31,29 +31,10 @@
 // for DEBUG
 #include "debug.h"
 
-#if 1 // for TEST
-// for CELT
-#include "celt.h"
-#endif // for TEST
-
 //using namespace qtbrynhildr;
 
 int main(int argc, char *argv[])
 {
-#if 1 // for TEST
-  int error;
-  CELTMode *mode = celt_mode_create(44100, 256, &error);
-  cout << "celt_mode_create : error = " << error << endl << flush;
-  celt_int32 skip = 0;
-  if (mode != 0){
-	celt_mode_info(mode, CELT_GET_LOOKAHEAD, &skip);
-	cout << "skip = " << skip << endl << flush;
-	celt_mode_destroy(mode);
-  }
-  else {
-	cout << "Ouch: mode = 0" << endl << flush;
-  }
-#endif // for TEST
   // for TEST and DEBUG
   if (!qtbrynhildr::checkProtocolHeader(false)){
 	cout << "Failed: checkProtocolHeader(). header size or member offset error!" << endl << flush;

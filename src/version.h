@@ -7,7 +7,7 @@
 
 // version
 #define QTB_VERSION				"1.5.6"
-#define QTB_RCNAME				"-reconnection"
+#define QTB_RCNAME				""
 #define QTB_VERSION_NUMBER		156
 
 // year

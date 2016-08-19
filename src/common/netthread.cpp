@@ -114,11 +114,12 @@ void NetThread::run()
 	PROCESS_RESULT result_process = processForHeader();
 	if (result_process != PROCESS_SUCCEEDED){
 	  if (result_process == PROCESS_NETWORK_ERROR){
-		// erro
+		// error
 #if 0 // for TEST
 		cout << "[" << name << "]" << " Network Error: processForHeader()" << endl << flush; // error
 #endif // for TEST
 		shutdownConnection();
+		runThread = false;
 		emit networkError(false);
 		continue;
 	  }
@@ -165,6 +166,7 @@ void NetThread::run()
 	case TRANSMIT_NETWORK_ERROR:
 	  cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << endl << flush; // error
 	  shutdownConnection();
+	  runThread = false;
 	  emit networkError(false);
 	  continue;
 	  break;
@@ -267,6 +269,13 @@ SOCKET NetThread::socketToServer()
 
   ADDRINFO *topAddrinfo = addrinfo;
   for (; addrinfo != NULL; addrinfo = addrinfo->ai_next){
+#if 1 // Portable Vresion (for MacOSX, FreeBSD...)
+	sock = connect_retry(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol,
+						 addrinfo->ai_addr, (int)addrinfo->ai_addrlen);
+	if (sock == INVALID_SOCKET){
+	  continue;
+	}
+#else
 	sock = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
 	if (sock == INVALID_SOCKET){
 	  continue;
@@ -276,6 +285,7 @@ SOCKET NetThread::socketToServer()
 	  sock = INVALID_SOCKET;
 	  continue;
 	}
+#endif
 	break;
   }
   // free all addrinfo
@@ -449,6 +459,30 @@ void NetThread::checkSocketOption(SOCKET sock)
 
 // connect with retry
 #define MAXSLEEP 128
+#if 1 // Portable Vresion (for MacOSX, FreeBSD...)
+int NetThread::connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen)
+{
+  for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
+	int fd = socket(domain, type, protocol);
+	if (fd < 0){
+	  break;
+	}
+	if (::connect(fd, addr, addrlen) == 0){
+	  return fd;
+	}
+	closesocket(fd);
+
+	// sleep for next try
+	if (numsec <= MAXSLEEP/2){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
+	  QThread::sleep(numsec);
+	}
+  }
+
+  return INVALID_SOCKET;
+}
+#else
 int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
   for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
@@ -473,6 +507,7 @@ int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t 
 
   return SOCKET_ERROR;
 }
+#endif
 
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 

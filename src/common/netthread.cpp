@@ -269,7 +269,7 @@ SOCKET NetThread::socketToServer()
 
   ADDRINFO *topAddrinfo = addrinfo;
   for (; addrinfo != NULL; addrinfo = addrinfo->ai_next){
-#if 1 // Portable Vresion (for MacOSX, FreeBSD...)
+#if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
 	sock = connect_retry(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol,
 						 addrinfo->ai_addr, (int)addrinfo->ai_addrlen);
 	if (sock == INVALID_SOCKET){
@@ -459,7 +459,7 @@ void NetThread::checkSocketOption(SOCKET sock)
 
 // connect with retry
 #define MAXSLEEP 128
-#if 1 // Portable Vresion (for MacOSX, FreeBSD...)
+#if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
 int NetThread::connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen)
 {
   for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){

@@ -2095,13 +2095,15 @@ void QtBrynhildr::reconnectToServer()
   closeSocket();
 #endif
 
-  // wait for reconnect to server
-  QThread::sleep(1);
-
   // counter for control
   counter_control = 0;
   // counter for graphics
   counter_graphics = 0;
+
+#if defined(Q_OS_OSX)
+  // wait for reconnect to server
+  QThread::sleep(1);
+#endif
 
   // start all thread
   controlThread->start();

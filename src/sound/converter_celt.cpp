@@ -70,9 +70,12 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
   // format:
   // size (4 bytes/Little Endian) + CELT data + size (4 bytes/Little Endian) + CELT data + ...
 
-  // 1) decode all CELT data chunks to PCM data (work buffer)
-  unsigned char *chunkTop = (unsigned char*)buffer;
-  celt_int16 *workTop = (celt_int16*)workBuffer;
+  // 1) copy raw data to workBuffer
+  memcpy(workBuffer, buffer, size);
+
+  // 2) decode all CELT data chunks to PCM data (buffer)
+  unsigned char *chunkTop = (unsigned char*)workBuffer;
+  celt_int16 *workTop = (celt_int16*)buffer;
   int pcmSize = channels * frameSize;
   int error;
   //  cout << "frameSize : " << frameSize << endl << flush;
@@ -93,15 +96,12 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
 	workTop += pcmSize;
 	//	cout << "workTop : " << workTop << endl << flush;
   }
-  decodedPCMSize = (char*)workTop - workBuffer;
+  decodedPCMSize = (char*)workTop - buffer;
   if (decodedPCMSize == 0){
 	return 0;
   }
 
-  // 2) copy PCM data to buffer
-  memcpy(buffer, workBuffer, decodedPCMSize);
-
-  // 3) return decoded PCM data size
+  // 2) return decoded PCM data size
   //  cout << "CELT       : " << size << endl << flush;
   //  cout << "convert PCM: " << decodedPCMSize << endl << flush;
   return decodedPCMSize;

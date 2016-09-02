@@ -102,7 +102,7 @@ protected:
   virtual TRANSMIT_RESULT transmitBuffer() = 0;
 
   // shutdown connection
-  void shutdownConnection();
+  virtual void shutdownConnection();
 
   // connected
   void connectedToServer();
@@ -164,7 +164,11 @@ private:
 #endif // defined(DEBUG)
 
   // connect with retry
+#if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
+  int connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen);
+#else
   int connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+#endif
 
 signals:
   // output Log Message

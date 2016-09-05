@@ -105,7 +105,7 @@ protected:
   virtual void shutdownConnection();
 
   // connected
-  void connectedToServer();
+  virtual void connectedToServer();
 
   // socket to server
   SOCKET socketToServer();

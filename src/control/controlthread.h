@@ -112,6 +112,9 @@ private:
   MODE sentMode;
 
 signals:
+  // connected
+  void connected();
+
   // refresh window
   void refreshWindow();
 

@@ -110,6 +110,9 @@ public slots:
   // connect to server
   void connectToServer();
 
+  // connected
+  void connected();
+
   // refresh window
   void refreshWindow();
 
@@ -312,9 +315,6 @@ private:
 
   // update frame rate
   void updateFrameRate();
-
-  // connected
-  void connected();
 
   // disconnected
   void disconnected();

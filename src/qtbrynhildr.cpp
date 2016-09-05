@@ -508,6 +508,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // control thread
   connect(controlThread,
+		  SIGNAL(connected()),
+		  SLOT(connected()));
+
+  connect(controlThread,
 		  SIGNAL(refreshWindow()),
 		  SLOT(refreshWindow()));
 
@@ -2057,9 +2061,6 @@ void QtBrynhildr::connectToServer()
   controlThread->start();
   graphicsThread->start();
   soundThread->start();
-
-  // connected
-  connected();
 }
 
 // reconnect to server
@@ -2071,47 +2072,18 @@ void QtBrynhildr::reconnectToServer()
 	return;
   }
 
-  // exit all threads
-  controlThread->exitThread();
-  graphicsThread->exitThread();
-  soundThread->exitThread();
-
-  controlThread->exit();
-  controlThread->wait();
-  graphicsThread->exit();
-  graphicsThread->wait();
-  soundThread->exit();
-  soundThread->wait();
-
-  // disconnect
-  settings->setConnected(false);
-
   // clear buffer for control
   mainWindow->getKeyBuffer()->clear();
   mainWindow->getMouseBuffer()->clear();
 
-#if 0 // for TEST
-  // close and initialize socket
-  closeSocket();
-#endif
+  // disconnected
+  disconnected();
 
-  // counter for control
-  counter_control = 0;
-  // counter for graphics
-  counter_graphics = 0;
+  // disconnect
+  settings->setConnected(false);
 
-#if defined(Q_OS_OSX)
-  // wait for reconnect to server
-  QThread::sleep(1);
-#endif
-
-  // start all thread
-  controlThread->start();
-  graphicsThread->start();
-  soundThread->start();
-
-  // connected
-  connected();
+  // desktop clear
+  onDesktopClear();
 }
 
 // disconnect to server

@@ -485,8 +485,12 @@ void ControlThread::connectedToServer()
   // done check password flag
   doneCheckPassword = false;
 
+  NetThread::connectedToServer();
+
   // succeeded to connect
   settings->setConnected(true);
+  // connected
+  emit connected();
   // refresh window
   emit refreshWindow();
 }

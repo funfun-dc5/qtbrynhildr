@@ -105,7 +105,7 @@ protected:
   virtual void shutdownConnection();
 
   // connected
-  void connectedToServer();
+  virtual void connectedToServer();
 
   // socket to server
   SOCKET socketToServer();
@@ -178,7 +178,7 @@ signals:
   void outputLogMessage(int id, const QString text);
 
   // network error
-  void networkError(bool exit);
+  void networkError();
 };
 
 } // end of namespace qtbrynhildr

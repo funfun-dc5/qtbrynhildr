@@ -110,6 +110,9 @@ public slots:
   // connect to server
   void connectToServer();
 
+  // connected
+  void connected();
+
   // refresh window
   void refreshWindow();
 
@@ -128,7 +131,7 @@ public slots:
 #endif // QTB_BRYNHILDR2_SUPPORT
 
   // network error handler
-  void onNetworkError(bool exit);
+  void onNetworkError();
 
   // exit applilcation
   void exitApplication();
@@ -312,9 +315,6 @@ private:
 
   // update frame rate
   void updateFrameRate();
-
-  // connected
-  void connected();
 
   // disconnected
   void disconnected();

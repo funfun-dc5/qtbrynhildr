@@ -497,16 +497,20 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 		  SIGNAL(outputLogMessage(int, const QString)),
 		  SLOT(outputLogMessage(int, const QString)));
   connect(controlThread,
-		  SIGNAL(networkError(bool)),
-		  SLOT(onNetworkError(bool)));
+		  SIGNAL(networkError()),
+		  SLOT(onNetworkError()));
   connect(graphicsThread,
-		  SIGNAL(networkError(bool)),
-		  SLOT(onNetworkError(bool)));
+		  SIGNAL(networkError()),
+		  SLOT(onNetworkError()));
   connect(soundThread,
-		  SIGNAL(networkError(bool)),
-		  SLOT(onNetworkError(bool)));
+		  SIGNAL(networkError()),
+		  SLOT(onNetworkError()));
 
   // control thread
+  connect(controlThread,
+		  SIGNAL(connected()),
+		  SLOT(connected()));
+
   connect(controlThread,
 		  SIGNAL(refreshWindow()),
 		  SLOT(refreshWindow()));
@@ -921,14 +925,9 @@ void QtBrynhildr::changeMouseCursor(const QCursor &cursor)
 #endif // QTB_BRYNHILDR2_SUPPORT
 
 // network error handler
-void QtBrynhildr::onNetworkError(bool exit)
+void QtBrynhildr::onNetworkError()
 {
-  if (exit){
-	disconnectToServer();
-  }
-  else {
-	reconnectToServer();
-  }
+  reconnectToServer();
 }
 
 // exit applilcation
@@ -1935,9 +1934,6 @@ void QtBrynhildr::popUpDisconnectToServer()
 
   // disconnect
   disconnectToServer();
-
-  // desktop clear
-  onDesktopClear();
 }
 
 // connect to server
@@ -2057,61 +2053,32 @@ void QtBrynhildr::connectToServer()
   controlThread->start();
   graphicsThread->start();
   soundThread->start();
-
-  // connected
-  connected();
 }
 
 // reconnect to server
 void QtBrynhildr::reconnectToServer()
 {
   if (!settings->getConnected()){
-	// NOT connected
-	connectToServer();
 	return;
   }
-
-  // exit all threads
-  controlThread->exitThread();
-  graphicsThread->exitThread();
-  soundThread->exitThread();
-
-  controlThread->exit();
-  controlThread->wait();
-  graphicsThread->exit();
-  graphicsThread->wait();
-  soundThread->exit();
-  soundThread->wait();
-
-  // disconnect
-  settings->setConnected(false);
 
   // clear buffer for control
   mainWindow->getKeyBuffer()->clear();
   mainWindow->getMouseBuffer()->clear();
-
-#if 0 // for TEST
-  // close and initialize socket
-  closeSocket();
-#endif
 
   // counter for control
   counter_control = 0;
   // counter for graphics
   counter_graphics = 0;
 
-#if defined(Q_OS_OSX)
-  // wait for reconnect to server
-  QThread::sleep(1);
-#endif
+  // disconnected
+  disconnected();
 
-  // start all thread
-  controlThread->start();
-  graphicsThread->start();
-  soundThread->start();
+  // disconnect
+  settings->setConnected(false);
 
-  // connected
-  connected();
+  // desktop clear
+  onDesktopClear();
 }
 
 // disconnect to server
@@ -2155,8 +2122,8 @@ void QtBrynhildr::disconnectToServer()
   // disconnect
   settings->setConnected(false);
 
-  // refresh window
-  refreshWindow();
+  // desktop clear
+  onDesktopClear();
 }
 
 // finished thread
@@ -2208,7 +2175,7 @@ void QtBrynhildr::exit()
   if (settings->getConnected()){
 	disconnectToServer();
   }
-
+#if 0 // for TEST
   // exit all threads
   controlThread->exitThread();
   graphicsThread->exitThread();
@@ -2220,7 +2187,7 @@ void QtBrynhildr::exit()
   graphicsThread->wait();
   soundThread->exit();
   soundThread->wait();
-
+#endif // for TEST
   // normal screen
   if (QTB_DESKTOP_FULL_SCREEN){
 	if (fullScreenMode){

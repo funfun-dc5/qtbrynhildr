@@ -284,6 +284,11 @@ void SoundThread::shutdownConnection()
 	sock_sound = INVALID_SOCKET;
   }
 
+  // stop audiouOutput
+  if (audioOutput != 0){
+	audioOutput->stop();
+  }
+
   NetThread::shutdownConnection();
 }
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)

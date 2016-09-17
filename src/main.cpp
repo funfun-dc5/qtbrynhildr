@@ -102,13 +102,6 @@ int main(int argc, char *argv[])
   app.installNativeEventFilter(qtbrynhildr.getMainWindow());
 #endif // defined(Q_OS_WIN)
 
-#if 0 // for TEST
-  qtbrynhildr.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  QSizePolicy sizePolicy = qtbrynhildr.sizePolicy();
-  cout << "sizePolicy1 = " << sizePolicy.verticalPolicy()  << endl << flush;
-  cout << "sizePolicy2 = " << sizePolicy.horizontalPolicy()  << endl << flush;
-#endif
-
   // display main window
   qtbrynhildr.setFocus(Qt::ActiveWindowFocusReason);
   qtbrynhildr.show();

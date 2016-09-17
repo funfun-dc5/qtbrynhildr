@@ -43,14 +43,11 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   settings(settings),
   eventConverter(0),
   onShiftKey(false),
-  heightOfStatusBar(0),
-  heightOfMenuBarInHiding(0),
-  heightOfStatusBarInHiding(0),
   heightOfMenuBar(0),
+  heightOfMenuBarInHiding(0),
+  heightOfStatusBar(0),
+  heightOfStatusBarInHiding(0),
   onFullScreen(false),
-#if 0 // for TEST
-  needCalcFullScalingFactor(false),
-#endif // for TEST
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
 #endif // defined(Q_OS_OSX)
@@ -199,11 +196,6 @@ void MainWindow::refreshDesktop(QImage image)
   // copy QImage
   this->image = image;
 
-#if 0 // for TEST
-  // refresh image
-  update();
-#endif // for TEST
-
   // resize window
   if (previousSize != currentSize){
 #if 0 // for DEBUG
@@ -215,80 +207,52 @@ void MainWindow::refreshDesktop(QImage image)
 	// resize main window
 	resize(currentSize.width(), currentSize.height());
 
-#if 0 // for TEST
-	// refresh
-	if (needCalcFullScalingFactor){
-	  parent->refreshFullScreenScalingFactor();
-	  needCalcFullScalingFactor = false;
-	}
-#endif // for TEST
-	refreshDesktop(true);
+	resizeWindow();
   }
   else if (settings->getDesktop()->isChangedCurrentScreen()) {
 	// if current screen is changed.
 	// refresh
-#if 0 // for TEST
-	refreshDesktop(false);
-#else // for TEST
-	refreshDesktop(true);
-#endif // for TEST
+	resizeWindow();
   }
-#if 1 // for TEST
   else {
 	// refresh image
 	update();
   }
-#endif // for TEST
 }
 
-// reflesh desktop window
-void MainWindow::refreshDesktop(bool doResize)
+// resize window
+void MainWindow::resizeWindow()
 {
-#if 1 // for TEST
   // check size
   if (!currentSize.isValid()){
 	// size is null value
 	// Nothing to do
 	return;
   }
-#else // for TEST
-  // check size
-  if (currentSize.width() < 0 || currentSize.height() < 0){
-	// size is null value
-	// Nothing to do
-	return;
-  }
-#endif // for TEST
 
-  // set maximum width & height
-  if (!onFullScreen){
-	if (QTB_FIXED_MAINWINDOW_SIZE && doResize){
+  // resize if NOT full screen
+  if (QTB_FIXED_MAINWINDOW_SIZE){
+	if (!onFullScreen){
 	  if (settings->getOnKeepOriginalDesktopSize()){
-		int targetWidth = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
-		int targetHeight = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+		int width = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
+		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
-		if (targetWidth > screenSize.width()){
-		  targetWidth = screenSize.width();
+		if (width > screenSize.width()){
+		  width = screenSize.width();
 		}
-		if (targetHeight > screenSize.height()){
-		  targetHeight = screenSize.height();
+		if (height > screenSize.height()){
+		  height = screenSize.height();
 		}
-#if 0 // for TEST
-		parent->setMaximumWidth(targetWidth);
-		parent->setMaximumHeight(targetHeight);
-#endif
-		parent->resize(targetWidth, targetHeight);
-#if 1 // for TEST
+
+		// resize
+		parent->resize(width, height);
+
 		// refresh image
 		update();
-#endif // for TEST
 	  }
 	}
   }
-#if 0 // for TEST
-  // refresh image
-  update();
-#endif // for TEST
 }
 
 // clear desktop window
@@ -323,9 +287,6 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 {
   if (QTB_DESKTOP_FULL_SCREEN){
 	this->onFullScreen = onFullScreen;
-#if 0 // for TEST
-	needCalcFullScalingFactor = onFullScreen;
-#endif // for TEST
   }
 }
 

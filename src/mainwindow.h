@@ -63,8 +63,8 @@ public:
   // refresh desktop window
   void refreshDesktop(QImage image);
 
-  // refresh desktop window
-  void refreshDesktop(bool doResize);
+  // resize window
+  void resizeWindow();
 
   // clear desktop window
   void clearDesktop();
@@ -184,25 +184,20 @@ private:
   // current mouse position
   QPoint currentMousePos;
 
-  // height of status bar
-  int heightOfStatusBar;
+  // height of menu bar
+  int heightOfMenuBar;
 
   // height of menu bar in hiding
   int heightOfMenuBarInHiding;
 
+  // height of status bar
+  int heightOfStatusBar;
+
   // height of status bar in hiding
   int heightOfStatusBarInHiding;
 
-  // height of menu bar
-  int heightOfMenuBar;
-
   // full screen flag
   bool onFullScreen;
-
-#if 0 // for TEST
-  // need calc full scaling factor
-  bool needCalcFullScalingFactor;
-#endif // for TEST
 
 #if defined(Q_OS_OSX)
   // previous KEYCODE_FLG

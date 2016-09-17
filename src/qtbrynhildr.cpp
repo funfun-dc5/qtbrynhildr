@@ -407,7 +407,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   flags |= Qt::WindowSystemMenuHint;
   flags |= Qt::WindowCloseButtonHint;
   flags |= Qt::WindowMinimizeButtonHint;
-#if 0 // for TEST
+#if 1 // for TEST
   flags |= Qt::WindowMaximizeButtonHint;
 #else// for TEST
   flags &= ~Qt::WindowMaximizeButtonHint; // disable Maximize Button
@@ -674,6 +674,7 @@ void QtBrynhildr::refreshWindow()
   // update status bar
   updateStatusBar();
 
+#if 0 // for TEST
   // recalc scaling factor
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -685,6 +686,7 @@ void QtBrynhildr::refreshWindow()
 	}
   }
 #endif // defined(QTB_DEV_DESKTOP)
+#endif // for TEST
 }
 
 // refresh menu
@@ -864,6 +866,7 @@ void QtBrynhildr::refreshRecordingAndReplayMenu()
 }
 #endif // QTB_RECORDER
 
+#if 0 // for TEST
 // full screen scaling factor
 void QtBrynhildr::refreshFullScreenScalingFactor()
 {
@@ -877,6 +880,7 @@ void QtBrynhildr::refreshFullScreenScalingFactor()
 	settings->setDesktopScalingFactor(desktopScalingFactor);
   }
 }
+#endif // for TEST
 
 // get shutdown flag
 bool QtBrynhildr::getShutdownFlag() const
@@ -1818,32 +1822,26 @@ void QtBrynhildr::disconnected()
 }
 
 // change event
-#if 0 // for TEST
 void QtBrynhildr::changeEvent(QEvent *event)
 {
   if (event->type() == QEvent::WindowStateChange){
+	static bool onKeepOriginalDesktopSize;
 	Qt::WindowStates states = windowState();
 	switch(states){
 	case Qt::WindowNoState:
-	  cout << "Normal" << endl << flush;
-	  break;
-	case Qt::WindowMaximized:
-	  {
-		cout << "Maximized" << endl << flush;
-		QSize desktopSize = mainWindow->getDesktopSize();
-		if (desktopSize.isValid()){
-		  settings->setDesktopScalingFactor(getFullScreenScalingFactor(desktopSize, true));
-		  mainWindow->refreshDesktop(true);
-		}
+	  if (onKeepOriginalDesktopSize){
+		settings->setOnKeepOriginalDesktopSize(true);
 	  }
 	  break;
+	case Qt::WindowMaximized:
+	  onKeepOriginalDesktopSize = settings->getOnKeepOriginalDesktopSize();
+	  settings->setOnKeepOriginalDesktopSize(false);
+	  break;
 	case Qt::WindowMinimized:
-	  cout << "Minimized" << endl << flush;
 	  break;
 	}
   }
 }
-#endif // for TEST
 
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
@@ -1851,6 +1849,44 @@ void QtBrynhildr::closeEvent(QCloseEvent *event)
   event->ignore();
 
   exit();
+}
+
+// window resize event
+void QtBrynhildr::resizeEvent(QResizeEvent *event)
+{
+  Q_UNUSED(event)
+
+  cout << "Resize: oldsize = (" << event->oldSize().width() << ", " << event->oldSize().height() << ")" << endl << flush;
+  cout << "Resize: size = (" << event->size().width() << ", " << event->size().height() << ")" << endl << flush;
+  cout << "Resize: mainWindow size = (" << mainWindow->getSize().width() << ", " << mainWindow->getSize().height() << ")" << endl << flush;
+
+  int width = event->size().width() - 2;
+  int height = event->size().height() - 43;
+  if (!settings->getOnShowMenuBar()) height += heightOfMenuBar;
+  if (!settings->getOnShowStatusBar()) height += heightOfStatusBar;
+
+  if (mainWindow->getSize().width() > 1920){
+	width = mainWindow->getSize().width();
+  }
+  if (mainWindow->getSize().height() > 1080){
+	height = mainWindow->getSize().height();
+  }
+
+  QSize desktopSize = mainWindow->getDesktopSize();
+  if (!desktopSize.isValid())
+	return;
+
+  int desktopWidth = desktopSize.width();
+  int desktopHeight = desktopSize.height();
+  qreal widthFactor = (qreal)width/desktopWidth;
+  qreal heightFactor = (qreal)height/desktopHeight;
+  if (widthFactor < heightFactor){
+	settings->setDesktopScalingFactor(widthFactor);
+  }
+  else {
+	settings->setDesktopScalingFactor(heightFactor);
+  }
+  cout << "ScalingFactor = " << settings->getDesktopScalingFactor() << endl << flush;
 }
 
 // load settings from setting files or registry
@@ -1871,11 +1907,13 @@ void QtBrynhildr::readSettings()
   move(rect.topLeft());
   resize(rect.size());
 
+#if 0 // for TEST
   // set maximum width & height
   int targetWidth = rect.size().width() + settings->getDesktop()->getCorrectWindowWidth();
   setMaximumWidth(targetWidth);
   int targetHeight = rect.size().height() + heightOfMenuBar + heightOfStatusBar + settings->getDesktop()->getCorrectWindowHeight();
   setMaximumHeight(targetHeight);
+#endif // for TEST
 }
 
 // save settings to setting file or registry
@@ -2673,6 +2711,7 @@ void QtBrynhildr::toggleShowFrameRate()
   updateStatusBar();
 }
 
+#if 0 // for TEST
 // get full screen scaling factor
 #if 0 // for TEST
 qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize, bool includeTitleBar)
@@ -2728,6 +2767,7 @@ qreal QtBrynhildr::getFullScreenScalingFactor(QSize desktopSize)
 #endif
   return (qreal)scalingFactor;
 }
+#endif // for TEST
 
 // full screen
 void QtBrynhildr::fullScreen()
@@ -2743,7 +2783,9 @@ void QtBrynhildr::fullScreen()
   cout << "fullScreen() : height = " << size.height() << endl << flush;
 #endif
 
+#if 0 // for TEST
   static qreal scalingFactorAtNormal = 1.0;
+#endif// for TEST
   fullScreenMode = !fullScreenMode;
   if (fullScreenMode){
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -2753,6 +2795,7 @@ void QtBrynhildr::fullScreen()
 	  menuBar()->setVisible(false);
 	  statusBar()->setVisible(false);
 	}
+#if 0 // for TEST
 	scalingFactorAtNormal = settings->getDesktopScalingFactor();
 	QSize desktopSize = mainWindow->getDesktopSize();
 	if (desktopSize.isValid()){
@@ -2762,6 +2805,7 @@ void QtBrynhildr::fullScreen()
 	  settings->setDesktopScalingFactor(getFullScreenScalingFactor(desktopSize));
 #endif // for TEST
 	}
+#endif// for TEST
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	mainWindow->setOnFullScreen(true);
@@ -2776,7 +2820,9 @@ void QtBrynhildr::fullScreen()
 	  menuBar()->setVisible(settings->getOnShowMenuBar());
 	  statusBar()->setVisible(settings->getOnShowStatusBar());
 	}
+#if 0 // for TEST
 	settings->setDesktopScalingFactor(scalingFactorAtNormal);
+#endif // for TEST
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	mainWindow->setOnFullScreen(false);

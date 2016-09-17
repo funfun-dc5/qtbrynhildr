@@ -48,7 +48,9 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   heightOfStatusBarInHiding(0),
   heightOfMenuBar(0),
   onFullScreen(false),
+#if 0 // for TEST
   needCalcFullScalingFactor(false),
+#endif // for TEST
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
 #endif // defined(Q_OS_OSX)
@@ -141,7 +143,7 @@ void MainWindow::refreshDesktop(QImage image)
   }
 
   // save size
-  size = desktopSize = image.size();
+  currentSize = desktopSize = image.size();
 
   // capture desktop image for original size
   if (QTB_DESKTOP_IMAGE_CAPTURE){
@@ -164,11 +166,11 @@ void MainWindow::refreshDesktop(QImage image)
   // scaling image
   if (QTB_DESKTOP_IMAGE_SCALING){
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
-	  qreal scalingFactor = getDesktopScalingFactor(size);
+	  qreal scalingFactor = getDesktopScalingFactor(currentSize);
 	  if (scalingFactor != 1.0){
 		// scale
-		size = size * scalingFactor;
-		image = image.scaled(size, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		currentSize = currentSize * scalingFactor;
+		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){
@@ -197,66 +199,96 @@ void MainWindow::refreshDesktop(QImage image)
   // copy QImage
   this->image = image;
 
+#if 0 // for TEST
   // refresh image
   update();
+#endif // for TEST
 
   // resize window
-  if (previousSize != size){
+  if (previousSize != currentSize){
 #if 0 // for DEBUG
 	cout << "resize..." << endl; // for DEBUG
 	cout << "image.size().width()  = " << image.size().width() << endl; // for DEBUG
 	cout << "image.size().height() = " << image.size().height() << endl << flush; // for DEBUG
 #endif
-	previousSize = size;
+	previousSize = currentSize;
 	// resize main window
-	resize(size.width(), size.height());
+	resize(currentSize.width(), currentSize.height());
 
+#if 0 // for TEST
 	// refresh
 	if (needCalcFullScalingFactor){
 	  parent->refreshFullScreenScalingFactor();
 	  needCalcFullScalingFactor = false;
 	}
+#endif // for TEST
 	refreshDesktop(true);
   }
   else if (settings->getDesktop()->isChangedCurrentScreen()) {
 	// if current screen is changed.
 	// refresh
+#if 0 // for TEST
 	refreshDesktop(false);
+#else // for TEST
+	refreshDesktop(true);
+#endif // for TEST
   }
+#if 1 // for TEST
+  else {
+	// refresh image
+	update();
+  }
+#endif // for TEST
 }
 
 // reflesh desktop window
 void MainWindow::refreshDesktop(bool doResize)
 {
+#if 1 // for TEST
   // check size
-  if (size.width() < 0 || size.height() < 0){
+  if (!currentSize.isValid()){
 	// size is null value
 	// Nothing to do
 	return;
   }
+#else // for TEST
+  // check size
+  if (currentSize.width() < 0 || currentSize.height() < 0){
+	// size is null value
+	// Nothing to do
+	return;
+  }
+#endif // for TEST
 
   // set maximum width & height
   if (!onFullScreen){
-	int targetWidth = size.width() + settings->getDesktop()->getCorrectWindowWidth();
-	int targetHeight = size.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
-	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
-	if (targetWidth > screenSize.width()){
-	  targetWidth = screenSize.width();
-	}
-	if (targetHeight > screenSize.height()){
-	  targetHeight = screenSize.height();
-	}
-	parent->setMaximumWidth(targetWidth);
-	parent->setMaximumHeight(targetHeight);
 	if (QTB_FIXED_MAINWINDOW_SIZE && doResize){
 	  if (settings->getOnKeepOriginalDesktopSize()){
+		int targetWidth = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
+		int targetHeight = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+		if (targetWidth > screenSize.width()){
+		  targetWidth = screenSize.width();
+		}
+		if (targetHeight > screenSize.height()){
+		  targetHeight = screenSize.height();
+		}
+#if 0 // for TEST
+		parent->setMaximumWidth(targetWidth);
+		parent->setMaximumHeight(targetHeight);
+#endif
 		parent->resize(targetWidth, targetHeight);
+#if 1 // for TEST
+		// refresh image
+		update();
+#endif // for TEST
 	  }
 	}
   }
-
+#if 0 // for TEST
   // refresh image
   update();
+#endif // for TEST
 }
 
 // clear desktop window
@@ -277,7 +309,7 @@ void MainWindow::clearDesktop()
 // get window size
 QSize MainWindow::getSize() const
 {
-  return size;
+  return currentSize;
 }
 
 // get window size
@@ -291,7 +323,9 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 {
   if (QTB_DESKTOP_FULL_SCREEN){
 	this->onFullScreen = onFullScreen;
+#if 0 // for TEST
 	needCalcFullScalingFactor = onFullScreen;
+#endif // for TEST
   }
 }
 
@@ -862,15 +896,13 @@ int MainWindow::getHeightOfStatusBar()
 // minimum size hint
 QSize MainWindow::minimumSizeHint() const
 {
-  //  return QSize(100, 40);
-  return size;
+  return currentSize;
 }
 
 // size hint
 QSize MainWindow::sizeHint() const
 {
-  //  return QSize(100, 40);
-  return size;
+  return currentSize;
 }
 
 //----------------------------------------------------------------------

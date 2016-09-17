@@ -161,7 +161,7 @@ private:
   QImage image;
 
   // window size
-  QSize size;
+  QSize currentSize;
 
   // previous window size
   QSize previousSize;
@@ -199,8 +199,10 @@ private:
   // full screen flag
   bool onFullScreen;
 
+#if 0 // for TEST
   // need calc full scaling factor
   bool needCalcFullScalingFactor;
+#endif // for TEST
 
 #if defined(Q_OS_OSX)
   // previous KEYCODE_FLG

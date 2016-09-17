@@ -103,8 +103,10 @@ public:
   // exit full screen
   void exitFullScreen();
 
+#if 0 // for TEST
   // full screen scaling factor
   void refreshFullScreenScalingFactor();
+#endif // for TEST
 
 public slots:
   // connect to server
@@ -151,13 +153,14 @@ public slots:
   void outputLogMessage(int id, const QString text);
 
 protected:
-#if 0 // for TEST
   // change event
   void changeEvent(QEvent *event);
-#endif // for TEST
 
   // window close event
   void closeEvent(QCloseEvent *event);
+
+  // window resize event
+  void resizeEvent(QResizeEvent *event);
 
 private slots:
   // popup connect to server dialog
@@ -629,11 +632,13 @@ private:
   QClipboard *clipboard;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if 0 // for TEST
   // get full screen scaling factor
 #if 0 // for TEST
   qreal getFullScreenScalingFactor(QSize desktopSize, bool includeTitleBar);
 #else// for TEST
   qreal getFullScreenScalingFactor(QSize desktopSize);
+#endif // for TEST
 #endif // for TEST
 
   // full screen

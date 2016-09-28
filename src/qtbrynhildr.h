@@ -323,6 +323,9 @@ private:
   // disconnected
   void disconnected();
 
+  // set desktop scaling factor
+  void setDesktopScalingFactor(QSize windowSize);
+
   // refresh monitor menu
   void refreshMonitorMenu();
 
@@ -635,6 +638,7 @@ private:
 
   // full screen
   bool fullScreenMode;
+  bool onSetDesktopScalingFactorForFullScreen;
 
   // current status
   bool onShowMenuBar;

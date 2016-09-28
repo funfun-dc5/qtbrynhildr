@@ -265,6 +265,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 // connected
 void SoundThread::connectedToServer()
 {
+  // reset samplerate
+  samplerate = 0;
+
   // delete files
   if (settings->getOutputSoundDataToFile()){
 	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);

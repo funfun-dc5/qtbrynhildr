@@ -172,6 +172,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   clipboard(clipboard),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fullScreenMode(false),
+  onSetDesktopScalingFactorForFullScreen(false),
   onShowMenuBar(false),
   onShowStatusBar(false),
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -867,6 +868,13 @@ void QtBrynhildr::onDesktopChanged(QImage image)
 {
   // update desktop
   mainWindow->refreshDesktop(image);
+
+  // set desktop scaling factor for full screen mode
+  if (onSetDesktopScalingFactorForFullScreen){
+	onSetDesktopScalingFactorForFullScreen = false;
+	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+	setDesktopScalingFactor(screenSize);
+  }
 
   // update current frame rate
   if (settings->getOnShowFrameRate()){
@@ -1727,12 +1735,15 @@ void QtBrynhildr::connected()
   refreshMenu();
 
   // full screen at connected
+  fullScreenMode = false;
+  onSetDesktopScalingFactorForFullScreen = false;
   if (settings->getOnFullScreenAtConnected()){
 	fullScreen();
+	onSetDesktopScalingFactorForFullScreen = true;
   }
 }
 
-// connected
+// disconnected
 void QtBrynhildr::disconnected()
 {
   // disabled software keyboard/button
@@ -1795,6 +1806,37 @@ void QtBrynhildr::disconnected()
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
+// set desktop scaling factor
+void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
+{
+  QSize desktopSize = mainWindow->getDesktopSize();
+  if (!desktopSize.isValid()){
+	return;
+  }
+
+  int width = windowSize.width() -  settings->getDesktop()->getCorrectWindowWidth();
+  int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar() - settings->getDesktop()->getCorrectWindowHeight();
+
+  QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+  if (mainWindow->getSize().width() > screenSize.width()){
+	width = mainWindow->getSize().width();
+  }
+  if (mainWindow->getSize().height() > screenSize.height()){
+	height = mainWindow->getSize().height();
+  }
+
+  int desktopWidth = desktopSize.width();
+  int desktopHeight = desktopSize.height();
+  float widthFactor = (float)width/desktopWidth;
+  float heightFactor = (float)height/desktopHeight;
+  if (widthFactor < heightFactor){
+	settings->setDesktopScalingFactor(widthFactor);
+  }
+  else {
+	settings->setDesktopScalingFactor(heightFactor);
+  }
+}
+
 // change event
 void QtBrynhildr::changeEvent(QEvent *event)
 {
@@ -1830,30 +1872,9 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
   Q_UNUSED(event)
 
-  QSize desktopSize = mainWindow->getDesktopSize();
-  if (!desktopSize.isValid())
-	return;
-
-  int width = event->size().width() -  settings->getDesktop()->getCorrectWindowWidth();
-  int height = event->size().height() - getHeightOfMenuBar() - getHeightOfStatusBar() - settings->getDesktop()->getCorrectWindowHeight();
-
-  QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
-  if (mainWindow->getSize().width() > screenSize.width()){
-	width = mainWindow->getSize().width();
-  }
-  if (mainWindow->getSize().height() > screenSize.height()){
-	height = mainWindow->getSize().height();
-  }
-
-  int desktopWidth = desktopSize.width();
-  int desktopHeight = desktopSize.height();
-  float widthFactor = (float)width/desktopWidth;
-  float heightFactor = (float)height/desktopHeight;
-  if (widthFactor < heightFactor){
-	settings->setDesktopScalingFactor(widthFactor);
-  }
-  else {
-	settings->setDesktopScalingFactor(heightFactor);
+  // rescaling desktop
+  if (settings->getOnKeepOriginalDesktopSize()){
+	setDesktopScalingFactor(event->size());
   }
 }
 
@@ -2075,8 +2096,13 @@ void QtBrynhildr::reconnectToServer()
   // disconnect
   settings->setConnected(false);
 
+  // update status bar
+  updateStatusBar();
+
+#if 0 // for TEST
   // desktop clear
   onDesktopClear();
+#endif
 }
 
 // disconnect to server

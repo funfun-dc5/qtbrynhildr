@@ -289,6 +289,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 // connected
 void SoundThread::connectedToServer()
 {
+  // reset samplerate
+  samplerate = 0;
+
   // delete files
   if (settings->getOutputSoundDataToFile()){
 	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
@@ -306,6 +309,11 @@ void SoundThread::shutdownConnection()
 	shutdown(sock_sound, SD_BOTH);
 	closesocket(sock_sound);
 	sock_sound = INVALID_SOCKET;
+  }
+
+  // stop audiouOutput
+  if (audioOutput != 0){
+	audioOutput->stop();
   }
 
   NetThread::shutdownConnection();

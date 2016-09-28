@@ -103,9 +103,6 @@ public:
   // exit full screen
   void exitFullScreen();
 
-  // full screen scaling factor
-  void refreshFullScreenScalingFactor();
-
 public slots:
   // connect to server
   void connectToServer();
@@ -151,13 +148,14 @@ public slots:
   void outputLogMessage(int id, const QString text);
 
 protected:
-#if 0 // for TEST
   // change event
   void changeEvent(QEvent *event);
-#endif // for TEST
 
   // window close event
   void closeEvent(QCloseEvent *event);
+
+  // window resize event
+  void resizeEvent(QResizeEvent *event);
 
 private slots:
   // popup connect to server dialog
@@ -180,6 +178,12 @@ private slots:
 
   // toggle output log mode
   void toggleOutputLog();
+
+  // get height of menu bar
+  int getHeightOfMenuBar();
+
+  // get height of status bar
+  int getHeightOfStatusBar();
 
   // about dialog
   void about();
@@ -318,6 +322,9 @@ private:
 
   // disconnected
   void disconnected();
+
+  // set desktop scaling factor
+  void setDesktopScalingFactor(QSize windowSize);
 
   // refresh monitor menu
   void refreshMonitorMenu();
@@ -629,15 +636,9 @@ private:
   QClipboard *clipboard;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
-  // get full screen scaling factor
-#if 0 // for TEST
-  qreal getFullScreenScalingFactor(QSize desktopSize, bool includeTitleBar);
-#else// for TEST
-  qreal getFullScreenScalingFactor(QSize desktopSize);
-#endif // for TEST
-
   // full screen
   bool fullScreenMode;
+  bool onSetDesktopScalingFactorForFullScreen;
 
   // current status
   bool onShowMenuBar;
@@ -652,6 +653,12 @@ private:
   // height of title bar
   int heightOfTitleBar;
 #endif // for TEST
+
+  // height of menu bar in hiding
+  int heightOfMenuBarInHiding;
+
+  // height of status bar in hiding
+  int heightOfStatusBarInHiding;
 
   // height of menu bar
   int heightOfMenuBar;

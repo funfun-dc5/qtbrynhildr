@@ -365,7 +365,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 
   // check result
   if (com_data->mode != sentMode){
-	switch(com_data->mode){
+    switch((int)com_data->mode){
 	case MODE_RESULT_PASSWORD_ERROR:
 	  if (doneCheckPassword){
 		// connect error
@@ -386,7 +386,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  break;
 	default:
 	  // unknown error
-	  cout << "Unknown Error...: com_data->mode = " << com_data->mode << endl << flush;
+	  cout << "Unknown Error...: com_data->mode = " << (int)com_data->mode << endl << flush;
 	  return PROCESS_UNKNOWN_ERROR;
 	  break;
 	}

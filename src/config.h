@@ -34,7 +34,11 @@ const bool QTB_FIXED_MAINWINDOW_SIZE	= true;
 const bool QTB_DESKTOP_IMAGE_SCALING	= true;
 
 // desktop image capture
+#if defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_CAPTURE	= true;
+#else // defined(QTB_DEV_DESKTOP)
+const bool QTB_DESKTOP_IMAGE_CAPTURE	= false;
+#endif // defined(QTB_DEV_DESKTOP)
 
 // cut desktop blank area
 const bool QTB_CUT_DESKTOP_BLANK_AREA	= true;
@@ -83,11 +87,19 @@ const bool QTB_IN_TESTING				= false;
 
 #if QTB_BRYNHILDR2_SUPPORT
 
+#if defined(QTB_DEV_DESKTOP)
 // extra mouse button support
 #define QTB_EXTRA_BUTTON_SUPPORT	1
 
 // public mode 6 support
 #define QTB_PUBLIC_MODE6_SUPPORT	1
+#else // defined(QTB_DEV_DESKTOP)
+// extra mouse button support
+#define QTB_EXTRA_BUTTON_SUPPORT	0
+
+// public mode 6 support
+#define QTB_PUBLIC_MODE6_SUPPORT	0
+#endif // defined(QTB_DEV_DESKTOP)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 // drag and drop support

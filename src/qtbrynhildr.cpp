@@ -19,9 +19,9 @@
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
-#if QTB_RECORDER
+#if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QFileDialog>
-#endif // QTB_RECORDER
+#endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>

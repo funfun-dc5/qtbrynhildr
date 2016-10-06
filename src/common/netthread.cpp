@@ -149,8 +149,8 @@ void NetThread::run()
 		// error
 		cout << "[" << name << "]" << " Unkown Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
-		runThread = false;
-		break;
+		emit networkError();
+		continue;
 	  }
 	}
 

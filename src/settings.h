@@ -63,7 +63,8 @@ typedef int PUBLIC_MODEVERSION;
 #if defined(QTB_DEV_TABLET) // for TEST
 #define QTB_SERVERNAME_DEFAULT	"192.168.10.5"
 #else // defined(QTB_DEV_TABLET)
-#define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
+//#define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
+#define QTB_SERVERNAME_DEFAULT	""
 #endif // defined(QTB_DEV_TABLET)
 
 #if QTB_AUTO_COMPLETE
@@ -230,6 +231,10 @@ typedef int SCALING_TYPE;
 #define QTB_MONITOR_NO_DEFAULT			1
 #define MONITOR_NO_MAX					9
 #define MONITOR_NO_ALL					99
+
+// for onOpenConnectToServerDialogAtBootup
+#define QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP				"onOpenConnectToServerDialogAtBootup"
+#define QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT		true
 
 // for onConfirmAtExit
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"
@@ -1140,6 +1145,18 @@ public:
 	this->monitorCount = monitorCount;
   }
 
+  // get open connect to server dialog at bootup flag
+  bool getOnOpenConnectToServerDialogAtBootup() const
+  {
+	return onOpenConnectToServerDialogAtBootup;
+  }
+
+  // set open connect to server dialog at bootup flag
+  void setOnOpenConnectToServerDialogAtBootup(bool onOpenConnectToServerDialogAtBootup)
+  {
+	this->onOpenConnectToServerDialogAtBootup = onOpenConnectToServerDialogAtBootup;
+  }
+
   // get confirm at exit flag
   bool getOnConfirmAtExit() const
   {
@@ -1720,6 +1737,9 @@ private:
 
   // monitor count
   volatile MONITOR_COUNT monitorCount;
+
+  // open connect to server dialog at bootup
+  volatile bool onOpenConnectToServerDialogAtBootup;
 
   // confirm at exit
   volatile bool onConfirmAtExit;

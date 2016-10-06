@@ -624,6 +624,7 @@ onCutDesktopBlankArea=false
 desktopOffsetX=0
 desktopOffsetY=0
 monitorNo=1
+onOpenConnectToServerDialogAtBootup=true
 onConfirmAtExit=true
 onSaveSettingsAtExit=false
 onExitAfterReplay=false
@@ -877,10 +878,12 @@ Ver.1.5.8 : 2016/xx/xx
              ・終了時に警告メッセージが出力されたり、コアダンプする場合がある不具合修正
              ・ネットワーク通信の自動再接続後にフルスクリーン状態が復帰されないことがある不具合修正
              ・ネットワーク通信の自動再接続後にサウンドが再生されない不具合修正
+             ・ネットワーク通信の自動再接続処理の改善
 
             [その他変更]
              ・ネットワーク通信の自動再接続試行時に画面クリアしないように変更
              ・最大化ボタン(Maximize Button)に対応(アスペクト比保存の調整がまだ…)
+             ・起動時に「サーバに接続」ダイアログをポップアップするように変更(変更可)
 
 Ver.1.5.7 : 2016/09/05
             [不具合修正]

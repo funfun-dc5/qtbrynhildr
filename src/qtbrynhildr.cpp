@@ -576,6 +576,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	// clear boot flag
 	option->setBootupFlag(false);
   }
+  else if (settings->getOnOpenConnectToServerDialogAtBootup()) {
+	// pop up connect to server dialog
+	popUpConnectToServer();
+  }
 }
 
 // destructor

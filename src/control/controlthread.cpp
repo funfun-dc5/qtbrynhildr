@@ -368,8 +368,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	switch(com_data->mode){
 	case MODE_RESULT_PASSWORD_ERROR:
 	  if (doneCheckPassword){
-		// connect error
-		return PROCESS_CONNECT_ERROR;
+		// network error
+		return PROCESS_NETWORK_ERROR;
 	  }
 	  else {
 		// password error
@@ -482,9 +482,6 @@ void ControlThread::connectedToServer()
   // shift/alt/control status
   keydown = KEYDOWN_OFF;
 
-  // done check password flag
-  doneCheckPassword = false;
-
   NetThread::connectedToServer();
 
   // succeeded to connect
@@ -513,6 +510,11 @@ void ControlThread::shutdownConnection()
 	shutdown(sock_sound, SD_BOTH);
 	closesocket(sock_sound);
 	sock_sound = INVALID_SOCKET;
+  }
+
+  // done check password flag
+  if (!runThread){
+	doneCheckPassword = false;
   }
 
   NetThread::shutdownConnection();

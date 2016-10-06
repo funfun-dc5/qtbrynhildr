@@ -115,6 +115,8 @@ Settings::Settings(const char *iniFileName)
 
   setMonitorNo(QTB_MONITOR_NO_DEFAULT);
 
+  setOnOpenConnectToServerDialogAtBootup(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT);
+
   setOnConfirmAtExit(QTB_ONCONFIRMATEXIT_DEFAULT);
 
   setOnSaveSettingsAtExit(QTB_ONSAVESETTINGSATEXIT_DEFAULT);
@@ -337,6 +339,10 @@ void Settings::readSettings()
   setMonitorNo(settings->value(QTB_MONITOR_NO,
 							   (qint32)QTB_MONITOR_NO_DEFAULT).toInt());
 
+  // load onOpenConnectToServerDialogAtBootup
+  setOnOpenConnectToServerDialogAtBootup(settings->value(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP,
+														  QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT).toBool());
+
   // load onConfirmAtExit
   setOnConfirmAtExit(settings->value(QTB_ONCONFIRMATEXIT,
 									 QTB_ONCONFIRMATEXIT_DEFAULT).toBool());
@@ -553,6 +559,9 @@ void Settings::writeSettings()
   // save monitor no
   settings->setValue(QTB_MONITOR_NO, (qint32)monitorNo);
 
+  // save onOpenConnectToServerDialogAtBootup
+  settings->setValue(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP, onOpenConnectToServerDialogAtBootup);
+
   // save confirmAtExit
   settings->setValue(QTB_ONCONFIRMATEXIT, onConfirmAtExit);
 
@@ -697,6 +706,7 @@ void Settings::printSettings() const
   qDebug() << "DesktopOffsetY          : " << desktopOffsetY;
 
   qDebug() << "MonitorNo               : " << monitorNo;
+  qDebug() << "OpenConnectToServerDialogAtBootup           : " << onOpenConnectToServerDialogAtBootup;
   qDebug() << "ConfirmAtExit           : " << onConfirmAtExit;
   qDebug() << "SaveSettingsAtExit      : " << onSaveSettingsAtExit;
   qDebug() << "ExitAfterReplay         : " << onExitAfterReplay;

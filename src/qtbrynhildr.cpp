@@ -578,6 +578,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   }
   else if (settings->getOnOpenConnectToServerDialogAtBootup()) {
 	// pop up connect to server dialog
+	this->show();
 	popUpConnectToServer();
   }
 }

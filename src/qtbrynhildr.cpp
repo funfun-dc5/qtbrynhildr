@@ -19,9 +19,9 @@
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
-#if QTB_RECORDER
+#if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QFileDialog>
-#endif // QTB_RECORDER
+#endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -173,6 +173,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fullScreenMode(false),
   onSetDesktopScalingFactorForFullScreen(false),
+  onKeepOriginalDesktopSize(false),
   onShowMenuBar(false),
   onShowStatusBar(false),
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -1846,13 +1847,9 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 void QtBrynhildr::changeEvent(QEvent *event)
 {
   if (event->type() == QEvent::WindowStateChange){
-	static bool onKeepOriginalDesktopSize;
 	Qt::WindowStates states = windowState();
 	switch(states){
 	case Qt::WindowNoState:
-	  if (onKeepOriginalDesktopSize){
-		settings->setOnKeepOriginalDesktopSize(true);
-	  }
 	  break;
 	case Qt::WindowMaximized:
 	  onKeepOriginalDesktopSize = settings->getOnKeepOriginalDesktopSize();
@@ -1876,6 +1873,12 @@ void QtBrynhildr::closeEvent(QCloseEvent *event)
 void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
   Q_UNUSED(event)
+
+  // restore onKeepOriginalDesktopSize
+  if (onKeepOriginalDesktopSize){
+	settings->setOnKeepOriginalDesktopSize(true);
+	onKeepOriginalDesktopSize = false;
+  }
 
   // rescaling desktop
   if (settings->getOnKeepOriginalDesktopSize()){

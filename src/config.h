@@ -34,7 +34,11 @@ const bool QTB_FIXED_MAINWINDOW_SIZE	= true;
 const bool QTB_DESKTOP_IMAGE_SCALING	= true;
 
 // desktop image capture
+#if defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_CAPTURE	= true;
+#else // defined(QTB_DEV_DESKTOP)
+const bool QTB_DESKTOP_IMAGE_CAPTURE	= false;
+#endif // defined(QTB_DEV_DESKTOP)
 
 // cut desktop blank area
 const bool QTB_CUT_DESKTOP_BLANK_AREA	= true;

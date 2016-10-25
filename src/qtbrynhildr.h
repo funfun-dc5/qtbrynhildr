@@ -639,6 +639,7 @@ private:
   // full screen
   bool fullScreenMode;
   bool onSetDesktopScalingFactorForFullScreen;
+  bool onKeepOriginalDesktopSize;
 
   // current status
   bool onShowMenuBar;

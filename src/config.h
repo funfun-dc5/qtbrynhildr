@@ -87,19 +87,11 @@ const bool QTB_IN_TESTING				= false;
 
 #if QTB_BRYNHILDR2_SUPPORT
 
-#if defined(QTB_DEV_DESKTOP)
 // extra mouse button support
 #define QTB_EXTRA_BUTTON_SUPPORT	1
 
 // public mode 6 support
 #define QTB_PUBLIC_MODE6_SUPPORT	1
-#else // defined(QTB_DEV_DESKTOP)
-// extra mouse button support
-#define QTB_EXTRA_BUTTON_SUPPORT	0
-
-// public mode 6 support
-#define QTB_PUBLIC_MODE6_SUPPORT	0
-#endif // defined(QTB_DEV_DESKTOP)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 // drag and drop support

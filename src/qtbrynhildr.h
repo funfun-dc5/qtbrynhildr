@@ -148,8 +148,10 @@ public slots:
   void outputLogMessage(int id, const QString text);
 
 protected:
+#if 0 // for TEST
   // change event
   void changeEvent(QEvent *event);
+#endif // for TEST
 
   // window close event
   void closeEvent(QCloseEvent *event);
@@ -639,7 +641,6 @@ private:
   // full screen
   bool fullScreenMode;
   bool onSetDesktopScalingFactorForFullScreen;
-  bool onKeepOriginalDesktopSize;
 
   // current status
   bool onShowMenuBar;

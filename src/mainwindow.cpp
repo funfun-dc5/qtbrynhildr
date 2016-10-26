@@ -233,7 +233,7 @@ void MainWindow::resizeWindow()
   // resize if NOT full screen
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
-	  if (settings->getOnKeepOriginalDesktopSize()){
+	  if (settings->getOnKeepOriginalDesktopSize() && !parent->isMaximized()){
 		int width = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
 		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
 

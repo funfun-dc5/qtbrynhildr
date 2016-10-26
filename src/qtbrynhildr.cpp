@@ -173,7 +173,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fullScreenMode(false),
   onSetDesktopScalingFactorForFullScreen(false),
-  onKeepOriginalDesktopSize(false),
   onShowMenuBar(false),
   onShowStatusBar(false),
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -1843,23 +1842,25 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   }
 }
 
+#if 0 // for TEST
 // change event
 void QtBrynhildr::changeEvent(QEvent *event)
 {
+  QMainWindow::changeEvent(event);
+
   if (event->type() == QEvent::WindowStateChange){
 	Qt::WindowStates states = windowState();
 	switch(states){
 	case Qt::WindowNoState:
 	  break;
 	case Qt::WindowMaximized:
-	  onKeepOriginalDesktopSize = settings->getOnKeepOriginalDesktopSize();
-	  settings->setOnKeepOriginalDesktopSize(false);
 	  break;
 	case Qt::WindowMinimized:
 	  break;
 	}
   }
 }
+#endif // for TEST
 
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
@@ -1874,14 +1875,18 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
   Q_UNUSED(event)
 
-  // restore onKeepOriginalDesktopSize
-  if (onKeepOriginalDesktopSize){
-	settings->setOnKeepOriginalDesktopSize(true);
-	onKeepOriginalDesktopSize = false;
-  }
+  QMainWindow::resizeEvent(event);
+
+#if 0 // for TEST
+  cout << "resizeEvent()" << endl << flush;
+#endif // for TEST
 
   // rescaling desktop
   if (settings->getOnKeepOriginalDesktopSize()){
+#if 0 // for TEST
+	cout << "resizeEvent() : Rescaling for (width, height) = ("
+		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
+#endif // for TEST
 	setDesktopScalingFactor(event->size());
   }
 }
@@ -1890,19 +1895,21 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 void QtBrynhildr::readSettings()
 {
   QRect defaultRect = QRect(200, 200, 800, 600);
-  QRect rect = settings->getSettings()->value(QTB_GEOMETRY, defaultRect).toRect();
 
   // read global settings
   if (!option->getInitFlag()){
 	settings->readSettings();
   }
-  else {
-	// set default rect
-	rect = defaultRect;
-  }
+
   // restore geometry
-  move(rect.topLeft());
-  resize(rect.size());
+  bool result = restoreGeometry(settings->getSettings()->value(QTB_GEOMETRY).toByteArray());
+  if (!result){
+	move(defaultRect.topLeft());
+	resize(defaultRect.size());
+  }
+
+  // restore window state
+  restoreState(settings->getSettings()->value(QTB_WINDOWSTATE).toByteArray());
 }
 
 // save settings to setting file or registry
@@ -1912,9 +1919,10 @@ void QtBrynhildr::writeSettings()
   settings->writeSettings();
 
   // save geometry
-  QRect geometryInfo(QPoint(frameGeometry().x(), frameGeometry().y()),
-					 QSize(geometry().width(), geometry().height()));
-  settings->getSettings()->setValue(QTB_GEOMETRY, geometryInfo);
+  settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
+
+  // save window state
+  settings->getSettings()->setValue(QTB_WINDOWSTATE, saveState());
 
   // sync
   settings->getSettings()->sync();
@@ -2045,6 +2053,7 @@ void QtBrynhildr::connectToServer()
 	  softwareKeyboardDockWidget = 0;
 	}
 	softwareKeyboardDockWidget = new QDockWidget(tr("Software Keyboard"));
+	softwareKeyboardDockWidget->setObjectName("Software Keyboard");
 	softwareKeyboardDockWidget->setWidget(softwareKeyboard);
 	softwareKeyboardDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
 	connect(softwareKeyboardDockWidget,
@@ -2055,6 +2064,7 @@ void QtBrynhildr::connectToServer()
 	// software button
 	if (softwareButtonDockWidget == 0){
 	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
+	  softwareButtonDockWidget->setObjectName("Software Button");
 	  softwareButtonDockWidget->setWidget(softwareButton);
 	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
 	  connect(softwareButtonDockWidget,

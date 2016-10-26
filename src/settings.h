@@ -362,6 +362,8 @@ typedef int SCALING_TYPE;
 // -- other settings --
 // for geometry
 #define QTB_GEOMETRY			"geometry"
+// for window state
+#define QTB_WINDOWSTATE			"windowState"
 
 namespace qtbrynhildr {
 

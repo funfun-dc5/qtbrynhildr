@@ -39,6 +39,19 @@
 
 (2) master上でリリース用にversion.h/qtbrynhildr.rc/qtbrynhildr.iss.templateを変更
 
+ qtbrynhildr.rcのFILEVERSION, FileVersionは、以下のルールとする。
+ (*)PRODUCTVERSION, ProductVersionには適用しない
+
+ [Release Candidate(RC)の場合]
+
+ RC1 -> x.x.x.1
+ RC2 -> x.x.x.2
+
+ [正式版の場合]
+
+ RCが存在しなかった場合 -> *.*.*.0
+ RCが存在した場合       -> *.*.*.? (?: 最後のRC番号)
+
 (3) タグ(tag)を打つ
 
 (4) リリース作業

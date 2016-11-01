@@ -1849,15 +1849,8 @@ void QtBrynhildr::changeEvent(QEvent *event)
   QMainWindow::changeEvent(event);
 
   if (event->type() == QEvent::WindowStateChange){
-	Qt::WindowStates states = windowState();
-	switch(states){
-	case Qt::WindowNoState:
-	  break;
-	case Qt::WindowMaximized:
-	  break;
-	case Qt::WindowMinimized:
-	  break;
-	}
+	Qt::WindowState state = windowState();
+	//  OR'ed Qt::WindowNoState, Qt::WindowMaximized, Qt::WindowMinimized, Qt::WindowActive
   }
 }
 #endif // for TEST

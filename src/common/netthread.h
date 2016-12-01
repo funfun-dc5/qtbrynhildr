@@ -175,7 +175,7 @@ signals:
   void outputLogMessage(int id, const QString text);
 
   // network error
-  void networkError();
+  void networkError(bool doRetry);
 };
 
 } // end of namespace qtbrynhildr

@@ -96,7 +96,7 @@ void NetThread::run()
 		cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
 #endif // for TEST
 		shutdownConnection();
-		emit networkError();
+		emit networkError(true);
 #if 0 // for TEST
 		emit outputLogMessage(QTB_MSG_CONNECT_ERROR);
 #endif // for TEST
@@ -118,7 +118,7 @@ void NetThread::run()
 		cout << "[" << name << "]" << " Network Error: processForHeader()" << endl << flush; // error
 #endif // for TEST
 		shutdownConnection();
-		emit networkError();
+		emit networkError(true);
 		continue;
 	  }
 	  if (result_process == PROCESS_PASSWORD_ERROR){
@@ -126,6 +126,7 @@ void NetThread::run()
 		cout << "[" << name << "]" << " Password Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		runThread = false;
+		emit networkError(false);
 		emit outputLogMessage(QTB_MSG_PASSWORD_ERROR);
 		break;
 	  }
@@ -134,6 +135,7 @@ void NetThread::run()
 		cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		runThread = false;
+		emit networkError(false);
 		emit outputLogMessage(QTB_MSG_ALREADY_CONNECT_ANOTHER_CLIENT);
 		break;
 	  }
@@ -142,6 +144,7 @@ void NetThread::run()
 		cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		runThread = false;
+		emit networkError(false);
 		emit outputLogMessage(QTB_MSG_NOTSUPPORT_VIDEO_MODE);
 		break;
 	  }
@@ -149,7 +152,7 @@ void NetThread::run()
 		// error
 		cout << "[" << name << "]" << " Unkown Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
-		emit networkError();
+		emit networkError(true);
 		continue;
 	  }
 	}
@@ -163,7 +166,7 @@ void NetThread::run()
 	case TRANSMIT_NETWORK_ERROR:
 	  cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << endl << flush; // error
 	  shutdownConnection();
-	  emit networkError();
+	  emit networkError(true);
 	  continue;
 	  break;
 	case TRANSMIT_DATASIZE_ERROR:

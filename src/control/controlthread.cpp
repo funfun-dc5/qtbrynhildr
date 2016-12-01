@@ -563,9 +563,12 @@ void ControlThread::initHeader()
   }
 #endif // QTB_BRYNHILDR2_SUPPORT
 
-
   // for control
   com_data->control		= settings->getOnControl() ? CONTROL_ON : CONTROL_OFF;
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // for plugins disable
+  com_data->plugins_disable = settings->getOnPluginsDisable() ? PLUGINS_DISABLE_ON : PLUGINS_DISABLE_OFF;
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
   com_data->mouse_move	= MOUSE_MOVE_OFF;
   com_data->mouse_x		= (POS)0;
   com_data->mouse_y		= (POS)0;

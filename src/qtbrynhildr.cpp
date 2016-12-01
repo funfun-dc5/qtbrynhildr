@@ -132,6 +132,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   startReplayRecordingControl_Action(0),
   stopReplayRecordingControl_Action(0),
 #endif // QTB_RECORDER
+#if QTB_EXTRA_BUTTON_SUPPORT
+  onPluginsDisable_Action(0),
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   sendKey1_Action(0),
   sendKey2_Action(0),
   sendKey3_Action(0),
@@ -1348,6 +1351,16 @@ void QtBrynhildr::createActions()
   connect(stopReplayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopReplayRecordingControl()));
 #endif // QTB_RECORDER
 
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // onPluginsDisable Action
+  onPluginsDisable_Action = new QAction(tr("Disable Plugins"), this);
+  onPluginsDisable_Action->setEnabled(false);
+  onPluginsDisable_Action->setCheckable(true);
+  onPluginsDisable_Action->setChecked(settings->getOnPluginsDisable());
+  onPluginsDisable_Action->setStatusTip(tr("Disable Plugins"));
+  connect(onPluginsDisable_Action, SIGNAL(triggered()), this, SLOT(setOnPluginsDisable()));
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
   // send key Action
 #if 0 // for TEST
   sendKey1_Action = new QAction(tr("Ctrl + Alt + Del"), this);
@@ -1541,6 +1554,12 @@ void QtBrynhildr::createMenus()
   recordAndReplaySubMenu->addAction(startReplayRecordingControl_Action);
   recordAndReplaySubMenu->addAction(stopReplayRecordingControl_Action);
 #endif // QTB_RECORDER
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // for plugins disable
+  controlMenu->addSeparator();
+  controlMenu->addAction(onPluginsDisable_Action);
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("Option"));
@@ -1738,6 +1757,11 @@ void QtBrynhildr::connected()
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // plugins disable
+  onPluginsDisable_Action->setEnabled(true);
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
   // reset total frame counter
   totalFrameCounter = 0;
 
@@ -1814,6 +1838,13 @@ void QtBrynhildr::disconnected()
 	mainWindow->setAcceptDrops(false);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // plugins disable
+  settings->setOnPluginsDisable(false);
+  onPluginsDisable_Action->setChecked(false);
+  onPluginsDisable_Action->setEnabled(false);
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 }
 
 // set desktop scaling factor
@@ -2479,6 +2510,15 @@ void QtBrynhildr::toggleOnSound()
 	onSound_Action->setChecked(true);
   }
 }
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+void QtBrynhildr::setOnPluginsDisable()
+{
+  settings->setOnPluginsDisable(true);
+  onPluginsDisable_Action->setChecked(true);
+  onPluginsDisable_Action->setEnabled(false);
+}
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
 #if QTB_RECORDER
 // start recording control

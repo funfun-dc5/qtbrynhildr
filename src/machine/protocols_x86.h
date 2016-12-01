@@ -55,6 +55,12 @@ typedef char	CONTROL;
 #define CONTROL_OFF			0	// control off
 #define CONTROL_ON			1	// control on
 
+// plugins disable
+#if QTB_PLUGINS_DISABLE_SUPPORT
+#define PLUGINS_DISABLE_OFF	0 // plugins disable off
+#define PLUGINS_DISABLE_ON	1 // plugins disable on
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
 // mouse move
 #if QTB_EXTRA_BUTTON_SUPPORT
 typedef char	MOUSE_MOVE;

@@ -31,7 +31,13 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   SIZE				server_cx;			// width of image for server.
   SIZE				server_cy;			// hight of image for server.
   CONTROL			control;
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  BYTE				dummy4[1];			// padding 1 bytes
+  BYTE				plugins_disable;	// disable plugins
+  BYTE				dummy17[1];			// padding 1 bytes
+#else // QTB_PLUGINS_DISABLE_SUPPORT
   BYTE				dummy4[3];			// padding 3 bytes
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 #if QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_MOVE		mouse_move;			// 1 byte
   BYTE				dummy5[1];

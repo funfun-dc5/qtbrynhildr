@@ -104,6 +104,9 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_DRAG_AND_DROP_SUPPORT	0
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+// disable plugins support
+#define QTB_PLUGINS_DISABLE_SUPPORT	1
+
 #else // QTB_BRYNHILDR2_SUPPORT
 
 // extra mouse button support
@@ -114,6 +117,9 @@ const bool QTB_IN_TESTING				= false;
 
 // drag and drop support
 #define QTB_DRAG_AND_DROP_SUPPORT	0
+
+// disable plugins support
+#define QTB_PLUGINS_DISABLE_SUPPORT	0
 
 #endif // QTB_BRYNHILDR2_SUPPORT
 

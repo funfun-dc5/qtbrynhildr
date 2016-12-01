@@ -228,6 +228,11 @@ private slots:
   void stopReplayRecordingControl();
 #endif // QTB_RECORDER
 
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // set onPluginsDisable
+  void setOnPluginsDisable();
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
   // send key
 #if 0 // for TEST
   void sendKey_CTRL_ALT_DEL(); // CTRL + ALT + DEL
@@ -517,6 +522,11 @@ private:
   // stop replay recorded control
   QAction *stopReplayRecordingControl_Action;
 #endif // QTB_RECORDER
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // set onPluginsDisable
+  QAction *onPluginsDisable_Action;
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // send key
   QAction *sendKey1_Action;

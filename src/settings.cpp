@@ -81,6 +81,9 @@ Settings::Settings(const char *iniFileName)
   setPortNo(QTB_PORTNO_DEFAULT);
   setPassword(QTB_PASSWORD_DEFAULT);
   setOnControl(QTB_ONCONTROL_DEFAULT);
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
   setOnHoldMouseControl(QTB_ONHOLDMOUSECONTROL_DEFAULT);
 #if QTB_EXTRA_BUTTON_SUPPORT
   setOnExtraButtonSupport(QTB_ONEXTRABUTTONSUPPORT_DEFAULT);
@@ -664,6 +667,9 @@ void Settings::printSettings() const
   qDebug() << "Port No       : " << portNo;
   qDebug() << "Password      : " << password;
   qDebug() << "Control       : " << onControl;
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  qDebug() << "PluginsDisable: " << onPluginsDisable;
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   qDebug() << "DisplayCursor : " << onDisplayCursor;
   qDebug() << "SupportGamePad: " << onSupportGamePad;

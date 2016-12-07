@@ -1,8 +1,8 @@
 ;----------------------------------------------------------------------
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
-#define AppVer "1.5.8"
-#define RCName "-v221"
+#define AppVer "1.5.9"
+#define RCName ""
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"

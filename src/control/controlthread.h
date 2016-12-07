@@ -150,9 +150,9 @@ private:
   char *clipboardTop;
 
   // transfer file progress
-  int transferFileProgress;
+  qint64 transferFileProgress;
   // send file progress unit
-  int transferFileProgressUnit;
+  qint64 transferFileProgressUnit;
 
   // ntfs utility
   NTFS *ntfs;

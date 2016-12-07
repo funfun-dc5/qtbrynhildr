@@ -1,5 +1,5 @@
 #!/bin/bash
-APP="qtbrynhildr"
+APP="QtBrynhildr"
 
 case $UNAME in
 	CYGWIN*)

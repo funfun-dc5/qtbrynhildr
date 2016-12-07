@@ -29,7 +29,7 @@ LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 }
 
 # for Linux/FreeBSD
-linux-g++ | freebsd-g++ {
+linux-g++-64 | linux-g++ | freebsd-g++ {
 DEFINES += QTB_RECORDER=1
 }
 

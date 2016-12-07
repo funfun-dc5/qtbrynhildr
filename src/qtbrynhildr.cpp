@@ -132,6 +132,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   startReplayRecordingControl_Action(0),
   stopReplayRecordingControl_Action(0),
 #endif // QTB_RECORDER
+#if QTB_EXTRA_BUTTON_SUPPORT
+  onPluginsDisable_Action(0),
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   sendKey1_Action(0),
   sendKey2_Action(0),
   sendKey3_Action(0),
@@ -142,6 +145,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #if QTB_PUBLIC_MODE6_SUPPORT
   sendClipboard_Action(0),
   sendFile_Action(0),
+  cancelFileTransferring_Action(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   connectToServerDialog(0),
   desktopScalingDialog(0),
@@ -502,14 +506,14 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 		  SIGNAL(outputLogMessage(int, const QString)),
 		  SLOT(outputLogMessage(int, const QString)));
   connect(controlThread,
-		  SIGNAL(networkError()),
-		  SLOT(onNetworkError()));
+		  SIGNAL(networkError(bool)),
+		  SLOT(onNetworkError(bool)));
   connect(graphicsThread,
-		  SIGNAL(networkError()),
-		  SLOT(onNetworkError()));
+		  SIGNAL(networkError(bool)),
+		  SLOT(onNetworkError(bool)));
   connect(soundThread,
-		  SIGNAL(networkError()),
-		  SLOT(onNetworkError()));
+		  SIGNAL(networkError(bool)),
+		  SLOT(onNetworkError(bool)));
 
   // control thread
   connect(controlThread,
@@ -916,9 +920,14 @@ void QtBrynhildr::changeMouseCursor(const QCursor &cursor)
 #endif // QTB_BRYNHILDR2_SUPPORT
 
 // network error handler
-void QtBrynhildr::onNetworkError()
+void QtBrynhildr::onNetworkError(bool doRetry)
 {
-  reconnectToServer();
+  if (doRetry){
+	reconnectToServer();
+  }
+  else {
+	disconnected();
+  }
 }
 
 // exit applilcation
@@ -950,9 +959,16 @@ void QtBrynhildr::setFileTransferProgressBarValue(int value)
 
   if (value >= 100){
 	progressBar->setVisible(false);
+
+	// enable cancel file transferring menu
+	cancelFileTransferring_Action->setEnabled(false);
   }
   else {
 	progressBar->setValue(value);
+
+	// disable cancel file transferring menu
+	if (!cancelFileTransferring_Action->isEnabled())
+	  cancelFileTransferring_Action->setEnabled(true);
   }
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -1343,6 +1359,16 @@ void QtBrynhildr::createActions()
   connect(stopReplayRecordingControl_Action, SIGNAL(triggered()), this, SLOT(stopReplayRecordingControl()));
 #endif // QTB_RECORDER
 
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // onPluginsDisable Action
+  onPluginsDisable_Action = new QAction(tr("Disable Plugins"), this);
+  onPluginsDisable_Action->setEnabled(false);
+  onPluginsDisable_Action->setCheckable(true);
+  onPluginsDisable_Action->setChecked(settings->getOnPluginsDisable());
+  onPluginsDisable_Action->setStatusTip(tr("Disable Plugins"));
+  connect(onPluginsDisable_Action, SIGNAL(triggered()), this, SLOT(setOnPluginsDisable()));
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
   // send key Action
 #if 0 // for TEST
   sendKey1_Action = new QAction(tr("Ctrl + Alt + Del"), this);
@@ -1400,6 +1426,12 @@ void QtBrynhildr::createActions()
   sendFile_Action->setEnabled(false);
   sendFile_Action->setStatusTip(tr("Send File"));
   connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
+
+  // cancel file transferring
+  cancelFileTransferring_Action = new QAction(tr("Cancel File Transferring"), this);
+  cancelFileTransferring_Action->setEnabled(false);
+  cancelFileTransferring_Action->setStatusTip(tr("Cancel File Transferring"));
+  connect(cancelFileTransferring_Action, SIGNAL(triggered()), this, SLOT(cancelFileTransferring()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -1418,8 +1450,10 @@ void QtBrynhildr::createMenus()
   if (!settings->getOnDisableTransferClipboard())
 	fileMenu->addAction(sendClipboard_Action);
 #endif
-  if (!settings->getOnDisableTransferFile())
+  if (!settings->getOnDisableTransferFile()){
 	fileMenu->addAction(sendFile_Action);
+	fileMenu->addAction(cancelFileTransferring_Action);
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -1536,6 +1570,12 @@ void QtBrynhildr::createMenus()
   recordAndReplaySubMenu->addAction(startReplayRecordingControl_Action);
   recordAndReplaySubMenu->addAction(stopReplayRecordingControl_Action);
 #endif // QTB_RECORDER
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // for plugins disable
+  controlMenu->addSeparator();
+  controlMenu->addAction(onPluginsDisable_Action);
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("Option"));
@@ -1728,10 +1768,18 @@ void QtBrynhildr::connected()
 	// send file
 	sendFile_Action->setEnabled(true);
 
+	// cancel file transferring
+	cancelFileTransferring_Action->setEnabled(false);
+
 	// drag and drop
 	mainWindow->setAcceptDrops(true);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // plugins disable
+  onPluginsDisable_Action->setEnabled(true);
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // reset total frame counter
   totalFrameCounter = 0;
@@ -1805,10 +1853,20 @@ void QtBrynhildr::disconnected()
 	// send file
 	sendFile_Action->setEnabled(false);
 
+	// cancel file transferring
+	cancelFileTransferring_Action->setEnabled(false);
+
 	// drag and drop
 	mainWindow->setAcceptDrops(false);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // plugins disable
+  settings->setOnPluginsDisable(false);
+  onPluginsDisable_Action->setChecked(false);
+  onPluginsDisable_Action->setEnabled(false);
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 }
 
 // set desktop scaling factor
@@ -2292,6 +2350,16 @@ void QtBrynhildr::sendFile()
   settings->setSendFileNames(fileNames);
   settings->setSendFileCount(fileNames.count());
 }
+
+// cancel file transferring
+void QtBrynhildr::cancelFileTransferring()
+{
+  // disable cancel file transferring menu
+  cancelFileTransferring_Action->setEnabled(false);
+
+  // cancel file transferring
+  controlThread->exitThread();
+}
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // clear Video Quality check
@@ -2474,6 +2542,15 @@ void QtBrynhildr::toggleOnSound()
 	onSound_Action->setChecked(true);
   }
 }
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+void QtBrynhildr::setOnPluginsDisable()
+{
+  settings->setOnPluginsDisable(true);
+  onPluginsDisable_Action->setChecked(true);
+  onPluginsDisable_Action->setEnabled(false);
+}
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
 #if QTB_RECORDER
 // start recording control

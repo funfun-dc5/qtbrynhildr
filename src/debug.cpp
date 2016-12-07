@@ -106,6 +106,19 @@ bool checkProtocolHeader(bool outputLog)
 	cout << " : ng" << endl;
 	result = false;
   }
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  offset = (char*)&(com_data.dummy17[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy16 offset = " << offset;
+  if (offset == 63){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	cout << " : ng" << endl;
+	result = false;
+  }
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
   offset = (char*)&(com_data.dummy5[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy5 offset = " << offset;

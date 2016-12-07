@@ -128,7 +128,7 @@ public slots:
 #endif // QTB_BRYNHILDR2_SUPPORT
 
   // network error handler
-  void onNetworkError();
+  void onNetworkError(bool doRetry);
 
   // exit applilcation
   void exitApplication();
@@ -199,6 +199,9 @@ private slots:
 
   // send file
   void sendFile();
+
+  // cancel file transferring
+  void cancelFileTransferring();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set video quality
@@ -227,6 +230,11 @@ private slots:
   void startReplayRecordingControl();
   void stopReplayRecordingControl();
 #endif // QTB_RECORDER
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // set onPluginsDisable
+  void setOnPluginsDisable();
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // send key
 #if 0 // for TEST
@@ -518,6 +526,11 @@ private:
   QAction *stopReplayRecordingControl_Action;
 #endif // QTB_RECORDER
 
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // set onPluginsDisable
+  QAction *onPluginsDisable_Action;
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
   // send key
   QAction *sendKey1_Action;
   QAction *sendKey2_Action;
@@ -535,6 +548,9 @@ private:
 
   // send file
   QAction *sendFile_Action;
+
+  // cancel file transferring
+  QAction *cancelFileTransferring_Action;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // connect to server dialog

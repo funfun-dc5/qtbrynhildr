@@ -116,6 +116,12 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONCONTROL			"onControl"
 #define QTB_ONCONTROL_DEFAULT	true
 
+#if QTB_PLUGINS_DISABLE_SUPPORT
+// for onPluginsDisable
+#define QTB_ONPLUGINSDISABLE			"onPluginsDisable"
+#define QTB_ONPLUGINSDISABLE_DEFAULT	false
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
 // for onHoldMouseControl
 #define QTB_ONHOLDMOUSECONTROL			"onHoldMouseControl"
 #define QTB_ONHOLDMOUSECONTROL_DEFAULT	false
@@ -677,6 +683,21 @@ public:
 	this->onControl = onControl;
 	return true;
   }
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // get plugins disable flag
+  bool getOnPluginsDisable() const
+  {
+	return onPluginsDisable;
+  }
+
+  // set plugins disable flag
+  bool setOnPluginsDisable(bool onPluginsDisable)
+  {
+	this->onPluginsDisable = onPluginsDisable;
+	return true;
+  }
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // get hold mouse control flag
   bool getOnHoldMouseControl() const
@@ -1705,6 +1726,9 @@ private:
 
   // Control
   volatile bool onControl;
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  volatile bool onPluginsDisable;
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
   volatile bool onHoldMouseControl;
 #if QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onExtraButtonSupport;

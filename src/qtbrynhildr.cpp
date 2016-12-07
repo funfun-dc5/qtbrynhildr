@@ -145,6 +145,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #if QTB_PUBLIC_MODE6_SUPPORT
   sendClipboard_Action(0),
   sendFile_Action(0),
+  cancelFileTransferring_Action(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   connectToServerDialog(0),
   desktopScalingDialog(0),
@@ -958,9 +959,16 @@ void QtBrynhildr::setFileTransferProgressBarValue(int value)
 
   if (value >= 100){
 	progressBar->setVisible(false);
+
+	// enable cancel file transferring menu
+	cancelFileTransferring_Action->setEnabled(false);
   }
   else {
 	progressBar->setValue(value);
+
+	// disable cancel file transferring menu
+	if (!cancelFileTransferring_Action->isEnabled())
+	  cancelFileTransferring_Action->setEnabled(true);
   }
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -1418,6 +1426,12 @@ void QtBrynhildr::createActions()
   sendFile_Action->setEnabled(false);
   sendFile_Action->setStatusTip(tr("Send File"));
   connect(sendFile_Action, SIGNAL(triggered()), this, SLOT(sendFile()));
+
+  // cancel file transferring
+  cancelFileTransferring_Action = new QAction(tr("Cancel File Transferring"), this);
+  cancelFileTransferring_Action->setEnabled(false);
+  cancelFileTransferring_Action->setStatusTip(tr("Cancel File Transferring"));
+  connect(cancelFileTransferring_Action, SIGNAL(triggered()), this, SLOT(cancelFileTransferring()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
@@ -1436,8 +1450,10 @@ void QtBrynhildr::createMenus()
   if (!settings->getOnDisableTransferClipboard())
 	fileMenu->addAction(sendClipboard_Action);
 #endif
-  if (!settings->getOnDisableTransferFile())
+  if (!settings->getOnDisableTransferFile()){
 	fileMenu->addAction(sendFile_Action);
+	fileMenu->addAction(cancelFileTransferring_Action);
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -1752,6 +1768,9 @@ void QtBrynhildr::connected()
 	// send file
 	sendFile_Action->setEnabled(true);
 
+	// cancel file transferring
+	cancelFileTransferring_Action->setEnabled(false);
+
 	// drag and drop
 	mainWindow->setAcceptDrops(true);
   }
@@ -1833,6 +1852,9 @@ void QtBrynhildr::disconnected()
 
 	// send file
 	sendFile_Action->setEnabled(false);
+
+	// cancel file transferring
+	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
 	mainWindow->setAcceptDrops(false);
@@ -2327,6 +2349,16 @@ void QtBrynhildr::sendFile()
   // send files
   settings->setSendFileNames(fileNames);
   settings->setSendFileCount(fileNames.count());
+}
+
+// cancel file transferring
+void QtBrynhildr::cancelFileTransferring()
+{
+  // disable cancel file transferring menu
+  cancelFileTransferring_Action->setEnabled(false);
+
+  // cancel file transferring
+  controlThread->exitThread();
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

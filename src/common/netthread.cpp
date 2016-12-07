@@ -112,6 +112,13 @@ void NetThread::run()
 	// process header (send and receive)
 	PROCESS_RESULT result_process = processForHeader();
 	if (result_process != PROCESS_SUCCEEDED){
+	  if (result_process == PROCESS_RESTART){
+		// restart
+		shutdownConnection();
+		QThread::sleep(2);
+		emit networkError(true);
+		continue;
+	  }
 	  if (result_process == PROCESS_NETWORK_ERROR){
 		// error
 #if 0 // for TEST
@@ -162,6 +169,13 @@ void NetThread::run()
 	switch(result_transmit){
 	case TRANSMIT_SUCCEEDED:
 	  // Nothing to do
+	  break;
+	case TRANSMIT_RESTART:
+	  // restart
+	  shutdownConnection();
+	  QThread::sleep(2);
+	  emit networkError(true);
+	  continue;
 	  break;
 	case TRANSMIT_NETWORK_ERROR:
 	  cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << endl << flush; // error

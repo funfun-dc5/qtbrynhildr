@@ -199,6 +199,9 @@ private slots:
 
   // send file
   void sendFile();
+
+  // cancel file transferring
+  void cancelFileTransferring();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set video quality
@@ -545,6 +548,9 @@ private:
 
   // send file
   QAction *sendFile_Action;
+
+  // cancel file transferring
+  QAction *cancelFileTransferring_Action;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // connect to server dialog

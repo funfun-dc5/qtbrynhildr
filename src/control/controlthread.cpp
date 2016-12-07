@@ -330,7 +330,11 @@ PROCESS_RESULT ControlThread::processForHeader()
 	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
 		!settings->getOnDisableTransferClipboard()){
 	  // send clipboard
-	  sendClipboard();
+	  if (!sendClipboard()){
+		// failed to send clipboard
+		//		cout << "Failed to send clipboard!" << endl << flush;
+		return PROCESS_RESTART;
+	  }
 	}
 	// file
 	else if (com_data->data_type == DATA_TYPE_FILE &&
@@ -338,9 +342,14 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  // send file
 	  keyBuffer->setEnabled(false); // disabled keyboard
 	  mouseBuffer->setEnabled(false); // disabled mouse
-	  sendFile();
+	  bool result = sendFile();
 	  keyBuffer->setEnabled(true);
 	  mouseBuffer->setEnabled(true);
+	  if (!result){
+		// failed to send file
+		//		cout << "Failed to send file!" << endl << flush;
+		return PROCESS_RESTART;
+	  }
 	}
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -449,7 +458,11 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
 		!settings->getOnDisableTransferClipboard()){
 	  // receive clipboard
-	  receiveClipboard();
+	  if (!receiveClipboard()){
+		// failed to transfer clipboard
+		//		cout << "Failed to receive clipboard!" << endl << flush;
+		return TRANSMIT_RESTART;
+	  }
 	}
 	// file
 	else if (com_data->data_type == DATA_TYPE_FILE &&
@@ -457,9 +470,14 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 	  // receive file
 	  keyBuffer->setEnabled(false); // disabled keyboard
 	  mouseBuffer->setEnabled(false); // disabled mouse
-	  receiveFile();
+	  bool result = receiveFile();
 	  keyBuffer->setEnabled(true);
 	  mouseBuffer->setEnabled(true);
+	  if (!result){
+		// failed to receive file
+		//		cout << "Failed to receive file!" << endl << flush;
+		return TRANSMIT_RESTART;
+	  }
 	}
   }
   return TRANSMIT_SUCCEEDED;
@@ -547,7 +565,11 @@ void ControlThread::initHeader()
 	com_data->data_type	= DATA_TYPE_FILE;
 	// set data size
 	QFileInfo fileInfo((QString)settings->getSendFileNames().at(sendFileCount-1));
-	com_data->data_size = fileInfo.size();
+	qint64 fileSize = fileInfo.size();
+	com_data->data_size = fileSize & 0xFFFFFFFF;
+	if ((fileSize & 0xFFFFFFFF00000000) != 0){ // fileSize > 4GB
+	  *((SIZE*)(com_data->dummy3)) = ((fileSize & 0xFFFFFFFF00000000) >> 32);
+	}
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->thread		= THREAD_CONTROL;
@@ -757,20 +779,23 @@ bool ControlThread::sendFile()
 {
   char filename[260+1] = {0};
   char fileTimeStamp[24+1] = {0};
+  static int previousProgress = -1;
 
-  SIZE fileSize = com_data->data_size;
-  SIZE fileSizeOrg = com_data->data_size;
-  SIZE sentDataSizeTotal = 0;
-  SIZE sentDataSize = 0;
+  qint64 fileSize = *((qint64*)&com_data->data_size);
+  qint64 fileSizeOrg = fileSize;
+  qint64 sentDataSizeTotal = 0;
+  qint64 sentDataSize = 0;
 
   // initialize progress bar
   if (settings->getOnShowTotalProgressForTransferFile()){
 	if (transferFileProgress == 0){
 	  transferFileProgressUnit = 100/settings->getSendFileCount();
+	  previousProgress = -1;
 	}
   }
   else {
 	transferFileProgressUnit = 100;
+	previousProgress = -1;
   }
 
   // send filename
@@ -821,9 +846,20 @@ bool ControlThread::sendFile()
 	  sentDataSize = sendData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	  sentDataSizeTotal += sentDataSize;
 	  fileSize -= sentDataSize;
+	  // check for cancel file transferring
+	  if (!runThread){
+		runThread = true;
+		// cancel
+		fileSize = -1;
+		break;
+	  }
 	  // set progress bar
-	  transferFileProgress += transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
-	  emit setFileTransferProgressBarValue(transferFileProgress);
+	  transferFileProgress = transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
+	  if (previousProgress != transferFileProgress){
+		//		cout << "transferFileProgress: " << transferFileProgress << endl << flush;
+		previousProgress = transferFileProgress;
+		emit setFileTransferProgressBarValue(transferFileProgress);
+	  }
 	}
 	if (fileSize > 0){
 	  int fragmentSize = fileSize & 0x3FF; // fileSize % 1024(10bit)
@@ -836,7 +872,8 @@ bool ControlThread::sendFile()
 	  sentDataSizeTotal += sentDataSize;
 	  fileSize -= sentDataSize;
 	  // set progress bar
-	  transferFileProgress += transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
+	  transferFileProgress = transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
+	  //	  cout << "transferFileProgress: " << transferFileProgress << endl << flush;
 	  emit setFileTransferProgressBarValue(transferFileProgress);
 	}
 	file.close();
@@ -878,15 +915,17 @@ bool ControlThread::receiveFile()
 {
   char filename[260+1];
   char fileTimeStamp[24+1]; // dummy read
+  static int previousProgress = -1;
 
-  SIZE fileSize = com_data->data_size;
-  SIZE fileSizeOrg = com_data->data_size;
-  SIZE receivedDataSizeTotal = 0;
-  SIZE receivedDataSize = 0;
+  qint64 fileSize = *((qint64*)&com_data->data_size);
+  qint64 fileSizeOrg = fileSize;
+  qint64 receivedDataSizeTotal = 0;
+  qint64 receivedDataSize = 0;
 
   // initialize progress bar
   if (transferFileProgress == 0){
 	transferFileProgressUnit = 100;
+	previousProgress = -1;
   }
 
   // get filename
@@ -906,9 +945,19 @@ bool ControlThread::receiveFile()
 		file.write(buffer, receivedDataSize);
 		receivedDataSizeTotal += receivedDataSize;
 		fileSize -= receivedDataSize;
+		// check for cancel file transferring
+		if (!runThread){
+		  runThread = true;
+		  // cancel
+		  fileSize = -1;
+		  break;
+		}
 		// set progress bar
-		transferFileProgress += transferFileProgressUnit*(float)receivedDataSizeTotal/fileSizeOrg;
-		emit setFileTransferProgressBarValue(transferFileProgress);
+		transferFileProgress = transferFileProgressUnit*(float)receivedDataSizeTotal/fileSizeOrg;
+		if (previousProgress != transferFileProgress){
+		  previousProgress = transferFileProgress;
+		  emit setFileTransferProgressBarValue(transferFileProgress);
+		}
 	  }
 	}
 	if (fileSize > 0){
@@ -918,7 +967,7 @@ bool ControlThread::receiveFile()
 		receivedDataSizeTotal += receivedDataSize;
 		fileSize -= receivedDataSize;
 		// set progress bar
-		transferFileProgress += transferFileProgressUnit*(float)receivedDataSizeTotal/fileSizeOrg;
+		transferFileProgress = transferFileProgressUnit*(float)receivedDataSizeTotal/fileSizeOrg;
 		emit setFileTransferProgressBarValue(transferFileProgress);
 	  }
 	}

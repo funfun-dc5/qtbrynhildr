@@ -53,6 +53,8 @@ DEFINES += QTB_RECORDER=0
 # for CELT
 INCLUDEPATH += ../libs
 LIBS += -L../libs -lcelt0
+HEADERS += sound/converter.h sound/converter_celt.h
+SOURCES += sound/converter.cpp sound/converter_celt.cpp
 
 # Input
 HEADERS += version.h config.h parameters.h
@@ -74,7 +76,6 @@ HEADERS += graphics/graphicsthread.h
 HEADERS += sound/soundthread.h
 HEADERS += sound/soundbuffer.h
 HEADERS += sound/wave.h
-HEADERS += sound/converter.h sound/converter_celt.h
 HEADERS += windows/keycodes.h windows/eventconverter.h windows/eventconverter_jp.h windows/eventconverter_us.h windows/ntfs.h
 HEADERS += function/recorder.h
 
@@ -93,6 +94,5 @@ SOURCES += control/keybuffer.cpp control/mousebuffer.cpp
 SOURCES += graphics/graphicsthread.cpp
 SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
-SOURCES += sound/converter.cpp sound/converter_celt.cpp
 SOURCES += windows/eventconverter.cpp windows/eventconverter_jp.cpp windows/eventconverter_us.cpp windows/ntfs.cpp
 SOURCES += function/recorder.cpp

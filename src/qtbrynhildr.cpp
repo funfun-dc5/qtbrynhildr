@@ -281,6 +281,13 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	settings->setOnFullScreenAtConnected(true);
   }
 
+#if QTB_CELT_SUPPORT
+  // celt
+  if (option->getCELTFlag()){
+	settings->setSoundType(SOUND_TYPE_CELT);
+  }
+#endif // QTB_CELT_SUPPORT
+
 #if QTB_RECORDER
   // record
   settings->setOnRecordingControl(option->getRecordingFlag());

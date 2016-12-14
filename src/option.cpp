@@ -36,6 +36,9 @@ Option::Option(int argc, char *argv[])
 #endif // defined(QTB_DEV_TABLET)
   debug(0),
   fullScreenFlag(false),
+#if QTB_CELT_SUPPORT
+  celtFlag(false),
+#endif // QTB_CELT_SUPPORT
 #if QTB_RECORDER
   recordingFlag(false),
   recordingFileName(0),
@@ -233,6 +236,11 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  else if (strncmp("fullscreen", optionName, sizeof("fullscreen")) == 0){
 		fullScreenFlag = true;
 	  }
+#if QTB_CELT_SUPPORT
+	  else if (strncmp("celt", optionName, sizeof("celt")) == 0){
+		celtFlag = true;
+	  }
+#endif // QTB_CELT_SUPPORT
 	  else if ((strncmp("version", optionName, sizeof("version")) == 0)||
 			   (strncmp("v", optionName, sizeof("v")) == 0)){
 		printVersion();
@@ -296,6 +304,13 @@ void Option::printHelp() const
   cout << "        " << "bootup for server." << endl;
   cout << "        " << "host type : xp/vista/7/8/8.1/10" << endl;
   cout << endl;
+
+#if QTB_CELT_SUPPORT
+  // -celt
+  cout << "-celt" << endl;
+  cout << "        " << "support CELT for sound." << endl;
+  cout << endl;
+#endif // QTB_CELT_SUPPORT
 
 #if QTB_RECORDER
   // -record <file>

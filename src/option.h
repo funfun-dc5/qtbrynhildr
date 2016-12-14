@@ -92,6 +92,14 @@ public:
 	return fullScreenFlag;
   }
 
+#if QTB_CELT_SUPPORT
+  // get CELT flag
+  bool getCELTFlag() const
+  {
+	return celtFlag;
+  }
+#endif // QTB_CELT_SUPPORT
+
 #if QTB_RECORDER
   // recording flag
   bool getRecordingFlag() const
@@ -160,6 +168,11 @@ private:
 
   // full screen flag
   bool fullScreenFlag;
+
+#if QTB_CELT_SUPPORT
+  // CELT flag
+  bool celtFlag;
+#endif // QTB_CELT_SUPPORT
 
 #if QTB_RECORDER
   // recording flag

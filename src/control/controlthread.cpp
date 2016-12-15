@@ -566,10 +566,7 @@ void ControlThread::initHeader()
 	// set data size
 	QFileInfo fileInfo((QString)settings->getSendFileNames().at(sendFileCount-1));
 	qint64 fileSize = fileInfo.size();
-	com_data->data_size = fileSize & 0xFFFFFFFF;
-	if ((fileSize & 0xFFFFFFFF00000000) != 0){ // fileSize > 4GB
-	  *((SIZE*)(com_data->dummy3)) = ((fileSize & 0xFFFFFFFF00000000) >> 32);
-	}
+	com_data->data_size = (SIZE64)fileSize;
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->thread		= THREAD_CONTROL;
@@ -629,7 +626,15 @@ void ControlThread::initHeader()
 
   // for sound
 #if QTB_CELT_SUPPORT
-  com_data->sound_type		= settings->getOnSound() ? settings->getSoundType() : SOUND_TYPE_OFF;
+  if (settings->getOnDisableBrynhildr2Support() ||
+	  serverVersion == SERVER_VERSION_BRYNHILDR){
+	// for Brynhildr (<= 1.1.5) : PCM only
+	com_data->sound_type = settings->getOnSound() ? SOUND_TYPE_PCM : SOUND_TYPE_OFF;
+  }
+  else {
+	// for Brynhildr (>= 2.0.0) : soundType (PCM/CELT/...)
+	com_data->sound_type = settings->getOnSound() ? settings->getSoundType() : SOUND_TYPE_OFF;
+  }
 #else // QTB_CELT_SUPPORT
   com_data->sound_type		= settings->getOnSound() ? SOUND_TYPE_PCM : SOUND_TYPE_OFF;
 #endif // QTB_CELT_SUPPORT
@@ -785,7 +790,7 @@ bool ControlThread::sendFile()
   char fileTimeStamp[24+1] = {0};
   static int previousProgress = -1;
 
-  qint64 fileSize = *((qint64*)&com_data->data_size);
+  qint64 fileSize = (qint64)com_data->data_size;
   qint64 fileSizeOrg = fileSize;
   qint64 sentDataSizeTotal = 0;
   qint64 sentDataSize = 0;
@@ -921,7 +926,7 @@ bool ControlThread::receiveFile()
   char fileTimeStamp[24+1]; // dummy read
   static int previousProgress = -1;
 
-  qint64 fileSize = *((qint64*)&com_data->data_size);
+  qint64 fileSize = (qint64)com_data->data_size;
   qint64 fileSizeOrg = fileSize;
   qint64 receivedDataSizeTotal = 0;
   qint64 receivedDataSize = 0;

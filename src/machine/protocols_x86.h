@@ -154,6 +154,8 @@ typedef	char	SOUND_QUALITY;
 typedef	long	POS;
 // size
 typedef	long	SIZE;
+// size 64bit
+typedef	long long	SIZE64;
 // zoom
 typedef double	ZOOM;
 

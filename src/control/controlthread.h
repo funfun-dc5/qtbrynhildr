@@ -82,6 +82,44 @@ private:
   bool receiveFile();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+  //  convert Big Endian 2 bytes
+  void convertBE2bytes(BYTE *ptr)
+  {
+	qint16 value;
+
+	value = *((unsigned short*)ptr);
+	*ptr++ = (BYTE)(value >> 8) & 0xFF;
+	*ptr   = (BYTE)(value >> 0) & 0xFF;
+  }
+
+  //  convert Big Endian 4 bytes
+  void convertBE4bytes(BYTE *ptr)
+  {
+	qint32 value;
+
+	value = *((unsigned int*)ptr);
+	*ptr++ = (BYTE)(value >> 24) & 0xFF;
+	*ptr++ = (BYTE)(value >> 16) & 0xFF;
+	*ptr++ = (BYTE)(value >> 8)  & 0xFF;
+	*ptr   = (BYTE)(value >> 0)  & 0xFF;
+  }
+
+  //  convert Big Endian 8 bytes
+  void convertBE8bytes(BYTE *ptr)
+  {
+	qint64 value;
+
+	value = *((unsigned int*)ptr);
+	*ptr++ = (BYTE)(value >> 56) & 0xFF;
+	*ptr++ = (BYTE)(value >> 48) & 0xFF;
+	*ptr++ = (BYTE)(value >> 40) & 0xFF;
+	*ptr++ = (BYTE)(value >> 32) & 0xFF;
+	*ptr++ = (BYTE)(value >> 24) & 0xFF;
+	*ptr++ = (BYTE)(value >> 16) & 0xFF;
+	*ptr++ = (BYTE)(value >> 8)  & 0xFF;
+	*ptr   = (BYTE)(value >> 0)  & 0xFF;
+  }
+
 private:
 #if QTB_BRYNHILDR2_SUPPORT
   // server version

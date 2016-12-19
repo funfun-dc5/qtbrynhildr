@@ -53,7 +53,7 @@ DEFINES += QTB_RECORDER=0
 # for CELT
 INCLUDEPATH += ../libs
 LIBS += -L../libs -lcelt0
-HEADERS += sound/converter.h sound/converter_celt.h
+HEADERS += sound/converter.h sound/converter_celt.h ../libs/celt.h ../libs/celt_types.h
 SOURCES += sound/converter.cpp sound/converter_celt.cpp
 
 # Input

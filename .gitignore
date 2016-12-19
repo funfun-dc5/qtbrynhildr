@@ -21,6 +21,7 @@ cov-int/
 src/ui_*.h
 src/moc_*.cpp
 src/qrc_*.cpp
+src/.qmake.*
 #-----------------------
 # ignore files
 #-----------------------

@@ -21,7 +21,6 @@ cov-int/
 src/ui_*.h
 src/moc_*.cpp
 src/qrc_*.cpp
-src/.qmake.*
 #-----------------------
 # ignore files
 #-----------------------
@@ -31,9 +30,10 @@ Makefile
 *.bak
 *.log
 *~
-# for Qt Creator
+# for Qt
 build-*/
 *.pro.user
+src/.qmake.*
 # for windows
 *.exe
 *.dll

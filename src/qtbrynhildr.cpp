@@ -1462,8 +1462,10 @@ void QtBrynhildr::createMenus()
 	fileMenu->addAction(cancelFileTransferring_Action);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#if !defined(Q_OS_OSX)
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
+#endif // !defined(Q_OS_OSX)
 
   // display menu
   displayMenu = menuBar()->addMenu(tr("Display"));

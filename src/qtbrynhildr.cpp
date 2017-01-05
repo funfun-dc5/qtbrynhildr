@@ -2294,8 +2294,7 @@ void QtBrynhildr::exit()
   if (QTB_DESKTOP_FULL_SCREEN){
 	if (fullScreenMode){
 	  // to Normal Screen
-	  showNormal();
-	  fullScreenMode = false;
+	  exitFullScreen();
 	}
   }
 

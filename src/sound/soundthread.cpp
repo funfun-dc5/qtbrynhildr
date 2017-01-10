@@ -187,7 +187,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	return TRANSMIT_SUCCEEDED;
   }
   if (receivedDataSize > QTB_SOUND_LOCAL_BUFFER_SIZE){
-	cout << "[SoundThread] receivedDataSize = " << receivedDataSize << endl << flush; // error
+	if (outputLog){
+	  cout << "[SoundThread] receivedDataSize = " << receivedDataSize << endl << flush; // error
+	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
 

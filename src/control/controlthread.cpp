@@ -887,7 +887,7 @@ bool ControlThread::sendFile()
 	}
 	file.close();
   }
-#if 1 // for DEBUG
+#if 0 // for DEBUG
   else {
 	cout << "open error!" << endl << flush;
   }

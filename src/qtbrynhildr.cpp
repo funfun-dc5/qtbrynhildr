@@ -952,9 +952,11 @@ void QtBrynhildr::setClipboard(QString clipboardString)
 	clipboard->setText(clipboardString);
 	//	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
   }
+#if 0 // for TEST
   else {
 	cout << "clipboard is null" << endl << flush;
   }
+#endif // for TEST
 }
 
 // set progress bar value for transfer file

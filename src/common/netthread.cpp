@@ -103,7 +103,8 @@ void NetThread::run()
 		continue;
 	  }
 	  if (result_connect == CONNECT_FAILED_RETRY){
-		cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
+		if (settings->getOutputLog())
+		  cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
 		runThread = false;
 		break;
 	  }
@@ -130,7 +131,8 @@ void NetThread::run()
 	  }
 	  if (result_process == PROCESS_PASSWORD_ERROR){
 		// error
-		cout << "[" << name << "]" << " Password Error: processForHeader()" << endl << flush; // error
+		if (settings->getOutputLog())
+		  cout << "[" << name << "]" << " Password Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);
@@ -139,7 +141,8 @@ void NetThread::run()
 	  }
 	  if (result_process == PROCESS_CONNECT_ERROR){
 		// error
-		cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
+		if (settings->getOutputLog())
+		  cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);
@@ -148,7 +151,8 @@ void NetThread::run()
 	  }
 	  if (result_process == PROCESS_VIDEO_MODE_ERROR){
 		// error
-		cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
+		if (settings->getOutputLog())
+		  cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);
@@ -157,7 +161,8 @@ void NetThread::run()
 	  }
 	  if (result_process == PROCESS_UNKNOWN_ERROR){
 		// error
-		cout << "[" << name << "]" << " Unkown Error: processForHeader()" << endl << flush; // error
+		if (settings->getOutputLog())
+		  cout << "[" << name << "]" << " Unkown Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		emit networkError(true);
 		continue;
@@ -178,22 +183,27 @@ void NetThread::run()
 	  continue;
 	  break;
 	case TRANSMIT_NETWORK_ERROR:
-	  cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << endl << flush; // error
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << endl << flush; // error
 	  shutdownConnection();
 	  emit networkError(true);
 	  continue;
 	  break;
 	case TRANSMIT_DATASIZE_ERROR:
-	  cout << "[" << name << "]" << " Failed: transmitBuffer(): data size" << endl << flush; // error
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " Failed: transmitBuffer(): data size" << endl << flush; // error
 	  break;
 	case TRANSMIT_FAILED_PUT_BUFFER:
-	  cout << "[" << name << "]" << " Failed: transmitBuffer(): put buffer." << endl << flush; // error
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " Failed: transmitBuffer(): put buffer." << endl << flush; // error
 	  break;
 	case TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER:
-	  cout << "[" << name << "]" << " Failed: transmitBuffer(): transmit device buffer." << endl << flush; // error
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " Failed: transmitBuffer(): transmit device buffer." << endl << flush; // error
 	  break;
 	case TRANSMIT_FAILED_IMAGE_DRAW:
-	  cout << "[" << name << "]" << " Failed: transmitBuffer(): image draw." << endl << flush; // error
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " Failed: transmitBuffer(): image draw." << endl << flush; // error
 	  break;
 	default:
 	  // error

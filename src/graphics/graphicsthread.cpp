@@ -169,7 +169,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	return TRANSMIT_DATASIZE_ERROR;
   }
   if (receivedDataSize > QTB_GRAPHICS_LOCAL_BUFFER_SIZE){
-	cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush; // error
+	if (outputLog){
+	  cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush; // error
+	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
 

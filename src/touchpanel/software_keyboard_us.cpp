@@ -20,7 +20,7 @@ namespace qtbrynhildr {
   const static SoftwareKeyboard::KeyTopInfo keyTopInfo[SoftwareKeyboard::ID_KEY_NUM+1] = {
 	{{(char*)"",		(char*)"",		(char)VK_NONE_00	},	{(char*)"",			(char)VK_NONE_00	}},	// DUMMY
 
-	{{(char*)"ESC",		(char*)"ESC",	(char)VK_ESCAPE		},	{(char*)"ESC",		(char)VK_ESCAPE		}},	// ID_KEY_1
+	{{(char*)"Esc",		(char*)"Esc",	(char)VK_ESCAPE		},	{(char*)"Esc",		(char)VK_ESCAPE		}},	// ID_KEY_1
 	{{(char*)"1",		(char*)"!",		(char)VK_1			},	{(char*)"F1",		(char)VK_F1			}},	// ID_KEY_2
 	{{(char*)"2",		(char*)"@",		(char)VK_2			},	{(char*)"F2",		(char)VK_F2			}},	// ID_KEY_3
 	{{(char*)"3",		(char*)"#",		(char)VK_3			},	{(char*)"F3",		(char)VK_F3			}},	// ID_KEY_4
@@ -49,7 +49,7 @@ namespace qtbrynhildr {
 	{{(char*)"P",		(char*)"P",		(char)VK_P			},	{(char*)"P",		(char)VK_P			}},	// ID_KEY_26
 	{{(char*)"[",		(char*)"{",		(char)VK_OEM_3		},	{(char*)"",			(char)VK_NONE_00	}},	// ID_KEY_27
 	{{(char*)"]",		(char*)"}",		(char)VK_OEM_4		},	{(char*)"",			(char)VK_NONE_00	}},	// ID_KEY_28
-	{{(char*)"RET",		(char*)"RET",	(char)VK_RETURN		},	{(char*)"RET",		(char)VK_RETURN		}},	// ID_KEY_29
+	{{(char*)"Enter",	(char*)"Enter",	(char)VK_RETURN		},	{(char*)"Enter",	(char)VK_RETURN		}},	// ID_KEY_29
 
 	{{(char*)"Ctrl",	(char*)"Ctrl",	(char)VK_LCONTROL	},	{(char*)"Ctrl",		(char)VK_LCONTROL	}},	// ID_KEY_30
 	{{(char*)"A",		(char*)"A",		(char)VK_A			},	{(char*)"A",		(char)VK_A			}},	// ID_KEY_31

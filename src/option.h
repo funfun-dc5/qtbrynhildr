@@ -1,6 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-// option.h
 
 #ifndef OPTION_H
 #define OPTION_H

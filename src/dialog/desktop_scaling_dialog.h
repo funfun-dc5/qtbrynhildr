@@ -1,6 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-// desktop_scaling_dialog.h
 
 #ifndef DESKTOP_SCALING_DIALOG_H
 #define DESKTOP_SCALING_DIALOG_H

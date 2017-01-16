@@ -1,6 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-// qtbrynhildr.h
 
 #ifndef QTBRYNHILDR_H
 #define QTBRYNHILDR_H

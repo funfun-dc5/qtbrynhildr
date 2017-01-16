@@ -1,6 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-// netthread.h
 
 #ifndef NETTHREAD_H
 #define NETTHREAD_H

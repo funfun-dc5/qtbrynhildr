@@ -1,6 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015-2016 FunFun <fu.aba.dc5@gmail.com>
-// version.h
 
 #ifndef VERSION_H
 #define VERSION_H

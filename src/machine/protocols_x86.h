@@ -1,6 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-// protocols_x86.h
 
 #ifndef PROTOCOLS_x86_H
 #define PROTOCOLS_x86_H

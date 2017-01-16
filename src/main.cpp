@@ -73,11 +73,11 @@ int main(int argc, char *argv[])
 #if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard
   QClipboard *clipboard = QApplication::clipboard();
-  qtbrynhildr::QtBrynhildr qtbrynhildr(argc, argv, clipboard);
+  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(argc, argv, clipboard);
 #else // QTB_PUBLIC_MODE6_SUPPORT
-  qtbrynhildr::QtBrynhildr qtbrynhildr(argc, argv);
+  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(argc, argv);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  if (qtbrynhildr.getShutdownFlag()){
+  if (qtbrynhildr->getShutdownFlag()){
 	// shutdown now
 	return EXIT_SUCCESS;
   }
@@ -99,12 +99,12 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_WIN)
   // install native event filter
-  app.installNativeEventFilter(qtbrynhildr.getMainWindow());
+  app.installNativeEventFilter(qtbrynhildr->getMainWindow());
 #endif // defined(Q_OS_WIN)
 
   // display main window
-  qtbrynhildr.setFocus(Qt::ActiveWindowFocusReason);
-  qtbrynhildr.show();
+  qtbrynhildr->setFocus(Qt::ActiveWindowFocusReason);
+  qtbrynhildr->show();
 
 #if QTB_SPLASH_SCREEN
   // undisplay splash screen
@@ -117,6 +117,9 @@ int main(int argc, char *argv[])
 
   // restore cursor
   app.restoreOverrideCursor();
+
+  // delete QtBrynhildr
+  delete qtbrynhildr;
 
   return result;
 }

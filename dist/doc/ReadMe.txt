@@ -785,7 +785,7 @@ http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
 
  パブリックモードでサポートしていないビデオコーデックがサーバで指定されています。(*)
 
- brynhildr.iniでvideocodec=2(MotionJPEG)と指定もしくはvideocodec自体の指定がないことを
+ brynhildr.iniでvideocodec=2(MotionJPEG)と指定していること、もしくはvideocodec自体の指定がないことを
  確認してください。
 
  (*) 現在のところvideocode=0(Speed)/1(Hybrid)/3(Compress)はサポートしていません。

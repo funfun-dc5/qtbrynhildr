@@ -673,6 +673,31 @@ void QtBrynhildr::exitFullScreen()
 	fullScreen();
 }
 
+// get height of menu bar
+int QtBrynhildr::getHeightOfMenuBar()
+{
+  if (heightOfMenuBar == 0)
+	return 0;
+
+  if (settings->getOnShowMenuBar()){
+	return heightOfMenuBar;
+  }
+  else {
+	return heightOfMenuBarInHiding;
+  }
+}
+
+// get height of status bar
+int QtBrynhildr::getHeightOfStatusBar()
+{
+  if (settings->getOnShowStatusBar()){
+	return heightOfStatusBar;
+  }
+  else {
+	return heightOfStatusBarInHiding;
+  }
+}
+
 // refresh window
 void QtBrynhildr::refreshWindow()
 {
@@ -3088,28 +3113,6 @@ void QtBrynhildr::toggleOutputLog()
   else {
 	settings->setOutputLog(true);
 	outputLog_Action->setChecked(true);
-  }
-}
-
-// get height of menu bar
-int QtBrynhildr::getHeightOfMenuBar()
-{
-  if (settings->getOnShowMenuBar()){
-	return heightOfMenuBar;
-  }
-  else {
-	return heightOfMenuBarInHiding;
-  }
-}
-
-// get height of status bar
-int QtBrynhildr::getHeightOfStatusBar()
-{
-  if (settings->getOnShowStatusBar()){
-	return heightOfStatusBar;
-  }
-  else {
-	return heightOfStatusBarInHiding;
   }
 }
 

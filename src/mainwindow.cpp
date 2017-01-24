@@ -43,9 +43,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   eventConverter(0),
   onShiftKey(false),
   heightOfMenuBar(0),
-  heightOfMenuBarInHiding(0),
   heightOfStatusBar(0),
-  heightOfStatusBarInHiding(0),
   onFullScreen(false),
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
@@ -71,10 +69,6 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
 
   // create mouse buffer
   mouseBuffer = new MouseBuffer(QTB_MOUSE_BUFFER_SIZE);
-
-  // set parameters
-  heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
-  heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
 
   // open keyboard log file
   openKeyboardLogFile(settings->getKeyboardLogFile());
@@ -829,28 +823,6 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
   }
 
   return scalingFactor;
-}
-
-// get height of menu bar
-int MainWindow::getHeightOfMenuBar()
-{
-  if (settings->getOnShowMenuBar()){
-	return heightOfMenuBar;
-  }
-  else {
-	return heightOfMenuBarInHiding;
-  }
-}
-
-// get height of status bar
-int MainWindow::getHeightOfStatusBar()
-{
-  if (settings->getOnShowStatusBar()){
-	return heightOfStatusBar;
-  }
-  else {
-	return heightOfStatusBarInHiding;
-  }
 }
 
 // minimum size hint

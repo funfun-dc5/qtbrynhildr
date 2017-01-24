@@ -144,10 +144,16 @@ private:
   qreal getDesktopScalingFactor(QSize targetSize);
 
   // get height of menu bar
-  int getHeightOfMenuBar();
+  int getHeightOfMenuBar()
+  {
+	return heightOfMenuBar;
+  }
 
   // get height of status bar
-  int getHeightOfStatusBar();
+  int getHeightOfStatusBar()
+  {
+	return heightOfStatusBar;
+  }
 
 private:
   // settings
@@ -186,14 +192,8 @@ private:
   // height of menu bar
   int heightOfMenuBar;
 
-  // height of menu bar in hiding
-  int heightOfMenuBarInHiding;
-
   // height of status bar
   int heightOfStatusBar;
-
-  // height of status bar in hiding
-  int heightOfStatusBarInHiding;
 
   // full screen flag
   bool onFullScreen;

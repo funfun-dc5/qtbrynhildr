@@ -102,6 +102,12 @@ public:
   // exit full screen
   void exitFullScreen();
 
+  // get height of menu bar
+  int getHeightOfMenuBar();
+
+  // get height of status bar
+  int getHeightOfStatusBar();
+
 public slots:
   // connect to server
   void connectToServer();
@@ -179,12 +185,6 @@ private slots:
 
   // toggle output log mode
   void toggleOutputLog();
-
-  // get height of menu bar
-  int getHeightOfMenuBar();
-
-  // get height of status bar
-  int getHeightOfStatusBar();
 
   // about dialog
   void about();

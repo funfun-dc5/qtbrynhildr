@@ -100,7 +100,7 @@
  以下を環境に合わせてダウンロードします。
 
  [64bit]
- http://download.qt.io/archive/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
+ http://download.qt.io/archive/qt/5.8/5.8.0/qt-opensource-linux-x64-5.8.0.run
 
  [32bit]
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run
@@ -109,8 +109,8 @@
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.7.0.run
- sudo ./qt-opensource-linux-x64-5.7.0.run
+ chmod 755 ./qt-opensource-linux-x64-5.8.0.run
+ sudo ./qt-opensource-linux-x64-5.8.0.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。
@@ -747,13 +747,13 @@ windowState=@ByteArray(xxxxx)
 
 Windows版ではランタイムライブラリパッケージ
 
-Visual C++ 2013 x86 Redistributable
+Visual C++ 2015 x86 Redistributable
 
 が必要な場合があります。
 
 例えば以下から入手できます。
 
-http://www.microsoft.com/ja-jp/download/details.aspx?id=40784
+https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 
 ----------------------------------------------------------------------
 7. メッセージダイアログについて
@@ -909,7 +909,8 @@ Ver.1.6.2 : 2017/01/xx
              ・「終了」メニュー項目の削除(Mac版のみ)
              ・ソフトウェア・キーボードのキートップ文字列の小変更
                "ESC" -> "Esc","RET" -> "Enter"
-             ・Qt5.7.1でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
+             ・Qt5.8.0でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
+               Windows版ではVisual C++ 2015 x86 Redistributable が必要
              ・デバッグ出力の整理
 
 Ver.1.6.1 : 2016/12/16

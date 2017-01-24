@@ -16,11 +16,11 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  Windows版ではランタイムライブラリパッケージ
 
-  Visual C++ 2013 x86 Redistributable
+  Visual C++ 2015 x86 Redistributable
 
  が必要な場合があります。例えば以下から入手できます。
 
- <http://www.microsoft.com/ja-jp/download/details.aspx?id=40784>
+ <https://www.microsoft.com/ja-JP/download/details.aspx?id=48145>
 
 2. インストール
 ---------------

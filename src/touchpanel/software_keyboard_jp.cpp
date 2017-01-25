@@ -25,7 +25,7 @@ namespace qtbrynhildr {
 	{{(char*)"3",		(char*)"#",		(char)VK_3			},	{(char*)"F3",		(char)VK_F3			}},	// ID_KEY_4
 	{{(char*)"4",		(char*)"$",		(char)VK_4			},	{(char*)"F4",		(char)VK_F4			}},	// ID_KEY_5
 	{{(char*)"5",		(char*)"%",		(char)VK_5			},	{(char*)"F5",		(char)VK_F5			}},	// ID_KEY_6
-	{{(char*)"6",		(char*)"&&",	(char)VK_6			},	{(char*)"F6",		(char)VK_F6			}},	// ID_KEY_7
+	{{(char*)"6",		(char*)"&",		(char)VK_6			},	{(char*)"F6",		(char)VK_F6			}},	// ID_KEY_7
 	{{(char*)"7",		(char*)"'",		(char)VK_7			},	{(char*)"F7",		(char)VK_F7			}},	// ID_KEY_8
 	{{(char*)"8",		(char*)"(",		(char)VK_8			},	{(char*)"F8",		(char)VK_F8			}},	// ID_KEY_9
 	{{(char*)"9",		(char*)")",		(char)VK_9			},	{(char*)"F9",		(char)VK_F9			}},	// ID_KEY_10

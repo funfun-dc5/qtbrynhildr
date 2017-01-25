@@ -7,7 +7,7 @@
 // System Header
 #include <iostream>
 
-// Qt header
+// Qt Header
 
 // Local Header
 #include "software_button.h"

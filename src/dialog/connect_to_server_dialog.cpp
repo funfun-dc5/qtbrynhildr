@@ -7,7 +7,7 @@
 // System Header
 #include <iostream>
 
-// Qt header
+// Qt Header
 #include <QDialog>
 #include <QFont>
 #include <QRect>

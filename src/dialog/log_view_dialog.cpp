@@ -6,7 +6,7 @@
 
 // System Header
 
-// Qt header
+// Qt Header
 #include <QDialog>
 #include <QFile>
 #include <QRect>

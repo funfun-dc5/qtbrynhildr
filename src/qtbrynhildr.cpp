@@ -3082,12 +3082,14 @@ void QtBrynhildr::toggleOnScrollMode()
 void QtBrynhildr::visibilityChangedSoftwareKeyboard(bool visible)
 {
   settings->setOnShowSoftwareKeyboard(visible);
+  showSoftwareKeyboard_Action->setChecked(visible);
 }
 
 // visibility changed software button
 void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
 {
   settings->setOnShowSoftwareButton(visible);
+  showSoftwareButton_Action->setChecked(visible);
 }
 
 // toggle outputKeyboardLog

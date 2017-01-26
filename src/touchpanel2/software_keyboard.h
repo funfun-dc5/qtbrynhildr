@@ -572,7 +572,7 @@ private:
   KeyTopInfo *keyTopInfo;
 
   // key top information table for JA
-  KeyTopInfo keyTopInfo_JA[ID_KEY_NUM + 1] = {
+  KeyTopInfo keyTopInfo_JA[ID_KEY_NUM] = {
 	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// DUMMY
 
 	{{"Esc",	"Esc",	(uchar)VK_ESCAPE	},	{"Esc",		(uchar)VK_ESCAPE	}},	// ID_KEY_1
@@ -649,7 +649,7 @@ private:
   };
 
   // key top information table for US
-  KeyTopInfo keyTopInfo_US[ID_KEY_NUM + 1] = {
+  KeyTopInfo keyTopInfo_US[ID_KEY_NUM] = {
 	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// DUMMY
 
 	{{"Esc",	"Esc",	(uchar)VK_ESCAPE	},	{"Esc",		(uchar)VK_ESCAPE	}},	// ID_KEY_1

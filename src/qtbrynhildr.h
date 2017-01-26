@@ -45,10 +45,15 @@
 #include "function/recorder.h"
 #endif // QTB_RECORDER
 #include "settings.h"
+#if USE_KERO_KEYBOARD // for TEST
+#include "touchpanel2/sk.h"
+#include "touchpanel2/sb.h"
+#else // for TEST
 #include "touchpanel/software_button.h"
 #include "touchpanel/software_keyboard.h"
 #include "touchpanel/software_keyboard_jp.h"
 #include "touchpanel/software_keyboard_us.h"
+#endif // for TEST
 
 // thread
 #include "control/controlthread.h"
@@ -562,8 +567,13 @@ private:
   LogViewDialog *logViewDialog;
 
   // software keyboard and button
+#if USE_KERO_KEYBOARD //for TEST
+  SK *softwareKeyboard;
+  SB *softwareButton;
+#else //for TEST
   SoftwareKeyboard *softwareKeyboard;
   SoftwareButton *softwareButton;
+#endif //for TEST
   QDockWidget *softwareKeyboardDockWidget;
   QDockWidget *softwareButtonDockWidget;
 

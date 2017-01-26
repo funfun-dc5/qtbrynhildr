@@ -1,0 +1,427 @@
+// -*- mode: c++; coding: utf-8-unix -*-
+// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+
+// Common Header
+
+// System Header
+#include <iostream> // for TEST
+
+// Qt Header
+#include <QColor>
+#include <QFont>
+#include <QPainter>
+#include <QPen>
+
+// Local Header
+#include "software_keyboard.h"
+
+using namespace std; // for TEST
+
+namespace qtbrynhildr {
+
+//---------------------------------------------------------------------------
+// public
+//---------------------------------------------------------------------------
+// constructor
+SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
+  :
+  QWidget(parent),
+  onShiftKey(false),
+  onControlKey(false),
+  onAltKey(false),
+  onFnKey(false),
+  // for DEBUG
+  outputLog(false)
+{
+  // reset flag
+  for(int i = ID_KEY_0; i < ID_KEY_NUM; i++){
+	layout[i].pushed = false;
+  }
+
+  // initialize layout
+  calclateLayout(4, 4);
+
+  // set keyboard type
+  keyTopInfo = keyTopInfo_JA;
+}
+
+#if 1 // for TEST
+// set keyboard type
+void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
+  switch(type){
+  case KEYTOP_TYPE_JA:
+	keyTopInfo = keyTopInfo_JA;
+	break;
+  case KEYTOP_TYPE_US:
+	keyTopInfo = keyTopInfo_US;
+	break;
+  default:
+	return;
+	break;
+  }
+
+  update();
+}
+#endif
+
+//---------------------------------------------------------------------------
+// protected
+//---------------------------------------------------------------------------
+
+// paint event
+void SoftwareKeyboard::paintEvent(QPaintEvent *event)
+{
+  Q_UNUSED(event)
+
+  QPainter painter(this);
+
+  // fill keyboard panel
+  QRect rect = QRect(QPoint(0,0), keyboardSize);
+  QColor panelColor = QColor::fromRgb(15, 31, 64);
+  painter.fillRect(rect, panelColor);
+  //  painter.fillRect(rect, Qt::darkCyan);
+  //cout << "paint! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
+
+  // change color for Pen
+  QColor penColor = QColor::fromRgb(61, 124, 250);
+  painter.setPen(penColor);
+  // change font size
+  QFont font = painter.font();
+  font.setPixelSize(16);
+  painter.setFont(font);
+
+  // for Shift Key Layout
+  if (onShiftKey){
+	for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
+	  QRect rect = layout[i].rect;
+	  if (layout[i].pushed)
+		painter.fillRect(rect, Qt::black);
+	  painter.drawRect(rect);
+	  painter.drawText(rect,
+					   Qt::AlignCenter,
+					   keyTopInfo[i].keyTop.keyTopWithShift
+					   );
+	}
+	return;
+  }
+
+  // for Fn Key Layout
+  if (onFnKey){
+	for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
+	  QRect rect = layout[i].rect;
+	  if (layout[i].pushed)
+		painter.fillRect(rect, Qt::black);
+	  painter.drawRect(rect);
+	  painter.drawText(rect,
+					   Qt::AlignCenter,
+					   keyTopInfo[i].keyTopWithFn.keyTop
+					   );
+	}
+	return;
+  }
+
+  // for Normal Key Layout
+  for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
+	QRect rect = layout[i].rect;
+	if (layout[i].pushed)
+	  painter.fillRect(rect, Qt::black);
+	painter.drawRect(rect);
+	painter.drawText(rect,
+					 Qt::AlignCenter,
+					 keyTopInfo[i].keyTop.keyTop
+					 );
+  }
+
+  // restore color for Pen
+  //  painter.setPen(Qt::black);
+}
+
+// resize event
+void SoftwareKeyboard::resizeEvent(QResizeEvent *event)
+{
+  QSize size = event->size() - QSize(1, 1);
+  if (size != keyboardSize){
+	//cout << "resize! : (W, H) = (" << size.width() << "," << size.height() << ")" << endl << flush;
+	qreal xFactor = (qreal)size.width()/WIDTH;
+	qreal yFactor = (qreal)size.height()/HEIGHT;
+	// recalclate layout
+	calclateLayout(xFactor, yFactor);
+	update();
+  }
+  else {
+	//cout << "resize! : same size" << endl << flush;
+  }
+}
+
+#if 0
+// minimum size hint
+QSize SoftwareKeyboard::minimumSizeHint() const
+{
+  QSize size = keyboardSize + QSize(1, 1);
+  return size;
+}
+#endif
+
+// size hint
+QSize SoftwareKeyboard::sizeHint() const
+{
+  QSize size = keyboardSize + QSize(1, 1);
+  return size;
+}
+
+// mouse event
+void SoftwareKeyboard::mousePressEvent(QMouseEvent *event)
+{
+  if (outputLog)
+	cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
+
+  ID_KEY id = getID(event->pos());
+  pressedKey(id);
+}
+
+void SoftwareKeyboard::mouseReleaseEvent(QMouseEvent *event)
+{
+  if (outputLog)
+	cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
+
+  ID_KEY id = getID(event->pos());
+  releasedKey(id);
+}
+
+ // key down
+void SoftwareKeyboard::keyDown(uchar key)
+{
+  if (outputLog){
+	cout << "DOWN: VK_Code : " << getVKCodeByString(key)  << endl << flush;
+  }
+}
+  
+ // key up
+void SoftwareKeyboard::keyUp(uchar key)
+{
+  if (outputLog){
+	cout << "UP  : VK_Code : " << getVKCodeByString(key)  << endl << flush;
+  }
+}
+
+// calclate layout
+void SoftwareKeyboard::calclateLayout(qreal xFactor, qreal yFactor)
+{
+  for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
+	QRect rect = keyLayout[i];
+	layout[i].rect.setX(rect.x()*xFactor);
+	layout[i].rect.setY(rect.y()*yFactor);
+	layout[i].rect.setWidth(rect.width()*xFactor);
+	layout[i].rect.setHeight(rect.height()*yFactor);
+  }
+  keyboardSize = QSize(WIDTH * xFactor, HEIGHT * yFactor);
+  //cout << "layout! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
+}
+
+// get ID
+SoftwareKeyboard::ID_KEY SoftwareKeyboard::getID(QPoint pos) const
+{
+  for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
+	QRect rect = layout[i].rect;
+	if (rect.contains(pos, true)){ // inside the rectangle
+	  return (ID_KEY)i;
+	}
+  }
+
+  return ID_KEY_0;
+}
+
+// pressed key
+void SoftwareKeyboard::pressedKey(ID_KEY id)
+{
+  if (outputLog){
+	cout << "Pressed Key! id = " << id << endl << flush;
+#if 0
+	if (onShiftKey)
+	  cout << "Pressed : " << keyTopInfo[id].keyTop.keyTopWithShift << endl << flush;
+	else if (onFnKey)
+	  cout << "Pressed : " << keyTopInfo[id].keyTopWithFn.keyTop << endl << flush;
+	else
+	  cout << "Pressed : " << keyTopInfo[id].keyTop.keyTop << endl << flush;
+#endif
+  }
+
+  // check id
+  if (id <= 0 || id > ID_KEY_NUM){
+	// error
+	return;
+  }
+
+  switch(id){
+  case ID_KEY_43:
+  case ID_KEY_56:
+	// Shift
+	onShiftKey = !onShiftKey;
+	if (outputLog)
+	  cout << "onShiftKey : " << onShiftKey << endl << flush;
+	pressedShiftKey();
+	layout[ID_KEY_43].pushed = onShiftKey;
+	layout[ID_KEY_56].pushed = onShiftKey;
+	break;
+  case ID_KEY_30:
+  case ID_KEY_62:
+	// Control
+	onControlKey = !onControlKey;
+	if (outputLog)
+	  cout << "onControlKey : " << onControlKey << endl << flush;
+	pressedControlKey();
+	layout[ID_KEY_30].pushed = onControlKey;
+	layout[ID_KEY_62].pushed = onControlKey;
+	break;
+  case ID_KEY_58:
+  case ID_KEY_63:
+	// Alt
+	onAltKey = !onAltKey;
+	if (outputLog)
+	  cout << "onAltKey : " << onAltKey << endl << flush;
+	pressedAltKey();
+	layout[ID_KEY_58].pushed = onAltKey;
+	layout[ID_KEY_63].pushed = onAltKey;
+	break;
+  case ID_KEY_57:
+  case ID_KEY_64:
+	// Fn
+	onFnKey = !onFnKey;
+	if (outputLog)
+	  cout << "onFnKey : " << onFnKey << endl << flush;
+	pressedFnKey();
+	layout[ID_KEY_57].pushed = onFnKey;
+	layout[ID_KEY_64].pushed = onFnKey;
+	break;
+  default:
+	if (onFnKey){
+	  // Fn key
+	  uchar key = keyTopInfo[id].keyTopWithFn.VK_Code;
+	  if (key != VK_NONE_00){
+		keyDown(key);
+	  }
+	  layout[ID_KEY_57].pushed = false;
+	  layout[ID_KEY_64].pushed = false;
+	}
+	else { // except for Fn key
+	  if (onShiftKey){
+		keyDown(VK_SHIFT);
+		layout[ID_KEY_43].pushed = false;
+		layout[ID_KEY_56].pushed = false;
+	  }
+	  if (onControlKey){
+		keyDown(VK_CONTROL);
+		layout[ID_KEY_30].pushed = false;
+		layout[ID_KEY_62].pushed = false;
+	  }
+	  if (onAltKey){
+		keyDown(VK_MENU);
+		layout[ID_KEY_58].pushed = false;
+		layout[ID_KEY_63].pushed = false;
+	  }
+	  uchar key = keyTopInfo[id].keyTop.VK_Code;
+	  keyDown(key);
+	}
+	break;
+  }
+}
+
+// released key
+void SoftwareKeyboard::releasedKey(ID_KEY id)
+{
+  // check id
+  if (id <= 0 || id > ID_KEY_NUM){
+	// error
+	return;
+  }
+
+  if (outputLog){
+	cout << "Released Key! id = " << id << endl << flush;
+#if 0
+	if (onShiftKey)
+	  cout << "Released : " << keyTopInfo[id].keyTop.keyTopWithShift << endl << flush;
+	else if (onFnKey)
+	  cout << "Released : " << keyTopInfo[id].keyTopWithFn.keyTop << endl << flush;
+	else
+	  cout << "Released : " << keyTopInfo[id].keyTop.keyTop << endl << flush;
+#endif
+  }
+
+  switch(id){
+  case ID_KEY_43:
+  case ID_KEY_56:
+	// Shift
+  case ID_KEY_30:
+  case ID_KEY_62:
+	// Control
+  case ID_KEY_58:
+  case ID_KEY_63:
+	// Alt
+  case ID_KEY_57:
+  case ID_KEY_64:
+	// Fn
+	// Nothig to do
+	break;
+  default:
+	if (onFnKey){
+	  // Fn key
+	  uchar key = keyTopInfo[id].keyTopWithFn.VK_Code;
+	  if (key != VK_NONE_00){
+		keyUp(key);
+	  }
+	}
+	else { // except for Fn key
+	  uchar key = keyTopInfo[id].keyTop.VK_Code;
+	  keyUp(key);
+	  if (onAltKey){
+		keyUp(VK_MENU);
+		onAltKey = false;
+	  }
+	  if (onControlKey){
+		keyUp(VK_CONTROL);
+		onControlKey = false;
+	  }
+	  if (onShiftKey){
+		keyUp(VK_SHIFT);
+		onShiftKey = false;
+	  }
+	}
+	break;
+  }
+}
+
+// shift key
+void SoftwareKeyboard::pressedShiftKey()
+{
+  // repaint for Shift Key Layout
+  update();
+}
+
+// Fn key
+void SoftwareKeyboard::pressedFnKey()
+{
+  // repaint for Fn Key Layout
+  update();
+}
+
+// control key
+void SoftwareKeyboard::pressedControlKey()
+{
+  // repaint for Control Key Layout
+  update();
+}
+
+// Alt key
+void SoftwareKeyboard::pressedAltKey()
+{
+  // repaint for Alt Key Layout
+  update();
+}
+
+// get name of virtual keycode
+string SoftwareKeyboard::getVKCodeByString(uchar vkcode) const
+{
+  return stringTableOfVKCode[(int)vkcode];
+}
+
+} // end of namespace qtbrynhildr

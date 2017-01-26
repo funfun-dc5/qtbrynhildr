@@ -1504,8 +1504,8 @@ void QtBrynhildr::createMenus()
   // software keyboard and button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	displayMenu->addSeparator();
-	displayMenu->addAction(showSoftwareKeyboard_Action);
 	displayMenu->addAction(showSoftwareButton_Action);
+	displayMenu->addAction(showSoftwareKeyboard_Action);
   }
 
   // for stays on top

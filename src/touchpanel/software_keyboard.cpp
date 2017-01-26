@@ -323,7 +323,7 @@ SoftwareKeyboard::SoftwareKeyboard(Settings *settings, KeyBuffer *keyBuffer, QWi
   onAltKey(false),
   onFnKey(false),
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
   setupUi(this);
 

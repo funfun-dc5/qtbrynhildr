@@ -32,7 +32,7 @@ SoftwareButton::SoftwareButton(Settings *settings, MouseBuffer *mouseBuffer, QWi
   previousClick(TYPE_MOUSE_INVALID),
   previousClickTime(QDateTime::currentDateTime()),
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
   setupUi(this);
 

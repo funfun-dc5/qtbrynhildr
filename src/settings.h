@@ -941,7 +941,6 @@ public:
   // set sound type
   void setSoundType(SOUND_TYPE soundType)
   {
-	ASSERT(soundType >= SOUND_TYPE_OFF && soundType <= SOUND_TYPE_CELT);
 	this->soundType = soundType;
   }
 

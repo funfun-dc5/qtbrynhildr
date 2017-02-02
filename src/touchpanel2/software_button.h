@@ -17,7 +17,7 @@
 namespace qtbrynhildr {
 
 // SoftwareButton
-  class SoftwareButton : public QWidget
+class SoftwareButton : public QWidget
 {
 public:
   // constructor
@@ -27,22 +27,22 @@ public:
 
 protected:
   // paint event
-  void paintEvent(QPaintEvent *event);
+  void paintEvent(QPaintEvent *event) override;
 
   // resize event
-  void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
 
 #if 0
   // minimum size hint
-  QSize minimumSizeHint() const;
+  QSize minimumSizeHint() const override;
 #endif
 
   // size hint
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 
   // mouse event
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 
 protected:
   // button id

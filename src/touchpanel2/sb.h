@@ -28,10 +28,10 @@ public:
 
 protected:
   // pressed button
-  void pressedButton(ID_BUTTON id);
+  void pressedButton(ID_BUTTON id) override;
 
   // released button
-  void releasedButton(ID_BUTTON id);
+  void releasedButton(ID_BUTTON id) override;
 
 private:
   // settings

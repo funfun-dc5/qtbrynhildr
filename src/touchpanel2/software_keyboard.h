@@ -13,6 +13,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QResizeEvent>
+#include <QSize>
 #include <QWidget>
 
 // Local Header
@@ -26,40 +27,51 @@ namespace qtbrynhildr {
 class SoftwareKeyboard : public QWidget
 {
 public:
+  // keyboard type
+  typedef enum {
+	KEYTOP_TYPE_JP,
+	KEYTOP_TYPE_US
+  } KEYTOP_TYPE;
+
+public:
   // constructor
   SoftwareKeyboard(QWidget *parent = 0);
+  SoftwareKeyboard(KEYTOP_TYPE type, QWidget *parent = 0);
   // destructor
   //  ~SoftwareKeyboard();
 
 #if 1 // for TEST
-  // keyboard type
-  typedef enum {
-	KEYTOP_TYPE_JA,
-	KEYTOP_TYPE_US
-  } KEYTOP_TYPE;
+  // get keytop type
+  KEYTOP_TYPE getKeytopType();
+
+  // get keytop type name
+  QString getKeytopTypeName();
 
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
 #endif
 
+  // reset size
+  QSize resetSize();
+
 protected:
   // paint event
-  void paintEvent(QPaintEvent *event);
+  void paintEvent(QPaintEvent *event) override;
 
   // resize event
-  void resizeEvent(QResizeEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
 
 #if 0
   // minimum size hint
-  QSize minimumSizeHint() const;
+  QSize minimumSizeHint() const override;
 #endif
 
   // size hint
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 
   // mouse event
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 
   // key down
   virtual void keyDown(uchar key);
@@ -465,6 +477,9 @@ private:
   static const int WIDTH = 270;
   static const int HEIGHT = 75;
 
+  // initial factor
+  const qreal INITIAL_FACTOR = 4.0;
+
   // layout table for keyboard
   const QRect keyLayout[ID_KEY_NUM] = {
 	//       x,  y,  w,  h
@@ -571,8 +586,8 @@ private:
   // key top information table
   KeyTopInfo *keyTopInfo;
 
-  // key top information table for JA
-  KeyTopInfo keyTopInfo_JA[ID_KEY_NUM] = {
+  // key top information table for JP
+  KeyTopInfo keyTopInfo_JP[ID_KEY_NUM] = {
 	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// DUMMY
 
 	{{"Esc",	"Esc",	(uchar)VK_ESCAPE	},	{"Esc",		(uchar)VK_ESCAPE	}},	// ID_KEY_1
@@ -724,6 +739,9 @@ private:
 	{{"↓",		"↓",	(uchar)VK_DOWN		},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
 	{{"→",		"→",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}},	// ID_KEY_67
   };
+
+  // key top type
+  KEYTOP_TYPE type;
 
   // keyboard size
   QSize keyboardSize;

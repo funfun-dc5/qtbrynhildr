@@ -26,10 +26,10 @@ public:
 
 protected:
   // key down
-  void keyDown(uchar key);
+  void keyDown(uchar key) override;
   
   // key up
-  void keyUp(uchar key);
+  void keyUp(uchar key) override;
 
 private:
   // settings

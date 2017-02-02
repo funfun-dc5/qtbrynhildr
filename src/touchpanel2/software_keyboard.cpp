@@ -25,7 +25,15 @@ namespace qtbrynhildr {
 // constructor
 SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
   :
+  SoftwareKeyboard(KEYTOP_TYPE_JP, parent)
+{
+}
+
+// constructor
+SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *parent)
+  :
   QWidget(parent),
+  type(type),
   onShiftKey(false),
   onControlKey(false),
   onAltKey(false),
@@ -39,18 +47,40 @@ SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
   }
 
   // initialize layout
-  calclateLayout(4, 4);
+  calclateLayout(INITIAL_FACTOR, INITIAL_FACTOR);
 
   // set keyboard type
-  keyTopInfo = keyTopInfo_JA;
+  setKeytopType(type);
 }
 
 #if 1 // for TEST
+// get keytop type
+SoftwareKeyboard::KEYTOP_TYPE SoftwareKeyboard::getKeytopType()
+{
+  return type;
+}
+
+// get keytop type name
+QString SoftwareKeyboard::getKeytopTypeName()
+{
+  switch(type){
+  case KEYTOP_TYPE_JP:
+	return QString("JP");
+	break;
+  case KEYTOP_TYPE_US:
+	return QString("US");
+	break;
+  default:
+	return QString("Unknown");
+	break;
+  }
+}
+
 // set keyboard type
 void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
   switch(type){
-  case KEYTOP_TYPE_JA:
-	keyTopInfo = keyTopInfo_JA;
+  case KEYTOP_TYPE_JP:
+	keyTopInfo = keyTopInfo_JP;
 	break;
   case KEYTOP_TYPE_US:
 	keyTopInfo = keyTopInfo_US;
@@ -60,9 +90,20 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
 	break;
   }
 
+  this->type = type;
+
   update();
 }
 #endif
+
+// reset size
+QSize SoftwareKeyboard::resetSize()
+{
+  // initialize layout
+  QSize size = QSize(WIDTH*INITIAL_FACTOR, HEIGHT*INITIAL_FACTOR);
+  resize(size);
+  return size;
+}
 
 //---------------------------------------------------------------------------
 // protected
@@ -77,17 +118,20 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 
   // fill keyboard panel
   QRect rect = QRect(QPoint(0,0), keyboardSize);
-  QColor panelColor = QColor::fromRgb(15, 31, 64);
+  //QColor panelColor = QColor::fromRgb(15, 31, 64);
+  QColor panelColor = QColor::fromRgb(30, 30, 30);
   painter.fillRect(rect, panelColor);
   //  painter.fillRect(rect, Qt::darkCyan);
   //cout << "paint! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
 
   // change color for Pen
-  QColor penColor = QColor::fromRgb(61, 124, 250);
+  //QColor penColor = QColor::fromRgb(61, 124, 250);
+  QColor penColor = QColor::fromRgb(192, 192, 192);
   painter.setPen(penColor);
   // change font size
   QFont font = painter.font();
   font.setPixelSize(16);
+  //font.setStyleStrategy(QFont::NoAntialias);
   painter.setFont(font);
 
   // for Shift Key Layout

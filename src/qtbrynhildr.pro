@@ -26,17 +26,20 @@ DEFINES += QWT_DLL
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
+CELT_SUPPORT = ON
 }
 
 # for Linux/FreeBSD
 linux-g++-64 | linux-g++ | freebsd-g++ {
 DEFINES += QTB_RECORDER=1
+CELT_SUPPORT = ON
 }
 
 # for MacOSX
 macx {
 DEFINES += QTB_RECORDER=1
 ICON = images/qtbrynhildr.icns
+CELT_SUPPORT = ON
 }
 
 # for Android
@@ -51,10 +54,16 @@ DEFINES += QTB_RECORDER=0
 #SOURCES += function/cipher.cpp
 
 # for CELT
+equals(CELT_SUPPORT, ON){
 INCLUDEPATH += ../libs
 LIBS += -L../libs -lcelt0
 HEADERS += sound/converter.h sound/converter_celt.h ../libs/celt.h ../libs/celt_types.h
 SOURCES += sound/converter.cpp sound/converter_celt.cpp
+DEFINES += QTB_CELT_SUPPORT=1
+}
+else {
+DEFINES += QTB_CELT_SUPPORT=0
+}
 
 # for Kero Keyboard
 DEFINES += USE_KERO_KEYBOARD=1

@@ -6,7 +6,7 @@
 
 // version
 #define QTB_VERSION				"1.6.2"
-#define QTB_RCNAME				""
+#define QTB_RCNAME				"-touchpanel2"
 #define QTB_VERSION_NUMBER		162
 
 // year

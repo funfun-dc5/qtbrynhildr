@@ -2141,6 +2141,7 @@ void QtBrynhildr::connectToServer()
 	softwareKeyboardDockWidget->setObjectName("Software Keyboard");
 	softwareKeyboardDockWidget->setWidget(softwareKeyboard);
 	softwareKeyboardDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+	softwareKeyboardDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
 	connect(softwareKeyboardDockWidget,
 			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
 	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
@@ -2152,6 +2153,7 @@ void QtBrynhildr::connectToServer()
 	  softwareButtonDockWidget->setObjectName("Software Button");
 	  softwareButtonDockWidget->setWidget(softwareButton);
 	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
+	  softwareButtonDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
 	  connect(softwareButtonDockWidget,
 			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
 	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);

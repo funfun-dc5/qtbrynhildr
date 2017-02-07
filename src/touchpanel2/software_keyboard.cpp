@@ -303,9 +303,9 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 	onShiftKey = !onShiftKey;
 	if (outputLog)
 	  cout << "onShiftKey : " << onShiftKey << endl << flush;
-	pressedShiftKey();
 	layout[ID_KEY_43].pushed = onShiftKey;
 	layout[ID_KEY_56].pushed = onShiftKey;
+	pressedShiftKey();
 	break;
   case ID_KEY_30:
   case ID_KEY_62:
@@ -313,9 +313,9 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 	onControlKey = !onControlKey;
 	if (outputLog)
 	  cout << "onControlKey : " << onControlKey << endl << flush;
-	pressedControlKey();
 	layout[ID_KEY_30].pushed = onControlKey;
 	layout[ID_KEY_62].pushed = onControlKey;
+	pressedControlKey();
 	break;
   case ID_KEY_58:
   case ID_KEY_63:
@@ -323,9 +323,9 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 	onAltKey = !onAltKey;
 	if (outputLog)
 	  cout << "onAltKey : " << onAltKey << endl << flush;
-	pressedAltKey();
 	layout[ID_KEY_58].pushed = onAltKey;
 	layout[ID_KEY_63].pushed = onAltKey;
+	pressedAltKey();
 	break;
   case ID_KEY_57:
   case ID_KEY_64:
@@ -333,9 +333,9 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 	onFnKey = !onFnKey;
 	if (outputLog)
 	  cout << "onFnKey : " << onFnKey << endl << flush;
-	pressedFnKey();
 	layout[ID_KEY_57].pushed = onFnKey;
 	layout[ID_KEY_64].pushed = onFnKey;
+	pressedFnKey();
 	break;
   default:
 	if (onFnKey){
@@ -366,8 +366,13 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 	  uchar key = keyTopInfo[id].keyTop.VK_Code;
 	  keyDown(key);
 	}
+	// pressed
+	layout[id].pushed = true;
 	break;
   }
+
+  // repaint keyboard
+  update();
 }
 
 // released key
@@ -430,36 +435,33 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
 		onShiftKey = false;
 	  }
 	}
+	// released
+	layout[id].pushed = false;
 	break;
   }
+
+  // repaint keyboard
+  update();
 }
 
 // shift key
 void SoftwareKeyboard::pressedShiftKey()
 {
-  // repaint for Shift Key Layout
-  update();
 }
 
 // Fn key
 void SoftwareKeyboard::pressedFnKey()
 {
-  // repaint for Fn Key Layout
-  update();
 }
 
 // control key
 void SoftwareKeyboard::pressedControlKey()
 {
-  // repaint for Control Key Layout
-  update();
 }
 
 // Alt key
 void SoftwareKeyboard::pressedAltKey()
 {
-  // repaint for Alt Key Layout
-  update();
 }
 
 // get name of virtual keycode

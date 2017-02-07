@@ -140,8 +140,6 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
   if (outputLog)
 	cout << "Pressed : BUTTON_ID = " << id << endl << flush;
 
-  bool updated = false;
-
   switch (id){
   case ID_BUTTON_1:
 	// Option
@@ -160,7 +158,6 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
   case ID_BUTTON_9:
   case ID_BUTTON_10:
   case ID_BUTTON_11:
-	updated = true;
 	break;
   case ID_BUTTON_12:
 	// Info Button
@@ -184,23 +181,18 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_18:
 	// Sound Quality (Lowest)
-	updated = true;
 	break;
   case ID_BUTTON_19:
 	// Sound Quality (Low)
-	updated = true;
 	break;
   case ID_BUTTON_20:
 	// Sound Quality (Standard)
-	updated = true;
 	break;
   case ID_BUTTON_21:
 	// Sound Quality (High)
-	updated = true;
 	break;
   case ID_BUTTON_22:
 	// Sound Quality (Highest)
-	updated = true;
 	break;
   case ID_BUTTON_23:
 	// Wheel -
@@ -211,23 +203,18 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_25:
 	// Video Quality (Lowest)
-	updated = true;
 	break;
   case ID_BUTTON_26:
 	// Video Quality (Low)
-	updated = true;
 	break;
   case ID_BUTTON_27:
 	// Video Quality (Standard)
-	updated = true;
 	break;
   case ID_BUTTON_28:
 	// Video Quality (High)
-	updated = true;
 	break;
   case ID_BUTTON_29:
 	// Video Quality (Highest)
-	updated = true;
 	break;
   case ID_BUTTON_30:
 	// Mouse Right Button
@@ -239,9 +226,10 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	// error
 	break;
   }
-  if (updated){
-	update();
-  }
+
+  // update buttons
+  layout[id].pushed = true;
+  update();
 }
 
 // released button
@@ -249,6 +237,10 @@ void SoftwareButton::releasedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog)
 	cout << "Released: BUTTON_ID = " << id << endl << flush;
+
+  // update buttons
+  layout[id].pushed = false;
+  update();
 }
 
 //---------------------------------------------------------------------------

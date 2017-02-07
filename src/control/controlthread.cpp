@@ -241,9 +241,15 @@ PROCESS_RESULT ControlThread::processForHeader()
 	KeyInfo *keyInfo = keyBuffer->get();
 	if (keyInfo != 0){
 	  // check shift/alt/control status
-	  if (keyInfo->keycode == VK_SHIFT ||
-		  keyInfo->keycode == VK_MENU  ||
-		  keyInfo->keycode == VK_CONTROL){
+	  if (keyInfo->keycode == VK_SHIFT    ||
+		  keyInfo->keycode == VK_MENU     ||
+		  keyInfo->keycode == VK_CONTROL  ||
+		  keyInfo->keycode == VK_RSHIFT   ||
+		  keyInfo->keycode == VK_LSHIFT   ||
+		  keyInfo->keycode == VK_RMENU    ||
+		  keyInfo->keycode == VK_LMENU    ||
+		  keyInfo->keycode == VK_RCONTROL ||
+		  keyInfo->keycode == VK_LCONTROL){
 		// toggle status
 		keydown = (keydown == KEYDOWN_ON) ? KEYDOWN_OFF : KEYDOWN_ON;
 	  }

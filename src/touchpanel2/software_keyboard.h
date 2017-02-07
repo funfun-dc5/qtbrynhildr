@@ -19,6 +19,10 @@
 // Local Header
 #include "windows/keycodes.h"
 
+#if USE_LAYOUTFILE
+#include "layoutfile_reader.h"
+#endif // USE_LAYOUTFILE
+
 using namespace std;
 
 namespace qtbrynhildr {
@@ -26,6 +30,10 @@ namespace qtbrynhildr {
 // SoftwareKeyboard
 class SoftwareKeyboard : public QWidget
 {
+#if USE_LAYOUTFILE
+  friend LayoutFileReader;
+#endif // USE_LAYOUTFILE
+
 public:
   // keyboard type
   typedef enum {
@@ -458,16 +466,16 @@ private:
   void releasedKey(ID_KEY id);
 
   // shift key
-  void pressedShiftKey();
-
-  // Fn key
-  void pressedFnKey();
+  uchar pressedShiftKey(ID_KEY id);
 
   // control key
-  void pressedControlKey();
+  uchar pressedControlKey(ID_KEY id);
 
   // alt key
-  void pressedAltKey();
+  uchar pressedAltKey(ID_KEY id);
+
+  // Fn key
+  uchar pressedFnKey(ID_KEY id);
 
   // get name of virtual keycode
   string getVKCodeByString(uchar vkcode) const;
@@ -757,6 +765,18 @@ private:
 
   // Fn key status
   bool onFnKey;
+
+  // pushed shift key
+  ID_KEY pushedShiftKey;
+
+  // pushed control key
+  ID_KEY pushedControlKey;
+
+  // pushed alt key
+  ID_KEY pushedAltKey;
+
+  // pushed Fn key
+  ID_KEY pushedFnKey;
 
   // output log flag
   bool outputLog;

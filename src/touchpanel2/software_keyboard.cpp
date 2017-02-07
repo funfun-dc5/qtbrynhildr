@@ -38,8 +38,16 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   onControlKey(false),
   onAltKey(false),
   onFnKey(false),
+  pushedShiftKey(ID_KEY_0),
+  pushedControlKey(ID_KEY_0),
+  pushedAltKey(ID_KEY_0),
+  pushedFnKey(ID_KEY_0),
   // for DEBUG
+#ifdef DEBUG
+  outputLog(true)
+#else // DEBUG
   outputLog(false)
+#endif // DEBUG
 {
   // reset flag
   for(int i = ID_KEY_0; i < ID_KEY_NUM; i++){
@@ -290,95 +298,60 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 #endif
   }
 
-  // check id
-  if (id <= 0 || id > ID_KEY_NUM){
-	// error
-	return;
-  }
+  // pushed key
+  uchar key = keyTopInfo[id].keyTop.VK_Code;
 
   switch(id){
   case ID_KEY_43:
   case ID_KEY_56:
 	// Shift
-	onShiftKey = !onShiftKey;
-	if (outputLog)
-	  cout << "onShiftKey : " << onShiftKey << endl << flush;
-	pressedShiftKey();
+	key = pressedShiftKey(id);
 	layout[ID_KEY_43].pushed = onShiftKey;
 	layout[ID_KEY_56].pushed = onShiftKey;
 	break;
   case ID_KEY_30:
   case ID_KEY_62:
 	// Control
-	onControlKey = !onControlKey;
-	if (outputLog)
-	  cout << "onControlKey : " << onControlKey << endl << flush;
-	pressedControlKey();
+	key = pressedControlKey(id);
 	layout[ID_KEY_30].pushed = onControlKey;
 	layout[ID_KEY_62].pushed = onControlKey;
 	break;
   case ID_KEY_58:
   case ID_KEY_63:
 	// Alt
-	onAltKey = !onAltKey;
-	if (outputLog)
-	  cout << "onAltKey : " << onAltKey << endl << flush;
-	pressedAltKey();
+	key = pressedAltKey(id);
 	layout[ID_KEY_58].pushed = onAltKey;
 	layout[ID_KEY_63].pushed = onAltKey;
 	break;
   case ID_KEY_57:
   case ID_KEY_64:
 	// Fn
-	onFnKey = !onFnKey;
-	if (outputLog)
-	  cout << "onFnKey : " << onFnKey << endl << flush;
-	pressedFnKey();
+	key = pressedFnKey(id);
 	layout[ID_KEY_57].pushed = onFnKey;
 	layout[ID_KEY_64].pushed = onFnKey;
 	break;
   default:
 	if (onFnKey){
 	  // Fn key
-	  uchar key = keyTopInfo[id].keyTopWithFn.VK_Code;
-	  if (key != VK_NONE_00){
-		keyDown(key);
-	  }
-	  layout[ID_KEY_57].pushed = false;
-	  layout[ID_KEY_64].pushed = false;
+	  key = keyTopInfo[id].keyTopWithFn.VK_Code;
 	}
-	else { // except for Fn key
-	  if (onShiftKey){
-		keyDown(VK_SHIFT);
-		layout[ID_KEY_43].pushed = false;
-		layout[ID_KEY_56].pushed = false;
-	  }
-	  if (onControlKey){
-		keyDown(VK_CONTROL);
-		layout[ID_KEY_30].pushed = false;
-		layout[ID_KEY_62].pushed = false;
-	  }
-	  if (onAltKey){
-		keyDown(VK_MENU);
-		layout[ID_KEY_58].pushed = false;
-		layout[ID_KEY_63].pushed = false;
-	  }
-	  uchar key = keyTopInfo[id].keyTop.VK_Code;
-	  keyDown(key);
-	}
+	layout[id].pushed = true;
 	break;
   }
+
+  // pressed key
+  if (key != VK_NONE_00){
+	// send pressed key
+	keyDown(key);
+  }
+
+  // repaint keyboard
+  update();
 }
 
 // released key
 void SoftwareKeyboard::releasedKey(ID_KEY id)
 {
-  // check id
-  if (id <= 0 || id > ID_KEY_NUM){
-	// error
-	return;
-  }
-
   if (outputLog){
 	cout << "Released Key! id = " << id << endl << flush;
 #if 0
@@ -390,6 +363,9 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
 	  cout << "Released : " << keyTopInfo[id].keyTop.keyTop << endl << flush;
 #endif
   }
+
+  // released key
+  uchar key = VK_NONE_00;
 
   switch(id){
   case ID_KEY_43:
@@ -407,59 +383,87 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
 	// Nothig to do
 	break;
   default:
-	if (onFnKey){
-	  // Fn key
-	  uchar key = keyTopInfo[id].keyTopWithFn.VK_Code;
-	  if (key != VK_NONE_00){
-		keyUp(key);
-	  }
-	}
-	else { // except for Fn key
-	  uchar key = keyTopInfo[id].keyTop.VK_Code;
-	  keyUp(key);
-	  if (onAltKey){
-		keyUp(VK_MENU);
-		onAltKey = false;
-	  }
-	  if (onControlKey){
-		keyUp(VK_CONTROL);
-		onControlKey = false;
-	  }
-	  if (onShiftKey){
-		keyUp(VK_SHIFT);
-		onShiftKey = false;
-	  }
-	}
+	key = keyTopInfo[id].keyTop.VK_Code;
+	layout[id].pushed = false;
 	break;
   }
+
+  // released key
+  if (key != VK_NONE_00){
+	// send released key
+	keyUp(key);
+  }
+
+  // repaint keyboard
+  update();
 }
 
 // shift key
-void SoftwareKeyboard::pressedShiftKey()
+uchar SoftwareKeyboard::pressedShiftKey(ID_KEY id)
 {
-  // repaint for Shift Key Layout
-  update();
-}
-
-// Fn key
-void SoftwareKeyboard::pressedFnKey()
-{
-  // repaint for Fn Key Layout
-  update();
+  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  onShiftKey = !onShiftKey;
+  if (onShiftKey){
+	pushedShiftKey = id;
+  }
+  else {
+	keyUp(keyTopInfo[pushedShiftKey].keyTop.VK_Code);
+	key = VK_NONE_00; // NOT downKey
+  }
+  if (outputLog)
+	cout << "onShiftKey : " << onShiftKey << endl << flush;
+  return key;
 }
 
 // control key
-void SoftwareKeyboard::pressedControlKey()
+uchar SoftwareKeyboard::pressedControlKey(ID_KEY id)
 {
-  // repaint for Control Key Layout
-  update();
+  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  onControlKey = !onControlKey;
+  if (onControlKey){
+	pushedControlKey = id;
+  }
+  else {
+	keyUp(keyTopInfo[pushedControlKey].keyTop.VK_Code);
+	key = VK_NONE_00; // NOT downKey
+  }
+  if (outputLog)
+	cout << "onControlKey : " << onControlKey << endl << flush;
+  return key;
 }
 
 // Alt key
-void SoftwareKeyboard::pressedAltKey()
+uchar SoftwareKeyboard::pressedAltKey(ID_KEY id)
 {
-  // repaint for Alt Key Layout
-  update();
+  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  onAltKey = !onAltKey;
+  if (onAltKey){
+	pushedAltKey = id;
+  }
+  else {
+	keyUp(keyTopInfo[pushedAltKey].keyTop.VK_Code);
+	key = VK_NONE_00; // NOT downKey
+  }
+  if (outputLog)
+	cout << "onAltKey : " << onAltKey << endl << flush;
+  return key;
+}
+
+// Fn key
+uchar SoftwareKeyboard::pressedFnKey(ID_KEY id)
+{
+  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  onFnKey = !onFnKey;
+  if (onFnKey){
+	pushedFnKey = id;
+  }
+  else {
+	keyUp(keyTopInfo[pushedFnKey].keyTop.VK_Code);
+	key = VK_NONE_00; // NOT downKey
+  }
+  if (outputLog)
+	cout << "onFnKey : " << onFnKey << endl << flush;
+  return key;
 }
 
 // get name of virtual keycode

@@ -463,11 +463,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // Software Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-#if USE_KERO_KEYBOARD // for TEST
 	softwareButton = new SB(settings, mainWindow->getMouseBuffer(), this);
-#else // for TEST
-	softwareButton = new SoftwareButton(settings, mainWindow->getMouseBuffer(), this);
-#endif // for TEST
 	softwareButton->setVisible(false);
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
   }
@@ -2119,7 +2115,6 @@ void QtBrynhildr::connectToServer()
 	  delete softwareKeyboard;
 	  softwareKeyboard = 0;
 	}
-#if USE_KERO_KEYBOARD // for TEST
 	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
 	switch(settings->getKeyboardType()){
 	case KEYBOARD_TYPE_JP:
@@ -2136,25 +2131,6 @@ void QtBrynhildr::connectToServer()
 	  ABORT();
 	  break;
 	}
-#else // for TEST
-	switch(settings->getKeyboardType()){
-	case KEYBOARD_TYPE_JP:
-	  softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this);
-	  break;
-	case KEYBOARD_TYPE_US:
-	  softwareKeyboard = new SoftwareKeyboard_US(settings, mainWindow->getKeyBuffer(), this);
-	  break;
-#if defined(Q_OS_WIN)
-	case KEYBOARD_TYPE_NATIVE:
-	  softwareKeyboard = new SoftwareKeyboard_JP(settings, mainWindow->getKeyBuffer(), this); // dummy object
-	  break;
-#endif // defined(Q_OS_WIN)
-	default:
-	  // unknown keyboard type
-	  ABORT();
-	  break;
-	}
-#endif // for TEST
 	softwareKeyboard->setVisible(false);
 	if (softwareKeyboardDockWidget != 0){
 	  removeDockWidget(softwareKeyboardDockWidget);

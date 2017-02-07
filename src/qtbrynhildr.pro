@@ -14,8 +14,6 @@ FORMS = GUI/connect_to_server_dialog.ui
 FORMS += GUI/desktop_scaling_dialog.ui
 FORMS += GUI/confirm_dialog.ui
 FORMS += GUI/log_view_dialog.ui
-#FORMS += GUI/software_keyboard.ui
-#FORMS += GUI/software_button.ui
 
 # for DEBUG
 #CONFIG += console
@@ -65,9 +63,6 @@ else {
 DEFINES += QTB_CELT_SUPPORT=0
 }
 
-# for Kero Keyboard
-DEFINES += USE_KERO_KEYBOARD=1
-
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h
@@ -78,8 +73,6 @@ HEADERS += option.h desktop.h
 HEADERS += debug.h
 HEADERS += mainwindow.h logmessage.h
 HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dialog/confirm_dialog.h dialog/log_view_dialog.h
-#HEADERS += touchpanel/software_keyboard.h touchpanel/software_keyboard_jp.h touchpanel/software_keyboard_us.h
-#HEADERS += touchpanel/software_button.h
 HEADERS += touchpanel2/software_keyboard.h touchpanel2/sk.h
 HEADERS += touchpanel2/software_button.h touchpanel2/sb.h
 HEADERS += settings.h
@@ -99,8 +92,6 @@ SOURCES += option.cpp desktop.cpp
 SOURCES += debug.cpp
 SOURCES += mainwindow.cpp logmessage.cpp
 SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp dialog/confirm_dialog.cpp dialog/log_view_dialog.cpp
-#SOURCES += touchpanel/software_keyboard.cpp touchpanel/software_keyboard_jp.cpp touchpanel/software_keyboard_us.cpp
-#SOURCES += touchpanel/software_button.cpp
 SOURCES += touchpanel2/software_keyboard.cpp touchpanel2/sk.cpp
 SOURCES += touchpanel2/software_button.cpp touchpanel2/sb.cpp
 SOURCES += settings.cpp

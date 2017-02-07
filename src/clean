@@ -7,6 +7,8 @@ case $UNAME in
 			mingw32-make clean
 			# delete executable file
 			rm -f release/${APP}.exe debug/${APP}.exe
+			# delete executable file for Android
+			rm -f lib${APP}.so
 		fi
 		if [ "$1" = "cygwin" ] ; then
 			make clean

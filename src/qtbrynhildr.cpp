@@ -1781,7 +1781,7 @@ void QtBrynhildr::connected()
   }
 
   // enabled capture
-  if (QTB_DESKTOP_IMAGE_SCALING){
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
 	desktopCapture_Action->setEnabled(true);
   }
 

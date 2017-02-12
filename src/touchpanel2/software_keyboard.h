@@ -611,7 +611,8 @@ private:
 	{{"0",		"",		(uchar)VK_0			},	{"F10",		(uchar)VK_F10		}},	// ID_KEY_11
 	{{"-",		"=",	(uchar)VK_OEM_MINUS	},	{"F11",		(uchar)VK_F11		}},	// ID_KEY_12
 	{{"^",		"~",	(uchar)VK_OEM_7		},	{"F12",		(uchar)VK_F12		}},	// ID_KEY_13
-	{{"\\",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
+	//	{{"\\",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
+	{{"￥",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
 	{{"BS",		"BS",	(uchar)VK_BACK		},	{"Del",		(uchar)VK_DELETE	}},	// ID_KEY_15
 
 	{{"Tab",	"Tab",	(uchar)VK_TAB		},	{"Tab",		(uchar)VK_TAB		}},	// ID_KEY_16

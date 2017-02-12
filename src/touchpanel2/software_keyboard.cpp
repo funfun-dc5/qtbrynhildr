@@ -138,8 +138,10 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
   painter.setPen(penColor);
   // change font size
   QFont font = painter.font();
+  font.setFamily("Courier");
   font.setPixelSize(16);
   //font.setStyleStrategy(QFont::NoAntialias);
+  //  qDebug() << "family = " << font.family();
   painter.setFont(font);
 
   // for Shift Key Layout

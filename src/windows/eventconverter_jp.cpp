@@ -390,7 +390,7 @@ uchar EventConverter_JP::getVKCode(QKeyEvent *keyEvent)
   case Key_MediaPrevious:
 	return VK_MEDIA_PREV_TRACK;
   case Key_MediaStop:
-	return VK_MEDIA_NEXT_TRACK;
+	return VK_MEDIA_STOP;
   case Key_MediaTogglePlayPause:
 	return VK_MEDIA_PLAY_PAUSE;
   case Key_LaunchMail:

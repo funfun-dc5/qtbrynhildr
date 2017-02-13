@@ -15,6 +15,9 @@ FORMS += GUI/desktop_scaling_dialog.ui
 FORMS += GUI/confirm_dialog.ui
 FORMS += GUI/log_view_dialog.ui
 
+# C++11
+CONFIG += c++11
+
 # for DEBUG
 #CONFIG += console
 

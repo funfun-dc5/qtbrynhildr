@@ -592,10 +592,10 @@ private:
   } KeyTopInfo;
 
   // key top information table
-  KeyTopInfo *keyTopInfo;
+  const KeyTopInfo *keyTopInfo;
 
   // key top information table for JP
-  KeyTopInfo keyTopInfo_JP[ID_KEY_NUM] = {
+  const KeyTopInfo keyTopInfo_JP[ID_KEY_NUM] = {
 	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// DUMMY
 
 	{{"Esc",	"Esc",	(uchar)VK_ESCAPE	},	{"Esc",		(uchar)VK_ESCAPE	}},	// ID_KEY_1
@@ -673,7 +673,7 @@ private:
   };
 
   // key top information table for US
-  KeyTopInfo keyTopInfo_US[ID_KEY_NUM] = {
+  const KeyTopInfo keyTopInfo_US[ID_KEY_NUM] = {
 	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// DUMMY
 
 	{{"Esc",	"Esc",	(uchar)VK_ESCAPE	},	{"Esc",		(uchar)VK_ESCAPE	}},	// ID_KEY_1

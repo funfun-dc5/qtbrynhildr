@@ -15,16 +15,43 @@ namespace qtbrynhildr {
 // constructor
 EventConverter::EventConverter()
   :
-  shiftKeyControl(SHIFTKEY_THROUGH),
-  outputLog(false)
+  EventConverter(KEYTOP_TYPE_JP)
 {
 }
 
-// get shift key control
-EventConverter::ShiftKeyControl EventConverter::getShiftKeyControl()
+EventConverter::EventConverter(KEYTOP_TYPE type)
+  :
+  shiftKeyControl(SHIFTKEY_THROUGH),
+  outputLog(false)
 {
-  return shiftKeyControl;
+  // set keyboard type
+  setKeytopType(type);
 }
+
+#if 1 // for TEST
+// get keytop type
+EventConverter::KEYTOP_TYPE EventConverter::getKeytopType()
+{
+  return type;
+}
+
+// set keyboard type
+void EventConverter::setKeytopType(KEYTOP_TYPE type){
+  switch(type){
+  case KEYTOP_TYPE_JP:
+	keyEventInfo = keyEventInfo_JP;
+	break;
+  case KEYTOP_TYPE_US:
+	keyEventInfo = keyEventInfo_US;
+	break;
+  default:
+	return;
+	break;
+  }
+
+  this->type = type;
+}
+#endif
 
 // for DEBUG
 
@@ -319,6 +346,45 @@ QString nameTableOfVKCode[256] = {
   "VK_OEM_CLEAR",
   "VK_NONE_FF"
 };
+
+// get Virtual Keycode
+uchar EventConverter::getVKCode(QKeyEvent *keyEvent)
+{
+  Key key = (Key)keyEvent->key();
+
+ for(int i = 0; i < TABLE_SIZE; i++){
+   if (keyEventInfo[i].key == key){
+	 shiftKeyControl = keyEventInfo[i].shiftKeyControl;
+	 return keyEventInfo[i].VK_Code;
+   }
+ }
+
+ // unknown key
+ shiftKeyControl = SHIFTKEY_THROUGH;
+ return VK_NONE_00;
+}
+
+// get shift key control
+EventConverter::ShiftKeyControl EventConverter::getShiftKeyControl()
+{
+  return shiftKeyControl;
+}
+
+// get name
+QString EventConverter::getEventConverterName()
+{
+  switch(type){
+  case KEYTOP_TYPE_JP:
+	return QString("JP");
+	break;
+  case KEYTOP_TYPE_US:
+	return QString("US");
+	break;
+  default:
+	return QString("Unknown");
+	break;
+  }
+}
 
 // get name of virtual keycode
 QString EventConverter::getVKCodeByString(uchar vkcode)

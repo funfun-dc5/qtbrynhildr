@@ -63,6 +63,15 @@ else {
 DEFINES += QTB_CELT_SUPPORT=0
 }
 
+# for new eventconverter
+NEW_EVENTCONVERTER = OFF
+equals(NEW_EVENTCONVERTER, ON){
+DEFINES += NEW_EVENTCONVERTER=1
+}
+else {
+DEFINES += NEW_EVENTCONVERTER=0
+}
+
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h
@@ -83,7 +92,12 @@ HEADERS += graphics/graphicsthread.h
 HEADERS += sound/soundthread.h
 HEADERS += sound/soundbuffer.h
 HEADERS += sound/wave.h
+equals(NEW_EVENTCONVERTER, ON){
+HEADERS += windows/keycodes.h windows/eventconverter.h windows/ntfs.h
+}
+else {
 HEADERS += windows/keycodes.h windows/eventconverter.h windows/eventconverter_jp.h windows/eventconverter_us.h windows/ntfs.h
+}
 HEADERS += function/recorder.h
 
 SOURCES += main.cpp
@@ -101,5 +115,10 @@ SOURCES += control/keybuffer.cpp control/mousebuffer.cpp
 SOURCES += graphics/graphicsthread.cpp
 SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
+equals(NEW_EVENTCONVERTER, ON){
+SOURCES += windows/eventconverter.cpp windows/ntfs.cpp
+}
+else {
 SOURCES += windows/eventconverter.cpp windows/eventconverter_jp.cpp windows/eventconverter_us.cpp windows/ntfs.cpp
+}
 SOURCES += function/recorder.cpp

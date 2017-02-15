@@ -12,8 +12,6 @@
 #include "settings.h"
 #include "ui_desktop_scaling_dialog.h"
 
-#include "common/msvc.h"
-
 namespace qtbrynhildr {
 
 // DesktopScalingDialog
@@ -66,7 +64,11 @@ private:
 
 public:
   // FACTOR for slider
+#if _MSC_VER
+  const qreal SLIDER_FACTOR = 10.0;
+#else  // _MSC_VER
   constexpr static const qreal SLIDER_FACTOR = 10.0;
+#endif // _MSC_VER
 
 private:
   // MINIMUM for slider
@@ -77,6 +79,5 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#include "common/msvc.h"
 
 #endif // DESKTOP_SCALING_DIALOG_H

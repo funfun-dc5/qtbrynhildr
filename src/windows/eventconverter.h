@@ -12,8 +12,6 @@
 // Local Header
 #include "keycodes.h"
 
-#include "common/msvc.h"
-
 //using namespace Qt;
 
 namespace qtbrynhildr {
@@ -405,7 +403,5 @@ protected:
 };
 
 } // end of namespace qtbrynhildr
-
-#include "common/msvc.h"
 
 #endif // EVENTCONVERTER_H

@@ -12,8 +12,8 @@
 
 // Utilities
 // for C++11
-#if __cplusplus < 201103L
-#define constexpr /* */
-#endif
+#if !_MSC_VER && __cplusplus < 201103L
+define constexpr /* */
+#endif // !_MSC_VER && __cplusplus < 201103L
 
 #endif // COMMON_H

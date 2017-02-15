@@ -23,8 +23,6 @@
 #include "layoutfile_reader.h"
 #endif // USE_LAYOUTFILE
 
-#include "common/msvc.h"
-
 using namespace std;
 
 namespace qtbrynhildr {
@@ -795,7 +793,5 @@ private:
 };
 
 } // end of namespace qtbrynhildr
-
-#include "common/msvc.h"
 
 #endif // SOFTWARE_KEYBOARD_H

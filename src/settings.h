@@ -25,8 +25,6 @@
 #include "parameters.h"
 #include "version.h"
 
-#include "common/msvc.h"
-
 // for Settings
 // author
 #define QTB_AUTHOR				"FunFun"
@@ -1925,7 +1923,5 @@ private:
 #define QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX	"graphics_output"
 #define QTB_SOUND_OUTPUT_FILENAME			"sound_output.pcm"
 #define QTB_SOUND_OUTPUT_WAV_FILENAME		"sound_output.wav"
-
-#include "common/msvc.h"
 
 #endif // SETTINGS_H

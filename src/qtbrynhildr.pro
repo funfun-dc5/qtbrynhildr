@@ -34,7 +34,7 @@ LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 
 # for MSVC 2015
 win32-msvc2015 {
-CELT_SUPPORT = OFF
+CELT_SUPPORT = ON
 }
 
 # for MinGW

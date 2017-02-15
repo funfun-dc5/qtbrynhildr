@@ -730,7 +730,11 @@ bool ControlThread::sendClipboard()
   QString clipboardString = settings->getSendClipboardString();
   SIZE stringSize = clipboardString.size() * 2;
   SIZE sentDataSize = 0;
+#if _MSC_VER
+  char *localBuffer = new char[stringSize + 16 + 2];
+#else // _MSC_VER
   char localBuffer[stringSize + 16 + 2];
+#endif // _MSC_VER
 
   // check
   if (stringSize == 0){
@@ -749,6 +753,11 @@ bool ControlThread::sendClipboard()
 
   // flag clear
   settings->setOnSendClipboard(false);
+
+#if _MSC_VER
+  if (localBuffer != 0)
+	delete [] localBuffer;
+#endif // _MSC_VER
 
   // check result
   if (stringSize == 0){

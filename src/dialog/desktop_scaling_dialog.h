@@ -12,6 +12,8 @@
 #include "settings.h"
 #include "ui_desktop_scaling_dialog.h"
 
+#include "common/msvc.h"
+
 namespace qtbrynhildr {
 
 // DesktopScalingDialog
@@ -74,5 +76,7 @@ private:
 };
 
 } // end of namespace qtbrynhildr
+
+#include "common/msvc.h"
 
 #endif // DESKTOP_SCALING_DIALOG_H

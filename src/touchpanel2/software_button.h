@@ -14,6 +14,8 @@
 
 // Local Header
 
+#include "common/msvc.h"
+
 namespace qtbrynhildr {
 
 // SoftwareButton
@@ -241,5 +243,7 @@ private:
 };
 
 } // end of namespace qtbrynhildr
+
+#include "common/msvc.h"
 
 #endif // BUTTON_H

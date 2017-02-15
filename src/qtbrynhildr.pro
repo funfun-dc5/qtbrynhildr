@@ -21,12 +21,24 @@ CONFIG += c++11
 # for DEBUG
 #CONFIG += console
 
-# for MinGW
+# for check spec
+# message($$QMAKESPEC)
+
+# for Windows (MinGW, MSVC)
 win32 {
 DEFINES += QWT_DLL
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
+}
+
+# for MSVC 2015
+win32-msvc2015 {
+CELT_SUPPORT = OFF
+}
+
+# for MinGW
+win32-g++ {
 CELT_SUPPORT = ON
 }
 

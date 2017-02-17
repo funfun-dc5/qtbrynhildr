@@ -13,6 +13,10 @@ if [ -n "$1" ] ; then
 			;;
 		cygwin)
 			;;
+		msvc)
+			;;
+		msvc64)
+			;;
 		*)
 			echo "Unkown argument : $1"
 			exit 1
@@ -49,6 +53,9 @@ case $UNAME in
 					;;
 				clean)
 					# for Text
+					DISTDIR="../dist/windows"
+					;;
+				*)
 					DISTDIR="../dist/windows"
 					;;
 			esac
@@ -194,7 +201,7 @@ fi
 case $UNAME in
 	CYGWIN*)
 		# check
-		if [ "$1" = "" ] ; then
+		if [ "$1" = "" -o "$1" = "msvc" -o "$1" = "msvc64" ] ; then
 			echo "Installing for windows..."
 			if [ ! -x release/${APP}.exe ] ; then
 				echo "NOT Found ${APP}.exe"
@@ -216,9 +223,11 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Network.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Widgets.dll ${DISTDIR}/bin
+			if [ "$1" = "" ] ; then
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
+			fi
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio

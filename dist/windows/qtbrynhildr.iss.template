@@ -2,7 +2,7 @@
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
 #define Name "Qt Brynhildr"
-;;#define Name "Qt Brynhildr x64"
+;;#define Name "Qt Brynhildr 64"
 #define AppVer "1.6.3"
 #define RCName "-msvc"
 #define AppVerNum StringChange(AppVer, ".", "")
@@ -90,8 +90,8 @@ english.BeveledLabel=English
 [CustomMessages]
 japanese.MakeShortcut=デスクトップにショートカットアイコンを作成する
 english.MakeShortcut=Make shortcut icon on desktop
-japanese.ManualShortcut=はじめて の Qt Brynhildr(Ver.0.9.3)
-english.ManualShortcut=First step of Qt Brynhildr(Ver.0.9.3)
+japanese.ManualShortcut=はじめて の {#Name}(Ver.0.9.3)
+english.ManualShortcut=First step of {#Name}(Ver.0.9.3)
 
 [Files]
 ; ランタイム

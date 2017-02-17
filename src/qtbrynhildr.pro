@@ -87,6 +87,14 @@ else {
 DEFINES += NEW_EVENTCONVERTER=0
 }
 
+# for Android APK
+DISTFILES += \
+    $$PWD/../dist/android/AndroidManifest.xml \
+    $$PWD/../dist/android/res/values/libs.xml \
+    $$PWD/../dist/android/build.gradle
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
+
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h

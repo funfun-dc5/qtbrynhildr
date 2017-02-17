@@ -19,6 +19,11 @@ UsePreviousAppDir=yes
 AppendDefaultDirName=yes
 OutputDir=.\
 TouchTime=03:15
+; for x64 environment
+;;ArchitecturesInstallIn64BitMode=x64
+;;ArchitecturesAllowed=x64
+; for x86 environment
+;;ArchitecturesAllowed=x86
 
 ;----------------------------------------------------------------------
 ; インストーラプログラム

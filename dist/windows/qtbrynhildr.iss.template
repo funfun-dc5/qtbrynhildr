@@ -9,8 +9,10 @@
 
 [Setup]
 AppName=Qt Brynhildr
+;;AppName=Qt Brynhildr x64
 AppVersion={#AppVer}
 AppVerName=Qt Brynhildr Ver.{#AppVer}
+;;AppVerName=Qt Brynhildr x64 Ver.{#AppVer}
 DefaultGroupName=Qt Brynhildr
 ;OutputBaseFilename=QtBrynhildr-windows-v{#AppVerNum}{#RCName}-{#AppDateString}
 OutputBaseFilename=QtBrynhildr-windows-v{#AppVerNum}{#RCName}

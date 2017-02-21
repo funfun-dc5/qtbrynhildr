@@ -12,7 +12,12 @@ typedef short int	SHORT;	// 2 byte
 typedef int			WORD;	// 4 byte
 
 // Protocol Header Structure (256 byte fixed)
+#if _MSC_VER
+#pragma pack(push, 1)
+typedef struct COM_DATA_BASE { // for C/C++ Compatibility
+#else // _MSC_VER
 typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatibility
+#endif // _MSC_VER
   DATA_TYPE			data_type;
   THREAD			thread;
   BYTE				dummy1[1];			// padding 1 byte
@@ -102,5 +107,8 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   BYTE				dummy15[20];		// padding 20 bytes
 #endif // QTB_BRYNHILDR2_SUPPORT
 } COM_DATA;
+#if _MSC_VER
+#pragma pack(pop)
+#endif // _MSC_VER
 
 #endif /* PROTOCOLS_common_H */

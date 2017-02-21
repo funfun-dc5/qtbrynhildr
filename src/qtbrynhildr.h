@@ -54,12 +54,7 @@
 #include "sound/soundthread.h"
 
 // event converter
-#if NEW_EVENCONVERTER // for TEST
 #include "windows/eventconverter.h"
-#else // for TEST
-#include "windows/eventconverter_jp.h"
-#include "windows/eventconverter_us.h"
-#endif // for TEST
 
 namespace qtbrynhildr {
 

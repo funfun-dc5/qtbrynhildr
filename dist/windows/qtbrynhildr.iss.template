@@ -1,30 +1,39 @@
 ;----------------------------------------------------------------------
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
+#define Name "%NAME%"
+#define BuildTool "%BUILDTOOL%"
 #define AppVer "1.6.3"
 #define RCName ""
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"
+#define ShortName StringChange(Name, " ", "")
 
 [Setup]
-AppName=Qt Brynhildr
+AppName={#Name}
 AppVersion={#AppVer}
-AppVerName=Qt Brynhildr Ver.{#AppVer}
-DefaultGroupName=Qt Brynhildr
-;OutputBaseFilename=QtBrynhildr-windows-v{#AppVerNum}{#RCName}-{#AppDateString}
-OutputBaseFilename=QtBrynhildr-windows-v{#AppVerNum}{#RCName}
-DefaultDirName={pf}\QtBrynhildr
+AppVerName={#Name} Ver.{#AppVer}
+DefaultGroupName={#Name}
+;OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}-{#AppDateString}
+OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}
+DefaultDirName={pf}\{#ShortName}
 UsePreviousAppDir=yes
 AppendDefaultDirName=yes
 OutputDir=.\
 TouchTime=03:15
+%EXTOPTION%
+; for x64 environment
+;;ArchitecturesInstallIn64BitMode=x64
+;;ArchitecturesAllowed=x64
+; for x86 environment
+;;ArchitecturesAllowed=x86
 
 ;----------------------------------------------------------------------
 ; インストーラプログラム
 ;----------------------------------------------------------------------
 VersionInfoVersion={#AppVer}
-VersionInfoDescription=Qt Brynhildrをセットアップするプログラム
+VersionInfoDescription={#Name}をセットアップするプログラム
 AppCopyright=Copyright(C) 2017 FunFun @ mcz-xoxo, All rights reserved.
 SetupIconFile=..\..\src\images\qtbrynhildr48.ico
 ;ウィザードページに表示されるグラフィック（*.bmp: 164 x 314）
@@ -82,8 +91,8 @@ english.BeveledLabel=English
 [CustomMessages]
 japanese.MakeShortcut=デスクトップにショートカットアイコンを作成する
 english.MakeShortcut=Make shortcut icon on desktop
-japanese.ManualShortcut=はじめて の Qt Brynhildr(Ver.0.9.3)
-english.ManualShortcut=First step of Qt Brynhildr(Ver.0.9.3)
+japanese.ManualShortcut=はじめて の {#Name}(Ver.0.9.3)
+english.ManualShortcut=First step of {#Name}(Ver.0.9.3)
 
 [Files]
 ; ランタイム
@@ -96,13 +105,13 @@ Source: "..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion tou
 [Registry]
 ;（アンインストール時に）動作設定を削除
 ;;Root: HKCU; Subkey: "Software\{#AuthName}"; Flags: uninsdeletekeyifempty
-;;Root: HKCU; Subkey: "Software\{#AuthName}\Qt Brynhildr"; Flags: uninsdeletekey
+;;Root: HKCU; Subkey: "Software\{#AuthName}\{#Name}"; Flags: uninsdeletekey
 
 [Icons]
-Name: "{commondesktop}\Qt Brynhildr"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}"; Tasks: desktopicon
-Name: "{group}\Qt Brynhildr"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}";
+Name: "{commondesktop}\{#Name}"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{group}\{#Name}"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}";
 
-Name: "{commondesktop}\Qt Brynhildr ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\{#Name} ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; マニュアル
 Name: "{commondesktop}\{cm:ManualShortcut}"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
@@ -115,7 +124,7 @@ Name: desktopicon; Description: "{cm:MakeShortcut}"
 
 [UninstallDelete]
 ;（アンインストール時に）設定ファイル及びフォルダを削除
-Type: files; Name: "{userappdata}\{#AuthName}\Qt Brynhildr.ini"
+Type: files; Name: "{userappdata}\{#AuthName}\{#Name}.ini"
 Type: dirifempty; Name: "{userappdata}\{#AuthName}"
 
 [Files]

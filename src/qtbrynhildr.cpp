@@ -468,16 +468,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
   }
 
-#if NEW_EVENTCONVERTER // for TEST
   // for Event Converter
   eventConverter = new EventConverter();
   mainWindow->setEventConverter(eventConverter);
-#else // for TEST
-  // for Event Converter TEST
-  if (QTB_DEBUG_KEYBOARD || QTB_DEBUG_MOUSE){
-	mainWindow->setEventConverter(new EventConverter_JP());
-  }
-#endif // for TEST
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard dataChanged
@@ -2076,7 +2069,6 @@ void QtBrynhildr::connectToServer()
   // clear desktop
   mainWindow->clearDesktop();
 
-#if NEW_EVENTCONVERTER // for TEST
   // set event converter
   switch(settings->getKeyboardType()){
   case KEYBOARD_TYPE_JP:
@@ -2097,30 +2089,6 @@ void QtBrynhildr::connectToServer()
 	ABORT();
 	break;
   }
-#else // for TEST
-  // set event converter
-  switch(settings->getKeyboardType()){
-  case KEYBOARD_TYPE_JP:
-	eventConverter = new EventConverter_JP();
-	break;
-  case KEYBOARD_TYPE_US:
-	eventConverter = new EventConverter_US();
-	break;
-#if defined(Q_OS_WIN)
-  case KEYBOARD_TYPE_NATIVE:
-	eventConverter = new EventConverter_JP(); // dummy object
-	break;
-#endif // defined(Q_OS_WIN)
-  default:
-	// unknown keyboard type
-	ABORT();
-	break;
-  }
-  if (eventConverter == 0){
-	return;
-  }
-  mainWindow->setEventConverter(eventConverter);
-#endif // for TEST
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // mode

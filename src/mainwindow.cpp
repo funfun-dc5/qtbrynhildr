@@ -528,7 +528,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
   // output Keyboard Log
   if (settings->getOutputKeyboardLog()){
-	(*keyboardLogFileStream) << "Press   - Qt : " << (Key)event->key()
+	(*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
 							 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
 							 << " => Sent" << endl << flush;
   }
@@ -554,7 +554,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	  onShiftKey = false;
 	  // output Keyboard Log
 	  if (settings->getOutputKeyboardLog()){
-		(*keyboardLogFileStream) << "Release - Qt : " << (Key)event->key()
+		(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
 								 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
 								 << " => Sent" << endl << flush;
 	  }
@@ -565,7 +565,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	  onShiftKey = true;
 	  // output Keyboard Log
 	  if (settings->getOutputKeyboardLog()){
-		(*keyboardLogFileStream) << "Press   - Qt : " << (Key)event->key()
+		(*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
 								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
 								 << " => Sent" << endl << flush;
 	  }
@@ -605,7 +605,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
   // output Keyboard Log
   if (settings->getOutputKeyboardLog()){
-	(*keyboardLogFileStream) << "Release - Qt : " << (Key)event->key()
+	(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
 							 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
 							 << " => Sent" << endl << flush;
   }
@@ -651,7 +651,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 	  onShiftKey = false;
 	  // output Keyboard Log
 	  if (settings->getOutputKeyboardLog()){
-		(*keyboardLogFileStream) << "Release - Qt : " << (Key)event->key()
+		(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
 								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
 								 << " => Sent" << endl << flush;
 	  }

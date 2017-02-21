@@ -350,7 +350,7 @@ QString nameTableOfVKCode[256] = {
 // get Virtual Keycode
 uchar EventConverter::getVKCode(QKeyEvent *keyEvent)
 {
-  Key key = (Key)keyEvent->key();
+  Qt::Key key = (Qt::Key)keyEvent->key();
 
  for(int i = 0; i < TABLE_SIZE; i++){
    if (keyEventInfo[i].key == key){

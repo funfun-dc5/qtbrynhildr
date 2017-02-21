@@ -47,18 +47,18 @@ public:
 #endif
 
   // get Virtual Keycode
-  virtual uchar getVKCode(QKeyEvent *keyEvent);
+  uchar getVKCode(QKeyEvent *keyEvent);
 
   // get shift key control
   ShiftKeyControl getShiftKeyControl();
 
   // get name
-  virtual QString getEventConverterName();
+  QString getEventConverterName();
 
   // for DEBUG
   static QString getVKCodeByString(uchar vkcode);
 
-protected:
+private:
   // key table size
 #if _MSC_VER
 #define TABLE_SIZE 139

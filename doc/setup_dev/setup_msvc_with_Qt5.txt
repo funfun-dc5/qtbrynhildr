@@ -1,0 +1,26 @@
+---------------------------------------------------------------------------
+ Setup Development Environment for Qt Brynhildr on Windows(MSVC2015).
+---------------------------------------------------------------------------
+
+1) install Qt5 and MSVC2015
+
+2) run command prompt for Qt5
+
+ example) "Qt 5.8 64-bit for Desktop (MSVC 2015)" in Start Menu
+
+3) run vcvarsall.bat
+
+[32bit]
+vcvarsall.bat x86
+
+[64bit]
+vcvarsall.bat amd64
+
+3) run qmake
+
+ cd qtbrynhildr/src
+ qmake qtbrynhildr.pro
+
+4) make
+
+ nmake

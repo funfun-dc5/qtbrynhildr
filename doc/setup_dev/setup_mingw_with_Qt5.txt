@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------
- Setup Development Environment for Qt Brynhildr on Windows.
+ Setup Development Environment for Qt Brynhildr on Windows(MinGW).
 ---------------------------------------------------------------------------
 
 1) install Qt5 and Cygwin

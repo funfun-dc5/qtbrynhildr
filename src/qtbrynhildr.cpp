@@ -1935,7 +1935,7 @@ void QtBrynhildr::disconnected()
 // set desktop scaling factor
 void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 {
-  if (settings->getOnDesktopScaleFixed()){
+  if (settings->getOnDesktopScaleFixed() || !settings->getOnKeepOriginalDesktopSize()){
 	// NOT change scaling
 	return;
   }

@@ -377,11 +377,15 @@
 
      ソフトウェア・ボタンの表示のON/OFFを変更します。
 
-     [6] 常に最前面に表示
+     [6] デスクトップのスケールを固定
+
+     デスクトップ画像のスケールを変更不可に変更します。
+
+     [7] 常に最前面に表示
 
      常に最前面に表示します。
 
-     [7] フルスクリーン
+     [8] フルスクリーン
 
      フルスクリーンにします。ESCキーで通常のウィンドウモードに戻ります。
 
@@ -637,6 +641,7 @@ onConfirmAtExit=true
 onSaveSettingsAtExit=false
 onExitAfterReplay=false
 onStaysOnTop=false
+onDesktopScaleFixed=false
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true
@@ -897,6 +902,10 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.1.6.5 : 2017/02/xx
+            [新規機能]
+             ・デスクトップのスケールを固定する機能の追加
+
 Ver.1.6.4 : 2017/02/21
             [その他変更]
              ・MSVC2015でビルドするための修正

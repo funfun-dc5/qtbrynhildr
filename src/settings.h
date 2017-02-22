@@ -263,6 +263,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONSTAYSONTOP					"onStaysOnTop"
 #define QTB_ONSTAYSONTOP_DEFAULT			false
 
+// for onDesktopScaleFixed
+#define QTB_ONDESKTOPSCALEFIXED				"onDesktopScaleFixed"
+#define QTB_ONDESKTOPSCALEFIXED_DEFAULT		false
+
 // for onFrameLessWindow
 #define QTB_ONFRAMELESSWINDOW				"onFrameLessWindow"
 #define QTB_ONFRAMELESSWINDOW_DEFAULT		false
@@ -1259,6 +1263,18 @@ public:
 	this->onStaysOnTop = onStaysOnTop;
   }
 
+  // get desktop scale fixed flag
+  bool getOnDesktopScaleFixed() const
+  {
+	return onDesktopScaleFixed;
+  }
+
+  // set desktop scale fixed flag
+  void setOnDesktopScaleFixed(bool onDesktopScaleFixed)
+  {
+	this->onDesktopScaleFixed = onDesktopScaleFixed;
+  }
+
   // get frame less window flag
   bool getOnFrameLessWindow() const
   {
@@ -1812,6 +1828,9 @@ private:
 
   // stays on top
   volatile bool onStaysOnTop;
+
+  // desktop scale fixed
+  volatile bool onDesktopScaleFixed;
 
   // frame less window
   volatile bool onFrameLessWindow;

@@ -92,8 +92,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   showMenuBar_Action(0),
   showStatusBar_Action(0),
   showFrameRate_Action(0),
-  staysOnTop_Action(0),
   fullScreen_Action(0),
+  staysOnTop_Action(0),
+  desktopScaleFixed_Action(0),
   desktopScalingDialog_Action(0),
   desktopCapture_Action(0),
   logViewDialog_Action(0),
@@ -1111,6 +1112,16 @@ void QtBrynhildr::createActions()
 	connect(staysOnTop_Action, SIGNAL(triggered()), this, SLOT(toggleStaysOnTop()));
   }
 
+  // Desktop Scale Fixed
+  if (QTB_DESKTOP_SCALE_FIXED){
+	desktopScaleFixed_Action = new QAction(tr("Desktop Scale Fixed"), this);
+	desktopScaleFixed_Action->setStatusTip(tr("Desktop Scale Fixed"));
+	desktopScaleFixed_Action->setEnabled(false);
+	desktopScaleFixed_Action->setCheckable(true);
+	desktopScaleFixed_Action->setChecked(settings->getOnDesktopScaleFixed());
+	connect(desktopScaleFixed_Action, SIGNAL(triggered()), this, SLOT(toggleDesktopScaleFixed()));
+  }
+
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	// Show Software Keyboard
 	showSoftwareKeyboard_Action = new QAction(tr("Show Software Keyboard"), this);
@@ -1507,7 +1518,15 @@ void QtBrynhildr::createMenus()
 	displayMenu->addAction(showSoftwareKeyboard_Action);
   }
 
-  // for stays on top
+  // desktop scale fixed
+#if defined(QTB_DEV_DESKTOP)
+  if (QTB_DESKTOP_SCALE_FIXED){
+	displayMenu->addSeparator();
+	displayMenu->addAction(desktopScaleFixed_Action);
+  }
+#endif // defined(QTB_DEV_DESKTOP)
+
+  // stays on top
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_STAYS_ON_TOP){
 	displayMenu->addSeparator();
@@ -1794,6 +1813,11 @@ void QtBrynhildr::connected()
 	fullScreen_Action->setEnabled(true);
   }
 
+  // enable desktop scale fixed
+  if (QTB_DESKTOP_SCALE_FIXED){
+	desktopScaleFixed_Action->setEnabled(true);
+  }
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// send clipboard
@@ -1879,6 +1903,11 @@ void QtBrynhildr::disconnected()
 	fullScreen_Action->setEnabled(false);
   }
 
+  // disable desktop scale fixed
+  if (QTB_DESKTOP_SCALE_FIXED){
+	desktopScaleFixed_Action->setEnabled(false);
+  }
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// send clipboard
@@ -1906,6 +1935,10 @@ void QtBrynhildr::disconnected()
 // set desktop scaling factor
 void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 {
+  if (settings->getOnDesktopScaleFixed()){
+	// NOT change scaling
+	return;
+  }
   QSize desktopSize = mainWindow->getDesktopSize();
   if (!desktopSize.isValid()){
 	return;
@@ -2890,6 +2923,31 @@ void QtBrynhildr::toggleStaysOnTop()
   move(topLeft);
 #endif // defined(QTB_NET_UNIX)
   show();
+}
+
+// desktop scale fixed
+void QtBrynhildr::toggleDesktopScaleFixed()
+{
+  if (QTB_DESKTOP_SCALE_FIXED){
+	// set enable/disable desktop scaling dialog menu
+	bool checked = desktopScaleFixed_Action->isChecked();
+	settings->setOnDesktopScaleFixed(checked);
+	static QSize orgMaximumSize = maximumSize();
+	static QSize previousSize = size();
+	if (checked){
+	  previousSize = size();
+	  // set maximum size (current size)
+	  setMaximumSize(size());
+	}
+	else {
+	  setMaximumSize(orgMaximumSize);
+	  resize(previousSize);
+	}
+	if (settings->getConnected()){
+	  desktopScalingDialog_Action->setEnabled(!checked);
+	  //	  desktopScalingDialog->hide();
+	}
+  }
 }
 
 // desktop scaling

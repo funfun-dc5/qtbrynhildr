@@ -379,13 +379,17 @@
 
      [6] デスクトップのスケールを固定
 
-     デスクトップ画像のスケールを変更不可に変更します。
+     デスクトップ画像のスケールを変更不可にします。
 
-     [7] 常に最前面に表示
+     [7] ウィンドウサイズを固定
+
+     ウィンドウサイズを変更不可にします。
+
+     [8] 常に最前面に表示
 
      常に最前面に表示します。
 
-     [8] フルスクリーン
+     [9] フルスクリーン
 
      フルスクリーンにします。ESCキーで通常のウィンドウモードに戻ります。
 
@@ -642,6 +646,7 @@ onSaveSettingsAtExit=false
 onExitAfterReplay=false
 onStaysOnTop=false
 onDesktopScaleFixed=false
+onWindowSizeFixed=false
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true
@@ -807,7 +812,8 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 8-2. Windows版のみの制限
 ----------------------------------------------------------------------
 
- なし
+ (1)「ウィンドウサイズを固定」を選択した時、一時的にウィンドウが閉じるため
+     画面がフラッシュしたように見える。
 
 ----------------------------------------------------------------------
 8-3. Linux版のみの制限
@@ -905,6 +911,7 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 Ver.1.6.5 : 2017/02/xx
             [新規機能]
              ・デスクトップのスケールを固定する機能の追加
+             ・ウィンドウサイズを固定する機能の追加
 
             [不具合修正]
              ・onKeepOriginalDesktopSize=falseの時でも、マウスによるウィンドウリサイズ時に

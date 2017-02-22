@@ -133,6 +133,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnDesktopScaleFixed(QTB_ONDESKTOPSCALEFIXED_DEFAULT);
 
+  setOnWindowSizeFixed(QTB_ONWINDOWSIZEFIXED_DEFAULT);
+
   setOnFrameLessWindow(QTB_ONFRAMELESSWINDOW_DEFAULT);
 
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
@@ -377,6 +379,10 @@ void Settings::readSettings()
   setOnDesktopScaleFixed(settings->value(QTB_ONDESKTOPSCALEFIXED,
 										 QTB_ONDESKTOPSCALEFIXED_DEFAULT).toBool());
 
+  // load onWindowSizeFixed
+  setOnWindowSizeFixed(settings->value(QTB_ONWINDOWSIZEFIXED,
+									   QTB_ONWINDOWSIZEFIXED_DEFAULT).toBool());
+
   // load onFrameLessWindow
   setOnFrameLessWindow(settings->value(QTB_ONFRAMELESSWINDOW,
 									   QTB_ONFRAMELESSWINDOW_DEFAULT).toBool());
@@ -595,6 +601,9 @@ void Settings::writeSettings()
   // save onDesktopScaleFixed
   settings->setValue(QTB_ONDESKTOPSCALEFIXED, onDesktopScaleFixed);
 
+  // save onWindowSizeFixed
+  settings->setValue(QTB_ONWINDOWSIZEFIXED, onWindowSizeFixed);
+
   // save onFrameLessWindow
   settings->setValue(QTB_ONFRAMELESSWINDOW, onFrameLessWindow);
 
@@ -736,6 +745,7 @@ void Settings::printSettings() const
   qDebug() << "ExitAfterReplay         : " << onExitAfterReplay;
   qDebug() << "StaysOnTop              : " << onStaysOnTop;
   qDebug() << "DesktopScaleFixed       : " << onDesktopScaleFixed;
+  qDebug() << "WindowSizeFixed         : " << onWindowSizeFixed;
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;

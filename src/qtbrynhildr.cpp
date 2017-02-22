@@ -95,6 +95,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   fullScreen_Action(0),
   staysOnTop_Action(0),
   desktopScaleFixed_Action(0),
+  windowSizeFixed_Action(0),
   desktopScalingDialog_Action(0),
   desktopCapture_Action(0),
   logViewDialog_Action(0),
@@ -1122,6 +1123,16 @@ void QtBrynhildr::createActions()
 	connect(desktopScaleFixed_Action, SIGNAL(triggered()), this, SLOT(toggleDesktopScaleFixed()));
   }
 
+  // Window Size Fixed
+  if (QTB_WINDOW_SIZE_FIXED){
+	windowSizeFixed_Action = new QAction(tr("Window Size Fixed"), this);
+	windowSizeFixed_Action->setStatusTip(tr("Window Size Fixed"));
+	windowSizeFixed_Action->setEnabled(true);
+	windowSizeFixed_Action->setCheckable(true);
+	windowSizeFixed_Action->setChecked(settings->getOnWindowSizeFixed());
+	connect(windowSizeFixed_Action, SIGNAL(triggered()), this, SLOT(toggleWindowSizeFixed()));
+  }
+
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	// Show Software Keyboard
 	showSoftwareKeyboard_Action = new QAction(tr("Show Software Keyboard"), this);
@@ -1523,6 +1534,16 @@ void QtBrynhildr::createMenus()
   if (QTB_DESKTOP_SCALE_FIXED){
 	displayMenu->addSeparator();
 	displayMenu->addAction(desktopScaleFixed_Action);
+  }
+#endif // defined(QTB_DEV_DESKTOP)
+
+  // window size fixed
+#if defined(QTB_DEV_DESKTOP)
+  if (QTB_WINDOW_SIZE_FIXED){
+	if (!QTB_DESKTOP_SCALE_FIXED){
+	  displayMenu->addSeparator();
+	}
+	displayMenu->addAction(windowSizeFixed_Action);
   }
 #endif // defined(QTB_DEV_DESKTOP)
 
@@ -2946,6 +2967,49 @@ void QtBrynhildr::toggleDesktopScaleFixed()
 	if (settings->getConnected()){
 	  desktopScalingDialog_Action->setEnabled(!checked);
 	  //	  desktopScalingDialog->hide();
+	}
+  }
+}
+
+// window size fixed
+void QtBrynhildr::toggleWindowSizeFixed()
+{
+  if (QTB_WINDOW_SIZE_FIXED){
+	bool checked = windowSizeFixed_Action->isChecked();
+	settings->setOnWindowSizeFixed(checked);
+	static QSize orgMaximumSize = maximumSize();
+	static QSize orgMinimumSize = minimumSize();
+	static Qt::ScrollBarPolicy hpolicy = scrollArea->horizontalScrollBarPolicy();
+	static Qt::ScrollBarPolicy vpolicy = scrollArea->horizontalScrollBarPolicy();
+	if (checked){
+	  // set maximum size (current size)
+	  setMaximumSize(size());
+	  // set minimum size (current size)
+	  setMinimumSize(size());
+	  // diable scroll bar
+	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  // disable maximum button
+#if defined(Q_OS_WIN)
+	  Qt::WindowFlags flags = windowFlags();
+	  flags &= ~Qt::WindowMaximizeButtonHint;
+	  setWindowFlags(flags);
+	  setVisible(true);
+#endif // defined(Q_OS_WIN)
+	}
+	else {
+	  setMaximumSize(orgMaximumSize);
+	  setMinimumSize(orgMinimumSize);
+	  // enable scroll bar
+	  scrollArea->setHorizontalScrollBarPolicy(hpolicy);
+	  scrollArea->setVerticalScrollBarPolicy(vpolicy);
+	  // restore window flags
+#if defined(Q_OS_WIN)
+	  Qt::WindowFlags flags = windowFlags();
+	  flags |= Qt::WindowMaximizeButtonHint;
+	  setWindowFlags(flags);
+	  setVisible(true);
+#endif // defined(Q_OS_WIN)
 	}
   }
 }

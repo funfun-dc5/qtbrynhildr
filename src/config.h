@@ -51,6 +51,9 @@ const bool QTB_DESKTOP_STAYS_ON_TOP		= true;
 // desktop scale fixed
 const bool QTB_DESKTOP_SCALE_FIXED		= true;
 
+// window size fixed
+const bool QTB_WINDOW_SIZE_FIXED		= true;
+
 // desktop frame control
 const bool QTB_DESKTOP_FRAME_CONTROL	= true;
 

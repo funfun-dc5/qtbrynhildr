@@ -260,6 +260,9 @@ private slots:
   // desktop scale fixed
   void toggleDesktopScaleFixed();
 
+  // window size fixed
+  void toggleWindowSizeFixed();
+
   // desktop scaling
   void desktopScaling();
 
@@ -459,6 +462,9 @@ private:
 
   // desktop scale fixed
   QAction *desktopScaleFixed_Action;
+
+  // window size fixed
+  QAction *windowSizeFixed_Action;
 
   // desktop scaling
   QAction *desktopScalingDialog_Action;

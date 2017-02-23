@@ -33,6 +33,13 @@
 #include "settings.h"
 #include "version.h"
 
+#if 0 // for TEST Desktop Image Capture
+#include <QPixmap>
+#include <QScreen>
+#include <QWindow>
+#include <QWidget>
+#endif // for TEST
+
 namespace qtbrynhildr {
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
@@ -191,6 +198,39 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   heightOfMenuBar(0),
   heightOfStatusBar(0)
 {
+#if 0 // for TEST Desktop Image Capture
+  QScreen *screen = QGuiApplication::primaryScreen();
+  if (screen != 0){
+	cout << "primaryScreen(): OK" << endl << flush;
+  }
+  else {
+	cout << "primaryScreen(): NG" << endl << flush;
+  }
+  const QWindow *window = windowHandle();
+  if (window != 0){
+	cout << "windowHandle(): OK" << endl << flush;
+	screen = window->screen();
+  }
+  else {
+	cout << "windowHandle(): NG" << endl << flush;
+  }
+  if (screen == 0){
+	cout << "capture: NG" << endl << flush;
+  }
+  else {
+	cout << "capture: OK" << endl << flush;
+	QDateTime beginTime = QDateTime::currentDateTime();
+	QPixmap pixmap;
+	for (int i = 0 ; i < 1000; i++){
+	  pixmap = screen->grabWindow(0);
+	}
+	QDateTime endTime = QDateTime::currentDateTime();
+	qint64 diffSeconds = endTime.toMSecsSinceEpoch() - beginTime.toMSecsSinceEpoch();
+	cout << "diff time = " << diffSeconds << " msecs." << endl << flush;
+	pixmap.save("jpg/desktop.jpg", "jpg", 75);
+  }
+#endif // for TEST
+
   // bootTime
   bootTime = QDateTime::currentDateTime();
 

@@ -4,7 +4,7 @@
 #define Name "%NAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "1.6.4"
-#define RCName "-scalefixed"
+#define RCName "-android"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"

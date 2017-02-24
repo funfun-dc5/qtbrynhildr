@@ -139,8 +139,12 @@ private:
   // mouse position
   MOUSE_POS prevPos;
 
-  // SHIFT/ALT/CONTROL key status
-  KEYDOWN keydown;
+  // SHIFT key status
+  KEYDOWN keydownSHIFT;
+  // ALT key status
+  KEYDOWN keydownALT;
+  // CONTROL key status
+  KEYDOWN keydownCONTROL;
 
   // monitor count
   MONITOR_COUNT monitorCount;

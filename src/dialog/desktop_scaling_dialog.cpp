@@ -63,6 +63,10 @@ void DesktopScalingDialog::setSliderPositionFromSetting()
 // set setting from scale slider position
 void DesktopScalingDialog::setSettingFromSliderPosition()
 {
+  if (settings->getOnDesktopScaleFixed()){
+	// NOT change scaling
+	return;
+  }
   settings->setDesktopScalingFactor((qreal)horizontalSlider->value()/SLIDER_FACTOR);
   if (outputLog){
 	cout << "scaling value: " << horizontalSlider->value() << endl << flush; // for DEBUG
@@ -118,6 +122,10 @@ void DesktopScalingDialog::on_resetButton_clicked()
 {
   if (outputLog)
 	cout << "reset button: click" << endl << flush; // for DEBUG
+  if (settings->getOnDesktopScaleFixed()){
+	// NOT change scaling
+	return;
+  }
 
   // reset desktop scaling factor
   settings->setDesktopScalingFactor(1.0);

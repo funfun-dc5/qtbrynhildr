@@ -6,7 +6,7 @@ case $UNAME in
 		if [ "$1" = "" ] ; then
 			mingw32-make clean
 			# delete executable file
-			rm -f release/${APP}.exe debug/${APP}.exe
+			rm -f release/${APP}.* debug/${APP}.*
 			# delete executable file for Android
 			rm -f lib${APP}.so
 		fi

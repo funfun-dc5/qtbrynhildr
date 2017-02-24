@@ -54,7 +54,9 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   mouseBuffer = mainWindow->getMouseBuffer();
 
   // initialize key and mouse information
-  keydown = KEYDOWN_OFF;
+  keydownSHIFT	= KEYDOWN_OFF;
+  keydownALT	= KEYDOWN_OFF;
+  keydownCONTROL= KEYDOWN_OFF;
   prevPos.x = 0;
   prevPos.y = 0;
 
@@ -241,26 +243,38 @@ PROCESS_RESULT ControlThread::processForHeader()
 	KeyInfo *keyInfo = keyBuffer->get();
 	if (keyInfo != 0){
 	  // check shift/alt/control status
-	  if (keyInfo->keycode == VK_SHIFT    ||
-		  keyInfo->keycode == VK_MENU     ||
-		  keyInfo->keycode == VK_CONTROL  ||
-		  keyInfo->keycode == VK_RSHIFT   ||
-		  keyInfo->keycode == VK_LSHIFT   ||
-		  keyInfo->keycode == VK_RMENU    ||
-		  keyInfo->keycode == VK_LMENU    ||
-		  keyInfo->keycode == VK_RCONTROL ||
+	  if (keyInfo->keycode == VK_SHIFT	||
+		  keyInfo->keycode == VK_RSHIFT	||
+		  keyInfo->keycode == VK_LSHIFT){
+		// toggle status
+		keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+	  }
+	  if (keyInfo->keycode == VK_MENU  ||
+		  keyInfo->keycode == VK_RMENU ||
+		  keyInfo->keycode == VK_LMENU){
+		// toggle status
+		keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+	  }
+	  if (keyInfo->keycode == VK_CONTROL ||
+		  keyInfo->keycode == VK_RCONTROL||
 		  keyInfo->keycode == VK_LCONTROL){
 		// toggle status
-		keydown = (keydown == KEYDOWN_ON) ? KEYDOWN_OFF : KEYDOWN_ON;
+		keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
 	  }
+
+	  // set keydown
+	  com_data->keydown = KEYDOWN_ON;
 
 	  // set key information
 	  com_data->keycode = keyInfo->keycode;
 	  com_data->keycode_flg = keyInfo->keycode_flg;
 	}
 
-	// set keydown flag
-	com_data->keydown = keydown;
+	// shift/alt/control
+	if (keydownSHIFT || keydownALT || keydownCONTROL){
+	  // set keydown
+	  com_data->keydown = KEYDOWN_ON;
+	}
   }
   else {
 	// NOT under control
@@ -503,7 +517,9 @@ void ControlThread::connectedToServer()
   prevPos.y = -1;
 
   // shift/alt/control status
-  keydown = KEYDOWN_OFF;
+  keydownSHIFT	= KEYDOWN_OFF;
+  keydownALT	= KEYDOWN_OFF;
+  keydownCONTROL= KEYDOWN_OFF;
 
   NetThread::connectedToServer();
 

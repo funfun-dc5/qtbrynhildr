@@ -59,6 +59,13 @@ CELT_SUPPORT = ON
 android-g++ {
 DEFINES += QTB_RECORDER=0
 CELT_SUPPORT = OFF
+# for Android APK
+DISTFILES += \
+    $$PWD/../dist/android/AndroidManifest.xml \
+    $$PWD/../dist/android/res/values/libs.xml \
+    $$PWD/../dist/android/build.gradle
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 }
 
 # for crypto++

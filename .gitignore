@@ -16,12 +16,13 @@ html/
 *.app/
 # for Coverity Scan
 cov-int/
-# my personal settings
+# funfun's settings
 kero_keyboard/
 #-----------------------
 # ignore source files
 #-----------------------
 src/ui_*.h
+src/moc_*.h
 src/moc_*.cpp
 src/qrc_*.cpp
 #-----------------------

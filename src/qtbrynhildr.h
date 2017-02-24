@@ -257,6 +257,12 @@ private slots:
   // toggle stays on top
   void toggleStaysOnTop();
 
+  // desktop scale fixed
+  void toggleDesktopScaleFixed();
+
+  // window size fixed
+  void toggleWindowSizeFixed();
+
   // desktop scaling
   void desktopScaling();
 
@@ -448,11 +454,17 @@ private:
   // show frame rate
   QAction *showFrameRate_Action;
 
+  // full screen
+  QAction *fullScreen_Action;
+
   // stays on top
   QAction *staysOnTop_Action;
 
-  // full screen
-  QAction *fullScreen_Action;
+  // desktop scale fixed
+  QAction *desktopScaleFixed_Action;
+
+  // window size fixed
+  QAction *windowSizeFixed_Action;
 
   // desktop scaling
   QAction *desktopScalingDialog_Action;

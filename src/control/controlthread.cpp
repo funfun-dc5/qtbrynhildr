@@ -243,24 +243,49 @@ PROCESS_RESULT ControlThread::processForHeader()
 	KeyInfo *keyInfo = keyBuffer->get();
 	if (keyInfo != 0){
 	  // check shift/alt/control status
+#if 1 // for TEST
+	  switch((int)keyInfo->keycode){
+	  case VK_SHIFT:
+	  case VK_RSHIFT:
+	  case VK_LSHIFT:
+		// toggle status
+		keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+		break;
+	  case VK_MENU:
+	  case VK_RMENU:
+	  case VK_LMENU:
+		// toggle status
+		keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+		break;
+	  case VK_CONTROL:
+	  case VK_RCONTROL:
+	  case VK_LCONTROL:
+		// toggle status
+		keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+		break;
+	  }
+#else // for TEST
 	  if (keyInfo->keycode == VK_SHIFT	||
 		  keyInfo->keycode == VK_RSHIFT	||
 		  keyInfo->keycode == VK_LSHIFT){
 		// toggle status
 		keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
 	  }
+	  else
 	  if (keyInfo->keycode == VK_MENU  ||
 		  keyInfo->keycode == VK_RMENU ||
 		  keyInfo->keycode == VK_LMENU){
 		// toggle status
 		keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
 	  }
+	  else
 	  if (keyInfo->keycode == VK_CONTROL ||
 		  keyInfo->keycode == VK_RCONTROL||
 		  keyInfo->keycode == VK_LCONTROL){
 		// toggle status
 		keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
 	  }
+#endif // for TEST
 
 	  // set keydown
 	  com_data->keydown = KEYDOWN_ON;

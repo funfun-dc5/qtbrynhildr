@@ -13,9 +13,13 @@ if [ -n "$1" ] ; then
 			;;
 		cygwin)
 			;;
+		msvc64)
+			;;
 		msvc)
 			;;
-		msvc64)
+		ubuntu64)
+			;;
+		ubuntu)
 			;;
 		*)
 			echo "Unkown argument : $1"
@@ -290,6 +294,16 @@ case $UNAME in
 			exit 1;
 		fi
 		VERSION=`${APP} -vv`
+		if [ -n "$1" ] ; then
+			case $1 in
+				ubuntu64)
+					PKGNAME="ubuntu_x64"
+					;;
+				ubuntu)
+					PKGNAME="ubuntu_x86"
+					;;
+			esac
+		fi
 		# for linux
 		# create directory
 		mkdir -p ${DISTDIR}/bin

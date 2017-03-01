@@ -1,6 +1,46 @@
 #!/bin/bash
 APP="QtBrynhildr"
 
+# check arg1
+EXTOPT=""
+if [ -n "$1" ] ; then
+	case $1 in
+		clean)
+			;;
+		cygwin)
+			EXTOPT="cygwin"
+			;;
+		msvc64)
+			EXTOPT="msvc"
+			;;
+		msvc)
+			EXTOPT="msvc64"
+			;;
+		ubuntu64)
+			EXTOPT="ubuntu64"
+			;;
+		ubuntu)
+			EXTOPT="ubuntu"
+			;;
+		*)
+			echo "Unkown argument1 : $1"
+			exit 1
+			;;
+	esac
+fi
+
+# check arg2
+if [ -n "$2" ] ; then
+	case $2 in
+		clean)
+			;;
+		*)
+			echo "Unkown argument2 : $2"
+			exit 1
+			;;
+	esac
+fi
+
 case $UNAME in
 	CYGWIN*)
 		if [ "$1" = "" ] ; then
@@ -23,7 +63,7 @@ case $UNAME in
 		popd
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
-		./install clean
+		./install $EXTOPT clean
 		;;
 	Linux)
 		make clean
@@ -35,7 +75,7 @@ case $UNAME in
 		popd
 		rm -rf ../dist/doc/manual/*
 		# delete files for install
-		./install clean
+		./install $EXTOPT clean
 		;;
 	FreeBSD)
 		make clean

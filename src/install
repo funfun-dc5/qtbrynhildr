@@ -22,7 +22,19 @@ if [ -n "$1" ] ; then
 		ubuntu)
 			;;
 		*)
-			echo "Unkown argument : $1"
+			echo "Unkown argument1 : $1"
+			exit 1
+			;;
+	esac
+fi
+
+# check arg2
+if [ -n "$2" ] ; then
+	case $2 in
+		clean)
+			;;
+		*)
+			echo "Unkown argument2 : $2"
 			exit 1
 			;;
 	esac
@@ -44,16 +56,15 @@ case $UNAME in
 					UNAMEM=`uname -m`
 					case $UNAMEM in
 						x86_64)
-							DISTDIR="../dist/cygwin/cygwin_x64"
 							PKGNAME="cygwin_x64"
 							echo "Installing for Cygwin x64..."
 							;;
 						x86)
-							DISTDIR="../dist/cygwin/cygwin_x86"
 							PKGNAME="cygwin_x86"
 							echo "Installing for Cygwin x86..."
 							;;
 					esac
+					DISTDIR="../dist/cygwin/$PKGNAME"
 					;;
 				clean)
 					# for Text
@@ -71,41 +82,48 @@ case $UNAME in
 		UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
-				DISTDIR="../dist/linux/linux_x64"
 				PKGNAME="linux_x64"
 				echo "Installing for Linux x64..."
 				;;
 			i686)
-				DISTDIR="../dist/linux/linux_x86"
 				PKGNAME="linux_x86"
 				echo "Installing for Linux x86..."
 				;;
 			armv6l)
-				DISTDIR="../dist/linux/linux_armv6l"
 				PKGNAME="linux_armv6l"
 				echo "Installing for Linux armv6l..."
 				;;
 			armv7l)
-				DISTDIR="../dist/linux/linux_armv7l"
 				PKGNAME="linux_armv7l"
 				echo "Installing for Linux armv7l..."
 				;;
 		esac
+		if [ -n "$1" ] ; then
+			case $1 in
+				ubuntu64)
+					PKGNAME="ubuntu_x64"
+					;;
+				ubuntu)
+					PKGNAME="ubuntu_x86"
+					;;
+			esac
+			DISTDIR="../dist/linux/$PKGNAME"
+		fi
+		DISTDIR="../dist/linux/$PKGNAME"
 		;;
 	FreeBSD)
 		UNAMEM=`uname -m`
 		case $UNAMEM in
 			amd64)
-				DISTDIR="../dist/linux/freebsd_x64"
 				PKGNAME="freebsd_x64"
 				echo "Installing for FreeBSD x64..."
 				;;
 			i386)
-				DISTDIR="../dist/linux/freebsd_x86"
 				PKGNAME="freebsd_x86"
 				echo "Installing for FreeBSD x86..."
 				;;
 		esac
+		DISTDIR="../dist/freebsd/$PKGNAME"
 		;;
 	Darwin)
 		UNAMEM=`uname -m`
@@ -124,7 +142,7 @@ case $UNAME in
 esac
 
 # clean
-if [ "$1" = "clean" ] ; then
+if [ "$1" = "clean" -o "$2" = "clean" ] ; then
 	echo "Cleaning..."
 	if [ "${DISTDIR}" = "" ] ; then
 		echo "DISTDIR is empty!! Please check!"
@@ -138,8 +156,7 @@ if [ "$1" = "clean" ] ; then
 			;;
 		Linux)
 			# clean
-			\rm -rf ${DISTDIR}/bin
-			\rm -rf ${DISTDIR}/doc
+			\rm -rf ${DISTDIR}
 			;;
 		Darwin)
 			# clean
@@ -294,16 +311,6 @@ case $UNAME in
 			exit 1;
 		fi
 		VERSION=`${APP} -vv`
-		if [ -n "$1" ] ; then
-			case $1 in
-				ubuntu64)
-					PKGNAME="ubuntu_x64"
-					;;
-				ubuntu)
-					PKGNAME="ubuntu_x86"
-					;;
-			esac
-		fi
 		# for linux
 		# create directory
 		mkdir -p ${DISTDIR}/bin

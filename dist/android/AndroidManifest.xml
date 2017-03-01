@@ -3,7 +3,7 @@
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Qt Brynhildr">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation"
                   android:name="org.qtproject.qt5.android.bindings.QtActivity"
-                  android:label="QtBrynhildr"
+                  android:label="Qt Brynhildr"
                   android:icon="@drawable/qtbrynhildr"
                   android:screenOrientation="landscape"
                   android:launchMode="singleTop">

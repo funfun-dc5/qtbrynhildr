@@ -96,7 +96,7 @@ void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
   Q_UNUSED(event)
 }
 
-  // settings for Tablet
+// settings for Tablet
 void ConnectToServerDialog::resetting()
 {
 #if defined(QTB_DEV_TABLET)

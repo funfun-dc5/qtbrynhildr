@@ -74,7 +74,7 @@ void DesktopScalingDialog::setSettingFromSliderPosition()
   }
 }
 
-  // settings for Tablet
+// settings for Tablet
 void DesktopScalingDialog::resetting()
 {
 #if defined(QTB_DEV_TABLET)

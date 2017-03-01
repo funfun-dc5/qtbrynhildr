@@ -63,6 +63,10 @@ CELT_SUPPORT = OFF
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
     $$PWD/../dist/android/res/values/libs.xml \
+    $$PWD/../dist/android/res/drawable-hdpi/qtbrynhildr.png \
+    $$PWD/../dist/android/res/drawable-mdpi/qtbrynhildr.png \
+    $$PWD/../dist/android/res/drawable-xhdpi/qtbrynhildr.png \
+    $$PWD/../dist/android/res/drawable-xxhdpi/qtbrynhildr.png \
     $$PWD/../dist/android/build.gradle
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android

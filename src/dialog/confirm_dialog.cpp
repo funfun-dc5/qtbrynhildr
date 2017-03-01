@@ -65,8 +65,8 @@ void ConfirmDialog::resetting()
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
-  int dialogWidth = desktopWidth/4;
-  int dialogHeight = desktopHeight/3;
+  int dialogWidth = desktopWidth-200;
+  int dialogHeight = desktopHeight-200;
   int fontPointSize = 14;
 
   // resetting dialog window size and font size

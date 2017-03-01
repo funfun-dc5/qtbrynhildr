@@ -72,7 +72,12 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
 
   // show password field
-  checkBox_fullScreen->setCheckState(settings->getOnFullScreenAtConnected() ? Qt::Checked : Qt::Unchecked);
+  if (QTB_DESKTOP_FULL_SCREEN){
+	checkBox_fullScreen->setCheckState(settings->getOnFullScreenAtConnected() ? Qt::Checked : Qt::Unchecked);
+  }
+  else {
+	checkBox_fullScreen->setVisible(false);
+  }
 
   // resetting
   resetting();
@@ -103,16 +108,28 @@ void ConnectToServerDialog::resetting()
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
-  int dialogWidth = desktopWidth/3;
+  int dialogWidth = desktopWidth/2;
   int dialogHeight = desktopHeight*0.8;
   int fontPointSize = 14;
 
   // resetting dialog window size and font size
+  lineEdit_hostname->setMinimumWidth(300);
+  comboBox_hosttype->setMinimumWidth(300);
+  comboBox_keyboardtype->setMinimumWidth(300);
+  spinBox_portno->setMinimumWidth(300);
+  lineEdit_password->setMinimumWidth(300);
+
   resize(dialogWidth, dialogHeight);
   layoutWidget->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
+#else // defined(QTB_DEV_TABLET)
+  lineEdit_hostname->setMinimumWidth(180);
+  comboBox_hosttype->setMinimumWidth(180);
+  comboBox_keyboardtype->setMinimumWidth(180);
+  spinBox_portno->setMinimumWidth(180);
+  lineEdit_password->setMinimumWidth(180);
 #endif // defined(QTB_DEV_TABLET)
 }
 

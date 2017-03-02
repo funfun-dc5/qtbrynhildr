@@ -112,23 +112,25 @@ void ConnectToServerDialog::resetting()
   int dialogHeight = desktopHeight*0.8;
   int fontPointSize = 14;
 
-  // resetting dialog window size and font size
+  // set minimum width
   lineEdit_hostname->setMinimumWidth(300);
-  comboBox_hosttype->setMinimumWidth(300);
-  comboBox_keyboardtype->setMinimumWidth(300);
-  spinBox_portno->setMinimumWidth(300);
+  comboBox_hosttype->setMinimumWidth(210);
+  comboBox_keyboardtype->setMinimumWidth(210);
+  spinBox_portno->setMinimumWidth(210);
   lineEdit_password->setMinimumWidth(300);
 
+  // resetting dialog window size and font size
   resize(dialogWidth, dialogHeight);
   layoutWidget->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
 #else // defined(QTB_DEV_TABLET)
+  // set minimum width
   lineEdit_hostname->setMinimumWidth(180);
-  comboBox_hosttype->setMinimumWidth(180);
-  comboBox_keyboardtype->setMinimumWidth(180);
-  spinBox_portno->setMinimumWidth(180);
+  comboBox_hosttype->setMinimumWidth(144);
+  comboBox_keyboardtype->setMinimumWidth(144);
+  spinBox_portno->setMinimumWidth(144);
   lineEdit_password->setMinimumWidth(180);
 #endif // defined(QTB_DEV_TABLET)
 }

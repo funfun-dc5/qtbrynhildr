@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>LogViewDialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -32,7 +32,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <property name="standardButtons">
-       <set>QDialogButtonBox::Ok</set>
+       <set>QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
       </property>
      </widget>
     </item>

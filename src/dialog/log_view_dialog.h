@@ -4,6 +4,7 @@
 #ifndef LOG_VIEW_DIALOG_H
 #define LOG_VIEW_DIALOG_H
 // Qt Header
+#include <QAbstractButton>
 #include <QDialog>
 #include <QResizeEvent>
 
@@ -37,6 +38,10 @@ public:
 private:
   // resettings for dialog
   void resetting();
+
+private slots:
+  // reset
+  void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
   // settings

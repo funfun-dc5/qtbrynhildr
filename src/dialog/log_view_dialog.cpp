@@ -91,4 +91,18 @@ void LogViewDialog::show()
   QDialog::show();
 }
 
+// reset
+void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
+{
+  if (button->text() == "Reset"){
+	// clear log
+	cout << "Clear log!" << endl <<flush;
+  }
+#if 0 // for DEBUG
+  else {
+	cout << "Other!" << endl <<flush;
+  }
+#endif // for DEBUG
+}
+
 } // end of namespace qtbrynhildr

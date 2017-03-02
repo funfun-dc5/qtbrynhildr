@@ -17,6 +17,7 @@
 #include <QWidget>
 
 // Local Header
+#include "config.h"
 #include "windows/keycodes.h"
 
 #if USE_LAYOUTFILE
@@ -486,7 +487,12 @@ private:
   static const int HEIGHT = 75;
 
   // initial factor
-  const qreal INITIAL_FACTOR = 4.0;
+  const qreal INITIAL_XFACTOR = 4.0;
+#if defined(QTB_DEV_DESKTOP)
+  const qreal INITIAL_YFACTOR = 4.0;
+#elif defined(QTB_DEV_TABLET)
+  const qreal INITIAL_YFACTOR = 4.0*1.185; // for TEST (1280/1080 = 1.185)
+#endif
 
   // layout table for keyboard
   const QRect keyLayout[ID_KEY_NUM] = {

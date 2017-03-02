@@ -55,7 +55,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   }
 
   // initialize layout
-  calculateLayout(INITIAL_FACTOR, INITIAL_FACTOR);
+  calculateLayout(INITIAL_XFACTOR, INITIAL_YFACTOR);
 
   // set keyboard type
   setKeytopType(type);
@@ -108,7 +108,7 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
 QSize SoftwareKeyboard::resetSize()
 {
   // initialize layout
-  QSize size = QSize(WIDTH*INITIAL_FACTOR, HEIGHT*INITIAL_FACTOR);
+  QSize size = QSize(WIDTH*INITIAL_XFACTOR, HEIGHT*INITIAL_YFACTOR);
   resize(size);
   return size;
 }

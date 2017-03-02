@@ -6,7 +6,7 @@
 
 // version
 #define QTB_VERSION				"1.6.5"
-#define QTB_RCNAME				"-android"
+#define QTB_RCNAME				"-clearlog"
 #define QTB_VERSION_NUMBER		165
 
 // year

@@ -1098,7 +1098,7 @@ void QtBrynhildr::createActions()
   exit_Action = new QAction(tr("Exit"), this);
   exit_Action->setStatusTip(tr("Exit Qt Brynhildr"));
   //  exit_Action->setShortcut(tr("Ctrl+E"));
-  //  exit_Action->setMenuRole(QAction::QuitRole);
+  exit_Action->setMenuRole(QAction::QuitRole);
   connect(exit_Action, SIGNAL(triggered()), this, SLOT(exit()));
 
   // about Action
@@ -1549,10 +1549,8 @@ void QtBrynhildr::createMenus()
 	fileMenu->addAction(cancelFileTransferring_Action);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#if !defined(Q_OS_OSX)
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
-#endif // !defined(Q_OS_OSX)
 
   // display menu
   displayMenu = menuBar()->addMenu(tr("Display"));

@@ -44,6 +44,12 @@ private slots:
   void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
+  // top position of log
+  qint64 topPos;
+
+  // last position of log
+  qint64 lastPos;
+
   // settings
   Settings *settings;
 };

@@ -26,6 +26,8 @@ LogViewDialog::LogViewDialog(Settings *settings,
   :
   //  QDialog(parent),
   QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
+  topPos(0),
+  lastPos(0),
   settings(settings)
 {
   setupUi(this);
@@ -82,8 +84,11 @@ void LogViewDialog::show()
   QFile *logFile = new QFile(settings->getLogFile());
   if (logFile->open(QFile::ReadOnly)){
 	  QTextStream *logFileStream = new QTextStream(logFile);
+	  logFileStream->seek(topPos);
 	  logFileStream->setCodec("UTF-8");
 	  logText = logFileStream->readAll();
+	  // save last position for Reset
+	  lastPos = logFileStream->pos();
 	  logFile->close();
   }
   clear();
@@ -96,7 +101,9 @@ void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
   if (button->text() == "Reset"){
 	// clear log
-	cout << "Clear log!" << endl <<flush;
+	//	cout << "Clear log!" << endl <<flush;
+	topPos = lastPos;
+	show();
   }
 #if 0 // for DEBUG
   else {

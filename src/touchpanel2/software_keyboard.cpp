@@ -55,7 +55,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   }
 
   // initialize layout
-  calclateLayout(INITIAL_FACTOR, INITIAL_FACTOR);
+  calculateLayout(INITIAL_FACTOR, INITIAL_FACTOR);
 
   // set keyboard type
   setKeytopType(type);
@@ -198,8 +198,8 @@ void SoftwareKeyboard::resizeEvent(QResizeEvent *event)
 	//cout << "resize! : (W, H) = (" << size.width() << "," << size.height() << ")" << endl << flush;
 	qreal xFactor = (qreal)size.width()/WIDTH;
 	qreal yFactor = (qreal)size.height()/HEIGHT;
-	// recalclate layout
-	calclateLayout(xFactor, yFactor);
+	// recalculate layout
+	calculateLayout(xFactor, yFactor);
 	update();
   }
   else {
@@ -258,8 +258,8 @@ void SoftwareKeyboard::keyUp(uchar key)
   }
 }
 
-// calclate layout
-void SoftwareKeyboard::calclateLayout(qreal xFactor, qreal yFactor)
+// calculate layout
+void SoftwareKeyboard::calculateLayout(qreal xFactor, qreal yFactor)
 {
   for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
 	QRect rect = keyLayout[i];

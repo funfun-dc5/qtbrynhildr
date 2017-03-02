@@ -40,7 +40,7 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   }
 
   // initialize layout
-  calclateLayout(5, 5);
+  calculateLayout(5, 5);
 }
 
 //---------------------------------------------------------------------------
@@ -92,8 +92,8 @@ void SoftwareButton::resizeEvent(QResizeEvent *event)
 	//cout << "resize! : (W, H) = (" << size.width() << "," << size.height() << ")" << endl << flush;
 	qreal xFactor = (qreal)size.width()/WIDTH;
 	qreal yFactor = (qreal)size.height()/HEIGHT;
-	// recalclate layout
-	calclateLayout(xFactor, yFactor);
+	// recalculate layout
+	calculateLayout(xFactor, yFactor);
 	update();
   }
   else {
@@ -246,8 +246,8 @@ void SoftwareButton::releasedButton(SoftwareButton::ID_BUTTON id)
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
-// calclate layout
-void SoftwareButton::calclateLayout(qreal xFactor, qreal yFactor)
+// calculate layout
+void SoftwareButton::calculateLayout(qreal xFactor, qreal yFactor)
 {
   for(int i = ID_BUTTON_1; i < ID_BUTTON_NUM; i++){
 	QRect rect = buttonLayout[i];

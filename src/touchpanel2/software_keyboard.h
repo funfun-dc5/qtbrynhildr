@@ -453,8 +453,8 @@ private:
   } ID_KEY;
 
 private:
-  // calclate layout
-  void calclateLayout(qreal xFactor, qreal yFactor);
+  // calculate layout
+  void calculateLayout(qreal xFactor, qreal yFactor);
 
   // get ID
   ID_KEY getID(QPoint pos) const;

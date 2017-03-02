@@ -90,8 +90,8 @@ protected:
   virtual void releasedButton(ID_BUTTON id);
 
 private:
-  // calclate layout
-  void calclateLayout(qreal xFactor, qreal yFactor);
+  // calculate layout
+  void calculateLayout(qreal xFactor, qreal yFactor);
 
   // get ID
   ID_BUTTON getID(QPoint pos);

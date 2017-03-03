@@ -491,7 +491,7 @@ private:
 #if defined(QTB_DEV_DESKTOP)
   const qreal INITIAL_YFACTOR = 4.0;
 #elif defined(QTB_DEV_TABLET)
-  const qreal INITIAL_YFACTOR = 4.0*1.185; // for TEST (1280/1080 = 1.185)
+  const qreal INITIAL_YFACTOR = 4.0*1.11; // for TEST Nexus 7 (1200/1080 = 1.11)
 #endif
 
   // layout table for keyboard

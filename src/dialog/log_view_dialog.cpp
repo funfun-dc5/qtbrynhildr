@@ -58,7 +58,7 @@ void LogViewDialog::resetting()
 
   // resetting dialog window size and font size
   resize(dialogWidth, dialogHeight);
-  widget->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
+  layoutWidget->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);

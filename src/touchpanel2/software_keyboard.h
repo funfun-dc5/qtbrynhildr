@@ -488,11 +488,11 @@ private:
 
   // initial factor
   const qreal INITIAL_XFACTOR = 4.0;
-#if defined(QTB_DEV_DESKTOP)
-  const qreal INITIAL_YFACTOR = 4.0;
-#elif defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TABLET)
   const qreal INITIAL_YFACTOR = 4.0*1.11; // for TEST Nexus 7 (1200/1080 = 1.11)
-#endif
+#else // defined(QTB_DEV_TABLET)
+  const qreal INITIAL_YFACTOR = 4.0;
+#endif // defined(QTB_DEV_TABLET)
 
   // layout table for keyboard
   const QRect keyLayout[ID_KEY_NUM] = {

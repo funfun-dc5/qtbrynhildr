@@ -82,8 +82,8 @@ void DesktopScalingDialog::resetting()
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
 
-  int dialogWidth = desktopWidth-200;
-  int dialogHeight = desktopHeight-200;
+  int dialogWidth = desktopWidth * 0.5;
+  int dialogHeight = desktopHeight * 0.5;
   int fontPointSize = 14;
 
   // resetting dialog window size and font size

@@ -108,8 +108,8 @@ void ConnectToServerDialog::resetting()
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
-  int dialogWidth = desktopWidth/2;
-  int dialogHeight = desktopHeight*0.8;
+  int dialogWidth = desktopWidth * 0.5;
+  int dialogHeight = desktopHeight * 0.8;
   int fontPointSize = 14;
 
   // set minimum width

@@ -518,6 +518,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	return;
   }
 
+  // for Menu Key support
+  Qt::Key key = (Qt::Key)event->key();
+  if (key == Qt::Key_Menu){
+	// right button down and up
+	MouseInfoValue value;
+	value.button = MOUSE_BUTTON_DOWN;
+	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	value.button = MOUSE_BUTTON_UP;
+	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	return;
+  }
+
   // get VK_Code from Key_*
   uchar VK_Code = eventConverter->getVKCode(event);
   if (outputLogForKeyboard){
@@ -591,6 +603,13 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
   // check event converter
   if (eventConverter == 0){
+	// Nothing to do
+	return;
+  }
+
+  // for Menu Key support
+  Qt::Key key = (Qt::Key)event->key();
+  if (key == Qt::Key_Menu){
 	// Nothing to do
 	return;
   }

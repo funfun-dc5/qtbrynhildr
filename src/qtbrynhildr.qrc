@@ -1,6 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-  <file>translations/qtbrynhildr_ja_JP.qm</file>
+  <file>translations/qtbrynhildr_ja.qm</file>
   <file>images/qtbrynhildr64.ico</file>
   <file>images/qtbrynhildr48.ico</file>
 </qresource>

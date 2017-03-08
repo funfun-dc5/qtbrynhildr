@@ -61,11 +61,18 @@ int main(int argc, char *argv[])
   // for Translation
   QTranslator appTranslator;
   if (qtbrynhildr::QTB_TRANSLATION){
+	bool result =
 	appTranslator.load(QTB_TRANSLATION_FILE_PATH
 					   QTB_TRANSLATION_FILE_PREFIX
 					   + QLocale::system().name(),
 					   qApp->applicationDirPath());
-	app.installTranslator(&appTranslator);
+	if (result){
+	  //	  cout << "Found translation file." << endl << flush;
+	  app.installTranslator(&appTranslator);
+	}
+	else {
+	  cout << "Not found translation file." << endl << flush;
+	}
   }
 
   // construct QtBrynhildr

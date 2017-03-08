@@ -2199,6 +2199,19 @@ void QtBrynhildr::connectToServer()
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	// software button
+	if (softwareButtonDockWidget == 0){
+	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
+	  softwareButtonDockWidget->setObjectName("Software Button");
+	  softwareButtonDockWidget->setWidget(softwareButton);
+	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
+	  softwareButtonDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
+	  connect(softwareButtonDockWidget,
+			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
+	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
+	}
+	softwareButtonDockWidget->setVisible(false);
+
 	// software keyboard
 	if (softwareKeyboard != 0){
 	  delete softwareKeyboard;
@@ -2236,19 +2249,6 @@ void QtBrynhildr::connectToServer()
 			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
 	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
 	softwareKeyboardDockWidget->setVisible(false);
-
-	// software button
-	if (softwareButtonDockWidget == 0){
-	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
-	  softwareButtonDockWidget->setObjectName("Software Button");
-	  softwareButtonDockWidget->setWidget(softwareButton);
-	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
-	  softwareButtonDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
-	  connect(softwareButtonDockWidget,
-			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
-	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
-	}
-	softwareButtonDockWidget->setVisible(false);
   }
 
   // clear buffer for control

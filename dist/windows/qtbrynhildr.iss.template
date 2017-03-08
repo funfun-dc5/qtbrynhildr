@@ -3,7 +3,7 @@
 ;----------------------------------------------------------------------
 #define Name "%NAME%"
 #define BuildTool "%BUILDTOOL%"
-#define AppVer "1.6.5"
+#define AppVer "1.6.6"
 #define RCName "-android"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")

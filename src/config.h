@@ -43,11 +43,7 @@ const bool QTB_DESKTOP_IMAGE_CAPTURE	= false;
 const bool QTB_CUT_DESKTOP_BLANK_AREA	= true;
 
 // desktop full screen mode
-#if defined(QTB_DEV_TABLET)
 const bool QTB_DESKTOP_FULL_SCREEN		= true;
-#else // defined(QTB_DEV_TABLET)
-const bool QTB_DESKTOP_FULL_SCREEN		= true;
-#endif // defined(QTB_DEV_TABLET)
 
 // stays on top
 const bool QTB_DESKTOP_STAYS_ON_TOP		= true;

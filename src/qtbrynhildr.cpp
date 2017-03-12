@@ -1134,6 +1134,7 @@ void QtBrynhildr::createActions()
   connect(showFrameRate_Action, SIGNAL(triggered()), this, SLOT(toggleShowFrameRate()));
 
   // Full Screen
+#if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
 	fullScreen_Action = new QAction(tr("Full Screen"), this);
 	fullScreen_Action->setStatusTip(tr("Full Screen"));
@@ -1143,6 +1144,7 @@ void QtBrynhildr::createActions()
 	fullScreen_Action->setChecked(false);
 	connect(fullScreen_Action, SIGNAL(triggered()), this, SLOT(fullScreen()));
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // Stays On Top
   if (QTB_DESKTOP_STAYS_ON_TOP){
@@ -1594,9 +1596,11 @@ void QtBrynhildr::createMenus()
 #endif // defined(QTB_DEV_DESKTOP)
 
   // full screen
+#if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
 	displayMenu->addAction(fullScreen_Action);
   }
+#endif // defined(QTB_DEV_DESKTOP)&& !defined(Q_OS_OSX)
 
   // video menu
   videoMenu = menuBar()->addMenu(tr("Video"));
@@ -1721,6 +1725,11 @@ void QtBrynhildr::createMenus()
 // create Context Menu
 void QtBrynhildr::createContextMenu()
 {
+#if 0 // for TEST
+  addAction(exit_Action);
+  setContextMenuPolicy(Qt::ActionsContextMenu);
+  //  setContextMenuPolicy(Qt::NoContextMenu);
+#endif // for TEST
 }
 
 // create Tool Bar
@@ -1868,9 +1877,11 @@ void QtBrynhildr::connected()
   }
 
   // enable full screen
+#if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
 	fullScreen_Action->setEnabled(true);
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // enable desktop scale fixed
   if (QTB_DESKTOP_SCALE_FIXED){
@@ -1958,9 +1969,11 @@ void QtBrynhildr::disconnected()
   }
 
   // disabled full screen
+#if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
 	fullScreen_Action->setEnabled(false);
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // disable desktop scale fixed
   if (QTB_DESKTOP_SCALE_FIXED){
@@ -2067,6 +2080,29 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 	setDesktopScalingFactor(event->size());
   }
 }
+
+#if 1 // for TEST
+// context menu event
+void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
+{
+  switch(event->reason()){
+  case QContextMenuEvent::Mouse:
+	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
+	break;
+  case QContextMenuEvent::Keyboard:
+	cout << "Context Menu Event by Keyboard (Menu button)" << endl << flush;
+	break;
+  case QContextMenuEvent::Other:
+	cout << "Context Menu Event by Other" << endl << flush;
+	break;
+  default:
+	cout << "Context Menu Event by Unknown" << endl << flush;
+	break;
+  }
+
+  QMainWindow::contextMenuEvent(event);
+}
+#endif // for TEST
 
 // load settings from setting files or registry
 void QtBrynhildr::readSettings()
@@ -2199,6 +2235,19 @@ void QtBrynhildr::connectToServer()
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+	// software button
+	if (softwareButtonDockWidget == 0){
+	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
+	  softwareButtonDockWidget->setObjectName("Software Button");
+	  softwareButtonDockWidget->setWidget(softwareButton);
+	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
+	  softwareButtonDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
+	  connect(softwareButtonDockWidget,
+			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
+	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
+	}
+	softwareButtonDockWidget->setVisible(false);
+
 	// software keyboard
 	if (softwareKeyboard != 0){
 	  delete softwareKeyboard;
@@ -2236,19 +2285,6 @@ void QtBrynhildr::connectToServer()
 			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
 	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
 	softwareKeyboardDockWidget->setVisible(false);
-
-	// software button
-	if (softwareButtonDockWidget == 0){
-	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
-	  softwareButtonDockWidget->setObjectName("Software Button");
-	  softwareButtonDockWidget->setWidget(softwareButton);
-	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
-	  softwareButtonDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
-	  connect(softwareButtonDockWidget,
-			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
-	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
-	}
-	softwareButtonDockWidget->setVisible(false);
   }
 
   // clear buffer for control
@@ -2954,7 +2990,9 @@ void QtBrynhildr::fullScreen()
 	showNormal();
   }
   // set checked flag
+#if defined(QTB_DEV_DESKTOP)
   fullScreen_Action->setChecked(fullScreenMode);
+#endif // defined(QTB_DEV_DESKTOP)
 #if 0 // for TEST
   // menu control
   desktopScalingDialog_Action->setEnabled(!fullScreenMode);

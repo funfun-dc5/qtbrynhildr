@@ -161,6 +161,11 @@ protected:
   // window resize event
   void resizeEvent(QResizeEvent *event);
 
+#if 1 // for TEST
+  // context menu event
+  void contextMenuEvent(QContextMenuEvent *event);
+#endif // for TEST
+
 private slots:
   // popup connect to server dialog
   void popUpConnectToServer();

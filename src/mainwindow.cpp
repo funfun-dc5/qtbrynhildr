@@ -538,13 +538,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	  ":" << hex << VK_Code;
   }
 
-  // output Keyboard Log
-  if (settings->getOutputKeyboardLog()){
-	(*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
-							 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
-							 << " => Sent" << endl << flush;
-  }
-
   // on Scroll Mode
   if (settings->getOnScrollMode()){
 	if (scrollArea(VK_Code, true)){
@@ -560,21 +553,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	  return;
 	}
 	// check shift key status
-	if (onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NONEED){
-	  // release shift key
-	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
-	  onShiftKey = false;
-	  // output Keyboard Log
-	  if (settings->getOutputKeyboardLog()){
-		(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
-								 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
-								 << " => Sent" << endl << flush;
-	  }
-	}
-	else if (!onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NEED){
+	if (!onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NEED){
 	  // need shift key
 	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYDOWN);
-	  onShiftKey = true;
 	  // output Keyboard Log
 	  if (settings->getOutputKeyboardLog()){
 		(*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
@@ -585,6 +566,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
+	// output Keyboard Log
+	if (settings->getOutputKeyboardLog()){
+	  (*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
+							   << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
+							   << " => Sent" << endl << flush;
+	}
 
 	// set shift key status
 	if (VK_Code == VK_SHIFT){
@@ -667,7 +654,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 	if (!onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NEED){
 	  // need shift key
 	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
-	  onShiftKey = false;
 	  // output Keyboard Log
 	  if (settings->getOutputKeyboardLog()){
 		(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()

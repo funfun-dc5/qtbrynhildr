@@ -69,6 +69,14 @@ DISTFILES += \
     $$PWD/../dist/android/res/drawable-xxhdpi/qtbrynhildr.png \
     $$PWD/../dist/android/build.gradle
 
+DISTFILES += \
+    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtActivity.java \
+    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtActivityLoader.java \
+    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
+    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtLoader.java \
+    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtService.java \
+    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtServiceLoader.java
+
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 }
 

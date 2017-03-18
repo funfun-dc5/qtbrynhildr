@@ -1,8 +1,9 @@
-/* -*- mode: c; coding: utf-8-unix -*-
+/* -*- mode: c; coding: utf-8-unix -*- */
+/*
 // -*- mode: c; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
-for c   : flex -o langfile.c langfile.lex ; gcc -o langfile langfile.c
-for c++ : flex -+ -o langfile.cpp langfile.lex ; g++ -o langfile -I. langfile.cpp
+// for c   : flex -o langfile.c langfile.lex ; gcc -o langfile langfile.c
+// for c++ : flex -+ -o langfile.cpp langfile.lex ; g++ -o langfile -I. langfile.cpp
 */
 
 %{

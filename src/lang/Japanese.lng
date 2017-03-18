@@ -5,7 +5,7 @@
 [General]
 Name="Japanese"
 Author="FunFun <fu.aba.dc5@gmail.com>"
-SpecVersion=001
+SpecVersion="001"
 
 [Keys]
 Key_Escape,				VK_ESCAPE,		SHIFTKEY_THROUGH

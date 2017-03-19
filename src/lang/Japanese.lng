@@ -1,11 +1,11 @@
 # japanese keyboard layout
 # Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
-# spec version 0.0.1
+# spec version 1
 
 [General]
 Name="Japanese"
 Author="FunFun <fu.aba.dc5@gmail.com>"
-SpecVersion="001"
+SpecVersion=1
 
 [Keys]
 Key_Escape,				VK_ESCAPE,		SHIFTKEY_THROUGH

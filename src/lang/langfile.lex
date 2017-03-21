@@ -1,7 +1,8 @@
 /* -*- mode: c; coding: utf-8-unix -*- */
 /*
 // -*- mode: c; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+//
 // for c   : flex -o langfile.c langfile.lex ; gcc -o langfile langfile.c
 // for c++ : flex -+ -o langfile.cpp langfile.lex ; g++ -o langfile -I. langfile.cpp
 */
@@ -87,6 +88,7 @@ equal		=
 
 %%
 
+/* for TEST */
 #ifdef __FLEX_LEXER_H
 /* for C++ */
 int yyFlexLexer::yywrap()

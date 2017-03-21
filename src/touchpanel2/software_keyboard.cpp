@@ -4,6 +4,7 @@
 // Common Header
 
 // System Header
+#include <fstream> // for TEST
 #include <iostream> // for TEST
 
 // Qt Header
@@ -59,6 +60,20 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 
   // set keyboard type
   setKeytopType(type);
+
+#if 0 // for TEST
+  fstream file;
+  file.open("keyTopInfo_JP.dat", ios::out | ios::binary | ios::trunc);
+  if (file.is_open()){
+	file.write((char *)&keyTopInfo_JP[1], sizeof(KeyTopInfo)*(ID_KEY_NUM-1));
+	file.close();
+  }
+  file.open("keyTopInfo_US.dat", ios::out | ios::binary | ios::trunc);
+  if (file.is_open()){
+	file.write((char *)&keyTopInfo_US[1], sizeof(KeyTopInfo)*(ID_KEY_NUM-1));
+	file.close();
+  }
+#endif // for TEST
 }
 
 #if 1 // for TEST

@@ -4,6 +4,9 @@
 // Common Header
 #include "common/common.h"
 
+// System Header
+#include <fstream> // for TEST
+
 // Qt Header
 #include <QString>
 
@@ -26,6 +29,20 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 {
   // set keyboard type
   setKeytopType(type);
+
+#if 0 // for TEST
+  fstream file;
+  file.open("keyEventInfo_JP.dat", ios::out | ios::binary | ios::trunc);
+  if (file.is_open()){
+	file.write((char *)keyEventInfo_JP, sizeof(KeyEvent)*TABLE_SIZE_JP);
+	file.close();
+  }
+  file.open("keyEventInfo_US.dat", ios::out | ios::binary | ios::trunc);
+  if (file.is_open()){
+	file.write((char *)keyEventInfo_US, sizeof(KeyEvent)*TABLE_SIZE_US);
+	file.close();
+  }
+#endif // for TEST
 }
 
 #if 1 // for TEST
@@ -40,9 +57,11 @@ void EventConverter::setKeytopType(KEYTOP_TYPE type){
   switch(type){
   case KEYTOP_TYPE_JP:
 	keyEventInfo = keyEventInfo_JP;
+	tableSize= TABLE_SIZE_JP;
 	break;
   case KEYTOP_TYPE_US:
 	keyEventInfo = keyEventInfo_US;
+	tableSize= TABLE_SIZE_US;
 	break;
   default:
 	return;
@@ -352,7 +371,7 @@ uchar EventConverter::getVKCode(QKeyEvent *keyEvent)
 {
   Qt::Key key = (Qt::Key)keyEvent->key();
 
- for(int i = 0; i < TABLE_SIZE; i++){
+ for(int i = 0; i < tableSize; i++){
    if (keyEventInfo[i].key == key){
 	 shiftKeyControl = keyEventInfo[i].shiftKeyControl;
 	 return keyEventInfo[i].VK_Code;

@@ -632,6 +632,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	this->show();
 	popUpConnectToServer();
   }
+#if 0 // for TEST
+	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+#endif // for TEST
 }
 
 // destructor

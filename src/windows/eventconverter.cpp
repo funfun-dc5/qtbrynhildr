@@ -12,6 +12,7 @@
 
 // Local Header
 #include "eventconverter.h"
+#include "lang/langfile.h" // for TEST
 
 namespace qtbrynhildr {
 
@@ -40,6 +41,33 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
   file.open("keyEventInfo_US.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
 	file.write((char *)keyEventInfo_US, sizeof(KeyEvent)*TABLE_SIZE_US);
+	file.close();
+  }
+  LFHeader header;
+  memset(&header, 0, sizeof(header));
+  strncpy(header.magic, "LF00", 4);
+  header.spec = 1;
+  header.size = 3160;
+  header.keynum = 139;
+  header.softkeynum = 67;
+  strncpy(header.name, "Japanese", strlen("Japanese"));
+  strncpy(header.name, "FunFun <fu.aba.dc5@gmail.com>", strlen("FunFun <fu.aba.dc5@gmail.com>"));
+  file.open("LFHeader_JP.dat", ios::out | ios::binary | ios::trunc);
+  if (file.is_open()){
+	file.write((char *)&header, sizeof(header));
+	file.close();
+  }
+  memset(&header, 0, sizeof(header));
+  strncpy(header.magic, "LF00", 4);
+  header.spec = 1;
+  header.size = 3124;
+  header.keynum = 136;
+  header.softkeynum = 67;
+  strncpy(header.name, "US", strlen("US"));
+  strncpy(header.name, "FunFun <fu.aba.dc5@gmail.com>", strlen("FunFun <fu.aba.dc5@gmail.com>"));
+  file.open("LFHeader_US.dat", ios::out | ios::binary | ios::trunc);
+  if (file.is_open()){
+	file.write((char *)&header, sizeof(header));
 	file.close();
   }
 #endif // for TEST

@@ -163,7 +163,7 @@ typedef struct {
 
 -- ファイルヘッダー --
 
-magic      : ファイルマジック ("xxxx")
+magic      : ファイルマジック ("KLF")
 
 spac       : SpecVersionの値
 

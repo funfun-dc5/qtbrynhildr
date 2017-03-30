@@ -12,7 +12,7 @@
 
 // Local Header
 #include "eventconverter.h"
-#include "lang/langfile.h" // for TEST
+#include "keylayout/keylayoutfile.h" // for TEST
 
 namespace qtbrynhildr {
 

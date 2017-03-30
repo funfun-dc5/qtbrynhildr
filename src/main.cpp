@@ -27,6 +27,8 @@
 #include "qtbrynhildr.h"
 #include "version.h"
 
+#include "keylayout/keylayoutfilereader.h" // for TEST
+
 // for DEBUG
 #include "debug.h"
 
@@ -34,6 +36,10 @@
 
 int main(int argc, char *argv[])
 {
+  qtbrynhildr::KeyLayoutFileReader *reader = new qtbrynhildr::KeyLayoutFileReader("./keylayout");
+  delete reader;
+  return 0;
+
   // for TEST and DEBUG
   if (!qtbrynhildr::checkProtocolHeader(false)){
 	cout << "Failed: checkProtocolHeader(). header size or member offset error!" << endl << flush;

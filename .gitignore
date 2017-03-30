@@ -18,6 +18,7 @@ html/
 cov-int/
 # funfun's settings
 kero_keyboard/
+template/
 #-----------------------
 # ignore source files
 #-----------------------

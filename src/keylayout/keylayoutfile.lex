@@ -3,8 +3,8 @@
 // -*- mode: c; coding: utf-8-unix -*-
 // Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
 //
-// for c   : flex -o langfile.c langfile.lex ; gcc -o langfile langfile.c
-// for c++ : flex -+ -o langfile.cpp langfile.lex ; g++ -o langfile -I. langfile.cpp
+// for c   : flex -o keylayoutfile.c keylayoutfile.l ; gcc -o keylayoutfile keylayoutfile.c
+// for c++ : flex -+ -o keylayoutfile.cpp keylayoutfile.l ; g++ -o keylayoutfile -I. keylayoutfile.cpp
 */
 
 %{

@@ -4,11 +4,11 @@ INCLUDES = -I.
 DEFINES =
 CFLAGS += $(INCLUDES) $(DEFINES)
 
-TARGET = langfile
+TARGET = keylayoutfile
 
 OBJPATH = obj/
 OBJS = \
-	$(OBJPATH)langfile.o \
+	$(OBJPATH)keylayoutfile.o \
 
 DEPENDS	= $(subst .o,.d,$(OBJS))
 
@@ -21,7 +21,7 @@ $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
-	@rm -f langfile.c
+	@rm -f keylayoutfile.c
 	@rm -f $(OBJS)
 	@rm -f $(TARGET)
 	@rm -f $(DEPENDS)
@@ -33,10 +33,10 @@ $(OBJPATH)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 
-langfile.c:
-	flex -o $@ langfile.lex
+keylayoutfile.c:
+	flex -o $@ keylayoutfile.l
 
 -include $(DEPENDS)
 
-.SUFFIXES: .c .h .o .d .lex
+.SUFFIXES: .c .h .o .d .l
 .PHONY: compile clean mk_dir yet

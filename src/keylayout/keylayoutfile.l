@@ -13,6 +13,9 @@
 #else // __FLEX_LEXER_H
 #include <stdio.h>
 #endif // __FLEX_LEXER_H
+
+#include "keylayoutfile.tab.h"
+
 %}
 
 ws			[ \t]+
@@ -37,17 +40,18 @@ equal		=
 \"	{
   string_buf_ptr = string_buf;
   BEGIN(qstring);
- }
+}
 
 <qstring>\"	{
   BEGIN(INITIAL);
   *string_buf_ptr = '\0';
   printf("qstring  = \"%s\"\n", string_buf);
- }
+  return QSTRING;
+}
 
 <qstring>\\(.|\n) {
   *string_buf_ptr++ = yytext[1];
- }
+}
 
 <qstring>[^\\\n\"]+ {
   char *yptr = yytext;
@@ -55,7 +59,7 @@ equal		=
   while (*yptr){
 	*string_buf_ptr++ = *yptr++;
   }
- }
+}
 
 {ws}		;
 {comment}	{
@@ -66,24 +70,31 @@ equal		=
 {equal}		;
 {section}	{
   printf("section  = %s\n", yytext);
+  return SECTION;
 }
 {key_id}	{
   printf("key_id   = %s\n", yytext);
+  return KEY_ID;
 }
 {vk_id}		{
   printf("vk_id    = %s\n", yytext);
+  return VK_ID;
 }
 {shiftkey}	{
   printf("shiftkey = %s\n", yytext);
+  return SHIFTKEY;
 }
 {platform}	{
   printf("platform = %s\n", yytext);
+  return PLATFORM;
 }
 {string}	{
   printf("string   = %s\n", yytext);
+  return STRING;
 }
 {number}	{
   printf("number   = %s\n", yytext);
+  return NUMBER;
 }
 
 %%
@@ -99,7 +110,13 @@ int yyFlexLexer::yywrap()
 int main(int argc, char *argv[])
 {
   yyFlexLexer lexer;
-  lexer.yylex();
+  while(true){
+	int id = lexer.yylex();
+	  printf("id = %d\n", id);
+	if (id == 0){
+	  break;
+	}
+  }
 }
 #else // __FLEX_LEXER_H
 /* for C */
@@ -110,6 +127,12 @@ int yywrap()
 
 int main(int argc, char *argv[])
 {
-  yylex();
+  while(1){
+	int id = yylex();
+	printf("id = %d\n", id);
+	if (id == 0){
+	  break;
+	}
+  }
 }
 #endif // __FLEX_LEXER_H

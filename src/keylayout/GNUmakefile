@@ -21,7 +21,7 @@ $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
-	@rm -f keylayoutfile.c
+	@rm -f keylayoutfile.c keylayoutfile.tab.h keylayoutfile.tab.c
 	@rm -f $(OBJS)
 	@rm -f $(TARGET)
 	@rm -f $(DEPENDS)
@@ -33,8 +33,11 @@ $(OBJPATH)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 
-keylayoutfile.c:
+keylayoutfile.c: keylayoutfile.l keylayoutfile.tab.h
 	flex -o $@ keylayoutfile.l
+
+keylayoutfile.tab.h:
+	bison -d keylayoutfile.y
 
 -include $(DEPENDS)
 

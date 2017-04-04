@@ -9,6 +9,7 @@ TARGET = keylayoutfile
 OBJPATH = obj/
 OBJS = \
 	$(OBJPATH)keylayoutfile.o \
+	$(OBJPATH)keylayoutfile.tab.o
 
 DEPENDS	= $(subst .o,.d,$(OBJS))
 
@@ -36,8 +37,11 @@ $(OBJPATH)%.o: %.c
 keylayoutfile.c: keylayoutfile.l keylayoutfile.tab.h
 	flex -o $@ keylayoutfile.l
 
-keylayoutfile.tab.h:
+keylayoutfile.tab.h: keylayoutfile.y
 	bison -d keylayoutfile.y
+
+keylayoutfile.tab.c: keylayoutfile.y
+	bison keylayoutfile.y
 
 -include $(DEPENDS)
 

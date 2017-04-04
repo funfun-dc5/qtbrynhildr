@@ -5,6 +5,14 @@
 //
 */
 %{
+#define DEBUG_YACC 1
+#ifdef DEBUG_YACC
+#include <stdio.h>
+#endif /* DEBUG_YACC */
+
+int yylex();
+int yyerror(char *s);
+
 %}
 
 %union {
@@ -12,14 +20,14 @@
   int intval;
 }
 
-%token STRING
-%token QSTRING
-%token NUMBER
-%token SECTION
-%token KEY_ID
-%token VK_ID
-%token SHIFTKEY
-%token PLATFORM
+%token <strp>	STRING
+%token <strp>	QSTRING
+%token <intval>	NUMBER
+%token <intval>	SECTION
+%token <strp>	KEY_ID
+%token <strp>	VK_ID
+%token <intval>	SHIFTKEY
+%token <intval>	PLATFORM
 
 %%
 
@@ -28,7 +36,37 @@ input:	/* */
 		;
 
 line:	'\n'
-		;
+| SECTION {
+#ifdef DEBUG_YACC
+  printf("Found Section\n");
+#endif /* DEBUG_YACC */
+}
+| STRING '=' QSTRING {
+#ifdef DEBUG_YACC
+  printf("VAR = QSTRING\n");
+#endif /* DEBUG_YACC */
+}
+| STRING '=' NUMBER {
+#ifdef DEBUG_YACC
+  printf("ENVVAR = NUMBER\n");
+#endif /* DEBUG_YACC */
+}
+| KEY_ID ',' VK_ID ',' SHIFTKEY {
+#ifdef DEBUG_YACC
+  printf("KEY_ID , VK_ID, SHIFTKEY\n");
+#endif /* DEBUG_YACC */
+}
+| KEY_ID ',' VK_ID ',' SHIFTKEY ',' PLATFORM {
+#ifdef DEBUG_YACC
+  printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM\n");
+#endif /* DEBUG_YACC */
+}
+| NUMBER ',' QSTRING ',' QSTRING ',' VK_ID ',' QSTRING ',' VK_ID {
+#ifdef DEBUG_YACC
+  printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID\n");
+#endif /* DEBUG_YACC */
+}
+;
 
 %%
 

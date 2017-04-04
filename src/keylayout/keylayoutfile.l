@@ -45,7 +45,9 @@ equal		=
 <qstring>\"	{
   BEGIN(INITIAL);
   *string_buf_ptr = '\0';
+#ifdef DEBUG_LEX
   printf("qstring  = \"%s\"\n", string_buf);
+#endif /* DEBUG_LEX */
   return QSTRING;
 }
 
@@ -63,37 +65,59 @@ equal		=
 
 {ws}		;
 {comment}	{
+#ifdef DEBUG_LEX
   printf("comment  = %s\n", yytext);
+#endif /* DEBUG_LEX */
 }
-{nl}		;
-{comma}		;
-{equal}		;
+{nl}		{
+  return '\n';
+}
+{comma}		{
+  return ',';
+}
+{equal}		{
+  return '=';
+}
 {section}	{
+#ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
+#endif /* DEBUG_LEX */
   return SECTION;
 }
 {key_id}	{
+#ifdef DEBUG_LEX
   printf("key_id   = %s\n", yytext);
+#endif /* DEBUG_LEX */
   return KEY_ID;
 }
 {vk_id}		{
+#ifdef DEBUG_LEX
   printf("vk_id    = %s\n", yytext);
+#endif /* DEBUG_LEX */
   return VK_ID;
 }
 {shiftkey}	{
+#ifdef DEBUG_LEX
   printf("shiftkey = %s\n", yytext);
+#endif /* DEBUG_LEX */
   return SHIFTKEY;
 }
 {platform}	{
+#ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
+#endif /* DEBUG_LEX */
   return PLATFORM;
 }
 {string}	{
+#ifdef DEBUG_LEX
   printf("string   = %s\n", yytext);
+#endif /* DEBUG_LEX */
   return STRING;
 }
 {number}	{
+#ifdef DEBUG_LEX
   printf("number   = %s\n", yytext);
+#endif /* DEBUG_LEX */
   return NUMBER;
 }
 
@@ -112,7 +136,7 @@ int main(int argc, char *argv[])
   yyFlexLexer lexer;
   while(true){
 	int id = lexer.yylex();
-	  printf("id = %d\n", id);
+	//	  printf("id = %d\n", id);
 	if (id == 0){
 	  break;
 	}
@@ -125,14 +149,16 @@ int yywrap()
   return 1;
 }
 
+#if 0
 int main(int argc, char *argv[])
 {
   while(1){
 	int id = yylex();
-	printf("id = %d\n", id);
+	//	printf("id = %d\n", id);
 	if (id == 0){
 	  break;
 	}
   }
 }
+#endif
 #endif // __FLEX_LEXER_H

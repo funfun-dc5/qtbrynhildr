@@ -38,12 +38,12 @@ input:	/* */
 line:	'\n'
 | SECTION {
 #ifdef DEBUG_YACC
-  printf("Found Section\n");
+  printf("Found Section (Section No. = %d)\n", $1);
 #endif /* DEBUG_YACC */
 }
 | STRING '=' QSTRING {
 #ifdef DEBUG_YACC
-  printf("VAR = QSTRING\n");
+  printf("ENVVAR = QSTRING (%s = %s)\n", $1, $3);
 #endif /* DEBUG_YACC */
 }
 | STRING '=' NUMBER {

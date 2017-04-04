@@ -10,11 +10,29 @@
 %{
 #ifdef __FLEX_LEXER_H
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #else // __FLEX_LEXER_H
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #endif // __FLEX_LEXER_H
 
 #include "keylayoutfile.tab.h"
+
+#if 1  /* for TEST */
+#define SHIFTKEY_THROUGH	0
+#define SHIFTKEY_NEED		1
+#define SHIFTKEY_NONEED		2
+
+#define SECTION_GENERAL		0
+#define SECTION_KEYS		1
+#define SECTION_SOFTKEYS	2
+
+#define PLATFORM_WINDOWS	0
+#define PLATFORM_MACOS		1
+#define PLATFORM_LINUX		2
+#endif /* for TEST */
 
 %}
 
@@ -24,7 +42,7 @@ nl			\n
 section		\[[a-zA-Z]+\]
 key_id		Key_[a-zA-Z0-9_]+
 vk_id		VK_[a-zA-Z0-9_]+
-shiftkey	SHIFTKEY_NEED|SHIFTKEY_NONEED|SHIFTKEY_THROUGH
+shiftkey	SHIFTKEY_THROUGH|SHIFTKEY_NEED|SHIFTKEY_NONEED
 platform	Windows|macOS|Linux
 string		[a-zA-Z_]+
 number		[0-9]+
@@ -48,6 +66,7 @@ equal		=
 #ifdef DEBUG_LEX
   printf("qstring  = \"%s\"\n", string_buf);
 #endif /* DEBUG_LEX */
+  yylval.strp = strdup(string_buf);
   return QSTRING;
 }
 
@@ -78,46 +97,93 @@ equal		=
 {equal}		{
   return '=';
 }
-{section}	{
+
+\[General\] {
 #ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  yylval.intval = SECTION_GENERAL;
+  return SECTION;
+}
+\[Keys\] {
+#ifdef DEBUG_LEX
+  printf("section  = %s\n", yytext);
+#endif /* DEBUG_LEX */
+  yylval.intval = SECTION_KEYS;
+  return SECTION;
+}
+\[SoftKeys\] {
+#ifdef DEBUG_LEX
+  printf("section  = %s\n", yytext);
+#endif /* DEBUG_LEX */
+  yylval.intval = SECTION_SOFTKEYS;
   return SECTION;
 }
 {key_id}	{
 #ifdef DEBUG_LEX
   printf("key_id   = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  yylval.strp = strdup(yytext);
   return KEY_ID;
 }
 {vk_id}		{
 #ifdef DEBUG_LEX
   printf("vk_id    = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  yylval.strp = strdup(yytext);
   return VK_ID;
 }
-{shiftkey}	{
+SHIFTKEY_THROUGH {
+  yylval.intval = SHIFTKEY_THROUGH;
+  return SHIFTKEY;
+}
+SHIFTKEY_NEED {
 #ifdef DEBUG_LEX
   printf("shiftkey = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  yylval.intval = SHIFTKEY_NEED;
   return SHIFTKEY;
 }
-{platform}	{
+SHIFTKEY_NONEED {
+#ifdef DEBUG_LEX
+  printf("shiftkey = %s\n", yytext);
+#endif /* DEBUG_LEX */
+  yylval.intval = SHIFTKEY_NONEED;
+  return SHIFTKEY;
+}
+Windows {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  yylval.intval = PLATFORM_WINDOWS;
+  return PLATFORM;
+}
+macOS {
+#ifdef DEBUG_LEX
+  printf("platform = %s\n", yytext);
+#endif /* DEBUG_LEX */
+  yylval.intval = PLATFORM_MACOS;
+  return PLATFORM;
+}
+Linux {
+#ifdef DEBUG_LEX
+  printf("platform = %s\n", yytext);
+#endif /* DEBUG_LEX */
+  yylval.intval = PLATFORM_LINUX;
   return PLATFORM;
 }
 {string}	{
 #ifdef DEBUG_LEX
   printf("string   = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  yylval.strp = strdup(yytext);
   return STRING;
 }
 {number}	{
 #ifdef DEBUG_LEX
   printf("number   = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  yylval.intval = atoi(yytext);
   return NUMBER;
 }
 

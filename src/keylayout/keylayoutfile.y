@@ -48,22 +48,23 @@ line:	'\n'
 }
 | STRING '=' NUMBER {
 #ifdef DEBUG_YACC
-  printf("ENVVAR = NUMBER\n");
+  printf("ENVVAR = NUMBER (%s = %d)\n", $1, $3);
 #endif /* DEBUG_YACC */
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY {
 #ifdef DEBUG_YACC
-  printf("KEY_ID , VK_ID, SHIFTKEY\n");
+  printf("KEY_ID , VK_ID, SHIFTKEY           : %-25s , %-25s, SHIFTKEY(%d)\n", $1, $3, $5);
 #endif /* DEBUG_YACC */
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY ',' PLATFORM {
 #ifdef DEBUG_YACC
-  printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM\n");
+  printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM : %-25s , %-25s, SHIFTKEY(%d), PLATFORM(%d)\n", $1, $3, $5, $7);
 #endif /* DEBUG_YACC */
 }
 | NUMBER ',' QSTRING ',' QSTRING ',' VK_ID ',' QSTRING ',' VK_ID {
 #ifdef DEBUG_YACC
-  printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID\n");
+  printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID : ");
+  printf("%2d, %-10s, %-10s, %-25s, %-10s, %s\n", $1, $3, $5, $7, $9, $11);
 #endif /* DEBUG_YACC */
 }
 ;

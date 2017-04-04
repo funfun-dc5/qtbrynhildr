@@ -8,6 +8,7 @@ release/
 debug/
 build/
 libs/
+obj/
 # for Sphinx
 doctrees/
 html/

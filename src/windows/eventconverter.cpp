@@ -43,16 +43,16 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 	file.write((char *)keyEventInfo_US, sizeof(KeyEvent)*TABLE_SIZE_US);
 	file.close();
   }
-  LFHeader header;
+  KLFHeader header;
   memset(&header, 0, sizeof(header));
   strncpy(header.magic, "KLF", 3);
   header.spec = 1;
   header.size = 3160;
   header.keynum = 139;
   header.softkeynum = 67;
-  strncpy(header.name, "Japanese", strlen("Japanese"));
+  strncpy(header.name, "Japanese 109", strlen("Japanese 109"));
   strncpy(header.author, "FunFun <fu.aba.dc5@gmail.com>", strlen("FunFun <fu.aba.dc5@gmail.com>"));
-  file.open("LFHeader_JP.dat", ios::out | ios::binary | ios::trunc);
+  file.open("KLFHeader_JP.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
 	file.write((char *)&header, sizeof(header));
 	file.close();
@@ -63,9 +63,9 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
   header.size = 3124;
   header.keynum = 136;
   header.softkeynum = 67;
-  strncpy(header.name, "US", strlen("US"));
+  strncpy(header.name, "US 101", strlen("US 101"));
   strncpy(header.author, "FunFun <fu.aba.dc5@gmail.com>", strlen("FunFun <fu.aba.dc5@gmail.com>"));
-  file.open("LFHeader_US.dat", ios::out | ios::binary | ios::trunc);
+  file.open("KLFHeader_US.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
 	file.write((char *)&header, sizeof(header));
 	file.close();

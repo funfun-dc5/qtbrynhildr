@@ -8,6 +8,8 @@
 // System Header
 
 // Local Header
+#include "key.h"
+#include "windows/keycodes.h"
 
 // Key Layout File Header
 #if _MSC_VER

@@ -27,7 +27,9 @@
 #include "qtbrynhildr.h"
 #include "version.h"
 
-#include "keylayout/keylayoutfilereader.h" // for TEST
+#if 1 // for TEST
+#include "keylayout/keylayoutfilereader.h"
+#endif
 
 // for DEBUG
 #include "debug.h"
@@ -36,9 +38,11 @@
 
 int main(int argc, char *argv[])
 {
+#if 1
   qtbrynhildr::KeyLayoutFileReader *reader = new qtbrynhildr::KeyLayoutFileReader("./keylayout");
   delete reader;
   return 0;
+#endif
 
   // for TEST and DEBUG
   if (!qtbrynhildr::checkProtocolHeader(false)){

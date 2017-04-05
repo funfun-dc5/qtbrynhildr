@@ -587,12 +587,12 @@ private:
   // key top information
   typedef struct {
 	struct {
-	  QString keyTop;
-	  QString keyTopWithShift;
+	  char keyTop[10];
+	  char keyTopWithShift[10];
 	  uchar VK_Code;
 	} keyTop;
 	struct {
-	  QString keyTop;
+	  char keyTop[10];
 	  uchar VK_Code;
 	} keyTopWithFn;
   } KeyTopInfo;

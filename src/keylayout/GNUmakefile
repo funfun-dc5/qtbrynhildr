@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -O3 -MMD
-INCLUDES = -I.
+INCLUDES = -I. -I..
 DEFINES =
 CFLAGS += $(INCLUDES) $(DEFINES)
 

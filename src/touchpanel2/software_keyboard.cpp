@@ -63,14 +63,14 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 
 #if 0 // for TEST
   fstream file;
-  file.open("keyTopInfo_JP.dat", ios::out | ios::binary | ios::trunc);
+  file.open("keyTopTable_JP.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
-	file.write((char *)&keyTopInfo_JP[1], sizeof(KeyTopInfo)*(ID_KEY_NUM-1));
+	file.write((char *)&keyTopTable_JP[1], sizeof(KeyTop)*(ID_KEY_NUM-1));
 	file.close();
   }
-  file.open("keyTopInfo_US.dat", ios::out | ios::binary | ios::trunc);
+  file.open("keyTopTable_US.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
-	file.write((char *)&keyTopInfo_US[1], sizeof(KeyTopInfo)*(ID_KEY_NUM-1));
+	file.write((char *)&keyTopTable_US[1], sizeof(KeyTop)*(ID_KEY_NUM-1));
 	file.close();
   }
 #endif // for TEST
@@ -103,10 +103,10 @@ QString SoftwareKeyboard::getKeytopTypeName()
 void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
   switch(type){
   case KEYTOP_TYPE_JP:
-	keyTopInfo = keyTopInfo_JP;
+	keyTopTable = keyTopTable_JP;
 	break;
   case KEYTOP_TYPE_US:
-	keyTopInfo = keyTopInfo_US;
+	keyTopTable = keyTopTable_US;
 	break;
   default:
 	return;
@@ -168,7 +168,7 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 	  painter.drawRect(rect);
 	  painter.drawText(rect,
 					   Qt::AlignCenter,
-					   keyTopInfo[i].keyTop.keyTopWithShift
+					   keyTopTable[i].keyTop.keyTopWithShift
 					   );
 	}
 	return;
@@ -183,7 +183,7 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 	  painter.drawRect(rect);
 	  painter.drawText(rect,
 					   Qt::AlignCenter,
-					   keyTopInfo[i].keyTopWithFn.keyTop
+					   keyTopTable[i].keyTopWithFn.keyTop
 					   );
 	}
 	return;
@@ -197,7 +197,7 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 	painter.drawRect(rect);
 	painter.drawText(rect,
 					 Qt::AlignCenter,
-					 keyTopInfo[i].keyTop.keyTop
+					 keyTopTable[i].keyTop.keyTop
 					 );
   }
 
@@ -307,16 +307,16 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 	cout << "Pressed Key! id = " << id << endl << flush;
 #if 0
 	if (onShiftKey)
-	  cout << "Pressed : " << keyTopInfo[id].keyTop.keyTopWithShift << endl << flush;
+	  cout << "Pressed : " << keyTop[id].keyTop.keyTopWithShift << endl << flush;
 	else if (onFnKey)
-	  cout << "Pressed : " << keyTopInfo[id].keyTopWithFn.keyTop << endl << flush;
+	  cout << "Pressed : " << keyTop[id].keyTopWithFn.keyTop << endl << flush;
 	else
-	  cout << "Pressed : " << keyTopInfo[id].keyTop.keyTop << endl << flush;
+	  cout << "Pressed : " << keyTop[id].keyTop.keyTop << endl << flush;
 #endif
   }
 
   // pushed key
-  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  uchar key = keyTopTable[id].keyTop.VK_Code;
 
   switch(id){
   case ID_KEY_43:
@@ -350,7 +350,7 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
   default:
 	if (onFnKey){
 	  // Fn key
-	  key = keyTopInfo[id].keyTopWithFn.VK_Code;
+	  key = keyTopTable[id].keyTopWithFn.VK_Code;
 	}
 	layout[id].pushed = true;
 	break;
@@ -373,11 +373,11 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
 	cout << "Released Key! id = " << id << endl << flush;
 #if 0
 	if (onShiftKey)
-	  cout << "Released : " << keyTopInfo[id].keyTop.keyTopWithShift << endl << flush;
+	  cout << "Released : " << keyTopTable[id].keyTop.keyTopWithShift << endl << flush;
 	else if (onFnKey)
-	  cout << "Released : " << keyTopInfo[id].keyTopWithFn.keyTop << endl << flush;
+	  cout << "Released : " << keyTopTable[id].keyTopWithFn.keyTop << endl << flush;
 	else
-	  cout << "Released : " << keyTopInfo[id].keyTop.keyTop << endl << flush;
+	  cout << "Released : " << keyTopTable[id].keyTop.keyTop << endl << flush;
 #endif
   }
 
@@ -400,7 +400,7 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
 	// Nothig to do
 	break;
   default:
-	key = keyTopInfo[id].keyTop.VK_Code;
+	key = keyTopTable[id].keyTop.VK_Code;
 	layout[id].pushed = false;
 	break;
   }
@@ -418,13 +418,13 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
 // shift key
 uchar SoftwareKeyboard::pressedShiftKey(ID_KEY id)
 {
-  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  uchar key = keyTopTable[id].keyTop.VK_Code;
   onShiftKey = !onShiftKey;
   if (onShiftKey){
 	pushedShiftKey = id;
   }
   else {
-	keyUp(keyTopInfo[pushedShiftKey].keyTop.VK_Code);
+	keyUp(keyTopTable[pushedShiftKey].keyTop.VK_Code);
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
@@ -435,13 +435,13 @@ uchar SoftwareKeyboard::pressedShiftKey(ID_KEY id)
 // control key
 uchar SoftwareKeyboard::pressedControlKey(ID_KEY id)
 {
-  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  uchar key = keyTopTable[id].keyTop.VK_Code;
   onControlKey = !onControlKey;
   if (onControlKey){
 	pushedControlKey = id;
   }
   else {
-	keyUp(keyTopInfo[pushedControlKey].keyTop.VK_Code);
+	keyUp(keyTopTable[pushedControlKey].keyTop.VK_Code);
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
@@ -452,13 +452,13 @@ uchar SoftwareKeyboard::pressedControlKey(ID_KEY id)
 // Alt key
 uchar SoftwareKeyboard::pressedAltKey(ID_KEY id)
 {
-  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  uchar key = keyTopTable[id].keyTop.VK_Code;
   onAltKey = !onAltKey;
   if (onAltKey){
 	pushedAltKey = id;
   }
   else {
-	keyUp(keyTopInfo[pushedAltKey].keyTop.VK_Code);
+	keyUp(keyTopTable[pushedAltKey].keyTop.VK_Code);
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
@@ -469,13 +469,13 @@ uchar SoftwareKeyboard::pressedAltKey(ID_KEY id)
 // Fn key
 uchar SoftwareKeyboard::pressedFnKey(ID_KEY id)
 {
-  uchar key = keyTopInfo[id].keyTop.VK_Code;
+  uchar key = keyTopTable[id].keyTop.VK_Code;
   onFnKey = !onFnKey;
   if (onFnKey){
 	pushedFnKey = id;
   }
   else {
-	keyUp(keyTopInfo[pushedFnKey].keyTop.VK_Code);
+	keyUp(keyTopTable[pushedFnKey].keyTop.VK_Code);
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
@@ -487,6 +487,11 @@ uchar SoftwareKeyboard::pressedFnKey(ID_KEY id)
 string SoftwareKeyboard::getVKCodeByString(uchar vkcode) const
 {
   return stringTableOfVKCode[(int)vkcode];
+}
+
+// print KeyTop
+void SoftwareKeyboard::printKeyTop(KeyTop *keyTop)
+{
 }
 
 } // end of namespace qtbrynhildr

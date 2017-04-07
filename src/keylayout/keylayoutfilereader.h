@@ -9,9 +9,12 @@
 // System Header
 
 // Qt Header
+#include <QList>
 
 // Local Header
 #include "keylayout/keylayoutfile.h"
+#include "touchpanel2/software_keyboard.h"
+#include "windows/eventconverter.h"
 
 namespace qtbrynhildr {
 
@@ -28,8 +31,21 @@ private:
   void readKeyLayoutFile(const char *file);
 
 private:
-  // layout file path
+  // key layout file path
   const char *path;
+
+  // key layout list
+  typedef struct {
+	QString name;	// Name
+	QString author;	// Author
+	int spec;		// SpecVersion
+	int keynum;		// num of KeyEvent
+	int softkeynum;	// num of KeyTop
+	char *klfImage;	// KFL image pointer
+	EventConverter::KeyEvent *keyEvent;	// KeyEvent pointer
+	SoftwareKeyboard::KeyTop *keyTop;	// KeyTop pointer
+  } KeyLayout;
+  QList<KeyLayout> list;
 };
 
 } // end of namespace qtbrynhildr

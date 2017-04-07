@@ -12,6 +12,8 @@
 #endif /* DEBUG_YACC */
 
 #include "keylayoutfile.h"
+#include "key.h"
+#include "windows/keyevent.h"
 
 int yylex();
 int yyerror(char *s);

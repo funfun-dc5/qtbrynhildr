@@ -19,6 +19,8 @@ namespace qtbrynhildr {
 // EventConverter
 class EventConverter
 {
+  friend class KeyLayoutFileReader;
+
 public:
   // keyboard type
   typedef enum {
@@ -26,12 +28,7 @@ public:
 	KEYTOP_TYPE_US
   } KEYTOP_TYPE;
 
-  // shift key control
-  typedef enum {
-	SHIFTKEY_THROUGH,
-	SHIFTKEY_NEED,
-	SHIFTKEY_NONEED,
-  } ShiftKeyControl;
+#include "windows/keyevent.h"
 
 public:
   // constructor
@@ -53,10 +50,14 @@ public:
   ShiftKeyControl getShiftKeyControl();
 
   // get name
-  QString getEventConverterName();
+  QString getEventConverterName() const;
 
-  // for DEBUG
+  // get name of virtual keycode
   static QString getVKCodeByString(uchar vkcode);
+
+private:
+  // print KeyEvent
+  static void printKeyEvent(KeyEvent *keyEvent);
 
 private:
   // key table size
@@ -68,21 +69,14 @@ private:
   static const int TABLE_SIZE_US = 136;
 #endif // _MSC_VER
 
-  // key table for event convert
-  typedef struct {
-	Qt::Key key;
-	uchar VK_Code;
-	ShiftKeyControl shiftKeyControl;
-  } KeyEvent;
-
-  // key table
-  const KeyEvent *keyEventInfo;
+  // key event table
+  const KeyEvent *keyEventTable;
 
   // table size
   int tableSize;
 
-  // key table for JP
-  const KeyEvent keyEventInfo_JP[TABLE_SIZE_JP] = {
+  // key event table for JP
+  const KeyEvent keyEventTable_JP[TABLE_SIZE_JP] = {
 	{Qt::Key_Escape,				VK_ESCAPE,		SHIFTKEY_THROUGH},
 	{Qt::Key_Tab,					VK_TAB,			SHIFTKEY_THROUGH},
 	{Qt::Key_Backspace,				VK_BACK,		SHIFTKEY_THROUGH},
@@ -239,8 +233,8 @@ private:
 	{Qt::Key_LaunchMail,			VK_LAUNCH_MAIL,			SHIFTKEY_THROUGH}
   };
 
-  // key table for US
-  const KeyEvent keyEventInfo_US[TABLE_SIZE_US] = {
+  // key event table for US
+  const KeyEvent keyEventTable_US[TABLE_SIZE_US] = {
 	{Qt::Key_Escape,				VK_ESCAPE,		SHIFTKEY_THROUGH},
 	{Qt::Key_Tab,					VK_TAB,			SHIFTKEY_THROUGH},
 	{Qt::Key_Backspace,				VK_BACK,		SHIFTKEY_THROUGH},

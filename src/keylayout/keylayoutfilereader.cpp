@@ -55,6 +55,16 @@ KeyLayoutFileReader::KeyLayoutFileReader(const char *layoutfilepath)
 // destructor
 KeyLayoutFileReader::~KeyLayoutFileReader()
 {
+  // delete objects
+  // all key layout
+  QList<KeyLayout>::iterator i;
+  for (i = list.begin(); i != list.end(); i++){
+	cout << (*i).keynum << endl << flush;
+	cout << (*i).softkeynum << endl << flush;
+	// delete image
+	delete [] (*i).klfImage;
+  }
+
   cout << "Deleted KeyLayoutFileReader!" << endl << flush;
 }
 
@@ -80,6 +90,22 @@ void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 	cout << "[General]" << endl;
 	cout << "Name       = " << header.name << endl;
 	cout << "Author     = " << header.author << endl << flush;
+
+	KeyLayout kl;
+	kl.name = header.name;
+	kl.author = header.author;
+	kl.spec = header.spec;
+	kl.keynum = header.keynum;
+	kl.softkeynum = header.softkeynum;
+	int imageSize = header.size - sizeof(KLFHeader);
+	kl.klfImage = new char[imageSize];
+	file.read(kl.klfImage, imageSize);
+	kl.keyEvent = (EventConverter::KeyEvent *)kl.klfImage;
+	kl.keyTop = (SoftwareKeyboard::KeyTop *)(kl.keyEvent + sizeof(EventConverter::KeyEvent)*header.keynum);
+
+	// append
+	list.append(kl);
+
 	file.close();
 	cout << "Closed file : " << fullname << endl << flush;
   }

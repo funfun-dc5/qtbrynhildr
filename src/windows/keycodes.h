@@ -297,4 +297,7 @@
 #define VK_OEM_CLEAR	0xFE
 #define VK_NONE_FF		0xFF
 
+// string table of vk code
+extern const char *stringTableOfVKCode[256];
+
 #endif // KEYCODES_H

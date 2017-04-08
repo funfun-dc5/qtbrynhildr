@@ -8,6 +8,8 @@
 // System Header
 
 // Local Header
+#include "touchpanel2/software_keyboard.h"
+#include "windows/eventconverter.h"
 
 // Key Layout File Header
 #if _MSC_VER
@@ -37,5 +39,50 @@ typedef struct __attribute__((__packed__)) { // for C/C++ Compatibility
 // 1) KLFHeader
 // 2) Keys Entries     (x keynum)
 // 3) SoftKeys Entrise (x softkeynum)
+
+#ifdef __cplusplus
+namespace qtbrynhildr {
+
+// Key Layout File
+class KeyLayoutFile {
+public:
+  // constructor
+  KeyLayoutFile(const char *layoutFileImage);
+  // destructor
+  ~KeyLayoutFile();
+
+public:
+
+
+private:
+  // pointer of KFL image
+  const char *klfImage;
+
+  // key layout name
+  char *name;
+
+  // key layout author
+  char *author;
+
+  // spec version
+  int spec;
+
+  // number of key event table entry
+  int keynum;
+
+  // number of key top table entry
+  int softkeynum;
+
+  // pointer of key event table entry
+  EventConverter::KeyEvent *keyEventTable;
+
+  // pointer of key top table entry
+  SoftwareKeyboard::KeyTop *keyTopTable;
+};
+
+} // end of namespace qtbrynhildr
+
+#endif // __cplusplus
+
 
 #endif // KEYLAYOUTFILE_H

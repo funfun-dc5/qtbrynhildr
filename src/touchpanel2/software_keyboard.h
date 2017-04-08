@@ -27,7 +27,7 @@ namespace qtbrynhildr {
 // SoftwareKeyboard
 class SoftwareKeyboard : public QWidget
 {
-  friend class KeyLayoutFileReader;
+  friend class KeyLayoutFile;
 
 public:
   // keyboard type

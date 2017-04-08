@@ -92,7 +92,7 @@ DEFINES += QTB_CELT_SUPPORT=0
 
 # for key layout file
 HEADERS += keylayout/keylayoutfile.h keylayout/keylayoutfilereader.h
-SOURCES += keylayout/keylayoutfilereader.cpp
+SOURCES += keylayout/keylayoutfile.cpp keylayout/keylayoutfilereader.cpp
 
 # Input
 HEADERS += version.h config.h parameters.h

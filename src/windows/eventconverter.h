@@ -19,7 +19,7 @@ namespace qtbrynhildr {
 // EventConverter
 class EventConverter
 {
-  friend class KeyLayoutFileReader;
+  friend class KeyLayoutFile;
 
 public:
   // keyboard type

@@ -79,7 +79,7 @@ void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 	KLFHeader header;
 	file.read((char*)&header, sizeof(KLFHeader));
 	cout << "[File Header]" << endl;
-	cout << "magic      = " << header.magic << endl;
+	cout << "magic      = \"" << header.magic << '\"' << endl;
 	cout << "spec       = " << header.spec << endl;
 	cout << "size       = " << header.size << endl;
 	cout << "keynum     = " << header.keynum << endl;

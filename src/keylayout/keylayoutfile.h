@@ -8,8 +8,10 @@
 // System Header
 
 // Local Header
+#ifdef __cplusplus
 #include "touchpanel2/software_keyboard.h"
 #include "windows/eventconverter.h"
+#endif // __cplusplus
 
 // Key Layout File Header
 #if _MSC_VER

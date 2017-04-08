@@ -786,7 +786,7 @@ line:	'\n'
 }
 | STRING '=' QSTRING {
 #ifdef DEBUG_YACC
-  printf("ENVVAR = QSTRING (%s = %s)\n", $1, $3);
+  printf("ENVVAR = QSTRING (%s = \"%s\")\n", $1, $3);
 #endif /* DEBUG_YACC */
 }
 | STRING '=' NUMBER {

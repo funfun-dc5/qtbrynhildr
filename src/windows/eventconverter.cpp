@@ -48,7 +48,7 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
   memset(&header, 0, sizeof(header));
   strncpy(header.magic, "KLF", 3);
   header.spec = 1;
-  header.size = 3160;
+  header.size = 3964;
   header.keynum = 139;
   header.softkeynum = 67;
   strncpy(header.name, "Japanese 109", strlen("Japanese 109"));
@@ -61,7 +61,7 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
   memset(&header, 0, sizeof(header));
   strncpy(header.magic, "KLF", 3);
   header.spec = 1;
-  header.size = 3124;
+  header.size = 3928;
   header.keynum = 136;
   header.softkeynum = 67;
   strncpy(header.name, "US 101", strlen("US 101"));

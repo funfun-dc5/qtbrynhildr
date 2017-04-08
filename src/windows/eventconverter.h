@@ -24,6 +24,7 @@ class EventConverter
 public:
   // keyboard type
   typedef enum {
+	KEYTOP_TYPE_KLF,
 	KEYTOP_TYPE_JP,
 	KEYTOP_TYPE_US
   } KEYTOP_TYPE;
@@ -35,13 +36,11 @@ public:
   EventConverter();
   EventConverter(KEYTOP_TYPE type);
 
-#if 1 // for TEST
   // get keytop type
   KEYTOP_TYPE getKeytopType();
 
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
-#endif
 
   // get Virtual Keycode
   uchar getVKCode(QKeyEvent *keyEvent);

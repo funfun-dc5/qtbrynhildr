@@ -32,6 +32,7 @@ class SoftwareKeyboard : public QWidget
 public:
   // keyboard type
   typedef enum {
+	KEYTOP_TYPE_KLF,
 	KEYTOP_TYPE_JP,
 	KEYTOP_TYPE_US
   } KEYTOP_TYPE;
@@ -45,7 +46,6 @@ public:
   // destructor
   //  ~SoftwareKeyboard();
 
-#if 1 // for TEST
   // get keytop type
   KEYTOP_TYPE getKeytopType();
 
@@ -54,7 +54,6 @@ public:
 
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
-#endif
 
   // reset size
   QSize resetSize();

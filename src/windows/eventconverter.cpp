@@ -74,7 +74,6 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 #endif // for TEST
 }
 
-#if 1 // for TEST
 // get keytop type
 EventConverter::KEYTOP_TYPE EventConverter::getKeytopType()
 {
@@ -93,15 +92,13 @@ void EventConverter::setKeytopType(KEYTOP_TYPE type){
 	tableSize= TABLE_SIZE_US;
 	break;
   default:
+	// NO Change
 	return;
 	break;
   }
 
   this->type = type;
 }
-#endif
-
-// for DEBUG
 
 // get Virtual Keycode
 uchar EventConverter::getVKCode(QKeyEvent *keyEvent)

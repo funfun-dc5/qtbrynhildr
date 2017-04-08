@@ -76,7 +76,6 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 #endif // for TEST
 }
 
-#if 1 // for TEST
 // get keytop type
 SoftwareKeyboard::KEYTOP_TYPE SoftwareKeyboard::getKeytopType()
 {
@@ -117,7 +116,6 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
 
   update();
 }
-#endif
 
 // reset size
 QSize SoftwareKeyboard::resetSize()

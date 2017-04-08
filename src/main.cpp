@@ -38,7 +38,7 @@
 
 int main(int argc, char *argv[])
 {
-#if 1
+#if 0 // for TEST
   qtbrynhildr::KeyLayoutFileReader *reader = new qtbrynhildr::KeyLayoutFileReader("./keylayout");
   delete reader;
   return 0;

@@ -45,8 +45,15 @@ typedef struct __attribute__((__packed__)) { // for C/C++ Compatibility
 #ifdef __cplusplus
 namespace qtbrynhildr {
 
+class EventConverter;
+class SoftwareKeyboard;
+
 // Key Layout File
-class KeyLayoutFile {
+class KeyLayoutFile
+{
+  friend class EventConverter;
+  friend class SoftwareKeyboard;
+
 public:
   // constructor
   KeyLayoutFile(const char *layoutFileImage);
@@ -61,25 +68,25 @@ private:
   const char *klfImage;
 
   // key layout name
-  char *name;
+  const char *name;
 
   // key layout author
-  char *author;
+  const char *author;
 
   // spec version
-  int spec;
+  const int spec;
 
   // number of key event table entry
-  int keynum;
+  const int keynum;
 
   // number of key top table entry
-  int softkeynum;
+  const int softkeynum;
 
   // pointer of key event table entry
-  EventConverter::KeyEvent *keyEventTable;
+  const EventConverter::KeyEvent *keyEventTable;
 
   // pointer of key top table entry
-  SoftwareKeyboard::KeyTop *keyTopTable;
+  const SoftwareKeyboard::KeyTop *keyTopTable;
 };
 
 } // end of namespace qtbrynhildr

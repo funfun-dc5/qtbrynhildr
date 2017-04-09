@@ -24,6 +24,8 @@ using namespace std;
 
 namespace qtbrynhildr {
 
+class KeyLayoutFile;
+
 // SoftwareKeyboard
 class SoftwareKeyboard : public QWidget
 {
@@ -43,6 +45,7 @@ public:
   // constructor
   SoftwareKeyboard(QWidget *parent = 0);
   SoftwareKeyboard(KEYTOP_TYPE type, QWidget *parent = 0);
+  SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = 0);
   // destructor
   //  ~SoftwareKeyboard();
 

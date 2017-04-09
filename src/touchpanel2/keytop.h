@@ -33,5 +33,4 @@ typedef unsigned char uchar;
 	  uchar VK_Code;
 	} keyTopWithFn;
   } KeyTop;
-
 #endif // KEYTOP_H

@@ -14,6 +14,7 @@
 #include <QPen>
 
 // Local Header
+#include "keylayout/keylayoutfile.h"
 #include "software_keyboard.h"
 
 using namespace std; // for TEST
@@ -76,6 +77,13 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 #endif // for TEST
 }
 
+SoftwareKeyboard::SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent)
+  :
+  SoftwareKeyboard(KEYTOP_TYPE_KLF, parent)
+{
+  keyTopTable = klf->keyTopTable;
+}
+
 // get keytop type
 SoftwareKeyboard::KEYTOP_TYPE SoftwareKeyboard::getKeytopType()
 {
@@ -108,6 +116,7 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
 	keyTopTable = keyTopTable_US;
 	break;
   default:
+	// No Change
 	return;
 	break;
   }

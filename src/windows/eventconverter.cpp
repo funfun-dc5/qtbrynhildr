@@ -13,7 +13,7 @@
 // Local Header
 
 #include "eventconverter.h"
-#include "keylayout/keylayoutfile.h" // for TEST
+#include "keylayout/keylayoutfile.h"
 
 namespace qtbrynhildr {
 
@@ -72,6 +72,14 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 	file.close();
   }
 #endif // for TEST
+}
+
+EventConverter::EventConverter(KeyLayoutFile *klf)
+  :
+  EventConverter(KEYTOP_TYPE_KLF)
+{
+  keyEventTable = klf->keyEventTable;
+  tableSize= klf->keynum;
 }
 
 // get keytop type

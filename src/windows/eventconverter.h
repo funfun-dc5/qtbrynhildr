@@ -16,6 +16,8 @@
 
 namespace qtbrynhildr {
 
+class KeyLayoutFile;
+
 // EventConverter
 class EventConverter
 {
@@ -35,6 +37,7 @@ public:
   // constructor
   EventConverter();
   EventConverter(KEYTOP_TYPE type);
+  EventConverter(KeyLayoutFile *klf);
 
   // get keytop type
   KEYTOP_TYPE getKeytopType();

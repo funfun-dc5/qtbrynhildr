@@ -179,6 +179,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
+  keyLayoutFileReader(0),
   eventConverter(0),
 #if QTB_PUBLIC_MODE6_SUPPORT
   clipboard(clipboard),
@@ -510,7 +511,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
   }
 
-  // for Event Converter
+  // Key Layout File Reader
+  keyLayoutFileReader = new KeyLayoutFileReader("./keylayout"); // for TEST
+
+  // Event Converter
   eventConverter = new EventConverter();
   mainWindow->setEventConverter(eventConverter);
 
@@ -670,6 +674,18 @@ QtBrynhildr::~QtBrynhildr()
 	// delete
 	delete soundThread;
 	soundThread = 0;
+  }
+
+  // Key Layout File Reader
+  if (keyLayoutFileReader != 0){
+	delete keyLayoutFileReader;
+	keyLayoutFileReader = 0;
+  }
+
+  // Event Converter
+  if (eventConverter != 0){
+	delete eventConverter;
+	eventConverter = 0;
   }
 
   // close Log File

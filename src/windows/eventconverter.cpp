@@ -26,6 +26,7 @@ EventConverter::EventConverter()
 
 EventConverter::EventConverter(KEYTOP_TYPE type)
   :
+  klf(0),
   shiftKeyControl(SHIFTKEY_THROUGH),
   outputLog(false)
 {
@@ -78,6 +79,8 @@ EventConverter::EventConverter(KeyLayoutFile *klf)
   :
   EventConverter(KEYTOP_TYPE_KLF)
 {
+  this->klf = klf;
+
   keyEventTable = klf->keyEventTable;
   tableSize= klf->keynum;
 }
@@ -140,6 +143,9 @@ QString EventConverter::getEventConverterName() const
 	break;
   case KEYTOP_TYPE_US:
 	return QString("US");
+	break;
+  case KEYTOP_TYPE_KLF:
+	return QString(klf->name);
 	break;
   default:
 	return QString("Unknown");

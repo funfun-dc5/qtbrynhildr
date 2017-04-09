@@ -53,6 +53,9 @@
 #include "graphics/graphicsthread.h"
 #include "sound/soundthread.h"
 
+// key layout
+#include "keylayout/keylayoutfilereader.h"
+
 // event converter
 #include "windows/eventconverter.h"
 
@@ -658,6 +661,9 @@ private:
 
   // thread for sound
   SoundThread *soundThread;
+
+  // key layout file reader
+  KeyLayoutFileReader *keyLayoutFileReader;
 
   // event converter
   EventConverter *eventConverter;

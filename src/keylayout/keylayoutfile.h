@@ -68,25 +68,25 @@ private:
   const char *klfImage;
 
   // key layout name
-  const char *name;
+  char *name;
 
   // key layout author
-  const char *author;
+  char *author;
 
   // spec version
-  const int spec;
+  int spec;
 
   // number of key event table entry
-  const int keynum;
+  int keynum;
 
   // number of key top table entry
-  const int softkeynum;
+  int softkeynum;
 
   // pointer of key event table entry
-  const EventConverter::KeyEvent *keyEventTable;
+  EventConverter::KeyEvent *keyEventTable;
 
   // pointer of key top table entry
-  const SoftwareKeyboard::KeyTop *keyTopTable;
+  SoftwareKeyboard::KeyTop *keyTopTable;
 };
 
 } // end of namespace qtbrynhildr

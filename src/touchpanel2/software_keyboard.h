@@ -461,6 +461,9 @@ private:
 	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
   };
 
+  // key layout file
+  KeyLayoutFile *klf;
+
   // key top type
   KEYTOP_TYPE type;
 

@@ -393,6 +393,9 @@ private:
 	{Qt::Key_LaunchMail,			VK_LAUNCH_MAIL,			SHIFTKEY_THROUGH}
   };
 
+  // key layout file
+  KeyLayoutFile *klf;
+
   // key top type
   KEYTOP_TYPE type;
 

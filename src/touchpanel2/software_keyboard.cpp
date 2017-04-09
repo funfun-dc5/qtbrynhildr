@@ -35,6 +35,7 @@ SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
 SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *parent)
   :
   QWidget(parent),
+  klf(0),
   type(type),
   onShiftKey(false),
   onControlKey(false),
@@ -81,7 +82,11 @@ SoftwareKeyboard::SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent)
   :
   SoftwareKeyboard(KEYTOP_TYPE_KLF, parent)
 {
+  this->klf = klf;
+
   keyTopTable = klf->keyTopTable;
+
+  update();
 }
 
 // get keytop type
@@ -100,6 +105,9 @@ QString SoftwareKeyboard::getKeytopTypeName()
   case KEYTOP_TYPE_US:
 	return QString("US");
 	break;
+  case KEYTOP_TYPE_KLF:
+	return QString(klf->name);
+	break;
   default:
 	return QString("Unknown");
 	break;
@@ -114,6 +122,11 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
 	break;
   case KEYTOP_TYPE_US:
 	keyTopTable = keyTopTable_US;
+	break;
+  case KEYTOP_TYPE_KLF:
+	// set type only
+	this->type = type;
+	return;
 	break;
   default:
 	// No Change

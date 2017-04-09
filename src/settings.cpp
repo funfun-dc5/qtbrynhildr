@@ -507,6 +507,7 @@ void Settings::writeSettings()
 
   // save keyboardType
   settings->setValue(QTB_KEYBOARDTYPE, (qint32)keyboardType);
+  settings->setValue(QTB_KEYBOARDTYPENAME, getKeyboardTypeName());
 
   // save portNo
   settings->setValue(QTB_PORTNO, portNo);

@@ -97,11 +97,14 @@ typedef int KEYBOARD_TYPE;
 #define KEYBOARD_TYPE_JP		0
 #define KEYBOARD_TYPE_US		1
 #define KEYBOARD_TYPE_NATIVE	2
-#define KEYBOARD_TYPE_NUM		3
+#define KEYBOARD_TYPE_KLF		3
+#define KEYBOARD_TYPE_NUM		4
 
-#define STRING_KEYBOARD_TYPE_JP		"JP Keyboard"
-#define STRING_KEYBOARD_TYPE_US		"US Keyboard"
+#define STRING_KEYBOARD_TYPE_JP		"JP Keyboard (built-in)"
+#define STRING_KEYBOARD_TYPE_US		"US Keyboard (built-in)"
 #define STRING_KEYBOARD_TYPE_NATIVE	"Native Keyboard"
+
+#define QTB_KEYBOARDTYPENAME	"keyboardTypeName"
 
 // for portNo
 #define QTB_PORTNO				"portNo"
@@ -615,12 +618,27 @@ public:
 	this->keyboardType = keyboardType;
   }
 
+  // get keyboard type name
+  QString getKeyboardTypeName() const
+  {
+	static const QString stringTable[KEYBOARD_TYPE_NUM] = {
+	  STRING_KEYBOARD_TYPE_JP,
+	  STRING_KEYBOARD_TYPE_US,
+	  STRING_KEYBOARD_TYPE_NATIVE,
+	  "KLF (dummy)"
+	};
+
+	return stringTable[keyboardType];
+  }
+
   // get keyboard type string
   QString getKeyboardTypeByString() const
   {
 	static const QString stringTable[KEYBOARD_TYPE_NUM] = {
 	  "KEYBOARD_TYPE_WINDOWS_JP",
 	  "KEYBOARD_TYPE_WINDOWS_US",
+	  "KEYBOARD_TYPE_WINDOWS_NATIVE",
+	  "KEYBOARD_TYPE_WINDOWS_KLF"
 	};
 
 	return stringTable[keyboardType];

@@ -641,12 +641,13 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 
 ------------------- ここから -------------------
 [General]
-generatedVersion=150
-currentVersion=153
+generatedVersion=168
+currentVersion=168
 publicModeVersion=6
 serverName=mcz.world.idol.jp
 serverType=5
 keyboardType=0
+keyboardTypeName=JP Keyboard (built-in)
 portNo=55500
 onControl=true
 onHoldMouseControl=false

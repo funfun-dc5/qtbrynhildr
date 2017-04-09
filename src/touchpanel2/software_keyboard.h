@@ -34,9 +34,10 @@ class SoftwareKeyboard : public QWidget
 public:
   // keyboard type
   typedef enum {
-	KEYTOP_TYPE_KLF,
 	KEYTOP_TYPE_JP,
-	KEYTOP_TYPE_US
+	KEYTOP_TYPE_US,
+	KEYTOP_TYPE_NATIVE,
+	KEYTOP_TYPE_KLF
   } KEYTOP_TYPE;
 
 #include "keytop.h"

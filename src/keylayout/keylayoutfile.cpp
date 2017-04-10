@@ -47,4 +47,10 @@ KeyLayoutFile::~KeyLayoutFile()
   }
 }
 
+// get name of key layout
+const char* KeyLayoutFile::getName()
+{
+  return (const char*)name;
+}
+
 } // end of namespace qtbrynhildr

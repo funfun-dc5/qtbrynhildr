@@ -82,11 +82,7 @@ SoftwareKeyboard::SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent)
   :
   SoftwareKeyboard(KEYTOP_TYPE_KLF, parent)
 {
-  this->klf = klf;
-
-  keyTopTable = klf->keyTopTable;
-
-  update();
+  setKeytopType(klf);
 }
 
 // get keytop type
@@ -135,6 +131,19 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
   }
 
   this->type = type;
+
+  update();
+}
+
+// set keytop type by key layout file
+void SoftwareKeyboard::setKeytopType(KeyLayoutFile *klf)
+{
+  // set keyboard type
+  setKeytopType(KEYTOP_TYPE_KLF);
+
+  this->klf = klf;
+
+  keyTopTable = klf->keyTopTable;
 
   update();
 }

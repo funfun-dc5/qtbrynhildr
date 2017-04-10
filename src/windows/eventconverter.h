@@ -46,6 +46,9 @@ public:
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
 
+  // set keytop type by key layout file
+  void setKeytopType(KeyLayoutFile *klf);
+
   // get Virtual Keycode
   uchar getVKCode(QKeyEvent *keyEvent);
 

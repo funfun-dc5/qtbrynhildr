@@ -81,6 +81,7 @@ Settings::Settings(const char *iniFileName)
   setServerName(QTB_SERVERNAME_DEFAULT);
   setServerType(QTB_SERVERTYPE_DEFAULT);
   setKeyboardType(getDefaultKeyboardType());
+  setKeyboardTypeName(QTB_KEYBOARDTYPENAME_DEFAULT);
   setPortNo(QTB_PORTNO_DEFAULT);
   setPassword(QTB_PASSWORD_DEFAULT);
   setOnControl(QTB_ONCONTROL_DEFAULT);
@@ -259,6 +260,9 @@ void Settings::readSettings()
   setKeyboardType(settings->value(QTB_KEYBOARDTYPE,
 								  (qint32)getDefaultKeyboardType()).toInt());
 
+  // load keyboardTypeName
+  setKeyboardTypeName(settings->value(QTB_KEYBOARDTYPENAME,
+									  QTB_KEYBOARDTYPENAME_DEFAULT).toString());
   // load portNo
   setPortNo(settings->value(QTB_PORTNO,
 							QTB_PORTNO_DEFAULT).toInt());
@@ -506,6 +510,7 @@ void Settings::writeSettings()
   settings->setValue(QTB_SERVERTYPE, (qint32)serverType);
 
   // save keyboardType
+  keyboardType = keyboardType < KEYBOARD_TYPE_KLF ? keyboardType : KEYBOARD_TYPE_KLF;
   settings->setValue(QTB_KEYBOARDTYPE, (qint32)keyboardType);
   settings->setValue(QTB_KEYBOARDTYPENAME, getKeyboardTypeName());
 

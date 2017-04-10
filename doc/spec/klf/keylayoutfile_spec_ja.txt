@@ -136,11 +136,11 @@ ex.)
 
 2) Keys Entries     (* keynum)
 
-Eventconverter::KeyEventのデータをkeynum個分を含む。
+Eventconverter::KeyEventのデータをkeynum個分含む。
 
 3) SoftKeys Entrise (* softkeynum)
 
-SoftwareKeyboard::KeyTopInfoのデータをsoftkeynum個分を含む。
+SoftwareKeyboard::KeyTopInfoのデータをsoftkeynum個分含む。
 
 ------------------------------------------------------------------------------------------
 1) LFHeader

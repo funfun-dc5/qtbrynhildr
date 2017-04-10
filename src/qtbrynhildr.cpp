@@ -513,6 +513,21 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 
   // Key Layout File Reader
   keyLayoutFileReader = new KeyLayoutFileReader("./keylayout"); // for TEST
+  connectToServerDialog->addKeyboardTypeList(keyLayoutFileReader->getKeyboardTypeList());
+  if (settings->getKeyboardType() == KEYBOARD_TYPE_KLF){
+	// set keyboard type (real index)
+	KEYBOARD_TYPE keyboardType =
+	  keyLayoutFileReader->getIndexOfKeyboardType(settings->getKeyboardTypeName());
+	if (keyboardType >= 0){
+	  keyboardType += KEYBOARD_TYPE_KLF;
+	  settings->setKeyboardType(keyboardType);
+	  connectToServerDialog->setKeyboardType(keyboardType);
+	}
+	else {
+	  settings->setKeyboardType(0);
+	  connectToServerDialog->setKeyboardType(0);
+	}
+  }
 
   // Event Converter
   eventConverter = new EventConverter();
@@ -2217,23 +2232,29 @@ void QtBrynhildr::connectToServer()
   mainWindow->clearDesktop();
 
   // set event converter
-  switch(settings->getKeyboardType()){
+  KEYBOARD_TYPE keyboardType = settings->getKeyboardType();
+  // TODO: check keyboardType range
+  switch(keyboardType){
   case KEYBOARD_TYPE_JP:
-	// set to JP
+	// set to JP (built-in)
 	eventConverter->setKeytopType(EventConverter::KEYTOP_TYPE_JP);
 	break;
   case KEYBOARD_TYPE_US:
-	// set to US
+	// set to US (built-in)
 	eventConverter->setKeytopType(EventConverter::KEYTOP_TYPE_US);
 	break;
-#if defined(Q_OS_WIN)
   case KEYBOARD_TYPE_NATIVE:
+#if defined(Q_OS_WIN)
 	// Nothing to do
-	break;
+#else // defined(Q_OS_WIN)
+	ABORT(); // available for windows only
 #endif // defined(Q_OS_WIN)
-  default:
-	// unknown keyboard type
-	ABORT();
+	break;
+  default: // key layout file
+	int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
+	// set key layout file to eventconverter
+	cout << "key layout file index = " << index << endl << flush;
+	eventConverter->setKeytopType(keyLayoutFileReader->getKeyLayoutFile(index));
 	break;
   }
 
@@ -2273,20 +2294,29 @@ void QtBrynhildr::connectToServer()
 	  softwareKeyboard = 0;
 	}
 	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
-	switch(settings->getKeyboardType()){
+	KEYBOARD_TYPE keyboardType = settings->getKeyboardType();
+	// TODO: check keyboardType range
+	switch(keyboardType){
 	case KEYBOARD_TYPE_JP:
 	  softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_JP);
 	  break;
 	case KEYBOARD_TYPE_US:
 	  softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_US);
 	  break;
-#if defined(Q_OS_WIN)
 	case KEYBOARD_TYPE_NATIVE:
-	  break;
+#if defined(Q_OS_WIN)
+	  // Nothing to do
+#else // defined(Q_OS_WIN)
+	  ABORT(); // available for windows only
 #endif // defined(Q_OS_WIN)
-	default:
-	  // unknown keyboard type
-	  ABORT();
+	  break;
+	default: // key layout file
+	  int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
+	  // set key layout file to software keyboard
+	  cout << "key layout file index = " << index << endl << flush;
+	  KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
+	  softwareKeyboard->setKeytopType(keyLayoutFile);
+	  settings->setKeyboardTypeName(keyLayoutFile->getName());
 	  break;
 	}
 	softwareKeyboard->setVisible(false);

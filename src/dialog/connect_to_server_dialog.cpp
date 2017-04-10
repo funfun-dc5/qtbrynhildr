@@ -95,6 +95,18 @@ ConnectToServerDialog::~ConnectToServerDialog()
 #endif // QTB_AUTO_COMPLETE
 }
 
+// add keyboard type list by key layout file
+void ConnectToServerDialog::addKeyboardTypeList(QStringList keyboardTypeList)
+{
+  comboBox_keyboardtype->addItems(keyboardTypeList);
+}
+
+// set keyboard type
+void ConnectToServerDialog::setKeyboardType(KEYBOARD_TYPE keyboardType)
+{
+  comboBox_keyboardtype->setCurrentIndex(keyboardType);
+}
+
 // resize event
 void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
 {

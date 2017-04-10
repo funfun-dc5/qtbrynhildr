@@ -46,6 +46,9 @@ KeyLayoutFileReader::KeyLayoutFileReader(const char *layoutfilepath)
 	  readKeyLayoutFile((const char*)dp->d_name);
 	}
 	closedir(dir);
+
+	// sort list
+	keyboardTypeList.sort();
   }
   else {
 	cout << "Failed to opendir()" << endl << flush;
@@ -63,6 +66,24 @@ KeyLayoutFileReader::~KeyLayoutFileReader()
   }
 
   cout << "Deleted KeyLayoutFileReader!" << endl << flush;
+}
+
+// get key layout file
+KeyLayoutFile* KeyLayoutFileReader::getKeyLayoutFile(int index)
+{
+  return (KeyLayoutFile*)list.at(index);
+}
+
+// get keyboard type list
+QStringList KeyLayoutFileReader::getKeyboardTypeList()
+{
+  return keyboardTypeList;
+}
+
+// get index of keyboard type
+int KeyLayoutFileReader::getIndexOfKeyboardType(QString keyboardTypeName)
+{
+  return keyboardTypeList.indexOf(keyboardTypeName);
 }
 
 // read a key layout file
@@ -99,6 +120,9 @@ void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 
 	file.close();
 	cout << "Closed file : " << fullname << endl << flush;
+
+	// append to keyboard type list
+	keyboardTypeList << QString(header.name);
   }
   else {
 	cout << "Error: Failed to open file" << endl << flush;

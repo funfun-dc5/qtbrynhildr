@@ -104,7 +104,8 @@ typedef int KEYBOARD_TYPE;
 #define STRING_KEYBOARD_TYPE_US		"US Keyboard (built-in)"
 #define STRING_KEYBOARD_TYPE_NATIVE	"Native Keyboard"
 
-#define QTB_KEYBOARDTYPENAME	"keyboardTypeName"
+#define QTB_KEYBOARDTYPENAME			"keyboardTypeName"
+#define QTB_KEYBOARDTYPENAME_DEFAULT	"Unknown"
 
 // for portNo
 #define QTB_PORTNO				"portNo"
@@ -608,7 +609,7 @@ public:
   // set keyboard type
   void setKeyboardType(KEYBOARD_TYPE keyboardType)
   {
-	ASSERT(keyboardType >= KEYBOARD_TYPE_JP && keyboardType < KEYBOARD_TYPE_NUM);
+	//	ASSERT(keyboardType >= KEYBOARD_TYPE_JP && keyboardType < KEYBOARD_TYPE_NUM);
 #if !defined(Q_OS_WIN)
 	if (keyboardType == KEYBOARD_TYPE_NATIVE){
 	  // NOT available except for windows
@@ -616,6 +617,12 @@ public:
 	}
 #endif // !defined(Q_OS_WIN)
 	this->keyboardType = keyboardType;
+  }
+
+  // set keyboard type name
+  void setKeyboardTypeName(QString keyboardTypeName)
+  {
+	this->keyboardTypeName = keyboardTypeName;
   }
 
   // get keyboard type name
@@ -628,7 +635,13 @@ public:
 	  "KLF (dummy)"
 	};
 
-	return stringTable[keyboardType];
+	if (keyboardType < KEYBOARD_TYPE_KLF){
+	  return stringTable[keyboardType];
+	}
+	else {
+	  // KLF
+	  return keyboardTypeName;
+	}
   }
 
   // get keyboard type string
@@ -1762,6 +1775,9 @@ private:
 
   // keyboard type
   volatile KEYBOARD_TYPE keyboardType;
+
+  // keyboard type name
+  QString keyboardTypeName;
 
   // port
   volatile quint16 portNo;

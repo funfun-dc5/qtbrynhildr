@@ -59,6 +59,9 @@ public:
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
 
+  // set keytop type by key layout file
+  void setKeytopType(KeyLayoutFile *klf);
+
   // reset size
   QSize resetSize();
 

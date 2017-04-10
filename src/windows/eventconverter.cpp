@@ -79,10 +79,7 @@ EventConverter::EventConverter(KeyLayoutFile *klf)
   :
   EventConverter(KEYTOP_TYPE_KLF)
 {
-  this->klf = klf;
-
-  keyEventTable = klf->keyEventTable;
-  tableSize= klf->keynum;
+  setKeytopType(klf);
 }
 
 // get keytop type
@@ -109,6 +106,18 @@ void EventConverter::setKeytopType(KEYTOP_TYPE type){
   }
 
   this->type = type;
+}
+
+// set keytop type by key layout file
+void EventConverter::setKeytopType(KeyLayoutFile *klf)
+{
+  // set keyboard type
+  setKeytopType(KEYTOP_TYPE_KLF);
+
+  this->klf = klf;
+
+  keyEventTable = klf->keyEventTable;
+  tableSize= klf->keynum;
 }
 
 // get Virtual Keycode

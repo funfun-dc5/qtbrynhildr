@@ -61,7 +61,8 @@ public:
   ~KeyLayoutFile();
 
 public:
-
+  // get name of key layout
+  const char *getName();
 
 private:
   // pointer of KFL image

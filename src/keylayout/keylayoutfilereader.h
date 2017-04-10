@@ -24,6 +24,15 @@ public:
   // destructor
   ~KeyLayoutFileReader();
 
+  // get key layout file
+  KeyLayoutFile* getKeyLayoutFile(int index);
+
+  // get keyboard type list
+  QStringList getKeyboardTypeList();
+
+  // get index of keyboard type
+  int getIndexOfKeyboardType(QString keyboardTypeName);
+
 private:
   // read a key layout file
   void readKeyLayoutFile(const char *file);
@@ -34,6 +43,9 @@ private:
 
   // key layout file list
   QList<KeyLayoutFile*> list;
+
+  // Keyboard type list
+  QStringList keyboardTypeList;
 };
 
 } // end of namespace qtbrynhildr

@@ -260,6 +260,7 @@ case $UNAME in
 			# copy key layout file
 			mkdir -p ${DISTDIR}/bin/keylayout
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+			# for TEST
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${DISTDIR}/bin/keylayout
 			echo "copy key layout file..."
 			# copy manual file
@@ -297,7 +298,6 @@ case $UNAME in
 			# copy key layout file
 			mkdir -p ${DISTDIR}/bin/keylayout
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
-			${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${DISTDIR}/bin/keylayout
 			# copy document file
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -332,7 +332,6 @@ case $UNAME in
 		# copy key layout file
 		mkdir -p ${DISTDIR}/bin/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${DISTDIR}/bin/keylayout
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -367,7 +366,6 @@ case $UNAME in
 		# copy key layout file
 		mkdir -p ${DISTDIR}/bin/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${DISTDIR}/bin/keylayout
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -395,7 +393,6 @@ case $UNAME in
 		# copy key layout file
 		mkdir -p ${APP}.app/Contents/MacOS/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${APP}.app/Contents/MacOS/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${APP}.app/Contents/MacOS/keylayout
 		VERSION=`${APP}.app/Contents/MacOS/${APP} -vv`
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"

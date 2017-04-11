@@ -41,6 +41,9 @@
 // translation file prefix
 #define QTB_TRANSLATION_FILE_PREFIX	"qtbrynhildr_"
 
+// key layout file directory
+#define QTB_KEYLAYOUT_FILE_PATH		"/keylayout"
+
 // -- settings --
 // for version information
 #define QTB_GENERATEDVERSION			"generatedVersion"

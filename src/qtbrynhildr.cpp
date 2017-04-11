@@ -512,7 +512,10 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   }
 
   // Key Layout File Reader
-  keyLayoutFileReader = new KeyLayoutFileReader("./keylayout"); // for TEST
+  //  QString keylayoutDirPath = QString(".") + QTB_KEYLAYOUT_FILE_PATH; // for TEST
+  QString keylayoutDirPath = qApp->applicationDirPath() + QTB_KEYLAYOUT_FILE_PATH;
+  const char *dirPath = strdup(qPrintable(QDir::toNativeSeparators(keylayoutDirPath)));
+  keyLayoutFileReader = new KeyLayoutFileReader(dirPath);
   connectToServerDialog->addKeyboardTypeList(keyLayoutFileReader->getKeyboardTypeList());
   if (settings->getKeyboardType() == KEYBOARD_TYPE_KLF){
 	// set keyboard type (real index)

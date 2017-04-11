@@ -65,7 +65,8 @@ int main(int argc, char *argv[])
 	appTranslator.load(QTB_TRANSLATION_FILE_PATH
 					   QTB_TRANSLATION_FILE_PREFIX
 					   + QLocale::system().name(),
-					   qApp->applicationDirPath());
+					   //					   qApp->applicationDirPath());
+					   app.applicationDirPath());
 	if (result){
 	  //	  cout << "Found translation file." << endl << flush;
 	  app.installTranslator(&appTranslator);

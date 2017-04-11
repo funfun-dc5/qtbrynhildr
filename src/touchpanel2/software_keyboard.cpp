@@ -53,7 +53,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 #endif // DEBUG
 {
   // reset flag
-  for(int i = ID_KEY_0; i < ID_KEY_NUM; i++){
+  for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
 	layout[i].pushed = false;
   }
 
@@ -348,33 +348,33 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
   uchar key = keyTopTable[id].keyTop.VK_Code;
 
   switch(id){
-  case ID_KEY_43:
-  case ID_KEY_56:
+  case ID_KEY_LSHIFT:
+  case ID_KEY_RSHIFT:
 	// Shift
 	key = pressedShiftKey(id);
-	layout[ID_KEY_43].pushed = onShiftKey;
-	layout[ID_KEY_56].pushed = onShiftKey;
+	layout[ID_KEY_LSHIFT].pushed = onShiftKey;
+	layout[ID_KEY_RSHIFT].pushed = onShiftKey;
 	break;
-  case ID_KEY_30:
-  case ID_KEY_62:
+  case ID_KEY_LCONTROL:
+  case ID_KEY_RCONTROL:
 	// Control
 	key = pressedControlKey(id);
-	layout[ID_KEY_30].pushed = onControlKey;
-	layout[ID_KEY_62].pushed = onControlKey;
+	layout[ID_KEY_LCONTROL].pushed = onControlKey;
+	layout[ID_KEY_RCONTROL].pushed = onControlKey;
 	break;
-  case ID_KEY_58:
-  case ID_KEY_63:
+  case ID_KEY_LALT:
+  case ID_KEY_RALT:
 	// Alt
 	key = pressedAltKey(id);
-	layout[ID_KEY_58].pushed = onAltKey;
-	layout[ID_KEY_63].pushed = onAltKey;
+	layout[ID_KEY_LALT].pushed = onAltKey;
+	layout[ID_KEY_RALT].pushed = onAltKey;
 	break;
-  case ID_KEY_57:
-  case ID_KEY_64:
+  case ID_KEY_LFn:
+  case ID_KEY_RFn:
 	// Fn
 	key = pressedFnKey(id);
-	layout[ID_KEY_57].pushed = onFnKey;
-	layout[ID_KEY_64].pushed = onFnKey;
+	layout[ID_KEY_LFn].pushed = onFnKey;
+	layout[ID_KEY_RFn].pushed = onFnKey;
 	break;
   default:
 	if (onFnKey){
@@ -414,17 +414,17 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
   uchar key = VK_NONE_00;
 
   switch(id){
-  case ID_KEY_43:
-  case ID_KEY_56:
+  case ID_KEY_LSHIFT:
+  case ID_KEY_RSHIFT:
 	// Shift
-  case ID_KEY_30:
-  case ID_KEY_62:
+  case ID_KEY_LCONTROL:
+  case ID_KEY_RCONTROL:
 	// Control
-  case ID_KEY_58:
-  case ID_KEY_63:
+  case ID_KEY_LALT:
+  case ID_KEY_RALT:
 	// Alt
-  case ID_KEY_57:
-  case ID_KEY_64:
+  case ID_KEY_LFn:
+  case ID_KEY_RFn:
 	// Fn
 	// Nothig to do
 	break;

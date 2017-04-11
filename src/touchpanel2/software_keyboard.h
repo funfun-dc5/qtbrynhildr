@@ -93,7 +93,6 @@ protected:
 private:
   // key id
   typedef enum {
-	ID_KEY_0,
 	ID_KEY_1,
 	ID_KEY_2,
 	ID_KEY_3,
@@ -161,7 +160,16 @@ private:
 	ID_KEY_65,
 	ID_KEY_66,
 	ID_KEY_67,
-	ID_KEY_NUM
+	ID_KEY_NUM,
+	ID_KEY_0		= ID_KEY_NUM,
+	ID_KEY_LSHIFT	= ID_KEY_43,
+	ID_KEY_RSHIFT	= ID_KEY_56,
+	ID_KEY_LCONTROL = ID_KEY_30,
+	ID_KEY_RCONTROL = ID_KEY_62,
+	ID_KEY_LALT		= ID_KEY_58,
+	ID_KEY_RALT		= ID_KEY_63,
+	ID_KEY_LFn		= ID_KEY_57,
+	ID_KEY_RFn		= ID_KEY_64
   } ID_KEY;
 
 private:
@@ -210,9 +218,6 @@ private:
 
   // layout table for keyboard
   const QRect keyLayout[ID_KEY_NUM] = {
-	//       x,  y,  w,  h
-	QRect(  0,  0,  0,  0), // dummy entry
-
 	// 1st row
 	QRect(  0,  0, 18, 15),
 	QRect( 18,  0, 18, 15),
@@ -303,8 +308,6 @@ private:
 
   // key top table for JP
   const KeyTop keyTopTable_JP[ID_KEY_NUM] = {
-	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// DUMMY
-
 	{{"Esc",	"Esc",	(uchar)VK_ESCAPE	},	{"Esc",		(uchar)VK_ESCAPE	}},	// ID_KEY_1
 	{{"1",		"!",	(uchar)VK_1			},	{"F1",		(uchar)VK_F1		}},	// ID_KEY_2
 	{{"2",		"\"",	(uchar)VK_2			},	{"F2",		(uchar)VK_F2		}},	// ID_KEY_3
@@ -386,8 +389,6 @@ private:
 
   // key top table for US
   const KeyTop keyTopTable_US[ID_KEY_NUM] = {
-	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// DUMMY
-
 	{{"Esc",	"Esc",	(uchar)VK_ESCAPE	},	{"Esc",		(uchar)VK_ESCAPE	}},	// ID_KEY_1
 	{{"1",		"!",	(uchar)VK_1			},	{"F1",		(uchar)VK_F1		}},	// ID_KEY_2
 	{{"2",		"@",	(uchar)VK_2			},	{"F2",		(uchar)VK_F2		}},	// ID_KEY_3

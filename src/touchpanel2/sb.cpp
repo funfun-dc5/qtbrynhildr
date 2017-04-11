@@ -29,7 +29,88 @@ SB::SB(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent)
   // for DEBUG
   outputLog(false)
 {
-  buttonTopInfo[ID_BUTTON_12].buttonTop = "Ver. " QTB_VERSION QTB_RCNAME;
+  // Info
+  buttonTopTable[ID_BUTTON_12].buttonTop = "Ver. " QTB_VERSION QTB_RCNAME;
+
+  // Monitor
+  MONITOR_NO monitorNo = settings->getMonitorNo();
+  switch(monitorNo){
+  case 1:
+	SoftwareButton::pressedButton(ID_BUTTON_3);
+	break;
+  case 2:
+	SoftwareButton::pressedButton(ID_BUTTON_4);
+	break;
+  case 3:
+	SoftwareButton::pressedButton(ID_BUTTON_5);
+	break;
+  case 4:
+	SoftwareButton::pressedButton(ID_BUTTON_6);
+	break;
+  case 5:
+	SoftwareButton::pressedButton(ID_BUTTON_7);
+	break;
+  case 6:
+	SoftwareButton::pressedButton(ID_BUTTON_8);
+	break;
+  case 7:
+	SoftwareButton::pressedButton(ID_BUTTON_9);
+	break;
+  case 8:
+	SoftwareButton::pressedButton(ID_BUTTON_10);
+	break;
+  case 9:
+	SoftwareButton::pressedButton(ID_BUTTON_11);
+	break;
+  }
+
+  // Sound
+  if (settings->getOnSound()){
+	SoftwareButton::pressedButton(ID_BUTTON_15);
+  }
+  else {
+	SoftwareButton::pressedButton(ID_BUTTON_14);
+  }
+
+  // Sound Quality
+  SOUND_QUALITY soundQuality = settings->getSoundQuality();
+  switch(soundQuality){
+  case SOUND_QUALITY_MINIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_18);
+	break;
+  case SOUND_QUALITY_LOW:
+	SoftwareButton::pressedButton(ID_BUTTON_19);
+	break;
+  case SOUND_QUALITY_STANDARD:
+	SoftwareButton::pressedButton(ID_BUTTON_20);
+	break;
+  case SOUND_QUALITY_HIGH:
+	SoftwareButton::pressedButton(ID_BUTTON_21);
+	break;
+  case SOUND_QUALITY_MAXIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_22);
+	break;
+  }
+
+  // Video Quality
+  VIDEO_QUALITY videoQuality = settings->getVideoQuality();
+  switch(videoQuality){
+  case VIDEO_QUALITY_MINIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_25);
+	break;
+  case VIDEO_QUALITY_LOW:
+	SoftwareButton::pressedButton(ID_BUTTON_26);
+	break;
+  case VIDEO_QUALITY_STANDARD:
+	SoftwareButton::pressedButton(ID_BUTTON_27);
+	break;
+  case VIDEO_QUALITY_HIGH:
+	SoftwareButton::pressedButton(ID_BUTTON_28);
+	break;
+  case VIDEO_QUALITY_MAXIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_29);
+	break;
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -38,10 +119,8 @@ SB::SB(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent)
 // pressed button
 void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 {
-  SoftwareButton::pressedButton(id);
-
   if (outputLog){
-	cout << "SB: Pressed : BUTTON_ID = " << id << endl << flush;
+	cout << "SB: Pressed : ID_BUTTON = " << id << endl << flush;
   }
 
   bool updated = false;
@@ -70,6 +149,10 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	  if (monitorNo <= settings->getMonitorCount()){
 		settings->setMonitorNo(monitorNo);
 		updated = true;
+	  }
+	  else {
+		// NOT available monitor
+		return;
 	  }
 	}
 	break;
@@ -202,15 +285,15 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	emit refreshMenu();
 #endif // USE_KERO_KEYBOARD
   }
+
+  SoftwareButton::pressedButton(id);
 }
 
 // released button
 void SB::releasedButton(SoftwareButton::ID_BUTTON id)
 {
-  SoftwareButton::releasedButton(id);
-
   if (outputLog){
-	cout << "SB: Released: BUTTON_ID = " << id << endl << flush;
+	cout << "SB: Released: ID_BUTTON = " << id << endl << flush;
   }
 
   MouseInfoValue value;
@@ -264,6 +347,8 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
 	// error
 	break;
   }
+
+  SoftwareButton::releasedButton(id);
 }
 
 //---------------------------------------------------------------------------

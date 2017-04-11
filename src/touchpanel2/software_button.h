@@ -47,7 +47,6 @@ protected:
 protected:
   // button id
   typedef enum {
-	ID_BUTTON_0,
 	ID_BUTTON_1,
 	ID_BUTTON_2,
 	ID_BUTTON_3,
@@ -79,7 +78,8 @@ protected:
 	ID_BUTTON_29,
 	ID_BUTTON_30,
 	ID_BUTTON_31,
-	ID_BUTTON_NUM
+	ID_BUTTON_NUM,
+	ID_BUTTON_0 = ID_BUTTON_NUM
   } ID_BUTTON;
 
 protected:
@@ -112,16 +112,14 @@ private:
   void toggleShowVideoQualityButton();
 
 protected:
-  // button top information
+  // button top
   typedef struct {
 	QString buttonTop;
 	bool visible;
-  } ButtonTopInfo;
+  } ButtonTop;
 
-  // key top information table
-  ButtonTopInfo buttonTopInfo[ID_BUTTON_NUM] = {
-	{"", 				false},  	// DUMMY
-
+  // key top table
+  ButtonTop buttonTopTable[ID_BUTTON_NUM] = {
 	{"Option",			true},  	// ID_BUTTON_1
 	{"Monitor",			false},		// ID_BUTTON_2
 	{"1",				false},		// ID_BUTTON_3
@@ -169,9 +167,6 @@ private:
 
   // layout table for button
   const QRect buttonLayout[ID_BUTTON_NUM] = {
-	//       x,  y,  w,  h 
-	QRect(  0,  0,  0,  0), // dummy entry
-
 	// 1st row
 	QRect(180,  0, 18, 15),
 	QRect(162,  0, 18, 15),
@@ -218,6 +213,7 @@ private:
   typedef struct {
 	QRect rect;
 	bool pushed;
+	bool selected;
   } Layout;
   Layout layout[ID_BUTTON_NUM];
 

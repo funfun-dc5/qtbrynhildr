@@ -46,6 +46,9 @@ private:
 
   // Keyboard type list
   QStringList keyboardTypeList;
+
+  // output log flag
+  const bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

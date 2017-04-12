@@ -2256,7 +2256,7 @@ void QtBrynhildr::connectToServer()
   default: // key layout file
 	int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
 	// set key layout file to eventconverter
-	cout << "key layout file index = " << index << endl << flush;
+	//	cout << "key layout file index = " << index << endl << flush;
 	eventConverter->setKeytopType(keyLayoutFileReader->getKeyLayoutFile(index));
 	break;
   }
@@ -2316,7 +2316,7 @@ void QtBrynhildr::connectToServer()
 	default: // key layout file
 	  int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
 	  // set key layout file to software keyboard
-	  cout << "key layout file index = " << index << endl << flush;
+	  //	  cout << "key layout file index = " << index << endl << flush;
 	  KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
 	  softwareKeyboard->setKeytopType(keyLayoutFile);
 	  settings->setKeyboardTypeName(keyLayoutFile->getName());

@@ -45,7 +45,7 @@ APP="QtBrynhildr"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
 INSTALLFLAGS="--compare --mode=644"
-INSTALLEXEFLAGS="--strip"
+INSTALLEXEFLAGS="--compare"
 INSTALLDLLFLAGS="--compare"
 DATE=`date +%Y%m%d`
 
@@ -112,6 +112,7 @@ case $UNAME in
 			DISTDIR="../dist/linux/$PKGNAME"
 		fi
 		DISTDIR="../dist/linux/$PKGNAME"
+		INSTALLEXEFLAGS="--strip"
 		;;
 	FreeBSD)
 		UNAMEM=`uname -m`
@@ -126,6 +127,7 @@ case $UNAME in
 				;;
 		esac
 		DISTDIR="../dist/freebsd/$PKGNAME"
+		INSTALLEXEFLAGS="--strip"
 		;;
 	Darwin)
 		UNAMEM=`uname -m`
@@ -136,6 +138,7 @@ case $UNAME in
 				echo "Installing for Darwin x64..."
 				;;
 		esac
+		INSTALLEXEFLAGS="--strip"
 		;;
 	*)
 		echo "$0 : Not support platform. $UNAME"

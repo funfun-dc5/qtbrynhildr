@@ -44,9 +44,9 @@ fi
 APP="QtBrynhildr"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
-INSTALLFLAGS="--compare --mode=644"
-INSTALLEXEFLAGS="--compare"
-INSTALLDLLFLAGS="--compare"
+INSTALLFLAGS="-C -m 444"
+INSTALLEXEFLAGS="-C"
+INSTALLDLLFLAGS="-C"
 DATE=`date +%Y%m%d`
 
 # check environment
@@ -112,7 +112,7 @@ case $UNAME in
 			DISTDIR="../dist/linux/$PKGNAME"
 		fi
 		DISTDIR="../dist/linux/$PKGNAME"
-		INSTALLEXEFLAGS="--strip"
+		INSTALLEXEFLAGS="-s"
 		;;
 	FreeBSD)
 		UNAMEM=`uname -m`
@@ -127,7 +127,7 @@ case $UNAME in
 				;;
 		esac
 		DISTDIR="../dist/freebsd/$PKGNAME"
-		INSTALLEXEFLAGS="--strip"
+		INSTALLEXEFLAGS="-s"
 		;;
 	Darwin)
 		UNAMEM=`uname -m`
@@ -138,7 +138,6 @@ case $UNAME in
 				echo "Installing for Darwin x64..."
 				;;
 		esac
-		INSTALLEXEFLAGS="--strip"
 		;;
 	*)
 		echo "$0 : Not support platform. $UNAME"
@@ -392,7 +391,7 @@ case $UNAME in
 			exit 1;
 		fi
 		# strip
-		strip -s ${APP}.app/Contents/MacOS/${APP}
+		strip ${APP}.app/Contents/MacOS/${APP}
 		# copy key layout file
 		mkdir -p ${APP}.app/Contents/MacOS/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${APP}.app/Contents/MacOS/keylayout

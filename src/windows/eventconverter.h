@@ -16,35 +16,38 @@
 
 namespace qtbrynhildr {
 
+class KeyLayoutFile;
+
 // EventConverter
 class EventConverter
 {
+  friend class KeyLayoutFile;
+
 public:
   // keyboard type
   typedef enum {
 	KEYTOP_TYPE_JP,
-	KEYTOP_TYPE_US
+	KEYTOP_TYPE_US,
+	KEYTOP_TYPE_NATIVE,
+	KEYTOP_TYPE_KLF
   } KEYTOP_TYPE;
 
-  // shift key control
-  typedef enum {
-	SHIFTKEY_THROUGH,
-	SHIFTKEY_NEED,
-	SHIFTKEY_NONEED,
-  } ShiftKeyControl;
+#include "windows/keyevent.h"
 
 public:
   // constructor
   EventConverter();
   EventConverter(KEYTOP_TYPE type);
+  EventConverter(KeyLayoutFile *klf);
 
-#if 1 // for TEST
   // get keytop type
   KEYTOP_TYPE getKeytopType();
 
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
-#endif
+
+  // set keytop type by key layout file
+  void setKeytopType(KeyLayoutFile *klf);
 
   // get Virtual Keycode
   uchar getVKCode(QKeyEvent *keyEvent);
@@ -53,31 +56,33 @@ public:
   ShiftKeyControl getShiftKeyControl();
 
   // get name
-  QString getEventConverterName();
+  QString getEventConverterName() const;
 
-  // for DEBUG
+  // get name of virtual keycode
   static QString getVKCodeByString(uchar vkcode);
+
+private:
+  // print KeyEvent
+  static void printKeyEvent(KeyEvent *keyEvent);
 
 private:
   // key table size
 #if _MSC_VER
-#define TABLE_SIZE 139
+#define TABLE_SIZE_JP 139
+#define TABLE_SIZE_US 136
 #else // _MSC_VER
-  static const int TABLE_SIZE = 139;
+  static const int TABLE_SIZE_JP = 139;
+  static const int TABLE_SIZE_US = 136;
 #endif // _MSC_VER
 
-  // key table for event convert
-  typedef struct {
-	Qt::Key key;
-	uchar VK_Code;
-	ShiftKeyControl shiftKeyControl;
-  } KeyEvent;
+  // key event table
+  const KeyEvent *keyEventTable;
 
-  // key table
-  const KeyEvent *keyEventInfo;
+  // table size
+  int tableSize;
 
-  // key table for JP
-  const KeyEvent keyEventInfo_JP[TABLE_SIZE] = {
+  // key event table for JP
+  const KeyEvent keyEventTable_JP[TABLE_SIZE_JP] = {
 	{Qt::Key_Escape,				VK_ESCAPE,		SHIFTKEY_THROUGH},
 	{Qt::Key_Tab,					VK_TAB,			SHIFTKEY_THROUGH},
 	{Qt::Key_Backspace,				VK_BACK,		SHIFTKEY_THROUGH},
@@ -234,8 +239,8 @@ private:
 	{Qt::Key_LaunchMail,			VK_LAUNCH_MAIL,			SHIFTKEY_THROUGH}
   };
 
-  // key table for US
-  const KeyEvent keyEventInfo_US[TABLE_SIZE] = {
+  // key event table for US
+  const KeyEvent keyEventTable_US[TABLE_SIZE_US] = {
 	{Qt::Key_Escape,				VK_ESCAPE,		SHIFTKEY_THROUGH},
 	{Qt::Key_Tab,					VK_TAB,			SHIFTKEY_THROUGH},
 	{Qt::Key_Backspace,				VK_BACK,		SHIFTKEY_THROUGH},
@@ -369,11 +374,11 @@ private:
 	{Qt::Key_BraceRight,			VK_OEM_6,		SHIFTKEY_NEED},		// '}'
 	{Qt::Key_AsciiTilde,			VK_OEM_3,		SHIFTKEY_NONEED},	// '~'
 	{Qt::Key_AsciiCircum,			VK_6,			SHIFTKEY_NEED},		// '^'
-
+#if 0 // for TEST
 	{Qt::Key_unknown,				VK_NONE_00,		SHIFTKEY_THROUGH},	// Convert
 	{Qt::Key_unknown,				VK_NONE_00,		SHIFTKEY_THROUGH},	// NonConvert
 	{Qt::Key_unknown,				VK_NONE_00,		SHIFTKEY_THROUGH},	// Zenkaku_Hankaku
-
+#endif // for TEST
 	{Qt::Key_Back,					VK_BROWSER_BACK,		SHIFTKEY_THROUGH},
 	{Qt::Key_Forward,				VK_BROWSER_FORWARD,		SHIFTKEY_THROUGH},
 	{Qt::Key_Refresh,				VK_BROWSER_REFRESH,		SHIFTKEY_THROUGH},
@@ -391,6 +396,9 @@ private:
 	{Qt::Key_MediaTogglePlayPause,	VK_MEDIA_PLAY_PAUSE,	SHIFTKEY_THROUGH},
 	{Qt::Key_LaunchMail,			VK_LAUNCH_MAIL,			SHIFTKEY_THROUGH}
   };
+
+  // key layout file
+  KeyLayoutFile *klf;
 
   // key top type
   KEYTOP_TYPE type;

@@ -35,6 +35,7 @@ LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 # for MSVC 2015
 win32-msvc2015 {
 CELT_SUPPORT = ON
+QMAKE_LFLAGS += /LTCG
 }
 
 # for MinGW
@@ -98,6 +99,10 @@ else {
 DEFINES += QTB_CELT_SUPPORT=0
 }
 
+# for key layout file
+HEADERS += keylayout/keylayoutfile.h keylayout/keylayoutfilereader.h
+SOURCES += keylayout/keylayoutfile.cpp keylayout/keylayoutfilereader.cpp
+
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h
@@ -118,7 +123,7 @@ HEADERS += graphics/graphicsthread.h
 HEADERS += sound/soundthread.h
 HEADERS += sound/soundbuffer.h
 HEADERS += sound/wave.h
-HEADERS += windows/keycodes.h windows/eventconverter.h windows/ntfs.h
+HEADERS += windows/eventconverter.h windows/ntfs.h windows/keycodes.h windows/keyevent.h
 HEADERS += function/recorder.h
 
 SOURCES += main.cpp
@@ -136,5 +141,5 @@ SOURCES += control/keybuffer.cpp control/mousebuffer.cpp
 SOURCES += graphics/graphicsthread.cpp
 SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
-SOURCES += windows/eventconverter.cpp windows/ntfs.cpp
+SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp

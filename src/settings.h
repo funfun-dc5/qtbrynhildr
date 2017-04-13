@@ -33,13 +33,22 @@
 #define QTB_ORGANIZATION		"mcz-xoxo"
 
 // application
+#if !_WIN64
 #define QTB_APPLICATION			"Qt Brynhildr"
+#else // !_WIN64
+#define QTB_APPLICATION			"Qt Brynhildr 64"
+#endif // !_WIN64
 
 // translation file path
 #define QTB_TRANSLATION_FILE_PATH	":/translations/"
 
 // translation file prefix
 #define QTB_TRANSLATION_FILE_PREFIX	"qtbrynhildr_"
+
+// key layout file directory
+#define QTB_KEYLAYOUT_FILE_PATH		"/keylayout"
+#define QTB_KEYLAYOUT_FILE_SUFFIX	".kl"
+#define QTB_KEYLAYOUT_FILE_SUFFIXX	".klx"
 
 // -- settings --
 // for version information
@@ -97,11 +106,15 @@ typedef int KEYBOARD_TYPE;
 #define KEYBOARD_TYPE_JP		0
 #define KEYBOARD_TYPE_US		1
 #define KEYBOARD_TYPE_NATIVE	2
-#define KEYBOARD_TYPE_NUM		3
+#define KEYBOARD_TYPE_KLF		3
+#define KEYBOARD_TYPE_NUM		4
 
-#define STRING_KEYBOARD_TYPE_JP		"JP Keyboard"
-#define STRING_KEYBOARD_TYPE_US		"US Keyboard"
+#define STRING_KEYBOARD_TYPE_JP		"JP Keyboard (built-in)"
+#define STRING_KEYBOARD_TYPE_US		"US Keyboard (built-in)"
 #define STRING_KEYBOARD_TYPE_NATIVE	"Native Keyboard"
+
+#define QTB_KEYBOARDTYPENAME			"keyboardTypeName"
+#define QTB_KEYBOARDTYPENAME_DEFAULT	"Unknown"
 
 // for portNo
 #define QTB_PORTNO				"portNo"
@@ -605,7 +618,7 @@ public:
   // set keyboard type
   void setKeyboardType(KEYBOARD_TYPE keyboardType)
   {
-	ASSERT(keyboardType >= KEYBOARD_TYPE_JP && keyboardType < KEYBOARD_TYPE_NUM);
+	//	ASSERT(keyboardType >= KEYBOARD_TYPE_JP && keyboardType < KEYBOARD_TYPE_NUM);
 #if !defined(Q_OS_WIN)
 	if (keyboardType == KEYBOARD_TYPE_NATIVE){
 	  // NOT available except for windows
@@ -615,12 +628,39 @@ public:
 	this->keyboardType = keyboardType;
   }
 
+  // set keyboard type name
+  void setKeyboardTypeName(QString keyboardTypeName)
+  {
+	this->keyboardTypeName = keyboardTypeName;
+  }
+
+  // get keyboard type name
+  QString getKeyboardTypeName() const
+  {
+	static const QString stringTable[KEYBOARD_TYPE_NUM] = {
+	  STRING_KEYBOARD_TYPE_JP,
+	  STRING_KEYBOARD_TYPE_US,
+	  STRING_KEYBOARD_TYPE_NATIVE,
+	  "KLF (dummy)"
+	};
+
+	if (keyboardType < KEYBOARD_TYPE_KLF){
+	  return stringTable[keyboardType];
+	}
+	else {
+	  // KLF
+	  return keyboardTypeName;
+	}
+  }
+
   // get keyboard type string
   QString getKeyboardTypeByString() const
   {
 	static const QString stringTable[KEYBOARD_TYPE_NUM] = {
 	  "KEYBOARD_TYPE_WINDOWS_JP",
 	  "KEYBOARD_TYPE_WINDOWS_US",
+	  "KEYBOARD_TYPE_WINDOWS_NATIVE",
+	  "KEYBOARD_TYPE_WINDOWS_KLF"
 	};
 
 	return stringTable[keyboardType];
@@ -1744,6 +1784,9 @@ private:
 
   // keyboard type
   volatile KEYBOARD_TYPE keyboardType;
+
+  // keyboard type name
+  QString keyboardTypeName;
 
   // port
   volatile quint16 portNo;

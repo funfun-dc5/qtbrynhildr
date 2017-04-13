@@ -8,6 +8,7 @@ release/
 debug/
 build/
 libs/
+obj/
 # for Sphinx
 doctrees/
 html/
@@ -18,6 +19,7 @@ html/
 cov-int/
 # funfun's settings
 kero_keyboard/
+template/
 #-----------------------
 # ignore source files
 #-----------------------

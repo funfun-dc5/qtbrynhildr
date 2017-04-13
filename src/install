@@ -44,7 +44,9 @@ fi
 APP="QtBrynhildr"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
-INSTALLFLAGS="-C"
+INSTALLFLAGS="-C -m 444"
+INSTALLEXEFLAGS="-C"
+INSTALLDLLFLAGS="-C"
 DATE=`date +%Y%m%d`
 
 # check environment
@@ -110,6 +112,7 @@ case $UNAME in
 			DISTDIR="../dist/linux/$PKGNAME"
 		fi
 		DISTDIR="../dist/linux/$PKGNAME"
+		INSTALLEXEFLAGS="-s"
 		;;
 	FreeBSD)
 		UNAMEM=`uname -m`
@@ -124,6 +127,7 @@ case $UNAME in
 				;;
 		esac
 		DISTDIR="../dist/freebsd/$PKGNAME"
+		INSTALLEXEFLAGS="-s"
 		;;
 	Darwin)
 		UNAMEM=`uname -m`
@@ -239,22 +243,28 @@ case $UNAME in
 			mkdir -p ${DISTDIR}/bin/platforms
 			mkdir -p ${DISTDIR}/bin/imageformats
 			mkdir -p ${DISTDIR}/bin/audio
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Core.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Gui.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Network.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/Qt5Widgets.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Core.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Gui.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Network.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Widgets.dll ${DISTDIR}/bin
 			if [ "$1" = "" ] ; then
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
 			fi
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
-			${INSTALL} ${INSTALLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
 			# copy executable file
 			echo "copy executable file..."
-			${INSTALL} ${INSTALLFLAGS} release/${APP}.exe ${DISTDIR}/bin
+			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin
+			# copy key layout file
+			mkdir -p ${DISTDIR}/bin/keylayout
+			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+			# for TEST
+			${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${DISTDIR}/bin/keylayout
+			echo "copy key layout file..."
 			# copy manual file
 			pushd ../doc/manual
 			make html
@@ -286,7 +296,10 @@ case $UNAME in
 			mkdir -p ${DISTDIR}/doc/manual
 			# copy executable file
 			echo "copy executable file..."
-			${INSTALL} ${INSTALLFLAGS} ${APP} ${DISTDIR}/bin
+			${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+			# copy key layout file
+			mkdir -p ${DISTDIR}/bin/keylayout
+			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
 			# copy document file
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -317,7 +330,10 @@ case $UNAME in
 		mkdir -p ${DISTDIR}/doc/manual
 		# copy executable file
 		echo "copy executable file..."
-		${INSTALL} ${INSTALLFLAGS} ${APP} ${DISTDIR}/bin
+		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+		# copy key layout file
+		mkdir -p ${DISTDIR}/bin/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -348,7 +364,10 @@ case $UNAME in
 		mkdir -p ${DISTDIR}/doc/manual
 		# copy executable file
 		echo "copy executable file..."
-		${INSTALL} ${INSTALLFLAGS} ${APP} ${DISTDIR}/bin
+		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+		# copy key layout file
+		mkdir -p ${DISTDIR}/bin/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -371,6 +390,11 @@ case $UNAME in
 			echo "NOT Found ${APP}.app"
 			exit 1;
 		fi
+		# strip
+		strip ${APP}.app/Contents/MacOS/${APP}
+		# copy key layout file
+		mkdir -p ${APP}.app/Contents/MacOS/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${APP}.app/Contents/MacOS/keylayout
 		VERSION=`${APP}.app/Contents/MacOS/${APP} -vv`
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"

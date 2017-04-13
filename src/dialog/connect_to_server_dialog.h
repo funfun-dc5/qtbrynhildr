@@ -36,6 +36,12 @@ public:
   // resize event
   void resizeEvent(QResizeEvent *event);
 
+  // add keyboard type list by key layout file
+  void addKeyboardTypeList(QStringList list);
+
+  // set keyboard type
+  void setKeyboardType(KEYBOARD_TYPE keyboardType);
+
 private:
   // resettings for dialog
   void resetting();

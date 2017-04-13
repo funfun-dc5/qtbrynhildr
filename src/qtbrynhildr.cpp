@@ -179,6 +179,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
+  keyLayoutFileReader(0),
   eventConverter(0),
 #if QTB_PUBLIC_MODE6_SUPPORT
   clipboard(clipboard),
@@ -510,7 +511,28 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
   }
 
-  // for Event Converter
+  // Key Layout File Reader
+  //  QString keylayoutDirPath = QString(".") + QTB_KEYLAYOUT_FILE_PATH; // for TEST
+  QString keylayoutDirPath = qApp->applicationDirPath() + QTB_KEYLAYOUT_FILE_PATH;
+  const char *dirPath = strdup(qPrintable(QDir::toNativeSeparators(keylayoutDirPath)));
+  keyLayoutFileReader = new KeyLayoutFileReader(dirPath);
+  connectToServerDialog->addKeyboardTypeList(keyLayoutFileReader->getKeyboardTypeList());
+  if (settings->getKeyboardType() == KEYBOARD_TYPE_KLF){
+	// set keyboard type (real index)
+	KEYBOARD_TYPE keyboardType =
+	  keyLayoutFileReader->getIndexOfKeyboardType(settings->getKeyboardTypeName());
+	if (keyboardType >= 0){
+	  keyboardType += KEYBOARD_TYPE_KLF;
+	  settings->setKeyboardType(keyboardType);
+	  connectToServerDialog->setKeyboardType(keyboardType);
+	}
+	else {
+	  settings->setKeyboardType(0);
+	  connectToServerDialog->setKeyboardType(0);
+	}
+  }
+
+  // Event Converter
   eventConverter = new EventConverter();
   mainWindow->setEventConverter(eventConverter);
 
@@ -632,6 +654,9 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	this->show();
 	popUpConnectToServer();
   }
+#if 0 // for TEST
+	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+#endif // for TEST
 }
 
 // destructor
@@ -667,6 +692,18 @@ QtBrynhildr::~QtBrynhildr()
 	// delete
 	delete soundThread;
 	soundThread = 0;
+  }
+
+  // Key Layout File Reader
+  if (keyLayoutFileReader != 0){
+	delete keyLayoutFileReader;
+	keyLayoutFileReader = 0;
+  }
+
+  // Event Converter
+  if (eventConverter != 0){
+	delete eventConverter;
+	eventConverter = 0;
   }
 
   // close Log File
@@ -2198,23 +2235,29 @@ void QtBrynhildr::connectToServer()
   mainWindow->clearDesktop();
 
   // set event converter
-  switch(settings->getKeyboardType()){
+  KEYBOARD_TYPE keyboardType = settings->getKeyboardType();
+  // TODO: check keyboardType range
+  switch(keyboardType){
   case KEYBOARD_TYPE_JP:
-	// set to JP
+	// set to JP (built-in)
 	eventConverter->setKeytopType(EventConverter::KEYTOP_TYPE_JP);
 	break;
   case KEYBOARD_TYPE_US:
-	// set to US
+	// set to US (built-in)
 	eventConverter->setKeytopType(EventConverter::KEYTOP_TYPE_US);
 	break;
-#if defined(Q_OS_WIN)
   case KEYBOARD_TYPE_NATIVE:
+#if defined(Q_OS_WIN)
 	// Nothing to do
-	break;
+#else // defined(Q_OS_WIN)
+	ABORT(); // available for windows only
 #endif // defined(Q_OS_WIN)
-  default:
-	// unknown keyboard type
-	ABORT();
+	break;
+  default: // key layout file
+	int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
+	// set key layout file to eventconverter
+	//	cout << "key layout file index = " << index << endl << flush;
+	eventConverter->setKeytopType(keyLayoutFileReader->getKeyLayoutFile(index));
 	break;
   }
 
@@ -2254,20 +2297,29 @@ void QtBrynhildr::connectToServer()
 	  softwareKeyboard = 0;
 	}
 	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
-	switch(settings->getKeyboardType()){
+	KEYBOARD_TYPE keyboardType = settings->getKeyboardType();
+	// TODO: check keyboardType range
+	switch(keyboardType){
 	case KEYBOARD_TYPE_JP:
 	  softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_JP);
 	  break;
 	case KEYBOARD_TYPE_US:
 	  softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_US);
 	  break;
-#if defined(Q_OS_WIN)
 	case KEYBOARD_TYPE_NATIVE:
-	  break;
+#if defined(Q_OS_WIN)
+	  // Nothing to do
+#else // defined(Q_OS_WIN)
+	  ABORT(); // available for windows only
 #endif // defined(Q_OS_WIN)
-	default:
-	  // unknown keyboard type
-	  ABORT();
+	  break;
+	default: // key layout file
+	  int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
+	  // set key layout file to software keyboard
+	  //	  cout << "key layout file index = " << index << endl << flush;
+	  KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
+	  softwareKeyboard->setKeytopType(keyLayoutFile);
+	  settings->setKeyboardTypeName(keyLayoutFile->getName());
 	  break;
 	}
 	softwareKeyboard->setVisible(false);

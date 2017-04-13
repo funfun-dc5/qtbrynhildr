@@ -35,8 +35,9 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   outputLog(false)
 {
   // reset flag
-  for(int i = ID_BUTTON_0; i < ID_BUTTON_NUM; i++){
+  for(int i = ID_BUTTON_1; i < ID_BUTTON_NUM; i++){
 	layout[i].pushed = false;
+	layout[i].selected = false;
   }
 
   // initialize layout
@@ -65,7 +66,7 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 
   // draw all buttons
   for(int i = ID_BUTTON_1; i < ID_BUTTON_NUM; i++){
-	if (buttonTopInfo[i].visible){
+	if (buttonTopTable[i].visible){
 	  QRect rect = layout[i].rect;
 	  if (layout[i].pushed)
 		painter.fillRect(rect, Qt::black);
@@ -74,7 +75,7 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 	  painter.drawRect(rect);
 	  painter.drawText(rect,
 					   Qt::AlignCenter,
-					   buttonTopInfo[i].buttonTop
+					   buttonTopTable[i].buttonTop
 					   );
 	}
   }
@@ -138,7 +139,7 @@ void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
 void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog)
-	cout << "Pressed : BUTTON_ID = " << id << endl << flush;
+	cout << "Pressed : ID_BUTTON = " << id << endl << flush;
 
   switch (id){
   case ID_BUTTON_1:
@@ -158,9 +159,16 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
   case ID_BUTTON_9:
   case ID_BUTTON_10:
   case ID_BUTTON_11:
+	for(int i = ID_BUTTON_3; i <= ID_BUTTON_11; i++){
+	  layout[i].pushed = false;
+	  layout[i].selected = false;
+	}
+	layout[id].selected = true;
 	break;
   case ID_BUTTON_12:
 	// Info Button
+	// Nothing to do
+	return;
 	break;
   case ID_BUTTON_13:
 	// Sound Button
@@ -168,9 +176,13 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_14:
 	// Sound OFF Button
-	break;
   case ID_BUTTON_15:
 	// Sound ON Button
+	for(int i = ID_BUTTON_14; i <= ID_BUTTON_15; i++){
+	  layout[i].pushed = false;
+	  layout[i].selected = false;
+	}
+	layout[id].selected = true;
 	break;
   case ID_BUTTON_16:
 	// Wheel +
@@ -181,18 +193,19 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_18:
 	// Sound Quality (Lowest)
-	break;
   case ID_BUTTON_19:
 	// Sound Quality (Low)
-	break;
   case ID_BUTTON_20:
 	// Sound Quality (Standard)
-	break;
   case ID_BUTTON_21:
 	// Sound Quality (High)
-	break;
   case ID_BUTTON_22:
 	// Sound Quality (Highest)
+	for(int i = ID_BUTTON_18; i <= ID_BUTTON_22; i++){
+	  layout[i].pushed = false;
+	  layout[i].selected = false;
+	}
+	layout[id].selected = true;
 	break;
   case ID_BUTTON_23:
 	// Wheel -
@@ -203,18 +216,19 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_25:
 	// Video Quality (Lowest)
-	break;
   case ID_BUTTON_26:
 	// Video Quality (Low)
-	break;
   case ID_BUTTON_27:
 	// Video Quality (Standard)
-	break;
   case ID_BUTTON_28:
 	// Video Quality (High)
-	break;
   case ID_BUTTON_29:
 	// Video Quality (Highest)
+	for(int i = ID_BUTTON_25; i <= ID_BUTTON_29; i++){
+	  layout[i].pushed = false;
+	  layout[i].selected = false;
+	}
+	layout[id].selected = true;
 	break;
   case ID_BUTTON_30:
 	// Mouse Right Button
@@ -236,11 +250,13 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 void SoftwareButton::releasedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog)
-	cout << "Released: BUTTON_ID = " << id << endl << flush;
+	cout << "Released: ID_BUTTON = " << id << endl << flush;
 
   // update buttons
-  layout[id].pushed = false;
-  update();
+  if (!layout[id].selected){
+	layout[id].pushed = false;
+	update();
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -264,7 +280,7 @@ void SoftwareButton::calculateLayout(qreal xFactor, qreal yFactor)
 SoftwareButton::ID_BUTTON SoftwareButton::getID(QPoint pos)
 {
   for(int i = ID_BUTTON_1; i < ID_BUTTON_NUM; i++){
-	if (buttonTopInfo[i].visible){
+	if (buttonTopTable[i].visible){
 	  QRect rect = layout[i].rect;
 	  if (rect.contains(pos, true)){ // inside the rectangle
 		return (ID_BUTTON)i;
@@ -281,15 +297,16 @@ void SoftwareButton::toggleOptionButton()
   onOptionButton = !onOptionButton;
 
   layout[ID_BUTTON_1].pushed = onOptionButton;
+  layout[ID_BUTTON_1].selected = onOptionButton;
 
   // monitor option button
-  buttonTopInfo[ID_BUTTON_2].visible = onOptionButton;
+  buttonTopTable[ID_BUTTON_2].visible = onOptionButton;
   // sound option button
-  buttonTopInfo[ID_BUTTON_13].visible = onOptionButton;
+  buttonTopTable[ID_BUTTON_13].visible = onOptionButton;
   // sound quality option button
-  buttonTopInfo[ID_BUTTON_17].visible = onOptionButton;
+  buttonTopTable[ID_BUTTON_17].visible = onOptionButton;
   // sound video option button
-  buttonTopInfo[ID_BUTTON_24].visible = onOptionButton;
+  buttonTopTable[ID_BUTTON_24].visible = onOptionButton;
 
   if(!onOptionButton){
 	// clear buttons
@@ -312,16 +329,17 @@ void SoftwareButton::toggleShowMonitorButton()
   onShowMonitorButton = !onShowMonitorButton;
 
   layout[ID_BUTTON_2].pushed = onShowMonitorButton;
+  layout[ID_BUTTON_2].selected = onShowMonitorButton;
 
-  buttonTopInfo[ID_BUTTON_3].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_4].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_5].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_6].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_7].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_8].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_9].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_10].visible = onShowMonitorButton;
-  buttonTopInfo[ID_BUTTON_11].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_3].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_4].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_5].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_6].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_7].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_8].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_9].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_10].visible = onShowMonitorButton;
+  buttonTopTable[ID_BUTTON_11].visible = onShowMonitorButton;
 
   update();
 }
@@ -332,9 +350,10 @@ void SoftwareButton::toggleShowSoundButton()
   onShowSoundButton = !onShowSoundButton;
 
   layout[ID_BUTTON_13].pushed = onShowSoundButton;
+  layout[ID_BUTTON_13].selected = onShowSoundButton;
 
-  buttonTopInfo[ID_BUTTON_14].visible = onShowSoundButton;
-  buttonTopInfo[ID_BUTTON_15].visible = onShowSoundButton;
+  buttonTopTable[ID_BUTTON_14].visible = onShowSoundButton;
+  buttonTopTable[ID_BUTTON_15].visible = onShowSoundButton;
 
   update();
 }
@@ -345,12 +364,13 @@ void SoftwareButton::toggleShowSoundQualityButton()
   onShowSoundQualityButton = !onShowSoundQualityButton;
 
   layout[ID_BUTTON_17].pushed = onShowSoundQualityButton;
+  layout[ID_BUTTON_17].selected = onShowSoundQualityButton;
 
-  buttonTopInfo[ID_BUTTON_18].visible = onShowSoundQualityButton;
-  buttonTopInfo[ID_BUTTON_19].visible = onShowSoundQualityButton;
-  buttonTopInfo[ID_BUTTON_20].visible = onShowSoundQualityButton;
-  buttonTopInfo[ID_BUTTON_21].visible = onShowSoundQualityButton;
-  buttonTopInfo[ID_BUTTON_22].visible = onShowSoundQualityButton;
+  buttonTopTable[ID_BUTTON_18].visible = onShowSoundQualityButton;
+  buttonTopTable[ID_BUTTON_19].visible = onShowSoundQualityButton;
+  buttonTopTable[ID_BUTTON_20].visible = onShowSoundQualityButton;
+  buttonTopTable[ID_BUTTON_21].visible = onShowSoundQualityButton;
+  buttonTopTable[ID_BUTTON_22].visible = onShowSoundQualityButton;
 
   update();
 }
@@ -361,12 +381,13 @@ void SoftwareButton::toggleShowVideoQualityButton()
   onShowVideoQualityButton = !onShowVideoQualityButton;
 
   layout[ID_BUTTON_24].pushed = onShowVideoQualityButton;
+  layout[ID_BUTTON_24].selected = onShowVideoQualityButton;
 
-  buttonTopInfo[ID_BUTTON_25].visible = onShowVideoQualityButton;
-  buttonTopInfo[ID_BUTTON_26].visible = onShowVideoQualityButton;
-  buttonTopInfo[ID_BUTTON_27].visible = onShowVideoQualityButton;
-  buttonTopInfo[ID_BUTTON_28].visible = onShowVideoQualityButton;
-  buttonTopInfo[ID_BUTTON_29].visible = onShowVideoQualityButton;
+  buttonTopTable[ID_BUTTON_25].visible = onShowVideoQualityButton;
+  buttonTopTable[ID_BUTTON_26].visible = onShowVideoQualityButton;
+  buttonTopTable[ID_BUTTON_27].visible = onShowVideoQualityButton;
+  buttonTopTable[ID_BUTTON_28].visible = onShowVideoQualityButton;
+  buttonTopTable[ID_BUTTON_29].visible = onShowVideoQualityButton;
 
   update();
 }

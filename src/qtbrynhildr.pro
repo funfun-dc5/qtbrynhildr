@@ -35,6 +35,7 @@ LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 # for MSVC 2015
 win32-msvc2015 {
 CELT_SUPPORT = ON
+QMAKE_LFLAGS += /LTCG
 }
 
 # for MinGW

@@ -63,11 +63,7 @@ Settings::Settings(const char *iniFileName)
   }
   else {
 	settings =
-#if !_WIN64
 	  new QSettings(QSettings::IniFormat, QSettings::UserScope, QTB_ORGANIZATION, QTB_APPLICATION);
-#else // !_WIN64
-	new QSettings(QSettings::IniFormat, QSettings::UserScope, QTB_ORGANIZATION, QTB_APPLICATION " 64");
-#endif // !_WIN64
   }
 
   // set version information

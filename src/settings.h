@@ -43,6 +43,8 @@
 
 // key layout file directory
 #define QTB_KEYLAYOUT_FILE_PATH		"/keylayout"
+#define QTB_KEYLAYOUT_FILE_SUFFIX	".kl"
+#define QTB_KEYLAYOUT_FILE_SUFFIXX	".klx"
 
 // -- settings --
 // for version information

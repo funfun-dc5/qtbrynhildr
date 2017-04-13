@@ -7,13 +7,16 @@
 // System Header
 #include <cstring>
 #include <fstream>
-#include <dirent.h>
 
 // Qt Header
+#include <QDir>
+#include <QFileInfo>
+#include <QFileInfoList>
 
 // Local Header
 #include "keylayout/keylayoutfilereader.h"
 #include "parameters.h"
+#include "settings.h"
 
 namespace qtbrynhildr {
 
@@ -27,37 +30,17 @@ KeyLayoutFileReader::KeyLayoutFileReader(const char *layoutfilepath)
   if (outputLog)
 	cout << "Created KeyLayoutFileReader! layoutfilepath = " << layoutfilepath << endl << flush;
 
-  DIR *dir;
-  dir = opendir(layoutfilepath);
-  if(dir != NULL){
-	while(true){
-	  struct dirent *dp;
-	  dp = readdir(dir);
-	  if (dp == NULL)
-		break;
-	  if (strncmp(dp->d_name, ".", 1) == 0 ||
-		  strncmp(dp->d_name, "..", 2) == 0 ){
-		continue;
-	  }
-	  if (!strncmp(&dp->d_name[strlen(dp->d_name)-4], ".klx", 4) == 0){
-		if (outputLog)
-		  cout << "NOT supported File : " << dp->d_name << endl << flush;
-		continue;
-	  }
+  QDir dir(layoutfilepath);
+  QFileInfoList list = dir.entryInfoList();
 
-	  // read "*.klx"
+  for (int i = 0; i < list.size(); i++){
+	QFileInfo fileInfo = list.at(i);
+	QString filename = fileInfo.fileName();
+	if (filename.endsWith(QTB_KEYLAYOUT_FILE_SUFFIXX)){
 	  if (outputLog)
-		cout << "    supported File : " << dp->d_name << endl << flush;
-	  readKeyLayoutFile((const char*)dp->d_name);
+		cout << "Found : " << qPrintable(filename) << endl << flush;
+	  readKeyLayoutFile(qPrintable(filename));
 	}
-	closedir(dir);
-
-	// sort list
-	keyboardTypeList.sort();
-  }
-  else {
-	if (outputLog)
-	  cout << "Failed to opendir()" << endl << flush;
   }
 }
 

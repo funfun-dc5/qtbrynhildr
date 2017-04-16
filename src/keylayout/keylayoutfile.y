@@ -757,6 +757,9 @@ KeyEntry keys[439] = {
   {"Key_Cancel", Key_Cancel},
 };
 
+#define MAX_KEY_EVENT_NUM 200
+#define MAX_KEY_TOP_NUM 100
+
  /* current section id */
  int section;
  /* next key index */
@@ -764,11 +767,15 @@ KeyEntry keys[439] = {
  /* next soft key index */
  int nextsoftkey;
 
+
+ /* Header */
+ KLFHeader header;
+
  /* table for KeyEvent */
- KeyEvent keyEventTable[200];
+ KeyEvent keyEventTable[MAX_KEY_EVENT_NUM];
 
  /* table for KeyTop */
- KeyTop keyTopTable[100];
+ KeyTop keyTopTable[MAX_KEY_TOP_NUM];
 
 %}
 
@@ -847,11 +854,17 @@ line:	'\n'
 	printf("error : NOT in [Keys]\n");
   }
   else {
-	/* set KeyEventTable[nextkey] */
+	if (nextkey < MAX_KEY_EVENT_NUM){
+	  /* set KeyEventTable[nextkey] */
 
-	/* Yet */
+	  /* Yet */
 
-	nextkey++;
+	  nextkey++;
+	}
+	else {
+	  // error : too many key event
+	  printf("error : too many key event in [Keys]\n");
+	}
   }
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY ',' PLATFORM {
@@ -883,11 +896,17 @@ line:	'\n'
 	printf("error : NOT in [SoftKeys]\n");
   }
   else {
-	/* set KeyTopTable[nextsoftkey] */
+	if (nextsoftkey < MAX_KEY_TOP_NUM){
+	  /* set KeyTopTable[nextsoftkey] */
 
-	/* Yet */
+	  /* Yet */
 
-	nextsoftkey++;
+	  nextsoftkey++;
+	}
+	else {
+	  // error : too many key top
+	  printf("error : too many key top in [SoftKeys]\n");
+	}
   }
 }
 ;
@@ -897,21 +916,58 @@ line:	'\n'
 /* for TEST */
 int main(int argc, char *argv[])
 {
+  FILE *fp;
+  int total = 0;
+  int result = 0;
+
   section = -1;
   nextkey = 0;
   nextsoftkey = 0;
 
+  /* Yet: open .kl file */
+
+  /* read .kl file */
   yyparse();
 
   printf("sizeof(KLFHeader) = %d\n", sizeof(KLFHeader));
   printf("sizeof(KeyEvent)  = %d\n", sizeof(KeyEvent));
   printf("sizeof(KeyTop)    = %d\n", sizeof(KeyTop));
+
+  total = sizeof(KLFHeader) + sizeof(KeyEvent) * nextkey + sizeof(KeyTop) * nextsoftkey;
+
+  printf("==== RESULT ====\n");
   printf("keynum     = %d\n", nextkey);
   printf("softkeynum = %d\n", nextsoftkey);
-  printf("total size = %d\n",
-		 sizeof(KLFHeader) +
-		 sizeof(KeyEvent) * nextkey +
-		 sizeof(KeyTop) * nextsoftkey);
+  printf("total size = %d\n", total);
+
+  /* Yet: close .kl file */
+
+  /* make file header */
+  strncpy(header.magic, "KLF", 3);
+  header.spec = 1;
+  header.size = total;
+  header.keynum = nextkey;
+  header.softkeynum = nextsoftkey;
+
+  /* Yet: open .klx file */
+  fp = fopen("TEST.klx", "wb");
+
+  /* Yet: write .klx file */
+  result += fwrite((const char *)&header, sizeof(KLFHeader), 1, fp) * sizeof(KLFHeader);
+  result += fwrite((const char *)keyEventTable, sizeof(KeyEvent), nextkey, fp) * sizeof(KeyEvent);
+  result += fwrite((const char *)keyTopTable, sizeof(KeyTop), nextsoftkey, fp) * sizeof(KeyTop);
+
+  if (result != total){
+	/* error : write error */
+	printf("error : Write error.\n");
+  }
+  else {
+	/* O.K. */
+	printf("O.K.  : Write\n");
+  }
+
+  /* Yet: close .klx file */
+  fclose(fp);
 }
 
 #include <stdio.h>

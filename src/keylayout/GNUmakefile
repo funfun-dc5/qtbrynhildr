@@ -26,6 +26,7 @@ clean:
 	@rm -f $(OBJS)
 	@rm -f $(TARGET)
 	@rm -f $(DEPENDS)
+	@rm -f TEST.klx
 
 yet:
 	@grep -n Yet *.h *.cpp

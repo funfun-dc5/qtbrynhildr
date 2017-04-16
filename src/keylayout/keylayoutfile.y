@@ -13,6 +13,7 @@
 
 #include "keylayoutfile.h"
 #include "key.h"
+#include "touchpanel2/keytop.h"
 #include "windows/keyevent.h"
 
 int yylex();
@@ -755,7 +756,20 @@ KeyEntry keys[439] = {
   {"Key_Exit", Key_Exit},
   {"Key_Cancel", Key_Cancel},
 };
- 
+
+ /* current section id */
+ int section;
+ /* next key index */
+ int nextkey;
+ /* next soft key index */
+ int nextsoftkey;
+
+ /* table for KeyEvent */
+ KeyEvent keyEventTable[200];
+
+ /* table for KeyTop */
+ KeyTop keyTopTable[100];
+
 %}
 
 %union {
@@ -783,16 +797,38 @@ line:	'\n'
 #ifdef DEBUG_YACC
   printf("Found Section (Section No. = %d)\n", $1);
 #endif /* DEBUG_YACC */
+  section = $1;
 }
 | STRING '=' QSTRING {
 #ifdef DEBUG_YACC
   printf("ENVVAR = QSTRING (%s = \"%s\")\n", $1, $3);
 #endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_GENERAL){
+	// error : NOT in [Keys]
+	printf("error : NOT in [General]\n");
+  }
+  else {
+	/* set */
+
+	/* Yet */
+  }
 }
 | STRING '=' NUMBER {
 #ifdef DEBUG_YACC
   printf("ENVVAR = NUMBER  (%s = %d)\n", $1, $3);
 #endif /* DEBUG_YACC */
+  /* section check */
+  if (section != ID_SECTION_GENERAL){
+	// error : NOT in [Keys]
+	printf("error : NOT in [General]\n");
+  }
+  else {
+	/* set */
+
+	/* Yet */
+  }
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY {
 #ifdef DEBUG_YACC
@@ -804,17 +840,55 @@ line:	'\n'
 	}
   }
 #endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_KEYS){
+	// error : NOT in [Keys]
+	printf("error : NOT in [Keys]\n");
+  }
+  else {
+	/* set KeyEventTable[nextkey] */
+
+	/* Yet */
+
+	nextkey++;
+  }
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY ',' PLATFORM {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM : %-25s , %-25s, SHIFTKEY(%d), PLATFORM(%d)\n", $1, $3, $5, $7);
 #endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_KEYS){
+	// error : NOT in [Keys]
+	printf("error : NOT in [Keys]\n");
+  }
+  else {
+	/* override */
+
+	/* Yet */
+
+  }
 }
 | NUMBER ',' QSTRING ',' QSTRING ',' VK_ID ',' QSTRING ',' VK_ID {
 #ifdef DEBUG_YACC
   printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID : ");
   printf("%2d, %-10s, %-10s, %-25s, %-10s, %s\n", $1, $3, $5, $7, $9, $11);
 #endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_SOFTKEYS){
+	// error : NOT in [Keys]
+	printf("error : NOT in [SoftKeys]\n");
+  }
+  else {
+	/* set KeyTopTable[nextsoftkey] */
+
+	/* Yet */
+
+	nextsoftkey++;
+  }
 }
 ;
 
@@ -823,7 +897,21 @@ line:	'\n'
 /* for TEST */
 int main(int argc, char *argv[])
 {
+  section = -1;
+  nextkey = 0;
+  nextsoftkey = 0;
+
   yyparse();
+
+  printf("sizeof(KLFHeader) = %d\n", sizeof(KLFHeader));
+  printf("sizeof(KeyEvent)  = %d\n", sizeof(KeyEvent));
+  printf("sizeof(KeyTop)    = %d\n", sizeof(KeyTop));
+  printf("keynum     = %d\n", nextkey);
+  printf("softkeynum = %d\n", nextsoftkey);
+  printf("total size = %d\n",
+		 sizeof(KLFHeader) +
+		 sizeof(KeyEvent) * nextkey +
+		 sizeof(KeyTop) * nextsoftkey);
 }
 
 #include <stdio.h>

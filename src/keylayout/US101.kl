@@ -169,7 +169,7 @@ Key_LaunchMail,			VK_LAUNCH_MAIL,			SHIFTKEY_THROUGH
  9, "8",	"*",	VK_8,			"F8",	VK_F8
 10, "9",	"(",	VK_9,			"F9",	VK_F9
 11, "0",	")",	VK_0,			"F10",	VK_F10
-12, "-",	"_",	VK_OEM_MINUS	"F11",	VK_F11
+12, "-",	"_",	VK_OEM_MINUS,	"F11",	VK_F11
 13, "=",	"+",	VK_OEM_7,		"F12",	VK_F12
 14, "",		"",		VK_NONE_00,		"Ins",	VK_INSERT
 15, "BS",	"BS",	VK_BACK,		"Del",	VK_DELETE

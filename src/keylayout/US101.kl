@@ -3,7 +3,7 @@
 # spec version 1
 
 [General]
-Name="US 101"
+Name="US 101 (klx)"
 Author="FunFun <fu.aba.dc5@gmail.com>"
 SpecVersion=1
 
@@ -28,10 +28,10 @@ Key_Down,				VK_DOWN,		SHIFTKEY_THROUGH
 Key_PageUp,				VK_PRIOR,		SHIFTKEY_THROUGH
 Key_PageDown,			VK_NEXT,		SHIFTKEY_THROUGH
 Key_Shift,				VK_SHIFT,		SHIFTKEY_THROUGH
-Key_Meta,				VK_LWIN,		SHIFTKEY_THROUGH
-Key_Meta,				VK_CONTROL,		SHIFTKEY_THROUGH, macOS # override on macOS
 Key_Control,			VK_CONTROL,		SHIFTKEY_THROUGH
 Key_Control,			VK_LWIN,		SHIFTKEY_THROUGH, macOS # override on macOS
+Key_Meta,				VK_LWIN,		SHIFTKEY_THROUGH
+Key_Meta,				VK_CONTROL,		SHIFTKEY_THROUGH, macOS # override on macOS
 Key_Alt,				VK_MENU,		SHIFTKEY_THROUGH
 Key_CapsLock,			VK_CAPITAL,		SHIFTKEY_THROUGH
 Key_NumLock,			VK_NUMLOCK,		SHIFTKEY_THROUGH

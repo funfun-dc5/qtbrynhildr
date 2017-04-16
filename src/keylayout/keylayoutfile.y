@@ -19,6 +19,21 @@
 int yylex();
 int yyerror(char *s);
 
+int getENVVAR_ID(const char *name);
+int getVK_ID(const char *name);
+Key getKey_ID(const char *name);
+
+// ENVVAR
+#define ID_ENVVAR_NAME			0
+#define ID_ENVVAR_AUTHOR		1
+#define ID_ENVVAR_SPECVERSION	2
+#define ID_ENVVAR_NUM			3
+const char *envvarname[ID_ENVVAR_NUM] = {
+  "Name",
+  "Author",
+  "SpecVersion"
+};
+
 // VK_ID
 const char *vkname[256] = {
   // 00 - 0F
@@ -45,11 +60,11 @@ const char *vkname[256] = {
   "VK_MENU",
   "VK_PAUSE",
   "VK_CAPITAL",
-  "VK_KANA/HANGUL",
+  "VK_KANA",
   "VK_NONE_16",
   "VK_JUNJA",
   "VK_FINAL",
-  "VK_KANJI/HANJI",
+  "VK_KANJI",
   "VK_NONE_1A",
   "VK_ESCAPE",
   "VK_CONVERT",
@@ -315,7 +330,9 @@ typedef struct {
 	Key key;
 } KeyEntry;
 
-KeyEntry keys[439] = {
+#define KEY_ENTRY_NUM 439
+
+KeyEntry keys[KEY_ENTRY_NUM] = {
   {"Key_Escape", Key_Escape},
   {"Key_Tab", Key_Tab},
   {"Key_Backtab", Key_Backtab},
@@ -813,13 +830,25 @@ line:	'\n'
 
   /* section check */
   if (section != ID_SECTION_GENERAL){
-	// error : NOT in [Keys]
+	// error : NOT in [General]
 	printf("error : NOT in [General]\n");
   }
   else {
 	/* set */
 
-	/* Yet */
+	int envvar = getENVVAR_ID((const char*)$1);
+	switch(envvar){
+	case ID_ENVVAR_NAME:
+	  strncpy(header.name, $3, 64-1);
+	  break;
+	case ID_ENVVAR_AUTHOR:
+	  strncpy(header.author, $3, 64-1);
+	  break;
+	default:
+	  // error
+	  printf("error : Illegal ENVVAR(%s)\n", $1);
+	  break;
+	}
   }
 }
 | STRING '=' NUMBER {
@@ -839,13 +868,9 @@ line:	'\n'
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY {
 #ifdef DEBUG_YACC
-  int i;
   printf("KEY_ID , VK_ID, SHIFTKEY           : %-25s , %-25s, SHIFTKEY(%d)\n", $1, $3, $5);
-  for(i = 0; i < 256; i++){
-	if (strcmp(vkname[i], $3) == 0){
-	  printf("VK_ID(%s) = 0x%02X\n", $3, i);
-	}
-  }
+  printf("KEY_ID(%s) = 0x%08X\n", $1, getKey_ID((const char*)$1));
+  printf("VK_ID(%s) = 0x%02X\n", $3, getVK_ID((const char*)$3));
 #endif /* DEBUG_YACC */
 
   /* section check */
@@ -857,7 +882,15 @@ line:	'\n'
 	if (nextkey < MAX_KEY_EVENT_NUM){
 	  /* set KeyEventTable[nextkey] */
 
-	  /* Yet */
+	  Key key = getKey_ID((const char*)$1);
+	  int VK_Code = getVK_ID((const char*)$3);
+	  ShiftKeyControl shiftKeyControl = $5;
+
+	  /* Yet: check */
+
+	  keyEventTable[nextkey].key = key;
+	  keyEventTable[nextkey].VK_Code = VK_Code;
+	  keyEventTable[nextkey].shiftKeyControl = shiftKeyControl;
 
 	  nextkey++;
 	}
@@ -870,6 +903,8 @@ line:	'\n'
 | KEY_ID ',' VK_ID ',' SHIFTKEY ',' PLATFORM {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM : %-25s , %-25s, SHIFTKEY(%d), PLATFORM(%d)\n", $1, $3, $5, $7);
+  printf("KEY_ID(%s) = 0x%08X\n", $1, getKey_ID((const char*)$1));
+  printf("VK_ID(%s) = 0x%02X\n", $3, getVK_ID((const char*)$3));
 #endif /* DEBUG_YACC */
 
   /* section check */
@@ -880,8 +915,9 @@ line:	'\n'
   else {
 	/* override */
 
-	/* Yet */
+	/* Yet: 1) search index of key event entry */
 
+	/* Yet: 2) overwrite */
   }
 }
 | NUMBER ',' QSTRING ',' QSTRING ',' VK_ID ',' QSTRING ',' VK_ID {
@@ -892,14 +928,19 @@ line:	'\n'
 
   /* section check */
   if (section != ID_SECTION_SOFTKEYS){
-	// error : NOT in [Keys]
+	// error : NOT in [SoftKeys]
 	printf("error : NOT in [SoftKeys]\n");
   }
   else {
 	if (nextsoftkey < MAX_KEY_TOP_NUM){
-	  /* set KeyTopTable[nextsoftkey] */
+	  /* set keTopTable[$1-1] */
+	  KeyTop *keyTop = &keyTopTable[$1-1];
 
-	  /* Yet */
+	  strncpy(keyTop->keyTop.keyTop, $3, 10);
+	  strncpy(keyTop->keyTop.keyTopWithShift, $5, 10);
+	  keyTop->keyTop.VK_Code = getVK_ID($7);
+	  strncpy(keyTop->keyTopWithFn.keyTop, $9, 10);
+	  keyTop->keyTopWithFn.VK_Code = getVK_ID($11);
 
 	  nextsoftkey++;
 	}
@@ -913,6 +954,45 @@ line:	'\n'
 
 %%
 
+/* get envvar by name */
+int getENVVAR_ID(const char *name)
+{
+  int i;
+  for(i = 0; i < ID_ENVVAR_NUM; i++){
+	if (strcmp(envvarname[i], name) == 0){
+	  return i;
+	}
+  }
+
+  return -1;
+}
+
+/* get vk_code by name */
+int getVK_ID(const char *name)
+{
+  int i;
+  for(i = 0; i < 256; i++){
+	if (strcmp(vkname[i], name) == 0){
+	  return i;
+	}
+  }
+
+  return -1;
+}
+
+/* get Key by name */
+Key getKey_ID(const char *name)
+{
+  int i;
+  for(i = 0; i < KEY_ENTRY_NUM; i++){
+	if (strcmp(keys[i].name, name) == 0){
+	  return keys[i].key;
+	}
+  }
+
+  return -1;
+}
+
 /* for TEST */
 int main(int argc, char *argv[])
 {
@@ -924,14 +1004,19 @@ int main(int argc, char *argv[])
   nextkey = 0;
   nextsoftkey = 0;
 
+  // zero clear of header, tables
+  memset(&header, 0, sizeof(header));
+  memset(keyEventTable, 0, sizeof(keyEventTable));
+  memset(keyTopTable, 0, sizeof(keyTopTable));
+
   /* Yet: open .kl file */
 
   /* read .kl file */
   yyparse();
 
-  printf("sizeof(KLFHeader) = %d\n", sizeof(KLFHeader));
-  printf("sizeof(KeyEvent)  = %d\n", sizeof(KeyEvent));
-  printf("sizeof(KeyTop)    = %d\n", sizeof(KeyTop));
+  printf("sizeof(KLFHeader) = %d\n", (int)sizeof(KLFHeader));
+  printf("sizeof(KeyEvent)  = %d\n", (int)sizeof(KeyEvent));
+  printf("sizeof(KeyTop)    = %d\n", (int)sizeof(KeyTop));
 
   total = sizeof(KLFHeader) + sizeof(KeyEvent) * nextkey + sizeof(KeyTop) * nextsoftkey;
 

@@ -18,10 +18,10 @@
 #include <string.h>
 #endif // __FLEX_LEXER_H
 
-#include "keylayoutfile.h"
-
 #include "klfcompiler.h"
 #include "klfcompiler.tab.h"
+
+#include "keylayoutfile.h"
 
 %}
 

@@ -8,12 +8,11 @@
 #include <string.h>
 #endif /* DEBUG_YACC */
 
+#include "klfcompiler.h"
+
 #include "keylayoutfile.h"
-#include "key.h"
 #include "touchpanel2/keytop.h"
 #include "windows/keyevent.h"
-
-#include "klfcompiler.h"
 
 extern int yylex();
 int yyerror(char *s);

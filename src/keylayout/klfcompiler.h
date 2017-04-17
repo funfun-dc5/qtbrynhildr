@@ -8,6 +8,7 @@
 // System Header
 
 // Local Header
+#include "key.h"
 
 #define ID_SHIFTKEY_THROUGH	0
 #define ID_SHIFTKEY_NEED	1

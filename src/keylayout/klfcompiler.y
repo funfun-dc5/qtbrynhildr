@@ -12,7 +12,7 @@
 #include "windows/keyevent.h"
 
 extern int yylex();
-int yyerror(char *s);
+void yyerror(char *s);
 
 int getENVVAR_ID(const char *name);
 int getVK_ID(const char *name);
@@ -1031,13 +1031,12 @@ int getID_Key(Key key)
 }
 
 // .kl to .klx
-int make_KLX(const char *infile)
+int make_KLX(const char *infile, const char *outfile)
 {
   extern FILE *yyin;
   FILE *fp;
   int total = 0;
   int result = 0;
-  char outfile[4096];
 
   section = -1;
   nextkey = 0;
@@ -1078,6 +1077,10 @@ int make_KLX(const char *infile)
   /* close .kl file */
   //  fclose(yyin);
 
+  if (outfile == NULL){
+	return 0;
+  }
+
   /* make file header */
   strncpy(header.magic, "KLF", 3);
   header.size = total;
@@ -1085,8 +1088,6 @@ int make_KLX(const char *infile)
   header.softkeynum = nextsoftkey;
 
   /* open .klx file */
-  strncpy(outfile, infile, 4096);
-  strcat(outfile,"x");
   fp = fopen(outfile, "wb");
   if (fp == NULL){
 	// error
@@ -1104,9 +1105,7 @@ int make_KLX(const char *infile)
   }
   else {
 	/* O.K. */
-#ifdef DEBUG_YACC
-	printf("O.K.  : Write done.\n");
-#endif /* DEBUG_YACC */
+	/* printf("output : %s\n", outfile); */
   }
 
   /* close .klx file */
@@ -1115,7 +1114,7 @@ int make_KLX(const char *infile)
   return 0;
 }
 
-int yyerror(char *s)
+void yyerror(char *s)
 {
   printf("%s\n", s);
 }

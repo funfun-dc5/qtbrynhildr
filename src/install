@@ -42,6 +42,7 @@ fi
 
 # setting
 APP="QtBrynhildr"
+KLFC="klfc"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
 INSTALLFLAGS="-C -m 444"
@@ -260,11 +261,17 @@ case $UNAME in
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin
 			# copy key layout file
+			echo "copy key layout file..."
 			mkdir -p ${DISTDIR}/bin/keylayout
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+			# install key layout file compiler
+			echo "make klfcompiler..."
+			cd keylayout; make clean; make DEFINES=-DPLATFORM_WINDOWS
+			echo "install klfcompiler..."
+			${INSTALL} ${INSTALLEXEFLAGS} ${KLFC}.exe ../${DISTDIR}/bin
+			cd ..
 			# for TEST
-			${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${DISTDIR}/bin/keylayout
-			echo "copy key layout file..."
+			${INSTALL} ${INSTALLFLAGS} keylayout/test/*.klx ${DISTDIR}/bin/keylayout
 			# copy manual file
 			pushd ../doc/manual
 			make html
@@ -300,6 +307,12 @@ case $UNAME in
 			# copy key layout file
 			mkdir -p ${DISTDIR}/bin/keylayout
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+			# install key layout file compiler
+			echo "make klfcompiler..."
+			cd keylayout; make clean; make DEFINES=-DPLATFORM_WINDOWS
+			echo "install klfcompiler..."
+			${INSTALL} ${INSTALLEXEFLAGS} ${KLFC}.exe ../${DISTDIR}/bin
+			cd ..
 			# copy document file
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -334,6 +347,12 @@ case $UNAME in
 		# copy key layout file
 		mkdir -p ${DISTDIR}/bin/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+		# install key layout file compiler
+		echo "make klfcompiler..."
+		cd keylayout; make clean; make DEFINES=-DPLATFORM_LINUX
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} ${KLFC} ../${DISTDIR}/bin
+		cd ..
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -368,6 +387,12 @@ case $UNAME in
 		# copy key layout file
 		mkdir -p ${DISTDIR}/bin/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+		# install key layout file compiler
+		echo "make klfcompiler..."
+		cd keylayout; make clean; make DEFINES=-DPLATFORM_LINUX
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} ${KLFC} ../${DISTDIR}/bin
+		cd ..
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -394,7 +419,13 @@ case $UNAME in
 		strip ${APP}.app/Contents/MacOS/${APP}
 		# copy key layout file
 		mkdir -p ${APP}.app/Contents/MacOS/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${APP}.app/Contents/MacOS/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl keylayout
+		# install key layout file compiler
+		echo "make klfcompiler..."
+		cd keylayout; make clean; make DEFINES=-DPLATFORM_MACOS
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} ${KLFC} ../${APP}.app/Contents/MacOS/
+		cd ..
 		VERSION=`${APP}.app/Contents/MacOS/${APP} -vv`
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"

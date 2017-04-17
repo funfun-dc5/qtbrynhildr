@@ -1,9 +1,6 @@
-/* -*- mode: c; coding: utf-8-unix -*- */
-/*
 // -*- mode: c; coding: utf-8-unix -*-
 // Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
 //
-*/
 %{
 #define DEBUG_YACC 1
 #ifdef DEBUG_YACC
@@ -16,12 +13,14 @@
 #include "touchpanel2/keytop.h"
 #include "windows/keyevent.h"
 
-int yylex();
+extern int yylex();
 int yyerror(char *s);
 
 int getENVVAR_ID(const char *name);
 int getVK_ID(const char *name);
 Key getKey_ID(const char *name);
+
+int make_KLX(const char *infile);
 
 // ENVVAR
 #define ID_ENVVAR_NAME			0
@@ -993,9 +992,10 @@ Key getKey_ID(const char *name)
   return -1;
 }
 
-/* for TEST */
-int main(int argc, char *argv[])
+// .kl to .klx
+int make_KLX(const char *infile)
 {
+  extern FILE *yyin;
   FILE *fp;
   int total = 0;
   int result = 0;
@@ -1009,7 +1009,14 @@ int main(int argc, char *argv[])
   memset(keyEventTable, 0, sizeof(keyEventTable));
   memset(keyTopTable, 0, sizeof(keyTopTable));
 
-  /* Yet: open .kl file */
+  /* open .kl file */
+  if (infile != NULL){
+	yyin = fopen(infile, "r");
+	if (yyin == NULL){
+	  // open failed
+	  return 1;
+	}
+  }
 
   /* read .kl file */
   yyparse();
@@ -1025,7 +1032,8 @@ int main(int argc, char *argv[])
   printf("softkeynum = %d\n", nextsoftkey);
   printf("total size = %d\n", total);
 
-  /* Yet: close .kl file */
+  /* close .kl file */
+  //  fclose(yyin);
 
   /* make file header */
   strncpy(header.magic, "KLF", 3);
@@ -1051,13 +1059,41 @@ int main(int argc, char *argv[])
 	printf("O.K.  : Write\n");
   }
 
-  /* Yet: close .klx file */
+  /* close .klx file */
   fclose(fp);
 }
-
-#include <stdio.h>
 
 int yyerror(char *s)
 {
   printf("%s\n", s);
+}
+
+// for TEST
+int main(int argc, char *argv[])
+{
+  int ret = 0;
+
+  if (argc == 1){
+	int result = make_KLX(argv[1]);
+	if (result != 0){
+	  // error
+	  printf("error : .kl error!\n");
+	  ret = 1;
+	}
+  }
+  else if (argc > 1){
+	// error
+	printf("error : too many arguments!\n");
+	ret = 1;
+  }
+  else {
+	int result = make_KLX(NULL); // stdin
+	if (result != 0){
+	  // error
+	  printf("error : .kl error!\n");
+	  ret = 1;
+	}
+  }
+
+  return ret;
 }

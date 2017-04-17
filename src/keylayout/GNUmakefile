@@ -1,3 +1,5 @@
+# Makefile for Key Layout File Compiler
+#
 CC = gcc
 CFLAGS = -O3 -MMD
 INCLUDES = -I. -I..
@@ -23,7 +25,7 @@ $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
-	@rm -f klfcompiler.c klfcompiler.tab.h klfcompiler.tab.c
+#	@rm -f klfcompiler.c klfcompiler.tab.h klfcompiler.tab.c
 	@rm -f $(OBJS)
 	@rm -f $(TARGET)
 	@rm -f $(DEPENDS)

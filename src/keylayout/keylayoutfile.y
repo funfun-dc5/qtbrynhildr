@@ -19,8 +19,21 @@ int yyerror(char *s);
 int getENVVAR_ID(const char *name);
 int getVK_ID(const char *name);
 Key getKey_ID(const char *name);
+int getID_Key(Key key);
 
 int make_KLX(const char *infile);
+
+// platform
+#if defined(PLATFORM_WINDOWS)
+ const int this_platform = ID_PLATFORM_WINDOWS;
+#elif defined( PLATFORM_MACOS)
+ const int this_platform = ID_PLATFORM_MACOS;
+#elif defined( PLATFORM_LINUX)
+ const int this_platform = ID_PLATFORM_LINUX;
+#else
+ //#error "NOT support platform!"
+ const int this_platform = ID_PLATFORM_WINDOWS; // for TEST
+#endif
 
 // ENVVAR
 #define ID_ENVVAR_NAME			0
@@ -912,11 +925,23 @@ line:	'\n'
 	printf("error : NOT in [Keys]\n");
   }
   else {
-	/* override */
+	/* override if this_platform == PLATFORM */
+	if (this_platform == $7){
+	  Key key = getKey_ID((const char*)$1);
+	  int VK_Code = getVK_ID((const char*)$3);
+	  ShiftKeyControl shiftKeyControl = $5;
+	  int index;
 
-	/* Yet: 1) search index of key event entry */
+	  /* 1) search index of key event entry */
+	  index = getID_Key(key);
 
-	/* Yet: 2) overwrite */
+	  /* 2) overwrite */
+	  if (index >= 0){
+		keyEventTable[index].key = key;
+		keyEventTable[index].VK_Code = VK_Code;
+		keyEventTable[index].shiftKeyControl = shiftKeyControl;
+	  }
+	}
   }
 }
 | NUMBER ',' QSTRING ',' QSTRING ',' VK_ID ',' QSTRING ',' VK_ID {
@@ -986,6 +1011,18 @@ Key getKey_ID(const char *name)
   for(i = 0; i < KEY_ENTRY_NUM; i++){
 	if (strcmp(keys[i].name, name) == 0){
 	  return keys[i].key;
+	}
+  }
+
+  return -1;
+}
+
+int getID_Key(Key key)
+{
+  int i;
+  for(i = 0; i < nextkey; i++){
+	if (keyEventTable[i].key == key){
+	  return i;
 	}
   }
 
@@ -1073,7 +1110,7 @@ int main(int argc, char *argv[])
 {
   int ret = 0;
 
-  if (argc == 1){
+  if (argc == 2){
 	int result = make_KLX(argv[1]);
 	if (result != 0){
 	  // error
@@ -1081,7 +1118,7 @@ int main(int argc, char *argv[])
 	  ret = 1;
 	}
   }
-  else if (argc > 1){
+  else if (argc > 2){
 	// error
 	printf("error : too many arguments!\n");
 	ret = 1;

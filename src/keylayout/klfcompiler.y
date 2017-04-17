@@ -13,6 +13,8 @@
 #include "touchpanel2/keytop.h"
 #include "windows/keyevent.h"
 
+#include "klfcompiler.h"
+
 extern int yylex();
 int yyerror(char *s);
 
@@ -20,8 +22,6 @@ int getENVVAR_ID(const char *name);
 int getVK_ID(const char *name);
 Key getKey_ID(const char *name);
 int getID_Key(Key key);
-
-int make_KLX(const char *infile);
 
 // platform
 #if defined(PLATFORM_WINDOWS)
@@ -1036,6 +1036,7 @@ int make_KLX(const char *infile)
   FILE *fp;
   int total = 0;
   int result = 0;
+  char outfile[4096];
 
   section = -1;
   nextkey = 0;
@@ -1079,8 +1080,14 @@ int make_KLX(const char *infile)
   header.keynum = nextkey;
   header.softkeynum = nextsoftkey;
 
-  /* Yet: open .klx file */
-  fp = fopen("TEST.klx", "wb");
+  /* open .klx file */
+  strncpy(outfile, infile, 4096);
+  strcat(outfile,"x");
+  fp = fopen(outfile, "wb");
+  if (fp == NULL){
+	// error
+	return 1;
+  }
 
   /* Yet: write .klx file */
   result += fwrite((const char *)&header, sizeof(KLFHeader), 1, fp) * sizeof(KLFHeader);
@@ -1098,39 +1105,11 @@ int make_KLX(const char *infile)
 
   /* close .klx file */
   fclose(fp);
+
+  return 0;
 }
 
 int yyerror(char *s)
 {
   printf("%s\n", s);
-}
-
-// for TEST
-int main(int argc, char *argv[])
-{
-  int ret = 0;
-
-  if (argc == 2){
-	int result = make_KLX(argv[1]);
-	if (result != 0){
-	  // error
-	  printf("error : .kl error!\n");
-	  ret = 1;
-	}
-  }
-  else if (argc > 2){
-	// error
-	printf("error : too many arguments!\n");
-	ret = 1;
-  }
-  else {
-	int result = make_KLX(NULL); // stdin
-	if (result != 0){
-	  // error
-	  printf("error : .kl error!\n");
-	  ret = 1;
-	}
-  }
-
-  return ret;
 }

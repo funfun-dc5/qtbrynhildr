@@ -4,12 +4,13 @@ INCLUDES = -I. -I..
 DEFINES =
 CFLAGS += $(INCLUDES) $(DEFINES)
 
-TARGET = keylayoutfile
+TARGET = klfcompiler
 
 OBJPATH = obj/
 OBJS = \
-	$(OBJPATH)keylayoutfile.o \
-	$(OBJPATH)keylayoutfile.tab.o
+	$(OBJPATH)main.o \
+	$(OBJPATH)klfcompiler.o \
+	$(OBJPATH)klfcompiler.tab.o
 
 DEPENDS	= $(subst .o,.d,$(OBJS))
 
@@ -22,11 +23,11 @@ $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
-	@rm -f keylayoutfile.c keylayoutfile.tab.h keylayoutfile.tab.c
+	@rm -f klfcompiler.c klfcompiler.tab.h klfcompiler.tab.c
 	@rm -f $(OBJS)
 	@rm -f $(TARGET)
 	@rm -f $(DEPENDS)
-	@rm -f TEST.klx
+	@rm -f *.klx
 
 yet:
 	@grep -n Yet *.h *.cpp
@@ -35,14 +36,14 @@ $(OBJPATH)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 
-keylayoutfile.c: keylayoutfile.l keylayoutfile.tab.h
-	flex -o $@ keylayoutfile.l
+klfcompiler.c: klfcompiler.l klfcompiler.tab.h
+	flex -o $@ klfcompiler.l
 
-keylayoutfile.tab.h: keylayoutfile.y
-	bison -d keylayoutfile.y
+klfcompiler.tab.h: klfcompiler.y
+	bison -d klfcompiler.y
 
-keylayoutfile.tab.c: keylayoutfile.y
-	bison keylayoutfile.y
+klfcompiler.tab.c: klfcompiler.y
+	bison klfcompiler.y
 
 -include $(DEPENDS)
 

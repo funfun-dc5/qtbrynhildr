@@ -19,7 +19,9 @@
 #endif // __FLEX_LEXER_H
 
 #include "keylayoutfile.h"
-#include "keylayoutfile.tab.h"
+
+#include "klfcompiler.h"
+#include "klfcompiler.tab.h"
 
 %}
 

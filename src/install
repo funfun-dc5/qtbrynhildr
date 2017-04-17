@@ -42,6 +42,7 @@ fi
 
 # setting
 APP="QtBrynhildr"
+KLFC="klfc"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
 INSTALLFLAGS="-C -m 444"
@@ -232,6 +233,10 @@ case $UNAME in
 				echo "NOT Found ${APP}.exe"
 				exit 1;
 			fi
+			if [ ! -x keylayout/${KLFC}.exe ] ; then
+				echo "NOT Found ${KLFC}.exe"
+				exit 1;
+			fi
 			VERSION=`release/${APP}.exe -vv`
 			# make package string
 			PKGSTRING="${APP}-windows-v${VERSION}-${DATE}.exe"
@@ -260,11 +265,14 @@ case $UNAME in
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin
 			# copy key layout file
+			echo "copy key layout file..."
 			mkdir -p ${DISTDIR}/bin/keylayout
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+			# install key layout file compiler
+			echo "install klfcompiler..."
+			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
 			# for TEST
-			${INSTALL} ${INSTALLFLAGS} keylayout/*.klx ${DISTDIR}/bin/keylayout
-			echo "copy key layout file..."
+			${INSTALL} ${INSTALLFLAGS} keylayout/test/*.klx ${DISTDIR}/bin/keylayout
 			# copy manual file
 			pushd ../doc/manual
 			make html
@@ -289,6 +297,10 @@ case $UNAME in
 				echo "NOT Found ${APP}"
 				exit 1;
 			fi
+			if [ ! -x keylayout/${KLFC} ] ; then
+				echo "NOT Found ${KLFC}"
+				exit 1;
+			fi
 			VERSION=`${APP} -vv`
 			# for cygwin
 			# create directory
@@ -300,6 +312,9 @@ case $UNAME in
 			# copy key layout file
 			mkdir -p ${DISTDIR}/bin/keylayout
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+			# install key layout file compiler
+			echo "install klfcompiler..."
+			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
 			# copy document file
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -323,6 +338,10 @@ case $UNAME in
 			echo "NOT Found ${APP}"
 			exit 1;
 		fi
+		if [ ! -x keylayout/${KLFC} ] ; then
+			echo "NOT Found ${KLFC}"
+			exit 1;
+		fi
 		VERSION=`${APP} -vv`
 		# for linux
 		# create directory
@@ -334,6 +353,10 @@ case $UNAME in
 		# copy key layout file
 		mkdir -p ${DISTDIR}/bin/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+		# install key layout file compiler
+		echo "make klfcompiler..."
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -357,6 +380,10 @@ case $UNAME in
 			echo "NOT Found ${APP}"
 			exit 1;
 		fi
+		if [ ! -x keylayout/${KLFC} ] ; then
+			echo "NOT Found ${KLFC}"
+			exit 1;
+		fi
 		VERSION=`${APP} -vv`
 		# for freebsd
 		# create directory
@@ -368,6 +395,10 @@ case $UNAME in
 		# copy key layout file
 		mkdir -p ${DISTDIR}/bin/keylayout
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
+		# install key layout file compiler
+		echo "make klfcompiler..."
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -390,11 +421,18 @@ case $UNAME in
 			echo "NOT Found ${APP}.app"
 			exit 1;
 		fi
+		if [ ! -x keylayout/${KLFC} ] ; then
+			echo "NOT Found ${KLFC}"
+			exit 1;
+		fi
 		# strip
 		strip ${APP}.app/Contents/MacOS/${APP}
 		# copy key layout file
 		mkdir -p ${APP}.app/Contents/MacOS/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${APP}.app/Contents/MacOS/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl keylayout
+		# install key layout file compiler
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${APP}.app/Contents/MacOS/
 		VERSION=`${APP}.app/Contents/MacOS/${APP} -vv`
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"

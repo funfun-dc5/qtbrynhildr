@@ -94,5 +94,4 @@ private:
 
 #endif // __cplusplus
 
-
 #endif // KEYLAYOUTFILE_H

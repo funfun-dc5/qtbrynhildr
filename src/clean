@@ -55,6 +55,8 @@ case $UNAME in
 			# delete executable file
 			rm -f ${APP}.exe
 		fi
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
 		# delete coverity scan directory
 		rm -rf cov-int
 		# delete manual
@@ -69,6 +71,8 @@ case $UNAME in
 		make clean
 		# delete executable file
 		rm -f ${APP}
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
 		pushd ../doc/manual
 		# delete manual
 		make clean
@@ -81,6 +85,8 @@ case $UNAME in
 		make clean
 		# delete executable file
 		rm -f ${APP}
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
 		pushd ../doc/manual
 		# delete manual
 		make clean
@@ -93,6 +99,8 @@ case $UNAME in
 		make clean
 		# delete executable file
 		rm -rf ${APP}.app
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
 		pushd ../doc/manual
 		# delete manual
 		make clean

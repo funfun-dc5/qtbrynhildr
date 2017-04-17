@@ -368,7 +368,7 @@ private:
 	{{"/",		"?",	(uchar)VK_OEM_2		},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_53
 	{{"\\",		"_",	(uchar)VK_OEM_102	},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_54
 	//	{{"↑",		"↑",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
-	{{"\u2191",		"\u2192",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
+	{{"\u2191",		"\u2191",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
 	{{"Shift",	"Shift",(uchar)VK_RSHIFT	},	{"Shift",	(uchar)VK_RSHIFT	}},	// ID_KEY_56
 
 	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}},	// ID_KEY_57
@@ -447,7 +447,7 @@ private:
 	{{"\\",		"?",	(uchar)VK_OEM_2		},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_53
 	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_54
 	//	{{"↑",		"↑",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
-	{{"\u2191",		"\u2192",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
+	{{"\u2191",		"\u2191",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
 	{{"Shift",	"Shift",(uchar)VK_RSHIFT	},	{"Shift",	(uchar)VK_RSHIFT	}},	// ID_KEY_56
 
 	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}},	// ID_KEY_57

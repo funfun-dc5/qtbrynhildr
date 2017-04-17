@@ -1,22 +1,37 @@
-/* -*- mode: c; coding: utf-8-unix -*- */
-/*
 // -*- mode: c; coding: utf-8-unix -*-
 // Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
 //
-*/
 %{
-#define DEBUG_YACC 1
-#ifdef DEBUG_YACC
 #include <stdio.h>
 #include <string.h>
-#endif /* DEBUG_YACC */
+
+#include "klfcompiler.h"
 
 #include "keylayoutfile.h"
-#include "key.h"
+#include "touchpanel2/keytop.h"
 #include "windows/keyevent.h"
 
-int yylex();
-int yyerror(char *s);
+extern int yylex();
+void yyerror(char *s);
+
+int getENVVAR_ID(const char *name);
+int getVK_ID(const char *name);
+Key getKey_ID(const char *name);
+int getID_Key(Key key);
+
+// platform
+const int this_platform = THIS_PLATFORM;
+
+// ENVVAR
+#define ID_ENVVAR_NAME			0
+#define ID_ENVVAR_AUTHOR		1
+#define ID_ENVVAR_SPECVERSION	2
+#define ID_ENVVAR_NUM			3
+const char *envvarname[ID_ENVVAR_NUM] = {
+  "Name",
+  "Author",
+  "SpecVersion"
+};
 
 // VK_ID
 const char *vkname[256] = {
@@ -44,11 +59,11 @@ const char *vkname[256] = {
   "VK_MENU",
   "VK_PAUSE",
   "VK_CAPITAL",
-  "VK_KANA/HANGUL",
+  "VK_KANA",
   "VK_NONE_16",
   "VK_JUNJA",
   "VK_FINAL",
-  "VK_KANJI/HANJI",
+  "VK_KANJI",
   "VK_NONE_1A",
   "VK_ESCAPE",
   "VK_CONVERT",
@@ -314,7 +329,9 @@ typedef struct {
 	Key key;
 } KeyEntry;
 
-KeyEntry keys[439] = {
+#define KEY_ENTRY_NUM 439
+
+KeyEntry keys[KEY_ENTRY_NUM] = {
   {"Key_Escape", Key_Escape},
   {"Key_Tab", Key_Tab},
   {"Key_Backtab", Key_Backtab},
@@ -755,7 +772,27 @@ KeyEntry keys[439] = {
   {"Key_Exit", Key_Exit},
   {"Key_Cancel", Key_Cancel},
 };
- 
+
+#define MAX_KEY_EVENT_NUM 200
+#define MAX_KEY_TOP_NUM 100
+
+ /* current section id */
+ int section;
+ /* next key index */
+ int nextkey;
+ /* next soft key index */
+ int nextsoftkey;
+
+
+ /* Header */
+ KLFHeader header;
+
+ /* table for KeyEvent */
+ KeyEvent keyEventTable[MAX_KEY_EVENT_NUM];
+
+ /* table for KeyTop */
+ KeyTop keyTopTable[MAX_KEY_TOP_NUM];
+
 %}
 
 %union {
@@ -783,52 +820,301 @@ line:	'\n'
 #ifdef DEBUG_YACC
   printf("Found Section (Section No. = %d)\n", $1);
 #endif /* DEBUG_YACC */
+  section = $1;
 }
 | STRING '=' QSTRING {
 #ifdef DEBUG_YACC
   printf("ENVVAR = QSTRING (%s = \"%s\")\n", $1, $3);
 #endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_GENERAL){
+	// error : NOT in [General]
+	printf("error : NOT in [General]\n");
+  }
+  else {
+	/* set */
+	int envvar = getENVVAR_ID((const char*)$1);
+	switch(envvar){
+	case ID_ENVVAR_NAME:
+	  strncpy(header.name, $3, 64-1);
+	  break;
+	case ID_ENVVAR_AUTHOR:
+	  strncpy(header.author, $3, 64-1);
+	  break;
+	case ID_ENVVAR_SPECVERSION:
+	  printf("error : ENVVAR(%s) is number. \n", $1);
+	  break;
+	default:
+	  // error
+	  printf("error : Unknown ENVVAR(%s)\n", $1);
+	  break;
+	}
+  }
 }
 | STRING '=' NUMBER {
 #ifdef DEBUG_YACC
   printf("ENVVAR = NUMBER  (%s = %d)\n", $1, $3);
 #endif /* DEBUG_YACC */
+  /* section check */
+  if (section != ID_SECTION_GENERAL){
+	// error : NOT in [Keys]
+	printf("error : NOT in [General]\n");
+  }
+  else {
+	/* set */
+	int envvar = getENVVAR_ID((const char*)$1);
+	switch(envvar){
+	case ID_ENVVAR_NAME:
+	case ID_ENVVAR_AUTHOR:
+	  printf("error : ENVVAR(%s) is quoted string. \n", $1);
+	  break;
+	case ID_ENVVAR_SPECVERSION:
+	  header.spec = $3;
+	  break;
+	default:
+	  // error
+	  printf("error : Unknown ENVVAR(%s)\n", $1);
+	  break;
+	}
+  }
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY {
 #ifdef DEBUG_YACC
-  int i;
   printf("KEY_ID , VK_ID, SHIFTKEY           : %-25s , %-25s, SHIFTKEY(%d)\n", $1, $3, $5);
-  for(i = 0; i < 256; i++){
-	if (strcmp(vkname[i], $3) == 0){
-	  printf("VK_ID(%s) = 0x%02X\n", $3, i);
+  printf("KEY_ID(%s) = 0x%08X\n", $1, getKey_ID((const char*)$1));
+  printf("VK_ID(%s) = 0x%02X\n", $3, getVK_ID((const char*)$3));
+#endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_KEYS){
+	// error : NOT in [Keys]
+	printf("error : NOT in [Keys]\n");
+  }
+  else {
+	if (nextkey < MAX_KEY_EVENT_NUM){
+	  /* set KeyEventTable[nextkey] */
+
+	  Key key = getKey_ID((const char*)$1);
+	  int VK_Code = getVK_ID((const char*)$3);
+	  ShiftKeyControl shiftKeyControl = $5;
+
+	  /* Yet: check */
+
+	  keyEventTable[nextkey].key = key;
+	  keyEventTable[nextkey].VK_Code = VK_Code;
+	  keyEventTable[nextkey].shiftKeyControl = shiftKeyControl;
+
+	  nextkey++;
+	}
+	else {
+	  // error : too many key event entry
+	  printf("error : too many key event entry in [Keys]\n");
 	}
   }
-#endif /* DEBUG_YACC */
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY ',' PLATFORM {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM : %-25s , %-25s, SHIFTKEY(%d), PLATFORM(%d)\n", $1, $3, $5, $7);
+  printf("KEY_ID(%s) = 0x%08X\n", $1, getKey_ID((const char*)$1));
+  printf("VK_ID(%s) = 0x%02X\n", $3, getVK_ID((const char*)$3));
 #endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_KEYS){
+	// error : NOT in [Keys]
+	printf("error : NOT in [Keys]\n");
+  }
+  else {
+	/* override if this_platform == PLATFORM */
+	if (this_platform == $7){
+	  Key key = getKey_ID((const char*)$1);
+	  int VK_Code = getVK_ID((const char*)$3);
+	  ShiftKeyControl shiftKeyControl = $5;
+	  int index;
+
+	  /* 1) search index of key event entry */
+	  index = getID_Key(key);
+
+	  /* 2) overwrite */
+	  if (index >= 0){
+		keyEventTable[index].key = key;
+		keyEventTable[index].VK_Code = VK_Code;
+		keyEventTable[index].shiftKeyControl = shiftKeyControl;
+	  }
+	}
+  }
 }
 | NUMBER ',' QSTRING ',' QSTRING ',' VK_ID ',' QSTRING ',' VK_ID {
 #ifdef DEBUG_YACC
   printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID : ");
   printf("%2d, %-10s, %-10s, %-25s, %-10s, %s\n", $1, $3, $5, $7, $9, $11);
 #endif /* DEBUG_YACC */
+
+  /* section check */
+  if (section != ID_SECTION_SOFTKEYS){
+	// error : NOT in [SoftKeys]
+	printf("error : NOT in [SoftKeys]\n");
+  }
+  else {
+	if (nextsoftkey < MAX_KEY_TOP_NUM){
+	  /* set keTopTable[$1-1] */
+	  KeyTop *keyTop = &keyTopTable[$1-1];
+
+	  strncpy(keyTop->keyTop.keyTop, $3, 10);
+	  strncpy(keyTop->keyTop.keyTopWithShift, $5, 10);
+	  keyTop->keyTop.VK_Code = getVK_ID($7);
+	  strncpy(keyTop->keyTopWithFn.keyTop, $9, 10);
+	  keyTop->keyTopWithFn.VK_Code = getVK_ID($11);
+
+	  nextsoftkey++;
+	}
+	else {
+	  // error : too many key top entry
+	  printf("error : too many key top entry in [SoftKeys]\n");
+	}
+  }
 }
 ;
 
 %%
 
-/* for TEST */
-int main(int argc, char *argv[])
+/* get envvar by name */
+int getENVVAR_ID(const char *name)
 {
-  yyparse();
+  int i;
+  for(i = 0; i < ID_ENVVAR_NUM; i++){
+	if (strcmp(envvarname[i], name) == 0){
+	  return i;
+	}
+  }
+
+  return -1;
 }
 
-#include <stdio.h>
+/* get vk_code by name */
+int getVK_ID(const char *name)
+{
+  int i;
+  for(i = 0; i < 256; i++){
+	if (strcmp(vkname[i], name) == 0){
+	  return i;
+	}
+  }
 
-int yyerror(char *s)
+  return -1;
+}
+
+/* get Key by name */
+Key getKey_ID(const char *name)
+{
+  int i;
+  for(i = 0; i < KEY_ENTRY_NUM; i++){
+	if (strcmp(keys[i].name, name) == 0){
+	  return keys[i].key;
+	}
+  }
+
+  return -1;
+}
+
+int getID_Key(Key key)
+{
+  int i;
+  for(i = 0; i < nextkey; i++){
+	if (keyEventTable[i].key == key){
+	  return i;
+	}
+  }
+
+  return -1;
+}
+
+// .kl to .klx
+int make_KLX(const char *infile, const char *outfile)
+{
+  extern FILE *yyin;
+  FILE *fp;
+  int total = 0;
+  int result = 0;
+
+  section = -1;
+  nextkey = 0;
+  nextsoftkey = 0;
+
+  // zero clear of header, tables
+  memset(&header, 0, sizeof(header));
+  memset(keyEventTable, 0, sizeof(keyEventTable));
+  memset(keyTopTable, 0, sizeof(keyTopTable));
+
+  /* open .kl file */
+  if (infile != NULL){
+	yyin = fopen(infile, "r");
+	if (yyin == NULL){
+	  // open failed
+	  return 1;
+	}
+  }
+
+  /* read .kl file */
+  yyparse();
+
+#ifdef DEBUG_YACC
+  printf("sizeof(KLFHeader) = %d\n", (int)sizeof(KLFHeader));
+  printf("sizeof(KeyEvent)  = %d\n", (int)sizeof(KeyEvent));
+  printf("sizeof(KeyTop)    = %d\n", (int)sizeof(KeyTop));
+#endif /* DEBUG_YACC */
+
+  total = sizeof(KLFHeader) + sizeof(KeyEvent) * nextkey + sizeof(KeyTop) * nextsoftkey;
+
+#ifdef DEBUG_YACC
+  printf("==== RESULT ====\n");
+  printf("keynum     = %d\n", nextkey);
+  printf("softkeynum = %d\n", nextsoftkey);
+  printf("total size = %d\n", total);
+#endif /* DEBUG_YACC */
+
+  /* close .kl file */
+  //  fclose(yyin);
+
+  if (outfile == NULL){
+	return 0;
+  }
+
+  /* make file header */
+  strncpy(header.magic, "KLF", 3);
+  header.size = total;
+  header.keynum = nextkey;
+  header.softkeynum = nextsoftkey;
+
+  /* open .klx file */
+  fp = fopen(outfile, "wb");
+  if (fp == NULL){
+	// error
+	return 1;
+  }
+
+  /* write .klx file */
+  result += fwrite((const char *)&header, sizeof(KLFHeader), 1, fp) * sizeof(KLFHeader);
+  result += fwrite((const char *)keyEventTable, sizeof(KeyEvent), nextkey, fp) * sizeof(KeyEvent);
+  result += fwrite((const char *)keyTopTable, sizeof(KeyTop), nextsoftkey, fp) * sizeof(KeyTop);
+
+  if (result != total){
+	/* error : write error */
+	printf("error : Write error.\n");
+  }
+  else {
+	/* O.K. */
+	/* printf("output : %s\n", outfile); */
+  }
+
+  /* close .klx file */
+  fclose(fp);
+
+  return 0;
+}
+
+void yyerror(char *s)
 {
   printf("%s\n", s);
 }

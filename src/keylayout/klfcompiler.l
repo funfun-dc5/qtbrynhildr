@@ -18,21 +18,10 @@
 #include <string.h>
 #endif // __FLEX_LEXER_H
 
-#include "keylayoutfile.tab.h"
+#include "klfcompiler.h"
+#include "klfcompiler.tab.h"
 
-#if 1  /* for TEST */
-#define SHIFTKEY_THROUGH	0
-#define SHIFTKEY_NEED		1
-#define SHIFTKEY_NONEED		2
-
-#define SECTION_GENERAL		0
-#define SECTION_KEYS		1
-#define SECTION_SOFTKEYS	2
-
-#define PLATFORM_WINDOWS	0
-#define PLATFORM_MACOS		1
-#define PLATFORM_LINUX		2
-#endif /* for TEST */
+#include "keylayoutfile.h"
 
 %}
 
@@ -102,21 +91,21 @@ equal		=
 #ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = SECTION_GENERAL;
+  yylval.intval = ID_SECTION_GENERAL;
   return SECTION;
 }
 \[Keys\] {
 #ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = SECTION_KEYS;
+  yylval.intval = ID_SECTION_KEYS;
   return SECTION;
 }
 \[SoftKeys\] {
 #ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = SECTION_SOFTKEYS;
+  yylval.intval = ID_SECTION_SOFTKEYS;
   return SECTION;
 }
 {key_id}	{
@@ -134,42 +123,42 @@ equal		=
   return VK_ID;
 }
 SHIFTKEY_THROUGH {
-  yylval.intval = SHIFTKEY_THROUGH;
+  yylval.intval = ID_SHIFTKEY_THROUGH;
   return SHIFTKEY;
 }
 SHIFTKEY_NEED {
 #ifdef DEBUG_LEX
   printf("shiftkey = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = SHIFTKEY_NEED;
+  yylval.intval = ID_SHIFTKEY_NEED;
   return SHIFTKEY;
 }
 SHIFTKEY_NONEED {
 #ifdef DEBUG_LEX
   printf("shiftkey = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = SHIFTKEY_NONEED;
+  yylval.intval = ID_SHIFTKEY_NONEED;
   return SHIFTKEY;
 }
 Windows {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = PLATFORM_WINDOWS;
+  yylval.intval = ID_PLATFORM_WINDOWS;
   return PLATFORM;
 }
 macOS {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = PLATFORM_MACOS;
+  yylval.intval = ID_PLATFORM_MACOS;
   return PLATFORM;
 }
 Linux {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = PLATFORM_LINUX;
+  yylval.intval = ID_PLATFORM_LINUX;
   return PLATFORM;
 }
 {string}	{

@@ -2,11 +2,8 @@
 // Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
 //
 %{
-#define DEBUG_YACC 1
-#ifdef DEBUG_YACC
 #include <stdio.h>
 #include <string.h>
-#endif /* DEBUG_YACC */
 
 #include "klfcompiler.h"
 
@@ -837,7 +834,6 @@ line:	'\n'
   }
   else {
 	/* set */
-
 	int envvar = getENVVAR_ID((const char*)$1);
 	switch(envvar){
 	case ID_ENVVAR_NAME:
@@ -864,8 +860,16 @@ line:	'\n'
   }
   else {
 	/* set */
-
-	/* Yet */
+	int envvar = getENVVAR_ID((const char*)$1);
+	switch(envvar){
+	case ID_ENVVAR_SPECVERSION:
+	  header.spec = $3;
+	  break;
+	default:
+	  // error
+	  printf("error : Illegal ENVVAR(%s)\n", $1);
+	  break;
+	}
   }
 }
 | KEY_ID ',' VK_ID ',' SHIFTKEY {
@@ -1049,23 +1053,26 @@ int make_KLX(const char *infile)
   /* read .kl file */
   yyparse();
 
+#ifdef DEBUG_YACC
   printf("sizeof(KLFHeader) = %d\n", (int)sizeof(KLFHeader));
   printf("sizeof(KeyEvent)  = %d\n", (int)sizeof(KeyEvent));
   printf("sizeof(KeyTop)    = %d\n", (int)sizeof(KeyTop));
+#endif /* DEBUG_YACC */
 
   total = sizeof(KLFHeader) + sizeof(KeyEvent) * nextkey + sizeof(KeyTop) * nextsoftkey;
 
+#ifdef DEBUG_YACC
   printf("==== RESULT ====\n");
   printf("keynum     = %d\n", nextkey);
   printf("softkeynum = %d\n", nextsoftkey);
   printf("total size = %d\n", total);
+#endif /* DEBUG_YACC */
 
   /* close .kl file */
   //  fclose(yyin);
 
   /* make file header */
   strncpy(header.magic, "KLF", 3);
-  header.spec = 1;
   header.size = total;
   header.keynum = nextkey;
   header.softkeynum = nextsoftkey;
@@ -1079,7 +1086,7 @@ int make_KLX(const char *infile)
 	return 1;
   }
 
-  /* Yet: write .klx file */
+  /* write .klx file */
   result += fwrite((const char *)&header, sizeof(KLFHeader), 1, fp) * sizeof(KLFHeader);
   result += fwrite((const char *)keyEventTable, sizeof(KeyEvent), nextkey, fp) * sizeof(KeyEvent);
   result += fwrite((const char *)keyTopTable, sizeof(KeyTop), nextsoftkey, fp) * sizeof(KeyTop);
@@ -1090,7 +1097,9 @@ int make_KLX(const char *infile)
   }
   else {
 	/* O.K. */
-	printf("O.K.  : Write\n");
+#ifdef DEBUG_YACC
+	printf("O.K.  : Write done.\n");
+#endif /* DEBUG_YACC */
   }
 
   /* close .klx file */

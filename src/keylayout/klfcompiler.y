@@ -23,16 +23,7 @@ Key getKey_ID(const char *name);
 int getID_Key(Key key);
 
 // platform
-#if defined(PLATFORM_WINDOWS)
- const int this_platform = ID_PLATFORM_WINDOWS;
-#elif defined( PLATFORM_MACOS)
- const int this_platform = ID_PLATFORM_MACOS;
-#elif defined( PLATFORM_LINUX)
- const int this_platform = ID_PLATFORM_LINUX;
-#else
- //#error "NOT support platform!"
- const int this_platform = ID_PLATFORM_WINDOWS; // for TEST
-#endif
+const int this_platform = THIS_PLATFORM;
 
 // ENVVAR
 #define ID_ENVVAR_NAME			0

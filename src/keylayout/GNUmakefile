@@ -1,10 +1,10 @@
 CC = gcc
 CFLAGS = -O3 -MMD
 INCLUDES = -I. -I..
-DEFINES =
+DEFINES = -DPLATFORM_WINDOWS
 CFLAGS += $(INCLUDES) $(DEFINES)
 
-TARGET = klfcompiler
+TARGET = klfc
 
 OBJPATH = obj/
 OBJS = \

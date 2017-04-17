@@ -842,9 +842,12 @@ line:	'\n'
 	case ID_ENVVAR_AUTHOR:
 	  strncpy(header.author, $3, 64-1);
 	  break;
+	case ID_ENVVAR_SPECVERSION:
+	  printf("error : ENVVAR(%s) is number. \n", $1);
+	  break;
 	default:
 	  // error
-	  printf("error : Illegal ENVVAR(%s)\n", $1);
+	  printf("error : Unknown ENVVAR(%s)\n", $1);
 	  break;
 	}
   }
@@ -862,12 +865,16 @@ line:	'\n'
 	/* set */
 	int envvar = getENVVAR_ID((const char*)$1);
 	switch(envvar){
+	case ID_ENVVAR_NAME:
+	case ID_ENVVAR_AUTHOR:
+	  printf("error : ENVVAR(%s) is quoted string. \n", $1);
+	  break;
 	case ID_ENVVAR_SPECVERSION:
 	  header.spec = $3;
 	  break;
 	default:
 	  // error
-	  printf("error : Illegal ENVVAR(%s)\n", $1);
+	  printf("error : Unknown ENVVAR(%s)\n", $1);
 	  break;
 	}
   }
@@ -901,8 +908,8 @@ line:	'\n'
 	  nextkey++;
 	}
 	else {
-	  // error : too many key event
-	  printf("error : too many key event in [Keys]\n");
+	  // error : too many key event entry
+	  printf("error : too many key event entry in [Keys]\n");
 	}
   }
 }
@@ -963,8 +970,8 @@ line:	'\n'
 	  nextsoftkey++;
 	}
 	else {
-	  // error : too many key top
-	  printf("error : too many key top in [SoftKeys]\n");
+	  // error : too many key top entry
+	  printf("error : too many key top entry in [SoftKeys]\n");
 	}
   }
 }

@@ -30,6 +30,7 @@ clean:
 	@rm -f $(TARGET)
 	@rm -f $(DEPENDS)
 	@rm -f *.klx
+	@rm -f $(OBJPATH)*.obj
 
 yet:
 	@grep -n Yet *.h *.cpp

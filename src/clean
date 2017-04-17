@@ -56,7 +56,7 @@ case $UNAME in
 			rm -f ${APP}.exe
 		fi
 		# clean key layout file compiler
-		pushd keylayout; make clean; rm -f obj/*.obj; popd
+		pushd keylayout; make clean; popd
 		# delete coverity scan directory
 		rm -rf cov-int
 		# delete manual

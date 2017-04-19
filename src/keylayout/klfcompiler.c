@@ -837,7 +837,7 @@ YY_DECL
 
 #line 45 "klfcompiler.l"
   char string_buf[1024];
-  char *string_buf_ptr;
+  char *string_buf_ptr = NULL;
 
 #line 842 "klfcompiler.c"
 

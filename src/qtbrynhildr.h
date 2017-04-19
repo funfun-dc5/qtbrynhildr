@@ -54,6 +54,7 @@
 #include "sound/soundthread.h"
 
 // key layout
+#include "keylayout/keylayoutfilemanager.h"
 #include "keylayout/keylayoutfilereader.h"
 
 // event converter
@@ -661,6 +662,9 @@ private:
 
   // thread for sound
   SoundThread *soundThread;
+
+  // key layout file manager
+  KeyLayoutFileManager *keyLayoutFileManager;
 
   // key layout file reader
   KeyLayoutFileReader *keyLayoutFileReader;

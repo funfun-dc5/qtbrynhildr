@@ -157,6 +157,7 @@ if [ "$1" = "clean" -o "$2" = "clean" ] ; then
 		CYGWIN*)
 			# clean
 			\rm -rf ${DISTDIR}/bin
+			\rm -rf ${DISTDIR}/doc
 			\rm -rf ${DISTDIR}/${ISS}
 			;;
 		Linux)
@@ -264,15 +265,13 @@ case $UNAME in
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin
-			# copy key layout file
-			echo "copy key layout file..."
-			mkdir -p ${DISTDIR}/bin/keylayout
-			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
 			# install key layout file compiler
 			echo "install klfcompiler..."
 			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
-			# for TEST
-			${INSTALL} ${INSTALLFLAGS} keylayout/test/*.klx ${DISTDIR}/bin/keylayout
+			# copy key layout file sample
+			echo "copy key layout file sample..."
+			mkdir -p ${DISTDIR}/doc/sample/keylayout
+			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/doc/sample/keylayout
 			# copy manual file
 			pushd ../doc/manual
 			make html
@@ -282,9 +281,10 @@ case $UNAME in
 			echo "create .iss file"
 			pushd ../dist
 			cd windows
-			find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss_bin.awk > tmp_bin.iss
+			find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss.awk > tmp_bin.iss
+			find doc/sample -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss.awk >> tmp_bin.iss
 			cd ..
-			find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss.awk > tmp.iss
+			find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss_manual.awk > tmp.iss
 			cat windows/${ISS}.template | sed -f script/buildtool${1}.sed > new_template.iss
 			cat new_template.iss windows/tmp_bin.iss tmp.iss > windows/${ISS}
 			rm -f windows/tmp_bin.iss tmp.iss new_template.iss
@@ -309,12 +309,13 @@ case $UNAME in
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
-			# copy key layout file
-			mkdir -p ${DISTDIR}/bin/keylayout
-			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
 			# install key layout file compiler
 			echo "install klfcompiler..."
 			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
+			# copy key layout file sample
+			echo "copy key layout file sample..."
+			mkdir -p ${DISTDIR}/doc/sample/keylayout
+			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/doc/sample/keylayout
 			# copy document file
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -350,13 +351,13 @@ case $UNAME in
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
-		# copy key layout file
-		mkdir -p ${DISTDIR}/bin/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
 		# install key layout file compiler
-		echo "make klfcompiler..."
 		echo "install klfcompiler..."
 		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
+		# copy key layout file sample
+		echo "copy key layout file sample..."
+		mkdir -p ${DISTDIR}/doc/sample/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/doc/sample/keylayout
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -392,13 +393,13 @@ case $UNAME in
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
-		# copy key layout file
-		mkdir -p ${DISTDIR}/bin/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout
 		# install key layout file compiler
-		echo "make klfcompiler..."
 		echo "install klfcompiler..."
 		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
+		# copy key layout file sample
+		echo "copy key layout file sample..."
+		mkdir -p ${DISTDIR}/doc/sample/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/doc/sample/keylayout
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
@@ -427,12 +428,13 @@ case $UNAME in
 		fi
 		# strip
 		strip ${APP}.app/Contents/MacOS/${APP}
-		# copy key layout file
-		mkdir -p ${APP}.app/Contents/MacOS/keylayout
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl keylayout
 		# install key layout file compiler
 		echo "install klfcompiler..."
 		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${APP}.app/Contents/MacOS/
+		# copy key layout file sample
+		echo "copy key layout file sample..."
+		mkdir -p ${APP}.app/Contents/MacOS/keylayout
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${APP}.app/Contents/MacOS/keylayout
 		VERSION=`${APP}.app/Contents/MacOS/${APP} -vv`
 		# make package string
 		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"

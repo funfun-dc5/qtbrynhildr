@@ -696,6 +696,7 @@ outputSoundDataToFile=false
 outputSoundDataToWavFile=false
 outputLog=false
 outputPath=C:\\Users\\funfun\\
+keylayoutPath=C:\\Users\\masaaki\\AppData\\Roaming\\funfun\\keylayout
 logFile=D:\\tmp\\qtbrynhildr.log
 keyboardLogFile=D:\\tmp\\keyboard.log
 desktopCaptureFormat=.jpg

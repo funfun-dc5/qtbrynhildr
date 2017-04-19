@@ -321,9 +321,9 @@ private:
 	{{"0",		"",		(uchar)VK_0			},	{"F10",		(uchar)VK_F10		}},	// ID_KEY_11
 	{{"-",		"=",	(uchar)VK_OEM_MINUS	},	{"F11",		(uchar)VK_F11		}},	// ID_KEY_12
 	{{"^",		"~",	(uchar)VK_OEM_7		},	{"F12",		(uchar)VK_F12		}},	// ID_KEY_13
-	//	{{"\\",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
-	//	{{"￥",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
-	{{"\uffe5",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
+//	{{"\\",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
+//	{{"￥",		"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
+	{{"\uffe5",	"|",	(uchar)VK_OEM_5		},	{"Ins",		(uchar)VK_INSERT	}},	// ID_KEY_14
 	{{"BS",		"BS",	(uchar)VK_BACK		},	{"Del",		(uchar)VK_DELETE	}},	// ID_KEY_15
 
 	{{"Tab",	"Tab",	(uchar)VK_TAB		},	{"Tab",		(uchar)VK_TAB		}},	// ID_KEY_16
@@ -367,8 +367,8 @@ private:
 	{{".",		">",	(uchar)VK_OEM_PERIOD},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_52
 	{{"/",		"?",	(uchar)VK_OEM_2		},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_53
 	{{"\\",		"_",	(uchar)VK_OEM_102	},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_54
-	//	{{"↑",		"↑",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
-	{{"\u2191",		"\u2191",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
+//	{{"↑",		"↑",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
+	{{"\u2191",		"\u2191",	(uchar)VK_UP},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
 	{{"Shift",	"Shift",(uchar)VK_RSHIFT	},	{"Shift",	(uchar)VK_RSHIFT	}},	// ID_KEY_56
 
 	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}},	// ID_KEY_57
@@ -379,12 +379,12 @@ private:
 	{{"Ctrl",	"Ctrl",	(uchar)VK_RCONTROL	},	{"Ctrl",	(uchar)VK_RCONTROL	}},	// ID_KEY_62
 	{{"Alt",	"Alt",	(uchar)VK_RMENU		},	{"Alt",		(uchar)VK_RMENU		}},	// ID_KEY_63
 	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}},	// ID_KEY_64
-	//	{{"←",		"←",	(uchar)VK_LEFT		},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
-	//	{{"↓",		"↓",	(uchar)VK_DOWN		},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
-	//	{{"→",		"→",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
-	{{"\u2190",	"\u2190",	(uchar)VK_LEFT		},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
-	{{"\u2193",	"\u2193",	(uchar)VK_DOWN		},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
-	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
+//	{{"←",		"←",	(uchar)VK_LEFT		},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
+//	{{"↓",		"↓",	(uchar)VK_DOWN		},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
+//	{{"→",		"→",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
+	{{"\u2190",	"\u2190",	(uchar)VK_LEFT	},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
+	{{"\u2193",	"\u2193",	(uchar)VK_DOWN	},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
+	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
   };
 
   // key top table for US
@@ -446,8 +446,8 @@ private:
 	{{".",		">",	(uchar)VK_OEM_PERIOD},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_52
 	{{"\\",		"?",	(uchar)VK_OEM_2		},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_53
 	{{"",		"",		(uchar)VK_NONE_00	},	{"",		(uchar)VK_NONE_00	}},	// ID_KEY_54
-	//	{{"↑",		"↑",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
-	{{"\u2191",		"\u2191",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
+//	{{"↑",		"↑",	(uchar)VK_UP		},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
+	{{"\u2191",		"\u2191",	(uchar)VK_UP},	{"PgU",		(uchar)VK_PRIOR		}},	// ID_KEY_55
 	{{"Shift",	"Shift",(uchar)VK_RSHIFT	},	{"Shift",	(uchar)VK_RSHIFT	}},	// ID_KEY_56
 
 	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}},	// ID_KEY_57
@@ -458,12 +458,12 @@ private:
 	{{"Ctrl",	"Ctrl",	(uchar)VK_RCONTROL	},	{"Ctrl",	(uchar)VK_RCONTROL	}},	// ID_KEY_62
 	{{"Alt",	"Alt",	(uchar)VK_RMENU		},	{"Alt",		(uchar)VK_RMENU		}},	// ID_KEY_63
 	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}},	// ID_KEY_64
-	//	{{"←",		"←",	(uchar)VK_LEFT		},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
-	//	{{"↓",		"↓",	(uchar)VK_DOWN		},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
-	//	{{"→",		"→",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}},	// ID_KEY_67
-	{{"\u2190",	"\u2190",	(uchar)VK_LEFT		},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
-	{{"\u2193",	"\u2193",	(uchar)VK_DOWN		},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
-	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
+//	{{"←",		"←",	(uchar)VK_LEFT		},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
+//	{{"↓",		"↓",	(uchar)VK_DOWN		},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
+//	{{"→",		"→",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}},	// ID_KEY_67
+	{{"\u2190",	"\u2190",	(uchar)VK_LEFT	},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
+	{{"\u2193",	"\u2193",	(uchar)VK_DOWN	},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
+	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
   };
 
   // key layout file

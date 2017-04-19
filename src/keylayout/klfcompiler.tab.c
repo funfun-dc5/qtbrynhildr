@@ -64,6 +64,10 @@
 /* Copy the first part of user declarations.  */
 #line 4 "klfcompiler.y" /* yacc.c:339  */
 
+#ifdef _MSC_VER
+#include "common/msvc.h"
+#endif // _MSC_VER
+
 #include <stdio.h>
 #include <string.h>
 
@@ -856,7 +860,7 @@ KeyEntry keys[KEY_ENTRY_NUM] = {
  KeyTop keyTopTable[MAX_KEY_TOP_NUM];
 
 
-#line 860 "klfcompiler.tab.c" /* yacc.c:339  */
+#line 864 "klfcompiler.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -907,12 +911,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 798 "klfcompiler.y" /* yacc.c:355  */
+#line 802 "klfcompiler.y" /* yacc.c:355  */
 
   char *strp;
   int intval;
 
-#line 916 "klfcompiler.tab.c" /* yacc.c:355  */
+#line 920 "klfcompiler.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -929,7 +933,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 933 "klfcompiler.tab.c" /* yacc.c:358  */
+#line 937 "klfcompiler.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1227,8 +1231,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   814,   814,   815,   818,   819,   825,   855,   882,   916,
-     948
+       0,   818,   818,   819,   822,   823,   829,   859,   886,   920,
+     952
 };
 #endif
 
@@ -2008,18 +2012,18 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 819 "klfcompiler.y" /* yacc.c:1646  */
+#line 823 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("Found Section (Section No. = %d)\n", (yyvsp[0].intval));
 #endif /* DEBUG_YACC */
   section = (yyvsp[0].intval);
 }
-#line 2019 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2023 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 825 "klfcompiler.y" /* yacc.c:1646  */
+#line 829 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("ENVVAR = QSTRING (%s = \"%s\")\n", (yyvsp[-2].strp), (yyvsp[0].strp));
@@ -2050,11 +2054,11 @@ yyreduce:
 	}
   }
 }
-#line 2054 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2058 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 855 "klfcompiler.y" /* yacc.c:1646  */
+#line 859 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("ENVVAR = NUMBER  (%s = %d)\n", (yyvsp[-2].strp), (yyvsp[0].intval));
@@ -2082,11 +2086,11 @@ yyreduce:
 	}
   }
 }
-#line 2086 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2090 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 882 "klfcompiler.y" /* yacc.c:1646  */
+#line 886 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY           : %-25s , %-25s, SHIFTKEY(%d)\n", (yyvsp[-4].strp), (yyvsp[-2].strp), (yyvsp[0].intval));
@@ -2121,11 +2125,11 @@ yyreduce:
 	}
   }
 }
-#line 2125 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2129 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 916 "klfcompiler.y" /* yacc.c:1646  */
+#line 920 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM : %-25s , %-25s, SHIFTKEY(%d), PLATFORM(%d)\n", (yyvsp[-6].strp), (yyvsp[-4].strp), (yyvsp[-2].intval), (yyvsp[0].intval));
@@ -2158,11 +2162,11 @@ yyreduce:
 	}
   }
 }
-#line 2162 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2166 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 948 "klfcompiler.y" /* yacc.c:1646  */
+#line 952 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID : ");
@@ -2193,11 +2197,11 @@ yyreduce:
 	}
   }
 }
-#line 2197 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2201 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2201 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2205 "klfcompiler.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2425,7 +2429,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 980 "klfcompiler.y" /* yacc.c:1906  */
+#line 984 "klfcompiler.y" /* yacc.c:1906  */
 
 
 /* get envvar by name */
@@ -2484,8 +2488,8 @@ int make_KLX(const char *infile, const char *outfile)
 {
   extern FILE *yyin;
   FILE *fp;
-  int total = 0;
-  int result = 0;
+  size_t total = 0;
+  size_t result = 0;
 
   section = -1;
   nextkey = 0;
@@ -2532,7 +2536,7 @@ int make_KLX(const char *infile, const char *outfile)
 
   /* make file header */
   strncpy(header.magic, "KLF", 3);
-  header.size = total;
+  header.size = (int)total;
   header.keynum = nextkey;
   header.softkeynum = nextsoftkey;
 

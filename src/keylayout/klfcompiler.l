@@ -8,6 +8,11 @@
 */
 
 %{
+
+#ifdef _MSC_VER
+#include "common/msvc.h"
+#endif // _MSC_VER
+
 #ifdef __FLEX_LEXER_H
 #include <cstdio>
 #include <cstdlib>

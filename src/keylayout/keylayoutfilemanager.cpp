@@ -8,6 +8,7 @@
 #include <iostream>
 
 // Qt Header
+#include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
 #include <QFileInfoList>
@@ -45,7 +46,21 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 		  cout << "NOT Found : " << qPrintable(filename) << endl << flush;
 		}
 	  }
+
+	  bool needBuild = false;
 	  if (!dir.exists(filename + "x")){
+		needBuild = true;
+	  }
+	  else {
+		// check newer .kl than .klx
+		QFileInfo xFileInfo(fileInfo.absoluteFilePath() + "x");
+		QDateTime lastModifiedTime = fileInfo.lastModified();
+		QDateTime xLastModifiedTime = xFileInfo.lastModified();
+		needBuild = lastModifiedTime > xLastModifiedTime;
+		if (outputLog)
+		  cout << "Found : newer .kl file!" << qPrintable(filename) << endl << flush;
+	  }
+	  if (needBuild){
 		QString inputFile = fileInfo.absoluteFilePath();
 		QString outputFile = fileInfo.absoluteFilePath() + "x";
 		const char* infile = strdup(qPrintable(QDir::toNativeSeparators(inputFile)));

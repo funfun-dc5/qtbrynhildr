@@ -513,7 +513,13 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   }
 
   // for Key Layout File
+#if 1 // for TEST
+  QFileInfo fileInfo(settings->getSettings()->fileName());
+  QString keylayoutDirPath = fileInfo.absolutePath() + QTB_KEYLAYOUT_FILE_PATH;
+  //cout << "keylayout dir : " << qPrintable(keylayoutDirPath) << endl << flush;
+#else
   QString keylayoutDirPath = qApp->applicationDirPath() + QTB_KEYLAYOUT_FILE_PATH;
+#endif
   const char *dirPath = strdup(qPrintable(QDir::toNativeSeparators(keylayoutDirPath)));
 
   // Key Layout File Manager

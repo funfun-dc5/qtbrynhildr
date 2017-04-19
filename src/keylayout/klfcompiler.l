@@ -42,7 +42,7 @@ equal		=
 %%
 
   char string_buf[1024];
-  char *string_buf_ptr;
+  char *string_buf_ptr = NULL;
 
 \"	{
   string_buf_ptr = string_buf;

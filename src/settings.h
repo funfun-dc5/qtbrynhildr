@@ -109,8 +109,8 @@ typedef int KEYBOARD_TYPE;
 #define KEYBOARD_TYPE_KLF		3
 #define KEYBOARD_TYPE_NUM		4
 
-#define STRING_KEYBOARD_TYPE_JP		"JP Keyboard (built-in)"
-#define STRING_KEYBOARD_TYPE_US		"US Keyboard (built-in)"
+#define STRING_KEYBOARD_TYPE_JP		"JP Keyboard"
+#define STRING_KEYBOARD_TYPE_US		"US Keyboard"
 #define STRING_KEYBOARD_TYPE_NATIVE	"Native Keyboard"
 
 #define QTB_KEYBOARDTYPENAME			"keyboardTypeName"

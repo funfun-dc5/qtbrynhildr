@@ -26,7 +26,7 @@ CONFIG += c++11
 
 # for Windows (MinGW, MSVC)
 win32 {
-DEFINES += QWT_DLL
+DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
@@ -45,20 +45,20 @@ CELT_SUPPORT = ON
 
 # for Linux/FreeBSD
 linux-g++-64 | linux-g++ | freebsd-g++ {
-DEFINES += QTB_RECORDER=1
+DEFINES += QTB_RECORDER=1 PLATFORM_LINUX
 CELT_SUPPORT = ON
 }
 
 # for MacOSX
 macx {
-DEFINES += QTB_RECORDER=1
+DEFINES += QTB_RECORDER=1 PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 CELT_SUPPORT = ON
 }
 
 # for Android
 android-g++ {
-DEFINES += QTB_RECORDER=0
+DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
 CELT_SUPPORT = OFF
 # for Android APK
 DISTFILES += \
@@ -92,8 +92,9 @@ DEFINES += QTB_CELT_SUPPORT=0
 }
 
 # for key layout file
-HEADERS += keylayout/keylayoutfile.h keylayout/keylayoutfilereader.h
-SOURCES += keylayout/keylayoutfile.cpp keylayout/keylayoutfilereader.cpp
+HEADERS += keylayout/keylayoutfile.h keylayout/keylayoutfilereader.h keylayout/keylayoutfilemanager.h
+SOURCES += keylayout/keylayoutfile.cpp keylayout/keylayoutfilereader.cpp keylayout/keylayoutfilemanager.cpp
+SOURCES += keylayout/klfcompiler.c keylayout/klfcompiler.tab.c
 
 # Input
 HEADERS += version.h config.h parameters.h

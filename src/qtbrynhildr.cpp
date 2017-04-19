@@ -179,6 +179,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
+  keyLayoutFileManager(0),
   keyLayoutFileReader(0),
   eventConverter(0),
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -511,10 +512,15 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
   }
 
-  // Key Layout File Reader
-  //  QString keylayoutDirPath = QString(".") + QTB_KEYLAYOUT_FILE_PATH; // for TEST
+  // for Key Layout File
   QString keylayoutDirPath = qApp->applicationDirPath() + QTB_KEYLAYOUT_FILE_PATH;
   const char *dirPath = strdup(qPrintable(QDir::toNativeSeparators(keylayoutDirPath)));
+
+  // Key Layout File Manager
+  keyLayoutFileManager = new KeyLayoutFileManager(dirPath);
+
+  // Key Layout File Reader
+  //  QString keylayoutDirPath = QString(".") + QTB_KEYLAYOUT_FILE_PATH; // for TEST
   keyLayoutFileReader = new KeyLayoutFileReader(dirPath);
   connectToServerDialog->addKeyboardTypeList(keyLayoutFileReader->getKeyboardTypeList());
   if (settings->getKeyboardType() == KEYBOARD_TYPE_KLF){
@@ -694,16 +700,22 @@ QtBrynhildr::~QtBrynhildr()
 	soundThread = 0;
   }
 
+  // Event Converter
+  if (eventConverter != 0){
+	delete eventConverter;
+	eventConverter = 0;
+  }
+
   // Key Layout File Reader
   if (keyLayoutFileReader != 0){
 	delete keyLayoutFileReader;
 	keyLayoutFileReader = 0;
   }
 
-  // Event Converter
-  if (eventConverter != 0){
-	delete eventConverter;
-	eventConverter = 0;
+  // Key Layout File Manager
+  if (keyLayoutFileManager != 0){
+	delete keyLayoutFileManager;
+	keyLayoutFileManager = 0;
   }
 
   // close Log File

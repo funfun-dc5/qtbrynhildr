@@ -272,7 +272,7 @@ case $UNAME in
 			echo "install klfcompiler..."
 			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
 			# for TEST
-			${INSTALL} ${INSTALLFLAGS} keylayout/test/*.klx ${DISTDIR}/bin/keylayout
+			#${INSTALL} ${INSTALLFLAGS} keylayout/test/*.klx ${DISTDIR}/bin/keylayout
 			# copy manual file
 			pushd ../doc/manual
 			make html

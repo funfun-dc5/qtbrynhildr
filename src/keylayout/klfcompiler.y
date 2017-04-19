@@ -2,6 +2,10 @@
 // Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
 //
 %{
+#ifdef _MSC_VER
+#include "common/msvc.h"
+#endif // _MSC_VER
+
 #include <stdio.h>
 #include <string.h>
 
@@ -1035,8 +1039,8 @@ int make_KLX(const char *infile, const char *outfile)
 {
   extern FILE *yyin;
   FILE *fp;
-  int total = 0;
-  int result = 0;
+  size_t total = 0;
+  size_t result = 0;
 
   section = -1;
   nextkey = 0;
@@ -1083,7 +1087,7 @@ int make_KLX(const char *infile, const char *outfile)
 
   /* make file header */
   strncpy(header.magic, "KLF", 3);
-  header.size = total;
+  header.size = (int)total;
   header.keynum = nextkey;
   header.softkeynum = nextsoftkey;
 

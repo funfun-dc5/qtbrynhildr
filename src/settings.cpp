@@ -168,6 +168,7 @@ Settings::Settings(const char *iniFileName)
   setOutputKeyboardLog(QTB_OUTPUTKEYBOARDLOG_DEFAULT);
 
   setOutputPath(getDefaultOutputPath());
+  setKeylayoutPath(getDefaultKeylayoutPath());
   setLogFile(getDefaultLogFile());
   setKeyboardLogFile(getDefaultKeyboardLogFile());
 
@@ -469,6 +470,10 @@ void Settings::readSettings()
   setOutputPath(settings->value(QTB_OUTPUTPATH,
 								getDefaultOutputPath()).toString());
 
+  // load keylayout path
+  setKeylayoutPath(settings->value(QTB_KEYLAYOUTPATH,
+								getDefaultKeylayoutPath()).toString());
+
   // load log file
   setLogFile(settings->value(QTB_LOGFILE,
 							 getDefaultLogFile()).toString());
@@ -670,6 +675,9 @@ void Settings::writeSettings()
   // save outputPath
   settings->setValue(QTB_OUTPUTPATH, outputPath);
 
+  // save keylayoutPath
+  settings->setValue(QTB_KEYLAYOUTPATH, keylayoutPath);
+
   // save logFile
   settings->setValue(QTB_LOGFILE, logFile);
 
@@ -783,6 +791,7 @@ void Settings::printSettings() const
   qDebug() << "DBG: output Keyboard Log             : " << outputKeyboardLog;
   qDebug() << "------------------------------------------";
   qDebug() << "Output Path       : " << outputPath;
+  qDebug() << "Keylayout Path    : " << keylayoutPath;
   qDebug() << "Log File          : " << logFile;
   qDebug() << "Keyboard Log File : " << keyboardLogFile;
   qDebug() << "Desktop Capture Format : " << desktopCaptureFormat;
@@ -803,6 +812,13 @@ KEYBOARD_TYPE Settings::getDefaultKeyboardType() const
 QString Settings::getDefaultOutputPath() const
 {
   return QDir::toNativeSeparators(QDir::homePath() + QDir::separator());
+}
+
+// get default keylayout path
+QString Settings::getDefaultKeylayoutPath() const
+{
+  QFileInfo fileInfo(settings->fileName());
+  return QDir::toNativeSeparators(fileInfo.absolutePath() + QTB_KEYLAYOUT_FILE_PATH);
 }
 
 // get Default Log File

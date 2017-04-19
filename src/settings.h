@@ -375,6 +375,9 @@ typedef int SCALING_TYPE;
 // for outputPath
 #define QTB_OUTPUTPATH							"outputPath"
 
+// for keylayoutPath
+#define QTB_KEYLAYOUTPATH						"keylayoutPath"
+
 // for logFile
 #define QTB_LOGFILE								"logFile"
 
@@ -1690,6 +1693,18 @@ public:
 	this->outputPath = outputPath;
   }
 
+  // get keylayout path
+  QString getKeylayoutPath() const
+  {
+	return keylayoutPath;
+  }
+
+  // set keylayout path
+  void setKeylayoutPath(QString keylayoutPath)
+  {
+	this->keylayoutPath = keylayoutPath;
+  }
+
   // get log file
   QString getLogFile() const
   {
@@ -1732,6 +1747,9 @@ private:
 
   // get default output path
   QString getDefaultOutputPath() const;
+
+  // get default keylayout path
+  QString getDefaultKeylayoutPath() const;
 
   // get Default Log File
   QString getDefaultLogFile() const;
@@ -1970,6 +1988,9 @@ private:
 
   // for outputPath
   QString outputPath;
+
+  // for keylayoutPath
+  QString keylayoutPath;
 
   // for logFile
   QString logFile;

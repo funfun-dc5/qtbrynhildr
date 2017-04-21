@@ -787,7 +787,6 @@ KeyEntry keys[KEY_ENTRY_NUM] = {
  /* next soft key index */
  int nextsoftkey;
 
-
  /* Header */
  KLFHeader header;
 
@@ -796,6 +795,9 @@ KeyEntry keys[KEY_ENTRY_NUM] = {
 
  /* table for KeyTop */
  KeyTop keyTopTable[MAX_KEY_TOP_NUM];
+
+ /* error counter */
+ int error_count;
 
 %}
 
@@ -834,6 +836,7 @@ line:	'\n'
   /* section check */
   if (section != ID_SECTION_GENERAL){
 	// error : NOT in [General]
+	error_count++;
 	printf("error : NOT in [General]\n");
   }
   else {
@@ -847,10 +850,12 @@ line:	'\n'
 	  strncpy(header.author, $3, 64-1);
 	  break;
 	case ID_ENVVAR_SPECVERSION:
+	  error_count++;
 	  printf("error : ENVVAR(%s) is number. \n", $1);
 	  break;
 	default:
 	  // error
+	  error_count++;
 	  printf("error : Unknown ENVVAR(%s)\n", $1);
 	  break;
 	}
@@ -863,6 +868,7 @@ line:	'\n'
   /* section check */
   if (section != ID_SECTION_GENERAL){
 	// error : NOT in [Keys]
+	error_count++;
 	printf("error : NOT in [General]\n");
   }
   else {
@@ -871,6 +877,8 @@ line:	'\n'
 	switch(envvar){
 	case ID_ENVVAR_NAME:
 	case ID_ENVVAR_AUTHOR:
+	  // error
+	  error_count++;
 	  printf("error : ENVVAR(%s) is quoted string. \n", $1);
 	  break;
 	case ID_ENVVAR_SPECVERSION:
@@ -878,6 +886,7 @@ line:	'\n'
 	  break;
 	default:
 	  // error
+	  error_count++;
 	  printf("error : Unknown ENVVAR(%s)\n", $1);
 	  break;
 	}
@@ -893,6 +902,7 @@ line:	'\n'
   /* section check */
   if (section != ID_SECTION_KEYS){
 	// error : NOT in [Keys]
+	error_count++;
 	printf("error : NOT in [Keys]\n");
   }
   else {
@@ -904,12 +914,14 @@ line:	'\n'
 	  ShiftKeyControl shiftKeyControl = $5;
 
 	  /* check */
-	  if (key == -1){
+	  if (key == (Key)-1){
 		// Unknown Key
+		error_count++;
 		printf("error : Unknown Key : %s\n", $1);
 	  }
 	  if (VK_Code == -1){
 		// Unknown VK Code
+		error_count++;
 		printf("error : Unknown VK Code : %s\n", $3);
 	  }
 
@@ -922,6 +934,7 @@ line:	'\n'
 	}
 	else {
 	  // error : too many key event entry
+	  error_count++;
 	  printf("error : too many key event entry in [Keys]\n");
 	}
   }
@@ -936,6 +949,7 @@ line:	'\n'
   /* section check */
   if (section != ID_SECTION_KEYS){
 	// error : NOT in [Keys]
+	error_count++;
 	printf("error : NOT in [Keys]\n");
   }
   else {
@@ -957,6 +971,7 @@ line:	'\n'
 	  }
 	  else {
 		// Not Found Key for overwrite
+		error_count++;
 		printf("error : Not Found Key : %s\n", $1);
 	  }
 	}
@@ -971,6 +986,7 @@ line:	'\n'
   /* section check */
   if (section != ID_SECTION_SOFTKEYS){
 	// error : NOT in [SoftKeys]
+	error_count++;
 	printf("error : NOT in [SoftKeys]\n");
   }
   else {
@@ -984,23 +1000,28 @@ line:	'\n'
 	  if (strlen($3) > MAX_KEYTOP_STRING){
 		// too long string
 		printf("error : too long string : %s\n", $3);
+		error_count++;
 	  }
 	  if (strlen($5) > MAX_KEYTOP_STRING){
 		// too long string
+		error_count++;
 		printf("error : too long string : %s\n", $5);
 	  }
 	  VK_Code = getVK_ID($7);
 	  if (VK_Code == -1){
 		// Unknown VK Code
+		error_count++;
 		printf("error : Unknown VK Code : %s\n", $7);
 	  }
 	  if (strlen($9) > MAX_KEYTOP_STRING){
 		// too long string
+		error_count++;
 		printf("error : too long string : %s\n", $9);
 	  }
 	  VK_Code = getVK_ID($11);
 	  if (VK_Code == -1){
 		// Unknown VK Code
+		error_count++;
 		printf("error : Unknown VK Code : %s\n", $11);
 	  }
 
@@ -1015,10 +1036,12 @@ line:	'\n'
 	}
 	else {
 	  // error : too many key top entry
+	  error_count++;
 	  printf("error : too many key top entry in [SoftKeys]\n");
 	}
   }
 }
+error '\n'
 ;
 
 %%
@@ -1085,6 +1108,7 @@ int make_KLX(const char *infile, const char *outfile)
   section = -1;
   nextkey = 0;
   nextsoftkey = 0;
+  error_count = 0;
 
   // zero clear of header, tables
   memset(&header, 0, sizeof(header));
@@ -1096,7 +1120,7 @@ int make_KLX(const char *infile, const char *outfile)
 	yyin = fopen(infile, "r");
 	if (yyin == NULL){
 	  // open failed
-	  return 1;
+	  return -1;
 	}
   }
 
@@ -1135,7 +1159,7 @@ int make_KLX(const char *infile, const char *outfile)
   fp = fopen(outfile, "wb");
   if (fp == NULL){
 	// error
-	return 1;
+	return -1;
   }
 
   /* write .klx file */
@@ -1143,19 +1167,20 @@ int make_KLX(const char *infile, const char *outfile)
   result += fwrite((const char *)keyEventTable, sizeof(KeyEvent), nextkey, fp) * sizeof(KeyEvent);
   result += fwrite((const char *)keyTopTable, sizeof(KeyTop), nextsoftkey, fp) * sizeof(KeyTop);
 
+  /* close .klx file */
+  fclose(fp);
+
   if (result != total){
 	/* error : write error */
 	printf("error : Write error.\n");
+	return -1;
   }
   else {
 	/* O.K. */
 	/* printf("output : %s\n", outfile); */
   }
 
-  /* close .klx file */
-  fclose(fp);
-
-  return 0;
+  return error_count;
 }
 
 void yyerror(char *msg)

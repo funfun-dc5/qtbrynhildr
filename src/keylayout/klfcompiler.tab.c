@@ -78,7 +78,7 @@
 #include "windows/keyevent.h"
 
 extern int yylex();
-void yyerror(char *s);
+void yyerror(char *msg);
 
 int getENVVAR_ID(const char *name);
 int getVK_ID(const char *name);
@@ -1231,8 +1231,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   818,   818,   819,   822,   823,   829,   859,   886,   920,
-     952
+       0,   818,   818,   819,   822,   823,   829,   859,   886,   929,
+     965
 };
 #endif
 
@@ -2111,8 +2111,17 @@ yyreduce:
 	  int VK_Code = getVK_ID((const char*)(yyvsp[-2].strp));
 	  ShiftKeyControl shiftKeyControl = (yyvsp[0].intval);
 
-	  /* Yet: check */
+	  /* check */
+	  if (key == -1){
+		// Unknown Key
+		printf("error : Unknown Key : %s\n", (yyvsp[-4].strp));
+	  }
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		printf("error : Unknown VK Code : %s\n", (yyvsp[-2].strp));
+	  }
 
+	  // set KeyEvent
 	  keyEventTable[nextkey].key = key;
 	  keyEventTable[nextkey].VK_Code = VK_Code;
 	  keyEventTable[nextkey].shiftKeyControl = shiftKeyControl;
@@ -2125,11 +2134,11 @@ yyreduce:
 	}
   }
 }
-#line 2129 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2138 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 920 "klfcompiler.y" /* yacc.c:1646  */
+#line 929 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM : %-25s , %-25s, SHIFTKEY(%d), PLATFORM(%d)\n", (yyvsp[-6].strp), (yyvsp[-4].strp), (yyvsp[-2].intval), (yyvsp[0].intval));
@@ -2159,14 +2168,18 @@ yyreduce:
 		keyEventTable[index].VK_Code = VK_Code;
 		keyEventTable[index].shiftKeyControl = shiftKeyControl;
 	  }
+	  else {
+		// Not Found Key for overwrite
+		printf("error : Not Found Key : %s\n", (yyvsp[-6].strp));
+	  }
 	}
   }
 }
-#line 2166 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2179 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 952 "klfcompiler.y" /* yacc.c:1646  */
+#line 965 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID : ");
@@ -2180,13 +2193,40 @@ yyreduce:
   }
   else {
 	if (nextsoftkey < MAX_KEY_TOP_NUM){
+	  int VK_Code;
+
 	  /* set keTopTable[$1-1] */
 	  KeyTop *keyTop = &keyTopTable[(yyvsp[-10].intval)-1];
 
-	  strncpy(keyTop->keyTop.keyTop, (yyvsp[-8].strp), 10);
-	  strncpy(keyTop->keyTop.keyTopWithShift, (yyvsp[-6].strp), 10);
+	  /* check */
+	  if (strlen((yyvsp[-8].strp)) > MAX_KEYTOP_STRING){
+		// too long string
+		printf("error : too long string : %s\n", (yyvsp[-8].strp));
+	  }
+	  if (strlen((yyvsp[-6].strp)) > MAX_KEYTOP_STRING){
+		// too long string
+		printf("error : too long string : %s\n", (yyvsp[-6].strp));
+	  }
+	  VK_Code = getVK_ID((yyvsp[-4].strp));
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		printf("error : Unknown VK Code : %s\n", (yyvsp[-4].strp));
+	  }
+	  if (strlen((yyvsp[-2].strp)) > MAX_KEYTOP_STRING){
+		// too long string
+		printf("error : too long string : %s\n", (yyvsp[-2].strp));
+	  }
+	  VK_Code = getVK_ID((yyvsp[0].strp));
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		printf("error : Unknown VK Code : %s\n", (yyvsp[0].strp));
+	  }
+
+	  // set KeyTop
+	  strncpy(keyTop->keyTop.keyTop, (yyvsp[-8].strp), MAX_KEYTOP_STRING);
+	  strncpy(keyTop->keyTop.keyTopWithShift, (yyvsp[-6].strp), MAX_KEYTOP_STRING);
 	  keyTop->keyTop.VK_Code = getVK_ID((yyvsp[-4].strp));
-	  strncpy(keyTop->keyTopWithFn.keyTop, (yyvsp[-2].strp), 10);
+	  strncpy(keyTop->keyTopWithFn.keyTop, (yyvsp[-2].strp), MAX_KEYTOP_STRING);
 	  keyTop->keyTopWithFn.VK_Code = getVK_ID((yyvsp[0].strp));
 
 	  nextsoftkey++;
@@ -2197,11 +2237,11 @@ yyreduce:
 	}
   }
 }
-#line 2201 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2241 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2205 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2245 "klfcompiler.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2429,7 +2469,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 984 "klfcompiler.y" /* yacc.c:1906  */
+#line 1024 "klfcompiler.y" /* yacc.c:1906  */
 
 
 /* get envvar by name */
@@ -2567,7 +2607,7 @@ int make_KLX(const char *infile, const char *outfile)
   return 0;
 }
 
-void yyerror(char *s)
+void yyerror(char *msg)
 {
-  printf("%s\n", s);
+  printf("%d : %s\n", lineno, msg);
 }

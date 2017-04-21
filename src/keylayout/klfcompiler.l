@@ -28,6 +28,9 @@
 
 #include "keylayoutfile.h"
 
+
+int lineno = 1;
+
 %}
 
 ws			[ \t]+
@@ -60,6 +63,9 @@ equal		=
 #ifdef DEBUG_LEX
   printf("qstring  = \"%s\"\n", string_buf);
 #endif /* DEBUG_LEX */
+  if (strlen(string_buf) > MAX_STRING){
+	printf("error : qstring > %d \n", MAX_STRING);
+  }
   yylval.strp = strdup(string_buf);
   return QSTRING;
 }
@@ -83,6 +89,7 @@ equal		=
 #endif /* DEBUG_LEX */
 }
 {nl}		{
+  lineno++;
   return '\n';
 }
 {comma}		{
@@ -117,6 +124,9 @@ equal		=
 #ifdef DEBUG_LEX
   printf("key_id   = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  if (strlen(yytext) > MAX_STRING){
+	printf("error : Key_* > %d \n", MAX_STRING);
+  }
   yylval.strp = strdup(yytext);
   return KEY_ID;
 }
@@ -124,6 +134,9 @@ equal		=
 #ifdef DEBUG_LEX
   printf("vk_id    = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  if (strlen(yytext) > MAX_STRING){
+	printf("error : VK_* > %d \n", MAX_STRING);
+  }
   yylval.strp = strdup(yytext);
   return VK_ID;
 }
@@ -170,6 +183,9 @@ Linux {
 #ifdef DEBUG_LEX
   printf("string   = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  if (strlen(yytext) > MAX_STRING){
+	printf("error : string > %d \n", MAX_STRING);
+  }
   yylval.strp = strdup(yytext);
   return STRING;
 }

@@ -16,7 +16,7 @@
 #include "windows/keyevent.h"
 
 extern int yylex();
-void yyerror(char *s);
+void yyerror(char *msg);
 
 int getENVVAR_ID(const char *name);
 int getVK_ID(const char *name);
@@ -903,8 +903,17 @@ line:	'\n'
 	  int VK_Code = getVK_ID((const char*)$3);
 	  ShiftKeyControl shiftKeyControl = $5;
 
-	  /* Yet: check */
+	  /* check */
+	  if (key == -1){
+		// Unknown Key
+		printf("error : Unknown Key : %s\n", $1);
+	  }
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		printf("error : Unknown VK Code : %s\n", $3);
+	  }
 
+	  // set KeyEvent
 	  keyEventTable[nextkey].key = key;
 	  keyEventTable[nextkey].VK_Code = VK_Code;
 	  keyEventTable[nextkey].shiftKeyControl = shiftKeyControl;
@@ -946,6 +955,10 @@ line:	'\n'
 		keyEventTable[index].VK_Code = VK_Code;
 		keyEventTable[index].shiftKeyControl = shiftKeyControl;
 	  }
+	  else {
+		// Not Found Key for overwrite
+		printf("error : Not Found Key : %s\n", $1);
+	  }
 	}
   }
 }
@@ -962,13 +975,40 @@ line:	'\n'
   }
   else {
 	if (nextsoftkey < MAX_KEY_TOP_NUM){
+	  int VK_Code;
+
 	  /* set keTopTable[$1-1] */
 	  KeyTop *keyTop = &keyTopTable[$1-1];
 
-	  strncpy(keyTop->keyTop.keyTop, $3, 10);
-	  strncpy(keyTop->keyTop.keyTopWithShift, $5, 10);
+	  /* check */
+	  if (strlen($3) > MAX_KEYTOP_STRING){
+		// too long string
+		printf("error : too long string : %s\n", $3);
+	  }
+	  if (strlen($5) > MAX_KEYTOP_STRING){
+		// too long string
+		printf("error : too long string : %s\n", $5);
+	  }
+	  VK_Code = getVK_ID($7);
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		printf("error : Unknown VK Code : %s\n", $7);
+	  }
+	  if (strlen($9) > MAX_KEYTOP_STRING){
+		// too long string
+		printf("error : too long string : %s\n", $9);
+	  }
+	  VK_Code = getVK_ID($11);
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		printf("error : Unknown VK Code : %s\n", $11);
+	  }
+
+	  // set KeyTop
+	  strncpy(keyTop->keyTop.keyTop, $3, MAX_KEYTOP_STRING);
+	  strncpy(keyTop->keyTop.keyTopWithShift, $5, MAX_KEYTOP_STRING);
 	  keyTop->keyTop.VK_Code = getVK_ID($7);
-	  strncpy(keyTop->keyTopWithFn.keyTop, $9, 10);
+	  strncpy(keyTop->keyTopWithFn.keyTop, $9, MAX_KEYTOP_STRING);
 	  keyTop->keyTopWithFn.VK_Code = getVK_ID($11);
 
 	  nextsoftkey++;
@@ -1118,7 +1158,7 @@ int make_KLX(const char *infile, const char *outfile)
   return 0;
 }
 
-void yyerror(char *s)
+void yyerror(char *msg)
 {
-  printf("%s\n", s);
+  printf("%d : %s\n", lineno, msg);
 }

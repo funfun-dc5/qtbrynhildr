@@ -14,7 +14,9 @@
 #include <QPen>
 
 // Local Header
+#ifdef USE_KEYLAYOUTFILE
 #include "keylayout/keylayoutfile.h"
+#endif // USE_KEYLAYOUTFILE
 #include "software_keyboard.h"
 
 using namespace std; // for TEST
@@ -35,7 +37,9 @@ SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
 SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *parent)
   :
   QWidget(parent),
+#ifdef USE_KEYLAYOUTFILE
   klf(0),
+#endif // USE_KEYLAYOUTFILE
   type(type),
   onShiftKey(false),
   onControlKey(false),
@@ -78,12 +82,14 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 #endif // for TEST
 }
 
+#ifdef USE_KEYLAYOUTFILE
 SoftwareKeyboard::SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent)
   :
   SoftwareKeyboard(KEYTOP_TYPE_KLF, parent)
 {
   setKeytopType(klf);
 }
+#endif // USE_KEYLAYOUTFILE
 
 // get keytop type
 SoftwareKeyboard::KEYTOP_TYPE SoftwareKeyboard::getKeytopType()
@@ -101,9 +107,11 @@ QString SoftwareKeyboard::getKeytopTypeName()
   case KEYTOP_TYPE_US:
 	return QString("US");
 	break;
+#ifdef USE_KEYLAYOUTFILE
   case KEYTOP_TYPE_KLF:
 	return QString(klf->name);
 	break;
+#endif // USE_KEYLAYOUTFILE
   default:
 	return QString("Unknown");
 	break;
@@ -119,11 +127,13 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
   case KEYTOP_TYPE_US:
 	keyTopTable = keyTopTable_US;
 	break;
+#ifdef USE_KEYLAYOUTFILE
   case KEYTOP_TYPE_KLF:
 	// set type only
 	this->type = type;
 	return;
 	break;
+#endif // USE_KEYLAYOUTFILE
   default:
 	// No Change
 	return;
@@ -135,6 +145,7 @@ void SoftwareKeyboard::setKeytopType(KEYTOP_TYPE type){
   update();
 }
 
+#ifdef USE_KEYLAYOUTFILE
 // set keytop type by key layout file
 void SoftwareKeyboard::setKeytopType(KeyLayoutFile *klf)
 {
@@ -147,6 +158,7 @@ void SoftwareKeyboard::setKeytopType(KeyLayoutFile *klf)
 
   update();
 }
+#endif // USE_KEYLAYOUTFILE
 
 // reset size
 QSize SoftwareKeyboard::resetSize()
@@ -513,14 +525,23 @@ uchar SoftwareKeyboard::pressedFnKey(ID_KEY id)
 }
 
 // get name of virtual keycode
-string SoftwareKeyboard::getVKCodeByString(uchar vkcode) const
+string SoftwareKeyboard::getVKCodeByString(uchar vkcode)
 {
   return stringTableOfVKCode[(int)vkcode];
 }
 
+// for DEBUG
+#if QTB_DEBUG
 // print KeyTop
 void SoftwareKeyboard::printKeyTop(KeyTop *keyTop)
 {
+  cout << "keyTop.keyTop          : " << keyTop->keyTop.keyTop << endl;
+  cout << "keyTop.keyTopWithShift : " << keyTop->keyTop.keyTopWithShift << endl;
+  cout << "keyTop.VK_Code         : " << getVKCodeByString(keyTop->keyTop.VK_Code) << endl << endl;
+
+  cout << "keyTopWithFn.keyTop    : " << keyTop->keyTopWithFn.keyTop << endl;
+  cout << "keyTopWithFn.VK_Code   : " << keyTop->keyTopWithFn.VK_Code << endl << flush;
 }
+#endif // QTB_DEBUG
 
 } // end of namespace qtbrynhildr

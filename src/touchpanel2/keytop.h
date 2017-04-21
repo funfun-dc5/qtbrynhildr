@@ -22,14 +22,15 @@ typedef unsigned char uchar;
 #endif // __cplusplus
 
   // key top information
+#define MAX_KEYTOP_STRING 9
   typedef struct {
 	struct {
-	  char keyTop[10];
-	  char keyTopWithShift[10];
+	  char keyTop[MAX_KEYTOP_STRING+1];
+	  char keyTopWithShift[MAX_KEYTOP_STRING+1];
 	  uchar VK_Code;
 	} keyTop;
 	struct {
-	  char keyTop[10];
+	  char keyTop[MAX_KEYTOP_STRING+1];
 	  uchar VK_Code;
 	} keyTopWithFn;
   } KeyTop;

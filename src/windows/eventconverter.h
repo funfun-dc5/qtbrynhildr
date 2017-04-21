@@ -62,8 +62,10 @@ public:
   static QString getVKCodeByString(uchar vkcode);
 
 private:
+#if QTB_DEBUG
   // print KeyEvent
   static void printKeyEvent(KeyEvent *keyEvent);
+#endif // QTB_DEBUG
 
 private:
   // key table size

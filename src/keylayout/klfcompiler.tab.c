@@ -2564,7 +2564,7 @@ int make_KLX(const char *infile, const char *outfile)
   printf("==== RESULT ====\n");
   printf("keynum     = %d\n", nextkey);
   printf("softkeynum = %d\n", nextsoftkey);
-  printf("total size = %d\n", total);
+  printf("total size = %d\n", (int)total);
 #endif /* DEBUG_YACC */
 
   /* close .kl file */

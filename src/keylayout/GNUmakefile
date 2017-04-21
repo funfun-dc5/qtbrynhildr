@@ -39,7 +39,7 @@ $(OBJPATH)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 
-klfcompiler.c: klfcompiler.l klfcompiler.tab.h
+klfcompiler.c: klfcompiler.l
 	flex -o $@ klfcompiler.l
 
 klfcompiler.tab.h: klfcompiler.y

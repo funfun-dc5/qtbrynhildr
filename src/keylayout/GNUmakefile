@@ -11,7 +11,7 @@ TARGET = klfc
 OBJPATH = obj/
 OBJS = \
 	$(OBJPATH)main.o \
-	$(OBJPATH)klfcompiler.o \
+	$(OBJPATH)klfcompiler_lex.o \
 	$(OBJPATH)klfcompiler.tab.o
 
 DEPENDS	= $(subst .o,.d,$(OBJS))
@@ -25,7 +25,7 @@ $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 clean:
-#	@rm -f klfcompiler.c klfcompiler.tab.h klfcompiler.tab.c
+#	@rm -f klfcompiler_lex.c klfcompiler.tab.h klfcompiler.tab.c
 	@rm -f $(OBJS)
 	@rm -f $(TARGET)
 	@rm -f $(DEPENDS)
@@ -39,7 +39,7 @@ $(OBJPATH)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 
-klfcompiler.c: klfcompiler.l
+klfcompiler_lex.c: klfcompiler.l
 	flex -o $@ klfcompiler.l
 
 klfcompiler.tab.h: klfcompiler.y

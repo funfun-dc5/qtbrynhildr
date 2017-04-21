@@ -10,11 +10,15 @@
 // Local Header
 #include "klfcompiler.h"
 
+// string for platform
 char *platform[ID_PLATFORM_NUM] = {
   "Windows",
   "Linux",
   "macOS"
 };
+
+// version
+const char *version = "0.0.2";
 
 // for TEST
 int main(int argc, char *argv[])
@@ -24,7 +28,7 @@ int main(int argc, char *argv[])
   char outfile[4096];
 
   /* openning message */
-  printf("Key Layout File Compiler (KLFC) Ver.0.0.1\n");
+  printf("Key Layout File Compiler (KLFC) Ver.%s\n", version);
   printf("Platform: %s\n", platform[THIS_PLATFORM]);
 
   if (argc == 2){

@@ -98,7 +98,7 @@ DEFINES += QTB_CELT_SUPPORT=0
 HEADERS += keylayout/keylayoutfile.h keylayout/keylayoutfilereader.h keylayout/keylayoutfilemanager.h
 SOURCES += keylayout/keylayoutfile.cpp keylayout/keylayoutfilereader.cpp keylayout/keylayoutfilemanager.cpp
 HEADERS += keylayout/klfcompiler.h keylayout/klfcompiler.tab.h
-SOURCES += keylayout/klfcompiler.c keylayout/klfcompiler.tab.c
+SOURCES += keylayout/klfcompiler_lex.c keylayout/klfcompiler.tab.c
 DEFINES += USE_KEYLAYOUTFILE YY_NO_UNPUT YY_NO_INPUT
 
 # Input

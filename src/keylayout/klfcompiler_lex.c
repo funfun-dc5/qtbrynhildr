@@ -1,6 +1,6 @@
-#line 1 "klfcompiler.c"
+#line 1 "klfcompiler_lex.c"
 
-#line 3 "klfcompiler.c"
+#line 3 "klfcompiler_lex.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -620,9 +620,9 @@ char *yytext;
 
 int lineno = 1;
 
-#line 623 "klfcompiler.c"
+#line 623 "klfcompiler_lex.c"
 
-#line 625 "klfcompiler.c"
+#line 625 "klfcompiler_lex.c"
 
 #define INITIAL 0
 #define qstring 1
@@ -847,7 +847,7 @@ YY_DECL
   char string_buf[1024];
   char *string_buf_ptr = NULL;
 
-#line 850 "klfcompiler.c"
+#line 850 "klfcompiler_lex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1138,7 +1138,7 @@ YY_RULE_SETUP
 #line 201 "klfcompiler.l"
 ECHO;
 	YY_BREAK
-#line 1141 "klfcompiler.c"
+#line 1141 "klfcompiler_lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(qstring):
 	yyterminate();

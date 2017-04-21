@@ -1182,11 +1182,11 @@ union yyalloc
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  14
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  4
+#define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  11
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  31
+#define YYNSTATES  30
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -1234,7 +1234,7 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   820,   820,   821,   824,   825,   831,   864,   895,   942,
-     980,   980
+     980,  1044
 };
 #endif
 
@@ -1245,7 +1245,7 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "STRING", "QSTRING", "NUMBER", "SECTION",
   "KEY_ID", "VK_ID", "SHIFTKEY", "PLATFORM", "'\\n'", "'='", "','",
-  "$accept", "input", "line", "$@1", YY_NULLPTR
+  "$accept", "input", "line", YY_NULLPTR
 };
 #endif
 
@@ -1259,10 +1259,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -9
+#define YYPACT_NINF -10
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-9)))
+  (!!((Yystate) == (-10)))
 
 #define YYTABLE_NINF -1
 
@@ -1273,10 +1273,9 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -9,     0,    -9,    -8,    -5,    -9,    -4,    -9,    -9,    -3,
-       6,     4,    -9,    -9,     1,     2,     9,     7,     5,     8,
-      11,    10,    12,    -9,    13,    14,    15,    -9,    21,    17,
-      -9
+     -10,     0,   -10,    -9,    -8,    -3,   -10,    -1,   -10,   -10,
+     -10,     4,     9,     6,   -10,   -10,     2,     3,    13,    10,
+       5,     7,    14,    11,    12,   -10,    19,    15,    16,   -10
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -1284,22 +1283,21 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     5,     0,     4,     3,     0,
-       0,     0,     6,     7,     0,     0,     0,     0,     0,     8,
-       0,     0,     0,     9,     0,     0,     0,    10,     0,     0,
-      11
+       2,     0,     1,     0,     0,     0,     5,     0,     4,     3,
+      11,     0,     0,     0,     6,     7,     0,     0,     0,     0,
+       0,     8,     0,     0,     0,     9,     0,     0,     0,    10
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,    -9,    -9
+     -10,   -10,   -10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     8,    28
+      -1,     1,     9
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -1307,40 +1305,39 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,    12,    13,     3,     9,     4,     5,     6,    10,    11,
-      14,     7,    15,    18,    16,    17,    19,    25,    20,    22,
-      23,    21,    29,    27,     0,    24,     0,    26,    30
+       2,     3,    10,     4,    11,     5,     6,     7,    14,    15,
+      12,     8,    13,    16,    17,    18,    19,    20,    22,    21,
+      23,    25,    24,    27,    29,    26,     0,     0,    28
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     4,     5,     3,    12,     5,     6,     7,    13,    13,
-       4,    11,     8,     4,    13,    13,     9,     4,    13,     8,
-      10,    13,     1,     8,    -1,    13,    -1,    13,    11
+       0,     1,    11,     3,    12,     5,     6,     7,     4,     5,
+      13,    11,    13,     4,     8,    13,    13,     4,    13,     9,
+      13,    10,     8,     4,     8,    13,    -1,    -1,    13
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    15,     0,     3,     5,     6,     7,    11,    16,    12,
-      13,    13,     4,     5,     4,     8,    13,    13,     4,     9,
-      13,    13,     8,    10,    13,     4,    13,     8,    17,     1,
-      11
+       0,    15,     0,     1,     3,     5,     6,     7,    11,    16,
+      11,    12,    13,    13,     4,     5,     4,     8,    13,    13,
+       4,     9,    13,    13,     8,    10,    13,     4,    13,     8
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    14,    15,    15,    16,    16,    16,    16,    16,    16,
-      17,    16
+      16,    16
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     1,     1,     3,     3,     5,     7,
-       0,    14
+      11,     2
 };
 
 
@@ -2024,7 +2021,7 @@ yyreduce:
 #endif /* DEBUG_YACC */
   section = (yyvsp[0].intval);
 }
-#line 2028 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2025 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
@@ -2062,7 +2059,7 @@ yyreduce:
 	}
   }
 }
-#line 2066 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2063 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
@@ -2098,7 +2095,7 @@ yyreduce:
 	}
   }
 }
-#line 2102 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2099 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
@@ -2150,7 +2147,7 @@ yyreduce:
 	}
   }
 }
-#line 2154 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2151 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
@@ -2193,7 +2190,7 @@ yyreduce:
 	}
   }
 }
-#line 2197 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2194 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -2262,11 +2259,20 @@ yyreduce:
 	}
   }
 }
-#line 2266 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2263 "klfcompiler.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 11:
+#line 1044 "klfcompiler.y" /* yacc.c:1646  */
+    {
+  // error
+  error_count++;
+}
+#line 2272 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2270 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2276 "klfcompiler.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2494,7 +2500,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1047 "klfcompiler.y" /* yacc.c:1906  */
+#line 1050 "klfcompiler.y" /* yacc.c:1906  */
 
 
 /* get envvar by name */

@@ -1041,7 +1041,10 @@ line:	'\n'
 	}
   }
 }
-error '\n'
+| error '\n' {
+  // error
+  error_count++;
+}
 ;
 
 %%

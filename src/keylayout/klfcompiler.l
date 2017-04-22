@@ -31,6 +31,8 @@
 
 int lineno = 1;
 
+#define STRING_BUF_SIZE 1024
+
 %}
 
 ws			[ \t]+
@@ -49,11 +51,13 @@ equal		=
 
 %%
 
-  char string_buf[1024];
+  char string_buf[STRING_BUF_SIZE];
   char *string_buf_ptr = NULL;
+  int string_buf_len = 0;
 
 \"	{
   string_buf_ptr = string_buf;
+  string_buf_len = 0;
   BEGIN(qstring);
 }
 
@@ -64,7 +68,7 @@ equal		=
   printf("qstring  = \"%s\"\n", string_buf);
 #endif /* DEBUG_LEX */
   if (strlen(string_buf) > MAX_STRING){
-	printf("error : qstring > %d \n", MAX_STRING);
+	printf("error : qstring > %d\n", MAX_STRING);
   }
   yylval.strp = strdup(string_buf);
   return QSTRING;
@@ -72,6 +76,7 @@ equal		=
 
 <qstring>\\(.|\n) {
   *string_buf_ptr++ = yytext[1];
+  string_buf_len++;
 }
 
 <qstring>[^\\\n\"]+ {
@@ -79,6 +84,11 @@ equal		=
 
   while (*yptr){
 	*string_buf_ptr++ = *yptr++;
+	string_buf_len++;
+	if (string_buf_len > MAX_STRING){
+	  printf("error : string_buf_len > %d\n", MAX_STRING);
+	  break;
+	}
   }
 }
 

@@ -87,9 +87,9 @@ class QtBrynhildr : public QMainWindow
 public:
   // constructor
 #if QTB_PUBLIC_MODE6_SUPPORT
-  QtBrynhildr(int argc, char *argv[], QClipboard *clipboard);
+  QtBrynhildr(Option *option, QClipboard *clipboard);
 #else // QTB_PUBLIC_MODE6_SUPPORT
-  QtBrynhildr(int argc, char *argv[]);
+  QtBrynhildr(Option *option);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   // destructor
   ~QtBrynhildr();

@@ -61,9 +61,9 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
 // constructor
 #if QTB_PUBLIC_MODE6_SUPPORT
-QtBrynhildr::QtBrynhildr(int argc, char *argv[], QClipboard *clipboard)
+QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #else // QTB_PUBLIC_MODE6_SUPPORT
-QtBrynhildr::QtBrynhildr(int argc, char *argv[])
+QtBrynhildr::QtBrynhildr(Option *option)
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   :
   scrollArea(0),
@@ -165,7 +165,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   totalFrameCounter(0),
   currentFrameRate(0),
   currentDataRate(0),
-  option(0),
+  option(option),
   iniFileName(0),
   settings(0),
   writeSettingsAtExit(true),
@@ -246,8 +246,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #endif
 #endif // QTB_CRYPTOGRAM
 
-  // analyze command line options
-  option = new Option(argc, argv);
+  // set init file
   if (option->getIniFileName() != 0){
 	iniFileName = option->getIniFileName();
   }

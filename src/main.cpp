@@ -24,6 +24,7 @@
 
 // Local Header
 #include "config.h"
+#include "option.h"
 #include "qtbrynhildr.h"
 #include "version.h"
 
@@ -47,6 +48,9 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
+  // analyze options
+  qtbrynhildr::Option *option = new qtbrynhildr::Option(argc, argv);
+
   // set window icon
   QIcon windowIcon(QPixmap(QTB_ICON_FILENAME));
   app.setWindowIcon(windowIcon);
@@ -60,7 +64,7 @@ int main(int argc, char *argv[])
 
   // for Translation
   QTranslator appTranslator;
-  if (qtbrynhildr::QTB_TRANSLATION){
+  if (qtbrynhildr::QTB_TRANSLATION && !option->getNoTransFlag()){
 	bool result =
 	appTranslator.load(QTB_TRANSLATION_FILE_PATH
 					   QTB_TRANSLATION_FILE_PREFIX
@@ -80,9 +84,9 @@ int main(int argc, char *argv[])
 #if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard
   QClipboard *clipboard = QApplication::clipboard();
-  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(argc, argv, clipboard);
+  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(option, clipboard);
 #else // QTB_PUBLIC_MODE6_SUPPORT
-  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(argc, argv);
+  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(option, argv);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   if (qtbrynhildr->getShutdownFlag()){
 	// shutdown now
@@ -127,6 +131,9 @@ int main(int argc, char *argv[])
 
   // delete QtBrynhildr
   delete qtbrynhildr;
+
+  // delete option
+  delete option;
 
   return result;
 }

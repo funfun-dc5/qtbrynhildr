@@ -667,11 +667,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
 // destructor
 QtBrynhildr::~QtBrynhildr()
 {
-  // option
-  if (option != 0){
-	delete option;
-	option = 0;
-  }
   if (settings != 0){
 	// disconnect to server
 	if (settings->getConnected()){

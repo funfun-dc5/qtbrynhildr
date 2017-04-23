@@ -1237,38 +1237,38 @@ void QtBrynhildr::createActions()
   }
 
   // Video Quality Action MINIMUM
-  videoQuality_MINIMUM_Action = new QAction(tr("Video Quality: Minimum"), this);
+  videoQuality_MINIMUM_Action = new QAction(tr("Video Quality : Minimum"), this);
   videoQuality_MINIMUM_Action->setCheckable(true);
   videoQuality_MINIMUM_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_MINIMUM);
-  videoQuality_MINIMUM_Action->setStatusTip(tr("Video Quality: Minimum"));
+  videoQuality_MINIMUM_Action->setStatusTip(tr("Video Quality : Minimum"));
   connect(videoQuality_MINIMUM_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_MINIMUM()));
 
   // Video Quality Action LOW
-  videoQuality_LOW_Action = new QAction(tr("Video Quality: Low"), this);
+  videoQuality_LOW_Action = new QAction(tr("Video Quality : Low"), this);
   videoQuality_LOW_Action->setCheckable(true);
   videoQuality_LOW_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_LOW);
-  videoQuality_LOW_Action->setStatusTip(tr("Video Quality: Low"));
+  videoQuality_LOW_Action->setStatusTip(tr("Video Quality : Low"));
   connect(videoQuality_LOW_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_LOW()));
 
   // Video Quality Action STANDARD
-  videoQuality_STANDARD_Action = new QAction(tr("Video Quality: Standard"), this);
+  videoQuality_STANDARD_Action = new QAction(tr("Video Quality : Standard"), this);
   videoQuality_STANDARD_Action->setCheckable(true);
   videoQuality_STANDARD_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_STANDARD);
-  videoQuality_STANDARD_Action->setStatusTip(tr("Video Quality: Standard"));
+  videoQuality_STANDARD_Action->setStatusTip(tr("Video Quality : Standard"));
   connect(videoQuality_STANDARD_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_STANDARD()));
 
   // Video Quality Action HIGH
-  videoQuality_HIGH_Action = new QAction(tr("Video Quality: High"), this);
+  videoQuality_HIGH_Action = new QAction(tr("Video Quality : High"), this);
   videoQuality_HIGH_Action->setCheckable(true);
   videoQuality_HIGH_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_HIGH);
-  videoQuality_HIGH_Action->setStatusTip(tr("Video Quality: High"));
+  videoQuality_HIGH_Action->setStatusTip(tr("Video Quality : High"));
   connect(videoQuality_HIGH_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_HIGH()));
 
   // Video Quality Action MAXIMUM
-  videoQuality_MAXIMUM_Action = new QAction(tr("Video Quality: Maximum"), this);
+  videoQuality_MAXIMUM_Action = new QAction(tr("Video Quality : Maximum"), this);
   videoQuality_MAXIMUM_Action->setCheckable(true);
   videoQuality_MAXIMUM_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_MAXIMUM);
-  videoQuality_MAXIMUM_Action->setStatusTip(tr("Video Quality: Maximum"));
+  videoQuality_MAXIMUM_Action->setStatusTip(tr("Video Quality : Maximum"));
   connect(videoQuality_MAXIMUM_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_MAXIMUM()));
 
   // Deskop Scaling Action
@@ -1414,38 +1414,38 @@ void QtBrynhildr::createActions()
   connect(selectMonitorNoAll_Action, SIGNAL(triggered()), this, SLOT(setSelectMonitorNoAll()));
 
   // Sound Quality Action MINIMUM
-  soundQuality_MINIMUM_Action = new QAction(tr("Sound Quality: Minimum"), this);
+  soundQuality_MINIMUM_Action = new QAction(tr("Sound Quality : Minimum"), this);
   soundQuality_MINIMUM_Action->setCheckable(true);
   soundQuality_MINIMUM_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_MINIMUM);
-  soundQuality_MINIMUM_Action->setStatusTip(tr("Sound Quality: Minimum"));
+  soundQuality_MINIMUM_Action->setStatusTip(tr("Sound Quality : Minimum"));
   connect(soundQuality_MINIMUM_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_MINIMUM()));
 
   // Sound Quality Action LOW
-  soundQuality_LOW_Action = new QAction(tr("Sound Quality: Low"), this);
+  soundQuality_LOW_Action = new QAction(tr("Sound Quality : Low"), this);
   soundQuality_LOW_Action->setCheckable(true);
   soundQuality_LOW_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_LOW);
-  soundQuality_LOW_Action->setStatusTip(tr("Sound Quality: Low"));
+  soundQuality_LOW_Action->setStatusTip(tr("Sound Quality : Low"));
   connect(soundQuality_LOW_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_LOW()));
 
   // Sound Quality Action STANDARD
-  soundQuality_STANDARD_Action = new QAction(tr("Sound Quality: Standard"), this);
+  soundQuality_STANDARD_Action = new QAction(tr("Sound Quality : Standard"), this);
   soundQuality_STANDARD_Action->setCheckable(true);
   soundQuality_STANDARD_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_STANDARD);
-  soundQuality_STANDARD_Action->setStatusTip(tr("Sound Quality: Standard"));
+  soundQuality_STANDARD_Action->setStatusTip(tr("Sound Quality : Standard"));
   connect(soundQuality_STANDARD_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_STANDARD()));
 
   // Sound Quality Action HIGH
-  soundQuality_HIGH_Action = new QAction(tr("Sound Quality: High"), this);
+  soundQuality_HIGH_Action = new QAction(tr("Sound Quality : High"), this);
   soundQuality_HIGH_Action->setCheckable(true);
   soundQuality_HIGH_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_HIGH);
-  soundQuality_HIGH_Action->setStatusTip(tr("Sound Quality: High"));
+  soundQuality_HIGH_Action->setStatusTip(tr("Sound Quality : High"));
   connect(soundQuality_HIGH_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_HIGH()));
 
   // Sound Quality Action MAXIMUM
-  soundQuality_MAXIMUM_Action = new QAction(tr("Sound Quality: Maximum"), this);
+  soundQuality_MAXIMUM_Action = new QAction(tr("Sound Quality : Maximum"), this);
   soundQuality_MAXIMUM_Action->setCheckable(true);
   soundQuality_MAXIMUM_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_MAXIMUM);
-  soundQuality_MAXIMUM_Action->setStatusTip(tr("Sound Quality: Maximum"));
+  soundQuality_MAXIMUM_Action->setStatusTip(tr("Sound Quality : Maximum"));
   connect(soundQuality_MAXIMUM_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_MAXIMUM()));
 
   // onControl Action

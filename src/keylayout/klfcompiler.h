@@ -37,6 +37,8 @@
 extern "C" {
 #endif // __cplusplus
 
+extern int lineno;
+
 int make_KLX(const char *infile, const char *outfile);
 
 #ifdef __cplusplus

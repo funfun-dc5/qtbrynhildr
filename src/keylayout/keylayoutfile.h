@@ -13,6 +13,9 @@
 #include "windows/eventconverter.h"
 #endif // __cplusplus
 
+// max length of string
+#define MAX_STRING 63
+
 // Key Layout File Header
 #if _MSC_VER
 #pragma pack(push, 1)
@@ -29,8 +32,8 @@ typedef struct __attribute__((__packed__)) { // for C/C++ Compatibility
   int	softkeynum;	// SoftKeys Entry Num
 
   // [General] Section
-  char	name[64];	// Name strings
-  char	author[64];	// Author strings
+  char	name[MAX_STRING+1];	// Name strings
+  char	author[MAX_STRING+1];	// Author strings
 } KLFHeader;
 #if _MSC_VER
 #pragma pack(pop)

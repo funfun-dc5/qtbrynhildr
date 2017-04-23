@@ -205,35 +205,35 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="1155"/>
         <location filename="../qtbrynhildr.cpp" line="1158"/>
-        <source>Video Quality: Minimum</source>
+        <source>Video Quality : Minimum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 最低</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1162"/>
         <location filename="../qtbrynhildr.cpp" line="1165"/>
-        <source>Video Quality: Low</source>
+        <source>Video Quality : Low</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 低</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1169"/>
         <location filename="../qtbrynhildr.cpp" line="1172"/>
-        <source>Video Quality: Standard</source>
+        <source>Video Quality : Standard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 標準</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1176"/>
         <location filename="../qtbrynhildr.cpp" line="1179"/>
-        <source>Video Quality: High</source>
+        <source>Video Quality : High</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 高</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1183"/>
         <location filename="../qtbrynhildr.cpp" line="1186"/>
-        <source>Video Quality: Maximum</source>
+        <source>Video Quality : Maximum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 最高</translation>
     </message>
@@ -515,35 +515,35 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="1332"/>
         <location filename="../qtbrynhildr.cpp" line="1335"/>
-        <source>Sound Quality: Minimum</source>
+        <source>Sound Quality : Minimum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 最低</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1339"/>
         <location filename="../qtbrynhildr.cpp" line="1342"/>
-        <source>Sound Quality: Low</source>
+        <source>Sound Quality : Low</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 低</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1346"/>
         <location filename="../qtbrynhildr.cpp" line="1349"/>
-        <source>Sound Quality: Standard</source>
+        <source>Sound Quality : Standard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 標準</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1353"/>
         <location filename="../qtbrynhildr.cpp" line="1356"/>
-        <source>Sound Quality: High</source>
+        <source>Sound Quality : High</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 高</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1360"/>
         <location filename="../qtbrynhildr.cpp" line="1363"/>
-        <source>Sound Quality: Maximum</source>
+        <source>Sound Quality : Maximum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 最高</translation>
     </message>

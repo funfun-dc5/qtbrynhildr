@@ -61,7 +61,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 802 "klfcompiler.y" /* yacc.c:1909  */
+#line 804 "klfcompiler.y" /* yacc.c:1909  */
 
   char *strp;
   int intval;

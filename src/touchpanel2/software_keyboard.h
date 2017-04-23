@@ -24,12 +24,16 @@ using namespace std;
 
 namespace qtbrynhildr {
 
+#ifdef USE_KEYLAYOUTFILE
 class KeyLayoutFile;
+#endif // USE_KEYLAYOUTFILE
 
 // SoftwareKeyboard
 class SoftwareKeyboard : public QWidget
 {
+#ifdef USE_KEYLAYOUTFILE
   friend class KeyLayoutFile;
+#endif // USE_KEYLAYOUTFILE
 
 public:
   // keyboard type
@@ -37,7 +41,9 @@ public:
 	KEYTOP_TYPE_JP,
 	KEYTOP_TYPE_US,
 	KEYTOP_TYPE_NATIVE,
+#ifdef USE_KEYLAYOUTFILE
 	KEYTOP_TYPE_KLF
+#endif // USE_KEYLAYOUTFILE
   } KEYTOP_TYPE;
 
 #include "keytop.h"
@@ -46,7 +52,9 @@ public:
   // constructor
   SoftwareKeyboard(QWidget *parent = 0);
   SoftwareKeyboard(KEYTOP_TYPE type, QWidget *parent = 0);
+#ifdef USE_KEYLAYOUTFILE
   SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = 0);
+#endif // USE_KEYLAYOUTFILE
   // destructor
   //  ~SoftwareKeyboard();
 
@@ -59,8 +67,10 @@ public:
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
 
+#ifdef USE_KEYLAYOUTFILE
   // set keytop type by key layout file
   void setKeytopType(KeyLayoutFile *klf);
+#endif // USE_KEYLAYOUTFILE
 
   // reset size
   QSize resetSize();
@@ -198,10 +208,12 @@ private:
   uchar pressedFnKey(ID_KEY id);
 
   // get name of virtual keycode
-  string getVKCodeByString(uchar vkcode) const;
+  static string getVKCodeByString(uchar vkcode);
 
+#if QTB_DEBUG
   // print KeyTop
   static void printKeyTop(KeyTop *keyTop);
+#endif // QTB_DEBUG
 
 private:
   // original size for layout
@@ -466,8 +478,10 @@ private:
 	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
   };
 
+#ifdef USE_KEYLAYOUTFILE
   // key layout file
   KeyLayoutFile *klf;
+#endif // USE_KEYLAYOUTFILE
 
   // key top type
   KEYTOP_TYPE type;

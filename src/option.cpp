@@ -44,6 +44,7 @@ Option::Option(int argc, char *argv[])
   replayingFlag(false),
   replayingFileName(0),
 #endif // QTB_RECORDER
+  noTransFlag(false),
   bootupFlag(false),
   shutdownFlag(false)
 {
@@ -167,6 +168,9 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  }
 	  else if (strncmp("init", optionName, sizeof("init")) == 0){
 		initFlag = true;
+	  }
+	  else if (strncmp("notrans", optionName, sizeof("notrans")) == 0){
+		noTransFlag = true;
 	  }
 #if QTB_RECORDER
 	  else if (strncmp("record", optionName, sizeof("record")) == 0){
@@ -346,6 +350,11 @@ void Option::printHelp() const
   // -init
   cout << "-init" << endl;
   cout << "        " << "initialize settings." << endl;
+  cout << endl;
+
+  // -notrans
+  cout << "-notrans" << endl;
+  cout << "        " << "no translation." << endl;
   cout << endl;
 
   // .ini file

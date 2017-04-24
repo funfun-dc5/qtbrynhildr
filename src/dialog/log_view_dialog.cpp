@@ -42,7 +42,7 @@ LogViewDialog::LogViewDialog(Settings *settings,
 // resize event
 void LogViewDialog::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 }
 
 // settings for Tablet

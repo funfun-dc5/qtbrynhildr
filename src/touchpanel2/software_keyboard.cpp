@@ -176,7 +176,7 @@ QSize SoftwareKeyboard::resetSize()
 // paint event
 void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 
   QPainter painter(this);
 

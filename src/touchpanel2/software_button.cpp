@@ -51,7 +51,7 @@ SoftwareButton::SoftwareButton(QWidget *parent)
 // paint event
 void SoftwareButton::paintEvent(QPaintEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 
   QPainter painter(this);
 

@@ -49,7 +49,7 @@ DesktopScalingDialog::DesktopScalingDialog(Settings *settings,
 // resize event
 void DesktopScalingDialog::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 }
 
 // set scale slider position from stting

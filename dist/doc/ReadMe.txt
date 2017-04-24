@@ -661,6 +661,7 @@ frameRate=30
 onSound=true
 soundType=1
 soundQuality=3
+soundCacheTime=100
 onKeepOriginalDesktopSize=true
 desktopScalingFactor=1
 desktopScalingQuality=1
@@ -946,6 +947,7 @@ Ver.1.6.8 : 2017/04/xx
             [新規機能]
              ・キーボードタイプ依存情報の外部ファイル対応
              ・メニューテキスト、メッセージなどの翻訳を抑止するオプション(-notrans)の追加
+             ・サウンドデータのキャッシュ時間(ms)のパラメータ(soundCacheTime)を追加
 
             [不具合修正]
              ・ソフトウェア・ボタンの不正動作修正

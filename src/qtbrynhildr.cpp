@@ -131,6 +131,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
   soundQuality_STANDARD_Action(0),
   soundQuality_HIGH_Action(0),
   soundQuality_MAXIMUM_Action(0),
+  soundCache_1_Action(0),
+  soundCache_2_Action(0),
+  soundCache_3_Action(0),
+  soundCache_4_Action(0),
+  soundCache_5_Action(0),
   onControl_Action(0),
   onGraphics_Action(0),
   onSound_Action(0),
@@ -1448,6 +1453,41 @@ void QtBrynhildr::createActions()
   soundQuality_MAXIMUM_Action->setStatusTip(tr("Sound Quality : Maximum"));
   connect(soundQuality_MAXIMUM_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_MAXIMUM()));
 
+  // Sound Cache Action 1
+  soundCache_1_Action = new QAction(tr("Level 1"), this);
+  soundCache_1_Action->setCheckable(true);
+  soundCache_1_Action->setChecked(settings->getSoundCacheTime() == 100);
+  soundCache_1_Action->setStatusTip(tr("Level 1"));
+  connect(soundCache_1_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_1()));
+
+  // Sound Cache Action 2
+  soundCache_2_Action = new QAction(tr("Level 2"), this);
+  soundCache_2_Action->setCheckable(true);
+  soundCache_2_Action->setChecked(settings->getSoundCacheTime() == 200);
+  soundCache_2_Action->setStatusTip(tr("Level 2"));
+  connect(soundCache_2_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_2()));
+
+  // Sound Cache Action 3
+  soundCache_3_Action = new QAction(tr("Level 3"), this);
+  soundCache_3_Action->setCheckable(true);
+  soundCache_3_Action->setChecked(settings->getSoundCacheTime() == 300);
+  soundCache_3_Action->setStatusTip(tr("Level 3"));
+  connect(soundCache_3_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_3()));
+
+  // Sound Cache Action 4
+  soundCache_4_Action = new QAction(tr("Level 4"), this);
+  soundCache_4_Action->setCheckable(true);
+  soundCache_4_Action->setChecked(settings->getSoundCacheTime() == 400);
+  soundCache_4_Action->setStatusTip(tr("Level 4"));
+  connect(soundCache_4_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_4()));
+
+  // Sound Cache Action 5
+  soundCache_5_Action = new QAction(tr("Level 5"), this);
+  soundCache_5_Action->setCheckable(true);
+  soundCache_5_Action->setChecked(settings->getSoundCacheTime() == 500);
+  soundCache_5_Action->setStatusTip(tr("Level 5"));
+  connect(soundCache_5_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_5()));
+
   // onControl Action
   onControl_Action = new QAction(tr("Control ON/OFF"), this);
   onControl_Action->setCheckable(true);
@@ -1684,6 +1724,13 @@ void QtBrynhildr::createMenus()
   soundMenu->addAction(soundQuality_STANDARD_Action);
   soundMenu->addAction(soundQuality_HIGH_Action);
   soundMenu->addAction(soundQuality_MAXIMUM_Action);
+  soundMenu->addSeparator();
+  soundCacheSubMenu = soundMenu->addMenu(tr("Sound Cache"));
+  soundCacheSubMenu->addAction(soundCache_1_Action);
+  soundCacheSubMenu->addAction(soundCache_2_Action);
+  soundCacheSubMenu->addAction(soundCache_3_Action);
+  soundCacheSubMenu->addAction(soundCache_4_Action);
+  soundCacheSubMenu->addAction(soundCache_5_Action);
 
   // control menu
   controlMenu = menuBar()->addMenu(tr("Control"));
@@ -2601,6 +2648,16 @@ void QtBrynhildr::clearSoundQualityCheck()
   soundQuality_MAXIMUM_Action->setChecked(false);
 }
 
+// clear Sound Cache check
+void QtBrynhildr::clearSoundCacheCheck()
+{
+  soundCache_1_Action->setChecked(false);
+  soundCache_2_Action->setChecked(false);
+  soundCache_3_Action->setChecked(false);
+  soundCache_4_Action->setChecked(false);
+  soundCache_5_Action->setChecked(false);
+}
+
 // clear Select Frame Rate
 void QtBrynhildr::clearSelectFrameRateCheck()
 {
@@ -2712,6 +2769,46 @@ void QtBrynhildr::setSoundQuality_MAXIMUM()
 {
   settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
   refreshSoundQualityMenu();
+}
+
+// set sound cache 1
+void QtBrynhildr::setSoundCache_1()
+{
+  clearSoundCacheCheck();
+  soundCache_1_Action->setChecked(true);
+  settings->setSoundCacheTime(100);
+}
+
+// set sound cache 2
+void QtBrynhildr::setSoundCache_2()
+{
+  clearSoundCacheCheck();
+  soundCache_2_Action->setChecked(true);
+  settings->setSoundCacheTime(200);
+}
+
+// set sound cache 3
+void QtBrynhildr::setSoundCache_3()
+{
+  clearSoundCacheCheck();
+  soundCache_3_Action->setChecked(true);
+  settings->setSoundCacheTime(300);
+}
+
+// set sound cache 4
+void QtBrynhildr::setSoundCache_4()
+{
+  clearSoundCacheCheck();
+  soundCache_4_Action->setChecked(true);
+  settings->setSoundCacheTime(400);
+}
+
+// set sound cache 5
+void QtBrynhildr::setSoundCache_5()
+{
+  clearSoundCacheCheck();
+  soundCache_5_Action->setChecked(true);
+  settings->setSoundCacheTime(500);
 }
 
 // toggle onControl

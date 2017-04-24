@@ -223,6 +223,13 @@ private slots:
   void setSoundQuality_HIGH();
   void setSoundQuality_MAXIMUM();
 
+  // set sound cache
+  void setSoundCache_1();
+  void setSoundCache_2();
+  void setSoundCache_3();
+  void setSoundCache_4();
+  void setSoundCache_5();
+
   // toggle onControl/onGraphics/onSound
   void toggleOnControl();
   void toggleOnGraphics();
@@ -397,6 +404,9 @@ private:
   // Sound Menu
   QMenu *soundMenu;
 
+  // Sound Cache Sub Menu
+  QMenu *soundCacheSubMenu;
+
   // Control Menu
   QMenu *controlMenu;
 
@@ -523,6 +533,17 @@ private:
   // sound Quality MAXIMUM
   QAction *soundQuality_MAXIMUM_Action;
 
+  // sound Cache 1
+  QAction *soundCache_1_Action;
+  // sound Cache 2
+  QAction *soundCache_2_Action;
+  // sound Cache 3
+  QAction *soundCache_3_Action;
+  // sound Cache 4
+  QAction *soundCache_4_Action;
+  // sound Cache 5
+  QAction *soundCache_5_Action;
+
   // toggle onControl
   QAction *onControl_Action;
 
@@ -591,6 +612,9 @@ private:
 
   // clear Sound Quality check
   void clearSoundQualityCheck();
+
+  // clear Sound Cache check
+  void clearSoundCacheCheck();
 
   // clear Select Frame Rate
   void clearSelectFrameRateCheck();

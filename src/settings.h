@@ -959,12 +959,21 @@ public:
 	}
 	else {
 	  frameInterval = (unsigned long)1000000/frameRate; // micro second = 1000000 (1 second)
-	  if (frameInterval > QTB_THREAD_SLEEP_TIME * 1000){
+	  if (frameInterval >= QTB_THREAD_SLEEP_TIME * 1000){
 		frameInterval -= QTB_THREAD_SLEEP_TIME * 1000; // sleep time
-		if (frameInterval > frameDrawTime){
+	  }
+	  else {
+		frameInterval = 0;
+	  }
+	  if (frameDrawTime > 0){
+		if (frameInterval >= frameDrawTime ){
 		  frameInterval -= frameDrawTime; // drawing time of 1 frame
 		}
+		else {
+		  frameInterval = 0;
+		}
 	  }
+	  //cout << "frameInterval = " << frameInterval << endl << flush;
 	}
   }
 

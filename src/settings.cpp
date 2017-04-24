@@ -45,7 +45,7 @@ Settings::Settings(const char *iniFileName)
   onSupportGamePad(false),
   onDisableBrynhildr2Support(false),
 #endif // QTB_BRYNHILDR2_SUPPORT
-  frameDrawTime(15000),
+  frameDrawTime(0),
   monitorCount(0),
   onShowSoftwareKeyboard(false),
   onShowSoftwareButton(false),

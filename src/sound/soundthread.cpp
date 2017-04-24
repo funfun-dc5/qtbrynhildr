@@ -229,6 +229,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   if (settings->getOnSound()){
 	// for cache
 	static long soundCacheSize = 0;
+	static long soundCacheSizeForLog = 0;
 
 	// check audio output
 	if (audioOutput == 0){
@@ -249,14 +250,21 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  // update cacheSize
 	  soundCacheTime = settings->getSoundCacheTime();
 	  soundCacheSize = (long)(samplerate * 2 * 2 * (qreal)soundCacheTime/1000);
+	  soundCacheSizeForLog = soundCacheSize;
 	  if (settings->getOutputLog()){
 		cout << "soundCacheSize = " << soundCacheSize << endl << flush;
 	  }
 	}
 
+	if (settings->getOutputLog()){
+	  double cacheRate = (double)(soundBuffer->size())/soundCacheSizeForLog * 100.0;
+	  cout << "[SoundThread] Cache Rate : " << cacheRate << endl << flush;
+	}
+
 	// write into sound buffer
-	if (audioOutput->state() != QAudio::StoppedState &&
-		soundBuffer->size() > soundCacheSize){
+	if (audioOutput->state() != QAudio::StoppedState && soundBuffer->size() > soundCacheSize){
+	  //	  soundCacheSize = 0;
+
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 	  while (chunks){
@@ -382,7 +390,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	delete audioOutput;
 	audioOutput = 0;
   }
-  audioOutput = new QAudioOutput(deviceInfo, format, this);
+  audioOutput = new QAudioOutput(deviceInfo, format);
 
   // stateChanged
 #if defined(DEBUG)

@@ -68,6 +68,9 @@ private:
   // sound buffer size
   int soundBufferSize;
 
+  // sound cache time (ms)
+  int soundCacheTime;
+
   // sample rate
   SAMPLERATE samplerate;
 

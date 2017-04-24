@@ -210,6 +210,10 @@ typedef int KEYBOARD_TYPE;
 #define QTB_SOUNDCAPTURE			"soundCapture"
 #define QTB_SOUNDCAPTURE_DEFAULT	SOUND_CAPTURE_CORE_AUDIO
 
+// for soundCacheTime (ms)
+#define QTB_SOUNDCACHETIME			"soundCacheTime"
+#define QTB_SOUNDCACHETIME_DEFAULT	100
+
 // for onKeepOriginalDesktopSize
 #define QTB_ONKEEPORIGINALDESKTOPSIZE "onKeepOriginalDesktopSize"
 #define QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT true
@@ -1042,6 +1046,18 @@ public:
 	return soundCapture;
   }
 
+  // get sound cache time
+  int getSoundCacheTime() const
+  {
+	return soundCacheTime;
+  }
+
+  // set sound cache time
+  void setSoundCacheTime(int soundCacheTime)
+  {
+	this->soundCacheTime = soundCacheTime;
+  }
+
 private:
   // set sound capture
   void setSoundCapture(SOUND_CAPTURE soundCapture)
@@ -1856,6 +1872,7 @@ private:
 #endif // QTB_CELT_SUPPORT
   volatile SOUND_QUALITY soundQuality;
   volatile SOUND_CAPTURE soundCapture;
+  volatile int soundCacheTime;
 
   // keep original desktop size flag
   volatile bool onKeepOriginalDesktopSize;

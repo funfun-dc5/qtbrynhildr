@@ -31,6 +31,7 @@ SoundThread::SoundThread(Settings *settings, MainWindow *mainWindow)
   NetThread("SoundThread", settings, mainWindow),
   soundBuffer(0),
   soundBufferSize(0),
+  soundCacheTime(-1),
   samplerate(0),
   audioOutput(0),
   output(0),
@@ -226,6 +227,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 
   // put PCM data into sound buffer
   if (settings->getOnSound()){
+	// for cache
+	static long soundCacheSize = 0;
+
 	// check audio output
 	if (audioOutput == 0){
 	  // NOT supported sample rate
@@ -240,8 +244,19 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
 
+	// check sound cache time
+	if (soundCacheTime != settings->getSoundCacheTime()){
+	  // update cacheSize
+	  soundCacheTime = settings->getSoundCacheTime();
+	  soundCacheSize = (long)(samplerate * 2 * 2 * (qreal)soundCacheTime/1000);
+	  if (settings->getOutputLog()){
+		cout << "soundCacheSize = " << soundCacheSize << endl << flush;
+	  }
+	}
+
 	// write into sound buffer
-	if (audioOutput->state() != QAudio::StoppedState){
+	if (audioOutput->state() != QAudio::StoppedState &&
+		soundBuffer->size() > soundCacheSize){
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 	  while (chunks){

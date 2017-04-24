@@ -32,7 +32,6 @@ SoundThread::SoundThread(Settings *settings, MainWindow *mainWindow)
   soundBuffer(0),
   soundBufferSize(0),
   samplerate(0),
-  format(0),
   audioOutput(0),
   output(0),
   samplerateChangeCount(0),
@@ -79,12 +78,6 @@ SoundThread::~SoundThread()
 	audioOutput->stop();
 	delete audioOutput;
 	audioOutput = 0;
-  }
-
-  // format
-  if (format != 0){
-	delete format;
-	format = 0;
   }
 
   // output wav file
@@ -331,21 +324,17 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << endl << flush;
   }
 
-  if (format == 0){
-	format = new QAudioFormat();
-  }
-
   // setting for sound format
-  format->setSampleRate((int)samplerate);
-  format->setChannelCount(2); // channel
-  format->setSampleSize(16); // bits
-  format->setCodec("audio/pcm"); // PCM
-  format->setByteOrder(QAudioFormat::LittleEndian);
-  format->setSampleType(QAudioFormat::SignedInt);
+  format.setSampleRate((int)samplerate);
+  format.setChannelCount(2); // channel
+  format.setSampleSize(16); // bits
+  format.setCodec("audio/pcm"); // PCM
+  format.setByteOrder(QAudioFormat::LittleEndian);
+  format.setSampleType(QAudioFormat::SignedInt);
 
   // audio device information
   const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
-  if (!deviceInfo.isFormatSupported(*format)){
+  if (!deviceInfo.isFormatSupported(format)){
 	if (audioOutput != 0){
 	  audioOutput->stop();
 	  delete audioOutput;
@@ -378,12 +367,12 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	delete audioOutput;
 	audioOutput = 0;
   }
-  audioOutput = new QAudioOutput(*format);
+  audioOutput = new QAudioOutput(deviceInfo, format, this);
 
   // stateChanged
 #if defined(DEBUG)
   connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
-#endif
+#endif // defined(DEBUG)
 
   // setting for AudioOutput
   audioOutput->setBufferSize(QTB_AUDIOOUTPUT_SOUND_BUFFER_SIZE);
@@ -481,10 +470,11 @@ void SoundThread::createWavFile(int pcmFileSize)
 }
 
 #if defined(DEBUG)
+// audio state change event
 void SoundThread::handleStateChanged(QAudio::State state)
 {
-    qWarning() << "state = " << state;
+  cout << "state = " << state << endl << flush;
 }
-#endif
+#endif // defined(DEBUG)
 
 } // end of namespace qtbrynhildr

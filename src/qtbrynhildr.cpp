@@ -2106,7 +2106,7 @@ void QtBrynhildr::closeEvent(QCloseEvent *event)
 // window resize event
 void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 
   QMainWindow::resizeEvent(event);
 

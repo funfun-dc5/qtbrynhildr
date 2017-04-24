@@ -288,7 +288,7 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 // paint event
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 
   if (image.isNull()){
 	return;
@@ -311,7 +311,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 // widget leave event
 void MainWindow::leaveEvent(QEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 
   if (settings->getOnClipCursor()){
 	QCursor::setPos(mapToGlobal(currentMousePos));
@@ -769,7 +769,7 @@ bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)
 // get desktop scaling factor
 qreal MainWindow::getDesktopScalingFactor(QSize size)
 {
-  Q_UNUSED(size)
+  Q_UNUSED(size);
 
   qreal scalingFactor = settings->getDesktopScalingFactor();
 
@@ -848,7 +848,7 @@ QSize MainWindow::sizeHint() const
 #if defined(Q_OS_WIN)
 bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
-  Q_UNUSED(result)
+  Q_UNUSED(result);
 
   if (!(settings->getConnected()) ||
 	  !(settings->getOnControl())){

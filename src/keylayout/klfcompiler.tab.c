@@ -880,10 +880,7 @@ KeyEntry keys[KEY_ENTRY_NUM] = {
 # define YYERROR_VERBOSE 0
 #endif
 
-/* In a future release of Bison, this section will be replaced
-   by #include "klfcompiler.tab.h".  */
-#ifndef YY_YY_KLFCOMPILER_TAB_H_INCLUDED
-# define YY_YY_KLFCOMPILER_TAB_H_INCLUDED
+
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -918,7 +915,7 @@ union YYSTYPE
   char *strp;
   int intval;
 
-#line 922 "klfcompiler.tab.c" /* yacc.c:355  */
+#line 919 "klfcompiler.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -931,11 +928,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_KLFCOMPILER_TAB_H_INCLUDED  */
+
 
 /* Copy the second part of user declarations.  */
 
-#line 939 "klfcompiler.tab.c" /* yacc.c:358  */
+#line 936 "klfcompiler.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -2021,7 +2018,7 @@ yyreduce:
 #endif /* DEBUG_YACC */
   section = (yyvsp[0].intval);
 }
-#line 2025 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2022 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
@@ -2059,7 +2056,7 @@ yyreduce:
 	}
   }
 }
-#line 2063 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2060 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
@@ -2095,7 +2092,7 @@ yyreduce:
 	}
   }
 }
-#line 2099 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2096 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
@@ -2147,7 +2144,7 @@ yyreduce:
 	}
   }
 }
-#line 2151 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2148 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
@@ -2190,7 +2187,7 @@ yyreduce:
 	}
   }
 }
-#line 2194 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2191 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -2259,7 +2256,7 @@ yyreduce:
 	}
   }
 }
-#line 2263 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2260 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
@@ -2268,11 +2265,11 @@ yyreduce:
   // error
   error_count++;
 }
-#line 2272 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2269 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2276 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2273 "klfcompiler.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

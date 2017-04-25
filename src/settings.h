@@ -882,6 +882,7 @@ public:
   {
 	ASSERT(videoQuality >= VIDEO_QUALITY_MINIMUM && videoQuality <= VIDEO_QUALITY_MAXIMUM);
 	this->videoQuality = videoQuality;
+	setFrameDrawTime(0); // recheck frameDrawTime
   }
 
   // get video quality string

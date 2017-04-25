@@ -224,6 +224,7 @@ private slots:
   void setSoundQuality_MAXIMUM();
 
   // set sound cache
+  void setSoundCache_0();
   void setSoundCache_1();
   void setSoundCache_2();
   void setSoundCache_3();
@@ -533,6 +534,8 @@ private:
   // sound Quality MAXIMUM
   QAction *soundQuality_MAXIMUM_Action;
 
+  // sound Cache 0
+  QAction *soundCache_0_Action;
   // sound Cache 1
   QAction *soundCache_1_Action;
   // sound Cache 2

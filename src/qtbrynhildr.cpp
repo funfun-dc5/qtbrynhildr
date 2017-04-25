@@ -131,6 +131,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   soundQuality_STANDARD_Action(0),
   soundQuality_HIGH_Action(0),
   soundQuality_MAXIMUM_Action(0),
+  soundCache_0_Action(0),
   soundCache_1_Action(0),
   soundCache_2_Action(0),
   soundCache_3_Action(0),
@@ -1453,6 +1454,13 @@ void QtBrynhildr::createActions()
   soundQuality_MAXIMUM_Action->setStatusTip(tr("Sound Quality : Maximum"));
   connect(soundQuality_MAXIMUM_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_MAXIMUM()));
 
+  // Sound Cache Action 0
+  soundCache_0_Action = new QAction(tr("Level 0"), this);
+  soundCache_0_Action->setCheckable(true);
+  soundCache_0_Action->setChecked(settings->getSoundCacheTime() == 0);
+  soundCache_0_Action->setStatusTip(tr("Level 0"));
+  connect(soundCache_0_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_0()));
+
   // Sound Cache Action 1
   soundCache_1_Action = new QAction(tr("Level 1"), this);
   soundCache_1_Action->setCheckable(true);
@@ -1726,6 +1734,7 @@ void QtBrynhildr::createMenus()
   soundMenu->addAction(soundQuality_MAXIMUM_Action);
   soundMenu->addSeparator();
   soundCacheSubMenu = soundMenu->addMenu(tr("Sound Cache"));
+  soundCacheSubMenu->addAction(soundCache_0_Action);
   soundCacheSubMenu->addAction(soundCache_1_Action);
   soundCacheSubMenu->addAction(soundCache_2_Action);
   soundCacheSubMenu->addAction(soundCache_3_Action);
@@ -2651,6 +2660,7 @@ void QtBrynhildr::clearSoundQualityCheck()
 // clear Sound Cache check
 void QtBrynhildr::clearSoundCacheCheck()
 {
+  soundCache_0_Action->setChecked(false);
   soundCache_1_Action->setChecked(false);
   soundCache_2_Action->setChecked(false);
   soundCache_3_Action->setChecked(false);
@@ -2769,6 +2779,14 @@ void QtBrynhildr::setSoundQuality_MAXIMUM()
 {
   settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
   refreshSoundQualityMenu();
+}
+
+// set sound cache 0
+void QtBrynhildr::setSoundCache_0()
+{
+  clearSoundCacheCheck();
+  soundCache_0_Action->setChecked(true);
+  settings->setSoundCacheTime(0);
 }
 
 // set sound cache 1

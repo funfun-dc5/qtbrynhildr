@@ -55,6 +55,12 @@ private:
   // create .wav file
   void createWavFile(int dataSize);
 
+#if defined(DEBUG)
+private slots:
+  // stateCanged
+  void handleStateChanged(QAudio::State state);
+#endif // defined(DEBUG)
+
 private:
   // sound buffer
   SoundBuffer *soundBuffer;
@@ -62,23 +68,20 @@ private:
   // sound buffer size
   int soundBufferSize;
 
+  // sound cache time (ms)
+  int soundCacheTime;
+
   // sample rate
   SAMPLERATE samplerate;
 
   // audio format
-  QAudioFormat *format;
+  QAudioFormat format;
 
   // audio output
   QAudioOutput *audioOutput;
 
   // IO device
   QIODevice *output;
-
-#ifdef DEBUG
-private slots:
-  // stateCanged
-  void handleStateChanged(QAudio::State state);
-#endif
 
   // samplerate change count
   int samplerateChangeCount;

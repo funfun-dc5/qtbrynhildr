@@ -61,9 +61,9 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
 // constructor
 #if QTB_PUBLIC_MODE6_SUPPORT
-QtBrynhildr::QtBrynhildr(int argc, char *argv[], QClipboard *clipboard)
+QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #else // QTB_PUBLIC_MODE6_SUPPORT
-QtBrynhildr::QtBrynhildr(int argc, char *argv[])
+QtBrynhildr::QtBrynhildr(Option *option)
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   :
   scrollArea(0),
@@ -131,6 +131,12 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   soundQuality_STANDARD_Action(0),
   soundQuality_HIGH_Action(0),
   soundQuality_MAXIMUM_Action(0),
+  soundCache_0_Action(0),
+  soundCache_1_Action(0),
+  soundCache_2_Action(0),
+  soundCache_3_Action(0),
+  soundCache_4_Action(0),
+  soundCache_5_Action(0),
   onControl_Action(0),
   onGraphics_Action(0),
   onSound_Action(0),
@@ -165,7 +171,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
   totalFrameCounter(0),
   currentFrameRate(0),
   currentDataRate(0),
-  option(0),
+  option(option),
   iniFileName(0),
   settings(0),
   writeSettingsAtExit(true),
@@ -246,8 +252,7 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 #endif
 #endif // QTB_CRYPTOGRAM
 
-  // analyze command line options
-  option = new Option(argc, argv);
+  // set init file
   if (option->getIniFileName() != 0){
 	iniFileName = option->getIniFileName();
   }
@@ -668,11 +673,6 @@ QtBrynhildr::QtBrynhildr(int argc, char *argv[])
 // destructor
 QtBrynhildr::~QtBrynhildr()
 {
-  // option
-  if (option != 0){
-	delete option;
-	option = 0;
-  }
   if (settings != 0){
 	// disconnect to server
 	if (settings->getConnected()){
@@ -996,6 +996,9 @@ bool QtBrynhildr::getShutdownFlag() const
 // desktop Changed
 void QtBrynhildr::onDesktopChanged(QImage image)
 {
+  if (!settings->getConnected())
+	return;
+
   // update desktop
   mainWindow->refreshDesktop(image);
 
@@ -1243,38 +1246,38 @@ void QtBrynhildr::createActions()
   }
 
   // Video Quality Action MINIMUM
-  videoQuality_MINIMUM_Action = new QAction(tr("Video Quality: Minimum"), this);
+  videoQuality_MINIMUM_Action = new QAction(tr("Video Quality : Minimum"), this);
   videoQuality_MINIMUM_Action->setCheckable(true);
   videoQuality_MINIMUM_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_MINIMUM);
-  videoQuality_MINIMUM_Action->setStatusTip(tr("Video Quality: Minimum"));
+  videoQuality_MINIMUM_Action->setStatusTip(tr("Video Quality : Minimum"));
   connect(videoQuality_MINIMUM_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_MINIMUM()));
 
   // Video Quality Action LOW
-  videoQuality_LOW_Action = new QAction(tr("Video Quality: Low"), this);
+  videoQuality_LOW_Action = new QAction(tr("Video Quality : Low"), this);
   videoQuality_LOW_Action->setCheckable(true);
   videoQuality_LOW_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_LOW);
-  videoQuality_LOW_Action->setStatusTip(tr("Video Quality: Low"));
+  videoQuality_LOW_Action->setStatusTip(tr("Video Quality : Low"));
   connect(videoQuality_LOW_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_LOW()));
 
   // Video Quality Action STANDARD
-  videoQuality_STANDARD_Action = new QAction(tr("Video Quality: Standard"), this);
+  videoQuality_STANDARD_Action = new QAction(tr("Video Quality : Standard"), this);
   videoQuality_STANDARD_Action->setCheckable(true);
   videoQuality_STANDARD_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_STANDARD);
-  videoQuality_STANDARD_Action->setStatusTip(tr("Video Quality: Standard"));
+  videoQuality_STANDARD_Action->setStatusTip(tr("Video Quality : Standard"));
   connect(videoQuality_STANDARD_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_STANDARD()));
 
   // Video Quality Action HIGH
-  videoQuality_HIGH_Action = new QAction(tr("Video Quality: High"), this);
+  videoQuality_HIGH_Action = new QAction(tr("Video Quality : High"), this);
   videoQuality_HIGH_Action->setCheckable(true);
   videoQuality_HIGH_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_HIGH);
-  videoQuality_HIGH_Action->setStatusTip(tr("Video Quality: High"));
+  videoQuality_HIGH_Action->setStatusTip(tr("Video Quality : High"));
   connect(videoQuality_HIGH_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_HIGH()));
 
   // Video Quality Action MAXIMUM
-  videoQuality_MAXIMUM_Action = new QAction(tr("Video Quality: Maximum"), this);
+  videoQuality_MAXIMUM_Action = new QAction(tr("Video Quality : Maximum"), this);
   videoQuality_MAXIMUM_Action->setCheckable(true);
   videoQuality_MAXIMUM_Action->setChecked(settings->getVideoQuality() == VIDEO_QUALITY_MAXIMUM);
-  videoQuality_MAXIMUM_Action->setStatusTip(tr("Video Quality: Maximum"));
+  videoQuality_MAXIMUM_Action->setStatusTip(tr("Video Quality : Maximum"));
   connect(videoQuality_MAXIMUM_Action, SIGNAL(triggered()), this, SLOT(setVideoQuality_MAXIMUM()));
 
   // Deskop Scaling Action
@@ -1420,39 +1423,81 @@ void QtBrynhildr::createActions()
   connect(selectMonitorNoAll_Action, SIGNAL(triggered()), this, SLOT(setSelectMonitorNoAll()));
 
   // Sound Quality Action MINIMUM
-  soundQuality_MINIMUM_Action = new QAction(tr("Sound Quality: Minimum"), this);
+  soundQuality_MINIMUM_Action = new QAction(tr("Sound Quality : Minimum"), this);
   soundQuality_MINIMUM_Action->setCheckable(true);
   soundQuality_MINIMUM_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_MINIMUM);
-  soundQuality_MINIMUM_Action->setStatusTip(tr("Sound Quality: Minimum"));
+  soundQuality_MINIMUM_Action->setStatusTip(tr("Sound Quality : Minimum"));
   connect(soundQuality_MINIMUM_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_MINIMUM()));
 
   // Sound Quality Action LOW
-  soundQuality_LOW_Action = new QAction(tr("Sound Quality: Low"), this);
+  soundQuality_LOW_Action = new QAction(tr("Sound Quality : Low"), this);
   soundQuality_LOW_Action->setCheckable(true);
   soundQuality_LOW_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_LOW);
-  soundQuality_LOW_Action->setStatusTip(tr("Sound Quality: Low"));
+  soundQuality_LOW_Action->setStatusTip(tr("Sound Quality : Low"));
   connect(soundQuality_LOW_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_LOW()));
 
   // Sound Quality Action STANDARD
-  soundQuality_STANDARD_Action = new QAction(tr("Sound Quality: Standard"), this);
+  soundQuality_STANDARD_Action = new QAction(tr("Sound Quality : Standard"), this);
   soundQuality_STANDARD_Action->setCheckable(true);
   soundQuality_STANDARD_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_STANDARD);
-  soundQuality_STANDARD_Action->setStatusTip(tr("Sound Quality: Standard"));
+  soundQuality_STANDARD_Action->setStatusTip(tr("Sound Quality : Standard"));
   connect(soundQuality_STANDARD_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_STANDARD()));
 
   // Sound Quality Action HIGH
-  soundQuality_HIGH_Action = new QAction(tr("Sound Quality: High"), this);
+  soundQuality_HIGH_Action = new QAction(tr("Sound Quality : High"), this);
   soundQuality_HIGH_Action->setCheckable(true);
   soundQuality_HIGH_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_HIGH);
-  soundQuality_HIGH_Action->setStatusTip(tr("Sound Quality: High"));
+  soundQuality_HIGH_Action->setStatusTip(tr("Sound Quality : High"));
   connect(soundQuality_HIGH_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_HIGH()));
 
   // Sound Quality Action MAXIMUM
-  soundQuality_MAXIMUM_Action = new QAction(tr("Sound Quality: Maximum"), this);
+  soundQuality_MAXIMUM_Action = new QAction(tr("Sound Quality : Maximum"), this);
   soundQuality_MAXIMUM_Action->setCheckable(true);
   soundQuality_MAXIMUM_Action->setChecked(settings->getSoundQuality() == SOUND_QUALITY_MAXIMUM);
-  soundQuality_MAXIMUM_Action->setStatusTip(tr("Sound Quality: Maximum"));
+  soundQuality_MAXIMUM_Action->setStatusTip(tr("Sound Quality : Maximum"));
   connect(soundQuality_MAXIMUM_Action, SIGNAL(triggered()), this, SLOT(setSoundQuality_MAXIMUM()));
+
+  // Sound Cache Action 0
+  soundCache_0_Action = new QAction(tr("Level 0"), this);
+  soundCache_0_Action->setCheckable(true);
+  soundCache_0_Action->setChecked(settings->getSoundCacheTime() == 0);
+  soundCache_0_Action->setStatusTip(tr("Level 0"));
+  connect(soundCache_0_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_0()));
+
+  // Sound Cache Action 1
+  soundCache_1_Action = new QAction(tr("Level 1"), this);
+  soundCache_1_Action->setCheckable(true);
+  soundCache_1_Action->setChecked(settings->getSoundCacheTime() == 100);
+  soundCache_1_Action->setStatusTip(tr("Level 1"));
+  connect(soundCache_1_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_1()));
+
+  // Sound Cache Action 2
+  soundCache_2_Action = new QAction(tr("Level 2"), this);
+  soundCache_2_Action->setCheckable(true);
+  soundCache_2_Action->setChecked(settings->getSoundCacheTime() == 200);
+  soundCache_2_Action->setStatusTip(tr("Level 2"));
+  connect(soundCache_2_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_2()));
+
+  // Sound Cache Action 3
+  soundCache_3_Action = new QAction(tr("Level 3"), this);
+  soundCache_3_Action->setCheckable(true);
+  soundCache_3_Action->setChecked(settings->getSoundCacheTime() == 300);
+  soundCache_3_Action->setStatusTip(tr("Level 3"));
+  connect(soundCache_3_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_3()));
+
+  // Sound Cache Action 4
+  soundCache_4_Action = new QAction(tr("Level 4"), this);
+  soundCache_4_Action->setCheckable(true);
+  soundCache_4_Action->setChecked(settings->getSoundCacheTime() == 400);
+  soundCache_4_Action->setStatusTip(tr("Level 4"));
+  connect(soundCache_4_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_4()));
+
+  // Sound Cache Action 5
+  soundCache_5_Action = new QAction(tr("Level 5"), this);
+  soundCache_5_Action->setCheckable(true);
+  soundCache_5_Action->setChecked(settings->getSoundCacheTime() == 500);
+  soundCache_5_Action->setStatusTip(tr("Level 5"));
+  connect(soundCache_5_Action, SIGNAL(triggered()), this, SLOT(setSoundCache_5()));
 
   // onControl Action
   onControl_Action = new QAction(tr("Control ON/OFF"), this);
@@ -1690,6 +1735,14 @@ void QtBrynhildr::createMenus()
   soundMenu->addAction(soundQuality_STANDARD_Action);
   soundMenu->addAction(soundQuality_HIGH_Action);
   soundMenu->addAction(soundQuality_MAXIMUM_Action);
+  soundMenu->addSeparator();
+  soundCacheSubMenu = soundMenu->addMenu(tr("Sound Cache"));
+  soundCacheSubMenu->addAction(soundCache_0_Action);
+  soundCacheSubMenu->addAction(soundCache_1_Action);
+  soundCacheSubMenu->addAction(soundCache_2_Action);
+  soundCacheSubMenu->addAction(soundCache_3_Action);
+  soundCacheSubMenu->addAction(soundCache_4_Action);
+  soundCacheSubMenu->addAction(soundCache_5_Action);
 
   // control menu
   controlMenu = menuBar()->addMenu(tr("Control"));
@@ -2112,7 +2165,7 @@ void QtBrynhildr::closeEvent(QCloseEvent *event)
 // window resize event
 void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 
   QMainWindow::resizeEvent(event);
 
@@ -2607,6 +2660,17 @@ void QtBrynhildr::clearSoundQualityCheck()
   soundQuality_MAXIMUM_Action->setChecked(false);
 }
 
+// clear Sound Cache check
+void QtBrynhildr::clearSoundCacheCheck()
+{
+  soundCache_0_Action->setChecked(false);
+  soundCache_1_Action->setChecked(false);
+  soundCache_2_Action->setChecked(false);
+  soundCache_3_Action->setChecked(false);
+  soundCache_4_Action->setChecked(false);
+  soundCache_5_Action->setChecked(false);
+}
+
 // clear Select Frame Rate
 void QtBrynhildr::clearSelectFrameRateCheck()
 {
@@ -2718,6 +2782,54 @@ void QtBrynhildr::setSoundQuality_MAXIMUM()
 {
   settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
   refreshSoundQualityMenu();
+}
+
+// set sound cache 0
+void QtBrynhildr::setSoundCache_0()
+{
+  clearSoundCacheCheck();
+  soundCache_0_Action->setChecked(true);
+  settings->setSoundCacheTime(0);
+}
+
+// set sound cache 1
+void QtBrynhildr::setSoundCache_1()
+{
+  clearSoundCacheCheck();
+  soundCache_1_Action->setChecked(true);
+  settings->setSoundCacheTime(100);
+}
+
+// set sound cache 2
+void QtBrynhildr::setSoundCache_2()
+{
+  clearSoundCacheCheck();
+  soundCache_2_Action->setChecked(true);
+  settings->setSoundCacheTime(200);
+}
+
+// set sound cache 3
+void QtBrynhildr::setSoundCache_3()
+{
+  clearSoundCacheCheck();
+  soundCache_3_Action->setChecked(true);
+  settings->setSoundCacheTime(300);
+}
+
+// set sound cache 4
+void QtBrynhildr::setSoundCache_4()
+{
+  clearSoundCacheCheck();
+  soundCache_4_Action->setChecked(true);
+  settings->setSoundCacheTime(400);
+}
+
+// set sound cache 5
+void QtBrynhildr::setSoundCache_5()
+{
+  clearSoundCacheCheck();
+  soundCache_5_Action->setChecked(true);
+  settings->setSoundCacheTime(500);
 }
 
 // toggle onControl

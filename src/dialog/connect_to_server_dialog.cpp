@@ -110,7 +110,7 @@ void ConnectToServerDialog::setKeyboardType(KEYBOARD_TYPE keyboardType)
 // resize event
 void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 }
 
 // settings for Tablet

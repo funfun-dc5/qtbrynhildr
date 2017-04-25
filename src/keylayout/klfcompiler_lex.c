@@ -1,6 +1,6 @@
-#line 1 "klfcompiler.c"
+#line 1 "klfcompiler_lex.c"
 
-#line 3 "klfcompiler.c"
+#line 3 "klfcompiler_lex.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -617,9 +617,14 @@ char *yytext;
 
 #include "keylayoutfile.h"
 
-#line 620 "klfcompiler.c"
 
-#line 622 "klfcompiler.c"
+int lineno = 1;
+
+#define STRING_BUF_SIZE 1024
+
+#line 625 "klfcompiler_lex.c"
+
+#line 627 "klfcompiler_lex.c"
 
 #define INITIAL 0
 #define qstring 1
@@ -837,14 +842,15 @@ YY_DECL
 		}
 
 	{
-#line 47 "klfcompiler.l"
+#line 52 "klfcompiler.l"
 
 
-#line 50 "klfcompiler.l"
-  char string_buf[1024];
+#line 55 "klfcompiler.l"
+  char string_buf[STRING_BUF_SIZE];
   char *string_buf_ptr = NULL;
+  int string_buf_len = 0;
 
-#line 847 "klfcompiler.c"
+#line 853 "klfcompiler_lex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -903,21 +909,25 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 53 "klfcompiler.l"
+#line 59 "klfcompiler.l"
 {
   string_buf_ptr = string_buf;
+  string_buf_len = 0;
   BEGIN(qstring);
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 58 "klfcompiler.l"
+#line 65 "klfcompiler.l"
 {
   BEGIN(INITIAL);
   *string_buf_ptr = '\0';
 #ifdef DEBUG_LEX
   printf("qstring  = \"%s\"\n", string_buf);
 #endif /* DEBUG_LEX */
+  if (strlen(string_buf) > MAX_STRING){
+	printf("error : qstring > %d\n", MAX_STRING);
+  }
   yylval.strp = strdup(string_buf);
   return QSTRING;
 }
@@ -925,30 +935,36 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 68 "klfcompiler.l"
+#line 78 "klfcompiler.l"
 {
   *string_buf_ptr++ = yytext[1];
+  string_buf_len++;
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 72 "klfcompiler.l"
+#line 83 "klfcompiler.l"
 {
   char *yptr = yytext;
 
   while (*yptr){
 	*string_buf_ptr++ = *yptr++;
+	string_buf_len++;
+	if (string_buf_len > MAX_STRING){
+	  printf("error : string_buf_len > %d\n", MAX_STRING);
+	  break;
+	}
   }
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 80 "klfcompiler.l"
+#line 96 "klfcompiler.l"
 ;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 81 "klfcompiler.l"
+#line 97 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("comment  = %s\n", yytext);
@@ -958,28 +974,29 @@ YY_RULE_SETUP
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 86 "klfcompiler.l"
+#line 102 "klfcompiler.l"
 {
+  lineno++;
   return '\n';
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 89 "klfcompiler.l"
+#line 106 "klfcompiler.l"
 {
   return ',';
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 92 "klfcompiler.l"
+#line 109 "klfcompiler.l"
 {
   return '=';
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 96 "klfcompiler.l"
+#line 113 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
@@ -990,7 +1007,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 103 "klfcompiler.l"
+#line 120 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
@@ -1001,7 +1018,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 110 "klfcompiler.l"
+#line 127 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("section  = %s\n", yytext);
@@ -1012,29 +1029,35 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 117 "klfcompiler.l"
+#line 134 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("key_id   = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  if (strlen(yytext) > MAX_STRING){
+	printf("error : Key_* > %d \n", MAX_STRING);
+  }
   yylval.strp = strdup(yytext);
   return KEY_ID;
 }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 124 "klfcompiler.l"
+#line 144 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("vk_id    = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  if (strlen(yytext) > MAX_STRING){
+	printf("error : VK_* > %d \n", MAX_STRING);
+  }
   yylval.strp = strdup(yytext);
   return VK_ID;
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 131 "klfcompiler.l"
+#line 154 "klfcompiler.l"
 {
   yylval.intval = ID_SHIFTKEY_THROUGH;
   return SHIFTKEY;
@@ -1042,7 +1065,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 135 "klfcompiler.l"
+#line 158 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("shiftkey = %s\n", yytext);
@@ -1053,7 +1076,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 142 "klfcompiler.l"
+#line 165 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("shiftkey = %s\n", yytext);
@@ -1064,7 +1087,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 149 "klfcompiler.l"
+#line 172 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
@@ -1075,7 +1098,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 156 "klfcompiler.l"
+#line 179 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
@@ -1086,7 +1109,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 163 "klfcompiler.l"
+#line 186 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
@@ -1097,18 +1120,21 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 170 "klfcompiler.l"
+#line 193 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("string   = %s\n", yytext);
 #endif /* DEBUG_LEX */
+  if (strlen(yytext) > MAX_STRING){
+	printf("error : string > %d \n", MAX_STRING);
+  }
   yylval.strp = strdup(yytext);
   return STRING;
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 177 "klfcompiler.l"
+#line 203 "klfcompiler.l"
 {
 #ifdef DEBUG_LEX
   printf("number   = %s\n", yytext);
@@ -1119,10 +1145,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 185 "klfcompiler.l"
+#line 211 "klfcompiler.l"
 ECHO;
 	YY_BREAK
-#line 1125 "klfcompiler.c"
+#line 1151 "klfcompiler_lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(qstring):
 	yyterminate();
@@ -2124,7 +2150,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 185 "klfcompiler.l"
+#line 211 "klfcompiler.l"
 
 
 /* for TEST */

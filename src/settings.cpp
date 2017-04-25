@@ -45,7 +45,7 @@ Settings::Settings(const char *iniFileName)
   onSupportGamePad(false),
   onDisableBrynhildr2Support(false),
 #endif // QTB_BRYNHILDR2_SUPPORT
-  frameDrawTime(15000),
+  frameDrawTime(0),
   monitorCount(0),
   onShowSoftwareKeyboard(false),
   onShowSoftwareButton(false),
@@ -102,6 +102,7 @@ Settings::Settings(const char *iniFileName)
   setSoundType(QTB_SOUNDTYPE_DEFAULT);
 #endif // QTB_CELT_SUPPORT
   setSoundQuality(QTB_SOUNDQUALITY_DEFAULT);
+  setSoundCacheTime(QTB_SOUNDCACHETIME_DEFAULT);
 
   setOnKeepOriginalDesktopSize(QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT);
   setDesktopScalingFactor(QTB_DESKTOPSCALINGFACTOR_DEFAULT);
@@ -324,6 +325,10 @@ void Settings::readSettings()
   // load soundCapture
   //  setSoundCapture(settings->value(QTB_SOUNDCAPTURE,
   //								 (qint32)QTB_SOUNDCAPTURE_DEFAULT).toInt());
+
+  // load soundCacheTime
+  setSoundCacheTime(settings->value(QTB_SOUNDCACHETIME,
+									(qint32)QTB_SOUNDCACHETIME_DEFAULT).toInt());
 
   // load onKeepOriginalDesktopSize
   setOnKeepOriginalDesktopSize(settings->value(QTB_ONKEEPORIGINALDESKTOPSIZE,
@@ -563,6 +568,9 @@ void Settings::writeSettings()
   // save soundQuality
   settings->setValue(QTB_SOUNDQUALITY, (qint32)soundQuality);
 
+  // save soundCacheTime
+  settings->setValue(QTB_SOUNDCACHETIME, (qint32)soundCacheTime);
+
   // save soundCapture
   //  settings->setValue(QTB_SOUNDCAPTURE, (qint32)soundCapture);
 
@@ -737,6 +745,7 @@ void Settings::printSettings() const
 #endif // QTB_CELT_SUPPORT
   qDebug() << "    QUALITY   : " << getSoundQualityByString();
   qDebug() << "    CAPTURE   : " << getSoundCaptureByString();
+  qDebug() << "    CacheTime : " << getSoundCacheTime();
 
   qDebug() << "KeepOriginalDesktopSize : " << onKeepOriginalDesktopSize;
   qDebug() << "DesktopScalingFactor    : " << desktopScalingFactor;

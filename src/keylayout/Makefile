@@ -11,12 +11,12 @@ TARGET = klfc.exe
 
 SOURCES = \
 	main.c \
-	klfcompiler.c \
+	klfcompiler_lex.c \
 	klfcompiler.tab.c
 
 OBJS = \
 	obj\main.obj \
-	obj\klfcompiler.obj \
+	obj\klfcompiler_lex.obj \
 	obj\klfcompiler.tab.obj
 
 .SUFFIXES: .c .h
@@ -29,8 +29,8 @@ $(TARGET): $(OBJS)
 obj\main.obj: main.c
 	$(CC) -c $(CFLAGS) -Foobj\ main.c
 
-obj\klfcompiler.obj: klfcompiler.c
-	$(CC) -c $(CFLAGS) -Foobj\ klfcompiler.c
+obj\klfcompiler_lex.obj: klfcompiler_lex.c
+	$(CC) -c $(CFLAGS) -Foobj\ klfcompiler_lex.c
 
 obj\klfcompiler.tab.obj: klfcompiler.tab.c
 	$(CC) -c $(CFLAGS) -Foobj\ klfcompiler.tab.c

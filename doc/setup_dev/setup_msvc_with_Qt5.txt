@@ -24,3 +24,7 @@ vcvarsall.bat amd64
 4) make
 
  nmake
+
+(*) src/keylayout/main.c
+
+ Rename main.c to main.c.bak for building QtBrynhildr.

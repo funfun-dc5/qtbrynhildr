@@ -61,6 +61,12 @@ public:
 	return initFlag;
   }
 
+  // get no translation flag
+  bool getNoTransFlag() const
+  {
+	return noTransFlag;
+  }
+
   // get bootup flag
   bool getBootupFlag() const
   {
@@ -186,6 +192,9 @@ private:
   // replaying filename
   const char *replayingFileName;
 #endif // QTB_RECORDER
+
+  // no translation flag
+  bool noTransFlag;
 
   // bootup flag
   bool bootupFlag;

@@ -47,7 +47,7 @@ ConfirmDialog::ConfirmDialog(QString msg,
 // resize event
 void ConfirmDialog::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
 }
 
 // get confirm flag

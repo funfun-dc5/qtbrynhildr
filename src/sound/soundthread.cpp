@@ -31,8 +31,8 @@ SoundThread::SoundThread(Settings *settings, MainWindow *mainWindow)
   NetThread("SoundThread", settings, mainWindow),
   soundBuffer(0),
   soundBufferSize(0),
+  soundCacheTime(-1),
   samplerate(0),
-  format(0),
   audioOutput(0),
   output(0),
   samplerateChangeCount(0),
@@ -79,12 +79,6 @@ SoundThread::~SoundThread()
 	audioOutput->stop();
 	delete audioOutput;
 	audioOutput = 0;
-  }
-
-  // format
-  if (format != 0){
-	delete format;
-	format = 0;
   }
 
   // output wav file
@@ -233,6 +227,10 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 
   // put PCM data into sound buffer
   if (settings->getOnSound()){
+	// for cache
+	static long soundCacheSize = 0;
+	static long soundCacheSizeForLog = 0;
+
 	// check audio output
 	if (audioOutput == 0){
 	  // NOT supported sample rate
@@ -247,8 +245,60 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
 
+	// check sound cache time
+	if (soundCacheTime != settings->getSoundCacheTime()){
+	  // update cacheSize
+	  soundCacheTime = settings->getSoundCacheTime();
+	  soundCacheSize = (long)(samplerate * 2 * 2 * (qreal)soundCacheTime/1000);
+	  soundCacheSizeForLog = soundCacheSize;
+	  if (settings->getOutputLog()){
+		cout << "soundCacheSize = " << soundCacheSize << endl << flush;
+	  }
+	}
+
+	if (settings->getOutputLog()){
+	  double cacheRate = (double)(soundBuffer->size())/soundCacheSizeForLog * 100.0;
+	  cout << "[SoundThread] Cache Rate : " << cacheRate << endl << flush;
+	}
+
 	// write into sound buffer
-	if (audioOutput->state() != QAudio::StoppedState){
+#if 1 // for TEST
+	if (soundBuffer->size() > soundCacheSize){
+	  if (audioOutput->state() != QAudio::StoppedState){
+		//	  soundCacheSize = 0;
+
+		int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
+
+		while (chunks){
+		  qint64 len = soundBuffer->size(audioOutput->periodSize());
+
+		  // write PCM data
+		  if (len != 0){
+			qint64 result = output->write(soundBuffer->get(len), len);
+			if (result != len){
+			  // Failed to write
+			  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
+			}
+		  }
+		  else {
+			break;
+		  }
+
+		  // if (len != audioOutput->periodSize())
+		  //   break;
+
+		  --chunks;
+		}
+	  }
+	  else {
+		// start output
+		output = audioOutput->start();
+	  }
+	}
+#else // for TEST
+	if (audioOutput->state() != QAudio::StoppedState && soundBuffer->size() > soundCacheSize){
+	  //	  soundCacheSize = 0;
+
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 	  while (chunks){
@@ -272,6 +322,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 		--chunks;
 	  }
 	}
+#endif // for TEST
 
 #if 0 // for DEBUG
 	static int count = 0;
@@ -331,21 +382,17 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << endl << flush;
   }
 
-  if (format == 0){
-	format = new QAudioFormat();
-  }
-
   // setting for sound format
-  format->setSampleRate((int)samplerate);
-  format->setChannelCount(2); // channel
-  format->setSampleSize(16); // bits
-  format->setCodec("audio/pcm"); // PCM
-  format->setByteOrder(QAudioFormat::LittleEndian);
-  format->setSampleType(QAudioFormat::SignedInt);
+  format.setSampleRate((int)samplerate);
+  format.setChannelCount(2); // channel
+  format.setSampleSize(16); // bits
+  format.setCodec("audio/pcm"); // PCM
+  format.setByteOrder(QAudioFormat::LittleEndian);
+  format.setSampleType(QAudioFormat::SignedInt);
 
   // audio device information
   const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
-  if (!deviceInfo.isFormatSupported(*format)){
+  if (!deviceInfo.isFormatSupported(format)){
 	if (audioOutput != 0){
 	  audioOutput->stop();
 	  delete audioOutput;
@@ -378,18 +425,20 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	delete audioOutput;
 	audioOutput = 0;
   }
-  audioOutput = new QAudioOutput(*format);
+  audioOutput = new QAudioOutput(deviceInfo, format);
 
   // stateChanged
 #if defined(DEBUG)
   connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
-#endif
+#endif // defined(DEBUG)
 
   // setting for AudioOutput
   audioOutput->setBufferSize(QTB_AUDIOOUTPUT_SOUND_BUFFER_SIZE);
 
-  // output
+#if 0 // for TEST
+  // start output
   output = audioOutput->start();
+#endif
 
   // change count up
   samplerateChangeCount++;
@@ -481,10 +530,11 @@ void SoundThread::createWavFile(int pcmFileSize)
 }
 
 #if defined(DEBUG)
+// audio state change event
 void SoundThread::handleStateChanged(QAudio::State state)
 {
-    qWarning() << "state = " << state;
+  cout << "state = " << state << endl << flush;
 }
-#endif
+#endif // defined(DEBUG)
 
 } // end of namespace qtbrynhildr

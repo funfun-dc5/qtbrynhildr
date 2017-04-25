@@ -78,7 +78,7 @@
 #include "windows/keyevent.h"
 
 extern int yylex();
-void yyerror(char *s);
+void yyerror(char *msg);
 
 int getENVVAR_ID(const char *name);
 int getVK_ID(const char *name);
@@ -849,7 +849,6 @@ KeyEntry keys[KEY_ENTRY_NUM] = {
  /* next soft key index */
  int nextsoftkey;
 
-
  /* Header */
  KLFHeader header;
 
@@ -859,8 +858,11 @@ KeyEntry keys[KEY_ENTRY_NUM] = {
  /* table for KeyTop */
  KeyTop keyTopTable[MAX_KEY_TOP_NUM];
 
+ /* error counter */
+ int error_count;
 
-#line 864 "klfcompiler.tab.c" /* yacc.c:339  */
+
+#line 866 "klfcompiler.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -878,10 +880,7 @@ KeyEntry keys[KEY_ENTRY_NUM] = {
 # define YYERROR_VERBOSE 0
 #endif
 
-/* In a future release of Bison, this section will be replaced
-   by #include "klfcompiler.tab.h".  */
-#ifndef YY_YY_KLFCOMPILER_TAB_H_INCLUDED
-# define YY_YY_KLFCOMPILER_TAB_H_INCLUDED
+
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -911,12 +910,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 802 "klfcompiler.y" /* yacc.c:355  */
+#line 804 "klfcompiler.y" /* yacc.c:355  */
 
   char *strp;
   int intval;
 
-#line 920 "klfcompiler.tab.c" /* yacc.c:355  */
+#line 919 "klfcompiler.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -929,11 +928,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_KLFCOMPILER_TAB_H_INCLUDED  */
+
 
 /* Copy the second part of user declarations.  */
 
-#line 937 "klfcompiler.tab.c" /* yacc.c:358  */
+#line 936 "klfcompiler.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1175,16 +1174,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   27
+#define YYLAST   28
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  14
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  10
+#define YYNRULES  11
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  28
+#define YYNSTATES  30
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -1231,8 +1230,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   818,   818,   819,   822,   823,   829,   859,   886,   920,
-     952
+       0,   820,   820,   821,   824,   825,   831,   864,   895,   942,
+     980,  1044
 };
 #endif
 
@@ -1257,10 +1256,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -9
+#define YYPACT_NINF -10
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-9)))
+  (!!((Yystate) == (-10)))
 
 #define YYTABLE_NINF -1
 
@@ -1271,9 +1270,9 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -9,     0,    -9,    -8,    -5,    -9,    -4,    -9,    -9,    -3,
-       6,     4,    -9,    -9,     1,     2,     9,     7,     5,     8,
-      11,    10,    12,    -9,    13,    14,    15,    -9
+     -10,     0,   -10,    -9,    -8,    -3,   -10,    -1,   -10,   -10,
+     -10,     4,     9,     6,   -10,   -10,     2,     3,    13,    10,
+       5,     7,    14,    11,    12,   -10,    19,    15,    16,   -10
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -1281,21 +1280,21 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     5,     0,     4,     3,     0,
-       0,     0,     6,     7,     0,     0,     0,     0,     0,     8,
-       0,     0,     0,     9,     0,     0,     0,    10
+       2,     0,     1,     0,     0,     0,     5,     0,     4,     3,
+      11,     0,     0,     0,     6,     7,     0,     0,     0,     0,
+       0,     8,     0,     0,     0,     9,     0,     0,     0,    10
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,    -9
+     -10,   -10,   -10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     8
+      -1,     1,     9
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -1303,39 +1302,39 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,    12,    13,     3,     9,     4,     5,     6,    10,    11,
-      14,     7,    15,    18,    16,    17,    19,    25,    20,    22,
-      23,    21,     0,    27,     0,    24,     0,    26
+       2,     3,    10,     4,    11,     5,     6,     7,    14,    15,
+      12,     8,    13,    16,    17,    18,    19,    20,    22,    21,
+      23,    25,    24,    27,    29,    26,     0,     0,    28
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     4,     5,     3,    12,     5,     6,     7,    13,    13,
-       4,    11,     8,     4,    13,    13,     9,     4,    13,     8,
-      10,    13,    -1,     8,    -1,    13,    -1,    13
+       0,     1,    11,     3,    12,     5,     6,     7,     4,     5,
+      13,    11,    13,     4,     8,    13,    13,     4,    13,     9,
+      13,    10,     8,     4,     8,    13,    -1,    -1,    13
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    15,     0,     3,     5,     6,     7,    11,    16,    12,
-      13,    13,     4,     5,     4,     8,    13,    13,     4,     9,
-      13,    13,     8,    10,    13,     4,    13,     8
+       0,    15,     0,     1,     3,     5,     6,     7,    11,    16,
+      11,    12,    13,    13,     4,     5,     4,     8,    13,    13,
+       4,     9,    13,    13,     8,    10,    13,     4,    13,     8
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    14,    15,    15,    16,    16,    16,    16,    16,    16,
-      16
+      16,    16
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     1,     1,     3,     3,     5,     7,
-      11
+      11,     2
 };
 
 
@@ -2012,18 +2011,18 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 823 "klfcompiler.y" /* yacc.c:1646  */
+#line 825 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("Found Section (Section No. = %d)\n", (yyvsp[0].intval));
 #endif /* DEBUG_YACC */
   section = (yyvsp[0].intval);
 }
-#line 2023 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2022 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 829 "klfcompiler.y" /* yacc.c:1646  */
+#line 831 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("ENVVAR = QSTRING (%s = \"%s\")\n", (yyvsp[-2].strp), (yyvsp[0].strp));
@@ -2032,6 +2031,7 @@ yyreduce:
   /* section check */
   if (section != ID_SECTION_GENERAL){
 	// error : NOT in [General]
+	error_count++;
 	printf("error : NOT in [General]\n");
   }
   else {
@@ -2045,20 +2045,22 @@ yyreduce:
 	  strncpy(header.author, (yyvsp[0].strp), 64-1);
 	  break;
 	case ID_ENVVAR_SPECVERSION:
+	  error_count++;
 	  printf("error : ENVVAR(%s) is number. \n", (yyvsp[-2].strp));
 	  break;
 	default:
 	  // error
+	  error_count++;
 	  printf("error : Unknown ENVVAR(%s)\n", (yyvsp[-2].strp));
 	  break;
 	}
   }
 }
-#line 2058 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2060 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 859 "klfcompiler.y" /* yacc.c:1646  */
+#line 864 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("ENVVAR = NUMBER  (%s = %d)\n", (yyvsp[-2].strp), (yyvsp[0].intval));
@@ -2066,6 +2068,7 @@ yyreduce:
   /* section check */
   if (section != ID_SECTION_GENERAL){
 	// error : NOT in [Keys]
+	error_count++;
 	printf("error : NOT in [General]\n");
   }
   else {
@@ -2074,6 +2077,8 @@ yyreduce:
 	switch(envvar){
 	case ID_ENVVAR_NAME:
 	case ID_ENVVAR_AUTHOR:
+	  // error
+	  error_count++;
 	  printf("error : ENVVAR(%s) is quoted string. \n", (yyvsp[-2].strp));
 	  break;
 	case ID_ENVVAR_SPECVERSION:
@@ -2081,16 +2086,17 @@ yyreduce:
 	  break;
 	default:
 	  // error
+	  error_count++;
 	  printf("error : Unknown ENVVAR(%s)\n", (yyvsp[-2].strp));
 	  break;
 	}
   }
 }
-#line 2090 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2096 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 886 "klfcompiler.y" /* yacc.c:1646  */
+#line 895 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY           : %-25s , %-25s, SHIFTKEY(%d)\n", (yyvsp[-4].strp), (yyvsp[-2].strp), (yyvsp[0].intval));
@@ -2101,6 +2107,7 @@ yyreduce:
   /* section check */
   if (section != ID_SECTION_KEYS){
 	// error : NOT in [Keys]
+	error_count++;
 	printf("error : NOT in [Keys]\n");
   }
   else {
@@ -2111,8 +2118,19 @@ yyreduce:
 	  int VK_Code = getVK_ID((const char*)(yyvsp[-2].strp));
 	  ShiftKeyControl shiftKeyControl = (yyvsp[0].intval);
 
-	  /* Yet: check */
+	  /* check */
+	  if (key == (Key)-1){
+		// Unknown Key
+		error_count++;
+		printf("error : Unknown Key : %s\n", (yyvsp[-4].strp));
+	  }
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		error_count++;
+		printf("error : Unknown VK Code : %s\n", (yyvsp[-2].strp));
+	  }
 
+	  // set KeyEvent
 	  keyEventTable[nextkey].key = key;
 	  keyEventTable[nextkey].VK_Code = VK_Code;
 	  keyEventTable[nextkey].shiftKeyControl = shiftKeyControl;
@@ -2121,15 +2139,16 @@ yyreduce:
 	}
 	else {
 	  // error : too many key event entry
+	  error_count++;
 	  printf("error : too many key event entry in [Keys]\n");
 	}
   }
 }
-#line 2129 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2148 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 920 "klfcompiler.y" /* yacc.c:1646  */
+#line 942 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("KEY_ID , VK_ID, SHIFTKEY, PLATFORM : %-25s , %-25s, SHIFTKEY(%d), PLATFORM(%d)\n", (yyvsp[-6].strp), (yyvsp[-4].strp), (yyvsp[-2].intval), (yyvsp[0].intval));
@@ -2140,6 +2159,7 @@ yyreduce:
   /* section check */
   if (section != ID_SECTION_KEYS){
 	// error : NOT in [Keys]
+	error_count++;
 	printf("error : NOT in [Keys]\n");
   }
   else {
@@ -2159,14 +2179,19 @@ yyreduce:
 		keyEventTable[index].VK_Code = VK_Code;
 		keyEventTable[index].shiftKeyControl = shiftKeyControl;
 	  }
+	  else {
+		// Not Found Key for overwrite
+		error_count++;
+		printf("error : Not Found Key : %s\n", (yyvsp[-6].strp));
+	  }
 	}
   }
 }
-#line 2166 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2191 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 952 "klfcompiler.y" /* yacc.c:1646  */
+#line 980 "klfcompiler.y" /* yacc.c:1646  */
     {
 #ifdef DEBUG_YACC
   printf("NUMBER, QSTRING, QSTRING, VK_ID, QSTRING, VK_ID : ");
@@ -2176,32 +2201,75 @@ yyreduce:
   /* section check */
   if (section != ID_SECTION_SOFTKEYS){
 	// error : NOT in [SoftKeys]
+	error_count++;
 	printf("error : NOT in [SoftKeys]\n");
   }
   else {
 	if (nextsoftkey < MAX_KEY_TOP_NUM){
+	  int VK_Code;
+
 	  /* set keTopTable[$1-1] */
 	  KeyTop *keyTop = &keyTopTable[(yyvsp[-10].intval)-1];
 
-	  strncpy(keyTop->keyTop.keyTop, (yyvsp[-8].strp), 10);
-	  strncpy(keyTop->keyTop.keyTopWithShift, (yyvsp[-6].strp), 10);
+	  /* check */
+	  if (strlen((yyvsp[-8].strp)) > MAX_KEYTOP_STRING){
+		// too long string
+		printf("error : too long string : %s\n", (yyvsp[-8].strp));
+		error_count++;
+	  }
+	  if (strlen((yyvsp[-6].strp)) > MAX_KEYTOP_STRING){
+		// too long string
+		error_count++;
+		printf("error : too long string : %s\n", (yyvsp[-6].strp));
+	  }
+	  VK_Code = getVK_ID((yyvsp[-4].strp));
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		error_count++;
+		printf("error : Unknown VK Code : %s\n", (yyvsp[-4].strp));
+	  }
+	  if (strlen((yyvsp[-2].strp)) > MAX_KEYTOP_STRING){
+		// too long string
+		error_count++;
+		printf("error : too long string : %s\n", (yyvsp[-2].strp));
+	  }
+	  VK_Code = getVK_ID((yyvsp[0].strp));
+	  if (VK_Code == -1){
+		// Unknown VK Code
+		error_count++;
+		printf("error : Unknown VK Code : %s\n", (yyvsp[0].strp));
+	  }
+
+	  // set KeyTop
+	  strncpy(keyTop->keyTop.keyTop, (yyvsp[-8].strp), MAX_KEYTOP_STRING);
+	  strncpy(keyTop->keyTop.keyTopWithShift, (yyvsp[-6].strp), MAX_KEYTOP_STRING);
 	  keyTop->keyTop.VK_Code = getVK_ID((yyvsp[-4].strp));
-	  strncpy(keyTop->keyTopWithFn.keyTop, (yyvsp[-2].strp), 10);
+	  strncpy(keyTop->keyTopWithFn.keyTop, (yyvsp[-2].strp), MAX_KEYTOP_STRING);
 	  keyTop->keyTopWithFn.VK_Code = getVK_ID((yyvsp[0].strp));
 
 	  nextsoftkey++;
 	}
 	else {
 	  // error : too many key top entry
+	  error_count++;
 	  printf("error : too many key top entry in [SoftKeys]\n");
 	}
   }
 }
-#line 2201 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2260 "klfcompiler.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 11:
+#line 1044 "klfcompiler.y" /* yacc.c:1646  */
+    {
+  // error
+  error_count++;
+}
+#line 2269 "klfcompiler.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2205 "klfcompiler.tab.c" /* yacc.c:1646  */
+#line 2273 "klfcompiler.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2429,7 +2497,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 984 "klfcompiler.y" /* yacc.c:1906  */
+#line 1050 "klfcompiler.y" /* yacc.c:1906  */
 
 
 /* get envvar by name */
@@ -2494,6 +2562,7 @@ int make_KLX(const char *infile, const char *outfile)
   section = -1;
   nextkey = 0;
   nextsoftkey = 0;
+  error_count = 0;
 
   // zero clear of header, tables
   memset(&header, 0, sizeof(header));
@@ -2505,7 +2574,7 @@ int make_KLX(const char *infile, const char *outfile)
 	yyin = fopen(infile, "r");
 	if (yyin == NULL){
 	  // open failed
-	  return 1;
+	  return -1;
 	}
   }
 
@@ -2524,7 +2593,7 @@ int make_KLX(const char *infile, const char *outfile)
   printf("==== RESULT ====\n");
   printf("keynum     = %d\n", nextkey);
   printf("softkeynum = %d\n", nextsoftkey);
-  printf("total size = %d\n", total);
+  printf("total size = %d\n", (int)total);
 #endif /* DEBUG_YACC */
 
   /* close .kl file */
@@ -2544,7 +2613,7 @@ int make_KLX(const char *infile, const char *outfile)
   fp = fopen(outfile, "wb");
   if (fp == NULL){
 	// error
-	return 1;
+	return -1;
   }
 
   /* write .klx file */
@@ -2552,22 +2621,23 @@ int make_KLX(const char *infile, const char *outfile)
   result += fwrite((const char *)keyEventTable, sizeof(KeyEvent), nextkey, fp) * sizeof(KeyEvent);
   result += fwrite((const char *)keyTopTable, sizeof(KeyTop), nextsoftkey, fp) * sizeof(KeyTop);
 
+  /* close .klx file */
+  fclose(fp);
+
   if (result != total){
 	/* error : write error */
 	printf("error : Write error.\n");
+	return -1;
   }
   else {
 	/* O.K. */
 	/* printf("output : %s\n", outfile); */
   }
 
-  /* close .klx file */
-  fclose(fp);
-
-  return 0;
+  return error_count;
 }
 
-void yyerror(char *s)
+void yyerror(char *msg)
 {
-  printf("%s\n", s);
+  printf("%d : %s\n", lineno, msg);
 }

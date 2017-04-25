@@ -210,6 +210,10 @@ typedef int KEYBOARD_TYPE;
 #define QTB_SOUNDCAPTURE			"soundCapture"
 #define QTB_SOUNDCAPTURE_DEFAULT	SOUND_CAPTURE_CORE_AUDIO
 
+// for soundCacheTime (ms)
+#define QTB_SOUNDCACHETIME			"soundCacheTime"
+#define QTB_SOUNDCACHETIME_DEFAULT	0
+
 // for onKeepOriginalDesktopSize
 #define QTB_ONKEEPORIGINALDESKTOPSIZE "onKeepOriginalDesktopSize"
 #define QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT true
@@ -878,6 +882,7 @@ public:
   {
 	ASSERT(videoQuality >= VIDEO_QUALITY_MINIMUM && videoQuality <= VIDEO_QUALITY_MAXIMUM);
 	this->videoQuality = videoQuality;
+	setFrameDrawTime(0); // recheck frameDrawTime
   }
 
   // get video quality string
@@ -955,12 +960,21 @@ public:
 	}
 	else {
 	  frameInterval = (unsigned long)1000000/frameRate; // micro second = 1000000 (1 second)
-	  if (frameInterval > QTB_THREAD_SLEEP_TIME * 1000){
+	  if (frameInterval >= QTB_THREAD_SLEEP_TIME * 1000){
 		frameInterval -= QTB_THREAD_SLEEP_TIME * 1000; // sleep time
-		if (frameInterval > frameDrawTime){
+	  }
+	  else {
+		frameInterval = 0;
+	  }
+	  if (frameDrawTime > 0){
+		if (frameInterval >= frameDrawTime ){
 		  frameInterval -= frameDrawTime; // drawing time of 1 frame
 		}
+		else {
+		  frameInterval = 0;
+		}
 	  }
+	  //cout << "frameInterval = " << frameInterval << endl << flush;
 	}
   }
 
@@ -1040,6 +1054,18 @@ public:
   SOUND_CAPTURE getSoundCapture() const
   {
 	return soundCapture;
+  }
+
+  // get sound cache time
+  int getSoundCacheTime() const
+  {
+	return soundCacheTime;
+  }
+
+  // set sound cache time
+  void setSoundCacheTime(int soundCacheTime)
+  {
+	this->soundCacheTime = soundCacheTime;
   }
 
 private:
@@ -1856,6 +1882,7 @@ private:
 #endif // QTB_CELT_SUPPORT
   volatile SOUND_QUALITY soundQuality;
   volatile SOUND_CAPTURE soundCapture;
+  volatile int soundCacheTime;
 
   // keep original desktop size flag
   volatile bool onKeepOriginalDesktopSize;

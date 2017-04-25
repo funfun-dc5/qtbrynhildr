@@ -6,6 +6,8 @@
 
 // System Header
 #include <fstream> // for TEST
+#include <iostream> // for TEST
+#include <iomanip> // for TEST
 
 // Qt Header
 #include <QString>
@@ -169,8 +171,13 @@ QString EventConverter::getVKCodeByString(uchar vkcode)
 }
 
 // for DEBUG
+#if QTB_DEBUG
 void EventConverter::printKeyEvent(KeyEvent *keyEvent)
 {
+  cout << "key             : " << keyEvent->key << endl;
+  cout << "VK_Code         : " << stringTableOfVKCode[(int)(keyEvent->VK_Code)] << endl;
+  cout << "shiftKeyControl : " << keyEvent->shiftKeyControl << endl << flush;
 }
+#endif // QTB_DEBUG
 
 } // end of namespace qtbrynhildr

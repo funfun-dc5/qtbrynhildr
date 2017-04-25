@@ -5,6 +5,7 @@
 #include "common/common.h"
 
 // System Header
+#include <cmath>
 #include <fstream>
 #include <iostream>
 
@@ -116,6 +117,30 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 {
   // frame control
   if (QTB_DESKTOP_FRAME_CONTROL){
+	unsigned long frameDrawTime = settings->getFrameDrawTime();
+	if (frameDrawTime == 0){
+	  // check frameDrawTime
+	  static unsigned int orgFrameRate = settings->getFrameRate();
+	  settings->setFrameRate(0);
+	  QDateTime currentTime = QDateTime::currentDateTime();
+	  static QDateTime previousTime;
+	  if (!previousTime.isNull()){
+		static qint64 previousDrawTime = 0;
+		qint64 drawTime;
+		drawTime = currentTime.toMSecsSinceEpoch() - previousTime.toMSecsSinceEpoch();
+		//cout << "draw Time = " << drawTime << endl << flush;
+		if (abs(drawTime - previousDrawTime) < 2){
+		  //cout << "get draw Time = " << drawTime << endl << flush;
+		  settings->setFrameDrawTime((drawTime - QTB_THREAD_SLEEP_TIME)*1000);
+		  settings->setFrameRate(orgFrameRate);
+		}
+		else {
+		  previousDrawTime = drawTime;
+		}
+	  }
+	  previousTime = currentTime;
+	}
+
 	unsigned long frameInterval = settings->getFrameInterval();
 	if (frameInterval != 0){
 	  // sleep frameInterval micro seconds

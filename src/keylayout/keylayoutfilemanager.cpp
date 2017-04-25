@@ -70,8 +70,11 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 		  cout << "outfile : " << outfile << endl << flush;
 		}
 		int result = make_KLX(infile, outfile);
-		if (result){
+		if (result < 0){
 		  cout << "Failed to build .klx (" << infile << ")" << endl << flush;
+		}
+		else if (result > 0){
+		  cout << "Found : " << result << " errors to build .klx (" << infile << ")" << endl << flush;
 		}
 	  }
 	}

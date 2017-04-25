@@ -262,6 +262,40 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
 
 	// write into sound buffer
+#if 1 // for TEST
+	if (soundBuffer->size() > soundCacheSize){
+	  if (audioOutput->state() != QAudio::StoppedState){
+		//	  soundCacheSize = 0;
+
+		int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
+
+		while (chunks){
+		  qint64 len = soundBuffer->size(audioOutput->periodSize());
+
+		  // write PCM data
+		  if (len != 0){
+			qint64 result = output->write(soundBuffer->get(len), len);
+			if (result != len){
+			  // Failed to write
+			  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
+			}
+		  }
+		  else {
+			break;
+		  }
+
+		  // if (len != audioOutput->periodSize())
+		  //   break;
+
+		  --chunks;
+		}
+	  }
+	  else {
+		// start output
+		output = audioOutput->start();
+	  }
+	}
+#else // for TEST
 	if (audioOutput->state() != QAudio::StoppedState && soundBuffer->size() > soundCacheSize){
 	  //	  soundCacheSize = 0;
 
@@ -288,6 +322,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 		--chunks;
 	  }
 	}
+#endif // for TEST
 
 #if 0 // for DEBUG
 	static int count = 0;
@@ -400,8 +435,10 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // setting for AudioOutput
   audioOutput->setBufferSize(QTB_AUDIOOUTPUT_SOUND_BUFFER_SIZE);
 
-  // output
+#if 0 // for TEST
+  // start output
   output = audioOutput->start();
+#endif
 
   // change count up
   samplerateChangeCount++;

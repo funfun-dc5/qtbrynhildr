@@ -107,31 +107,31 @@
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Hide Others</source>
-        <translation type="vanished">ほかを隠す</translation>
+        <translation>ほかを隠す</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation type="vanished">%1 を終了</translation>
+        <translation>%1 を終了</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="vanished">%1 について</translation>
+        <translation>%1 について</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="vanished">設定...</translation>
+        <translation>設定...</translation>
     </message>
     <message>
         <source>Services</source>
-        <translation type="vanished">サービス</translation>
+        <translation>サービス</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation type="vanished">%1 を隠す</translation>
+        <translation>%1 を隠す</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation type="vanished">すべて表示</translation>
+        <translation>すべて表示</translation>
     </message>
 </context>
 <context>

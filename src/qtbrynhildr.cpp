@@ -996,6 +996,9 @@ bool QtBrynhildr::getShutdownFlag() const
 // desktop Changed
 void QtBrynhildr::onDesktopChanged(QImage image)
 {
+  if (!settings->getConnected())
+	return;
+
   // update desktop
   mainWindow->refreshDesktop(image);
 

@@ -302,6 +302,12 @@ void Option::printHelp() const
   cout << QTB_APPLICATION << " [options] <.ini file>" << endl;
   cout << "-------------------------------------------------------" << endl;
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+  cout << "-mode5/mode6" << endl;
+  cout << "        " << "support public mode 5/mode6." << endl;
+  cout << endl;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   // -server <server name|IP address>:<password>[:<port no>[:<host type>]]
   cout << "-server <server name|IP address>:<password>[:<port no>[:<host type>]]" << endl;
   cout << "        " << "bootup for server." << endl;

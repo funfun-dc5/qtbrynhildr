@@ -332,7 +332,7 @@ void Option::printHelp() const
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   cout << "-mode5/mode6" << endl;
-  cout << "        " << "support public mode 5/mode6." << endl;
+  cout << "        " << "support public mode 5/mode 6." << endl;
   cout << endl;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

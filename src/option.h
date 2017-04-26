@@ -141,6 +141,9 @@ private:
   // print version string
   void printVersionString() const;
 
+  // print spec
+  void printSpec() const;
+
   // print help messages
   void printHelp() const;
 

@@ -253,6 +253,10 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		printVersionString();
 		shutdownFlag = true;
 	  }
+	  else if (strncmp("spec", optionName, sizeof("spec")) == 0){
+		printSpec();
+		shutdownFlag = true;
+	  }
 	  else if ((strncmp("help", optionName, sizeof("help")) == 0)||
 			   (strncmp("h", optionName, sizeof("h")) == 0)){
 		printHelp();
@@ -292,6 +296,30 @@ void Option::printVersionString() const
 	str.erase(pos,1);
   }
   cout << str << flush;
+}
+
+// print spec
+void Option::printSpec() const
+{
+  cout << "spec :";
+
+#if QTB_RECORDER
+  cout << " RECORDER";
+#endif // QTB_RECORDER
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  cout << " MODE6";
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_CELT_SUPPORT
+  cout << " CELT";
+#endif // QTB_CELT_SUPPORT
+
+#ifdef USE_KEYLAYOUTFILE
+  cout << " KEYLAYOUTFILE";
+#endif // USE_KEYLAYOUTFILE
+
+  cout << endl << flush;
 }
 
 // print help messages
@@ -346,6 +374,11 @@ void Option::printHelp() const
   // -version (-v)
   cout << "-version (-v)" << endl;
   cout << "        " << "display version." << endl;
+  cout << endl;
+
+  // -spec
+  cout << "-spec" << endl;
+  cout << "        " << "display spec." << endl;
   cout << endl;
 
   // -help (-h)

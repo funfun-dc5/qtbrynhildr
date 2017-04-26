@@ -53,9 +53,11 @@
 #include "graphics/graphicsthread.h"
 #include "sound/soundthread.h"
 
+#ifdef USE_KEYLAYOUTFILE
 // key layout
 #include "keylayout/keylayoutfilemanager.h"
 #include "keylayout/keylayoutfilereader.h"
+#endif // USE_KEYLAYOUTFILE
 
 // event converter
 #include "windows/eventconverter.h"
@@ -690,11 +692,13 @@ private:
   // thread for sound
   SoundThread *soundThread;
 
+#ifdef USE_KEYLAYOUTFILE
   // key layout file manager
   KeyLayoutFileManager *keyLayoutFileManager;
 
   // key layout file reader
   KeyLayoutFileReader *keyLayoutFileReader;
+#endif // USE_KEYLAYOUTFILE
 
   // event converter
   EventConverter *eventConverter;

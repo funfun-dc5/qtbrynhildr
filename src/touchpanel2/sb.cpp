@@ -300,7 +300,6 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
   value.button = MOUSE_BUTTON_UP;
 
   switch (id){
-  case ID_BUTTON_0:
   case ID_BUTTON_1:
   case ID_BUTTON_2:
   case ID_BUTTON_3:

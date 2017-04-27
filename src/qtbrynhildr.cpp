@@ -76,6 +76,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   selectMonitorNoSubMenu(0),
   selectFrameRateSubMenu(0),
   soundMenu(0),
+  soundCacheSubMenu(0),
   controlMenu(0),
   sendKeySubMenu(0),
 #if QTB_RECORDER

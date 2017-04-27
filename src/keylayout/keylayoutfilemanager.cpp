@@ -63,8 +63,9 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 	  if (needBuild){
 		QString inputFile = fileInfo.absoluteFilePath();
 		QString outputFile = fileInfo.absoluteFilePath() + "x";
-		const char* infile = strdup(qPrintable(QDir::toNativeSeparators(inputFile)));
-		const char* outfile = strdup(qPrintable(QDir::toNativeSeparators(outputFile)));
+		char* infile = strdup(qPrintable(QDir::toNativeSeparators(inputFile)));
+		char* outfile = strdup(qPrintable(QDir::toNativeSeparators(outputFile)));
+
 		if (outputLog){
 		  cout << "infile  : " << infile << endl;
 		  cout << "outfile : " << outfile << endl << flush;
@@ -76,6 +77,9 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 		else if (result > 0){
 		  cout << "Found : " << result << " errors to build .klx (" << infile << ")" << endl << flush;
 		}
+
+		free(infile);
+		free(outfile);
 	  }
 	}
   }

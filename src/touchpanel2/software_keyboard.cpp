@@ -37,10 +37,11 @@ SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
 SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *parent)
   :
   QWidget(parent),
+  keyTopTable(0),
 #ifdef USE_KEYLAYOUTFILE
   klf(0),
 #endif // USE_KEYLAYOUTFILE
-  type(type),
+  type(KEYTOP_TYPE_UNKNOWN),
   onShiftKey(false),
   onControlKey(false),
   onAltKey(false),
@@ -67,6 +68,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   // set keyboard type
   setKeytopType(type);
 
+#ifdef USE_KEYLAYOUTFILE
 #if 0 // for TEST
   fstream file;
   file.open("keyTopTable_JP.dat", ios::out | ios::binary | ios::trunc);
@@ -80,6 +82,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 	file.close();
   }
 #endif // for TEST
+#endif // USE_KEYLAYOUTFILE
 }
 
 #ifdef USE_KEYLAYOUTFILE

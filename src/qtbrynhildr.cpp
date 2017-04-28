@@ -76,6 +76,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   selectMonitorNoSubMenu(0),
   selectFrameRateSubMenu(0),
   soundMenu(0),
+  soundCacheSubMenu(0),
   controlMenu(0),
   sendKeySubMenu(0),
 #if QTB_RECORDER
@@ -185,8 +186,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   controlThread(0),
   graphicsThread(0),
   soundThread(0),
+#ifdef USE_KEYLAYOUTFILE
   keyLayoutFileManager(0),
   keyLayoutFileReader(0),
+#endif // USE_KEYLAYOUTFILE
   eventConverter(0),
 #if QTB_PUBLIC_MODE6_SUPPORT
   clipboard(clipboard),
@@ -517,6 +520,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
   }
 
+#ifdef USE_KEYLAYOUTFILE
   // for Key Layout File
   QString keylayoutDirPath = settings->getKeylayoutPath();
   const char *dirPath = strdup(qPrintable(QDir::toNativeSeparators(keylayoutDirPath)));
@@ -542,6 +546,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	  connectToServerDialog->setKeyboardType(0);
 	}
   }
+#endif // USE_KEYLAYOUTFILE
 
   // Event Converter
   eventConverter = new EventConverter();
@@ -706,6 +711,7 @@ QtBrynhildr::~QtBrynhildr()
 	eventConverter = 0;
   }
 
+#ifdef USE_KEYLAYOUTFILE
   // Key Layout File Reader
   if (keyLayoutFileReader != 0){
 	delete keyLayoutFileReader;
@@ -717,6 +723,7 @@ QtBrynhildr::~QtBrynhildr()
 	delete keyLayoutFileManager;
 	keyLayoutFileManager = 0;
   }
+#endif // USE_KEYLAYOUTFILE
 
   // close Log File
   logMessage->closeLogFile();
@@ -2319,10 +2326,14 @@ void QtBrynhildr::connectToServer()
 #endif // defined(Q_OS_WIN)
 	break;
   default: // key layout file
+#ifdef USE_KEYLAYOUTFILE
 	int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
 	// set key layout file to eventconverter
 	//	cout << "key layout file index = " << index << endl << flush;
 	eventConverter->setKeytopType(keyLayoutFileReader->getKeyLayoutFile(index));
+#else // USE_KEYLAYOUTFILE
+	ABORT();
+#endif //  USE_KEYLAYOUTFILE
 	break;
   }
 
@@ -2379,12 +2390,16 @@ void QtBrynhildr::connectToServer()
 #endif // defined(Q_OS_WIN)
 	  break;
 	default: // key layout file
+#ifdef USE_KEYLAYOUTFILE
 	  int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
 	  // set key layout file to software keyboard
 	  //	  cout << "key layout file index = " << index << endl << flush;
 	  KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
 	  softwareKeyboard->setKeytopType(keyLayoutFile);
 	  settings->setKeyboardTypeName(keyLayoutFile->getName());
+#else // USE_KEYLAYOUTFILE
+	  ABORT();
+#endif // USE_KEYLAYOUTFILE
 	  break;
 	}
 	softwareKeyboard->setVisible(false);

@@ -16,12 +16,16 @@
 
 namespace qtbrynhildr {
 
+#ifdef USE_KEYLAYOUTFILE
 class KeyLayoutFile;
+#endif // USE_KEYLAYOUTFILE
 
 // EventConverter
 class EventConverter
 {
+#ifdef USE_KEYLAYOUTFILE
   friend class KeyLayoutFile;
+#endif // USE_KEYLAYOUTFILE
 
 public:
   // keyboard type
@@ -29,7 +33,8 @@ public:
 	KEYTOP_TYPE_JP,
 	KEYTOP_TYPE_US,
 	KEYTOP_TYPE_NATIVE,
-	KEYTOP_TYPE_KLF
+	KEYTOP_TYPE_KLF,
+	KEYTOP_TYPE_UNKNOWN
   } KEYTOP_TYPE;
 
 #include "windows/keyevent.h"
@@ -38,7 +43,9 @@ public:
   // constructor
   EventConverter();
   EventConverter(KEYTOP_TYPE type);
+#ifdef USE_KEYLAYOUTFILE
   EventConverter(KeyLayoutFile *klf);
+#endif // USE_KEYLAYOUTFILE
 
   // get keytop type
   KEYTOP_TYPE getKeytopType();
@@ -46,8 +53,10 @@ public:
   // set keytop type
   void setKeytopType(KEYTOP_TYPE type);
 
+#ifdef USE_KEYLAYOUTFILE
   // set keytop type by key layout file
   void setKeytopType(KeyLayoutFile *klf);
+#endif // USE_KEYLAYOUTFILE
 
   // get Virtual Keycode
   uchar getVKCode(QKeyEvent *keyEvent);
@@ -399,8 +408,10 @@ private:
 	{Qt::Key_LaunchMail,			VK_LAUNCH_MAIL,			SHIFTKEY_THROUGH}
   };
 
+#ifdef USE_KEYLAYOUTFILE
   // key layout file
   KeyLayoutFile *klf;
+#endif // USE_KEYLAYOUTFILE
 
   // key top type
   KEYTOP_TYPE type;

@@ -15,7 +15,9 @@
 // Local Header
 
 #include "eventconverter.h"
+#ifdef USE_KEYLAYOUTFILE
 #include "keylayout/keylayoutfile.h"
+#endif // USE_KEYLAYOUTFILE
 
 namespace qtbrynhildr {
 
@@ -28,13 +30,19 @@ EventConverter::EventConverter()
 
 EventConverter::EventConverter(KEYTOP_TYPE type)
   :
+  keyEventTable(0),
+  tableSize(0),
+#ifdef USE_KEYLAYOUTFILE
   klf(0),
+#endif // USE_KEYLAYOUTFILE
+  type(KEYTOP_TYPE_UNKNOWN),
   shiftKeyControl(SHIFTKEY_THROUGH),
   outputLog(false)
 {
   // set keyboard type
   setKeytopType(type);
 
+#ifdef USE_KEYLAYOUTFILE
 #if 0 // for TEST
   fstream file;
   file.open("keyEventTable_JP.dat", ios::out | ios::binary | ios::trunc);
@@ -75,14 +83,17 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 	file.close();
   }
 #endif // for TEST
+#endif // USE_KEYLAYOUTFILE
 }
 
+#ifdef USE_KEYLAYOUTFILE
 EventConverter::EventConverter(KeyLayoutFile *klf)
   :
   EventConverter(KEYTOP_TYPE_KLF)
 {
   setKeytopType(klf);
 }
+#endif // USE_KEYLAYOUTFILE
 
 // get keytop type
 EventConverter::KEYTOP_TYPE EventConverter::getKeytopType()
@@ -110,6 +121,7 @@ void EventConverter::setKeytopType(KEYTOP_TYPE type){
   this->type = type;
 }
 
+#ifdef USE_KEYLAYOUTFILE
 // set keytop type by key layout file
 void EventConverter::setKeytopType(KeyLayoutFile *klf)
 {
@@ -121,6 +133,7 @@ void EventConverter::setKeytopType(KeyLayoutFile *klf)
   keyEventTable = klf->keyEventTable;
   tableSize= klf->keynum;
 }
+#endif // USE_KEYLAYOUTFILE
 
 // get Virtual Keycode
 uchar EventConverter::getVKCode(QKeyEvent *keyEvent)
@@ -155,9 +168,11 @@ QString EventConverter::getEventConverterName() const
   case KEYTOP_TYPE_US:
 	return QString("US");
 	break;
+#ifdef USE_KEYLAYOUTFILE
   case KEYTOP_TYPE_KLF:
 	return QString(klf->name);
 	break;
+#endif // USE_KEYLAYOUTFILE
   default:
 	return QString("Unknown");
 	break;

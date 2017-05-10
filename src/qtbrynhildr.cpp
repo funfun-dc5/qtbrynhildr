@@ -2860,6 +2860,9 @@ void QtBrynhildr::toggleOnControl()
   else {
 	settings->setOnControl(true);
 	onControl_Action->setChecked(true);
+	// onGraphics On
+	settings->setOnGraphics(true);
+	onGraphics_Action->setChecked(true);
   }
 }
 

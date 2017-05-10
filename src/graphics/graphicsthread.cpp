@@ -66,6 +66,8 @@ GraphicsThread::~GraphicsThread()
 // get frame rate
 double GraphicsThread::getFrameRate()
 {
+  if (!settings->getOnGraphics()) return 0.0;
+
   QDateTime currentTime = QDateTime::currentDateTime();
   double fps = 0.0;
 
@@ -141,7 +143,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	  previousTime = currentTime;
 	}
 
-	unsigned long frameInterval = settings->getFrameInterval();
+	unsigned long frameInterval = settings->getOnGraphics() ? settings->getFrameInterval() : 1000*200;
 	if (frameInterval != 0){
 	  // sleep frameInterval micro seconds
 	  usleep(frameInterval);

@@ -16,6 +16,7 @@
 #endif // !QTB_BRYNHILDR2_SUPPORT
 #include <QDateTime>
 #include <QDockWidget>
+#include <QHideEvent>
 #include <QLabel>
 #include <QMainWindow>
 #include <QMenu>
@@ -25,8 +26,10 @@
 #include <QProgressBar>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QScrollArea>
+#include <QShowEvent>
 #include <QSize>
 #include <QString>
+#include <QTimer>
 #include <QToolBar>
 #include <QtGlobal>
 
@@ -166,6 +169,12 @@ protected:
 
   // window resize event
   void resizeEvent(QResizeEvent *event);
+
+  // window hide event
+  void hideEvent(QHideEvent *event);
+
+  // window show event
+  void showEvent(QShowEvent *event);
 
 #if 1 // for TEST
   // context menu event
@@ -741,6 +750,17 @@ private:
   // palettes
   QPalette originalPalette;
   QPalette fullScreenPalette;
+
+  // current onControl/onGraphics/onSound
+  bool onControl;
+  bool onGraphics;
+  bool onSound;
+
+  // timer for main thread
+  QTimer *timer;
+
+private slots:
+  void timerExpired();
 };
 
 } // end of namespace qtbrynhildr

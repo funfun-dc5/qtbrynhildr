@@ -207,7 +207,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
   heightOfMenuBarInHiding(0),
   heightOfStatusBarInHiding(0),
   heightOfMenuBar(0),
-  heightOfStatusBar(0)
+  heightOfStatusBar(0),
+  onControl(true),
+  onGraphics(true),
+  onSound(true),
+  timer(0)
 {
 #if 0 // for TEST Desktop Image Capture
   QScreen *screen = QGuiApplication::primaryScreen();
@@ -413,6 +417,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 (QString)"Desktop Height = " + QString::number(desktopHeight));
   }
+
+  // set current onControl/onGraphics/onSound
+  onControl = settings->getOnControl();
+  onGraphics = settings->getOnGraphics();
+  onSound = settings->getOnSound();
 
   //------------------------------------------------------------
   // create window
@@ -673,6 +682,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if 0 // for TEST
 	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
 #endif // for TEST
+
+	// initialize timer for main thread
+	timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
+	timer->start(100); // 0.1 second tick timer
 }
 
 // destructor
@@ -754,6 +768,13 @@ QtBrynhildr::~QtBrynhildr()
   if (!shutdownPlatform()){
 	// Failed to shutdown platform
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "error: shutdownPlatform()");
+  }
+
+  // shutdown timer for main thread
+  if (timer != 0){
+	timer->stop();
+	delete timer;
+	timer = 0;
   }
 }
 
@@ -1016,6 +1037,7 @@ void QtBrynhildr::onDesktopChanged(QImage image)
 	setDesktopScalingFactor(screenSize);
   }
 
+#if 0 // for TEST
   // update current frame rate
   if (settings->getOnShowFrameRate()){
 	static int refreshCounter = 1;
@@ -1033,6 +1055,7 @@ void QtBrynhildr::onDesktopChanged(QImage image)
 	}
 	refreshCounter++;
   }
+#endif // for TEST
 }
 
 // desktop clear
@@ -2190,6 +2213,39 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
   }
 }
 
+// window hide event
+void QtBrynhildr::hideEvent(QHideEvent *event)
+{
+  QMainWindow::hideEvent(event);
+
+  if (settings->getConnected()){
+	//	cout << "hideEvent()" << endl << flush;
+
+	// save onControl/onGraphics/onSound
+	onControl = settings->getOnControl();
+	onGraphics = settings->getOnGraphics();
+	onSound = settings->getOnSound();
+	// onControl/onGraphics to OFF
+	settings->setOnControl(false);
+	settings->setOnGraphics(false);
+  }
+}
+
+// window show event
+void QtBrynhildr::showEvent(QShowEvent *event)
+{
+  QMainWindow::showEvent(event);
+
+  if (settings->getConnected()){
+	//	cout << "showEvent()" << endl << flush;
+
+	// restore onControl/onGraphics/onSound
+	settings->setOnControl(onControl);
+	settings->setOnGraphics(onGraphics);
+	settings->setOnSound(onSound);
+  }
+}
+
 #if 1 // for TEST
 // context menu event
 void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
@@ -2584,8 +2640,14 @@ void QtBrynhildr::exit()
   }
 
   // save settings
-  if (writeSettingsAtExit || settings->getOnSaveSettingsAtExit())
+  if (writeSettingsAtExit || settings->getOnSaveSettingsAtExit()){
+	// restore onControl/onGraphics/onSound
+	settings->setOnControl(onControl);
+	settings->setOnGraphics(onGraphics);
+	settings->setOnSound(onSound);
+
 	writeSettings();
+  }
 
   // log
   QDateTime shutdownTime = QDateTime::currentDateTime();
@@ -2852,6 +2914,7 @@ void QtBrynhildr::toggleOnControl()
 {
   if (settings->getOnControl()){
 	settings->setOnControl(false);
+	onControl = false;
 	onControl_Action->setChecked(false);
 	// clear device buffer
 	mainWindow->getKeyBuffer()->clear();
@@ -2859,9 +2922,11 @@ void QtBrynhildr::toggleOnControl()
   }
   else {
 	settings->setOnControl(true);
+	onControl = true;
 	onControl_Action->setChecked(true);
 	// onGraphics On
 	settings->setOnGraphics(true);
+	onGraphics = true;
 	onGraphics_Action->setChecked(true);
   }
 }
@@ -2871,16 +2936,19 @@ void QtBrynhildr::toggleOnGraphics()
 {
   if (settings->getOnGraphics()){
 	settings->setOnGraphics(false);
+	onGraphics = false;
 	onGraphics_Action->setChecked(false);
 
 	// onControl Off
 	if (settings->getOnControlOffWithGraphicsOff()){
 	  settings->setOnControl(false);
+	  onControl = false;
 	  onControl_Action->setChecked(false);
 	}
   }
   else {
 	settings->setOnGraphics(true);
+	onGraphics = true;
 	onGraphics_Action->setChecked(true);
   }
 }
@@ -2890,10 +2958,12 @@ void QtBrynhildr::toggleOnSound()
 {
   if (settings->getOnSound()){
 	settings->setOnSound(false);
+	onSound = false;
 	onSound_Action->setChecked(false);
   }
   else {
 	settings->setOnSound(true);
+	onSound = true;
 	onSound_Action->setChecked(true);
   }
 }
@@ -3586,5 +3656,28 @@ bool QtBrynhildr::shutdownPlatform()
   return true;
 }
 #endif // defined(QTB_NET_UNIX)
+
+void QtBrynhildr::timerExpired()
+{
+  //  cout << "timerExpired!" << endl << flush;
+
+  // update current frame rate
+  if (settings->getOnShowFrameRate()){
+	static int refreshCounter = 1;
+	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
+	  // frame rate
+	  currentFrameRate = graphicsThread->getFrameRate();
+	  // data rate
+	  long controlDataRate = controlThread->getDataRate();
+	  long graphicsDataRate = graphicsThread->getDataRate();
+	  long soundDataRate = soundThread->getDataRate();
+	  // Mbps
+	  currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
+	  updateFrameRate();
+	  refreshCounter = 1;
+	}
+	refreshCounter++;
+  }
+}
 
 } // end of namespace qtbrynhildr

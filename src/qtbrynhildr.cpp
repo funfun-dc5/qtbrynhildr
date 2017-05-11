@@ -211,7 +211,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   onControl(true),
   onGraphics(true),
   onSound(true),
-  timer(0)
+  timer(0),
+  // for DEBUG
+  outputLog(false)
 {
 #if 0 // for TEST Desktop Image Capture
   QScreen *screen = QGuiApplication::primaryScreen();

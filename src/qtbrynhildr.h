@@ -761,6 +761,10 @@ private:
 
 private slots:
   void timerExpired();
+
+private:
+  // output log flag
+  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

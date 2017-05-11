@@ -51,11 +51,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   pushedAltKey(ID_KEY_0),
   pushedFnKey(ID_KEY_0),
   // for DEBUG
-#ifdef DEBUG
-  outputLog(true)
-#else // DEBUG
   outputLog(false)
-#endif // DEBUG
 {
   // reset flag
   for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){

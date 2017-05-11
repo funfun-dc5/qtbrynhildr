@@ -884,6 +884,9 @@ void QtBrynhildr::refreshVideoQualityMenu()
 	ABORT();
 	break;
   }
+
+  // recheck frame draw time
+  settings->setFrameDrawTime(0);
 }
 
 // refresh sound quality menu
@@ -2213,6 +2216,9 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 #endif // for TEST
 	setDesktopScalingFactor(event->size());
   }
+
+  // recheck frame draw time
+  settings->setFrameDrawTime(0);
 }
 
 // window hide event

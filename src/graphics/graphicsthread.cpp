@@ -116,18 +116,21 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	  settings->setFrameRate(0);
 	  QDateTime currentTime = QDateTime::currentDateTime();
 	  static QDateTime previousTime;
+	  static int counter = 0;
 	  if (!previousTime.isNull()){
 		static qint64 previousDrawTime = 0;
 		qint64 drawTime;
 		drawTime = currentTime.toMSecsSinceEpoch() - previousTime.toMSecsSinceEpoch();
-		//cout << "draw Time = " << drawTime << endl << flush;
-		if (abs(drawTime - previousDrawTime) < 2){
-		  //cout << "get draw Time = " << drawTime << endl << flush;
-		  settings->setFrameDrawTime((drawTime - QTB_THREAD_SLEEP_TIME)*1000);
+		//		cout << "draw Time = " << drawTime << endl << flush;
+		if (counter > 10 && abs(drawTime - previousDrawTime) < 2){
+		  //		  cout << "get draw Time = " << drawTime << endl << flush;
+		  settings->setFrameDrawTime(drawTime*1000);
 		  settings->setFrameRate(orgFrameRate);
+		  counter = 0;
 		}
 		else {
 		  previousDrawTime = drawTime;
+		  counter++;
 		}
 	  }
 	  previousTime = currentTime;

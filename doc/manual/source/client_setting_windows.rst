@@ -12,11 +12,11 @@
 
  <https://github.com/funfun-dc5/qtbrynhildr/releases>
 
-(2) Visual C++ 2013 x86 Redistributable のダウンロード
+(2) Visual C++ 2015 Redistributable のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  Windows版ではランタイムライブラリパッケージ
 
-  Visual C++ 2015 x86 Redistributable
+  Visual C++ 2015 x86 Redistributable または Visual C++ 2015 x64 Redistributable
 
  が必要な場合があります。例えば以下から入手できます。
 

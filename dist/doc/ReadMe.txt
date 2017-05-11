@@ -84,11 +84,11 @@
  Windows版として以下の3つがあります。見た目変わりありませんが、主にMinGW版で
  動作確認などを行っています。
 
-  1. QtBrynhidlr [MinGWビルド版]  : 64/32ビット Windowsで動作
+  1. Qt Brynhidlr [MinGWビルド版]   : 64/32ビット Windowsで動作
 
-  2. QtBrynhidlr [MSVCビルド版]   : 64/32ビット Windowsで動作
+  2. Qt Brynhidlr [MSVCビルド版]    : 64/32ビット Windowsで動作
 
-  3. QtBrynhildr64 [MSVCビルド版] : 64ビット Windowsのみで動作
+  3. Qt Brynhildr 64 [MSVCビルド版] : 64ビット Windowsのみで動作
 
 ==============================
 [アンインストール]
@@ -802,7 +802,7 @@ windowState=@ByteArray(xxxxx)
 
 Windows版ではランタイムライブラリパッケージ
 
-Visual C++ 2015 x86 Redistributable
+Visual C++ 2015 x86 Redistributable または Visual C++ 2015 x64 Redistributable
 
 が必要な場合があります。
 

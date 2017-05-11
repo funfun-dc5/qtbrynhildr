@@ -32,6 +32,9 @@ const int QTB_CONTROL_LOCAL_BUFFER_SIZE = 128 * 1024;
 // local data buffer size for graphics (byte)
 const int QTB_GRAPHICS_LOCAL_BUFFER_SIZE = 1024 * 1024;
 
+// sample frame for draw time check
+const int QTB_GRAPHICS_SAMPLE_FRAME = 40;
+
 //---------------------------------------------------------------------------
 // for sound
 //---------------------------------------------------------------------------

@@ -112,24 +112,26 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	unsigned long frameDrawTime = settings->getFrameDrawTime();
 	if (frameDrawTime == 0){
 	  // check frameDrawTime
-	  static unsigned int orgFrameRate = settings->getFrameRate();
-	  settings->setFrameRate(0);
+	  settings->setFrameInterval(0);
 	  QDateTime currentTime = QDateTime::currentDateTime();
 	  static QDateTime previousTime;
+	  static qint64 minDrawTime = 1000; // 1 second
 	  static int counter = 0;
 	  if (!previousTime.isNull()){
-		static qint64 previousDrawTime = 0;
-		qint64 drawTime;
-		drawTime = currentTime.toMSecsSinceEpoch() - previousTime.toMSecsSinceEpoch();
+		qint64 drawTime = currentTime.toMSecsSinceEpoch() - previousTime.toMSecsSinceEpoch();
 		//		cout << "draw Time = " << drawTime << endl << flush;
-		if (counter > 10 && abs(drawTime - previousDrawTime) < 2){
-		  //		  cout << "get draw Time = " << drawTime << endl << flush;
-		  settings->setFrameDrawTime(drawTime*1000);
-		  settings->setFrameRate(orgFrameRate);
+		if (counter > QTB_GRAPHICS_SAMPLE_FRAME){
+		  //		  cout << "minimum Draw Time = " << minDrawTime << endl << flush;
+		  settings->setFrameDrawTime(minDrawTime*1000);
+		  settings->setFrameRate(settings->getFrameRate());
+		  // for next time
+		  previousTime = QDateTime();
+		  minDrawTime = 1000; // 1 second
 		  counter = 0;
 		}
 		else {
-		  previousDrawTime = drawTime;
+		  if (drawTime < minDrawTime)
+			minDrawTime = drawTime;
 		  counter++;
 		}
 	  }

@@ -974,7 +974,8 @@ public:
 		  frameInterval = 0;
 		}
 	  }
-	  //cout << "frameInterval = " << frameInterval << endl << flush;
+	  //	  cout << "frameDrawTime = " << frameDrawTime << endl;
+	  //	  cout << "frameInterval = " << frameInterval << endl << flush;
 	}
   }
 
@@ -982,6 +983,12 @@ public:
   unsigned long getFrameInterval()
   {
 	return frameInterval;
+  }
+
+  // set frame interval (micro seconds)
+  void setFrameInterval(unsigned long frameInterval)
+  {
+	this->frameInterval = frameInterval;
   }
 
   // get frame draw time (micro seconds)

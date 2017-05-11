@@ -32,7 +32,7 @@ NetThread::NetThread(const char *name, Settings *settings, MainWindow *mainWindo
   mainWindow(mainWindow),
   name(name),
   settings(settings),
-  com_data(0),
+  com_data(new COM_DATA),
   runThread(true),
   receivedDataCounter(0),
   // for DEBUG
@@ -43,6 +43,12 @@ NetThread::NetThread(const char *name, Settings *settings, MainWindow *mainWindo
 // destructor
 NetThread::~NetThread()
 {
+  // delete objects
+  // com_data
+  if (com_data != 0){
+	delete com_data;
+	com_data = 0;
+  }
 }
 
 // exit thread

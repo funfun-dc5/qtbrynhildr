@@ -84,11 +84,6 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
 ControlThread::~ControlThread()
 {
   // delete objects
-  if (com_data != 0){
-	delete com_data;
-	com_data = 0;
-  }
-
 #if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   if (buffer != 0){
@@ -130,12 +125,6 @@ CONNECT_RESULT ControlThread::connectToServer()
 	cout << "Failed: setsockopt()" << endl << flush;
   }
 #endif // for TEST
-
-  // create objects
-  // header
-  if (com_data == 0){
-	com_data = new COM_DATA;
-  }
 
   // connected
   connectedToServer();

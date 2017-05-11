@@ -55,12 +55,6 @@ SoundThread::SoundThread(Settings *settings, MainWindow *mainWindow)
 SoundThread::~SoundThread()
 {
   // delete objects
-  // com_data
-  if (com_data != 0){
-	delete com_data;
-	com_data = 0;
-  }
-
   // sound buffer
   if (soundBuffer != 0){
 	delete soundBuffer;
@@ -110,12 +104,6 @@ CONNECT_RESULT SoundThread::connectToServer()
   sock_sound = socketToServer();
   if (sock_sound == INVALID_SOCKET){
 	return CONNECT_FAILED;
-  }
-
-  // create objects
-  // header
-  if (com_data == 0){
-	com_data = new COM_DATA;
   }
 
   // connected

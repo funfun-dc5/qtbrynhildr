@@ -44,12 +44,6 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
 GraphicsThread::~GraphicsThread()
 {
   // delete objects
-  // com_data
-  if (com_data != 0){
-	delete com_data;
-	com_data = 0;
-  }
-
   // local buffer
   if (buffer != 0){
 	delete [] buffer;
@@ -103,10 +97,6 @@ CONNECT_RESULT GraphicsThread::connectToServer()
   }
 
   // create objects
-  // header
-  if (com_data == 0){
-	com_data = new COM_DATA;
-  }
 
   // connected
   connectedToServer();

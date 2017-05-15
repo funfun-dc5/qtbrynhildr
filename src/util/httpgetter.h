@@ -32,10 +32,13 @@ public:
   ~HttpGetter();
 
   // start download
-  void startDownload(const QString &url, const QString &fileName);
+  bool startDownload(const QString &url, const QString &fileName);
 
   // cancel download
   void cancelDownload();
+
+  // check support OpenSSL
+  bool supportsSsl();
 
 signals:
   //

@@ -30,16 +30,6 @@ HttpGetter::HttpGetter(QObject *parent)
 		  this, &HttpGetter::slotAuthenticationRequired);
   connect(&networkAccessManager, &QNetworkAccessManager::sslErrors,
 		  this, &HttpGetter::sslErrors);
-
-  // check SSL support
-  if (outputLog){
-	if (QSslSocket::supportsSsl()){
-	  cout << "support SSL" << endl << flush;
-	}
-	else {
-	  cout << "NOT support SSL" << endl << flush;
-	}
-  }
 }
 
 // destructor
@@ -48,29 +38,35 @@ HttpGetter::~HttpGetter()
 }
 
 // start download
-void HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
+bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
 {
   if (outputLog){
 	cout << "enter startDownload()" << endl << flush;
   }
 
+  // check SSL support
+  if (!QSslSocket::supportsSsl())
+	return false;
+
   if (urlSpec.isEmpty() || fileName.isEmpty())
-	return;
+	return false;
 
   const QUrl newUrl = QUrl::fromUserInput(urlSpec);
   if (!newUrl.isValid()){
-	return;
+	return false;
   }
 
   file = openFileForWrite(fileName);
   if (file == Q_NULLPTR)
-	return;
+	return false;
 
   startRequest(newUrl);
 
   if (outputLog){
 	cout << "leave startDownload()" << endl << flush;
   }
+
+  return true;
 }
 
 // cancel download
@@ -86,6 +82,12 @@ void HttpGetter::cancelDownload()
   if (outputLog){
 	cout << "leave cancelDownload()" << endl << flush;
   }
+}
+
+// check support OpenSSL
+bool HttpGetter::supportsSsl()
+{
+  return QSslSocket::supportsSsl();
 }
 
 // open file for download

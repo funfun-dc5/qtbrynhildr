@@ -112,6 +112,10 @@ SOURCES += keylayout/klfcompiler_lex.c keylayout/klfcompiler.tab.c
 DEFINES += USE_KEYLAYOUTFILE YY_NO_UNPUT YY_NO_INPUT
 }
 
+# for update check
+HEADERS += util/httpgetter.h
+SOURCES += util/httpgetter.cpp
+
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h

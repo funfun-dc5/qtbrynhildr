@@ -4,7 +4,7 @@
 #define Name "%NAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "1.6.9"
-#define RCName ""
+#define RCName "-updatecheck"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"

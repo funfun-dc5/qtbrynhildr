@@ -880,6 +880,17 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 
  (4) デスクトップの自動スケーリングが正しく行われない場合があります。
 
+ (5) 起動時に端末に以下のメッセージが表示されることがあります。
+
+    qt.network.ssl: QSslSocket: cannot resolve SSLv2_client_method
+    qt.network.ssl: QSslSocket: cannot resolve SSLv2_server_method
+
+    インストールされているOpenSSLのライブラリがSSLv2を無効にしてビルドされているためです。
+
+    以下のページが参考になります。
+
+    https://askubuntu.com/questions/711863/installing-qt-5-5-1-on-ubuntu-14-04-throws-qt-network-ssl-error-on-terminal
+
 ----------------------------------------------------------------------
 8-4. Mac版のみの制限
 ----------------------------------------------------------------------

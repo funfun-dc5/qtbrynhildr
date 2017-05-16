@@ -291,7 +291,7 @@
         <location filename="../qtbrynhildr.cpp" line="765"/>
         <source>Up-to-date!</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>最新です!</translation>
+        <translation>最新のバージョンです!</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1279"/>

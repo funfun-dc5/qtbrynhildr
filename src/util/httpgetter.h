@@ -32,23 +32,19 @@ public:
   // destructor
   ~HttpGetter();
 
-  // start download
-#if 0 // for TEST
+  // start download to file
   bool startDownload(const QString &url, const QString &fileName);
-#else
+  // start download to memory
   bool startDownload(const QString &url);
-#endif
 
   // cancel download
   void cancelDownload();
 
-#if 1 // for TEST
-  // get download page
+  // get download page image
   QByteArray &getPage();
 
   // clear download page
   void clear();
-#endif
 
   // check support OpenSSL
   bool supportsSsl();
@@ -58,10 +54,8 @@ signals:
   void finished();
 
 private:
-#if 0 // for TEST
   // open file for download
   QFile *openFileForWrite(const QString &fileName);
-#endif
 
   // start request
   void startRequest(const QUrl &url);
@@ -76,11 +70,8 @@ private:
   QUrl url;
   QNetworkAccessManager networkAccessManager;
   QNetworkReply *reply;
-#if 0 // for TEST
   QFile *file;
-#else
   QByteArray byteArray;
-#endif
   bool httpRequestAborted;
 
   // output log flag

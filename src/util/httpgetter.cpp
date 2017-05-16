@@ -23,9 +23,7 @@ HttpGetter::HttpGetter(QObject *parent)
   :
   QObject(parent),
   reply(Q_NULLPTR),
-#if 0 // for TEST
   file(Q_NULLPTR),
-#endif
   httpRequestAborted(false),
   // for DEBUG
   outputLog(false)
@@ -41,12 +39,8 @@ HttpGetter::~HttpGetter()
 {
 }
 
-// start download
-#if 0 // for TEST
+// start download to file
 bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
-#else
-bool HttpGetter::startDownload(const QString &urlSpec)
-#endif
 {
   if (outputLog){
 	cout << "enter startDownload()" << endl << flush;
@@ -56,26 +50,47 @@ bool HttpGetter::startDownload(const QString &urlSpec)
   if (!QSslSocket::supportsSsl())
 	return false;
 
-#if 0 // for TEST
   if (urlSpec.isEmpty() || fileName.isEmpty())
 	return false;
-#else
-  if (urlSpec.isEmpty())
-	return false;
-#endif
 
   const QUrl newUrl = QUrl::fromUserInput(urlSpec);
   if (!newUrl.isValid()){
 	return false;
   }
 
-#if 0 // for TEST
   file = openFileForWrite(fileName);
   if (file == Q_NULLPTR)
 	return false;
-#else
+
+  startRequest(newUrl);
+
+  if (outputLog){
+	cout << "leave startDownload()" << endl << flush;
+  }
+
+  return true;
+}
+
+// start download to memory
+bool HttpGetter::startDownload(const QString &urlSpec)
+{
+  if (outputLog){
+	cout << "enter startDownload()" << endl << flush;
+  }
+
+  // check SSL support
+  if (!QSslSocket::supportsSsl())
+	return false;
+
+  if (urlSpec.isEmpty())
+	return false;
+
+  const QUrl newUrl = QUrl::fromUserInput(urlSpec);
+  if (!newUrl.isValid()){
+	return false;
+  }
+
   byteArray.clear();
-#endif
 
   startRequest(newUrl);
 
@@ -96,9 +111,8 @@ void HttpGetter::cancelDownload()
   httpRequestAborted = true;
   reply->abort();
 
-#if 1 // for TEST
-  byteArray.clear();
-#endif
+  if (file == Q_NULLPTR)
+	byteArray.clear();
 
   if (outputLog){
 	cout << "leave cancelDownload()" << endl << flush;
@@ -111,8 +125,7 @@ bool HttpGetter::supportsSsl()
   return QSslSocket::supportsSsl();
 }
 
-#if 1 // for TEST
-// get download page
+// get download page image
 QByteArray &HttpGetter::getPage()
 {
   return byteArray;
@@ -123,9 +136,7 @@ void HttpGetter::clear()
 {
   byteArray.clear();
 }
-#endif
 
-#if 0 // for TEST
 // open file for download
 QFile *HttpGetter::openFileForWrite(const QString &fileName)
 {
@@ -144,7 +155,6 @@ QFile *HttpGetter::openFileForWrite(const QString &fileName)
 
   return file.take();
 }
-#endif
 
 // start request
 void HttpGetter::startRequest(const QUrl &url)
@@ -171,15 +181,13 @@ void HttpGetter::httpFinished()
 	cout << "enter httpFinished()" << endl << flush;
   }
 
-#if 0 // for TEST
   QFileInfo fi;
-  if (file) {
+  if (file != Q_NULLPTR) {
 	fi.setFile(file->fileName());
 	file->close();
 	delete file;
 	file = Q_NULLPTR;
   }
-#endif
 
   if (httpRequestAborted) {
 	reply->deleteLater();
@@ -188,17 +196,16 @@ void HttpGetter::httpFinished()
   }
 
   if (reply->error()) {
-#if 0 // for TEST
-	QFile::remove(fi.absoluteFilePath());
-#else
+	if (file != Q_NULLPTR) {
+	  QFile::remove(fi.absoluteFilePath());
+	}
 	byteArray.clear();
-#endif
 	reply->deleteLater();
 	reply = Q_NULLPTR;
 	return;
   }
 
-  //
+  // emit finished() signal
   emit finished();
 
   if (outputLog){
@@ -212,12 +219,12 @@ void HttpGetter::httpReadyRead()
 	cout << "enter httpReadyRead()" << endl << flush;
   }
 
-#if 0 // for TEST
-  if (file != 0)
+  if (file != Q_NULLPTR){
 	file->write(reply->readAll());
-#else
-  byteArray.append(reply->readAll());
-#endif
+  }
+  else {
+	byteArray.append(reply->readAll());
+  }
 
   if (outputLog){
 	cout << "leave httpReadyRead()" << endl << flush;
@@ -226,6 +233,9 @@ void HttpGetter::httpReadyRead()
 
 void HttpGetter::slotAuthenticationRequired(QNetworkReply *reply, QAuthenticator *authenthicator)
 {
+  Q_UNUSED(reply);
+  Q_UNUSED(authenthicator);
+
   if (outputLog){
 	cout << "enter slotAuthenticationRequired()!" << endl << flush;
   }
@@ -247,13 +257,12 @@ void HttpGetter::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 	  errorString += '\n';
 	errorString += error.errorString();
   }
-#if 0 // NOT Widgets
-  if (QMessageBox::warning(this, tr("SSL Errors"),
-						   tr("One or more SSL errors has occurred:\n%1").arg(errorString),
-						   QMessageBox::Ignore | QMessageBox::Abort) == QMessageBox::Ignore) {
-	reply->ignoreSslErrors();
-  }
-#endif
+
+  // Yet: error message
+
+  // ignore errors
+  reply->ignoreSslErrors();
+
   if (outputLog){
 	cout << "leave sslErrors()" << endl << flush;
   }

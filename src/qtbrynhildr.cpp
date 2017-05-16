@@ -380,11 +380,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
   if (!httpGetter->supportsSsl()){
 	cout << "NOT support OpenSSL" << endl << flush;
   }
-#if 0
+#if 0 // for DEBUG
   else {
 	cout << "support OpenSSL" << endl << flush;
   }
-#endif
+#endif // for DEBUG
   connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
 #endif // QTB_UPDATECHECK
 
@@ -717,64 +717,75 @@ QtBrynhildr::QtBrynhildr(Option *option)
 // finished download
 void QtBrynhildr::finishedDownload()
 {
-#if 0
-  QFile file("test.html");
+  // check update
+  QByteArray byteArray = httpGetter->getPage();
+  if (byteArray.size() == 0){
+	cout << "finished downloading to file." << endl << flush;
+	return;
+  }
+
+#if 0 // for TEST
+  // save to file
+  QFile file("release_page.html");
   file.open(QIODevice::WriteOnly);
-  file.write(httpGetter->getPage());
+  file.write(byteArray);
   file.close();
-#else
-  QString releasePage(httpGetter->getPage());
+#endif // for TEST
+
+  QString releasePage(byteArray);
 #if 1
-	int startIndex = releasePage.indexOf("/funfun-dc5/qtbrynhildr/releases/tag/v");
-	if (startIndex > 0) {
-	  startIndex += qstrlen("/funfun-dc5/qtbrynhildr/releases/tag/v");
-	  int lastIndex = releasePage.indexOf("\"", startIndex);
-	  //  cout << "startIndex = " << startIndex << endl << flush;
-	  //  cout << "lastIndex  = " << lastIndex << endl << flush;
-	  QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
-	  QString newestTag;
-	  newestTag.append(tagRef);
-	  cout << "newest tag = v" << qPrintable(newestTag);
+  // check newest release
+  int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
+  if (startIndex > 0) {
+	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
+	int lastIndex = releasePage.indexOf("\"", startIndex);
+	//  cout << "startIndex = " << startIndex << endl << flush;
+	//  cout << "lastIndex  = " << lastIndex << endl << flush;
+	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString newestTag;
+	newestTag.append(tagRef);
+	//	  cout << "newest tag = v" << qPrintable(newestTag);
 
-	  startIndex = lastIndex + 2;
-	  lastIndex = releasePage.indexOf("<", startIndex);
-	  QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
-	  QString ver;
-	  ver.append(verRef);
-	  cout << " : ver = " << qPrintable(ver) << endl << flush;
+	startIndex = lastIndex + 2;
+	lastIndex = releasePage.indexOf("<", startIndex);
+	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString ver;
+	ver.append(verRef);
+	//	  cout << " : ver = " << qPrintable(ver) << endl << flush;
 
-	  QString tag(option->getVersionString());
-	  //	  tag = "169";
-	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
-	  if (tag != newestTag){
-		// Found new version
-		cout << "Found new version" << endl << flush;
-		int ret = QMessageBox::question(this,
-										tr("Confirm"),
-										tr("Found new release. Open release page?"),
-										QMessageBox::Ok | QMessageBox::Cancel,
-										QMessageBox::Ok);
-		if (ret == QMessageBox::Ok){
-		  QDesktopServices::openUrl(QUrl("https://github.com/funfun-dc5/qtbrynhildr/releases"));
-		}
-	  }
-	  else {
-		// Up-to-date
-		cout << "Up-to-date!" << endl << flush;
-		QMessageBox::information(this, tr("Information"),
-								 tr("Up-to-date!"));
+	QString tag(option->getVersionString());
+	//	  tag = "169";
+	//	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
+	if (tag != newestTag){
+	  // Found new version
+	  //		cout << "Found new version" << endl << flush;
+	  int ret = QMessageBox::question(this,
+									  tr("Confirm"),
+									  tr("Found new release. Open release page?"),
+									  QMessageBox::Ok | QMessageBox::Cancel,
+									  QMessageBox::Ok);
+	  if (ret == QMessageBox::Ok){
+		QDesktopServices::openUrl(QUrl(QTB_URL_FOR_RELEASE));
 	  }
 	}
 	else {
-	  cout << "NOT Found tag!" << endl << flush;
+	  // Up-to-date
+	  //		cout << "Up-to-date!" << endl << flush;
+	  QMessageBox::information(this, tr("Information"),
+							   tr("Up-to-date!"));
 	}
-#else
+  }
+  else {
+	cout << "NOT Found tag!" << endl << flush;
+  }
+#else // for TEST
+  // display all tag and version in release page
   int startIndex = 0;
   while(true){
-	startIndex = releasePage.indexOf("/funfun-dc5/qtbrynhildr/releases/tag/v", startIndex);
+	startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH, startIndex);
 	if (startIndex < 0) break;
 
-	startIndex += qstrlen("/funfun-dc5/qtbrynhildr/releases/tag/v");
+	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
 	int lastIndex = releasePage.indexOf("\"", startIndex);
 	//  cout << "startIndex = " << startIndex << endl << flush;
 	//  cout << "lastIndex  = " << lastIndex << endl << flush;
@@ -792,8 +803,9 @@ void QtBrynhildr::finishedDownload()
 	cout << " : ver = " << qPrintable(ver) << endl << flush;
 	startIndex = lastIndex;
   }
-#endif
-#endif
+#endif // for TEST
+
+  // clear memory
   httpGetter->clear();
 }
 #endif // QTB_UPDATECHECK
@@ -2477,7 +2489,8 @@ void QtBrynhildr::checkUpdate()
   //  cout << "enter checkUpdate()" << endl << flush;
 
   // start downloading release page
-  bool result = httpGetter->startDownload("https://github.com/funfun-dc5/qtbrynhildr/releases");
+  //  bool result = httpGetter->startDownload(QTB_URL_FOR_RELEASE, "release_page.html");
+  bool result = httpGetter->startDownload(QTB_URL_FOR_RELEASE);
   if (!result){
 	cout << "Failed to http access" << endl << flush;
   }

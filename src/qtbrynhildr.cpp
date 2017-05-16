@@ -734,7 +734,7 @@ void QtBrynhildr::finishedDownload()
 
   QString releasePage(byteArray);
 #if 1
-  // check newest release
+  // check latest release
   int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
   if (startIndex > 0) {
 	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
@@ -742,9 +742,9 @@ void QtBrynhildr::finishedDownload()
 	//  cout << "startIndex = " << startIndex << endl << flush;
 	//  cout << "lastIndex  = " << lastIndex << endl << flush;
 	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString newestTag;
-	newestTag.append(tagRef);
-	//	  cout << "newest tag = v" << qPrintable(newestTag);
+	QString latestTag;
+	latestTag.append(tagRef);
+	//	  cout << "latest tag = v" << qPrintable(latestTag);
 
 	startIndex = lastIndex + 2;
 	lastIndex = releasePage.indexOf("<", startIndex);
@@ -756,7 +756,7 @@ void QtBrynhildr::finishedDownload()
 	QString tag(option->getVersionString());
 	//	  tag = "169";
 	//	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
-	if (tag != newestTag){
+	if (tag < latestTag){
 	  // Found new version
 	  //		cout << "Found new version" << endl << flush;
 	  int ret = QMessageBox::question(this,

@@ -756,7 +756,7 @@ void QtBrynhildr::finishedDownload()
 	QString tag(option->getVersionString());
 	//	  tag = "169";
 	//	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
-	if (tag < latestTag){
+	if (tag != latestTag){
 	  // Found new version
 	  //		cout << "Found new version" << endl << flush;
 	  int ret = QMessageBox::question(this,

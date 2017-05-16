@@ -17,6 +17,9 @@ public:
   // destructor
   ~Option();
 
+  // get version string
+  const char *getVersionString() const;
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // get public mode version
   int getPublicModeVersion() const

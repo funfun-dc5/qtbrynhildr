@@ -7,7 +7,9 @@
 // System Header
 
 // Qt Header
+#if 0 // for TEST
 #include <QFileInfo>
+#endif
 #include <QtNetwork>
 
 // Local Header
@@ -21,10 +23,12 @@ HttpGetter::HttpGetter(QObject *parent)
   :
   QObject(parent),
   reply(Q_NULLPTR),
+#if 0 // for TEST
   file(Q_NULLPTR),
+#endif
   httpRequestAborted(false),
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
   connect(&networkAccessManager, &QNetworkAccessManager::authenticationRequired,
 		  this, &HttpGetter::slotAuthenticationRequired);
@@ -38,7 +42,11 @@ HttpGetter::~HttpGetter()
 }
 
 // start download
+#if 0 // for TEST
 bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
+#else
+bool HttpGetter::startDownload(const QString &urlSpec)
+#endif
 {
   if (outputLog){
 	cout << "enter startDownload()" << endl << flush;
@@ -48,17 +56,26 @@ bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
   if (!QSslSocket::supportsSsl())
 	return false;
 
+#if 0 // for TEST
   if (urlSpec.isEmpty() || fileName.isEmpty())
 	return false;
+#else
+  if (urlSpec.isEmpty())
+	return false;
+#endif
 
   const QUrl newUrl = QUrl::fromUserInput(urlSpec);
   if (!newUrl.isValid()){
 	return false;
   }
 
+#if 0 // for TEST
   file = openFileForWrite(fileName);
   if (file == Q_NULLPTR)
 	return false;
+#else
+  byteArray.clear();
+#endif
 
   startRequest(newUrl);
 
@@ -79,6 +96,10 @@ void HttpGetter::cancelDownload()
   httpRequestAborted = true;
   reply->abort();
 
+#if 1 // for TEST
+  byteArray.clear();
+#endif
+
   if (outputLog){
 	cout << "leave cancelDownload()" << endl << flush;
   }
@@ -90,6 +111,21 @@ bool HttpGetter::supportsSsl()
   return QSslSocket::supportsSsl();
 }
 
+#if 1 // for TEST
+// get download page
+QByteArray &HttpGetter::getPage()
+{
+  return byteArray;
+}
+
+// clear download page
+void HttpGetter::clear()
+{
+  byteArray.clear();
+}
+#endif
+
+#if 0 // for TEST
 // open file for download
 QFile *HttpGetter::openFileForWrite(const QString &fileName)
 {
@@ -108,6 +144,7 @@ QFile *HttpGetter::openFileForWrite(const QString &fileName)
 
   return file.take();
 }
+#endif
 
 // start request
 void HttpGetter::startRequest(const QUrl &url)
@@ -134,6 +171,7 @@ void HttpGetter::httpFinished()
 	cout << "enter httpFinished()" << endl << flush;
   }
 
+#if 0 // for TEST
   QFileInfo fi;
   if (file) {
 	fi.setFile(file->fileName());
@@ -141,6 +179,7 @@ void HttpGetter::httpFinished()
 	delete file;
 	file = Q_NULLPTR;
   }
+#endif
 
   if (httpRequestAborted) {
 	reply->deleteLater();
@@ -149,7 +188,11 @@ void HttpGetter::httpFinished()
   }
 
   if (reply->error()) {
+#if 0 // for TEST
 	QFile::remove(fi.absoluteFilePath());
+#else
+	byteArray.clear();
+#endif
 	reply->deleteLater();
 	reply = Q_NULLPTR;
 	return;
@@ -169,8 +212,12 @@ void HttpGetter::httpReadyRead()
 	cout << "enter httpReadyRead()" << endl << flush;
   }
 
+#if 0 // for TEST
   if (file != 0)
 	file->write(reply->readAll());
+#else
+  byteArray.append(reply->readAll());
+#endif
 
   if (outputLog){
 	cout << "leave httpReadyRead()" << endl << flush;

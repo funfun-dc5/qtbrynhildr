@@ -18,6 +18,7 @@
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
+#include <QDesktopServices>
 #if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QFileDialog>
 #endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
@@ -379,16 +380,12 @@ QtBrynhildr::QtBrynhildr(Option *option)
   if (!httpGetter->supportsSsl()){
 	cout << "NOT support OpenSSL" << endl << flush;
   }
+#if 0
   else {
 	cout << "support OpenSSL" << endl << flush;
   }
+#endif
   connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
-#if 0 // for TEST
-  bool result = httpGetter->startDownload("https://github.com/funfun-dc5/qtbrynhildr/releases", "test.html");
-  if (!result){
-	cout << "Failed to http access" << endl << flush;
-  }
-#endif // for TEST
 #endif // QTB_UPDATECHECK
 
   // version
@@ -720,7 +717,75 @@ QtBrynhildr::QtBrynhildr(Option *option)
 // finished download
 void QtBrynhildr::finishedDownload()
 {
-  cout << "finished Download!" << endl << flush;
+#if 0
+  QFile file("test.html");
+  file.open(QIODevice::WriteOnly);
+  file.write(httpGetter->getPage());
+  file.close();
+#else
+  QString releasePage(httpGetter->getPage());
+#if 1
+	int startIndex = releasePage.indexOf("/funfun-dc5/qtbrynhildr/releases/tag/v");
+	if (startIndex > 0) {
+	  startIndex += qstrlen("/funfun-dc5/qtbrynhildr/releases/tag/v");
+	  int lastIndex = releasePage.indexOf("\"", startIndex);
+	  //  cout << "startIndex = " << startIndex << endl << flush;
+	  //  cout << "lastIndex  = " << lastIndex << endl << flush;
+	  QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
+	  QString newestTag;
+	  newestTag.append(tagRef);
+	  cout << "newest tag = v" << qPrintable(newestTag);
+
+	  startIndex = lastIndex + 2;
+	  lastIndex = releasePage.indexOf("<", startIndex);
+	  QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
+	  QString ver;
+	  ver.append(verRef);
+	  cout << " : ver = " << qPrintable(ver) << endl << flush;
+
+	  QString tag(option->getVersionString());
+	  tag = "169";
+	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
+	  if (tag != newestTag){
+		// Found new version
+		cout << "Found new version" << endl << flush;
+		QDesktopServices::openUrl(QUrl("https://github.com/funfun-dc5/qtbrynhildr/releases"));
+	  }
+	  else {
+		// Up-to-date
+		cout << "Up-to-date!" << endl << flush;
+	  }
+	}
+	else {
+	  cout << "NOT Found tag!" << endl << flush;
+	}
+#else
+  int startIndex = 0;
+  while(true){
+	startIndex = releasePage.indexOf("/funfun-dc5/qtbrynhildr/releases/tag/v", startIndex);
+	if (startIndex < 0) break;
+
+	startIndex += qstrlen("/funfun-dc5/qtbrynhildr/releases/tag/v");
+	int lastIndex = releasePage.indexOf("\"", startIndex);
+	//  cout << "startIndex = " << startIndex << endl << flush;
+	//  cout << "lastIndex  = " << lastIndex << endl << flush;
+	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString tag;
+	tag.append(tagRef);
+	cout << "Found tag = v" << qPrintable(tag);
+	startIndex = lastIndex;
+
+	startIndex = lastIndex + 2;
+	lastIndex = releasePage.indexOf("<", startIndex);
+	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString ver;
+	ver.append(verRef);
+	cout << " : ver = " << qPrintable(ver) << endl << flush;
+	startIndex = lastIndex;
+  }
+#endif
+#endif
+  httpGetter->clear();
 }
 #endif // QTB_UPDATECHECK
 
@@ -2400,8 +2465,15 @@ void QtBrynhildr::popUpConnectToServer()
 // check update
 void QtBrynhildr::checkUpdate()
 {
-  cout << "enter checkUpdate()" << endl << flush;
-  cout << "leave checkUpdate()" << endl << flush;
+  //  cout << "enter checkUpdate()" << endl << flush;
+
+  // start downloading release page
+  bool result = httpGetter->startDownload("https://github.com/funfun-dc5/qtbrynhildr/releases");
+  if (!result){
+	cout << "Failed to http access" << endl << flush;
+  }
+
+  //  cout << "leave checkUpdate()" << endl << flush;
 }
 #endif // QTB_UPDATECHECK
 

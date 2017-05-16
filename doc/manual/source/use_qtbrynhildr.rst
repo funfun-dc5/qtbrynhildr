@@ -245,9 +245,13 @@
 
  .. image:: images/menu_help.jpg
 
- * ログの表示
+ * 「ログの表示」
 
    Qt Brynhildr のログを表示します。
+
+ * 「アップデートを確認」
+
+   新しいバージョンがリリースされていないかを確認します。
 
  * 「Qt Brynhildrについて」
 

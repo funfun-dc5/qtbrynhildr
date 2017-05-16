@@ -744,16 +744,25 @@ void QtBrynhildr::finishedDownload()
 	  cout << " : ver = " << qPrintable(ver) << endl << flush;
 
 	  QString tag(option->getVersionString());
-	  tag = "169";
+	  //	  tag = "169";
 	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
 	  if (tag != newestTag){
 		// Found new version
 		cout << "Found new version" << endl << flush;
-		QDesktopServices::openUrl(QUrl("https://github.com/funfun-dc5/qtbrynhildr/releases"));
+		int ret = QMessageBox::question(this,
+										tr("Confirm"),
+										tr("Found new release. Open release page?"),
+										QMessageBox::Ok | QMessageBox::Cancel,
+										QMessageBox::Ok);
+		if (ret == QMessageBox::Ok){
+		  QDesktopServices::openUrl(QUrl("https://github.com/funfun-dc5/qtbrynhildr/releases"));
+		}
 	  }
 	  else {
 		// Up-to-date
 		cout << "Up-to-date!" << endl << flush;
+		QMessageBox::information(this, tr("Information"),
+								 tr("Up-to-date!"));
 	  }
 	}
 	else {

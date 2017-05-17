@@ -1325,6 +1325,7 @@ void QtBrynhildr::createActions()
   // check update Action
   checkUpdate_Action = new QAction(tr("Check Update"), this);
   checkUpdate_Action->setStatusTip(tr("Check Update"));
+  checkUpdate_Action->setEnabled(httpGetter->supportsSsl());
   connect(checkUpdate_Action, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 #endif // QTB_UPDATECHECK
 

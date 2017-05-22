@@ -243,23 +243,6 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	updated = true;
 	break;
   case ID_BUTTON_30:
-	// Mouse Right Button
-	if (settings->getConnected()){
-	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
-	  QDateTime currentTime = QDateTime::currentDateTime();
-	  qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousClickTime.toMSecsSinceEpoch();
-	  if (previousClick == TYPE_MOUSE_RIGHT_BUTTON && diffMSeconds < settings->getDoubleClickThreshold()){
-		value.button = MOUSE_BUTTON_DBLCLK;
-		mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
-		if (outputLog){
-		  cout << "Double Click!!" << endl << flush;
-		}
-	  }
-	  previousClick = TYPE_MOUSE_RIGHT_BUTTON;
-	  previousClickTime = currentTime;
-	}
-	break;
-  case ID_BUTTON_31:
 	// Mouse Left Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
@@ -273,6 +256,23 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 		}
 	  }
 	  previousClick = TYPE_MOUSE_LEFT_BUTTON;
+	  previousClickTime = currentTime;
+	}
+	break;
+  case ID_BUTTON_31:
+	// Mouse Right Button
+	if (settings->getConnected()){
+	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	  QDateTime currentTime = QDateTime::currentDateTime();
+	  qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousClickTime.toMSecsSinceEpoch();
+	  if (previousClick == TYPE_MOUSE_RIGHT_BUTTON && diffMSeconds < settings->getDoubleClickThreshold()){
+		value.button = MOUSE_BUTTON_DBLCLK;
+		mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+		if (outputLog){
+		  cout << "Double Click!!" << endl << flush;
+		}
+	  }
+	  previousClick = TYPE_MOUSE_RIGHT_BUTTON;
 	  previousClickTime = currentTime;
 	}
 	break;
@@ -331,15 +331,15 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
   case ID_BUTTON_29:
 	break;
   case ID_BUTTON_30:
-	// Mouse Right Button
-	if (settings->getConnected()){
-	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
-	}
-	break;
-  case ID_BUTTON_31:
 	// Mouse Left Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	}
+	break;
+  case ID_BUTTON_31:
+	// Mouse Right Button
+	if (settings->getConnected()){
+	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
 	}
 	break;
   default:

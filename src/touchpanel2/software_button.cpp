@@ -124,7 +124,16 @@ void SoftwareButton::mousePressEvent(QMouseEvent *event)
   if (outputLog)
 	cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
   ID_BUTTON id = getID(event->pos());
+#if 0 // for TEST
   pressedButton(id);
+#else // for TEST
+  if (id != ID_BUTTON_0){
+	pressedButton(id);
+  }
+  else {
+	QWidget::mousePressEvent(event);
+  }
+#endif // for TEST
 }
 
 void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
@@ -132,7 +141,16 @@ void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
   if (outputLog)
 	cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
   ID_BUTTON id = getID(event->pos());
+#if 0 // for TEST
   releasedButton(id);
+#else // for TEST
+  if (id != ID_BUTTON_0){
+	releasedButton(id);
+  }
+  else {
+	QWidget::mouseReleaseEvent(event);
+  }
+#endif // for TEST
 }
 
 // pressed button
@@ -231,10 +249,10 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	layout[id].selected = true;
 	break;
   case ID_BUTTON_30:
-	// Mouse Right Button
+	// Mouse Left Button
 	break;
   case ID_BUTTON_31:
-	// Mouse Left Button
+	// Mouse Right Button
 	break;
   default:
 	// error

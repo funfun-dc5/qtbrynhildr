@@ -120,7 +120,7 @@ protected:
 
   // key top table
   ButtonTop buttonTopTable[ID_BUTTON_NUM] = {
-	{"Option",			true},  	// ID_BUTTON_1
+	{"Fn",				true},  	// ID_BUTTON_1
 	{"Monitor",			false},		// ID_BUTTON_2
 	{"1",				false},		// ID_BUTTON_3
 	{"2",				false},		// ID_BUTTON_4
@@ -153,8 +153,8 @@ protected:
 	{"High",			false},	 	// ID_BUTTON_28
 	{"Highest",			false}, 	// ID_BUTTON_29
 
-	{"Right",			true},	 	// ID_BUTTON_30
-	{"Left",			true}	 	// ID_BUTTON_31
+	{"Left",			true},	 	// ID_BUTTON_30
+	{"Right",			true}	 	// ID_BUTTON_31
   };
 
 private:
@@ -168,45 +168,45 @@ private:
   // layout table for button
   const QRect buttonLayout[ID_BUTTON_NUM] = {
 	// 1st row
-	QRect(180,  0, 18, 15),
-	QRect(162,  0, 18, 15),
-	QRect(144,  0, 18, 15),
-	QRect(126,  0, 18, 15),
-	QRect(108,  0, 18, 15),
-	QRect( 90,  0, 18, 15),
-	QRect( 72,  0, 18, 15),
-	QRect( 54,  0, 18, 15),
-	QRect( 36,  0, 18, 15),
-	QRect( 18,  0, 18, 15),
 	QRect(  0,  0, 18, 15),
+	QRect( 18,  0, 18, 15),
+	QRect( 36,  0, 18, 15),
+	QRect( 54,  0, 18, 15),
+	QRect( 72,  0, 18, 15),
+	QRect( 90,  0, 18, 15),
+	QRect(108,  0, 18, 15),
+	QRect(126,  0, 18, 15),
+	QRect(144,  0, 18, 15),
+	QRect(162,  0, 18, 15),
+	QRect(180,  0, 18, 15),
 
 	// 2nd row
-	QRect(180, 15, 18, 15),
-	QRect(162, 15, 18, 15),
-	QRect(144, 15, 18, 15),
-	QRect(126, 15, 18, 15),
+	QRect(  0, 15, 18, 15),
+	QRect( 18, 15, 18, 15),
+	QRect( 36, 15, 18, 15),
+	QRect( 54, 15, 18, 15),
 
 	// 3rd row
-	QRect(180, 30, 18, 15),
-	QRect(162, 30, 18, 15),
-	QRect(144, 30, 18, 15),
-	QRect(126, 30, 18, 15),
-	QRect(108, 30, 18, 15),
-	QRect( 90, 30, 18, 15),
+	QRect(  0, 30, 18, 15),
+	QRect( 18, 30, 18, 15),
+	QRect( 36, 30, 18, 15),
+	QRect( 54, 30, 18, 15),
 	QRect( 72, 30, 18, 15),
+	QRect( 90, 30, 18, 15),
+	QRect(108, 30, 18, 15),
 
 	// 4th row
-	QRect(180, 45, 18, 15),
-	QRect(162, 45, 18, 15),
-	QRect(144, 45, 18, 15),
-	QRect(126, 45, 18, 15),
-	QRect(108, 45, 18, 15),
-	QRect( 90, 45, 18, 15),
+	QRect(  0, 45, 18, 15),
+	QRect( 18, 45, 18, 15),
+	QRect( 36, 45, 18, 15),
+	QRect( 54, 45, 18, 15),
 	QRect( 72, 45, 18, 15),
+	QRect( 90, 45, 18, 15),
+	QRect(108, 45, 18, 15),
 
 	// 5th row
-	QRect(180, 60, 18, 15),
-	QRect(162, 60, 18, 15),
+	QRect(  0, 60, 18, 15),
+	QRect( 18, 60, 18, 15),
   };
 
   // layout table for button

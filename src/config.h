@@ -141,6 +141,13 @@ const bool QTB_IN_TESTING				= false;
 // auto complete
 #define QTB_AUTO_COMPLETE			1
 
+// update check
+#if defined(QTB_DEV_DESKTOP)
+#define QTB_UPDATECHECK				1
+#else // defined(QTB_DEV_DESKTOP)
+#define QTB_UPDATECHECK				0
+#endif // defined(QTB_DEV_DESKTOP)
+
 // debug
 #define QTB_DEBUG					1
 #define QTB_DEBUG_KEYBOARD			false

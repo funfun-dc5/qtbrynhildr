@@ -1,6 +1,7 @@
 #!/bin/bash
 UNAME=`uname`
 UNAMEM=`uname -m`
+ARCH=x86
 
 source ./setup_qt5 $1
 
@@ -14,8 +15,10 @@ if [ -n "$1" ] ; then
 		cygwin)
 			;;
 		msvc64)
+			ARCH=x86_64
 			;;
 		msvc)
+			ARCH=x86
 			;;
 		ubuntu64)
 			;;
@@ -262,6 +265,10 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
+			# copy openssl dll
+			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin

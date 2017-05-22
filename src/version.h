@@ -12,7 +12,13 @@
 // year
 #define QTB_YEAR		"2015-2017"
 
-// URI of blog
+// URL of blog
 #define QTB_BLOG		"<a href=\"http://mcz-xoxo.cocolog-nifty.com/blog/\">http://mcz-xoxo.cocolog-nifty.com/blog/</a>"
+
+// URL of release page in GitHub
+#define QTB_URL_FOR_RELEASE		"https://github.com/funfun-dc5/qtbrynhildr/releases"
+
+// STRINGS for tag search
+#define QTB_STRING_FOR_TAGSEARCH	"/funfun-dc5/qtbrynhildr/releases/tag/v"
 
 #endif // VERSION_H

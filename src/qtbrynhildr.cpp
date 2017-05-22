@@ -18,6 +18,7 @@
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
+#include <QDesktopServices>
 #if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QFileDialog>
 #endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
@@ -92,6 +93,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   outputLog_Action(0),
   exit_Action(0),
   about_Action(0),
+#if QTB_UPDATECHECK
+  checkUpdate_Action(0),
+#endif // QTB_UPDATECHECK
   videoQuality_MINIMUM_Action(0),
   videoQuality_LOW_Action(0),
   videoQuality_STANDARD_Action(0),
@@ -176,12 +180,15 @@ QtBrynhildr::QtBrynhildr(Option *option)
   iniFileName(0),
   settings(0),
   writeSettingsAtExit(true),
-#if QTB_RECORDER
-  recorder(0),
-#endif // QTB_RECORDER
 #if QTB_CRYPTOGRAM
   cipher(0),
 #endif // QTB_CRYPTGRAM
+#if QTB_RECORDER
+  recorder(0),
+#endif // QTB_RECORDER
+#if QTB_UPDATECHECK
+  httpGetter(0),
+#endif // QTB_UPDATECHECK
   logMessage(new LogMessage(this)),
   controlThread(0),
   graphicsThread(0),
@@ -366,6 +373,20 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	recorder->startRecording();
   }
 #endif // QTB_RECORDER
+
+#if QTB_UPDATECHECK
+  // create http getter
+  httpGetter = new HttpGetter();
+  if (!httpGetter->supportsSsl()){
+	cout << "NOT support OpenSSL" << endl << flush;
+  }
+#if 0 // for DEBUG
+  else {
+	cout << "support OpenSSL" << endl << flush;
+  }
+#endif // for DEBUG
+  connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
+#endif // QTB_UPDATECHECK
 
   // version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION QTB_RCNAME);
@@ -681,19 +702,124 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	this->show();
 	popUpConnectToServer();
   }
+
+  // initialize timer for main thread
+  timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
+  timer->start(100); // 0.1 second tick timer
+
 #if 0 // for TEST
-	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+  softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+#endif // for TEST
+}
+
+#if QTB_UPDATECHECK
+// finished download
+void QtBrynhildr::finishedDownload()
+{
+  // check update
+  QByteArray byteArray = httpGetter->getPage();
+  if (byteArray.size() == 0){
+	cout << "finished downloading to file." << endl << flush;
+	return;
+  }
+
+#if 0 // for TEST
+  // save to file
+  QFile file("release_page.html");
+  file.open(QIODevice::WriteOnly);
+  file.write(byteArray);
+  file.close();
 #endif // for TEST
 
-	// initialize timer for main thread
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
-	timer->start(100); // 0.1 second tick timer
+  QString releasePage(byteArray);
+#if 1
+  // check latest release
+  int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
+  if (startIndex > 0) {
+	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
+	int lastIndex = releasePage.indexOf("\"", startIndex);
+	//  cout << "startIndex = " << startIndex << endl << flush;
+	//  cout << "lastIndex  = " << lastIndex << endl << flush;
+	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString latestTag;
+	latestTag.append(tagRef);
+	//	  cout << "latest tag = v" << qPrintable(latestTag);
+
+	startIndex = lastIndex + 2;
+	lastIndex = releasePage.indexOf("<", startIndex);
+	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString ver;
+	ver.append(verRef);
+	//	  cout << " : ver = " << qPrintable(ver) << endl << flush;
+
+	QString tag(option->getVersionString());
+	//	  tag = "169";
+	//	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
+	if (tag != latestTag){
+	  // Found new version
+	  //		cout << "Found new version" << endl << flush;
+	  int ret = QMessageBox::question(this,
+									  tr("Confirm"),
+									  tr("Found new release. Open release page?"),
+									  QMessageBox::Ok | QMessageBox::Cancel,
+									  QMessageBox::Ok);
+	  if (ret == QMessageBox::Ok){
+		QDesktopServices::openUrl(QUrl(QTB_URL_FOR_RELEASE));
+	  }
+	}
+	else {
+	  // Up-to-date
+	  //		cout << "Up-to-date!" << endl << flush;
+	  QMessageBox::information(this, tr("Information"),
+							   tr("Up-to-date!"));
+	}
+  }
+  else {
+	cout << "NOT Found tag!" << endl << flush;
+  }
+#else // for TEST
+  // display all tag and version in release page
+  int startIndex = 0;
+  while(true){
+	startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH, startIndex);
+	if (startIndex < 0) break;
+
+	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
+	int lastIndex = releasePage.indexOf("\"", startIndex);
+	//  cout << "startIndex = " << startIndex << endl << flush;
+	//  cout << "lastIndex  = " << lastIndex << endl << flush;
+	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString tag;
+	tag.append(tagRef);
+	cout << "Found tag = v" << qPrintable(tag);
+	startIndex = lastIndex;
+
+	startIndex = lastIndex + 2;
+	lastIndex = releasePage.indexOf("<", startIndex);
+	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString ver;
+	ver.append(verRef);
+	cout << " : ver = " << qPrintable(ver) << endl << flush;
+	startIndex = lastIndex;
+  }
+#endif // for TEST
+
+  // clear memory
+  httpGetter->clear();
 }
+#endif // QTB_UPDATECHECK
 
 // destructor
 QtBrynhildr::~QtBrynhildr()
 {
+  // shutdown timer for main thread
+  if (timer != 0){
+	timer->stop();
+	delete timer;
+	timer = 0;
+  }
+
   if (settings != 0){
 	// disconnect to server
 	if (settings->getConnected()){
@@ -741,9 +867,6 @@ QtBrynhildr::~QtBrynhildr()
   }
 #endif // USE_KEYLAYOUTFILE
 
-  // close Log File
-  logMessage->closeLogFile();
-
 #if QTB_CRYPTOGRAM
   // delete cipher
   if (cipher != 0){
@@ -751,6 +874,14 @@ QtBrynhildr::~QtBrynhildr()
 	cipher = 0;
   }
 #endif
+
+#if QTB_UPDATECHECK
+  // http getter
+  if (httpGetter != 0){
+	delete httpGetter;
+	httpGetter = 0;
+  }
+#endif // QTB_UPDATECHECK
 
 #if QTB_RECORDER
   // delete recorder
@@ -772,12 +903,8 @@ QtBrynhildr::~QtBrynhildr()
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "error: shutdownPlatform()");
   }
 
-  // shutdown timer for main thread
-  if (timer != 0){
-	timer->stop();
-	delete timer;
-	timer = 0;
-  }
+  // close Log File
+  logMessage->closeLogFile();
 }
 
 // get main window
@@ -1193,6 +1320,14 @@ void QtBrynhildr::createActions()
   about_Action->setStatusTip(tr("About Qt Brynhildr"));
   //  about_Action->setMenuRole(QAction::AboutRole);
   connect(about_Action, SIGNAL(triggered()), this, SLOT(about()));
+
+#if QTB_UPDATECHECK
+  // check update Action
+  checkUpdate_Action = new QAction(tr("Check Update"), this);
+  checkUpdate_Action->setStatusTip(tr("Check Update"));
+  checkUpdate_Action->setEnabled(httpGetter->supportsSsl());
+  connect(checkUpdate_Action, SIGNAL(triggered()), this, SLOT(checkUpdate()));
+#endif // QTB_UPDATECHECK
 
   // Show Menu Bar
   showMenuBar_Action = new QAction(tr("Show Menu Bar"), this);
@@ -1856,6 +1991,10 @@ void QtBrynhildr::createMenus()
 	helpMenu->addAction(logViewDialog_Action);
 	helpMenu->addSeparator();
   }
+#if QTB_UPDATECHECK
+  helpMenu->addAction(checkUpdate_Action);
+  helpMenu->addSeparator();
+#endif // QTB_UPDATECHECK
   helpMenu->addAction(about_Action);
 }
 
@@ -2343,6 +2482,23 @@ void QtBrynhildr::popUpConnectToServer()
   // pop up connect to server dialog
   connectToServerDialog->show();
 }
+
+#if QTB_UPDATECHECK
+// check update
+void QtBrynhildr::checkUpdate()
+{
+  //  cout << "enter checkUpdate()" << endl << flush;
+
+  // start downloading release page
+  //  bool result = httpGetter->startDownload(QTB_URL_FOR_RELEASE, "release_page.html");
+  bool result = httpGetter->startDownload(QTB_URL_FOR_RELEASE);
+  if (!result){
+	cout << "Failed to http access" << endl << flush;
+  }
+
+  //  cout << "leave checkUpdate()" << endl << flush;
+}
+#endif // QTB_UPDATECHECK
 
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()

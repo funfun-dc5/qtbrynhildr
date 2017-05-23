@@ -171,8 +171,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   logViewDialog(0),
   softwareKeyboard(0),
   softwareButton(0),
+#if 0 // for TEST
   softwareKeyboardDockWidget(0),
   softwareButtonDockWidget(0),
+#endif // for TEST
   totalFrameCounter(0),
   currentFrameRate(0),
   currentDataRate(0),
@@ -545,11 +547,26 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	logViewDialog = new LogViewDialog(settings, this);
   }
 
-  // Software Button
+  // set up Software Button and Keyboard
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	softwareButton = new SB(settings, mainWindow->getMouseBuffer(), this);
+	// keyboard
+	//	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), mainWindow);
+	softwareKeyboard->setVisible(false);
+#if 0 // for TEST
+	softwareKeyboard->setGeometry(40,350,1120,300);
+	softwareKeyboard->setVisible(true);
+#endif // for TEST
+
+	// button
+	//	softwareButton = new SB(settings, mainWindow->getMouseBuffer(), this);
+	softwareButton = new SB(settings, mainWindow->getMouseBuffer(), mainWindow);
 	softwareButton->setVisible(false);
 	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
+#if 0 // for TEST
+	softwareButton->setGeometry(40,30,1188,450);
+	softwareButton->setVisible(true);
+#endif // for TEST
   }
 
 #ifdef USE_KEYLAYOUTFILE
@@ -707,10 +724,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(100); // 0.1 second tick timer
-
-#if 0 // for TEST
-  softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
-#endif // for TEST
 }
 
 #if QTB_UPDATECHECK
@@ -2356,6 +2369,12 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 	setDesktopScalingFactor(event->size());
   }
 
+  // resize software keyboard/button
+  if (settings->getOnShowSoftwareKeyboard())
+	calculateSoftwareKeyboardLayout();  
+  if (settings->getOnShowSoftwareButton())
+	calculateSoftwareButtonLayout();  
+
   // recheck frame draw time
   settings->setFrameDrawTime(0);
 }
@@ -2574,6 +2593,7 @@ void QtBrynhildr::connectToServer()
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+#if 0 // for TEST
 	// software button
 	if (softwareButtonDockWidget == 0){
 	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
@@ -2586,13 +2606,16 @@ void QtBrynhildr::connectToServer()
 	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
 	}
 	softwareButtonDockWidget->setVisible(false);
+#endif // for TEST
 
 	// software keyboard
+#if 0 // for TEST
 	if (softwareKeyboard != 0){
 	  delete softwareKeyboard;
 	  softwareKeyboard = 0;
 	}
 	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+#endif // for TEST
 	KEYBOARD_TYPE keyboardType = settings->getKeyboardType();
 	// TODO: check keyboardType range
 	switch(keyboardType){
@@ -2623,6 +2646,7 @@ void QtBrynhildr::connectToServer()
 	  break;
 	}
 	softwareKeyboard->setVisible(false);
+#if 0 // for TEST
 	if (softwareKeyboardDockWidget != 0){
 	  removeDockWidget(softwareKeyboardDockWidget);
 	  delete softwareKeyboardDockWidget;
@@ -2637,6 +2661,7 @@ void QtBrynhildr::connectToServer()
 			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
 	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
 	softwareKeyboardDockWidget->setVisible(false);
+#endif // for TEST
   }
 
   // clear buffer for control
@@ -3547,6 +3572,51 @@ void QtBrynhildr::logView()
   }
 }
 
+// calulate software keyboard layout
+void QtBrynhildr::calculateSoftwareKeyboardLayout()
+{
+  // calc geometry
+  QSize desktopSize = mainWindow->size();
+  QSize size = softwareKeyboard->resetSize();
+
+  // calc size
+  int width = desktopSize.width() * 0.9;
+  int height = size.height() * ((double)width / size.width());
+
+  //  cout << "width = " << width << endl;
+  //  cout << "height = " << height << endl << flush;
+
+  // calc position
+  int x = (desktopSize.width() - width) * 0.5;
+  int y = (desktopSize.height() - height) * 0.9;
+
+  //  cout << "x = " << x << endl;
+  //  cout << "y = " << y << endl << flush;
+
+  softwareKeyboard->setGeometry(x, y, width, height);
+}
+
+// calulate software button layout
+void QtBrynhildr::calculateSoftwareButtonLayout()
+{
+  // calc geometry
+  QSize desktopSize = mainWindow->size();
+  QSize size = softwareButton->resetSize();
+
+  // calc size
+  int width = desktopSize.width() * 0.9;
+  int height = size.height() * ((double)width / size.width());
+
+  //  cout << "width = " << width << endl;
+  //  cout << "height = " << height << endl << flush;
+
+  // calc position
+  int x = (desktopSize.width() - width) * 0.5;
+  int y = (desktopSize.height() - height) * 0.05;
+
+  softwareButton->setGeometry(x, y, width, height);
+}
+
 // toggle show software keyboard
 void QtBrynhildr::toggleShowSoftwareKeyboard()
 {
@@ -3559,7 +3629,12 @@ void QtBrynhildr::toggleShowSoftwareKeyboard()
   else {
 	settings->setOnShowSoftwareKeyboard(true);
   }
+#if 0 // for TEST
   softwareKeyboardDockWidget->setVisible(settings->getOnShowSoftwareKeyboard());
+#else // for TEST
+  calculateSoftwareKeyboardLayout();
+  softwareKeyboard->setVisible(settings->getOnShowSoftwareKeyboard());
+#endif // for TEST
 }
 
 // toggle show software button
@@ -3574,7 +3649,12 @@ void QtBrynhildr::toggleShowSoftwareButton()
   else {
 	settings->setOnShowSoftwareButton(true);
   }
+#if 0 // for TEST
   softwareButtonDockWidget->setVisible(settings->getOnShowSoftwareButton());
+#else // for TEST
+  calculateSoftwareButtonLayout();
+  softwareButton->setVisible(settings->getOnShowSoftwareButton());
+#endif // for TEST
 }
 
 // select frame rate

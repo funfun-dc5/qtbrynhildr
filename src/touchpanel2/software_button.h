@@ -25,6 +25,9 @@ public:
   // destructor
   //  ~SoftwareButton();
 
+  // reset size
+  QSize resetSize();
+
 protected:
   // paint event
   void paintEvent(QPaintEvent *event) override;

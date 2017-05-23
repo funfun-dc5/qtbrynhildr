@@ -44,6 +44,14 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   calculateLayout(5, 5);
 }
 
+// reset size
+QSize SoftwareButton::resetSize()
+{
+  // initialize layout
+  calculateLayout(5, 5);
+  return buttonSize;
+}
+
 //---------------------------------------------------------------------------
 // protected
 //---------------------------------------------------------------------------

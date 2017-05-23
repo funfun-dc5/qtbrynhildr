@@ -614,6 +614,8 @@ void ControlThread::initHeader()
 #if QTB_BRYNHILDR2_SUPPORT
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
 	com_data->mouse_cursor = settings->getOnDisplayCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
+	if (settings->getOnShowSoftwareButton())
+	  com_data->mouse_cursor = MOUSE_CURSOR_ON;
   }
 #endif // QTB_BRYNHILDR2_SUPPORT
 

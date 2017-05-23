@@ -210,10 +210,8 @@ private slots:
   // about dialog
   void about();
 
-#if QTB_UPDATECHECK
   // check update
   void checkUpdate();
-#endif // QTB_UPDATECHECK
 
   // exit from QtBynhildr
   void exit();
@@ -480,10 +478,8 @@ private:
   // about this application
   QAction *about_Action;
 
-#if QTB_UPDATECHECK
   // check update
   QAction *checkUpdate_Action;
-#endif // QTB_UPDATECHECK
 
   // video Quality MINIMUM
   QAction *videoQuality_MINIMUM_Action;
@@ -708,7 +704,6 @@ private:
   Recorder *recorder;
 #endif // QTB_RECORDER
 
-#if QTB_UPDATECHECK
   // http getter
   HttpGetter *httpGetter;
 
@@ -717,7 +712,6 @@ private slots:
   void finishedDownload();
 
 private:
-#endif // QTB_UPDATECHECK
 
   // current path
   QString currentPath;

@@ -93,9 +93,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   outputLog_Action(0),
   exit_Action(0),
   about_Action(0),
-#if QTB_UPDATECHECK
   checkUpdate_Action(0),
-#endif // QTB_UPDATECHECK
   videoQuality_MINIMUM_Action(0),
   videoQuality_LOW_Action(0),
   videoQuality_STANDARD_Action(0),
@@ -188,9 +186,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_RECORDER
   recorder(0),
 #endif // QTB_RECORDER
-#if QTB_UPDATECHECK
   httpGetter(0),
-#endif // QTB_UPDATECHECK
   logMessage(new LogMessage(this)),
   controlThread(0),
   graphicsThread(0),
@@ -376,7 +372,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   }
 #endif // QTB_RECORDER
 
-#if QTB_UPDATECHECK
   // create http getter
   httpGetter = new HttpGetter();
   if (!httpGetter->supportsSsl()){
@@ -388,7 +383,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   }
 #endif // for DEBUG
   connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
-#endif // QTB_UPDATECHECK
 
   // version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION QTB_RCNAME);
@@ -726,7 +720,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   timer->start(100); // 0.1 second tick timer
 }
 
-#if QTB_UPDATECHECK
 // finished download
 void QtBrynhildr::finishedDownload()
 {
@@ -821,7 +814,6 @@ void QtBrynhildr::finishedDownload()
   // clear memory
   httpGetter->clear();
 }
-#endif // QTB_UPDATECHECK
 
 // destructor
 QtBrynhildr::~QtBrynhildr()
@@ -888,13 +880,11 @@ QtBrynhildr::~QtBrynhildr()
   }
 #endif
 
-#if QTB_UPDATECHECK
   // http getter
   if (httpGetter != 0){
 	delete httpGetter;
 	httpGetter = 0;
   }
-#endif // QTB_UPDATECHECK
 
 #if QTB_RECORDER
   // delete recorder
@@ -2502,7 +2492,6 @@ void QtBrynhildr::popUpConnectToServer()
   connectToServerDialog->show();
 }
 
-#if QTB_UPDATECHECK
 // check update
 void QtBrynhildr::checkUpdate()
 {
@@ -2517,7 +2506,6 @@ void QtBrynhildr::checkUpdate()
 
   //  cout << "leave checkUpdate()" << endl << flush;
 }
-#endif // QTB_UPDATECHECK
 
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()

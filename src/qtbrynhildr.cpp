@@ -2393,7 +2393,7 @@ void QtBrynhildr::showEvent(QShowEvent *event)
   }
 }
 
-#if 1 // for TEST
+#if 0 // for TEST
 // context menu event
 void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
 {
@@ -2412,7 +2412,7 @@ void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
 	break;
   }
 
-  QMainWindow::contextMenuEvent(event);
+  //  QMainWindow::contextMenuEvent(event);
 }
 #endif // for TEST
 

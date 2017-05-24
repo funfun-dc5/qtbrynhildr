@@ -2402,28 +2402,30 @@ void QtBrynhildr::showEvent(QShowEvent *event)
   }
 }
 
-#if 0 // for TEST
 // context menu event
 void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
 {
   switch(event->reason()){
   case QContextMenuEvent::Mouse:
-	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
+	//	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
+	// marker for mouse cursor
+	if (settings->getOnDrawMarker()){
+	  mainWindow->setDrawMarkerCounter(30);
+	}
 	break;
   case QContextMenuEvent::Keyboard:
-	cout << "Context Menu Event by Keyboard (Menu button)" << endl << flush;
+	//	cout << "Context Menu Event by Keyboard (Menu button)" << endl << flush;
 	break;
   case QContextMenuEvent::Other:
-	cout << "Context Menu Event by Other" << endl << flush;
+	//	cout << "Context Menu Event by Other" << endl << flush;
 	break;
   default:
-	cout << "Context Menu Event by Unknown" << endl << flush;
+	//	cout << "Context Menu Event by Unknown" << endl << flush;
 	break;
   }
 
-  //  QMainWindow::contextMenuEvent(event);
+  QMainWindow::contextMenuEvent(event);
 }
-#endif // for TEST
 
 // load settings from setting files or registry
 void QtBrynhildr::readSettings()

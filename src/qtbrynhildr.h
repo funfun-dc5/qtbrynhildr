@@ -180,10 +180,8 @@ protected:
   // window show event
   void showEvent(QShowEvent *event);
 
-#if 0 // for TEST
   // context menu event
   void contextMenuEvent(QContextMenuEvent *event);
-#endif // for TEST
 
 private slots:
   // popup connect to server dialog

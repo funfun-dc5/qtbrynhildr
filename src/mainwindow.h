@@ -89,6 +89,12 @@ public:
   // set full screen flag
   void setOnFullScreen(bool onFullScreen);
 
+  // set draw marker counter
+  void setDrawMarkerCounter(int drawMarkerCounter)
+  {
+	this->drawMarkerCounter = drawMarkerCounter;
+  }
+
   // minimum size hint
   QSize minimumSizeHint() const;
   // size hint
@@ -197,6 +203,9 @@ private:
 
   // full screen flag
   bool onFullScreen;
+
+  // draw marker counter
+  int drawMarkerCounter;
 
 #if defined(Q_OS_OSX)
   // previous KEYCODE_FLG

@@ -695,6 +695,7 @@ onHideMenuAndStatusBarAtFullScreen=true
 onShowFrameRate=true
 onShowPassword=false
 onClipCursor=false
+onDrawMarker=false
 onDisableTransferFile=false
 onShowTotalProgressForTransferFile=false
 onDisableTransferFileByDragAndDrop=false
@@ -977,6 +978,7 @@ Ver.1.7.0 : 2017/05/xx
 
             [その他変更]
              ・ソフトウェア・キーボードおよびボタン表示レイアウトを変更
+             ・マウスカーソルの位置を知らせるためのマーカー表示機能の追加(タッチパネル向け)
 
 Ver.1.6.9 : 2017/05/12
             [不具合修正]

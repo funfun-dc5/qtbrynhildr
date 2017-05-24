@@ -45,6 +45,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   heightOfMenuBar(0),
   heightOfStatusBar(0),
   onFullScreen(false),
+  drawMarkerCounter(0),
 #if defined(Q_OS_OSX)
   previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
 #endif // defined(Q_OS_OSX)
@@ -297,6 +298,23 @@ void MainWindow::paintEvent(QPaintEvent *event)
 #if 1 // for TEST
   QPainter painter(this);
   painter.drawImage(0, 0, image);
+  // draw marker for mouse cursor
+  if (drawMarkerCounter > 0){
+	int length = drawMarkerCounter*10;
+	int x = currentMousePos.x() - length/2;
+	int y = currentMousePos.y() - length/2;
+
+	painter.setRenderHint(QPainter::Antialiasing, false);
+	painter.setPen(QPen(Qt::green, 4));
+	painter.drawArc(x, y, length, length, 0*360, 16*360);
+
+	drawMarkerCounter--;
+  }
+#if 0 // for TEST
+  else {
+	drawMarkerCounter = 30;
+  }
+#endif // for TEST
 #else // for TEST
   QImage image2(image.size().width(), image.size().height(), QImage::Format_ARGB32_Premultiplied);
   QPainter imagePainter(&image2);

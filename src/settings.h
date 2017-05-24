@@ -324,6 +324,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONCLIPCURSOR					"onClipCursor"
 #define QTB_ONCLIPCURSOR_DEFAULT			false
 
+// for onDrawMarker
+#define QTB_ONDRAWMARKER					"onDrawMarker"
+#define QTB_ONDRAWMARKER_DEFAULT			false
+
 #if QTB_PUBLIC_MODE6_SUPPORT
 // for onDisableTransferFile
 #define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
@@ -1537,6 +1541,18 @@ public:
 	this->onClipCursor = onClipCursor;
   }
 
+  // get draw marker flag
+  bool getOnDrawMarker() const
+  {
+	return onDrawMarker;
+  }
+
+  // set draw marker flag
+  void setOnDrawMarker(bool onDrawMarker)
+  {
+	this->onDrawMarker = onDrawMarker;
+  }
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // get disable transfer file flag
   bool getOnDisableTransferFile() const
@@ -1991,6 +2007,9 @@ private:
 
   // clip cursor
   volatile bool onClipCursor;
+
+  // draw marker
+  volatile bool onDrawMarker;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // disable send/receive file

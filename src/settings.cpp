@@ -148,7 +148,7 @@ Settings::Settings(const char *iniFileName)
 
   setOnClipCursor(QTB_ONCLIPCURSOR_DEFAULT);
 
-  setOnDrawMarker(QTB_ONDRAWMARKER_DEFAULT);
+  setOnShowMarker(QTB_ONSHOWMARKER_DEFAULT);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   setOnDisableTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
@@ -423,9 +423,9 @@ void Settings::readSettings()
   setOnClipCursor(settings->value(QTB_ONCLIPCURSOR,
 								  QTB_ONCLIPCURSOR_DEFAULT).toBool());
 
-  // load onDrawMarker
-  setOnDrawMarker(settings->value(QTB_ONDRAWMARKER,
-								  QTB_ONDRAWMARKER_DEFAULT).toBool());
+  // load onShowMarker
+  setOnShowMarker(settings->value(QTB_ONSHOWMARKER,
+								  QTB_ONSHOWMARKER_DEFAULT).toBool());
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // load onDisableTansferFile
@@ -649,8 +649,8 @@ void Settings::writeSettings()
   // save onClipCursor
   settings->setValue(QTB_ONCLIPCURSOR, onClipCursor);
 
-  // save onDrawMarker
-  settings->setValue(QTB_ONDRAWMARKER, onDrawMarker);
+  // save onShowMarker
+  settings->setValue(QTB_ONSHOWMARKER, onShowMarker);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // save onDisableTransferFile
@@ -782,7 +782,7 @@ void Settings::printSettings() const
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
   qDebug() << "ShowPassword            : " << onShowPassword;
   qDebug() << "ClipCursor              : " << onClipCursor;
-  qDebug() << "DrawMarker              : " << onDrawMarker;
+  qDebug() << "ShowMarker              : " << onShowMarker;
 #if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "DisableTransferFile     : " << onDisableTransferFile;
   qDebug() << "ShowTotalProgressForTransferFile     : " << onShowTotalProgressForTransferFile;

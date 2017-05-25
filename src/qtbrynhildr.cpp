@@ -2409,7 +2409,7 @@ void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
   case QContextMenuEvent::Mouse:
 	//	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
 	// marker for mouse cursor
-	if (settings->getOnDrawMarker()){
+	if (settings->getOnShowMarker()){
 	  mainWindow->setDrawMarkerCounter(30);
 	}
 	break;

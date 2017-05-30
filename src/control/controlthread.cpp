@@ -174,6 +174,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 		com_data->mouse_wheel = mouseInfo->value.wheel;
 		break;
 	  case TYPE_MOUSE_FILEDROP:
+		com_data->mouse_left = mouseInfo->value.button;
 		com_data->filedrop = FILEDROP_ON;
 		break;
 	  default:

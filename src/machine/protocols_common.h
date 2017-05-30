@@ -37,10 +37,10 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
 #if QTB_PLUGINS_DISABLE_SUPPORT
   BYTE				dummy3[1];			// padding 1 bytes
   BYTE				plugins_disable;	// disable plugins
-  BYTE				dummy16[1];			// padding 1 bytes
 #else // QTB_PLUGINS_DISABLE_SUPPORT
-  BYTE				dummy3[3];			// padding 3 bytes
+  BYTE				dummy3[2];			// padding 2 bytes
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  BYTE				filedrop;			// file drop from server
 #if QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_MOVE		mouse_move;			// 1 byte
   BYTE				dummy4[1];

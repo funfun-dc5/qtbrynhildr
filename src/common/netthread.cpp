@@ -573,11 +573,22 @@ void NetThread::printHeader()
   cout << "com_data->server_cx      :"  << com_data->server_cx << endl;
   cout << "com_data->server_cy      :"  << com_data->server_cy << endl;
   cout << "com_data->control        :"	<< (int)com_data->control << endl;
+  cout << "com_data->filedrop       :"	<< (int)com_data->filedrop << endl;
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  cout << "com_data->plugins_disable:"	<< (int)com_data->plugins_disable << endl;
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
   cout << "com_data->mouse_move     :"	<< (int)com_data->mouse_move << endl;
+#if QTB_EXTRA_BUTTON_SUPPORT
+  cout << "com_data->mouse_x1       :"  << (int)com_data->mouse_x1 << endl;
+  cout << "com_data->mouse_x2       :"  << (int)com_data->mouse_x2 << endl;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   cout << "com_data->mouse_x        :"  << com_data->mouse_x << endl;
   cout << "com_data->mouse_y        :"  << com_data->mouse_y << endl;
   cout << "com_data->mouse_left     :"  << (int)com_data->mouse_left << endl;
   cout << "com_data->mouse_right    :"  << (int)com_data->mouse_right << endl;
+#if QTB_EXTRA_BUTTON_SUPPORT
+  cout << "com_data->mouse_middle   :"  << (int)com_data->mouse_middle << endl;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
   cout << "com_data->mouse_wheel    :"  << (int)com_data->mouse_wheel << endl;
   cout << "com_data->keycode        :"  << (int)com_data->keycode << endl;
   cout << "com_data->keycode_flg    :"  << (int)com_data->keycode_flg << endl;
@@ -586,11 +597,28 @@ void NetThread::printHeader()
   cout << "com_data->sound_capture  :"	<< (int)com_data->sound_capture << endl;
   cout << "com_data->keydown        :"	<< com_data->keydown << endl;
   cout << "com_data->video_quality  :"	<< (int)com_data->video_quality << endl;
+#if QTB_BRYNHILDR2_SUPPORT
+  cout << "com_data->mouse_cursor   :"	<< (int)com_data->mouse_cursor << endl;
+  cout << "com_data->gamepad1       :"	<< com_data->gamepad1 << endl;
+  cout << "com_data->gamepad2       :"	<< com_data->gamepad2 << endl;
+  cout << "com_data->gamepad3       :"	<< com_data->gamepad3 << endl;
+  cout << "com_data->gamepad4       :"	<< com_data->gamepad4 << endl;
+#endif // QTB_BRYNHILDR2_SUPPORT
   cout << "com_data->client_scroll_x:"  << com_data->client_scroll_x << endl;
   cout << "com_data->client_scroll_y:"  << com_data->client_scroll_y << endl;
+  cout << "com_data->video_mode     :"  << com_data->video_mode << endl;
+#if QTB_BRYNHILDR2_SUPPORT
+  cout << "com_data->server_version :"  << com_data->server_version << endl;
+#endif // QTB_BRYNHILDR2_SUPPORT
   cout << "com_data->zoom           :"  << com_data->zoom << endl;
   cout << "com_data->mode           :"	<< (int)com_data->mode << endl;
   cout << "com_data->sound_quality  :"	<< (int)com_data->sound_quality << endl;
+#if QTB_BRYNHILDR2_SUPPORT
+  cout << "com_data->gamepad5       :"	<< com_data->gamepad5 << endl;
+  cout << "com_data->gamepad6       :"	<< com_data->gamepad6 << endl;
+  cout << "com_data->gamepad7       :"	<< com_data->gamepad7 << endl;
+  cout << "com_data->gamepad8       :"	<< com_data->gamepad8 << endl;
+#endif // QTB_BRYNHILDR2_SUPPORT
 
   cout << endl << flush;
 }

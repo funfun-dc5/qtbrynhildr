@@ -16,7 +16,8 @@ typedef enum {
   TYPE_MOUSE_MIDDLE_BUTTON,
   TYPE_MOUSE_BACK_BUTTON,
   TYPE_MOUSE_FORWARD_BUTTON,
-  TYPE_MOUSE_WHEEL
+  TYPE_MOUSE_WHEEL,
+  TYPE_MOUSE_FILEDROP
 } MouseInfoType;
 
 // value of mouse information

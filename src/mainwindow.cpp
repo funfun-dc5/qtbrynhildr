@@ -364,7 +364,7 @@ void MainWindow::printMouseButtonEvent(QMouseEvent *event)
 	break;
   }
 
-  cout << "(x, y) = (" << event->pos().x() << "," << event->pos().y() << ")" << endl <<flush;
+  cout << "(x, y) = (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
 }
 
 // set mouse button event
@@ -437,6 +437,19 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
+
+	// check for filedrop
+	if (event->button() == Qt::LeftButton){
+	  QRect window = QRect(0, 0, currentSize.width(), currentSize.height());
+	  if (!window.contains(event->pos(), false)){
+		//		cout << "FileDrop!" << endl << flush;
+		MouseInfoValue value;
+		value.button = MOUSE_BUTTON_UP;
+		mouseBuffer->put(TYPE_MOUSE_FILEDROP, value);
+		return;
+	  }
+	}
+
 #if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
 	  MouseInfoValue value;
@@ -508,7 +521,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
   // for DEBUG
   if (outputLogForMouse){
     cout << "[MainWindow] mouseMoveEvent: (x, y) = (" <<
-	  event->pos().x() << "," << event->pos().y() << ")" << endl <<flush; // for DEBUG
+	  event->pos().x() << "," << event->pos().y() << ")" << endl << flush; // for DEBUG
   }
 
   if (settings->getConnected() &&

@@ -173,6 +173,9 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  case TYPE_MOUSE_WHEEL:
 		com_data->mouse_wheel = mouseInfo->value.wheel;
 		break;
+	  case TYPE_MOUSE_FILEDROP:
+		com_data->filedrop = FILEDROP_ON;
+		break;
 	  default:
 		// unknown type
 		ABORT();

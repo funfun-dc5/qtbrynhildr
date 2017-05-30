@@ -63,6 +63,10 @@ typedef char	CONTROL;
 #define PLUGINS_DISABLE_ON	1 // plugins disable on
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
+// file drop
+#define FILEDROP_OFF	0 // filedrop off
+#define FILEDROP_ON		1 // filedrop on
+
 // mouse move
 #if QTB_EXTRA_BUTTON_SUPPORT
 typedef char	MOUSE_MOVE;

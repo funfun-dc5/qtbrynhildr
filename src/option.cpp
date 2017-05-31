@@ -283,7 +283,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 // get version string
 const char *Option::getVersionString() const
 {
-  string str = QTB_VERSION QTB_RCNAME;
+  static string str = QTB_VERSION QTB_RCNAME;
   for (string::size_type pos = str.find(".") ; pos != string::npos; pos = str.find(".")){
 	str.erase(pos,1);
   }

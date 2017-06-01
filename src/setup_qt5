@@ -26,14 +26,16 @@ case $UNAME in
 					;;
 			esac
 		else
-			QTROOT="/c/Tools/develop/Qt/Qt5.8.0/5.8/mingw53_32"
+			QTROOT="/c/Tools/develop/Qt/Qt5.9.0/5.9/mingw53_32"
+#			QTROOT="/c/Tools/develop/Qt/Qt5.8.0/5.8/mingw53_32"
 #			QTROOT="/c/Tools/develop/Qt/Qt5.7.1/5.7/mingw53_32"
 		fi
 	;;
 	Linux)
 		case $UNAMEM in
 			x86_64)
-				QTROOT=/opt/Qt5.8.0/5.8/gcc_64
+				QTROOT=/opt/Qt5.9.0/5.9/gcc_64
+#				QTROOT=/opt/Qt5.8.0/5.8/gcc_64
 #				QTROOT=/opt/Qt5.7.1/5.7/gcc_64
 				;;
 			i686)
@@ -66,7 +68,8 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
-				QTROOT=/opt/Qt5.8.0/5.8/clang_64
+				QTROOT=/opt/Qt5.9.0/5.9/clang_64
+#				QTROOT=/opt/Qt5.8.0/5.8/clang_64
 #				QTROOT=/opt/Qt5.7.1/5.7/clang_64
 				;;
 			*)

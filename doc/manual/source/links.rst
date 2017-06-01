@@ -47,3 +47,8 @@
 ----------------
 
  The CELT ultra-low delay audio codec <http://www.celt-codec.org/>
+
+5. OpenSSLのページ
+-------------------
+
+ OpenSSL Toolkit <http://www.openssl.org/>

@@ -7,15 +7,15 @@
  example)
 
  [64bit]
- http://download.qt.io/archive/qt/5.8/5.8.0/qt-opensource-linux-x64-5.8.0.run
+ http://download.qt.io/archive/qt/5.9/5.9.0/qt-opensource-linux-x64-5.9.0.run
 
- chmod 755 qt-opensource-linux-x64-5.8.0.run
- sudo ./qt-opensource-linux-x64-5.8.0.run
+ chmod 755 qt-opensource-linux-x64-5.9.0.run
+ sudo ./qt-opensource-linux-x64-5.9.0.run
 
  (*) If you don't have g++ command, do "sudo apt-get install g++"
      and you may have to do "sudo apt-get install libglu1-mesa-dev" for openGL.
 
- (**) You may have to do "sudo apt-get install libpulse-dev" for Qt5.8.0.
+ (**) You may have to do "sudo apt-get install libpulse-dev" for Qt5.9.0.
 
 2) check setup script for Qt5 (src/setup_qt5)
 

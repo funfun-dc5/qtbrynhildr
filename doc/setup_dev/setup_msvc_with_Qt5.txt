@@ -4,9 +4,11 @@
 
 1) install Qt5 and MSVC2015
 
+ http://download.qt.io/archive/qt/5.9/5.9.0/qt-opensource-windows-x86-5.9.0.exe
+
 2) run command prompt for Qt5
 
- example) "Qt 5.8 64-bit for Desktop (MSVC 2015)" in Start Menu
+ example) "Qt 5.9 64-bit for Desktop (MSVC 2015)" in Start Menu
 
 3) run vcvarsall.bat
 

@@ -44,6 +44,9 @@ DesktopScalingDialog::DesktopScalingDialog(Settings *settings,
 
   // resetting
   resetting();
+
+  // fix size
+  setFixedSize(size());
 }
 
 // resize event

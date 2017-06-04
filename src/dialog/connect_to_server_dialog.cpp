@@ -81,6 +81,9 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
   // resetting
   resetting();
+
+  // fix size
+  setFixedSize(size());
 }
 
 // destructor

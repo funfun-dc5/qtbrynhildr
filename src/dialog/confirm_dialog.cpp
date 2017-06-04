@@ -42,6 +42,9 @@ ConfirmDialog::ConfirmDialog(QString msg,
 
   // resetting
   resetting();
+
+  // fix size
+  setFixedSize(size());
 }
 
 // resize event

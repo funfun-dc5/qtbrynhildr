@@ -265,6 +265,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP				"onOpenConnectToServerDialogAtBootup"
 #define QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT		true
 
+// for onCheckUpdateAtBootup
+#define QTB_ONCHECKUPDATEATBOOTUP				"onCheckUpdateAtBootup"
+#define QTB_ONCHECKUPDATEATBOOTUP_DEFAULT		false
+
 // for onConfirmAtExit
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"
 #define QTB_ONCONFIRMATEXIT_DEFAULT		true
@@ -1300,6 +1304,18 @@ public:
 	this->onOpenConnectToServerDialogAtBootup = onOpenConnectToServerDialogAtBootup;
   }
 
+  // get check update at bootup flag
+  bool getOnCheckUpdateAtBootup() const
+  {
+	return onCheckUpdateAtBootup;
+  }
+
+  // set check update at bootup flag
+  void setOnCheckUpdateAtBootup(bool onCheckUpdateAtBootup)
+  {
+	this->onCheckUpdateAtBootup = onCheckUpdateAtBootup;
+  }
+
   // get confirm at exit flag
   bool getOnConfirmAtExit() const
   {
@@ -1944,6 +1960,9 @@ private:
 
   // open connect to server dialog at bootup
   volatile bool onOpenConnectToServerDialogAtBootup;
+
+  // check update at bootup
+  volatile bool onCheckUpdateAtBootup;
 
   // confirm at exit
   volatile bool onConfirmAtExit;

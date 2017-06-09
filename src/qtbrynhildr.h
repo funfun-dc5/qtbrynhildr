@@ -788,6 +788,9 @@ private slots:
   void timerExpired();
 
 private:
+  // check update in background mode
+  bool onCheckUpdateInBackground;
+
   // output log flag
   bool outputLog;
 };

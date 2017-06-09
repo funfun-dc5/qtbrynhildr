@@ -121,6 +121,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnOpenConnectToServerDialogAtBootup(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT);
 
+  setOnCheckUpdateAtBootup(QTB_ONCHECKUPDATEATBOOTUP_DEFAULT);
+
   setOnConfirmAtExit(QTB_ONCONFIRMATEXIT_DEFAULT);
 
   setOnSaveSettingsAtExit(QTB_ONSAVESETTINGSATEXIT_DEFAULT);
@@ -369,7 +371,11 @@ void Settings::readSettings()
 
   // load onOpenConnectToServerDialogAtBootup
   setOnOpenConnectToServerDialogAtBootup(settings->value(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP,
-														  QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT).toBool());
+														 QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT).toBool());
+
+  // load onCheckUpdateAtBootup
+  setOnCheckUpdateAtBootup(settings->value(QTB_ONCHECKUPDATEATBOOTUP,
+										   QTB_ONCHECKUPDATEATBOOTUP_DEFAULT).toBool());
 
   // load onConfirmAtExit
   setOnConfirmAtExit(settings->value(QTB_ONCONFIRMATEXIT,
@@ -614,6 +620,9 @@ void Settings::writeSettings()
   // save onOpenConnectToServerDialogAtBootup
   settings->setValue(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP, onOpenConnectToServerDialogAtBootup);
 
+  // save onCheckUpdateAtBootup
+  settings->setValue(QTB_ONCHECKUPDATEATBOOTUP, onCheckUpdateAtBootup);
+
   // save confirmAtExit
   settings->setValue(QTB_ONCONFIRMATEXIT, onConfirmAtExit);
 
@@ -775,6 +784,7 @@ void Settings::printSettings() const
 
   qDebug() << "MonitorNo               : " << monitorNo;
   qDebug() << "OpenConnectToServerDialogAtBootup           : " << onOpenConnectToServerDialogAtBootup;
+  qDebug() << "CheckUpdateAtBootup     : " << onCheckUpdateAtBootup;
   qDebug() << "ConfirmAtExit           : " << onConfirmAtExit;
   qDebug() << "SaveSettingsAtExit      : " << onSaveSettingsAtExit;
   qDebug() << "ExitAfterReplay         : " << onExitAfterReplay;

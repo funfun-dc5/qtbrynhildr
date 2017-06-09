@@ -5,9 +5,9 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"1.7.0"
-#define QTB_RCNAME				"-android"
-#define QTB_VERSION_NUMBER		170
+#define QTB_VERSION				"1.7.1"
+#define QTB_RCNAME				""
+#define QTB_VERSION_NUMBER		171
 
 // year
 #define QTB_YEAR		"2015-2017"

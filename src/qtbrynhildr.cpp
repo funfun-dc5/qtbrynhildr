@@ -445,14 +445,15 @@ QtBrynhildr::QtBrynhildr(Option *option)
   //------------------------------------------------------------
   // create window
   //------------------------------------------------------------
+  // Main Window Widget
+  mainWindow = new MainWindow(settings, this);
+
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
   //  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   //  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  // Main Window Widget
-  mainWindow = new MainWindow(settings, this);
   // set Widget
   scrollArea->setWidget(mainWindow);
   scrollArea->setFocusProxy(mainWindow);

@@ -217,6 +217,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   onGraphics(true),
   onSound(true),
   timer(0),
+  onCheckUpdateInBackground(false),
   // for DEBUG
   outputLog(false)
 {
@@ -709,7 +710,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	// clear boot flag
 	option->setBootupFlag(false);
   }
-  else if (settings->getOnOpenConnectToServerDialogAtBootup()) {
+  else if (settings->getOnOpenConnectToServerDialogAtBootup()){
 	// pop up connect to server dialog
 	this->show();
 	popUpConnectToServer();
@@ -726,6 +727,13 @@ QtBrynhildr::QtBrynhildr(Option *option)
   }
   else {
 	changeMouseCursor(Qt::ArrowCursor);
+  }
+
+  // check update
+  if (settings->getOnCheckUpdateAtBootup()){
+	// check update
+	onCheckUpdateInBackground = true;
+	checkUpdate();
   }
 }
 
@@ -784,10 +792,16 @@ void QtBrynhildr::finishedDownload()
 	  }
 	}
 	else {
-	  // Up-to-date
-	  //		cout << "Up-to-date!" << endl << flush;
-	  QMessageBox::information(this, tr("Information"),
-							   tr("Up-to-date!"));
+	  if (!onCheckUpdateInBackground){
+		// Up-to-date
+		//		cout << "Up-to-date!" << endl << flush;
+		QMessageBox::information(this, tr("Information"),
+								 tr("Up-to-date!"));
+	  }
+	  else {
+		// reset background mode
+		onCheckUpdateInBackground = false;
+	  }
 	}
   }
   else {

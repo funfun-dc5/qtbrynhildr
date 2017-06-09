@@ -682,6 +682,7 @@ desktopOffsetX=0
 desktopOffsetY=0
 monitorNo=1
 onOpenConnectToServerDialogAtBootup=true
+onCheckUpdateAtBootup=false
 onConfirmAtExit=true
 onSaveSettingsAtExit=false
 onExitAfterReplay=false
@@ -972,6 +973,14 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.1.7.2 : 2017/06/xx
+            [新規機能]
+             ・毎回起動時に「アップデートを確認」を実行する機能を追加(標準では無効)
+
+            [不具合修正]
+
+            [その他変更]
+
 Ver.1.7.1 : 2017/06/11
             [不具合修正]
              ・すべてのダイアログ・ウィンドウをサイズ固定に変更

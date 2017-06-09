@@ -171,6 +171,7 @@ typedef int KEYBOARD_TYPE;
 
 #if QTB_BRYNHILDR2_SUPPORT
 // for displayCursor
+#define QTB_ONDISPLAYCURSOR				"onDisplayCursor"
 #if defined(QTB_DEV_TABLET)
 #define QTB_ONDISPLAYCURSOR_DEFAULT		true
 #else // defined(QTB_DEV_TABLET)

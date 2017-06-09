@@ -463,7 +463,12 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  else if (serverVersion == SERVER_VERSION_BRYNHILDR2){
 		// change to Qt::ArrowCursor for Brynhildr (>= 2.0.0)
 		// change mouse cursor
-		emit changeMouseCursor(Qt::ArrowCursor);
+		if (settings->getOnDisplayCursor()){
+		  emit changeMouseCursor(Qt::CrossCursor);
+		}
+		else {
+		  emit changeMouseCursor(Qt::ArrowCursor);
+		}
 	  }
 	}
 #endif // QTB_BRYNHILDR2_SUPPORT

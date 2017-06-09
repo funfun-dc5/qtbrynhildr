@@ -719,6 +719,14 @@ QtBrynhildr::QtBrynhildr(Option *option)
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(100); // 0.1 second tick timer
+
+  // initialize mouse cursor
+  if (settings->getOnDisplayCursor()){
+	changeMouseCursor(Qt::CrossCursor);
+  }
+  else {
+	changeMouseCursor(Qt::ArrowCursor);
+  }
 }
 
 // finished download

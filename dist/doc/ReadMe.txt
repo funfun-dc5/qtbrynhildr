@@ -665,6 +665,7 @@ onExtraButtonSupport=true
 onControlOffWithGraphicsOff=true
 onGraphics=true
 videoQuality=5
+onDisplayCursor=false
 onSupportGamePad=true
 onDisableBrynhildr2Support=false
 frameRate=30
@@ -972,12 +973,11 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 10. 変更履歴
 ----------------------------------------------------------------------
 Ver.1.7.1 : 2017/06/11
-            [新規機能]
-
             [不具合修正]
-             ・すべてのダイアログを固定サイズに変更
+             ・すべてのダイアログ・ウィンドウをサイズ固定に変更
 
             [その他変更]
+             ・マウスカーソルをサーバ側で表示するように変更する設定を追加
              ・Qt5.9.0でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
              ・Mac版の開発ツールXcodeを7.3.1から8.3.3に更新
 

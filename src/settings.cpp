@@ -297,6 +297,10 @@ void Settings::readSettings()
 								  (qint32)QTB_VIDEOQUALITY_DEFAULT).toInt());
 
 #if QTB_BRYNHILDR2_SUPPORT
+  // load onDisplayCursor
+  setOnDisplayCursor(settings->value(QTB_ONDISPLAYCURSOR,
+									 QTB_ONDISPLAYCURSOR_DEFAULT).toBool());
+
   // load onSupportGamePad
   setOnSupportGamePad(settings->value(QTB_ONSUPPORTGAMEPAD,
 									  QTB_ONSUPPORTGAMEPAD_DEFAULT).toBool());
@@ -553,6 +557,9 @@ void Settings::writeSettings()
   settings->setValue(QTB_VIDEOQUALITY, (qint32)videoQuality);
 
 #if QTB_BRYNHILDR2_SUPPORT
+  // save onDisplayCursor
+  settings->setValue(QTB_ONDISPLAYCURSOR, onDisplayCursor);
+
   // save onSupportGamePad
   settings->setValue(QTB_ONSUPPORTGAMEPAD, onSupportGamePad);
 

@@ -2790,7 +2790,8 @@ void QtBrynhildr::exit()
 	ConfirmDialog *confirmDialog =
 	  new ConfirmDialog(tr("exit application?"),
 						settings->getOnConfirmAtExit(),
-						settings);
+						settings,
+						this);
 	if (confirmDialog->exec() == QDialog::Accepted){
 	  settings->setOnConfirmAtExit(confirmDialog->getConfirmFlag());
 	  delete confirmDialog;

@@ -982,6 +982,9 @@ Ver.1.7.2 : 2017/06/xx
             [その他変更]
              ・終了時の「確認」ダイアログをディスプレイの中心ではなくウィンドウの中心に
                表示するように変更
+             ・.iniの設定名変更
+               onSupportGamePad → onGamePadSupport
+               onShowMarker → onShowMouseCursorMarker
 
 Ver.1.7.1 : 2017/06/11
             [不具合修正]

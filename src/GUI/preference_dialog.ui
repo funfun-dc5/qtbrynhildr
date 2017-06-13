@@ -160,7 +160,7 @@
       <item>
        <widget class="QLabel" name="label_keyLayoutList">
         <property name="text">
-         <string> Key Layout List</string>
+         <string>Key Layout List</string>
         </property>
        </widget>
       </item>

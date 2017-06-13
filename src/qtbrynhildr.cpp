@@ -168,6 +168,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   connectToServerDialog(0),
   desktopScalingDialog(0),
   logViewDialog(0),
+  preferenceDialog(0),
   softwareKeyboard(0),
   softwareButton(0),
 #if 0 // for TEST
@@ -543,6 +544,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   if (QTB_LOG_VIEW){
 	logViewDialog = new LogViewDialog(settings, this);
   }
+
+  // preference dialog
+  preferenceDialog = new PreferenceDialog(settings, this);
 
   // set up Software Button and Keyboard
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
@@ -2933,6 +2937,9 @@ void QtBrynhildr::cancelFileTransferring()
 void QtBrynhildr::preferences()
 {
   cout << "enter preferences()" << endl << flush;
+
+  preferenceDialog->show();
+
   cout << "leave preferences()" << endl << flush;
 }
 

@@ -40,6 +40,7 @@
 #include "dialog/connect_to_server_dialog.h"
 #include "dialog/desktop_scaling_dialog.h"
 #include "dialog/log_view_dialog.h"
+#include "dialog/preference_dialog.h"
 #if QTB_CRYPTOGRAM
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
@@ -633,6 +634,9 @@ private:
 
   // log view dialog
   LogViewDialog *logViewDialog;
+
+  // preference dialog
+  PreferenceDialog *preferenceDialog;
 
   // software keyboard and button
   SK *softwareKeyboard;

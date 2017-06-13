@@ -309,7 +309,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 
 #if QTB_BRYNHILDR2_SUPPORT
   // for GamePad
-  if (settings->getOnSupportGamePad()){
+  if (settings->getOnGamePadSupport()){
 	setGamePadControl();
   }
 #endif // QTB_BRYNHILDR2_SUPPORT

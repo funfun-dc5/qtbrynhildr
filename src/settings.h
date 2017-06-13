@@ -177,12 +177,12 @@ typedef int KEYBOARD_TYPE;
 #else // defined(QTB_DEV_TABLET)
 #define QTB_ONDISPLAYCURSOR_DEFAULT		false
 #endif // defined(QTB_DEV_TABLET)
-// for onSupportGamePad
-#define QTB_ONSUPPORTGAMEPAD			"onSupportGamePad"
+// for onGamePadSupport
+#define QTB_ONGAMEPADSUPPORT			"onGamePadSupport"
 #if defined(Q_OS_WIN)
-#define QTB_ONSUPPORTGAMEPAD_DEFAULT	true
+#define QTB_ONGAMEPADSUPPORT_DEFAULT	true
 #else // defined(Q_OS_WIN)
-#define QTB_ONSUPPORTGAMEPAD_DEFAULT	false
+#define QTB_ONGAMEPADSUPPORT_DEFAULT	false
 #endif // defined(Q_OS_WIN)
 // for onDisableBrynhildr2Support
 #define QTB_ONDISABLEBRYNHILDR2SUPPORT			"onDisableBrynhildr2Support"
@@ -329,9 +329,9 @@ typedef int SCALING_TYPE;
 #define QTB_ONCLIPCURSOR					"onClipCursor"
 #define QTB_ONCLIPCURSOR_DEFAULT			false
 
-// for onShowMarker
-#define QTB_ONSHOWMARKER					"onShowMarker"
-#define QTB_ONSHOWMARKER_DEFAULT			false
+// for onShowMouseCursorMarker
+#define QTB_ONSHOWMOUSECURSORMARKER			"onShowMouseCursorMarker"
+#define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	false
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 // for onDisableTransferFile
@@ -926,16 +926,16 @@ public:
 	this->onDisplayCursor = onDisplayCursor;
   }
 
-  // get support gamepad flag
-  bool getOnSupportGamePad()
+  // get gamepad support flag
+  bool getOnGamePadSupport()
   {
-	return onSupportGamePad;
+	return onGamePadSupport;
   }
 
-  // set support gamepad flag
-  void setOnSupportGamePad(bool onSupportGamePad)
+  // set gamepad support flag
+  void setOnGamePadSupport(bool onGamePadSupport)
   {
-	this->onSupportGamePad = onSupportGamePad;
+	this->onGamePadSupport = onGamePadSupport;
   }
 
   // get disable brynhildr2 flag
@@ -1558,16 +1558,16 @@ public:
 	this->onClipCursor = onClipCursor;
   }
 
-  // get show marker flag
-  bool getOnShowMarker() const
+  // get show mouse cursor marker flag
+  bool getOnShowMouseCursorMarker() const
   {
-	return onShowMarker;
+	return onShowMouseCursorMarker;
   }
 
-  // set show marker flag
-  void setOnShowMarker(bool onShowMarker)
+  // set show mouse cursor marker flag
+  void setOnShowMouseCursorMarker(bool onShowMouseCursorMarker)
   {
-	this->onShowMarker = onShowMarker;
+	this->onShowMouseCursorMarker = onShowMouseCursorMarker;
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -1908,7 +1908,7 @@ private:
 
 #if QTB_BRYNHILDR2_SUPPORT
   volatile bool onDisplayCursor;
-  volatile bool onSupportGamePad;
+  volatile bool onGamePadSupport;
   volatile bool onDisableBrynhildr2Support;
 #endif // QTB_BRYNHILDR2_SUPPORT
   volatile unsigned int frameRate;
@@ -2029,7 +2029,7 @@ private:
   volatile bool onClipCursor;
 
   // show marker
-  volatile bool onShowMarker;
+  volatile bool onShowMouseCursorMarker;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // disable send/receive file

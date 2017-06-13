@@ -42,7 +42,7 @@ Settings::Settings(const char *iniFileName)
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   onDisplayCursor(false),
-  onSupportGamePad(false),
+  onGamePadSupport(false),
   onDisableBrynhildr2Support(false),
 #endif // QTB_BRYNHILDR2_SUPPORT
   frameDrawTime(0),
@@ -93,7 +93,7 @@ Settings::Settings(const char *iniFileName)
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
 #if QTB_BRYNHILDR2_SUPPORT
   setOnDisplayCursor(QTB_ONDISPLAYCURSOR_DEFAULT);
-  setOnSupportGamePad(QTB_ONSUPPORTGAMEPAD_DEFAULT);
+  setOnGamePadSupport(QTB_ONGAMEPADSUPPORT_DEFAULT);
   setOnDisableBrynhildr2Support(QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT);
 #endif // QTB_BRYNHILDR2_SUPPORT
   setFrameRate(QTB_FRAMERATE_DEFAULT);
@@ -150,7 +150,7 @@ Settings::Settings(const char *iniFileName)
 
   setOnClipCursor(QTB_ONCLIPCURSOR_DEFAULT);
 
-  setOnShowMarker(QTB_ONSHOWMARKER_DEFAULT);
+  setOnShowMouseCursorMarker(QTB_ONSHOWMOUSECURSORMARKER_DEFAULT);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   setOnDisableTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
@@ -303,9 +303,9 @@ void Settings::readSettings()
   setOnDisplayCursor(settings->value(QTB_ONDISPLAYCURSOR,
 									 QTB_ONDISPLAYCURSOR_DEFAULT).toBool());
 
-  // load onSupportGamePad
-  setOnSupportGamePad(settings->value(QTB_ONSUPPORTGAMEPAD,
-									  QTB_ONSUPPORTGAMEPAD_DEFAULT).toBool());
+  // load onGamePadSupport
+  setOnGamePadSupport(settings->value(QTB_ONGAMEPADSUPPORT,
+									  QTB_ONGAMEPADSUPPORT_DEFAULT).toBool());
 
   // load onDisableBrynhildr2Support
   setOnDisableBrynhildr2Support(settings->value(QTB_ONDISABLEBRYNHILDR2SUPPORT,
@@ -433,9 +433,9 @@ void Settings::readSettings()
   setOnClipCursor(settings->value(QTB_ONCLIPCURSOR,
 								  QTB_ONCLIPCURSOR_DEFAULT).toBool());
 
-  // load onShowMarker
-  setOnShowMarker(settings->value(QTB_ONSHOWMARKER,
-								  QTB_ONSHOWMARKER_DEFAULT).toBool());
+  // load onShowMouseCursorMarker
+  setOnShowMouseCursorMarker(settings->value(QTB_ONSHOWMOUSECURSORMARKER,
+											 QTB_ONSHOWMOUSECURSORMARKER_DEFAULT).toBool());
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // load onDisableTansferFile
@@ -566,8 +566,8 @@ void Settings::writeSettings()
   // save onDisplayCursor
   settings->setValue(QTB_ONDISPLAYCURSOR, onDisplayCursor);
 
-  // save onSupportGamePad
-  settings->setValue(QTB_ONSUPPORTGAMEPAD, onSupportGamePad);
+  // save onGamePadSupport
+  settings->setValue(QTB_ONGAMEPADSUPPORT, onGamePadSupport);
 
   // save onDisableBrynhildr2Support
   settings->setValue(QTB_ONDISABLEBRYNHILDR2SUPPORT, onDisableBrynhildr2Support);
@@ -665,8 +665,8 @@ void Settings::writeSettings()
   // save onClipCursor
   settings->setValue(QTB_ONCLIPCURSOR, onClipCursor);
 
-  // save onShowMarker
-  settings->setValue(QTB_ONSHOWMARKER, onShowMarker);
+  // save onShowMouseCursorMarker
+  settings->setValue(QTB_ONSHOWMOUSECURSORMARKER, onShowMouseCursorMarker);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // save onDisableTransferFile
@@ -750,7 +750,7 @@ void Settings::printSettings() const
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 #if QTB_BRYNHILDR2_SUPPORT
   qDebug() << "DisplayCursor : " << onDisplayCursor;
-  qDebug() << "SupportGamePad: " << onSupportGamePad;
+  qDebug() << "GamePadSupport: " << onGamePadSupport;
 #endif // QTB_BRYNHILDR2_SUPPORT
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
 #if QTB_EXTRA_BUTTON_SUPPORT
@@ -799,7 +799,7 @@ void Settings::printSettings() const
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
   qDebug() << "ShowPassword            : " << onShowPassword;
   qDebug() << "ClipCursor              : " << onClipCursor;
-  qDebug() << "ShowMarker              : " << onShowMarker;
+  qDebug() << "ShowMouseCursorMarker   : " << onShowMouseCursorMarker;
 #if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "DisableTransferFile     : " << onDisableTransferFile;
   qDebug() << "ShowTotalProgressForTransferFile     : " << onShowTotalProgressForTransferFile;

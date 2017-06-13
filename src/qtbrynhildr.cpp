@@ -164,6 +164,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   sendFile_Action(0),
   cancelFileTransferring_Action(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+  preferences_Action(0),
   connectToServerDialog(0),
   desktopScalingDialog(0),
   logViewDialog(0),
@@ -1819,6 +1820,12 @@ void QtBrynhildr::createActions()
   cancelFileTransferring_Action->setStatusTip(tr("Cancel File Transferring"));
   connect(cancelFileTransferring_Action, SIGNAL(triggered()), this, SLOT(cancelFileTransferring()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // preferences
+  preferences_Action = new QAction(tr("Preferences..."), this);
+  preferences_Action->setEnabled(true);
+  preferences_Action->setStatusTip(tr("Preferences..."));
+  connect(preferences_Action, SIGNAL(triggered()), this, SLOT(preferences()));
 }
 
 // create Menus
@@ -1841,6 +1848,8 @@ void QtBrynhildr::createMenus()
 	fileMenu->addAction(cancelFileTransferring_Action);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+  fileMenu->addSeparator();
+  fileMenu->addAction(preferences_Action);
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
 
@@ -2919,6 +2928,13 @@ void QtBrynhildr::cancelFileTransferring()
   controlThread->exitThread();
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+// preferences
+void QtBrynhildr::preferences()
+{
+  cout << "enter preferences()" << endl << flush;
+  cout << "leave preferences()" << endl << flush;
+}
 
 // clear Video Quality check
 void QtBrynhildr::clearVideoQualityCheck()

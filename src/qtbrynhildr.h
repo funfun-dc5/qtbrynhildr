@@ -225,6 +225,9 @@ private slots:
   void cancelFileTransferring();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+  // preferences
+  void preferences();
+
   // set video quality
   void setVideoQuality_MINIMUM();
   void setVideoQuality_LOW();
@@ -618,6 +621,9 @@ private:
   // cancel file transferring
   QAction *cancelFileTransferring_Action;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // preferences
+  QAction *preferences_Action;
 
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;

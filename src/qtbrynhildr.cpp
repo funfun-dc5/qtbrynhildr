@@ -1826,9 +1826,14 @@ void QtBrynhildr::createActions()
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // preferences
+#if !defined(Q_OS_OSX)
   preferences_Action = new QAction(tr("Preferences..."), this);
-  preferences_Action->setEnabled(true);
   preferences_Action->setStatusTip(tr("Preferences..."));
+#else // !defined(Q_OS_OSX)
+  preferences_Action = new QAction("Preferences...", this);
+  preferences_Action->setStatusTip("Preferences...");
+#endif // !defined(Q_OS_OSX)
+  preferences_Action->setEnabled(true);
   connect(preferences_Action, SIGNAL(triggered()), this, SLOT(preferences()));
 }
 

@@ -41,7 +41,7 @@
 
 [Windows版(64bit/32bit)]
 
- Windows XP以降
+ Windows XP以降 (*3)
 
 [Linux版(x64/x86)]
 
@@ -60,6 +60,8 @@
 
       Qt5のサポートする環境(OS)について詳しくは以下のページを御覧ください。
       http://doc.qt.io/QtSupportedPlatforms/index.html
+
+ (*3) XP/Vista版をビルドするにはバージョンが5.6.2以下のQtを使ってビルドする必要があります。
 
 ==============================
  [テスト中の環境]
@@ -820,6 +822,10 @@ Visual C++ 2015 x86 Redistributable または Visual C++ 2015 x64 Redistributabl
 例えば以下から入手できます。
 
 https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
+
+
+Qtのバージョンにより必要なランタイムライブラリパッケージは異なる可能性があります。
+例えば、Qt5.6.2では Visual C++ 2013 のランタイムライブラリパッケージが必要です。
 
 ----------------------------------------------------------------------
 7. メッセージダイアログについて

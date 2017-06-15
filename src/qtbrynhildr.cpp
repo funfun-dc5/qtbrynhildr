@@ -604,7 +604,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard dataChanged
-  if (!settings->getOnDisableTransferClipboard()){
+  if (settings->getOnTransferClipboard()){
 	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -1845,14 +1845,14 @@ void QtBrynhildr::createMenus()
   fileMenu->addAction(connectToServer_Action);
   fileMenu->addAction(disconnectToServer_Action);
 #if QTB_PUBLIC_MODE6_SUPPORT
-  if (!settings->getOnDisableTransferFile() || !settings->getOnDisableTransferClipboard()){
+  if (settings->getOnTransferFile() || settings->getOnTransferClipboard()){
 	fileMenu->addSeparator();
   }
 #if 0 // for TEST
-  if (!settings->getOnDisableTransferClipboard())
+  if (settings->getOnTransferClipboard())
 	fileMenu->addAction(sendClipboard_Action);
 #endif
-  if (!settings->getOnDisableTransferFile()){
+  if (settings->getOnTransferFile()){
 	fileMenu->addAction(sendFile_Action);
 	fileMenu->addAction(cancelFileTransferring_Action);
   }

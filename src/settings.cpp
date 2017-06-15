@@ -43,7 +43,7 @@ Settings::Settings(const char *iniFileName)
 #if QTB_BRYNHILDR2_SUPPORT
   onDisplayCursor(false),
   onGamePadSupport(false),
-  onDisableBrynhildr2Support(false),
+  onBrynhildr2Support(true),
 #endif // QTB_BRYNHILDR2_SUPPORT
   frameDrawTime(0),
   monitorCount(0),
@@ -94,7 +94,7 @@ Settings::Settings(const char *iniFileName)
 #if QTB_BRYNHILDR2_SUPPORT
   setOnDisplayCursor(QTB_ONDISPLAYCURSOR_DEFAULT);
   setOnGamePadSupport(QTB_ONGAMEPADSUPPORT_DEFAULT);
-  setOnDisableBrynhildr2Support(QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT);
+  setOnBrynhildr2Support(QTB_ONBRYNHILDR2SUPPORT_DEFAULT);
 #endif // QTB_BRYNHILDR2_SUPPORT
   setFrameRate(QTB_FRAMERATE_DEFAULT);
   setOnSound(QTB_ONSOUND_DEFAULT);
@@ -153,12 +153,12 @@ Settings::Settings(const char *iniFileName)
   setOnShowMouseCursorMarker(QTB_ONSHOWMOUSECURSORMARKER_DEFAULT);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  setOnDisableTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
-  setOnShowTotalProgressForTransferFile(QTB_ONDISABLETRANSFERFILE_DEFAULT);
+  setOnTransferFile(QTB_ONTRANSFERFILE_DEFAULT);
+  setOnShowTotalProgressForTransferFile(QTB_ONTRANSFERFILE_DEFAULT);
 #if QTB_DRAG_AND_DROP_SUPPORT
-  setOnDisableTransferFileByDragAndDrop(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT);
+  setOnTransferFileByDragAndDrop(QTB_ONTRANSFERFILEBYDRAGANDDROP_DEFAULT);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
-  setOnDisableTransferClipboard(QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT);
+  setOnTransferClipboard(QTB_ONTRANSFERCLIPBOARD_DEFAULT);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
@@ -307,9 +307,9 @@ void Settings::readSettings()
   setOnGamePadSupport(settings->value(QTB_ONGAMEPADSUPPORT,
 									  QTB_ONGAMEPADSUPPORT_DEFAULT).toBool());
 
-  // load onDisableBrynhildr2Support
-  setOnDisableBrynhildr2Support(settings->value(QTB_ONDISABLEBRYNHILDR2SUPPORT,
-												QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT).toBool());
+  // load onBrynhildr2Support
+  setOnBrynhildr2Support(settings->value(QTB_ONBRYNHILDR2SUPPORT,
+										 QTB_ONBRYNHILDR2SUPPORT_DEFAULT).toBool());
 #endif // QTB_BRYNHILDR2_SUPPORT
 
   // load frameRate
@@ -438,21 +438,21 @@ void Settings::readSettings()
 											 QTB_ONSHOWMOUSECURSORMARKER_DEFAULT).toBool());
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // load onDisableTansferFile
-  setOnDisableTransferFile(settings->value(QTB_ONDISABLETRANSFERFILE,
-										   QTB_ONDISABLETRANSFERFILE_DEFAULT).toBool());
+  // load onTansferFile
+  setOnTransferFile(settings->value(QTB_ONTRANSFERFILE,
+									QTB_ONTRANSFERFILE_DEFAULT).toBool());
   // load onShowTotalProgressForTransferFile
   setOnShowTotalProgressForTransferFile(settings->value(QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE,
 														QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE_DEFAULT).toBool());
 #if QTB_DRAG_AND_DROP_SUPPORT
-  // load onDisableTansferFileByDragAndDrop
-  setOnDisableTransferFileByDragAndDrop(settings->value(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP,
-														QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT).toBool());
+  // load onTansferFileByDragAndDrop
+  setOnTransferFileByDragAndDrop(settings->value(QTB_ONTRANSFERFILEBYDRAGANDDROP,
+												 QTB_ONTRANSFERFILEBYDRAGANDDROP_DEFAULT).toBool());
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-  // load onDisableTansferClipboard
-  setOnDisableTransferClipboard(settings->value(QTB_ONDISABLETRANSFERCLIPBOARD,
-												QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT).toBool());
+  // load onTansferClipboard
+  setOnTransferClipboard(settings->value(QTB_ONTRANSFERCLIPBOARD,
+										 QTB_ONTRANSFERCLIPBOARD_DEFAULT).toBool());
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // load graphicsBufferSize
@@ -569,8 +569,8 @@ void Settings::writeSettings()
   // save onGamePadSupport
   settings->setValue(QTB_ONGAMEPADSUPPORT, onGamePadSupport);
 
-  // save onDisableBrynhildr2Support
-  settings->setValue(QTB_ONDISABLEBRYNHILDR2SUPPORT, onDisableBrynhildr2Support);
+  // save onBrynhildr2Support
+  settings->setValue(QTB_ONBRYNHILDR2SUPPORT, onBrynhildr2Support);
 #endif // QTB_BRYNHILDR2_SUPPORT
 
   // save frameRate
@@ -669,16 +669,16 @@ void Settings::writeSettings()
   settings->setValue(QTB_ONSHOWMOUSECURSORMARKER, onShowMouseCursorMarker);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // save onDisableTransferFile
-  settings->setValue(QTB_ONDISABLETRANSFERFILE, onDisableTransferFile);
+  // save onTransferFile
+  settings->setValue(QTB_ONTRANSFERFILE, onTransferFile);
   // save onShowTotalProgressForTransferFile
   settings->setValue(QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE, onShowTotalProgressForTransferFile);
 #if QTB_DRAG_AND_DROP_SUPPORT
-  // save onDisableTransferFileByDragAndDrop
-  settings->setValue(QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP, onDisableTransferFileByDragAndDrop);
+  // save onTransferFileByDragAndDrop
+  settings->setValue(QTB_ONTRANSFERFILEBYDRAGANDDROP, onTransferFileByDragAndDrop);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
-  // save onDisableTransferClipboard
-  settings->setValue(QTB_ONDISABLETRANSFERCLIPBOARD, onDisableTransferClipboard);
+  // save onTransferClipboard
+  settings->setValue(QTB_ONTRANSFERCLIPBOARD, onTransferClipboard);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // save graphicsBufferSize
@@ -801,16 +801,16 @@ void Settings::printSettings() const
   qDebug() << "ClipCursor              : " << onClipCursor;
   qDebug() << "ShowMouseCursorMarker   : " << onShowMouseCursorMarker;
 #if QTB_PUBLIC_MODE6_SUPPORT
-  qDebug() << "DisableTransferFile     : " << onDisableTransferFile;
-  qDebug() << "ShowTotalProgressForTransferFile     : " << onShowTotalProgressForTransferFile;
+  qDebug() << "TransferFile            : " << onTransferFile;
+  qDebug() << "ShowTotalProgressForTransferFile : " << onShowTotalProgressForTransferFile;
 #if QTB_DRAG_AND_DROP_SUPPORT
-  qDebug() << "DisableTransferFileByDragAndDrop     : " << onDisableTransferFileByDragAndDrop;
+  qDebug() << "TransferFileByDragAndDrop : " << onTransferFileByDragAndDrop;
 #endif // QTB_DRAG_AND_DROP_SUPPORT
-  qDebug() << "DisableTransferClipboard: " << onDisableTransferClipboard;
+  qDebug() << "TransferClipboard       : " << onTransferClipboard;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_BRYNHILDR2_SUPPORT
-  qDebug() << "DisableBrynhildr2Support: " << onDisableBrynhildr2Support;
+  qDebug() << "Brynhildr2Support       : " << onBrynhildr2Support;
 #endif // QTB_BRYNHILDR2_SUPPORT
 
   qDebug() << "------------------------------------------";

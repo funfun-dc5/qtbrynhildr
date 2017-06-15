@@ -606,7 +606,7 @@
   (*2) ドラッグ&ドロップによるファイル転送もサポートしています。
        設定ファイルを以下のように変更することで無効化出来ます。
 
-       onDisableTransferFileByDragAndDrop=true
+       onTransferFileByDragAndDrop=false
 
  (2) クリップボード共有
 
@@ -673,7 +673,7 @@ onGraphics=true
 videoQuality=5
 onDisplayCursor=false
 onGamePadSupport=true
-onDisableBrynhildr2Support=false
+onBrynhildr2Support=true
 frameRate=30
 onSound=true
 soundType=1
@@ -704,10 +704,10 @@ onShowFrameRate=true
 onShowPassword=false
 onClipCursor=false
 onShowMouseCursorMarker=false
-onDisableTransferFile=false
+onTransferFile=true
 onShowTotalProgressForTransferFile=false
-onDisableTransferFileByDragAndDrop=false
-onDisableTransferClipboard=false
+onTransferFileByDragAndDrop=true
+onTransferClipboard=true
 graphicsBufferSize=1048576
 soundBufferSize=1048576
 doubleClickThreshold=500
@@ -993,8 +993,21 @@ Ver.1.7.2 : 2017/06/xx
              ・終了時の「確認」ダイアログをディスプレイの中心ではなくウィンドウの中心に
                表示するように変更
              ・.iniの設定名変更
-               onSupportGamePad → onGamePadSupport
-               onShowMarker → onShowMouseCursorMarker
+               [旧]
+               onSupportGamePad
+               onShowMarker
+               onDisableBrynhildr2Support
+               onDisableTransferFile
+               onDisableTransferFileByDragAndDrop
+               onDisableTransferClipboard
+
+               [新]
+               onGamePadSupport
+               onShowMouseCursorMarker
+               onBrynhildr2Support
+               onTransferFile
+               onTransferFileByDragAndDrop
+               onTransferClipboard
 
 Ver.1.7.1 : 2017/06/11
             [不具合修正]

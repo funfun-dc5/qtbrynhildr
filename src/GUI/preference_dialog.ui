@@ -90,7 +90,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onDisableBrynhildr2Support">
+    <widget class="QCheckBox" name="checkBox_onBrynhildr2Support">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -311,7 +311,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onDiableFileTransferSupport">
+    <widget class="QCheckBox" name="checkBox_onFileTransferSupport">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -324,7 +324,7 @@
       <string>File Transfer Support</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onDiableFileTransferSupportByDragAndDrop">
+    <widget class="QCheckBox" name="checkBox_onFileTransferSupportByDragAndDrop">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -350,7 +350,7 @@
       <string>Show Total Progress Bar</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onDiableClipbordTransferSupport">
+    <widget class="QCheckBox" name="checkBox_onClipbordTransferSupport">
      <property name="geometry">
       <rect>
        <x>30</x>

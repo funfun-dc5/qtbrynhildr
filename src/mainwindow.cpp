@@ -707,8 +707,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 // drag enter event
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-  if (settings->getOnDisableTransferFile() ||
-	  settings->getOnDisableTransferFileByDragAndDrop()){
+  if (!settings->getOnTransferFile() ||
+	  !settings->getOnTransferFileByDragAndDrop()){
 	return;
   }
   if (event->mimeData()->hasFormat("text/uri-list")){
@@ -719,8 +719,8 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 // drop event
 void MainWindow::dropEvent(QDropEvent *event)
 {
-  if (settings->getOnDisableTransferFile() ||
-	  settings->getOnDisableTransferFileByDragAndDrop()){
+  if (!settings->getOnTransferFile() ||
+	  !settings->getOnTransferFileByDragAndDrop()){
 	return;
   }
 

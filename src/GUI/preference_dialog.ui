@@ -67,7 +67,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QSplitter" name="splitter_publicMode">
+    <widget class="QSplitter" name="splitter_publicModeVersion">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -79,18 +79,18 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QLabel" name="label_publicMode">
+     <widget class="QLabel" name="label_publicModeVersion">
       <property name="text">
        <string>Public Mode</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_publicMode">
+     <widget class="QComboBox" name="comboBox_publicModeVersion">
       <property name="currentText">
        <string/>
       </property>
      </widget>
     </widget>
-    <widget class="QCheckBox" name="checkBox_Brynhildr2Support">
+    <widget class="QCheckBox" name="checkBox_onDisableBrynhildr2Support">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -103,7 +103,7 @@
       <string>Brynhildr2 Support</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_OpenConnectToServerDialogAtBootup">
+    <widget class="QCheckBox" name="checkBox_onOpenConnectToServerDialogAtBootup">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -116,7 +116,7 @@
       <string>Open Connect To Server Dialog At Bootup</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_ConfrimAtExit">
+    <widget class="QCheckBox" name="checkBox_onConfrimAtExit">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -129,7 +129,7 @@
       <string>Confirm At Exit</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_CheckUpdateAtBootup">
+    <widget class="QCheckBox" name="checkBox_onCheckUpdateAtBootup">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -192,7 +192,7 @@
       <item>
        <widget class="QPushButton" name="pushButton_keyLayoutPath">
         <property name="text">
-         <string>・・・</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
@@ -225,7 +225,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QCheckBox" name="checkBox_HoldMouseControl">
+    <widget class="QCheckBox" name="checkBox_onHoldMouseControl">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -238,7 +238,7 @@
       <string>Hold Mouse Control</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_ExtraButtonSupport">
+    <widget class="QCheckBox" name="checkBox_onExtraButtonSupport">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -251,7 +251,7 @@
       <string>Extra Button Support</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_DisplayMouseCursor">
+    <widget class="QCheckBox" name="checkBox_onDisplayMouseCursor">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -264,7 +264,7 @@
       <string>Display Mouse Cursor</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_ShowMouseCursorMarker">
+    <widget class="QCheckBox" name="checkBox_onShowMouseCursorMarker">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -305,13 +305,13 @@
       <item>
        <widget class="QPushButton" name="pushButton_outputPath">
         <property name="text">
-         <string>・・・</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
-    <widget class="QCheckBox" name="checkBox_FileTransferSupport">
+    <widget class="QCheckBox" name="checkBox_onDiableFileTransferSupport">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -324,7 +324,7 @@
       <string>File Transfer Support</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_FileTransferSupportByDragAndDrop">
+    <widget class="QCheckBox" name="checkBox_onDiableFileTransferSupportByDragAndDrop">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -337,7 +337,7 @@
       <string>File Transfer Support by Drag and Drop</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_TotalProgressBar">
+    <widget class="QCheckBox" name="checkBox_onShowTotalProgressBar">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -347,10 +347,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>Total Progress Bar</string>
+      <string>Show Total Progress Bar</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_ClipbordTransferSupport">
+    <widget class="QCheckBox" name="checkBox_onDiableClipbordTransferSupport">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -440,7 +440,7 @@
       <item>
        <widget class="QPushButton" name="pushButton_logFile">
         <property name="text">
-         <string>・・・</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
@@ -469,7 +469,7 @@
       <item>
        <widget class="QPushButton" name="pushButton_keyboardLogFile">
         <property name="text">
-         <string>・・・</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
@@ -480,7 +480,7 @@
     <attribute name="title">
      <string>Plugin</string>
     </attribute>
-    <widget class="QCheckBox" name="checkBox_GamePadSupport">
+    <widget class="QCheckBox" name="checkBox_onGamePadSupport">
      <property name="geometry">
       <rect>
        <x>21</x>

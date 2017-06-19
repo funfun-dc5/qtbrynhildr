@@ -15,10 +15,10 @@ case $UNAME in
 					# ignore
 					;;
 				msvc)
-					QTROOT="/c/Tools/develop/Qt/Qt5.8.0_msvc2015_86/5.8/msvc2015"
+					QTROOT="/c/Tools/develop/Qt/Qt5.9.0/5.9/msvc2015"
 					;;
 				msvc64)
-					QTROOT="/c/Tools/develop/Qt/Qt5.8.0_msvc2015_64/5.8/msvc2015_64"
+					QTROOT="/c/Tools/develop/Qt/Qt5.9.0/5.9/msvc2015_64"
 					;;
 				*)
 					echo "setup_qt5 : Unkown argument : $1"

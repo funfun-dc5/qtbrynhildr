@@ -728,6 +728,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
   // initialize mouse cursor
   if (settings->getOnDisplayCursor()){
+	menuBar()->setCursor(cursor());
 	changeMouseCursor(Qt::CrossCursor);
   }
   else {

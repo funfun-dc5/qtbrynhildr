@@ -917,7 +917,11 @@ public:
   // get display cursor flag
   bool getOnDisplayCursor()
   {
+#if 0 // for restriction of publicmode
 	return onDisplayCursor;
+#else // for restriction of publicmode
+	return true;
+#endif // for restriction of publicmode
   }
 
   // set display cursor flag

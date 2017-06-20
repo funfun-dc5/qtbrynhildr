@@ -31,6 +31,9 @@ protected:
   void showEvent(QShowEvent *event);
 
 private:
+  // setup
+  void setup();
+
   // resettings for dialog
   void resetting();
 
@@ -40,6 +43,8 @@ private slots:
   void accept();
   // reject button
   void reject();
+  // clicked button
+  void clicked(QAbstractButton *button);
 
 private:
   // settings

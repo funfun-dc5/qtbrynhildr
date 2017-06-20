@@ -26,7 +26,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+    <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
   <widget class="QTabWidget" name="tabWidget">
@@ -34,7 +34,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>621</width>
+     <width>631</width>
      <height>521</height>
     </rect>
    </property>
@@ -116,7 +116,7 @@
       <string>Open Connect To Server Dialog At Bootup</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onConfrimAtExit">
+    <widget class="QCheckBox" name="checkBox_onConfirmAtExit">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -178,16 +178,16 @@
        <height>30</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_keyLayoutPath">
+     <layout class="QHBoxLayout" name="horizontalLayout_keylayoutPath">
       <item>
-       <widget class="QLabel" name="label_keyLayoutPath">
+       <widget class="QLabel" name="label_keylayoutPath">
         <property name="text">
          <string>Key Layout Path</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_keyLayoutPath"/>
+       <widget class="QLineEdit" name="lineEdit_keylayoutPath"/>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_keyLayoutPath">
@@ -212,16 +212,16 @@
        <height>22</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_doubleClickThresold">
+     <layout class="QHBoxLayout" name="horizontalLayout_doubleClickThreshold">
       <item>
-       <widget class="QLabel" name="label_doubleClickThresold">
+       <widget class="QLabel" name="label_doubleClickThreshold">
         <property name="text">
          <string>Double Click (ms)</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spinBox_doubleClickThresold"/>
+       <widget class="QSpinBox" name="spinBox_doubleClickThreshold"/>
       </item>
      </layout>
     </widget>
@@ -311,7 +311,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onFileTransferSupport">
+    <widget class="QCheckBox" name="checkBox_onTransferFileSupport">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -321,10 +321,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>File Transfer Support</string>
+      <string>Transfer File Support</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onFileTransferSupportByDragAndDrop">
+    <widget class="QCheckBox" name="checkBox_onTransferFileSupportByDragAndDrop">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -334,10 +334,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>File Transfer Support by Drag and Drop</string>
+      <string>Transfer File Support by Drag and Drop</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onShowTotalProgressBar">
+    <widget class="QCheckBox" name="checkBox_onShowTotalProgressForTransferFile">
      <property name="geometry">
       <rect>
        <x>31</x>
@@ -347,10 +347,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>Show Total Progress Bar</string>
+      <string>Show Total Progress For Transfer File</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onClipbordTransferSupport">
+    <widget class="QCheckBox" name="checkBox_onTransferClipboardSupport">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -360,7 +360,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Clipboard Transfer Support</string>
+      <string>Transfer Clipboard Support</string>
      </property>
     </widget>
    </widget>

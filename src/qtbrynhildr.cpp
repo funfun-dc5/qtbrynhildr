@@ -604,7 +604,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard dataChanged
-  if (settings->getOnTransferClipboard()){
+  if (settings->getOnTransferClipboardSupport()){
 	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -727,7 +727,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   timer->start(100); // 0.1 second tick timer
 
   // initialize mouse cursor
-  if (settings->getOnDisplayCursor()){
+  if (settings->getOnDisplayMouseCursor()){
 	menuBar()->setCursor(cursor());
 	changeMouseCursor(Qt::CrossCursor);
   }
@@ -1846,14 +1846,14 @@ void QtBrynhildr::createMenus()
   fileMenu->addAction(connectToServer_Action);
   fileMenu->addAction(disconnectToServer_Action);
 #if QTB_PUBLIC_MODE6_SUPPORT
-  if (settings->getOnTransferFile() || settings->getOnTransferClipboard()){
+  if (settings->getOnTransferFileSupport() || settings->getOnTransferClipboardSupport()){
 	fileMenu->addSeparator();
   }
 #if 0 // for TEST
-  if (settings->getOnTransferClipboard())
+  if (settings->getOnTransferClipboardSupport())
 	fileMenu->addAction(sendClipboard_Action);
 #endif
-  if (settings->getOnTransferFile()){
+  if (settings->getOnTransferFileSupport()){
 	fileMenu->addAction(sendFile_Action);
 	fileMenu->addAction(cancelFileTransferring_Action);
   }

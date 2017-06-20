@@ -365,7 +365,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// cliboard
 	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
-		settings->getOnTransferClipboard()){
+		settings->getOnTransferClipboardSupport()){
 	  // send clipboard
 	  if (!sendClipboard()){
 		// failed to send clipboard
@@ -375,7 +375,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	}
 	// file
 	else if (com_data->data_type == DATA_TYPE_FILE &&
-			 settings->getOnTransferFile()){
+			 settings->getOnTransferFileSupport()){
 	  // send file
 	  keyBuffer->setEnabled(false); // disabled keyboard
 	  mouseBuffer->setEnabled(false); // disabled mouse
@@ -463,7 +463,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  else if (serverVersion == SERVER_VERSION_BRYNHILDR2){
 		// change to Qt::ArrowCursor for Brynhildr (>= 2.0.0)
 		// change mouse cursor
-		if (settings->getOnDisplayCursor()){
+		if (settings->getOnDisplayMouseCursor()){
 		  emit changeMouseCursor(Qt::CrossCursor);
 		}
 		else {
@@ -498,7 +498,7 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// cliboard
 	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
-		settings->getOnTransferClipboard()){
+		settings->getOnTransferClipboardSupport()){
 	  // receive clipboard
 	  if (!receiveClipboard()){
 		// failed to transfer clipboard
@@ -508,7 +508,7 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 	}
 	// file
 	else if (com_data->data_type == DATA_TYPE_FILE &&
-			 settings->getOnTransferFile()){
+			 settings->getOnTransferFileSupport()){
 	  // receive file
 	  keyBuffer->setEnabled(false); // disabled keyboard
 	  mouseBuffer->setEnabled(false); // disabled mouse
@@ -622,7 +622,7 @@ void ControlThread::initHeader()
   com_data->monitor_no	= settings->getMonitorNo();
 #if QTB_BRYNHILDR2_SUPPORT
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
-	com_data->mouse_cursor = settings->getOnDisplayCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
+	com_data->mouse_cursor = settings->getOnDisplayMouseCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
 	if (settings->getOnShowSoftwareButton())
 	  com_data->mouse_cursor = MOUSE_CURSOR_ON;
   }

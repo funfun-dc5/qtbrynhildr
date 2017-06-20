@@ -170,12 +170,12 @@ typedef int KEYBOARD_TYPE;
 #endif // defined(QTB_DEV_TABLET)
 
 #if QTB_BRYNHILDR2_SUPPORT
-// for displayCursor
-#define QTB_ONDISPLAYCURSOR				"onDisplayCursor"
+// for displayMouseCursor
+#define QTB_ONDISPLAYMOUSECURSOR			"onDisplayMouseCursor"
 #if defined(QTB_DEV_TABLET)
-#define QTB_ONDISPLAYCURSOR_DEFAULT		true
+#define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	true
 #else // defined(QTB_DEV_TABLET)
-#define QTB_ONDISPLAYCURSOR_DEFAULT		false
+#define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	false
 #endif // defined(QTB_DEV_TABLET)
 // for onGamePadSupport
 #define QTB_ONGAMEPADSUPPORT			"onGamePadSupport"
@@ -334,23 +334,23 @@ typedef int SCALING_TYPE;
 #define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	false
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-// for onTransferFile
-#define QTB_ONTRANSFERFILE			"onTransferFile"
-#define QTB_ONTRANSFERFILE_DEFAULT	true
+// for onTransferFileSupport
+#define QTB_ONTRANSFERFILESUPPORT			"onTransferFileSupport"
+#define QTB_ONTRANSFERFILESUPPORT_DEFAULT	true
 
 // for onShowTotalProgressForTransferFile
 #define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE			"onShowTotalProgressForTransferFile"
 #define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE_DEFAULT	false
 
 #if QTB_DRAG_AND_DROP_SUPPORT
-// for onTransferFileByDragAndDrop
-#define QTB_ONTRANSFERFILEBYDRAGANDDROP			"onTransferFileByDragAndDrop"
-#define QTB_ONTRANSFERFILEBYDRAGANDDROP_DEFAULT	true
+// for onTransferFileSupportByDragAndDrop
+#define QTB_ONTRANSFERFILESUPPORTBYDRAGANDDROP			"onTransferFileSupportByDragAndDrop"
+#define QTB_ONTRANSFERFILESUPPORTBYDRAGANDDROP_DEFAULT	true
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-// for onTransferClipboard
-#define QTB_ONTRANSFERCLIPBOARD			"onTransferClipboard"
-#define QTB_ONTRANSFERCLIPBOARD_DEFAULT	true
+// for onTransferClipboardSupport
+#define QTB_ONTRANSFERCLIPBOARDSUPPORT			"onTransferClipboardSupport"
+#define QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT	true
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for graphicsBufferSize
@@ -914,20 +914,20 @@ public:
   }
 
 #if QTB_BRYNHILDR2_SUPPORT
-  // get display cursor flag
-  bool getOnDisplayCursor()
+  // get display mouse cursor flag
+  bool getOnDisplayMouseCursor()
   {
 #if 0 // for restriction of publicmode
-	return onDisplayCursor;
+	return onDisplayMouseCursor;
 #else // for restriction of publicmode
 	return true;
 #endif // for restriction of publicmode
   }
 
-  // set display cursor flag
-  void setOnDisplayCursor(bool onDisplayCursor)
+  // set display mouse cursor flag
+  void setOnDisplayMouseCursor(bool onDisplayMouseCursor)
   {
-	this->onDisplayCursor = onDisplayCursor;
+	this->onDisplayMouseCursor = onDisplayMouseCursor;
   }
 
   // get gamepad support flag
@@ -1575,16 +1575,16 @@ public:
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // get  transfer file flag
-  bool getOnTransferFile() const
+  // get  transfer file support flag
+  bool getOnTransferFileSupport() const
   {
-	return onTransferFile;
+	return onTransferFileSupport;
   }
 
-  // set  transfer file flag
-  void setOnTransferFile(bool onTransferFile)
+  // set  transfer file support flag
+  void setOnTransferFileSupport(bool onTransferFileSupport)
   {
-	this->onTransferFile = onTransferFile;
+	this->onTransferFileSupport = onTransferFileSupport;
   }
 
   // get show total progress for transfer file flag
@@ -1600,29 +1600,29 @@ public:
   }
 
 #if QTB_DRAG_AND_DROP_SUPPORT
-  // get transfer file by drag and drop flag
-  bool getOnTransferFileByDragAndDrop() const
+  // get transfer file support by drag and drop flag
+  bool getOnTransferFileSupportByDragAndDrop() const
   {
-	return onTransferFileByDragAndDrop;
+	return onTransferFileSupportByDragAndDrop;
   }
 
-  // set transfer file by drag and drop flag
-  void setOnTransferFileByDragAndDrop(bool onTransferFileByDragAndDrop)
+  // set transfer file support by drag and drop flag
+  void setOnTransferFileSupportByDragAndDrop(bool onTransferFileSupportByDragAndDrop)
   {
-	this->onTransferFileByDragAndDrop = onTransferFileByDragAndDrop;
+	this->onTransferFileSupportByDragAndDrop = onTransferFileSupportByDragAndDrop;
   }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-  // get transfer clilpboard flag
-  bool getOnTransferClipboard() const
+  // get transfer clilpboard support flag
+  bool getOnTransferClipboardSupport() const
   {
-	return onTransferClipboard;
+	return onTransferClipboardSupport;
   }
 
-  // set transfer clipboard flag
-  void setOnTransferClipboard(bool onTransferClipboard)
+  // set transfer clipboard support flag
+  void setOnTransferClipboardSupport(bool onTransferClipboardSupport)
   {
-	this->onTransferClipboard = onTransferClipboard;
+	this->onTransferClipboardSupport = onTransferClipboardSupport;
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -1911,7 +1911,7 @@ private:
   volatile VIDEO_QUALITY videoQuality;
 
 #if QTB_BRYNHILDR2_SUPPORT
-  volatile bool onDisplayCursor;
+  volatile bool onDisplayMouseCursor;
   volatile bool onGamePadSupport;
   volatile bool onBrynhildr2Support;
 #endif // QTB_BRYNHILDR2_SUPPORT
@@ -2036,17 +2036,17 @@ private:
   volatile bool onShowMouseCursorMarker;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // send/receive file
-  volatile bool onTransferFile;
+  // send/receive file support
+  volatile bool onTransferFileSupport;
 
   // send/receive file
   volatile bool onShowTotalProgressForTransferFile;
 
-  // send/receive file by drag and drop
-  volatile bool onTransferFileByDragAndDrop;
+  // send/receive file support by drag and drop
+  volatile bool onTransferFileSupportByDragAndDrop;
 
-  // send/receive clipboard
-  volatile bool onTransferClipboard;
+  // send/receive clipboard support
+  volatile bool onTransferClipboardSupport;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // buffer

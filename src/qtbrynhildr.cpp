@@ -1853,8 +1853,10 @@ void QtBrynhildr::createMenus()
 	fileMenu->addAction(cancelFileTransferring_Action);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#if 0 // for TEST
   fileMenu->addSeparator();
   fileMenu->addAction(preferences_Action);
+#endif // for TEST
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
 

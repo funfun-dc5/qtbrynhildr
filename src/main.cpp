@@ -68,17 +68,34 @@ int main(int argc, char *argv[])
   QTranslator appTranslator;
   if (qtbrynhildr::QTB_TRANSLATION && !option->getNoTransFlag()){
 	bool result =
-	appTranslator.load(QTB_TRANSLATION_FILE_PATH
-					   QTB_TRANSLATION_FILE_PREFIX
-					   + QLocale::system().name(),
-					   //					   qApp->applicationDirPath());
-					   app.applicationDirPath());
+	  appTranslator.load(QTB_TRANSLATION_FILE_PATH
+						 QTB_TRANSLATION_FILE_PREFIX
+						 + QLocale::system().name(),
+						 //					   qApp->applicationDirPath());
+						 app.applicationDirPath());
 	if (result){
 	  //	  cout << "Found translation file." << endl << flush;
 	  app.installTranslator(&appTranslator);
 	}
 	else {
-	  cout << "Not found translation file." << endl << flush;
+	  cout << "Not found translation file. qtbrynhildr_*.qm" << endl << flush;
+	}
+  }
+  // for Translation Qt
+  QTranslator appTranslatorQt;
+  if (!option->getNoTransFlag()){
+	bool result =
+	  appTranslatorQt.load("translations/"
+						   "qt_"
+						   + QLocale::system().name(),
+						   //					   qApp->applicationDirPath());
+						   app.applicationDirPath());
+	if (result){
+	  //	  cout << "Found translation file." << endl << flush;
+	  app.installTranslator(&appTranslatorQt);
+	}
+	else {
+	  cout << "Not found translation file. qt_*.qm" << endl << flush;
 	}
   }
 

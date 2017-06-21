@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PreferenceDialog</class>
+ <widget class="QDialog" name="PreferenceDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>624</width>
+    <height>575</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Preference</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>530</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>631</width>
+     <height>521</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab_general">
+    <attribute name="title">
+     <string>General</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget_1">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>290</y>
+       <width>165</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_serverNameListSize">
+      <item>
+       <widget class="QLabel" name="label_serverNameListSize">
+        <property name="text">
+         <string>Server Name List Size</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_serverNameListSize"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QSplitter" name="splitter_publicModeVersion">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>40</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QLabel" name="label_publicModeVersion">
+      <property name="text">
+       <string>Public Mode</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_publicModeVersion">
+      <property name="currentText">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onBrynhildr2Support">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>91</y>
+       <width>271</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Brynhildr2 Support</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onOpenConnectToServerDialogAtBootup">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>141</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Open Connect To Server Dialog At Bootup</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onConfirmAtExit">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>190</y>
+       <width>281</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Confirm At Exit</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onCheckUpdateAtBootup">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>240</y>
+       <width>261</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Check Update At Bootup</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_keyboard">
+    <attribute name="title">
+     <string>Keyboard</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>100</y>
+       <width>348</width>
+       <height>194</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_keyLayoutList">
+      <item>
+       <widget class="QLabel" name="label_keyLayoutList">
+        <property name="text">
+         <string>Key Layout List</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListView" name="listView_keyLayoutList"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>224</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_keylayoutPath">
+      <item>
+       <widget class="QLabel" name="label_keylayoutPath">
+        <property name="text">
+         <string>Key Layout Path</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_keylayoutPath"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_keyLayoutPath">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_mouse">
+    <attribute name="title">
+     <string>Mouse</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>240</y>
+       <width>181</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_doubleClickThreshold">
+      <item>
+       <widget class="QLabel" name="label_doubleClickThreshold">
+        <property name="text">
+         <string>Double Click (ms)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_doubleClickThreshold"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onHoldMouseControl">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>31</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Hold Mouse Control</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onExtraButtonSupport">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>80</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Extra Button Support</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onDisplayMouseCursor">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>130</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Display Mouse Cursor</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onShowMouseCursorMarker">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>180</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show Mouse Cursor Marker</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_fileandclipboard">
+    <attribute name="title">
+     <string>File and Clipboard</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget_5">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>240</y>
+       <width>306</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_outputPath">
+      <item>
+       <widget class="QLabel" name="label_outputPath">
+        <property name="text">
+         <string>Output Path</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_outputPath"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_outputPath">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onTransferFileSupport">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>31</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Transfer File Support</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onTransferFileSupportByDragAndDrop">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>81</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Transfer File Support by Drag and Drop</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onShowTotalProgressForTransferFile">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>131</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show Total Progress For Transfer File</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onTransferClipboardSupport">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>180</y>
+       <width>301</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Transfer Clipboard Support</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_buffer">
+    <attribute name="title">
+     <string>Buffer</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget_6">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>160</y>
+       <width>169</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_soundBufferSize">
+      <item>
+       <widget class="QLabel" name="label_soundBufferSize">
+        <property name="text">
+         <string>Sound Buffer Size (KB) </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_soundBufferSize"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget_7">
+     <property name="geometry">
+      <rect>
+       <x>31</x>
+       <y>52</y>
+       <width>183</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_graphicsBufferSize">
+      <item>
+       <widget class="QLabel" name="label_graphicsBufferSize">
+        <property name="text">
+         <string>Graphics Buffer Size (KB) </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_graphicsBufferSize"/>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_log">
+    <attribute name="title">
+     <string>Log</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget_8">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>263</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_logFile">
+      <item>
+       <widget class="QLabel" name="label_logFile">
+        <property name="text">
+         <string>Log File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_logFile"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_logFile">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget_9">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>314</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_keyboardLogFile">
+      <item>
+       <widget class="QLabel" name="label_keyboardLogFile">
+        <property name="text">
+         <string>Keyboard Log File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_keyboardLogFile"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_keyboardLogFile">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_plugin">
+    <attribute name="title">
+     <string>Plugin</string>
+    </attribute>
+    <widget class="QCheckBox" name="checkBox_onGamePadSupport">
+     <property name="geometry">
+      <rect>
+       <x>21</x>
+       <y>41</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>GamePad Support</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PreferenceDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PreferenceDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -14,6 +14,7 @@ FORMS = GUI/connect_to_server_dialog.ui
 FORMS += GUI/desktop_scaling_dialog.ui
 FORMS += GUI/confirm_dialog.ui
 FORMS += GUI/log_view_dialog.ui
+FORMS += GUI/preference_dialog.ui
 
 # C++11
 CONFIG += c++11
@@ -156,3 +157,6 @@ SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
+
+HEADERS += dialog/preference_dialog.h
+SOURCES += dialog/preference_dialog.cpp

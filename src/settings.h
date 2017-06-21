@@ -170,23 +170,23 @@ typedef int KEYBOARD_TYPE;
 #endif // defined(QTB_DEV_TABLET)
 
 #if QTB_BRYNHILDR2_SUPPORT
-// for displayCursor
-#define QTB_ONDISPLAYCURSOR				"onDisplayCursor"
+// for displayMouseCursor
+#define QTB_ONDISPLAYMOUSECURSOR			"onDisplayMouseCursor"
 #if defined(QTB_DEV_TABLET)
-#define QTB_ONDISPLAYCURSOR_DEFAULT		true
+#define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	true
 #else // defined(QTB_DEV_TABLET)
-#define QTB_ONDISPLAYCURSOR_DEFAULT		false
+#define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	false
 #endif // defined(QTB_DEV_TABLET)
-// for onSupportGamePad
-#define QTB_ONSUPPORTGAMEPAD			"onSupportGamePad"
+// for onGamePadSupport
+#define QTB_ONGAMEPADSUPPORT			"onGamePadSupport"
 #if defined(Q_OS_WIN)
-#define QTB_ONSUPPORTGAMEPAD_DEFAULT	true
+#define QTB_ONGAMEPADSUPPORT_DEFAULT	true
 #else // defined(Q_OS_WIN)
-#define QTB_ONSUPPORTGAMEPAD_DEFAULT	false
+#define QTB_ONGAMEPADSUPPORT_DEFAULT	false
 #endif // defined(Q_OS_WIN)
-// for onDisableBrynhildr2Support
-#define QTB_ONDISABLEBRYNHILDR2SUPPORT			"onDisableBrynhildr2Support"
-#define QTB_ONDISABLEBRYNHILDR2SUPPORT_DEFAULT	false
+// for onBrynhildr2Support
+#define QTB_ONBRYNHILDR2SUPPORT			"onBrynhildr2Support"
+#define QTB_ONBRYNHILDR2SUPPORT_DEFAULT	true
 #endif // QTB_BRYNHILDR2_SUPPORT
 
 // for onSound
@@ -265,6 +265,10 @@ typedef int SCALING_TYPE;
 #define QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP				"onOpenConnectToServerDialogAtBootup"
 #define QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT		true
 
+// for onCheckUpdateAtBootup
+#define QTB_ONCHECKUPDATEATBOOTUP				"onCheckUpdateAtBootup"
+#define QTB_ONCHECKUPDATEATBOOTUP_DEFAULT		false
+
 // for onConfirmAtExit
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"
 #define QTB_ONCONFIRMATEXIT_DEFAULT		true
@@ -325,28 +329,28 @@ typedef int SCALING_TYPE;
 #define QTB_ONCLIPCURSOR					"onClipCursor"
 #define QTB_ONCLIPCURSOR_DEFAULT			false
 
-// for onShowMarker
-#define QTB_ONSHOWMARKER					"onShowMarker"
-#define QTB_ONSHOWMARKER_DEFAULT			false
+// for onShowMouseCursorMarker
+#define QTB_ONSHOWMOUSECURSORMARKER			"onShowMouseCursorMarker"
+#define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	false
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-// for onDisableTransferFile
-#define QTB_ONDISABLETRANSFERFILE			"onDisableTransferFile"
-#define QTB_ONDISABLETRANSFERFILE_DEFAULT	false
+// for onTransferFileSupport
+#define QTB_ONTRANSFERFILESUPPORT			"onTransferFileSupport"
+#define QTB_ONTRANSFERFILESUPPORT_DEFAULT	true
 
 // for onShowTotalProgressForTransferFile
 #define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE			"onShowTotalProgressForTransferFile"
 #define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE_DEFAULT	false
 
 #if QTB_DRAG_AND_DROP_SUPPORT
-// for onDisableTransferFileByDragAndDrop
-#define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP			"onDisableTransferFileByDragAndDrop"
-#define QTB_ONDISABLETRANSFERFILEBYDRAGANDDROP_DEFAULT	false
+// for onTransferFileSupportByDragAndDrop
+#define QTB_ONTRANSFERFILESUPPORTBYDRAGANDDROP			"onTransferFileSupportByDragAndDrop"
+#define QTB_ONTRANSFERFILESUPPORTBYDRAGANDDROP_DEFAULT	true
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-// for onDisableTransferClipboard
-#define QTB_ONDISABLETRANSFERCLIPBOARD			"onDisableTransferClipboard"
-#define QTB_ONDISABLETRANSFERCLIPBOARD_DEFAULT	false
+// for onTransferClipboardSupport
+#define QTB_ONTRANSFERCLIPBOARDSUPPORT			"onTransferClipboardSupport"
+#define QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT	true
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for graphicsBufferSize
@@ -910,40 +914,44 @@ public:
   }
 
 #if QTB_BRYNHILDR2_SUPPORT
-  // get display cursor flag
-  bool getOnDisplayCursor()
+  // get display mouse cursor flag
+  bool getOnDisplayMouseCursor()
   {
-	return onDisplayCursor;
+#if 0 // for restriction of publicmode
+	return onDisplayMouseCursor;
+#else // for restriction of publicmode
+	return true;
+#endif // for restriction of publicmode
   }
 
-  // set display cursor flag
-  void setOnDisplayCursor(bool onDisplayCursor)
+  // set display mouse cursor flag
+  void setOnDisplayMouseCursor(bool onDisplayMouseCursor)
   {
-	this->onDisplayCursor = onDisplayCursor;
+	this->onDisplayMouseCursor = onDisplayMouseCursor;
   }
 
-  // get support gamepad flag
-  bool getOnSupportGamePad()
+  // get gamepad support flag
+  bool getOnGamePadSupport()
   {
-	return onSupportGamePad;
+	return onGamePadSupport;
   }
 
-  // set support gamepad flag
-  void setOnSupportGamePad(bool onSupportGamePad)
+  // set gamepad support flag
+  void setOnGamePadSupport(bool onGamePadSupport)
   {
-	this->onSupportGamePad = onSupportGamePad;
+	this->onGamePadSupport = onGamePadSupport;
   }
 
-  // get disable brynhildr2 flag
-  bool getOnDisableBrynhildr2Support()
+  // get brynhildr2 support flag
+  bool getOnBrynhildr2Support()
   {
-	return onDisableBrynhildr2Support;
+	return onBrynhildr2Support;
   }
 
-  // set disable brynhildr2 flag
-  void setOnDisableBrynhildr2Support(bool onDisableBrynhildr2Support)
+  // set brynhildr2 support flag
+  void setOnBrynhildr2Support(bool onBrynhildr2Support)
   {
-	this->onDisableBrynhildr2Support = onDisableBrynhildr2Support;
+	this->onBrynhildr2Support = onBrynhildr2Support;
   }
 #endif // QTB_BRYNHILDR2_SUPPORT
 
@@ -1300,6 +1308,18 @@ public:
 	this->onOpenConnectToServerDialogAtBootup = onOpenConnectToServerDialogAtBootup;
   }
 
+  // get check update at bootup flag
+  bool getOnCheckUpdateAtBootup() const
+  {
+	return onCheckUpdateAtBootup;
+  }
+
+  // set check update at bootup flag
+  void setOnCheckUpdateAtBootup(bool onCheckUpdateAtBootup)
+  {
+	this->onCheckUpdateAtBootup = onCheckUpdateAtBootup;
+  }
+
   // get confirm at exit flag
   bool getOnConfirmAtExit() const
   {
@@ -1542,29 +1562,29 @@ public:
 	this->onClipCursor = onClipCursor;
   }
 
-  // get show marker flag
-  bool getOnShowMarker() const
+  // get show mouse cursor marker flag
+  bool getOnShowMouseCursorMarker() const
   {
-	return onShowMarker;
+	return onShowMouseCursorMarker;
   }
 
-  // set show marker flag
-  void setOnShowMarker(bool onShowMarker)
+  // set show mouse cursor marker flag
+  void setOnShowMouseCursorMarker(bool onShowMouseCursorMarker)
   {
-	this->onShowMarker = onShowMarker;
+	this->onShowMouseCursorMarker = onShowMouseCursorMarker;
   }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // get disable transfer file flag
-  bool getOnDisableTransferFile() const
+  // get  transfer file support flag
+  bool getOnTransferFileSupport() const
   {
-	return onDisableTransferFile;
+	return onTransferFileSupport;
   }
 
-  // set disable transfer file flag
-  void setOnDisableTransferFile(bool onDisableTransferFile)
+  // set  transfer file support flag
+  void setOnTransferFileSupport(bool onTransferFileSupport)
   {
-	this->onDisableTransferFile = onDisableTransferFile;
+	this->onTransferFileSupport = onTransferFileSupport;
   }
 
   // get show total progress for transfer file flag
@@ -1580,29 +1600,29 @@ public:
   }
 
 #if QTB_DRAG_AND_DROP_SUPPORT
-  // get disable transfer file by drag and drop flag
-  bool getOnDisableTransferFileByDragAndDrop() const
+  // get transfer file support by drag and drop flag
+  bool getOnTransferFileSupportByDragAndDrop() const
   {
-	return onDisableTransferFileByDragAndDrop;
+	return onTransferFileSupportByDragAndDrop;
   }
 
-  // set disable transfer file by drag and drop flag
-  void setOnDisableTransferFileByDragAndDrop(bool onDisableTransferFileByDragAndDrop)
+  // set transfer file support by drag and drop flag
+  void setOnTransferFileSupportByDragAndDrop(bool onTransferFileSupportByDragAndDrop)
   {
-	this->onDisableTransferFileByDragAndDrop = onDisableTransferFileByDragAndDrop;
+	this->onTransferFileSupportByDragAndDrop = onTransferFileSupportByDragAndDrop;
   }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-  // get disable transfer clilpboard flag
-  bool getOnDisableTransferClipboard() const
+  // get transfer clilpboard support flag
+  bool getOnTransferClipboardSupport() const
   {
-	return onDisableTransferClipboard;
+	return onTransferClipboardSupport;
   }
 
-  // set disable transfer clipboard flag
-  void setOnDisableTransferClipboard(bool onDisableTransferClipboard)
+  // set transfer clipboard support flag
+  void setOnTransferClipboardSupport(bool onTransferClipboardSupport)
   {
-	this->onDisableTransferClipboard = onDisableTransferClipboard;
+	this->onTransferClipboardSupport = onTransferClipboardSupport;
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -1891,9 +1911,9 @@ private:
   volatile VIDEO_QUALITY videoQuality;
 
 #if QTB_BRYNHILDR2_SUPPORT
-  volatile bool onDisplayCursor;
-  volatile bool onSupportGamePad;
-  volatile bool onDisableBrynhildr2Support;
+  volatile bool onDisplayMouseCursor;
+  volatile bool onGamePadSupport;
+  volatile bool onBrynhildr2Support;
 #endif // QTB_BRYNHILDR2_SUPPORT
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;
@@ -1944,6 +1964,9 @@ private:
 
   // open connect to server dialog at bootup
   volatile bool onOpenConnectToServerDialogAtBootup;
+
+  // check update at bootup
+  volatile bool onCheckUpdateAtBootup;
 
   // confirm at exit
   volatile bool onConfirmAtExit;
@@ -2010,20 +2033,20 @@ private:
   volatile bool onClipCursor;
 
   // show marker
-  volatile bool onShowMarker;
+  volatile bool onShowMouseCursorMarker;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  // disable send/receive file
-  volatile bool onDisableTransferFile;
+  // send/receive file support
+  volatile bool onTransferFileSupport;
 
-  // disable send/receive file
+  // send/receive file
   volatile bool onShowTotalProgressForTransferFile;
 
-  // disable send/receive file by drag and drop
-  volatile bool onDisableTransferFileByDragAndDrop;
+  // send/receive file support by drag and drop
+  volatile bool onTransferFileSupportByDragAndDrop;
 
-  // disable send/receive clipboard
-  volatile bool onDisableTransferClipboard;
+  // send/receive clipboard support
+  volatile bool onTransferClipboardSupport;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // buffer

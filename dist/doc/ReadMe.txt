@@ -41,7 +41,7 @@
 
 [Windows版(64bit/32bit)]
 
- Windows XP以降
+ Windows XP以降 (*3)
 
 [Linux版(x64/x86)]
 
@@ -60,6 +60,8 @@
 
       Qt5のサポートする環境(OS)について詳しくは以下のページを御覧ください。
       http://doc.qt.io/QtSupportedPlatforms/index.html
+
+ (*3) XP/Vista版をビルドするにはバージョンが5.6.2以下のQtを使ってビルドする必要があります。
 
 ==============================
  [テスト中の環境]
@@ -378,7 +380,11 @@
 
      ファイルの転送(送受信)を中止します。一旦サーバを切断し、再接続します。
 
-     [5] 終了
+     [5] 設定
+
+     「設定」ダイアログを表示します。
+
+     [6] 終了
 
      Qt Brynhildr を終了します。 「確認」ダイアログが表示されるので「OK」ボタンを押すと
      終了します。
@@ -600,7 +606,7 @@
   (*2) ドラッグ&ドロップによるファイル転送もサポートしています。
        設定ファイルを以下のように変更することで無効化出来ます。
 
-       onDisableTransferFileByDragAndDrop=true
+       onTransferFileByDragAndDrop=false
 
  (2) クリップボード共有
 
@@ -666,8 +672,8 @@ onControlOffWithGraphicsOff=true
 onGraphics=true
 videoQuality=5
 onDisplayCursor=false
-onSupportGamePad=true
-onDisableBrynhildr2Support=false
+onGamePadSupport=true
+onBrynhildr2Support=true
 frameRate=30
 onSound=true
 soundType=1
@@ -682,6 +688,7 @@ desktopOffsetX=0
 desktopOffsetY=0
 monitorNo=1
 onOpenConnectToServerDialogAtBootup=true
+onCheckUpdateAtBootup=false
 onConfirmAtExit=true
 onSaveSettingsAtExit=false
 onExitAfterReplay=false
@@ -696,11 +703,11 @@ onHideMenuAndStatusBarAtFullScreen=true
 onShowFrameRate=true
 onShowPassword=false
 onClipCursor=false
-onShowMarker=false
-onDisableTransferFile=false
+onShowMouseCursorMarker=false
+onTransferFile=true
 onShowTotalProgressForTransferFile=false
-onDisableTransferFileByDragAndDrop=false
-onDisableTransferClipboard=false
+onTransferFileByDragAndDrop=true
+onTransferClipboard=true
 graphicsBufferSize=1048576
 soundBufferSize=1048576
 doubleClickThreshold=500
@@ -815,6 +822,10 @@ Visual C++ 2015 x86 Redistributable または Visual C++ 2015 x64 Redistributabl
 例えば以下から入手できます。
 
 https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
+
+
+Qtのバージョンにより必要なランタイムライブラリパッケージは異なる可能性があります。
+例えば、Qt5.6.2では Visual C++ 2013 のランタイムライブラリパッケージが必要です。
 
 ----------------------------------------------------------------------
 7. メッセージダイアログについて
@@ -972,6 +983,25 @@ https://www.microsoft.com/ja-JP/download/details.aspx?id=48145
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.1.7.2 : 2017/06/21
+            [新規機能]
+             ・起動時に「アップデートを確認」を実行する機能を追加(標準では無効)
+
+            [その他変更]
+             ・現在のパブリックモードの仕様ではマウスカーソルの形状変化に対応できないため
+               常にサーバ側カーソルを表示する(onDisplayCursor=true)仕様へ暫定変更
+             ・終了時の「確認」ダイアログをディスプレイの中心ではなくウィンドウの中心に
+               表示するように変更
+             ・Qtの翻訳ファイル(qt_*.qm)の取り込み
+             ・Qt Brynhildr.iniの設定名変更
+                 onSupportGamePad                   → onGamePadSupport
+                 onShowMarker                       → onShowMouseCursorMarker
+                 onDisableBrynhildr2Support         → onBrynhildr2Support
+                 onDisableTransferFile              → onTransferFileSupport
+                 onDisableTransferFileByDragAndDrop → onTransferFileSupportByDragAndDrop
+                 onDisableTransferClipboard         → onTransferClipboardSupport
+                 onDisplayCursor                    → onDisplayMouseCursor
+
 Ver.1.7.1 : 2017/06/11
             [不具合修正]
              ・すべてのダイアログ・ウィンドウをサイズ固定に変更

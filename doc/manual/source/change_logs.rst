@@ -3,6 +3,37 @@
 変更履歴
 =======================
 
+Ver.1.7.2 (2017/06/21)
+----------------------
+* [新規機能]
+
+ 1. 起動時に「アップデートを確認」を実行する機能を追加(標準では無効)
+
+* [その他変更]
+
+ 1. 現在のパブリックモードの仕様ではマウスカーソルの形状変化に対応できないため
+    常にサーバ側カーソルを表示する(onDisplayCursor=true)仕様へ暫定変更
+
+ 2. 終了時の「確認」ダイアログをディスプレイの中心ではなくウィンドウの中心に表示するように変更
+
+ 3. Qtの翻訳ファイル(qt_*.qm)の取り込み
+
+ 4. Qt Brynhildr.iniの設定名変更
+
+    onSupportGamePad                   → onGamePadSupport
+
+    onShowMarker                       → onShowMouseCursorMarker
+
+    onDisableBrynhildr2Support         → onBrynhildr2Support
+
+    onDisableTransferFile              → onTransferFileSupport
+
+    onDisableTransferFileByDragAndDrop → onTransferFileSupportByDragAndDrop
+
+    onDisableTransferClipboard         → onTransferClipboardSupport
+
+    onDisplayCursor                    → onDisplayMouseCursor
+
 Ver.1.7.1 (2017/06/11)
 ----------------------
 * [不具合修正]

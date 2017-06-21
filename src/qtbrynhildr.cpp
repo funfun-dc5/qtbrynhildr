@@ -164,9 +164,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
   sendFile_Action(0),
   cancelFileTransferring_Action(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+  preferences_Action(0),
   connectToServerDialog(0),
   desktopScalingDialog(0),
   logViewDialog(0),
+  preferenceDialog(0),
   softwareKeyboard(0),
   softwareButton(0),
 #if 0 // for TEST
@@ -217,6 +219,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   onGraphics(true),
   onSound(true),
   timer(0),
+  onCheckUpdateInBackground(false),
   // for DEBUG
   outputLog(false)
 {
@@ -542,6 +545,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	logViewDialog = new LogViewDialog(settings, this);
   }
 
+  // preference dialog
+  preferenceDialog = new PreferenceDialog(settings, this);
+
   // set up Software Button and Keyboard
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
 	// keyboard
@@ -598,7 +604,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard dataChanged
-  if (!settings->getOnDisableTransferClipboard()){
+  if (settings->getOnTransferClipboardSupport()){
 	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -709,7 +715,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	// clear boot flag
 	option->setBootupFlag(false);
   }
-  else if (settings->getOnOpenConnectToServerDialogAtBootup()) {
+  else if (settings->getOnOpenConnectToServerDialogAtBootup()){
 	// pop up connect to server dialog
 	this->show();
 	popUpConnectToServer();
@@ -721,11 +727,19 @@ QtBrynhildr::QtBrynhildr(Option *option)
   timer->start(100); // 0.1 second tick timer
 
   // initialize mouse cursor
-  if (settings->getOnDisplayCursor()){
+  if (settings->getOnDisplayMouseCursor()){
+	menuBar()->setCursor(cursor());
 	changeMouseCursor(Qt::CrossCursor);
   }
   else {
 	changeMouseCursor(Qt::ArrowCursor);
+  }
+
+  // check update
+  if (settings->getOnCheckUpdateAtBootup()){
+	// check update
+	onCheckUpdateInBackground = true;
+	checkUpdate();
   }
 }
 
@@ -784,10 +798,16 @@ void QtBrynhildr::finishedDownload()
 	  }
 	}
 	else {
-	  // Up-to-date
-	  //		cout << "Up-to-date!" << endl << flush;
-	  QMessageBox::information(this, tr("Information"),
-							   tr("Up-to-date!"));
+	  if (!onCheckUpdateInBackground){
+		// Up-to-date
+		//		cout << "Up-to-date!" << endl << flush;
+		QMessageBox::information(this, tr("Information"),
+								 tr("Up-to-date!"));
+	  }
+	  else {
+		// reset background mode
+		onCheckUpdateInBackground = false;
+	  }
 	}
   }
   else {
@@ -1805,6 +1825,12 @@ void QtBrynhildr::createActions()
   cancelFileTransferring_Action->setStatusTip(tr("Cancel File Transferring"));
   connect(cancelFileTransferring_Action, SIGNAL(triggered()), this, SLOT(cancelFileTransferring()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // preferences
+  preferences_Action = new QAction(tr("Preferences..."), this);
+  preferences_Action->setStatusTip(tr("Preferences..."));
+  preferences_Action->setEnabled(true);
+  connect(preferences_Action, SIGNAL(triggered()), this, SLOT(preferences()));
 }
 
 // create Menus
@@ -1815,18 +1841,20 @@ void QtBrynhildr::createMenus()
   fileMenu->addAction(connectToServer_Action);
   fileMenu->addAction(disconnectToServer_Action);
 #if QTB_PUBLIC_MODE6_SUPPORT
-  if (!settings->getOnDisableTransferFile() || !settings->getOnDisableTransferClipboard()){
+  if (settings->getOnTransferFileSupport() || settings->getOnTransferClipboardSupport()){
 	fileMenu->addSeparator();
   }
 #if 0 // for TEST
-  if (!settings->getOnDisableTransferClipboard())
+  if (settings->getOnTransferClipboardSupport())
 	fileMenu->addAction(sendClipboard_Action);
 #endif
-  if (!settings->getOnDisableTransferFile()){
+  if (settings->getOnTransferFileSupport()){
 	fileMenu->addAction(sendFile_Action);
 	fileMenu->addAction(cancelFileTransferring_Action);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+  fileMenu->addSeparator();
+  fileMenu->addAction(preferences_Action);
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
 
@@ -2418,7 +2446,7 @@ void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
   case QContextMenuEvent::Mouse:
 	//	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
 	// marker for mouse cursor
-	if (settings->getOnShowMarker()){
+	if (settings->getOnShowMouseCursorMarker()){
 	  mainWindow->setDrawMarkerCounter(30);
 	}
 	break;
@@ -2776,7 +2804,8 @@ void QtBrynhildr::exit()
 	ConfirmDialog *confirmDialog =
 	  new ConfirmDialog(tr("exit application?"),
 						settings->getOnConfirmAtExit(),
-						settings);
+						settings,
+						this);
 	if (confirmDialog->exec() == QDialog::Accepted){
 	  settings->setOnConfirmAtExit(confirmDialog->getConfirmFlag());
 	  delete confirmDialog;
@@ -2904,6 +2933,16 @@ void QtBrynhildr::cancelFileTransferring()
   controlThread->exitThread();
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+// preferences
+void QtBrynhildr::preferences()
+{
+  cout << "enter preferences()" << endl << flush;
+
+  preferenceDialog->show();
+
+  cout << "leave preferences()" << endl << flush;
+}
 
 // clear Video Quality check
 void QtBrynhildr::clearVideoQualityCheck()

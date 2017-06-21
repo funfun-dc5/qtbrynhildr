@@ -48,7 +48,7 @@ APP="QtBrynhildr"
 KLFC="klfc"
 ISS="$APP.iss"
 INSTALL="/usr/bin/install"
-INSTALLFLAGS="-C -m 444"
+INSTALLFLAGS="-m444"
 INSTALLEXEFLAGS="-C"
 INSTALLDLLFLAGS="-C"
 DATE=`date +%Y%m%d`
@@ -272,6 +272,9 @@ case $UNAME in
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin
+			# copy translation files for Qt
+			mkdir -p ${DISTDIR}/bin/translations
+			${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
 			# install key layout file compiler
 			echo "install klfcompiler..."
 			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
@@ -315,6 +318,9 @@ case $UNAME in
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+			# copy translation files for Qt
+			mkdir -p ${DISTDIR}/bin/translations
+			${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
 			# install key layout file compiler
 			echo "install klfcompiler..."
 			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
@@ -357,6 +363,9 @@ case $UNAME in
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+		# copy translation files for Qt
+		mkdir -p ${DISTDIR}/bin/translations
+		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
 		# install key layout file compiler
 		echo "install klfcompiler..."
 		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
@@ -399,6 +408,9 @@ case $UNAME in
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+		# copy translation files for Qt
+		mkdir -p ${DISTDIR}/bin/translations
+		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
 		# install key layout file compiler
 		echo "install klfcompiler..."
 		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
@@ -434,6 +446,10 @@ case $UNAME in
 		fi
 		# strip
 		strip ${APP}.app/Contents/MacOS/${APP}
+		# copy translation files for Qt
+		echo "copy translations files for Qt..."
+		mkdir -p ${APP}.app/Contents/MacOS/translations
+		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${APP}.app/Contents/MacOS/translations
 		# install key layout file compiler
 		echo "install klfcompiler..."
 		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${APP}.app/Contents/MacOS/

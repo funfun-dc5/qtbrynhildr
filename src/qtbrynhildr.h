@@ -40,6 +40,7 @@
 #include "dialog/connect_to_server_dialog.h"
 #include "dialog/desktop_scaling_dialog.h"
 #include "dialog/log_view_dialog.h"
+#include "dialog/preference_dialog.h"
 #if QTB_CRYPTOGRAM
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
@@ -224,6 +225,9 @@ private slots:
   // cancel file transferring
   void cancelFileTransferring();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // preferences
+  void preferences();
 
   // set video quality
   void setVideoQuality_MINIMUM();
@@ -619,6 +623,9 @@ private:
   QAction *cancelFileTransferring_Action;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+  // preferences
+  QAction *preferences_Action;
+
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;
 
@@ -627,6 +634,9 @@ private:
 
   // log view dialog
   LogViewDialog *logViewDialog;
+
+  // preference dialog
+  PreferenceDialog *preferenceDialog;
 
   // software keyboard and button
   SK *softwareKeyboard;
@@ -788,6 +798,9 @@ private slots:
   void timerExpired();
 
 private:
+  // check update in background mode
+  bool onCheckUpdateInBackground;
+
   // output log flag
   bool outputLog;
 };

@@ -500,6 +500,13 @@ int NetThread::connect_retry(int domain, int type, int protocol, const struct so
 	}
 	closesocket(fd);
 
+	// check exit
+	if (!runThread){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
+	  return INVALID_SOCKET;
+	}
+
 	// sleep for next try
 	if (numsec <= MAXSLEEP/2){
 	  if (settings->getOutputLog())

@@ -856,9 +856,7 @@ QtBrynhildr::~QtBrynhildr()
 
   if (settings != 0){
 	// disconnect to server
-	if (settings->getConnected()){
-	  disconnectToServer();
-	}
+	disconnectToServer();
 
 	// disconnect signal slots
 	disconnect();
@@ -2551,12 +2549,6 @@ void QtBrynhildr::checkUpdate()
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()
 {
-  // disconnected
-  if (!settings->getConnected()){
-	// Nothing to do
-	return;
-  }
-
   // disconnect
   disconnectToServer();
 }
@@ -2745,11 +2737,6 @@ void QtBrynhildr::reconnectToServer()
 // disconnect to server
 void QtBrynhildr::disconnectToServer()
 {
-  // connect check
-  if (!settings->getConnected()){
-	return;
-  }
-
 #if QTB_RECORDER
   // stop record and replay
   if (settings->getOnReplayingControl()){
@@ -2834,22 +2821,8 @@ void QtBrynhildr::exit()
 #endif // for TEST
 
   // disconnected
-  if (settings->getConnected()){
-	disconnectToServer();
-  }
-#if 0 // for TEST
-  // exit all threads
-  controlThread->exitThread();
-  graphicsThread->exitThread();
-  soundThread->exitThread();
+  disconnectToServer();
 
-  controlThread->exit();
-  controlThread->wait();
-  graphicsThread->exit();
-  graphicsThread->wait();
-  soundThread->exit();
-  soundThread->wait();
-#endif // for TEST
   // normal screen
   if (QTB_DESKTOP_FULL_SCREEN){
 	if (fullScreenMode){

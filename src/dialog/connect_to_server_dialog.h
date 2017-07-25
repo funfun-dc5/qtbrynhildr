@@ -48,7 +48,7 @@ private:
 
 private slots:
   // hostname field
-  void on_lineEdit_hostname_textChanged();
+  void on_comboBox_hostname_currentIndexChanged(int index);
   // hosttype field
   void on_comboBox_hosttype_currentIndexChanged(int index);
   // keyboard type field

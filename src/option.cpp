@@ -235,6 +235,9 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  else if (strncmp("mode6", optionName, sizeof("mode6")) == 0){
 		publicModeVersion = 6;
 	  }
+	  else if (strncmp("mode7", optionName, sizeof("mode7")) == 0){
+		publicModeVersion = 7;
+	  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 	  else if (strncmp("fullscreen", optionName, sizeof("fullscreen")) == 0){
 		fullScreenFlag = true;
@@ -341,8 +344,8 @@ void Option::printHelp() const
   cout << "-------------------------------------------------------" << endl;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  cout << "-mode5/mode6" << endl;
-  cout << "        " << "support public mode 5/mode 6." << endl;
+  cout << "-mode5/mode6/mode7" << endl;
+  cout << "        " << "support public mode 5/6/7." << endl;
   cout << endl;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 

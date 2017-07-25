@@ -31,7 +31,7 @@
          <string>Host Name</string>
         </property>
         <property name="buddy">
-         <cstring>lineEdit_hostname</cstring>
+         <cstring>comboBox_hostname</cstring>
         </property>
        </widget>
       </item>
@@ -49,7 +49,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_hostname"/>
+       <widget class="QComboBox" name="comboBox_hostname"/>
       </item>
      </layout>
     </item>
@@ -224,12 +224,13 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>lineEdit_hostname</tabstop>
+  <tabstop>comboBox_hostname</tabstop>
   <tabstop>comboBox_hosttype</tabstop>
   <tabstop>comboBox_keyboardtype</tabstop>
   <tabstop>spinBox_portno</tabstop>
   <tabstop>lineEdit_password</tabstop>
   <tabstop>checkBox_showPassword</tabstop>
+  <tabstop>checkBox_fullScreen</tabstop>
  </tabstops>
  <resources/>
  <connections>

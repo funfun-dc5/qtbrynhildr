@@ -117,6 +117,10 @@ DEFINES += USE_KEYLAYOUTFILE YY_NO_UNPUT YY_NO_INPUT
 HEADERS += util/httpgetter.h
 SOURCES += util/httpgetter.cpp
 
+# for vp8
+INCLUDEPATH += ../libs/vpx
+LIBS += -L../libs/vpx -lvpx
+
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h

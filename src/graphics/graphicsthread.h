@@ -12,6 +12,10 @@
 // Local Header
 #include "common/netthread.h"
 
+// libvxp Header
+#include "vpx_decoder.h"
+#include "vp8dx.h"
+
 namespace qtbrynhildr {
 
 // GraphicsThread
@@ -51,6 +55,21 @@ protected:
   void shutdownConnection();
 
 private:
+  // decode VP8
+  uchar *decodeVP8(int size);
+
+  // convert YUV420 to RGB32
+  int convertYUV420toRGB32();
+
+  // clip
+  int clip(int val)
+  {
+	if (val < 0) return 0;
+	if (val > 255) return 255;
+	return val;
+  }
+
+private:
   // image for desktop
   QImage *image;
 
@@ -65,6 +84,21 @@ private:
 
   // clearDesktop
   bool onClearDesktop;
+
+  // width of image
+  int width;
+
+  // height of image
+  int height;
+
+  // buffer for yuv420
+  uchar *yuv420;
+
+  // buffer for rgb32
+  uchar *rgb32;
+
+  // codec context
+  vpx_codec_ctx_t c_codec;
 
 private:
   // local buffer

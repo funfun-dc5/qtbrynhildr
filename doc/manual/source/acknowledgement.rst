@@ -8,5 +8,5 @@
 
  また有用なツール、ライブラリを提供くださるQt Projectに感謝します。
 
- 最後にGNU, MinGW, Cygwin,CELTライブラリ,OpenSSLなどフリーなソフトウェアを提供くださる
+ 最後にGNU, MinGW, Cygwin,CELTライブラリ,OpenSSL,VP8などフリーなソフトウェアを提供くださる
  すべての方々に感謝します。

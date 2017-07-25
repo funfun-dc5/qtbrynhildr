@@ -135,9 +135,8 @@ typedef int	GAMEPAD_VALUE;
 // mode
 typedef	char	MODE;
 #define MODE_PUBLIC5					5	// public mode 5
-#if QTB_PUBLIC_MODE6_SUPPORT
 #define MODE_PUBLIC6					6	// public mode 6
-#endif // QTB_PUBLIC_MODE6_SUPPORT
+#define MODE_PUBLIC7					7	// public mode 7
 // result value
 #define MODE_RESULT_PASSWORD_ERROR		 0	// password error
 #define MODE_RESULT_CONNECT_ERROR		-1	// connect error

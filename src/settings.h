@@ -60,10 +60,11 @@
 #if QTB_PUBLIC_MODE6_SUPPORT
 // for publicModeVersion
 #define QTB_PUBLICMODEVERSION	"publicModeVersion"
-#define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION6
+#define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION7
 typedef int PUBLIC_MODEVERSION;
 #define PUBLICMODE_VERSION5		5
 #define PUBLICMODE_VERSION6		6
+#define PUBLICMODE_VERSION7		7
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for serverName
@@ -196,7 +197,7 @@ typedef int KEYBOARD_TYPE;
 #if QTB_CELT_SUPPORT
 // for soundType
 #define QTB_SOUNDTYPE			"soundType"
-#define QTB_SOUNDTYPE_DEFAULT	SOUND_TYPE_PCM
+#define QTB_SOUNDTYPE_DEFAULT	SOUND_TYPE_CELT
 #endif // QTB_CELT_SUPPORT
 
 // for soundQuality
@@ -482,11 +483,13 @@ public:
   void setPublicModeVersion(PUBLIC_MODEVERSION publicModeVersion)
   {
 	ASSERT(publicModeVersion == PUBLICMODE_VERSION5 ||
-		   publicModeVersion == PUBLICMODE_VERSION6);
+		   publicModeVersion == PUBLICMODE_VERSION6 ||
+		   publicModeVersion == PUBLICMODE_VERSION7);
 
 	switch(publicModeVersion){
 	case PUBLICMODE_VERSION5:
 	case PUBLICMODE_VERSION6:
+	case PUBLICMODE_VERSION7:
 	  this->publicModeVersion = publicModeVersion;
 	  break;
 	default:
@@ -505,6 +508,9 @@ public:
 	  break;
 	case PUBLICMODE_VERSION6:
 	  return "PUBLICMODE_VERSION6";
+	  break;
+	case PUBLICMODE_VERSION7:
+	  return "PUBLICMODE_VERSION7";
 	  break;
 	}
 

@@ -40,8 +40,10 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   serverNameList = settings->getServerNameList();
 #if QTB_AUTO_COMPLETE
   completer = new QCompleter(*serverNameList, this);
-  lineEdit_hostname->setCompleter(completer);
-  lineEdit_hostname->insert(settings->getServerName());
+  comboBox_hostname->setCompleter(completer);
+  comboBox_hostname->addItems(*serverNameList);
+  comboBox_hostname->setCurrentIndex(serverNameList->indexOf(QRegExp(settings->getServerName())));
+  comboBox_hostname->setEditable(true);
 #endif // QTB_AUTO_COMPLETE
 
   // server type field
@@ -128,7 +130,7 @@ void ConnectToServerDialog::resetting()
   int fontPointSize = 14;
 
   // set minimum width
-  lineEdit_hostname->setMinimumWidth(300);
+  comboBox_hostname->setMinimumWidth(300);
   comboBox_hosttype->setMinimumWidth(300);
   comboBox_keyboardtype->setMinimumWidth(300);
   spinBox_portno->setMinimumWidth(300);
@@ -142,7 +144,7 @@ void ConnectToServerDialog::resetting()
   setFont(currentFont);
 #else // defined(QTB_DEV_TABLET)
   // set minimum width
-  lineEdit_hostname->setMinimumWidth(180);
+  comboBox_hostname->setMinimumWidth(180);
   comboBox_hosttype->setMinimumWidth(180);
   comboBox_keyboardtype->setMinimumWidth(180);
   spinBox_portno->setMinimumWidth(180);
@@ -154,44 +156,44 @@ void ConnectToServerDialog::resetting()
 // private slot
 //---------------------------------------------------------------------------
 // server name field
-void ConnectToServerDialog::on_lineEdit_hostname_textChanged()
+void ConnectToServerDialog::on_comboBox_hostname_currentIndexChanged(int index)
 {
   if (outputLog)
-	cout << "text Changed : hostname"; // for DEBUG
+	cout << "index Changed : hostname : index = " << index << endl << flush; // for DEBUG
 }
 
 // server type field
 void ConnectToServerDialog::on_comboBox_hosttype_currentIndexChanged(int index)
 {
   if (outputLog)
-	cout << "index Changed : hosttype : index = " << index; // for DEBUG
+	cout << "index Changed : hosttype : index = " << index << endl << flush; // for DEBUG
 }
 
 // keyboard type field
 void ConnectToServerDialog::on_comboBox_keyboardtype_currentIndexChanged(int index)
 {
   if (outputLog)
-	cout << "index Changed : keyboardtype : index = " << index; // for DEBUG
+	cout << "index Changed : keyboardtype : index = " << index << endl << flush; // for DEBUG
 }
 
 // port no field
 void ConnectToServerDialog::on_spinBox_portno_valueChanged(int i)
 {
   if (outputLog)
-	cout << "value Changed : portno : value = " << i; // for DEBUG
+	cout << "value Changed : portno : value = " << i << endl << flush; // for DEBUG
 }
 
 // password field
 void ConnectToServerDialog::on_lineEdit_password_textChanged()
 {
   if (outputLog)
-	cout << "text Changed : password"; // for DEBUG
+	cout << "text Changed : password" << endl << flush; // for DEBUG
 
   // check
   QString password = lineEdit_password->text();
   if (password.size() > ENCRYPTION_KEY_LENGTH){
 	// error
-	cout << "password is too long : " << password.size();
+	cout << "password is too long : " << password.size() << endl << flush;
   }
 }
 
@@ -227,11 +229,11 @@ void ConnectToServerDialog::on_checkBox_fullScreen_stateChanged(int state)
 void ConnectToServerDialog::accept()
 {
   if (outputLog)
-	cout << "accept()."; // for DEBUG
+	cout << "accept()." << endl << flush; // for DEBUG
 
   // server name
-  if (lineEdit_hostname->text().size() > 0){
-	QString serverName = lineEdit_hostname->text();
+  if (comboBox_hostname->currentText().size() > 0){
+	QString serverName = comboBox_hostname->currentText();
 	settings->setServerName(serverName);
 #if QTB_AUTO_COMPLETE
 	if (!(serverNameList->contains(serverName))){
@@ -272,7 +274,7 @@ void ConnectToServerDialog::accept()
 void ConnectToServerDialog::reject()
 {
   if (outputLog)
-	cout << "reject()."; // for DEBUG
+	cout << "reject()." << endl << flush; // for DEBUG
   hide();
 }
 

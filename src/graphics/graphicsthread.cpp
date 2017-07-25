@@ -29,6 +29,10 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   frameCounter(0),
   totalFrameCounter(0),
   onClearDesktop(false),
+  width(0),
+  height(0),
+  yuv420(0),
+  rgb32(0),
   buffer(0)
 {
   outputLog = false; // for DEBUG
@@ -38,6 +42,11 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
 
   // create image
   image = new QImage();
+
+  // initialize libvpx
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
+	vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
+  }
 }
 
 // destructor
@@ -54,6 +63,16 @@ GraphicsThread::~GraphicsThread()
   if (image != 0){
 	delete image;
 	image = 0;
+  }
+
+  // buffer for yuv420/rgb32
+  if (yuv420 != 0){
+	delete [] yuv420;
+	yuv420 = 0;
+  }
+  if (rgb32 != 0){
+	delete [] rgb32;
+	rgb32 = 0;
   }
 }
 
@@ -171,7 +190,8 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 #endif // for TEST
 
   // check received video_mode
-  if (com_data->video_mode != VIDEO_MODE_MJPEG){
+  if (com_data->video_mode != VIDEO_MODE_MJPEG &&
+	  com_data->video_mode != VIDEO_MODE_COMPRESS ){
 	return PROCESS_VIDEO_MODE_ERROR;
   }
 
@@ -181,7 +201,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 // transmit local buffer to global buffer
 TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 {
-  // receivedDataSize (= JPEG File Size)
+  // receivedDataSize for image
   long receivedDataSize = com_data->data_size;
 
   // check
@@ -196,7 +216,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	return TRANSMIT_DATASIZE_ERROR;
   }
 
-  // receive JPEG File Data
+  // receive data for image
   receivedDataSize = receiveData(sock_graphics, buffer, receivedDataSize);
   // size check
   if (receivedDataSize <= 0){
@@ -207,16 +227,25 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // received 1 frame
   frameCounter++;
 
+  // == VIDEO_MODE_MJPEG ==
   // buffer[]         : JPEG File
   // receivedDataSize : Size of JPEG File
+  // == VIDEO_MODE_COMPRESS ==
+  // buffer[]         : VP8 Data
+  // receivedDataSize : Size of VP8 Data
 
-  // for DEBUG : save a JPEG File
+  // for DEBUG : save received data
   if (settings->getOutputGraphicsDataToFile()){
   //  if (true){
 	fstream file;
 	char filename[QTB_MAXPATHLEN+1];
 	int result;
-	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg", QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+	if (com_data->video_mode == VIDEO_MODE_MJPEG){
+	  result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg", QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+	}
+	else { // binary
+	  result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.bin", QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+	}
 	if (result > 0 && result <= QTB_MAXPATHLEN){
 	  file.open(filename, ios::out | ios::binary | ios::trunc);
 	  if (file.is_open()){
@@ -232,16 +261,40 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
-  // draw a JPEG File
+  // draw a desktop image
   if (settings->getOnGraphics()){
 	// clear desktop flag clear
 	onClearDesktop = false;
 
-	// load a JPEG data to desktop
-	bool desktopLoadResult;
-	desktopLoadResult = image->loadFromData((const uchar *)buffer,
-											(uint)receivedDataSize,
-											"JPEG");
+	bool desktopLoadResult = false;
+	if (com_data->video_mode == VIDEO_MODE_MJPEG){
+	  // load a JPEG data to desktop
+	  desktopLoadResult = image->loadFromData((const uchar *)buffer,
+											  (uint)receivedDataSize,
+											  "JPEG");
+	}
+	else if (com_data->video_mode == VIDEO_MODE_COMPRESS ){
+	  // VP8
+	  uchar *rgb32image = decodeVP8(receivedDataSize);
+	  if (rgb32image != 0){
+		// create QImage from RGB32
+		delete image;
+		image = new QImage(rgb32image, width, height, QImage::Format_RGBA8888);
+	  }
+	  else {
+		if (image->isNull()){
+		  delete image;
+		  image = new QImage(width, height, QImage::Format_RGBA8888);
+		  image->fill(Qt::gray);
+		}
+	  }
+
+	  desktopLoadResult = true;
+	}
+	else {
+	  // illegal VIDEO_MODE
+	}
+
 	if (desktopLoadResult){
 	  // GOOD
 	  // update desktop
@@ -308,5 +361,152 @@ void GraphicsThread::shutdownConnection()
   NetThread::shutdownConnection();
 }
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
+
+//---------------------------------------------------------------------------
+// private
+//---------------------------------------------------------------------------
+// decode VP8
+uchar *GraphicsThread::decodeVP8(int size)
+{
+  // decode vp8
+  vpx_codec_decode(&c_codec, (uint8_t*)buffer, size, 0, 0);
+
+  // get 1 frame image
+  vpx_codec_iter_t iter = 0;
+  vpx_image_t *img = vpx_codec_get_frame(&c_codec, &iter);
+  if (img == 0) {
+	return 0;
+  }
+
+  // set size
+  if (width  != (int)img->d_w ||
+	  height != (int)img->d_h){
+	// set new width/height
+	width  = img->d_w;
+	height = img->d_h;
+	//  cout << "width = " << width << endl << "height = " << height << endl << flush;
+
+	// allocate yuv420/rgb32 buffer
+	if (yuv420 != 0){
+	  delete [] yuv420;
+	}
+	yuv420 = new uchar[width*height + width*height/2];
+	if (rgb32 != 0){
+	  delete [] rgb32;
+	}
+	rgb32 = new uchar[width*height*4];
+  }
+
+  // create yuv420
+  uchar *top = yuv420;
+  // Y
+  uchar *buf = img->planes[0];
+  int stride = img->stride[0];
+  int next = width;
+  for(int yPos = 0; yPos < height; yPos++){
+	memcpy(top, buf, next);
+	top += next;
+	buf += stride;
+  }
+  // U
+  buf = img->planes[1];
+  stride = img->stride[1];
+  next = width/2;
+  for(int yPos = 0; yPos < height; yPos += 2){
+	memcpy(top, buf, next);
+	top += next;
+	buf += stride;
+  }
+  // V
+  buf = img->planes[2];
+  stride = img->stride[2];
+  next = width/2;
+  for(int yPos = 0; yPos < height; yPos += 2){
+	memcpy(top, buf, next);
+	top += next;
+	buf += stride;
+  }
+
+  // convert YUV420 to RGB32
+  if (convertYUV420toRGB32() != 0){
+	return rgb32;
+  }
+  else {
+	return 0;
+  }
+}
+
+#define GET_R(Y, V)		(Y                   + 1.402 * (V-128))
+#define GET_G(Y, U, V)	(Y - 0.344 * (U-128) - 0.714 * (V-128))
+#define GET_B(Y, U)		(Y + 1.772 * (U-128)                  )
+
+//#define GET_R(Y, V)		((256*Y               + 358*(V - 128)) >> 8)
+//#define GET_G(Y, U, V)	((256*Y -  88*(U-128) - 182*(V - 128)) >> 8)
+//#define GET_B(Y, U)		((256*Y + 453*(U-128)                ) >> 8)
+
+// convert YUV420 to RGB32
+int GraphicsThread::convertYUV420toRGB32()
+{
+  int rgb32size = 0;
+  int size = width * height;
+  uchar *ytop = (uchar*)yuv420;
+  uchar *utop = ytop + size;
+  uchar *vtop = utop + size / 4;
+  int uvNext = width/2;
+  int rgb32Prev = width * 4 * 2;
+  uchar *rgb32top = rgb32;
+
+  // last line top
+  rgb32top += width * (height - 1) * 4;
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int r, g, b;
+	  uchar y, u, v;
+
+	  // set u/v
+	  u = *(utop + uvOffset);
+	  v = *(vtop + uvOffset);
+
+	  // == xPos ==
+	  y = *ytop++;
+
+	  // R
+	  r = clip(GET_R(y, v));
+	  *rgb32top++ = (uchar)r;
+	  // G
+	  g = clip(GET_G(y, u, v));
+	  *rgb32top++ = (uchar)g;
+	  // B
+	  b = clip(GET_B(y, u));
+	  *rgb32top++ = (uchar)b;
+	  // A
+	  *rgb32top++ = 255;
+
+	  // == xPos+1 ==
+	  y = *ytop++;
+
+	  // R
+	  r = clip(GET_R(y, v));
+	  *rgb32top++ = (uchar)r;
+	  // G
+	  g = clip(GET_G(y, u, v));
+	  *rgb32top++ = (uchar)g;
+	  // B
+	  b = clip(GET_B(y, u));
+	  *rgb32top++ = (uchar)b;
+	  // A
+	  *rgb32top++ = 255;
+
+	  rgb32size += 8;
+	}
+	rgb32top -= rgb32Prev;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+  return rgb32size;
+}
 
 } // end of namespace qtbrynhildr

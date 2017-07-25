@@ -61,7 +61,7 @@
       Qt5のサポートする環境(OS)について詳しくは以下のページを御覧ください。
       http://doc.qt.io/QtSupportedPlatforms/index.html
 
- (*3) XP/Vista版をビルドするにはバージョンが5.6.2以下のQtを使ってビルドする必要があります。
+ (*3) XP/Vistaで動作する版をビルドするにはバージョンが5.6.2以下のQtを使ってビルドする必要があります。
 
 ==============================
  [テスト中の環境]
@@ -168,8 +168,6 @@
  (1) root権限でQt5パッケージをインストールします。(すでにインストール済みの場合はスキップしてください)
 
    sudo apt-get install qt5-default
-
-   (*) 現在はQt5.6.1相当のパッケージがインストールされるようです。
 
  (2) 自己解凍ファイルを実行してパッケージを展開します。
 
@@ -739,13 +737,15 @@ windowState=@ByteArray(xxxxx)
 5. オプション
 ----------------------------------------------------------------------
 
- (0) -mode5/mode6オプション
+ (0) -mode5/mode6/mode7オプション
 
- パブリックモードのバージョンを指定します。無指定時は-mode6指定相当となります。
+ パブリックモードのバージョンを指定します。無指定時は-mode7指定相当となります。
 
  -mode5 : ファイル転送、クリップボード共有をサポートしません。古いサーバに接続するために
           指定します。
  -mode6 : ファイル転送、クリップボード共有をサポートします。
+
+ -mode7 : mode6に加えてVP8によるデスクトップ画像転送を行います。
 
  (1) -serverオプション
 
@@ -857,10 +857,10 @@ Qtのバージョンにより必要なランタイムライブラリパッケー
 
  パブリックモードでサポートしていないビデオコーデックがサーバで指定されています。(*)
 
- brynhildr.iniでvideocodec=2(MotionJPEG)と指定していること、もしくはvideocodec自体の指定がないことを
- 確認してください。
+ brynhildr.iniでvideocodec=2(MotionJPEG)もしくはvideocodec=3(Compress)と指定していること
+ もしくはvideocodec自体の指定がないことを確認してください。
 
- (*) 現在のところvideocode=0(Speed)/1(Hybrid)/3(Compress)はサポートしていません。
+ (*) 現在のところvideocode=0(Speed)/1(Hybrid)はサポートしていません。
 
 ----------------------------------------------------------------------
 8-1. 制限
@@ -869,8 +869,6 @@ Qtのバージョンにより必要なランタイムライブラリパッケー
  (1) フォーカスが無い時もマウスが有効となっています。
 
  (2) アスペクト比保存の調整機構が未実装です。
-
- (3) パブリックモード6で接続した場合、マウスカーソルの変更に対応していません。
 
 ----------------------------------------------------------------------
 8-2. Windows版のみの制限
@@ -983,6 +981,13 @@ Qtのバージョンにより必要なランタイムライブラリパッケー
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.2.0.0 : 2017/08/xx
+            [新規機能]
+             ・VP8によるデスクトップ画像転送をサポートしたモード7を追加
+
+            [その他変更]
+             ・CELTによるサウンドデータ転送を標準に変更
+
 Ver.1.7.3 : 2017/07/12
             [不具合修正]
              ・サーバへ接続する前に終了しようとすると不正終了となる不具合修正
@@ -1649,6 +1654,10 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 
  http://www.openssl.org/
 
+(6) VP8のページ
+
+ http://www.webmproject.org/
+
 ----------------------------------------------------------------------
 12. 謝辞
 ----------------------------------------------------------------------
@@ -1658,8 +1667,8 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 
 また有用なツール、ライブラリを提供くださるQt Projectに感謝します。
 
-最後にGNU, MinGW, Cygwin, CELTライブラリ, OpenSSLなどフリーなソフトウェアを提供くださる
-すべての方々に感謝します。
+最後にGNU, MinGW, Cygwin, CELTライブラリ, OpenSSL, VP8などフリーなソフトウェアを
+提供くださるすべての方々に感謝します。
 
 ----------------------------------------------------------------------
 
@@ -1831,3 +1840,33 @@ E POSSIBILITY OF SUCH DAMAGE.
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
+
+----------------------------------------------------------------------
+[VP8 LICENSE]
+
+Copyright (c) 2010, Google Inc. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+
+・Redistributions of source code must retain the above copyright notice, this li
+st of conditions and the following disclaimer.
+
+・Redistributions in binary form must reproduce the above copyright notice, this
+ list of conditions and the following disclaimer in the documentation and/or oth
+er materials provided with the distribution.
+
+・Neither the name of Google nor the names of its contributors may be used to en
+dorse or promote products derived from this software without specific prior writ
+ten permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WA
+RRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT
+, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, D
+ATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF L
+IABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE O
+R OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ OF THE POSSIBILITY OF SUCH DAMAGE.

@@ -521,6 +521,16 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 		return TRANSMIT_RESTART;
 	  }
 	}
+	// mouse cursor image
+	else if (com_data->data_type == DATA_TYPE_DATA){
+	  // receive mouse cursor image
+	  bool result = receiveMouseCursorImage();
+	  if (!result){
+		// failed to receive mouse cursor image
+		//		cout << "Failed to receive mouse cursor image!" << endl << flush;
+		return TRANSMIT_RESTART;
+	  }
+	}
   }
   return TRANSMIT_SUCCEEDED;
 #else // QTB_PUBLIC_MODE6_SUPPORT
@@ -1052,5 +1062,31 @@ bool ControlThread::receiveFile()
 }
 
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+// receive mouse cursor image
+bool ControlThread::receiveMouseCursorImage()
+{
+  // mouse cursor image data (4096 bytes * 2)
+  char image1[4096];
+  char image2[4096];
+  qint64 receivedDataSize = 0;
+
+  // get image1
+  receivedDataSize = receiveData(sock_control, image1, 4096);
+  if (receivedDataSize != 4096){
+	return false;
+  }
+
+  // get image2
+  receivedDataSize = receiveData(sock_control, image2, 4096);
+  if (receivedDataSize != 4096){
+	return false;
+  }
+
+  if (!settings->getOnDisplayMouseCursor()){
+	// Yet: change mouse cursor image
+  }
+  return true;
+}
 
 } // end of namespace qtbrynhildr

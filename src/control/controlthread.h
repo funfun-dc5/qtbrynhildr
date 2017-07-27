@@ -81,6 +81,9 @@ private:
   bool receiveFile();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+  // receive mouse cursor image
+  bool receiveMouseCursorImage();
+
   //  convert Big Endian 2 bytes
   void convertBE2bytes(BYTE *ptr)
   {

@@ -440,9 +440,9 @@ uchar *GraphicsThread::decodeVP8(int size)
 #define GET_G(Y, U, V)	(Y - 0.344 * (U-128) - 0.714 * (V-128))
 #define GET_B(Y, U)		(Y + 1.772 * (U-128)                  )
 
-//#define GET_R(Y, V)		((256*Y               + 358*(V - 128)) >> 8)
-//#define GET_G(Y, U, V)	((256*Y -  88*(U-128) - 182*(V - 128)) >> 8)
-//#define GET_B(Y, U)		((256*Y + 453*(U-128)                ) >> 8)
+//#define GET_R(Y, V)		((256 * Y                 + 358 * (V-128)) >> 8)
+//#define GET_G(Y, U, V)	((256 * Y -  88 * (U-128) - 182 * (V-128)) >> 8)
+//#define GET_B(Y, U)		((256 * Y + 453 * (U-128)                ) >> 8)
 
 // convert YUV420 to RGB32
 int GraphicsThread::convertYUV420toRGB32()

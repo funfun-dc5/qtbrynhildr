@@ -516,6 +516,24 @@ public:
 
 	return "UNKNOWN PUBLICMODE_VERSION";
   }
+
+  // get public mode alias string
+  QString getPublicModeAliasString() const
+  {
+	switch(publicModeVersion){
+	case PUBLICMODE_VERSION5:
+	  return "MODE 5";
+	  break;
+	case PUBLICMODE_VERSION6:
+	  return "MJPEG";
+	  break;
+	case PUBLICMODE_VERSION7:
+	  return "Compress";
+	  break;
+	}
+
+	return "UNKNOWN PUBLICMODE_VERSION";
+  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get server name

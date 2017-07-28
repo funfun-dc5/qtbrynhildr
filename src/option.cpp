@@ -232,10 +232,12 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  else if (strncmp("mode5", optionName, sizeof("mode5")) == 0){
 		publicModeVersion = 5;
 	  }
-	  else if (strncmp("mode6", optionName, sizeof("mode6")) == 0){
+	  else if (strncmp("mode6", optionName, sizeof("mode6")) == 0 ||
+			   strncmp("mjpg", optionName, sizeof("mjpg")) == 0){
 		publicModeVersion = 6;
 	  }
-	  else if (strncmp("mode7", optionName, sizeof("mode7")) == 0){
+	  else if (strncmp("mode7", optionName, sizeof("mode7")) == 0 ||
+			   strncmp("compress", optionName, sizeof("compress")) == 0){
 		publicModeVersion = 7;
 	  }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -344,7 +346,7 @@ void Option::printHelp() const
   cout << "-------------------------------------------------------" << endl;
 
 #if QTB_PUBLIC_MODE6_SUPPORT
-  cout << "-mode5/mode6/mode7" << endl;
+  cout << "-mode5/mode6(mjpg)/mode7(compress)" << endl;
   cout << "        " << "support public mode 5/6/7." << endl;
   cout << endl;
 #endif // QTB_PUBLIC_MODE6_SUPPORT

@@ -6,7 +6,7 @@
 
 // version
 #define QTB_VERSION				"2.0.0"
-#define QTB_RCNAME				"-rc1"
+#define QTB_RCNAME				"-rc2"
 #define QTB_VERSION_NUMBER		200
 
 // year

@@ -395,10 +395,47 @@ uchar *GraphicsThread::decodeVP8(int size)
 	  delete [] rgb32;
 	}
 	rgb32 = new uchar[width*height*4];
+
+#if 1 // for TEST
+	// calc parameters
+	hwidth = width / 2;
+	size = width * height;
+	ytopOrg = (uchar*)yuv420;
+	utopOrg = ytopOrg + size;
+	vtopOrg = utopOrg + size / 4;
+	uvNext = width / 2;
+	rgb32Prev = width * 4 * 2;
+#endif // for TEST
   }
 
   // create yuv420
   uchar *top = yuv420;
+#if 1 // for TEST
+  // Y
+  uchar *buf = img->planes[0];
+  int stride = img->stride[0];
+  for(int yPos = 0; yPos < height; yPos++){
+	memcpy(top, buf, width);
+	top += width;
+	buf += stride;
+  }
+  // U
+  buf = img->planes[1];
+  stride = img->stride[1];
+  for(int yPos = 0; yPos < height; yPos += 2){
+	memcpy(top, buf, hwidth);
+	top += hwidth;
+	buf += stride;
+  }
+  // V
+  buf = img->planes[2];
+  stride = img->stride[2];
+  for(int yPos = 0; yPos < height; yPos += 2){
+	memcpy(top, buf, hwidth);
+	top += hwidth;
+	buf += stride;
+  }
+#else // for TEST
   // Y
   uchar *buf = img->planes[0];
   int stride = img->stride[0];
@@ -426,6 +463,7 @@ uchar *GraphicsThread::decodeVP8(int size)
 	top += next;
 	buf += stride;
   }
+#endif // for TEST
 
   // convert YUV420 to RGB32
   if (convertYUV420toRGB32() != 0){
@@ -436,6 +474,18 @@ uchar *GraphicsThread::decodeVP8(int size)
   }
 }
 
+#if 1 // for TEST
+
+#define GET_R(Y, V)		(Y             + 1.402 * V)
+#define GET_G(Y, U, V)	(Y - 0.344 * U - 0.714 * V)
+#define GET_B(Y, U)		(Y + 1.772 * U            )
+
+//#define GET_R(Y, V)		((256 * Y           + 358 * V) >> 8)
+//#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
+//#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
+
+#else // for TEST
+
 #define GET_R(Y, V)		(Y                   + 1.402 * (V-128))
 #define GET_G(Y, U, V)	(Y - 0.344 * (U-128) - 0.714 * (V-128))
 #define GET_B(Y, U)		(Y + 1.772 * (U-128)                  )
@@ -444,17 +494,25 @@ uchar *GraphicsThread::decodeVP8(int size)
 //#define GET_G(Y, U, V)	((256 * Y -  88 * (U-128) - 182 * (V-128)) >> 8)
 //#define GET_B(Y, U)		((256 * Y + 453 * (U-128)                ) >> 8)
 
+#endif // for TEST
+
 // convert YUV420 to RGB32
 int GraphicsThread::convertYUV420toRGB32()
 {
+  uchar *rgb32top = rgb32;
   int rgb32size = 0;
+#if 1 // for TEST
+  uchar *ytop = ytopOrg;
+  uchar *utop = utopOrg;
+  uchar *vtop = vtopOrg;
+#else // for TEST
   int size = width * height;
   uchar *ytop = (uchar*)yuv420;
   uchar *utop = ytop + size;
   uchar *vtop = utop + size / 4;
   int uvNext = width/2;
   int rgb32Prev = width * 4 * 2;
-  uchar *rgb32top = rgb32;
+#endif // for TEST
 
   // last line top
   rgb32top += width * (height - 1) * 4;
@@ -462,11 +520,20 @@ int GraphicsThread::convertYUV420toRGB32()
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
+#if 1 // for TEST
+	  int y, u, v;
+#else // for TEST
 	  uchar y, u, v;
+#endif // for TEST
 
 	  // set u/v
+#if 1 // for TEST
+	  u = *(utop + uvOffset) - 128;
+	  v = *(vtop + uvOffset) - 128;
+#else // for TEST
 	  u = *(utop + uvOffset);
 	  v = *(vtop + uvOffset);
+#endif // for TEST
 
 	  // == xPos ==
 	  y = *ytop++;

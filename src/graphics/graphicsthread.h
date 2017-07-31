@@ -97,6 +97,20 @@ private:
   // buffer for rgb32
   uchar *rgb32;
 
+#if 1 // for TEST
+  // parameters for decodeVP8()
+  int hwidth;
+
+  // parameters for convertYUV420toRGB32()
+  uchar *ytopOrg;
+  uchar *utopOrg;
+  uchar *vtopOrg;
+
+  int size; // width * height
+  int uvNext;
+  int rgb32Prev;
+#endif // for TEST
+
   // codec context
   vpx_codec_ctx_t c_codec;
 

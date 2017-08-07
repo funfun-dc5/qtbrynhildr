@@ -1088,9 +1088,9 @@ bool ControlThread::receiveMouseCursorImage()
 	  file.write((char*)andMaskImage, receivedDataSize);
 	  file.close();
 	}
-	QImage *image = new QImage((uchar*)andMaskImage, 32, 32, QImage::Format_RGBA8888);
-	*image = image->mirrored(false, true);
-	image->save("jpg/andMaskImage.bmp", "BMP");
+	QImage image(andMaskImage, 32, 32, QImage::Format_RGBA8888);
+	image = image.mirrored(false, true);
+	image.save("jpg/andMaskImage.bmp", "BMP");
   }
 #endif // for TEST
 
@@ -1107,15 +1107,15 @@ bool ControlThread::receiveMouseCursorImage()
 	  file.write((char*)xorMaskImage, receivedDataSize);
 	  file.close();
 	}
-	QImage *image = new QImage((uchar*)xorMaskImage, 32, 32, QImage::Format_RGBA8888);
-	*image = image->mirrored(false, true);
-	image->save("jpg/xorMaskImage.bmp", "BMP");
+	QImage image(xorMaskImage, 32, 32, QImage::Format_RGBA8888);
+	image = image.mirrored(false, true);
+	image.save("jpg/xorMaskImage.bmp", "BMP");
   }
 #endif // for TEST
 
   if (!settings->getOnDisplayMouseCursor()){
 #if 0 // for TEST (by pixmap)
-#if 1 // for TEST
+#if 0 // for TEST
 	for(int i = 0; i < 4096; i += 4){
 	  andMaskImage[i+3] = 0xFF;
 	  if (xorMaskImage[i] == 0xFF && andMaskImage[i] == 0xFF &&
@@ -1128,15 +1128,20 @@ bool ControlThread::receiveMouseCursorImage()
 #endif // for TEST
 
 	// Cursor Image
-	QImage cursorImage((uchar*)xorMaskImage, 32, 32, QImage::Format_RGBA8888);
+	for(int i = 0; i < 4096; i += 4){
+	  //	  if (xorMaskImage[i] != 0 || xorMaskImage[i+1] != 0 && xorMaskImage[i+2] != 0)
+	  //		xorMaskImage[i+3] = 0xFF;
+	}
+	QImage cursorImage(xorMaskImage, 32, 32, QImage::Format_RGBA8888);
 	cursorImage = cursorImage.mirrored(false, true);
-	QPixmap cursor = QPixmap::fromImage(cursorImage);
+	//	cursorImage.save("jpg/cursorImage.bmp", "BMP");
+	QPixmap cursor = QPixmap::fromImage(cursorImage, Qt::NoFormatConversion);
 
-#if 0 // for TEST
 	// Mask Image
-	QImage maskImage((uchar*)andMaskImage, 32, 32, QImage::Format_RGBA8888);
+#if 0 // for TEST
+	QImage maskImage(andMaskImage, 32, 32, QImage::Format_RGBA8888);
 	maskImage = maskImage.mirrored(false, true);
-	QBitmap mask = QBitmap::fromImage(maskImage);
+	QBitmap mask = QBitmap::fromImage(maskImage, Qt::NoFormatConversion | Qt::NoOpaqueDetection);
 	mask.save("jpg/ZCursor_mask.bmp", "BMP");
 	cursor.setMask(mask);
 #endif // for TEST

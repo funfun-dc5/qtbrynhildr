@@ -17,6 +17,10 @@
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QSize>
 
+#include <QBitmap>
+#include <QCursor>
+#include <QImage>
+
 // Local Header
 #include "controlthread.h"
 #include "qtbrynhildr.h"
@@ -1067,24 +1071,133 @@ bool ControlThread::receiveFile()
 bool ControlThread::receiveMouseCursorImage()
 {
   // mouse cursor image data (4096 bytes * 2)
-  char image1[4096];
-  char image2[4096];
+  uchar andMaskImage[4096];
+  uchar xorMaskImage[4096];
   qint64 receivedDataSize = 0;
 
-  // get image1
-  receivedDataSize = receiveData(sock_control, image1, 4096);
+  // get AND Mask Cursor
+  receivedDataSize = receiveData(sock_control, (char*)andMaskImage, 4096);
   if (receivedDataSize != 4096){
 	return false;
   }
+#if 0 // for TEST
+  else {
+	fstream file;
+	file.open("jpg/andMaskImage.bin", ios::out | ios::binary | ios::trunc);
+	if (file.is_open()){
+	  file.write((char*)andMaskImage, receivedDataSize);
+	  file.close();
+	}
+	QImage *image = new QImage((uchar*)andMaskImage, 32, 32, QImage::Format_RGBA8888);
+	*image = image->mirrored(false, true);
+	image->save("jpg/andMaskImage.bmp", "BMP");
+  }
+#endif // for TEST
 
-  // get image2
-  receivedDataSize = receiveData(sock_control, image2, 4096);
+  // get XOR Mask Cursor
+  receivedDataSize = receiveData(sock_control, (char*)xorMaskImage, 4096);
   if (receivedDataSize != 4096){
 	return false;
   }
+#if 0 // for TEST
+  else {
+	fstream file;
+	file.open("jpg/xorMaskImage.bin", ios::out | ios::binary | ios::trunc);
+	if (file.is_open()){
+	  file.write((char*)xorMaskImage, receivedDataSize);
+	  file.close();
+	}
+	QImage *image = new QImage((uchar*)xorMaskImage, 32, 32, QImage::Format_RGBA8888);
+	*image = image->mirrored(false, true);
+	image->save("jpg/xorMaskImage.bmp", "BMP");
+  }
+#endif // for TEST
 
   if (!settings->getOnDisplayMouseCursor()){
-	// Yet: change mouse cursor image
+#if 0 // for TEST (by pixmap)
+#if 1 // for TEST
+	for(int i = 0; i < 4096; i += 4){
+	  andMaskImage[i+3] = 0xFF;
+	  if (xorMaskImage[i] == 0xFF && andMaskImage[i] == 0xFF &&
+		  xorMaskImage[i+1] == 0xFF && andMaskImage[i+1] == 0xFF &&
+		  xorMaskImage[i+2] == 0xFF && andMaskImage[i+2] == 0xFF){
+		xorMaskImage[i] = xorMaskImage[i+1] = xorMaskImage[i+2] = 0;
+		xorMaskImage[i+3] = 0xFF;
+	  }
+	}
+#endif // for TEST
+
+	// Cursor Image
+	QImage cursorImage((uchar*)xorMaskImage, 32, 32, QImage::Format_RGBA8888);
+	cursorImage = cursorImage.mirrored(false, true);
+	QPixmap cursor = QPixmap::fromImage(cursorImage);
+
+#if 0 // for TEST
+	// Mask Image
+	QImage maskImage((uchar*)andMaskImage, 32, 32, QImage::Format_RGBA8888);
+	maskImage = maskImage.mirrored(false, true);
+	QBitmap mask = QBitmap::fromImage(maskImage);
+	mask.save("jpg/ZCursor_mask.bmp", "BMP");
+	cursor.setMask(mask);
+#endif // for TEST
+
+	// change mouse cursor image
+	cursor.save("jpg/ZCursor_pixmap.bmp", "BMP");
+	int hotX = (int)com_data->cursor_hotspot_x;
+	int hotY = (int)com_data->cursor_hotspot_y;
+	QCursor newCursor(cursor, hotX, hotY);
+#else // for TEST (by bitmap, mask)
+	uchar bitmapImage[32*32*3];
+	uchar maskImage[32*32*3];
+	uchar *bitmaptop = bitmapImage;
+	uchar *masktop = maskImage;
+
+	// == Windows ==
+	// XOR AND
+	//  0   0     -> black
+	//  1   0     -> white
+	//  0   1     -> transparent
+	//  1   1     -> Reverse screen
+
+	// == Qt5 ==
+	// B=0 and M=0 -> black
+	// B=1 and M=0 -> white
+	// B=1 and M=1 -> transparent
+	// B=0 and M=1 -> XOR'd result under Windows.
+	for (int i = 0; i < 4096; i++){
+	  if ((i+1) % 4 != 0){
+		if (xorMaskImage[i] == 0 && andMaskImage[i] == 0xFF){
+		  // transparent
+		  *bitmaptop++ = 0xFF;
+		  *masktop++ = 0xFF;
+		}
+		else if (xorMaskImage[i] == 0xFF && andMaskImage[i] == 0xFF){
+		  // XOR'd result under Windows.
+		  *bitmaptop++ = 0x00;
+		  *masktop++ = 0xFF;
+		}
+		else {
+		  *bitmaptop++ = xorMaskImage[i];
+		  *masktop++ = andMaskImage[i];
+		}
+	  }
+	}
+	QImage bitmapQImage(bitmapImage, 32, 32, QImage::Format_RGB888);
+	bitmapQImage = bitmapQImage.mirrored(false, true);
+	QBitmap bitmap = QBitmap::fromImage(bitmapQImage);
+	QImage maskQImage(maskImage, 32, 32, QImage::Format_RGB888);
+	maskQImage = maskQImage.mirrored(false, true);
+	QBitmap mask = QBitmap::fromImage(maskQImage);
+	int hotX = (int)com_data->cursor_hotspot_x;
+	int hotY = (int)com_data->cursor_hotspot_y;
+#if 0 // for TEST
+	bitmap.save("jpg/ZCursor_bitmap.bmp", "BMP");
+	mask.save("jpg/ZCursor_mask.bmp", "BMP");
+#endif // for TEST
+	QCursor newCursor(bitmap, mask, hotX, hotY);
+#endif // for TEST (by bitmap, mask)
+	emit changeMouseCursor(newCursor);
+	//emit changeMouseCursor(Qt::IBeamCursor);
   }
   return true;
 }

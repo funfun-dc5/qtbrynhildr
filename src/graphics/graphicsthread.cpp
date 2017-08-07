@@ -279,7 +279,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  if (rgb32image != 0){
 		// create QImage from RGB32
 		delete image;
-		image = new QImage(rgb32image, width, height, QImage::Format_RGBA8888);
+		//image = new QImage(rgb32image, width, height, QImage::Format_RGBA8888);
+		image = new QImage(rgb32image, width, height, QImage::Format_RGB888);
+		//*image = image->mirrored(false, true);
 	  }
 	  else {
 		if (image->isNull()){
@@ -395,6 +397,7 @@ uchar *GraphicsThread::decodeVP8(int size)
 	  delete [] rgb32;
 	}
 	rgb32 = new uchar[width*height*4];
+	//rgb32 = new uchar[width*height*3];
 
 #if 1 // for TEST
 	// calc parameters
@@ -404,7 +407,8 @@ uchar *GraphicsThread::decodeVP8(int size)
 	utopOrg = ytopOrg + size;
 	vtopOrg = utopOrg + size / 4;
 	uvNext = width / 2;
-	rgb32Prev = width * 4 * 2;
+	//rgb32Prev = width * 4 * 2;
+	rgb32Prev = width * 3 * 2;
 #endif // for TEST
   }
 
@@ -514,8 +518,58 @@ int GraphicsThread::convertYUV420toRGB32()
   int rgb32Prev = width * 4 * 2;
 #endif // for TEST
 
+#if 0 // for TEST
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int r, g, b;
+	  int y, u, v;
+
+	  // set u/v
+	  u = *(utop + uvOffset) - 128;
+	  v = *(vtop + uvOffset) - 128;
+
+	  // == xPos ==
+	  y = *ytop++;
+
+	  // R
+	  r = clip(GET_R(y, v));
+	  *rgb32top++ = (uchar)r;
+	  // G
+	  g = clip(GET_G(y, u, v));
+	  *rgb32top++ = (uchar)g;
+	  // B
+	  b = clip(GET_B(y, u));
+	  *rgb32top++ = (uchar)b;
+	  // A
+	  //	  *rgb32top++ = 255;
+
+	  // == xPos+1 ==
+	  y = *ytop++;
+
+	  // R
+	  r = clip(GET_R(y, v));
+	  *rgb32top++ = (uchar)r;
+	  // G
+	  g = clip(GET_G(y, u, v));
+	  *rgb32top++ = (uchar)g;
+	  // B
+	  b = clip(GET_B(y, u));
+	  *rgb32top++ = (uchar)b;
+	  // A
+	  //	  *rgb32top++ = 255;
+
+	  //	  rgb32size += 8;
+	  rgb32size += 6;
+	}
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+#else // for TEST
   // last line top
-  rgb32top += width * (height - 1) * 4;
+  //rgb32top += width * (height - 1) * 4;
+  rgb32top += width * (height - 1) * 3;
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -548,7 +602,7 @@ int GraphicsThread::convertYUV420toRGB32()
 	  b = clip(GET_B(y, u));
 	  *rgb32top++ = (uchar)b;
 	  // A
-	  *rgb32top++ = 255;
+	  //*rgb32top++ = 255;
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -563,9 +617,10 @@ int GraphicsThread::convertYUV420toRGB32()
 	  b = clip(GET_B(y, u));
 	  *rgb32top++ = (uchar)b;
 	  // A
-	  *rgb32top++ = 255;
+	  //*rgb32top++ = 255;
 
-	  rgb32size += 8;
+	  //rgb32size += 8;
+	  rgb32size += 6;
 	}
 	rgb32top -= rgb32Prev;
 	if (yPos & 0x1){
@@ -573,6 +628,7 @@ int GraphicsThread::convertYUV420toRGB32()
 	  vtop += uvNext;
 	}
   }
+#endif // for TEST
   return rgb32size;
 }
 

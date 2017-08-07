@@ -732,9 +732,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	menuBar()->setCursor(cursor());
 	changeMouseCursor(Qt::CrossCursor);
   }
+#if 0 // for TEST
   else {
 	changeMouseCursor(Qt::ArrowCursor);
   }
+#endif // for TEST
 
   // check update
   if (settings->getOnCheckUpdateAtBootup()){

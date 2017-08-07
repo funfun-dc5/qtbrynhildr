@@ -941,7 +941,7 @@ public:
   // get display mouse cursor flag
   bool getOnDisplayMouseCursor()
   {
-#if 0 // for restriction of publicmode
+#if 1 // for restriction of publicmode
 	return onDisplayMouseCursor;
 #else // for restriction of publicmode
 	return true;

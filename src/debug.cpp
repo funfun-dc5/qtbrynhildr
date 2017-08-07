@@ -118,6 +118,7 @@ bool checkProtocolHeader(bool outputLog)
 	cout << " : ng" << endl;
 	result = false;
   }
+#if 0 // for MODE7
   offset = (char*)&(com_data.dummy5[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy5 offset = " << offset;
@@ -129,6 +130,7 @@ bool checkProtocolHeader(bool outputLog)
 	cout << " : ng" << endl;
 	result = false;
   }
+#endif // for MODE7
   offset = (char*)&(com_data.dummy6[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy6 offset = " << offset;

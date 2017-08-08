@@ -84,6 +84,15 @@ private:
   // receive mouse cursor image
   bool receiveMouseCursorImage();
 
+  // check color mouse cursor image
+  bool isColorMouseCursorImage(uchar *image, uchar *mask, int size);
+
+  // create color mouse cursor
+  QCursor createColorMouseCursor(uchar *image, uchar *mask);
+
+  // create monochrome mouse cursor
+  QCursor createMonochromeMouseCursor(uchar *image, uchar *mask);
+
   //  convert Big Endian 2 bytes
   void convertBE2bytes(BYTE *ptr)
   {

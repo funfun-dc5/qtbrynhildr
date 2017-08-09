@@ -978,6 +978,14 @@ int QtBrynhildr::getHeightOfStatusBar()
   }
 }
 
+#if !defined(Q_OS_WIN)
+// set cursor point color
+void QtBrynhildr::setCursorPointColor(QRgb cursorPointColor)
+{
+  controlThread->setCursorPointColor(cursorPointColor);
+}
+#endif // !defined(Q_OS_WIN)
+
 // refresh window
 void QtBrynhildr::refreshWindow()
 {

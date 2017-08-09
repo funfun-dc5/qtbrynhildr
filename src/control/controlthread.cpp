@@ -67,6 +67,11 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   // done check password flag
   doneCheckPassword = false;
 
+#if !defined(Q_OS_WIN)
+  // cursor point color
+  cursorPointColor = 0xFFFFFFFF;
+#endif // !defined(Q_OS_WIN)
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE+2];
@@ -97,6 +102,14 @@ ControlThread::~ControlThread()
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
+
+#if !defined(Q_OS_WIN)
+// set cursor point color
+void ControlThread::setCursorPointColor(QRgb cursorPointColor)
+{
+  this->cursorPointColor = cursorPointColor;
+}
+#endif // !defined(Q_OS_WIN)
 
 //---------------------------------------------------------------------------
 // protected
@@ -1230,6 +1243,28 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 	  }
 	}
   }
+
+#if !defined(Q_OS_WIN) // for XOR'd all platforms
+  uchar bitmapValue, maskValue;
+  if ((cursorPointColor & 0x00FFFFFF) != 0){
+	// black
+	bitmapValue = 0x00;
+	maskValue = 0x00;
+  }
+  else {
+	// white
+	bitmapValue = 0xFF;
+	maskValue = 0x00;
+  }
+  // convert to black or white
+  for (int i = 0; i < 3072; i++){
+	if (bitmapImage[i] == 0x00 && maskImage[i] == 0xFF){
+	  bitmapImage[i] = bitmapValue;
+	  maskImage[i] = maskValue;
+	}
+  }
+#endif // !defined(Q_OS_WIN)
+
   QImage bitmapQImage(bitmapImage, 32, 32, QImage::Format_RGB888);
   bitmapQImage = bitmapQImage.mirrored(false, true);
   QBitmap bitmap = QBitmap::fromImage(bitmapQImage);

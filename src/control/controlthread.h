@@ -44,6 +44,11 @@ ControlThread(Settings *settings, MainWindow *mainWindow);
   // destructor
   ~ControlThread();
 
+#if !defined(Q_OS_WIN)
+  // set cursor point color
+  void setCursorPointColor(QRgb cursorPointColor);
+#endif // !defined(Q_OS_WIN)
+
 protected:
   // connect to server
   CONNECT_RESULT connectToServer();
@@ -193,6 +198,11 @@ signals:
 private:
   // done check password flag
   bool doneCheckPassword;
+
+#if !defined(Q_OS_WIN)
+  // cursor point color
+  QRgb cursorPointColor;
+#endif // !defined(Q_OS_WIN)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 private:

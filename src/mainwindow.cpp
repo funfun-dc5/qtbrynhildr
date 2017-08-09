@@ -532,6 +532,10 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 	  pos.x = currentMousePos.x();
 	  pos.y = currentMousePos.y();
 	  mouseBuffer->setMousePos(pos);
+#if !defined(Q_OS_WIN)
+	  // set cursor point color to control thread
+	  parent->setCursorPointColor(image.pixel(currentMousePos));
+#endif // !defined(Q_OS_WIN)
 	}
   }
 }

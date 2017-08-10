@@ -92,6 +92,9 @@ private:
   // check color mouse cursor image
   bool isColorMouseCursorImage(uchar *image, uchar *mask, int size);
 
+  // change mouse cursor
+  void changeMouseCursor();
+
   // create color mouse cursor
   QCursor createColorMouseCursor(uchar *image, uchar *mask);
 
@@ -198,6 +201,10 @@ signals:
 private:
   // done check password flag
   bool doneCheckPassword;
+
+  // mouse cursor image data (4096 bytes * 2)
+  uchar andMaskImage[4096];
+  uchar xorMaskImage[4096];
 
 #if !defined(Q_OS_WIN)
   // cursor point color

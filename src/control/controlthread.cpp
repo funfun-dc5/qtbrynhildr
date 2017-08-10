@@ -107,7 +107,11 @@ ControlThread::~ControlThread()
 // set cursor point color
 void ControlThread::setCursorPointColor(QRgb cursorPointColor)
 {
-  this->cursorPointColor = cursorPointColor;
+  if (this->cursorPointColor != cursorPointColor){
+	//	cout << "cursorPointColor: 0x" << hex << cursorPointColor << endl << flush;
+	this->cursorPointColor = cursorPointColor;
+	changeMouseCursor();
+  }
 }
 #endif // !defined(Q_OS_WIN)
 
@@ -1083,9 +1087,6 @@ bool ControlThread::receiveFile()
 // receive mouse cursor image
 bool ControlThread::receiveMouseCursorImage()
 {
-  // mouse cursor image data (4096 bytes * 2)
-  uchar andMaskImage[4096];
-  uchar xorMaskImage[4096];
   qint64 receivedDataSize = 0;
 
   // get AND Mask Cursor
@@ -1127,7 +1128,6 @@ bool ControlThread::receiveMouseCursorImage()
 #endif // for TEST
 
   if (!settings->getOnDisplayMouseCursor()){
-
 	// BGRA -> RGBA
 	for(int i = 0; i < 4096; i += 4){
 	  uchar r, g, b;
@@ -1147,6 +1147,16 @@ bool ControlThread::receiveMouseCursorImage()
 	  xorMaskImage[i+2] = b;
 	}
 
+	// change mouse cursor
+	changeMouseCursor();
+  }
+
+  return true;
+}
+
+// change mouse cursor
+void ControlThread::changeMouseCursor()
+{
 	QCursor newCursor;
 	if (isColorMouseCursorImage(xorMaskImage, andMaskImage, 4096)){
 	  newCursor = createColorMouseCursor(xorMaskImage, andMaskImage);
@@ -1156,9 +1166,6 @@ bool ControlThread::receiveMouseCursorImage()
 	}
 	// change mouse cursor
 	emit changeMouseCursor(newCursor);
-  }
-
-  return true;
 }
 
 // check color mouse cursor image
@@ -1246,14 +1253,16 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 
 #if !defined(Q_OS_WIN) // for XOR'd all platforms
   uchar bitmapValue, maskValue;
-  if ((cursorPointColor & 0x00FFFFFF) != 0){
-	// black
-	bitmapValue = 0x00;
+  if (((cursorPointColor & 0x00FF0000) >> 16) < 5 &&
+	  ((cursorPointColor & 0x0000FF00) >> 8)  < 5 &&
+	  ((cursorPointColor & 0x000000FF) >> 0)  < 5){
+	// white
+	bitmapValue = 0xFF;
 	maskValue = 0x00;
   }
   else {
-	// white
-	bitmapValue = 0xFF;
+	// black
+	bitmapValue = 0x00;
 	maskValue = 0x00;
   }
   // convert to black or white

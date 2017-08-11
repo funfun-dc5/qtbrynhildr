@@ -33,7 +33,7 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   width(0),
   height(0),
   yuv420(0),
-  rgb32(0),
+  rgb24(0),
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   buffer(0)
 {
@@ -70,14 +70,14 @@ GraphicsThread::~GraphicsThread()
   }
 
 #if QTB_PUBLIC_MODE7_SUPPORT
-  // buffer for yuv420/rgb32
+  // buffer for yuv420/rgb24
   if (yuv420 != 0){
 	delete [] yuv420;
 	yuv420 = 0;
   }
-  if (rgb32 != 0){
-	delete [] rgb32;
-	rgb32 = 0;
+  if (rgb24 != 0){
+	delete [] rgb24;
+	rgb24 = 0;
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 }
@@ -288,13 +288,11 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_PUBLIC_MODE7_SUPPORT
 	else if (com_data->video_mode == VIDEO_MODE_COMPRESS ){
 	  // VP8
-	  uchar *rgb32image = decodeVP8(receivedDataSize);
-	  if (rgb32image != 0){
-		// create QImage from RGB32
+	  uchar *rgb24image = decodeVP8(receivedDataSize);
+	  if (rgb24image != 0){
+		// create QImage from RGB24
 		delete image;
-		//image = new QImage(rgb32image, width, height, QImage::Format_RGBA8888);
-		image = new QImage(rgb32image, width, height, QImage::Format_RGB888);
-		//*image = image->mirrored(false, true);
+		image = new QImage(rgb24image, width, height, QImage::Format_RGB888);
 	  }
 	  else {
 		if (image->isNull()){
@@ -403,15 +401,15 @@ uchar *GraphicsThread::decodeVP8(int size)
 	height = img->d_h;
 	//  cout << "width = " << width << endl << "height = " << height << endl << flush;
 
-	// allocate yuv420/rgb32 buffer
+	// allocate yuv420/rgb24 buffer
 	if (yuv420 != 0){
 	  delete [] yuv420;
 	}
 	yuv420 = new uchar[width*height + width*height/2];
-	if (rgb32 != 0){
-	  delete [] rgb32;
+	if (rgb24 != 0){
+	  delete [] rgb24;
 	}
-	rgb32 = new uchar[width*height*3];
+	rgb24 = new uchar[width*height*3];
 
 	// calc parameters
 	hwidth = width / 2;
@@ -420,7 +418,7 @@ uchar *GraphicsThread::decodeVP8(int size)
 	utopOrg = ytopOrg + size;
 	vtopOrg = utopOrg + size / 4;
 	uvNext = width / 2;
-	rgb32Prev = width * 3 * 2;
+	rgb24Prev = width * 3 * 2;
   }
 
   // create yuv420
@@ -450,15 +448,16 @@ uchar *GraphicsThread::decodeVP8(int size)
 	buf += stride;
   }
 
-  // convert YUV420 to RGB32
-  if (convertYUV420toRGB32() != 0){
-	return rgb32;
+  // convert YUV420 to RGB24
+  if (convertYUV420toRGB24() != 0){
+	return rgb24;
   }
   else {
 	return 0;
   }
 }
 
+// YUV420 convert to RGB macro
 #define GET_R(Y, V)		(Y             + 1.402 * V)
 #define GET_G(Y, U, V)	(Y - 0.344 * U - 0.714 * V)
 #define GET_B(Y, U)		(Y + 1.772 * U            )
@@ -467,17 +466,17 @@ uchar *GraphicsThread::decodeVP8(int size)
 //#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
 //#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
 
-// convert YUV420 to RGB32
-int GraphicsThread::convertYUV420toRGB32()
+// convert YUV420 to RGB24
+int GraphicsThread::convertYUV420toRGB24()
 {
-  uchar *rgb32top = rgb32;
-  int rgb32size = 0;
+  uchar *rgb24top = rgb24;
+  int rgb24size = 0;
   uchar *ytop = ytopOrg;
   uchar *utop = utopOrg;
   uchar *vtop = vtopOrg;
 
   // last line top
-  rgb32top += width * (height - 1) * 3;
+  rgb24top += width * (height - 1) * 3;
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -493,36 +492,36 @@ int GraphicsThread::convertYUV420toRGB32()
 
 	  // R
 	  r = clip(GET_R(y, v));
-	  *rgb32top++ = (uchar)r;
+	  *rgb24top++ = (uchar)r;
 	  // G
 	  g = clip(GET_G(y, u, v));
-	  *rgb32top++ = (uchar)g;
+	  *rgb24top++ = (uchar)g;
 	  // B
 	  b = clip(GET_B(y, u));
-	  *rgb32top++ = (uchar)b;
+	  *rgb24top++ = (uchar)b;
 
 	  // == xPos+1 ==
 	  y = *ytop++;
 
 	  // R
 	  r = clip(GET_R(y, v));
-	  *rgb32top++ = (uchar)r;
+	  *rgb24top++ = (uchar)r;
 	  // G
 	  g = clip(GET_G(y, u, v));
-	  *rgb32top++ = (uchar)g;
+	  *rgb24top++ = (uchar)g;
 	  // B
 	  b = clip(GET_B(y, u));
-	  *rgb32top++ = (uchar)b;
+	  *rgb24top++ = (uchar)b;
 
-	  rgb32size += 6;
+	  rgb24size += 6;
 	}
-	rgb32top -= rgb32Prev;
+	rgb24top -= rgb24Prev;
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;
 	}
   }
-  return rgb32size;
+  return rgb24size;
 }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 

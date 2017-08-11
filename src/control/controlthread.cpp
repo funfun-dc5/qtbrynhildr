@@ -1164,7 +1164,7 @@ void ControlThread::changeMouseCursor()
 {
 	QCursor newCursor;
 	if (isColorMouseCursorImage(xorMaskImage, andMaskImage, 4096)){
-	  newCursor = createColorMouseCursor(xorMaskImage, andMaskImage);
+	  newCursor = createColorMouseCursor(xorMaskImage);
 	}
 	else {
 	  newCursor = createMonochromeMouseCursor(xorMaskImage, andMaskImage);
@@ -1201,7 +1201,7 @@ bool ControlThread::isColorMouseCursorImage(uchar *image, uchar *mask, int size)
 }
 
 // create color mouse cursor
-QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
+QCursor ControlThread::createColorMouseCursor(uchar *image)
 {
   // Cursor Image
   QImage cursorImage(image, 32, 32, QImage::Format_RGBA8888);

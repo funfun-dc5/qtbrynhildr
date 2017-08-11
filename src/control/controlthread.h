@@ -97,7 +97,7 @@ private:
   void changeMouseCursor();
 
   // create color mouse cursor
-  QCursor createColorMouseCursor(uchar *image, uchar *mask);
+  QCursor createColorMouseCursor(uchar *image);
 
   // create monochrome mouse cursor
   QCursor createMonochromeMouseCursor(uchar *image, uchar *mask);

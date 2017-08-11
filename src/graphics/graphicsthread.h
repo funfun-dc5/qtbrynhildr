@@ -12,9 +12,11 @@
 // Local Header
 #include "common/netthread.h"
 
+#if QTB_PUBLIC_MODE7_SUPPORT
 // libvxp Header
 #include "vpx_decoder.h"
 #include "vp8dx.h"
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {
 
@@ -59,8 +61,8 @@ private:
   // decode VP8
   uchar *decodeVP8(int size);
 
-  // convert YUV420 to RGB32
-  int convertYUV420toRGB32();
+  // convert YUV420 to RGB24
+  int convertYUV420toRGB24();
 
   // clip
   int clip(int val)
@@ -97,20 +99,20 @@ private:
   // buffer for yuv420
   uchar *yuv420;
 
-  // buffer for rgb32
-  uchar *rgb32;
+  // buffer for rgb24
+  uchar *rgb24;
 
   // parameters for decodeVP8()
   int hwidth;
 
-  // parameters for convertYUV420toRGB32()
+  // parameters for convertYUV420toRGB24()
   uchar *ytopOrg;
   uchar *utopOrg;
   uchar *vtopOrg;
 
   int size; // width * height
   int uvNext;
-  int rgb32Prev;
+  int rgb24Prev;
 
   // codec context
   vpx_codec_ctx_t c_codec;

@@ -286,7 +286,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 											  "JPEG");
 	}
 #if QTB_PUBLIC_MODE7_SUPPORT
-	else if (com_data->video_mode == VIDEO_MODE_COMPRESS ){
+	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	  // VP8
 	  uchar *rgb24image = decodeVP8(receivedDataSize);
 	  if (rgb24image != 0){

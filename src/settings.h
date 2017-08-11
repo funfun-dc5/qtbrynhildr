@@ -945,11 +945,12 @@ public:
   // get display mouse cursor flag
   bool getOnDisplayMouseCursor()
   {
-#if 1 // for restriction of publicmode
-	return onDisplayMouseCursor;
-#else // for restriction of publicmode
-	return true;
-#endif // for restriction of publicmode
+	if (getPublicModeVersion() >= PUBLICMODE_VERSION7){
+	  return onDisplayMouseCursor;
+	}
+	else { // MODE5/6
+	  return true;
+	}
   }
 
   // set display mouse cursor flag

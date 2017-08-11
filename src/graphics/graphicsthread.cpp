@@ -458,13 +458,15 @@ uchar *GraphicsThread::decodeVP8(int size)
 }
 
 // YUV420 convert to RGB macro
+#if 0 // float (original)
 #define GET_R(Y, V)		(Y             + 1.402 * V)
 #define GET_G(Y, U, V)	(Y - 0.344 * U - 0.714 * V)
 #define GET_B(Y, U)		(Y + 1.772 * U            )
-
-//#define GET_R(Y, V)		((256 * Y           + 358 * V) >> 8)
-//#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
-//#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
+#else // integer and shift
+#define GET_R(Y, V)		((256 * Y           + 358 * V) >> 8)
+#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
+#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
+#endif
 
 // convert YUV420 to RGB24
 int GraphicsThread::convertYUV420toRGB24()

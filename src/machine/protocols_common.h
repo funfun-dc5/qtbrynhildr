@@ -61,12 +61,12 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   MOUSE_WHEEL		mouse_wheel;
   char				keycode;
   KEYCODE_FLG		keycode_flg;
-#if 1 // for MODE7
+#if QTB_PUBLIC_MODE7_SUPPORT
   char				cursor_hotspot_x;	// cursor hotspot x
   char				cursor_hotspot_y;	// cursor hotspot y
-#else // for MODE7
+#else // QTB_PUBLIC_MODE7_SUPPORT
   BYTE				dummy5[2];			// padding 2 bytes
-#endif // for MODE7
+#endif // QTB_PUBLIC_MODE7_SUPPORT
   MONITOR_NO		monitor_no;
   MONITOR_COUNT		monitor_count;
   BYTE				dummy6[6];			// padding 6 bytes

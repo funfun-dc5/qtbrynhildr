@@ -55,15 +55,6 @@ int main(int argc, char *argv[])
   QIcon windowIcon(QPixmap(QTB_ICON_FILENAME));
   app.setWindowIcon(windowIcon);
 
-  // set cursor
-#if 0 // for TEST
-#if !QTB_BRYNHILDR2_SUPPORT
-  app.setOverrideCursor(Qt::CrossCursor);
-#else // !QTB_BRYNHILDR2_SUPPORT
-  app.setOverrideCursor(Qt::ArrowCursor);
-#endif // !QTB_BRYNHILDR2_SUPPORT
-#endif
-
   // for Translation
   QTranslator appTranslator;
   if (qtbrynhildr::QTB_TRANSLATION && !option->getNoTransFlag()){

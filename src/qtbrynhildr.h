@@ -119,10 +119,10 @@ public:
   // get height of status bar
   int getHeightOfStatusBar();
 
-#if !defined(Q_OS_WIN)
+#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
   // set cursor point color
   void setCursorPointColor(QRgb cursorPointColor);
-#endif // !defined(Q_OS_WIN)
+#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 
 public slots:
   // connect to server

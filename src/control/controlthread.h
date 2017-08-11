@@ -44,10 +44,10 @@ ControlThread(Settings *settings, MainWindow *mainWindow);
   // destructor
   ~ControlThread();
 
-#if !defined(Q_OS_WIN)
+#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
   // set cursor point color
   void setCursorPointColor(QRgb cursorPointColor);
-#endif // !defined(Q_OS_WIN)
+#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 
 protected:
   // connect to server
@@ -86,6 +86,7 @@ private:
   bool receiveFile();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if QTB_PUBLIC_MODE7_SUPPORT
   // receive mouse cursor image
   bool receiveMouseCursorImage();
 
@@ -100,6 +101,7 @@ private:
 
   // create monochrome mouse cursor
   QCursor createMonochromeMouseCursor(uchar *image, uchar *mask);
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   //  convert Big Endian 2 bytes
   void convertBE2bytes(BYTE *ptr)
@@ -202,6 +204,7 @@ private:
   // done check password flag
   bool doneCheckPassword;
 
+#if QTB_PUBLIC_MODE7_SUPPORT
   // mouse cursor image data (4096 bytes * 2)
   uchar andMaskImage[4096];
   uchar xorMaskImage[4096];
@@ -210,6 +213,7 @@ private:
   // cursor point color
   QRgb cursorPointColor;
 #endif // !defined(Q_OS_WIN)
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 private:

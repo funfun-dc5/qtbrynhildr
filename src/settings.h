@@ -60,7 +60,11 @@
 #if QTB_PUBLIC_MODE6_SUPPORT
 // for publicModeVersion
 #define QTB_PUBLICMODEVERSION	"publicModeVersion"
+#if QTB_PUBLIC_MODE7_SUPPORT
 #define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION7
+#else // QTB_PUBLIC_MODE7_SUPPORT
+#define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION6
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 typedef int PUBLIC_MODEVERSION;
 #define PUBLICMODE_VERSION5		5
 #define PUBLICMODE_VERSION6		6
@@ -525,10 +529,10 @@ public:
 	  return "MODE 5";
 	  break;
 	case PUBLICMODE_VERSION6:
-	  return "MJPEG";
+	  return "MODE 6";
 	  break;
 	case PUBLICMODE_VERSION7:
-	  return "Compress";
+	  return "MODE 7";
 	  break;
 	}
 

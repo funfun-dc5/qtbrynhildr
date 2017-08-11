@@ -29,10 +29,12 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   frameCounter(0),
   totalFrameCounter(0),
   onClearDesktop(false),
+#if QTB_PUBLIC_MODE7_SUPPORT
   width(0),
   height(0),
   yuv420(0),
   rgb32(0),
+#endif // QTB_PUBLIC_MODE7_SUPPORT
   buffer(0)
 {
   outputLog = false; // for DEBUG
@@ -43,10 +45,12 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   // create image
   image = new QImage();
 
+#if QTB_PUBLIC_MODE7_SUPPORT
   // initialize libvpx
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
 	vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
   }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
 // destructor
@@ -65,6 +69,7 @@ GraphicsThread::~GraphicsThread()
 	image = 0;
   }
 
+#if QTB_PUBLIC_MODE7_SUPPORT
   // buffer for yuv420/rgb32
   if (yuv420 != 0){
 	delete [] yuv420;
@@ -74,6 +79,7 @@ GraphicsThread::~GraphicsThread()
 	delete [] rgb32;
 	rgb32 = 0;
   }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
 // get frame rate
@@ -190,10 +196,16 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 #endif // for TEST
 
   // check received video_mode
+#if QTB_PUBLIC_MODE7_SUPPORT
   if (com_data->video_mode != VIDEO_MODE_MJPEG &&
 	  com_data->video_mode != VIDEO_MODE_COMPRESS ){
 	return PROCESS_VIDEO_MODE_ERROR;
   }
+#else // QTB_PUBLIC_MODE7_SUPPORT
+  if (com_data->video_mode != VIDEO_MODE_MJPEG){
+	return PROCESS_VIDEO_MODE_ERROR;
+  }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   return PROCESS_SUCCEEDED;
 }
@@ -273,6 +285,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 											  (uint)receivedDataSize,
 											  "JPEG");
 	}
+#if QTB_PUBLIC_MODE7_SUPPORT
 	else if (com_data->video_mode == VIDEO_MODE_COMPRESS ){
 	  // VP8
 	  uchar *rgb32image = decodeVP8(receivedDataSize);
@@ -296,6 +309,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	else {
 	  // illegal VIDEO_MODE
 	}
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 	if (desktopLoadResult){
 	  // GOOD
@@ -367,6 +381,7 @@ void GraphicsThread::shutdownConnection()
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
+#if QTB_PUBLIC_MODE7_SUPPORT
 // decode VP8
 uchar *GraphicsThread::decodeVP8(int size)
 {
@@ -396,10 +411,8 @@ uchar *GraphicsThread::decodeVP8(int size)
 	if (rgb32 != 0){
 	  delete [] rgb32;
 	}
-	rgb32 = new uchar[width*height*4];
-	//rgb32 = new uchar[width*height*3];
+	rgb32 = new uchar[width*height*3];
 
-#if 1 // for TEST
 	// calc parameters
 	hwidth = width / 2;
 	size = width * height;
@@ -407,14 +420,11 @@ uchar *GraphicsThread::decodeVP8(int size)
 	utopOrg = ytopOrg + size;
 	vtopOrg = utopOrg + size / 4;
 	uvNext = width / 2;
-	//rgb32Prev = width * 4 * 2;
 	rgb32Prev = width * 3 * 2;
-#endif // for TEST
   }
 
   // create yuv420
   uchar *top = yuv420;
-#if 1 // for TEST
   // Y
   uchar *buf = img->planes[0];
   int stride = img->stride[0];
@@ -439,35 +449,6 @@ uchar *GraphicsThread::decodeVP8(int size)
 	top += hwidth;
 	buf += stride;
   }
-#else // for TEST
-  // Y
-  uchar *buf = img->planes[0];
-  int stride = img->stride[0];
-  int next = width;
-  for(int yPos = 0; yPos < height; yPos++){
-	memcpy(top, buf, next);
-	top += next;
-	buf += stride;
-  }
-  // U
-  buf = img->planes[1];
-  stride = img->stride[1];
-  next = width/2;
-  for(int yPos = 0; yPos < height; yPos += 2){
-	memcpy(top, buf, next);
-	top += next;
-	buf += stride;
-  }
-  // V
-  buf = img->planes[2];
-  stride = img->stride[2];
-  next = width/2;
-  for(int yPos = 0; yPos < height; yPos += 2){
-	memcpy(top, buf, next);
-	top += next;
-	buf += stride;
-  }
-#endif // for TEST
 
   // convert YUV420 to RGB32
   if (convertYUV420toRGB32() != 0){
@@ -478,8 +459,6 @@ uchar *GraphicsThread::decodeVP8(int size)
   }
 }
 
-#if 1 // for TEST
-
 #define GET_R(Y, V)		(Y             + 1.402 * V)
 #define GET_G(Y, U, V)	(Y - 0.344 * U - 0.714 * V)
 #define GET_B(Y, U)		(Y + 1.772 * U            )
@@ -488,106 +467,26 @@ uchar *GraphicsThread::decodeVP8(int size)
 //#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
 //#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
 
-#else // for TEST
-
-#define GET_R(Y, V)		(Y                   + 1.402 * (V-128))
-#define GET_G(Y, U, V)	(Y - 0.344 * (U-128) - 0.714 * (V-128))
-#define GET_B(Y, U)		(Y + 1.772 * (U-128)                  )
-
-//#define GET_R(Y, V)		((256 * Y                 + 358 * (V-128)) >> 8)
-//#define GET_G(Y, U, V)	((256 * Y -  88 * (U-128) - 182 * (V-128)) >> 8)
-//#define GET_B(Y, U)		((256 * Y + 453 * (U-128)                ) >> 8)
-
-#endif // for TEST
-
 // convert YUV420 to RGB32
 int GraphicsThread::convertYUV420toRGB32()
 {
   uchar *rgb32top = rgb32;
   int rgb32size = 0;
-#if 1 // for TEST
   uchar *ytop = ytopOrg;
   uchar *utop = utopOrg;
   uchar *vtop = vtopOrg;
-#else // for TEST
-  int size = width * height;
-  uchar *ytop = (uchar*)yuv420;
-  uchar *utop = ytop + size;
-  uchar *vtop = utop + size / 4;
-  int uvNext = width/2;
-  int rgb32Prev = width * 4 * 2;
-#endif // for TEST
 
-#if 0 // for TEST
-  for (int yPos = 0; yPos < height; yPos++){
-	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
-	  int r, g, b;
-	  int y, u, v;
-
-	  // set u/v
-	  u = *(utop + uvOffset) - 128;
-	  v = *(vtop + uvOffset) - 128;
-
-	  // == xPos ==
-	  y = *ytop++;
-
-	  // R
-	  r = clip(GET_R(y, v));
-	  *rgb32top++ = (uchar)r;
-	  // G
-	  g = clip(GET_G(y, u, v));
-	  *rgb32top++ = (uchar)g;
-	  // B
-	  b = clip(GET_B(y, u));
-	  *rgb32top++ = (uchar)b;
-	  // A
-	  //	  *rgb32top++ = 255;
-
-	  // == xPos+1 ==
-	  y = *ytop++;
-
-	  // R
-	  r = clip(GET_R(y, v));
-	  *rgb32top++ = (uchar)r;
-	  // G
-	  g = clip(GET_G(y, u, v));
-	  *rgb32top++ = (uchar)g;
-	  // B
-	  b = clip(GET_B(y, u));
-	  *rgb32top++ = (uchar)b;
-	  // A
-	  //	  *rgb32top++ = 255;
-
-	  //	  rgb32size += 8;
-	  rgb32size += 6;
-	}
-	if (yPos & 0x1){
-	  utop += uvNext;
-	  vtop += uvNext;
-	}
-  }
-#else // for TEST
   // last line top
-  //rgb32top += width * (height - 1) * 4;
   rgb32top += width * (height - 1) * 3;
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
-#if 1 // for TEST
 	  int y, u, v;
-#else // for TEST
-	  uchar y, u, v;
-#endif // for TEST
 
 	  // set u/v
-#if 1 // for TEST
 	  u = *(utop + uvOffset) - 128;
 	  v = *(vtop + uvOffset) - 128;
-#else // for TEST
-	  u = *(utop + uvOffset);
-	  v = *(vtop + uvOffset);
-#endif // for TEST
 
 	  // == xPos ==
 	  y = *ytop++;
@@ -601,8 +500,6 @@ int GraphicsThread::convertYUV420toRGB32()
 	  // B
 	  b = clip(GET_B(y, u));
 	  *rgb32top++ = (uchar)b;
-	  // A
-	  //*rgb32top++ = 255;
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -616,10 +513,7 @@ int GraphicsThread::convertYUV420toRGB32()
 	  // B
 	  b = clip(GET_B(y, u));
 	  *rgb32top++ = (uchar)b;
-	  // A
-	  //*rgb32top++ = 255;
 
-	  //rgb32size += 8;
 	  rgb32size += 6;
 	}
 	rgb32top -= rgb32Prev;
@@ -628,8 +522,8 @@ int GraphicsThread::convertYUV420toRGB32()
 	  vtop += uvNext;
 	}
   }
-#endif // for TEST
   return rgb32size;
 }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 } // end of namespace qtbrynhildr

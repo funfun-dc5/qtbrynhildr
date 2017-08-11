@@ -54,6 +54,7 @@ protected:
   // shutdown connection
   void shutdownConnection();
 
+#if QTB_PUBLIC_MODE7_SUPPORT
 private:
   // decode VP8
   uchar *decodeVP8(int size);
@@ -68,6 +69,7 @@ private:
 	if (val > 255) return 255;
 	return val;
   }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 private:
   // image for desktop
@@ -85,6 +87,7 @@ private:
   // clearDesktop
   bool onClearDesktop;
 
+#if QTB_PUBLIC_MODE7_SUPPORT
   // width of image
   int width;
 
@@ -97,7 +100,6 @@ private:
   // buffer for rgb32
   uchar *rgb32;
 
-#if 1 // for TEST
   // parameters for decodeVP8()
   int hwidth;
 
@@ -109,10 +111,10 @@ private:
   int size; // width * height
   int uvNext;
   int rgb32Prev;
-#endif // for TEST
 
   // codec context
   vpx_codec_ctx_t c_codec;
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 private:
   // local buffer

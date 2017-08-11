@@ -15,11 +15,13 @@
 #include <QByteArray>
 #include <QFileInfo>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#include <QSize>
-
+#if QTB_PUBLIC_MODE7_SUPPORT
 #include <QBitmap>
 #include <QCursor>
 #include <QImage>
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+#include <QSize>
+
 
 // Local Header
 #include "controlthread.h"
@@ -67,10 +69,10 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   // done check password flag
   doneCheckPassword = false;
 
-#if !defined(Q_OS_WIN)
+#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
   // cursor point color
   cursorPointColor = 0xFFFFFFFF;
-#endif // !defined(Q_OS_WIN)
+#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
@@ -103,7 +105,7 @@ ControlThread::~ControlThread()
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
-#if !defined(Q_OS_WIN)
+#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 // set cursor point color
 void ControlThread::setCursorPointColor(QRgb cursorPointColor)
 {
@@ -113,7 +115,7 @@ void ControlThread::setCursorPointColor(QRgb cursorPointColor)
 	changeMouseCursor();
   }
 }
-#endif // !defined(Q_OS_WIN)
+#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 
 //---------------------------------------------------------------------------
 // protected
@@ -542,6 +544,7 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 		return TRANSMIT_RESTART;
 	  }
 	}
+#if QTB_PUBLIC_MODE7_SUPPORT
 	// mouse cursor image
 	else if (com_data->data_type == DATA_TYPE_DATA){
 	  // receive mouse cursor image
@@ -552,6 +555,7 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 		return TRANSMIT_RESTART;
 	  }
 	}
+#endif // QTB_PUBLIC_MODE7_SUPPORT
   }
   return TRANSMIT_SUCCEEDED;
 #else // QTB_PUBLIC_MODE6_SUPPORT
@@ -1084,6 +1088,7 @@ bool ControlThread::receiveFile()
 
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if QTB_PUBLIC_MODE7_SUPPORT
 // receive mouse cursor image
 bool ControlThread::receiveMouseCursorImage()
 {
@@ -1290,5 +1295,6 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 
   return  newCursor;
 }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 } // end of namespace qtbrynhildr

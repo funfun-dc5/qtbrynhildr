@@ -6,6 +6,9 @@
 
 // System Header
 #include <cmath>
+#if QTB_PUBLIC_MODE7_SUPPORT
+#include <cstring>
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 #include <fstream>
 #include <iostream>
 
@@ -48,6 +51,7 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
 #if QTB_PUBLIC_MODE7_SUPPORT
   // initialize libvpx
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
+	memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
 	vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT

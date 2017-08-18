@@ -1140,14 +1140,14 @@ bool ControlThread::receiveMouseCursorImage()
 	  b = andMaskImage[i];
 	  g = andMaskImage[i+1];
 	  r = andMaskImage[i+2];
-	  andMaskImage[i] = r;
+	  andMaskImage[i]   = r;
 	  andMaskImage[i+1] = g;
 	  andMaskImage[i+2] = b;
 	  // xor
 	  b = xorMaskImage[i];
 	  g = xorMaskImage[i+1];
 	  r = xorMaskImage[i+2];
-	  xorMaskImage[i] = r;
+	  xorMaskImage[i]   = r;
 	  xorMaskImage[i+1] = g;
 	  xorMaskImage[i+2] = b;
 	}
@@ -1182,11 +1182,11 @@ bool ControlThread::isColorMouseCursorImage(uchar *image, uchar *mask, int size)
 	if ((image[i]   != 0 && image[i]   != 0xFF) || // R
 		(image[i+1] != 0 && image[i+1] != 0xFF) || // G
 		(image[i+2] != 0 && image[i+2] != 0xFF) || // B
-		image[i+3] != 0 ){ // A
+		 image[i+3] != 0 ){ // A
 	  //	  cout << "Found Color Mouse Cursor!" << endl << flush;
 	  return true;
 	}
-	if (mask[i] != 0 || mask[i+1] != 0 || mask[i+1] != 0)
+	if (mask[i] != 0 || mask[i+1] != 0 || mask[i+2] != 0)
 	  maskAllZero = false;
   }
 
@@ -1257,24 +1257,22 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
   }
 
 #if !defined(Q_OS_WIN) // for XOR'd all platforms
-  uchar bitmapValue, maskValue;
+  uchar bitmapValue;
   if (((cursorPointColor & 0x00FF0000) >> 16) < 5 &&
 	  ((cursorPointColor & 0x0000FF00) >> 8)  < 5 &&
 	  ((cursorPointColor & 0x000000FF) >> 0)  < 5){
 	// white
 	bitmapValue = 0xFF;
-	maskValue = 0x00;
   }
   else {
 	// black
 	bitmapValue = 0x00;
-	maskValue = 0x00;
   }
   // convert to black or white
   for (int i = 0; i < 3072; i++){
 	if (bitmapImage[i] == 0x00 && maskImage[i] == 0xFF){
 	  bitmapImage[i] = bitmapValue;
-	  maskImage[i] = maskValue;
+	  maskImage[i] = 0x00;
 	}
   }
 #endif // !defined(Q_OS_WIN)

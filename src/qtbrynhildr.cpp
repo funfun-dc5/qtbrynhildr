@@ -727,12 +727,12 @@ QtBrynhildr::QtBrynhildr(Option *option)
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(100); // 0.1 second tick timer
 
+#if 0 // for TEST
   // initialize mouse cursor
   if (settings->getOnDisplayMouseCursor()){
 	menuBar()->setCursor(cursor());
 	changeMouseCursor(Qt::CrossCursor);
   }
-#if 0 // for TEST
   else {
 	changeMouseCursor(Qt::ArrowCursor);
   }
@@ -2238,6 +2238,17 @@ void QtBrynhildr::connected()
 
   // reset total frame counter
   totalFrameCounter = 0;
+
+  // initialize mouse cursor
+  if (settings->getOnDisplayMouseCursor()){
+	menuBar()->setCursor(cursor());
+	changeMouseCursor(Qt::CrossCursor);
+  }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // set window title
+  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // refresh menu
   refreshMenu();

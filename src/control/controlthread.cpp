@@ -1162,15 +1162,18 @@ bool ControlThread::receiveMouseCursorImage()
 // change mouse cursor
 void ControlThread::changeMouseCursor()
 {
-	QCursor newCursor;
-	if (isColorMouseCursorImage(xorMaskImage, andMaskImage, 4096)){
-	  newCursor = createColorMouseCursor(xorMaskImage);
-	}
-	else {
-	  newCursor = createMonochromeMouseCursor(xorMaskImage, andMaskImage);
-	}
-	// change mouse cursor
-	emit changeMouseCursor(newCursor);
+  if (settings->getPublicModeVersion() < PUBLICMODE_VERSION7)
+	return;
+
+  QCursor newCursor;
+  if (isColorMouseCursorImage(xorMaskImage, andMaskImage, 4096)){
+	newCursor = createColorMouseCursor(xorMaskImage);
+  }
+  else {
+	newCursor = createMonochromeMouseCursor(xorMaskImage, andMaskImage);
+  }
+  // change mouse cursor
+  emit changeMouseCursor(newCursor);
 }
 
 // check color mouse cursor image

@@ -47,14 +47,6 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
 
   // create image
   image = new QImage();
-
-#if QTB_PUBLIC_MODE7_SUPPORT
-  // initialize libvpx
-  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
-	memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
-	vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
-  }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
 // destructor
@@ -349,6 +341,14 @@ void GraphicsThread::connectedToServer()
 
   // reset previous frame time to Null
   previousFrameTime = QDateTime();
+
+#if QTB_PUBLIC_MODE7_SUPPORT
+  // initialize libvpx
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
+	memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
+	vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
+  }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   NetThread::connectedToServer();
 }

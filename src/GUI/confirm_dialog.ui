@@ -43,7 +43,7 @@
     <item>
      <widget class="QCheckBox" name="checkBox_confirm">
       <property name="text">
-       <string> Confirm at next time</string>
+       <string>Confirm at next time</string>
       </property>
      </widget>
     </item>

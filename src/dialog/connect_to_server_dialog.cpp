@@ -38,9 +38,6 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
   // server name field
   serverNameList = settings->getServerNameList();
-  if (serverNameList->at(0) == ""){
-	serverNameList->append(settings->getServerName());
-  }
 #if QTB_AUTO_COMPLETE
   completer = new QCompleter(*serverNameList, this);
   comboBox_hostname->setCompleter(completer);
@@ -73,10 +70,23 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   // port no field
   spinBox_portno->setValue(settings->getPortNo());
 
+  // public mode field
+  comboBox_publicmode->insertItem(PUBLICMODE_VERSION5 - PUBLICMODE_VERSION5, tr("MODE 5"));
+#if QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicmode->insertItem(PUBLICMODE_VERSION6 - PUBLICMODE_VERSION5, tr("MODE 6"));
+#if QTB_PUBLIC_MODE7_SUPPORT
+  comboBox_publicmode->insertItem(PUBLICMODE_VERSION7 - PUBLICMODE_VERSION5, tr("MODE 7"));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicmode->setCurrentIndex(settings->getPublicModeVersion() - PUBLICMODE_VERSION5);
+#else // QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicmode->setCurrentIndex(0);
+  comboBox_publicmode->setEnabled(false);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   // show password field
   checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
 
-  // show password field
+  // full screen field
   if (QTB_DESKTOP_FULL_SCREEN){
 	checkBox_fullScreen->setCheckState(settings->getOnFullScreenAtConnected() ? Qt::Checked : Qt::Unchecked);
   }
@@ -138,6 +148,7 @@ void ConnectToServerDialog::resetting()
   comboBox_keyboardtype->setMinimumWidth(300);
   spinBox_portno->setMinimumWidth(300);
   lineEdit_password->setMinimumWidth(300);
+  comboBox_publicmode->setMinimumWidth(300);
 
   // resetting dialog window size and font size
   resize(dialogWidth, dialogHeight);
@@ -152,6 +163,7 @@ void ConnectToServerDialog::resetting()
   comboBox_keyboardtype->setMinimumWidth(180);
   spinBox_portno->setMinimumWidth(180);
   lineEdit_password->setMinimumWidth(180);
+  comboBox_publicmode->setMinimumWidth(180);
 #endif // defined(QTB_DEV_TABLET)
 }
 
@@ -198,6 +210,13 @@ void ConnectToServerDialog::on_lineEdit_password_textChanged()
 	// error
 	cout << "password is too long : " << password.size() << endl << flush;
   }
+}
+
+// public mode field
+void ConnectToServerDialog::on_comboBox_publicmode_currentIndexChanged(int index)
+{
+  if (outputLog)
+	cout << "index Changed : publicmode : index = " << index << endl << flush; // for DEBUG
 }
 
 // show password field
@@ -260,6 +279,9 @@ void ConnectToServerDialog::accept()
 
   // password
   settings->setPassword(lineEdit_password->text());
+
+  // public mode
+  settings->setPublicModeVersion(comboBox_publicmode->currentIndex() + PUBLICMODE_VERSION5);
 
   // show password field
   settings->setOnShowPassword(checkBox_showPassword->checkState() == Qt::Checked);

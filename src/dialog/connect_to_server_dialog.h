@@ -57,6 +57,8 @@ private slots:
   void on_spinBox_portno_valueChanged(int i);
   // password field
   void on_lineEdit_password_textChanged();
+  // public mode field
+  void on_comboBox_publicmode_currentIndexChanged(int index);
   // show password field
   void on_checkBox_showPassword_stateChanged(int state);
   // show password field

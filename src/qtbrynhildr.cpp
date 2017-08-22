@@ -488,7 +488,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // set window title
 #if QTB_PUBLIC_MODE6_SUPPORT
   //  setWindowTitle(tr(QTB_APPLICATION)+"  - MODE  " + QString::number(settings->getPublicModeVersion()) +" -");
-  setWindowTitle(tr(QTB_APPLICATION)+"  [" + settings->getPublicModeAliasString() +" ]");
+  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
 #else // QTB_PUBLIC_MODE6_SUPPORT
   setWindowTitle(tr(QTB_APPLICATION));
 #endif // QTB_PUBLIC_MODE6_SUPPORT

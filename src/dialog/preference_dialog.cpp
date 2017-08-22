@@ -50,8 +50,13 @@ void PreferenceDialog::resizeEvent(QResizeEvent *event)
 void PreferenceDialog::setup()
 {
   // publicModeVersion
-  comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "mode 5");
-  comboBox_publicModeVersion->insertItem(MODE_PUBLIC6 - MODE_PUBLIC5, "mode 6");
+  comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "MODE 5");
+#if QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicModeVersion->insertItem(MODE_PUBLIC6 - MODE_PUBLIC5, "MODE 6");
+#if QTB_PUBLIC_MODE7_SUPPORT
+  comboBox_publicModeVersion->insertItem(MODE_PUBLIC7 - MODE_PUBLIC5, "MODE 7");
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicModeVersion->setCurrentIndex(settings->getPublicModeVersion() - MODE_PUBLIC5);
 
   // onBrynhildr2Support
@@ -104,8 +109,14 @@ void PreferenceDialog::setup()
 	setCheckState(settings->getOnTransferFileSupport() ? Qt::Checked : Qt::Unchecked);
 
   // onTransferFileSupportByDragAndDrop
+#if QTB_DRAG_AND_DROP_SUPPORT
   checkBox_onTransferFileSupportByDragAndDrop->
 	setCheckState(settings->getOnTransferFileSupportByDragAndDrop() ? Qt::Checked : Qt::Unchecked);
+#else // QTB_DRAG_AND_DROP_SUPPORT
+  checkBox_onTransferFileSupportByDragAndDrop->
+	setCheckState(Qt::Unchecked);
+  checkBox_onTransferFileSupportByDragAndDrop->setEnabled(false);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
   // onShowTotalProgressForTransferFile
   checkBox_onShowTotalProgressForTransferFile->
@@ -114,6 +125,20 @@ void PreferenceDialog::setup()
   // onTransferClipboardSupport
   checkBox_onTransferClipboardSupport->
 	setCheckState(settings->getOnTransferClipboardSupport() ? Qt::Checked : Qt::Unchecked);
+
+#if !QTB_PUBLIC_MODE6_SUPPORT
+  // onTransferFileSupport
+  checkBox_onTransferFileSupport->setEnabled(false);
+
+  // onTransferFileSupportByDragAndDrop
+  checkBox_onTransferFileSupportByDragAndDrop->setEnabled(false);
+
+  // onShowTotalProgressForTransferFile
+  checkBox_onShowTotalProgressForTransferFile->setEnabled(false);
+
+  // onTransferClipboardSupport
+  checkBox_onTransferClipboardSupport->setEnabled(false);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // graphicsBufferSize
   spinBox_graphicsBufferSize->setMinimum(256);		// for TEST
@@ -155,7 +180,7 @@ void PreferenceDialog::resetting()
 
   // resetting dialog window size and font size
   resize(dialogWidth, dialogHeight);
-  layoutWidget->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
+  layoutWidget_1->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);

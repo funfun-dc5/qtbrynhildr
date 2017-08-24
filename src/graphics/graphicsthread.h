@@ -16,6 +16,19 @@
 // libvxp Header
 #include "vpx_decoder.h"
 #include "vp8dx.h"
+
+// use loadFromData() instead of new QImage()
+#define USE_PPM_LOADER_FOR_VP8	0
+
+#if USE_PPM_LOADER_FOR_VP8
+// for PPM Header
+#define PPM_HEADER_SIZE_MAX 32
+// "P6\n"            : PPM binary
+// "wwww hhhh\n"     : width height
+// "255\n"           : max value (255)
+#define PPM_HEADER_FORMAT "P6\n%d %d\n255\n"
+#endif // USE_PPM_LOADER_FOR_VP8
+
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {
@@ -59,7 +72,7 @@ protected:
 #if QTB_PUBLIC_MODE7_SUPPORT
 private:
   // decode VP8
-  uchar *decodeVP8(int size);
+  int decodeVP8(int size);
 
   // convert YUV420 to RGB24
   int convertYUV420toRGB24();
@@ -98,6 +111,11 @@ private:
 
   // buffer for yuv420
   uchar *yuv420;
+
+#if USE_PPM_LOADER_FOR_VP8
+  // buffer for ppm
+  uchar *ppm;
+#endif // USE_PPM_LOADER_FOR_VP8
 
   // buffer for rgb24
   uchar *rgb24;

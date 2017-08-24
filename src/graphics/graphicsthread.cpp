@@ -7,6 +7,9 @@
 // System Header
 #include <cmath>
 #if QTB_PUBLIC_MODE7_SUPPORT
+#if USE_PPM_LOADER_FOR_VP8
+#include <cstdio>
+#endif // USE_PPM_LOADER_FOR_VP8
 #include <cstring>
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 #include <fstream>
@@ -36,6 +39,9 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   width(0),
   height(0),
   yuv420(0),
+#if USE_PPM_LOADER_FOR_VP8
+  ppm(0),
+#endif // USE_PPM_LOADER_FOR_VP8
   rgb24(0),
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   buffer(0)
@@ -71,10 +77,18 @@ GraphicsThread::~GraphicsThread()
 	delete [] yuv420;
 	yuv420 = 0;
   }
+#if USE_PPM_LOADER_FOR_VP8
+  if (ppm != 0){
+	delete [] ppm;
+	ppm = 0;
+	rgb24 = 0;
+  }
+#else // USE_PPM_LOADER_FOR_VP8
   if (rgb24 != 0){
 	delete [] rgb24;
 	rgb24 = 0;
   }
+#endif // USE_PPM_LOADER_FOR_VP8
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
@@ -284,21 +298,38 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_PUBLIC_MODE7_SUPPORT
 	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	  // VP8
-	  uchar *rgb24image = decodeVP8(receivedDataSize);
-	  if (rgb24image != 0){
-		// create QImage from RGB24
-		delete image;
-		image = new QImage(rgb24image, width, height, QImage::Format_RGB888);
+#if USE_PPM_LOADER_FOR_VP8
+	  int rgb24size = decodeVP8(receivedDataSize);
+	  if (rgb24size != 0){
+		// load a PPM data to desktop
+		desktopLoadResult = image->loadFromData((const uchar *)ppm,
+												(uint)rgb24size + PPM_HEADER_SIZE_MAX,
+												"PPM");
 	  }
 	  else {
 		if (image->isNull()){
 		  delete image;
-		  image = new QImage(width, height, QImage::Format_RGBA8888);
+		  image = new QImage(width, height, QImage::Format_RGB888);
+		  image->fill(Qt::gray);
+		}
+	  }
+#else // USE_PPM_LOADER_FOR_VP8
+	  int rgb24size = decodeVP8(receivedDataSize);
+	  if (rgb24size != 0){
+		// create QImage from RGB24
+		delete image;
+		image = new QImage(rgb24, width, height, QImage::Format_RGB888);
+	  }
+	  else {
+		if (image->isNull()){
+		  delete image;
+		  image = new QImage(width, height, QImage::Format_RGB888);
 		  image->fill(Qt::gray);
 		}
 	  }
 
 	  desktopLoadResult = true;
+#endif // USE_PPM_LOADER_FOR_VP8
 	}
 	else {
 	  // illegal VIDEO_MODE
@@ -385,7 +416,7 @@ void GraphicsThread::shutdownConnection()
 //---------------------------------------------------------------------------
 #if QTB_PUBLIC_MODE7_SUPPORT
 // decode VP8
-uchar *GraphicsThread::decodeVP8(int size)
+int GraphicsThread::decodeVP8(int size)
 {
   // decode vp8
   vpx_codec_decode(&c_codec, (uint8_t*)buffer, size, 0, 0);
@@ -409,11 +440,22 @@ uchar *GraphicsThread::decodeVP8(int size)
 	if (yuv420 != 0){
 	  delete [] yuv420;
 	}
-	yuv420 = new uchar[width*height + width*height/2];
+	yuv420 = new uchar[width * height + width * height / 2];
+#if USE_PPM_LOADER_FOR_VP8
+	if (ppm != 0){
+	  delete [] ppm;
+	}
+	ppm = new uchar[width * height * 3 + PPM_HEADER_SIZE_MAX];
+	// make PPM header
+	snprintf((char*)ppm, PPM_HEADER_SIZE_MAX, PPM_HEADER_FORMAT, width, height);
+	// set rgb24 top
+	rgb24 = ppm + strlen((char*)ppm);
+#else // USE_PPM_LOADER_FOR_VP8
 	if (rgb24 != 0){
 	  delete [] rgb24;
 	}
-	rgb24 = new uchar[width*height*3];
+	rgb24 = new uchar[width * height * 3];
+#endif // USE_PPM_LOADER_FOR_VP8
 
 	// calc parameters
 	hwidth = width / 2;
@@ -453,12 +495,7 @@ uchar *GraphicsThread::decodeVP8(int size)
   }
 
   // convert YUV420 to RGB24
-  if (convertYUV420toRGB24() != 0){
-	return rgb24;
-  }
-  else {
-	return 0;
-  }
+  return convertYUV420toRGB24();
 }
 
 // YUV420 convert to RGB macro

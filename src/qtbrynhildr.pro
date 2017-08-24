@@ -31,6 +31,7 @@ DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
+LIBS += -L../libs/vpx -lvpx
 }
 
 # for MSVC 2015
@@ -51,6 +52,7 @@ CELT_SUPPORT = ON
 linux-g++-64 | linux-g++ | freebsd-g++ {
 DEFINES += QTB_RECORDER=1 PLATFORM_LINUX
 CELT_SUPPORT = ON
+LIBS += -L../libs/vpx -lvpx
 }
 
 # for MacOSX
@@ -58,12 +60,14 @@ macx {
 DEFINES += QTB_RECORDER=1 PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 CELT_SUPPORT = ON
+LIBS += -L../libs/vpx -lvpx
 }
 
 # for Android
 android-g++ {
 DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
 CELT_SUPPORT = OFF
+LIBS += -L../libs/vpx -lvpx_android
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
@@ -119,7 +123,7 @@ SOURCES += util/httpgetter.cpp
 
 # for vp8
 INCLUDEPATH += ../libs/vpx
-LIBS += -L../libs/vpx -lvpx
+#LIBS += -L../libs/vpx -lvpx
 
 # Input
 HEADERS += version.h config.h parameters.h

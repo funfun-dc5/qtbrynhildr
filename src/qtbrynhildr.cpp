@@ -2410,7 +2410,8 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 #endif // for TEST
 
   // rescaling desktop
-  if (settings->getOnKeepOriginalDesktopSize()){
+  if (settings->getOnKeepOriginalDesktopSize() &&
+	  settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
 #if 0 // for TEST
 	cout << "resizeEvent() : Rescaling for (width, height) = ("
 		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;

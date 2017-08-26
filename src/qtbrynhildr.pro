@@ -32,6 +32,7 @@ RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 LIBS += -L../libs/vpx -lvpx
+LIBS += -L../libs/celt -lcelt0
 }
 
 # for MSVC 2015
@@ -53,6 +54,7 @@ linux-g++-64 | linux-g++ | freebsd-g++ {
 DEFINES += QTB_RECORDER=1 PLATFORM_LINUX
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
+LIBS += -L../libs/celt -lcelt0
 }
 
 # for MacOSX
@@ -61,13 +63,15 @@ DEFINES += QTB_RECORDER=1 PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
+LIBS += -L../libs/celt -lcelt0
 }
 
 # for Android
 android-g++ {
 DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
-CELT_SUPPORT = OFF
+CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx_android
+LIBS += -L../libs/celt -lcelt0_android
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
@@ -97,10 +101,13 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 
 # for CELT
 equals(CELT_SUPPORT, ON){
-INCLUDEPATH += ../libs
-LIBS += -L../libs -lcelt0
-HEADERS += sound/converter.h sound/converter_celt.h ../libs/celt.h ../libs/celt_types.h
+INCLUDEPATH += ../libs/celt
+HEADERS += sound/converter.h sound/converter_celt.h
 SOURCES += sound/converter.cpp sound/converter_celt.cpp
+#INCLUDEPATH += ../libs/opus
+#LIBS += -L../libs/opus -lopus
+#HEADERS += sound/converter.h sound/converter_opus.h
+#SOURCES += sound/converter.cpp sound/converter_opus.cpp
 DEFINES += QTB_CELT_SUPPORT=1
 }
 else {

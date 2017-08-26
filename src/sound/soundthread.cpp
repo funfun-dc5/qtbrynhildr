@@ -199,6 +199,11 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
 	// convert to PCM
 	receivedDataSize = converter->convertToPCM(buffer, receivedDataSize);
+	if (receivedDataSize == 0){
+	  // Failed to convert to pcm
+	  // Yet: error
+	  return TRANSMIT_SUCCEEDED;
+	}
   }
 #endif // QTB_CELT_SUPPORT
 

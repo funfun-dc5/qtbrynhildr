@@ -38,6 +38,11 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
   // server name field
   serverNameList = settings->getServerNameList();
+#if 0 // for DEBUG
+  if (serverNameList->size() == 0){
+	serverNameList->append(settings->getServerName());
+  }
+#endif // for DEBUG
 #if QTB_AUTO_COMPLETE
   completer = new QCompleter(*serverNameList, this);
   comboBox_hostname->setCompleter(completer);

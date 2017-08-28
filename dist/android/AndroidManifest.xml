@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest package="org.qtproject.example.QtBrynhildr" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.6.3" android:versionCode="163" android:installLocation="auto">
+<manifest package="org.qtproject.example.QtBrynhildr" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.0.1" android:versionCode="201" android:installLocation="auto">
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Qt Brynhildr">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation"
                   android:name="org.qtproject.qt5.android.bindings.QtActivity"
+                  android:theme="@style/qtbrynhildr_theme"
                   android:label="Qt Brynhildr"
                   android:icon="@drawable/qtbrynhildr"
                   android:screenOrientation="landscape"

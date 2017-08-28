@@ -76,6 +76,7 @@ LIBS += -L../libs/celt -lcelt0_android
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
     $$PWD/../dist/android/res/values/libs.xml \
+    $$PWD/../dist/android/res/values/style.xml \
     $$PWD/../dist/android/res/drawable-hdpi/qtbrynhildr.png \
     $$PWD/../dist/android/res/drawable-mdpi/qtbrynhildr.png \
     $$PWD/../dist/android/res/drawable-xhdpi/qtbrynhildr.png \

@@ -120,6 +120,9 @@ private:
   // buffer for rgb24
   uchar *rgb24;
 
+  // vpx init flag
+  bool doneVpxInit;
+
   // parameters for decodeVP8()
   int hwidth;
 

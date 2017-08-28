@@ -43,6 +43,7 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   ppm(0),
 #endif // USE_PPM_LOADER_FOR_VP8
   rgb24(0),
+  doneVpxInit(false),
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   buffer(0)
 {
@@ -375,9 +376,10 @@ void GraphicsThread::connectedToServer()
 
 #if QTB_PUBLIC_MODE7_SUPPORT
   // initialize libvpx
-  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
+  if (!doneVpxInit && settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
 	memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
 	vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
+	doneVpxInit = true;
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 

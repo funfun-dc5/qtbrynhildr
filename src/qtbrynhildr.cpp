@@ -1866,8 +1866,10 @@ void QtBrynhildr::createMenus()
   fileMenu->addSeparator();
   fileMenu->addAction(preferences_Action);
 #endif // for TEST
+#if defined(QTB_DEV_DESKTOP)
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // display menu
   displayMenu = menuBar()->addMenu(tr("Display"));

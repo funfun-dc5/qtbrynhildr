@@ -38,7 +38,7 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
   // server name field
   serverNameList = settings->getServerNameList();
-#if 0 // for DEBUG
+#if defined(Q_OS_ANDROID) // for DEBUG
   if (serverNameList->size() == 0){
 	serverNameList->append(settings->getServerName());
   }

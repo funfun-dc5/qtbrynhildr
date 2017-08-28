@@ -250,7 +250,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
 
 	if (settings->getOutputLog()){
-	  double cacheRate = (double)(soundBuffer->size())/soundCacheSizeForLog * 100.0;
+	  double cacheRate = 0;
+	  if (soundCacheSizeForLog != 0)
+		cacheRate = (double)(soundBuffer->size())/soundCacheSizeForLog * 100.0;
 	  cout << "[SoundThread] Cache Rate : " << cacheRate << endl << flush;
 	}
 

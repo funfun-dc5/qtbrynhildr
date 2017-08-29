@@ -101,13 +101,15 @@ double GraphicsThread::getFrameRate()
   QDateTime currentTime = QDateTime::currentDateTime();
   double fps = 0.0;
 
-  if (!previousFrameTime.isNull()){
-	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousFrameTime.toMSecsSinceEpoch();
+  if (!previousGetFrameRateTime.isNull()){
+	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousGetFrameRateTime.toMSecsSinceEpoch();
 	if (diffMSeconds != 0){
 	  fps = frameCounter / ((double)diffMSeconds/1000);
+	  //cout << "frameCounter = " << frameCounter << endl;
+	  //cout << "diffMSeconds = " << diffMSeconds << endl << flush;
 	}
   }
-  previousFrameTime = currentTime;
+  previousGetFrameRateTime = currentTime;
   totalFrameCounter += frameCounter;
   frameCounter = 0;
   return fps;
@@ -143,42 +145,10 @@ CONNECT_RESULT GraphicsThread::connectToServer()
 // process for header
 PROCESS_RESULT GraphicsThread::processForHeader()
 {
-  // frame control
-  if (QTB_DESKTOP_FRAME_CONTROL){
-	unsigned long frameDrawTime = settings->getFrameDrawTime();
-	if (frameDrawTime == 0){
-	  // check frameDrawTime
-	  settings->setFrameInterval(0);
-	  QDateTime currentTime = QDateTime::currentDateTime();
-	  static QDateTime previousTime;
-	  static qint64 minDrawTime = 1000; // 1 second
-	  static int counter = 0;
-	  if (!previousTime.isNull()){
-		qint64 drawTime = currentTime.toMSecsSinceEpoch() - previousTime.toMSecsSinceEpoch();
-		//		cout << "draw Time = " << drawTime << endl << flush;
-		if (counter > QTB_GRAPHICS_SAMPLE_FRAME){
-		  //		  cout << "minimum Draw Time = " << minDrawTime << endl << flush;
-		  settings->setFrameDrawTime(minDrawTime*1000);
-		  settings->setFrameRate(settings->getFrameRate());
-		  // for next time
-		  previousTime = QDateTime();
-		  minDrawTime = 1000; // 1 second
-		  counter = 0;
-		}
-		else {
-		  if (drawTime < minDrawTime)
-			minDrawTime = drawTime;
-		  counter++;
-		}
-	  }
-	  previousTime = currentTime;
-	}
-
-	unsigned long frameInterval = settings->getOnGraphics() ? settings->getFrameInterval() : 1000*200;
-	if (frameInterval != 0){
-	  // sleep frameInterval micro seconds
-	  usleep(frameInterval);
-	}
+  // frame rate control
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	// record start time of draw frame
+	startDrawFrameTime = QDateTime::currentDateTime();
   }
 
   // receive header
@@ -359,6 +329,25 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
+  // frame rate control
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	QDateTime currentTime = QDateTime::currentDateTime();
+
+	qint64 drawTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+	qint64 interval = settings->getFrameInterval();
+
+	//cout << "Interval : " << interval << endl;
+	//cout << "drawTime : " << drawTime << endl << flush;
+	if (drawTime < interval){
+	  unsigned long sleepTime = interval - drawTime;
+	  //cout << "sleepTime : " <<  sleepTime << " (us)" << endl << flush;
+	  usleep(sleepTime);
+	}
+	else {
+	  // No wait
+	}
+  }
+
   return TRANSMIT_SUCCEEDED;
 }
 
@@ -372,7 +361,7 @@ void GraphicsThread::connectedToServer()
   frameCounter = 0;
 
   // reset previous frame time to Null
-  previousFrameTime = QDateTime();
+  previousGetFrameRateTime = QDateTime();
 
 #if QTB_PUBLIC_MODE7_SUPPORT
   // initialize libvpx
@@ -391,7 +380,7 @@ void GraphicsThread::connectedToServer()
 void GraphicsThread::shutdownConnection()
 {
   // reset previous frame time to Null
-  previousFrameTime = QDateTime();
+  previousGetFrameRateTime = QDateTime();
 
   if (sock_control != INVALID_SOCKET){
 	shutdown(sock_control, SD_BOTH);

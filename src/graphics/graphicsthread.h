@@ -93,8 +93,11 @@ private:
   // frame counter
   unsigned int frameCounter;
 
-  // previous frame time
-  QDateTime previousFrameTime;
+  // previous get frame rate time
+  QDateTime previousGetFrameRateTime;
+
+  // start draw frame time
+  QDateTime startDrawFrameTime;
 
   // total frame counter
   unsigned int totalFrameCounter;

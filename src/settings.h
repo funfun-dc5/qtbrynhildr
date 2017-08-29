@@ -919,7 +919,6 @@ public:
   {
 	ASSERT(videoQuality >= VIDEO_QUALITY_MINIMUM && videoQuality <= VIDEO_QUALITY_MAXIMUM);
 	this->videoQuality = videoQuality;
-	setFrameDrawTime(0); // recheck frameDrawTime
   }
 
   // get video quality string
@@ -1002,22 +1001,6 @@ public:
 	}
 	else {
 	  frameInterval = (unsigned long)1000000/frameRate; // micro second = 1000000 (1 second)
-	  if (frameInterval >= QTB_THREAD_SLEEP_TIME * 1000){
-		frameInterval -= QTB_THREAD_SLEEP_TIME * 1000; // sleep time
-	  }
-	  else {
-		frameInterval = 0;
-	  }
-	  if (frameDrawTime > 0){
-		if (frameInterval >= frameDrawTime ){
-		  frameInterval -= frameDrawTime; // drawing time of 1 frame
-		}
-		else {
-		  frameInterval = 0;
-		}
-	  }
-	  //	  cout << "frameDrawTime = " << frameDrawTime << endl;
-	  //	  cout << "frameInterval = " << frameInterval << endl << flush;
 	}
   }
 
@@ -1027,23 +1010,13 @@ public:
 	return frameInterval;
   }
 
+#if 0 // for TEST
   // set frame interval (micro seconds)
   void setFrameInterval(unsigned long frameInterval)
   {
 	this->frameInterval = frameInterval;
   }
-
-  // get frame draw time (micro seconds)
-  unsigned long getFrameDrawTime()
-  {
-	return frameDrawTime;
-  }
-
-  // set frame draw time (micro seconds)
-  void setFrameDrawTime(unsigned long frameDrawTime)
-  {
-	this->frameDrawTime = frameDrawTime;
-  }
+#endif // for TEST
 
 #if QTB_CELT_SUPPORT
   // get sound type
@@ -1946,7 +1919,6 @@ private:
 #endif // QTB_BRYNHILDR2_SUPPORT
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;
-  volatile unsigned long frameDrawTime;
 
   // Sound
   volatile bool onSound;

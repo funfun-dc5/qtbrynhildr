@@ -1052,9 +1052,6 @@ void QtBrynhildr::refreshVideoQualityMenu()
 	ABORT();
 	break;
   }
-
-  // recheck frame draw time
-  settings->setFrameDrawTime(0);
 }
 
 // refresh sound quality menu
@@ -2141,6 +2138,8 @@ void QtBrynhildr::updateFrameRate()
 	  currentFrameRate = 0;
 	  currentDataRate = 0;
 	}
+	//currentFrameRate = settings->getFrameInterval(); // for TEST
+	//currentFrameRate = settings->getFrameDrawTime(); // for TEST
 	QString str = QString(tr("Frame Rate: ")+"%1 [%2 Mbps]").
 	  arg(currentFrameRate, 4, 'f', 1, ' ').
 	  arg(currentDataRate, 4, 'f', 1, ' ');
@@ -2426,9 +2425,6 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 	calculateSoftwareKeyboardLayout();  
   if (settings->getOnShowSoftwareButton())
 	calculateSoftwareButtonLayout();  
-
-  // recheck frame draw time
-  settings->setFrameDrawTime(0);
 }
 
 // window hide event

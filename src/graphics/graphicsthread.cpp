@@ -466,7 +466,7 @@ int GraphicsThread::decodeVP8(int size)
 	utopOrg = ytopOrg + size;
 	vtopOrg = utopOrg + size / 4;
 	uvNext = width / 2;
-	rgb24Prev = width * 3 * 2;
+	rgb24Next = - width * 3 * 2;
   }
 
   // create yuv420
@@ -500,16 +500,24 @@ int GraphicsThread::decodeVP8(int size)
   return convertYUV420toRGB24();
 }
 
+
+// yuv420toRGB24 version
+#define YUV420TORGB24_V1 0 // float
+#define YUV420TORGB24_V2 0 // integer and shift
+#define YUV420TORGB24_V3 1 // V2 + alpha
+
+#if YUV420TORGB24_V1 || YUV420TORGB24_V2
 // YUV420 convert to RGB macro
-#if 0 // float (original)
+#if YUV420TORGB24_V1 // float (original)
 #define GET_R(Y, V)		(Y             + 1.402 * V)
 #define GET_G(Y, U, V)	(Y - 0.344 * U - 0.714 * V)
 #define GET_B(Y, U)		(Y + 1.772 * U            )
-#else // integer and shift
+#endif // YUV420TORGB24_V1
+#if YUV420TORGB24_V2 // integer and shift
 #define GET_R(Y, V)		((256 * Y           + 358 * V) >> 8)
 #define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
 #define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
-#endif
+#endif // YUV420TORGB24_V2
 
 // convert YUV420 to RGB24
 int GraphicsThread::convertYUV420toRGB24()
@@ -560,7 +568,7 @@ int GraphicsThread::convertYUV420toRGB24()
 
 	  rgb24size += 6;
 	}
-	rgb24top -= rgb24Prev;
+	rgb24top += rgb24Next;
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;
@@ -568,6 +576,75 @@ int GraphicsThread::convertYUV420toRGB24()
   }
   return rgb24size;
 }
+#endif // YUV420TORGB24_V1 || YUV420TORGB24_V2
+
+#if YUV420TORGB24_V3
+// YUV420 convert to RGB macro
+#define GET_R(Y, V)		((Y           + 358 * V) >> 8)
+#define GET_G(Y, U, V)	((Y -  88 * U - 182 * V) >> 8)
+#define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
+
+// convert YUV420 to RGB24
+int GraphicsThread::convertYUV420toRGB24()
+{
+  uchar *rgb24top = rgb24;
+  int rgb24size = 0;
+  uchar *ytop = ytopOrg;
+  uchar *utop = utopOrg;
+  uchar *vtop = vtopOrg;
+
+  // last line top
+  rgb24top += width * (height - 1) * 3;
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int r, g, b;
+	  int y, u, v;
+
+	  // set u/v
+	  u = *(utop + uvOffset) - 128;
+	  v = *(vtop + uvOffset) - 128;
+
+	  // == xPos ==
+	  y = *ytop++;
+	  y <<= 8; // y * 256
+
+	  // R
+	  r = clip(GET_R(y, v));
+	  *rgb24top++ = (uchar)r;
+	  // G
+	  g = clip(GET_G(y, u, v));
+	  *rgb24top++ = (uchar)g;
+	  // B
+	  b = clip(GET_B(y, u));
+	  *rgb24top++ = (uchar)b;
+
+	  // == xPos+1 ==
+	  y = *ytop++;
+	  y <<= 8; // y * 256
+
+	  // R
+	  r = clip(GET_R(y, v));
+	  *rgb24top++ = (uchar)r;
+	  // G
+	  g = clip(GET_G(y, u, v));
+	  *rgb24top++ = (uchar)g;
+	  // B
+	  b = clip(GET_B(y, u));
+	  *rgb24top++ = (uchar)b;
+
+	  rgb24size += 6;
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+  return rgb24size;
+}
+#endif // YUV420TORGB24_V3
+
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
 } // end of namespace qtbrynhildr

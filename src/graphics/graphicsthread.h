@@ -133,7 +133,7 @@ private:
 
   int size; // width * height
   int uvNext;
-  int rgb24Prev;
+  int rgb24Next;
 
   // codec context
   vpx_codec_ctx_t c_codec;

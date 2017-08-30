@@ -71,8 +71,8 @@ protected:
 
 #if QTB_PUBLIC_MODE7_SUPPORT
 private:
-  // decode VP8
-  int decodeVP8(int size);
+  // make RGB24 image
+  int makeRGB24Image();
 
   // convert YUV420 to RGB24
   int convertYUV420toRGB24();

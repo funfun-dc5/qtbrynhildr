@@ -412,6 +412,32 @@ int GraphicsThread::decodeVP8(int size)
   // decode vp8
   vpx_codec_decode(&c_codec, (uint8_t*)buffer, size, 0, 0);
 
+#if 0 // for TEST
+  // frame rate control
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	QDateTime currentTime = QDateTime::currentDateTime();
+
+	qint64 drawTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+	qint64 interval = settings->getFrameInterval();
+
+	//cout << "Interval : " << interval << endl;
+	//cout << "drawTime : " << drawTime << endl << flush;
+	static bool onceFlag = true;
+	if (drawTime > interval * 3){
+	  // drop this frame
+	  //cout << "DROP!" << endl;
+	  //cout << "Interval : " << interval << endl;
+	  //cout << "drawTime : " << drawTime << endl << flush;
+	  if (!onceFlag){
+		return TRANSMIT_SUCCEEDED;
+	  }
+	  else {
+		onceFlag = false;
+	  }
+	}
+  }
+#endif
+
   // get 1 frame image
   vpx_codec_iter_t iter = 0;
   vpx_image_t *img = vpx_codec_get_frame(&c_codec, &iter);

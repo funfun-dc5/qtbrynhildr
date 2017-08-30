@@ -237,7 +237,7 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy15[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy15 offset = " << offset;
-  if (offset == 236){
+  if (offset == 237){
 	if (outputLog)
 	  cout << " : ok" << endl;
   }

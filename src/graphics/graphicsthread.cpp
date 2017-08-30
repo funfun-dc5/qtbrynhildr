@@ -217,6 +217,10 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	return TRANSMIT_NETWORK_ERROR;
   }
 
+#if 0 // for TEST
+  cout << "[" << name << "] frame no = " << (int)com_data->frame_no << endl << flush;
+#endif
+
   // received 1 frame
   frameCounter++;
 

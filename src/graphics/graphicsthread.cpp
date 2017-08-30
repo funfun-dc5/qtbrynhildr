@@ -258,6 +258,42 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
+#if QTB_PUBLIC_MODE7_SUPPORT
+  // decode vp8
+  if (com_data->video_mode == VIDEO_MODE_COMPRESS){
+	vpx_codec_decode(&c_codec, (uint8_t*)buffer, receivedDataSize, 0, 0);
+  }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+
+#if 0 // for TEST
+  // frame skip check
+  if (settings->getOnGraphics()){
+	// frame rate control
+	if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	  QDateTime currentTime = QDateTime::currentDateTime();
+
+	  qint64 drawTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+	  qint64 interval = settings->getFrameInterval();
+
+	  //cout << "Interval : " << interval << endl;
+	  //cout << "drawTime : " << drawTime << endl << flush;
+	  static bool onceFlag = true;
+	  if (drawTime > interval * 3){
+		// drop this frame
+		//cout << "DROP!" << endl;
+		//cout << "Interval : " << interval << endl;
+		//cout << "drawTime : " << drawTime << endl << flush;
+		if (!onceFlag){
+		  return TRANSMIT_SUCCEEDED;
+		}
+		else {
+		  onceFlag = false;
+		}
+	  }
+	}
+  }
+#endif
+
   // draw a desktop image
   if (settings->getOnGraphics()){
 	// clear desktop flag clear
@@ -274,7 +310,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	  // VP8
 #if USE_PPM_LOADER_FOR_VP8
-	  int rgb24size = decodeVP8(receivedDataSize);
+	  int rgb24size = makeRGB24Image();
 	  if (rgb24size != 0){
 		// load a PPM data to desktop
 		desktopLoadResult = image->loadFromData((const uchar *)ppm,
@@ -289,7 +325,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 		}
 	  }
 #else // USE_PPM_LOADER_FOR_VP8
-	  int rgb24size = decodeVP8(receivedDataSize);
+	  int rgb24size = makeRGB24Image();
 	  if (rgb24size != 0){
 		// create QImage from RGB24
 		delete image;
@@ -410,39 +446,10 @@ void GraphicsThread::shutdownConnection()
 // private
 //---------------------------------------------------------------------------
 #if QTB_PUBLIC_MODE7_SUPPORT
-// decode VP8
-int GraphicsThread::decodeVP8(int size)
+// make RGB24 image
+int GraphicsThread::makeRGB24Image()
 {
-  // decode vp8
-  vpx_codec_decode(&c_codec, (uint8_t*)buffer, size, 0, 0);
-
-#if 0 // for TEST
-  // frame rate control
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	QDateTime currentTime = QDateTime::currentDateTime();
-
-	qint64 drawTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
-	qint64 interval = settings->getFrameInterval();
-
-	//cout << "Interval : " << interval << endl;
-	//cout << "drawTime : " << drawTime << endl << flush;
-	static bool onceFlag = true;
-	if (drawTime > interval * 3){
-	  // drop this frame
-	  //cout << "DROP!" << endl;
-	  //cout << "Interval : " << interval << endl;
-	  //cout << "drawTime : " << drawTime << endl << flush;
-	  if (!onceFlag){
-		return TRANSMIT_SUCCEEDED;
-	  }
-	  else {
-		onceFlag = false;
-	  }
-	}
-  }
-#endif
-
-  // get 1 frame image
+  // get 1 frame image (YUV420)
   vpx_codec_iter_t iter = 0;
   vpx_image_t *img = vpx_codec_get_frame(&c_codec, &iter);
   if (img == 0) {

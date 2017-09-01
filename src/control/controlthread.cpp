@@ -704,6 +704,8 @@ void ControlThread::initHeader()
 	com_data->client_scroll_y	= 0;
 	com_data->video_quality		= VIDEO_QUALITY_MINIMUM;
   }
+  // max fps
+  com_data->max_fps = (char)settings->getFrameRate();
 
   // for sound
 #if QTB_CELT_SUPPORT

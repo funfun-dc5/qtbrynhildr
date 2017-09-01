@@ -78,7 +78,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy2[0]) - (char*)&com_data;
@@ -89,7 +90,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy3[0]) - (char*)&com_data;
@@ -100,7 +102,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy4[0]) - (char*)&com_data;
@@ -115,7 +118,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
 #if !QTB_PUBLIC_MODE7_SUPPORT
@@ -127,7 +131,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
 #endif // !QTB_PUBLIC_MODE7_SUPPORT
@@ -139,7 +144,20 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
+	result = false;
+  }
+  offset = (char*)&(com_data.dummy16[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy16 offset = " << offset;
+  if (offset == 89){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy7[0]) - (char*)&com_data;
@@ -150,7 +168,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy8[0]) - (char*)&com_data;
@@ -161,7 +180,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy9[0]) - (char*)&com_data;
@@ -172,7 +192,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy10[0]) - (char*)&com_data;
@@ -187,7 +208,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy11[0]) - (char*)&com_data;
@@ -198,7 +220,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy12[0]) - (char*)&com_data;
@@ -209,7 +232,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy13[0]) - (char*)&com_data;
@@ -220,7 +244,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy14[0]) - (char*)&com_data;
@@ -231,7 +256,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   offset = (char*)&(com_data.dummy15[0]) - (char*)&com_data;
@@ -242,7 +268,8 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ok" << endl;
   }
   else {
-	cout << " : ng" << endl;
+	if (outputLog)
+	  cout << " : ng" << endl;
 	result = false;
   }
   cout << flush;

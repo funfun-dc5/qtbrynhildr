@@ -69,7 +69,9 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   MONITOR_NO		monitor_no;
   MONITOR_COUNT		monitor_count;
-  BYTE				dummy6[6];			// padding 6 bytes
+  BYTE				dummy6[2];			// padding 2 bytes
+  char				max_fps;			// max FPS
+  BYTE				dummy16[3];			// padding 3 bytes
   SOUND_CAPTURE		sound_capture;
   BYTE				dummy7[3];			// padding 3 bytes
   BYTE				dummy8[40];			// padding 40 bytes

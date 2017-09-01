@@ -33,7 +33,9 @@ GraphicsThread::GraphicsThread(Settings *settings, MainWindow *mainWindow)
   NetThread("GraphicsThread", settings, mainWindow),
   image(0),
   frameCounter(0),
+  averageDrawFrameTime(0),
   totalFrameCounter(0),
+  drawTime(0),
   onClearDesktop(false),
 #if QTB_PUBLIC_MODE7_SUPPORT
   width(0),
@@ -107,6 +109,7 @@ double GraphicsThread::getFrameRate()
 	  fps = frameCounter / ((double)diffMSeconds/1000);
 	  //cout << "frameCounter = " << frameCounter << endl;
 	  //cout << "diffMSeconds = " << diffMSeconds << endl << flush;
+	  averageDrawFrameTime = (frameCounter != 0) ? diffMSeconds*1000/frameCounter : 0;
 	}
   }
   previousGetFrameRateTime = currentTime;
@@ -149,6 +152,16 @@ PROCESS_RESULT GraphicsThread::processForHeader()
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	// record start time of draw frame
 	startDrawFrameTime = QDateTime::currentDateTime();
+#if 0 // for TEST
+	static QDateTime prevTime;
+	if (!prevTime.isNull()){
+	  qint64 diffMSeconds = startDrawFrameTime.toMSecsSinceEpoch() - prevTime.toMSecsSinceEpoch();
+	  if (diffMSeconds != 0){
+		cout << "[" << name << "] processForHeader() : diffMSeconds = " << diffMSeconds << " (ms)" << endl << flush;
+	  }
+	}
+	prevTime = startDrawFrameTime;
+#endif
   }
 
   // receive header
@@ -258,6 +271,13 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
+  // save current time for draw time check
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	if (drawTime == 0){
+	  startDrawTime = QDateTime::currentDateTime();
+	}
+  }
+
 #if QTB_PUBLIC_MODE7_SUPPORT
   // decode vp8
   if (com_data->video_mode == VIDEO_MODE_COMPRESS){
@@ -269,26 +289,20 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // frame skip check
   if (settings->getOnGraphics()){
 	// frame rate control
-	if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	if (QTB_DESKTOP_FRAMERATE_CONTROL && drawTime != 0){
 	  QDateTime currentTime = QDateTime::currentDateTime();
+	  qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
+						 currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+	  qint64 threshold = averageDrawFrameTime; // settings->getFrameInterval();
 
-	  qint64 drawTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
-	  qint64 interval = settings->getFrameInterval();
-
-	  //cout << "Interval : " << interval << endl;
-	  //cout << "drawTime : " << drawTime << endl << flush;
-	  static bool onceFlag = true;
-	  if (drawTime > interval * 3){
+	  //cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl << flush;
+	  //cout << "[" << name << "] threshold : " << threshold << " (us)" << endl;
+	  if (pastTime + drawTime > threshold){
 		// drop this frame
-		//cout << "DROP!" << endl;
-		//cout << "Interval : " << interval << endl;
-		//cout << "drawTime : " << drawTime << endl << flush;
-		if (!onceFlag){
-		  return TRANSMIT_SUCCEEDED;
-		}
-		else {
-		  onceFlag = false;
-		}
+		cout << "pastTime + drawTime > threshold" << endl;
+		cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl;
+		cout << "[" << name << "] drawTime  : " << drawTime << " (us)" << endl;
+		cout << "[" << name << "] threshold : " << threshold << " (us)" << endl << flush;
 	  }
 	}
   }
@@ -372,15 +386,29 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	QDateTime currentTime = QDateTime::currentDateTime();
-
-	qint64 drawTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+	qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
+					   currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
 	qint64 interval = settings->getFrameInterval();
 
-	//cout << "Interval : " << interval << endl;
-	//cout << "drawTime : " << drawTime << endl << flush;
-	if (drawTime < interval){
-	  unsigned long sleepTime = interval - drawTime;
-	  //cout << "sleepTime : " <<  sleepTime << " (us)" << endl << flush;
+	// draw time check
+	if (drawTime == 0){
+	  static int counter = 0;
+	  if (counter == DRAW_TIME_SAMPLING_POINT){
+		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB and RGB888)
+		drawTime = (currentTime.toMSecsSinceEpoch() - startDrawTime.toMSecsSinceEpoch())*1000;
+		counter = 0;
+		//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;
+	  }
+	  else {
+		counter++;
+	  }
+	}
+
+	//cout << "[" << name << "] interval : " << interval << " (us)" << endl << flush;
+	//cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl << flush;
+	if (pastTime < interval){
+	  unsigned long sleepTime = interval - pastTime;
+	  //cout << "[" << name << "] sleepTime : " <<  sleepTime << " (us)" << endl << flush;
 	  usleep(sleepTime);
 	}
 	else {
@@ -399,6 +427,12 @@ void GraphicsThread::connectedToServer()
 
   // reset frame counter
   frameCounter = 0;
+
+  // average draw frame time
+  averageDrawFrameTime = 0;
+
+  // draw time
+  drawTime = 0;
 
   // reset previous frame time to Null
   previousGetFrameRateTime = QDateTime();

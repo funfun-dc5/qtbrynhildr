@@ -12,6 +12,9 @@
 // Local Header
 #include "common/netthread.h"
 
+// count for draw time check
+#define DRAW_TIME_SAMPLING_POINT 20
+
 #if QTB_PUBLIC_MODE7_SUPPORT
 // libvxp Header
 #include "vpx_decoder.h"
@@ -99,8 +102,17 @@ private:
   // start draw frame time
   QDateTime startDrawFrameTime;
 
+  // average draw frame time
+  qint64 averageDrawFrameTime;
+
   // total frame counter
   unsigned int totalFrameCounter;
+
+  // draw time (MODE5/6: JPEG, MODE7: YUV->RGB and RGB888)
+  qint64 drawTime;
+
+  // start draw time
+  QDateTime startDrawTime;
 
   // clearDesktop
   bool onClearDesktop;

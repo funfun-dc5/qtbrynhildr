@@ -357,6 +357,14 @@ private slots:
   // visibility changed software button
   void visibilityChangedSoftwareButton(bool visible);
 
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // desktop compress mode
+  void desktopCompressMode0();
+  void desktopCompressMode2();
+  void desktopCompressMode4();
+  void desktopCompressMode8();
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
 private:
   // build GUI
   void createActions();
@@ -458,6 +466,11 @@ private:
 
   // In Testing Sub Menu
   QMenu *inTestingSubMenu;
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // Desktop Compress Mode Sub Menu
+  QMenu *desktopCompressModeSubMenu;
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
   // Help Menu
   QMenu *helpMenu;
@@ -627,6 +640,14 @@ private:
   // cancel file transferring
   QAction *cancelFileTransferring_Action;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // desktop compress mode
+  QAction *desktopCompressMode0_Action;
+  QAction *desktopCompressMode2_Action;
+  QAction *desktopCompressMode4_Action;
+  QAction *desktopCompressMode8_Action;
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
   // preferences
   QAction *preferences_Action;

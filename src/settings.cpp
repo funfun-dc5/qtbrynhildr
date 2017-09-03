@@ -108,6 +108,10 @@ Settings::Settings(const char *iniFileName)
   setDesktopScalingQuality(QTB_DESKTOPSCALINGQUALITY_DEFAULT);
   setDesktopScalingType(QTB_DESKTOPSCALINGTYPE_DEFAULT);
 
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  setDesktopCompressMode(QTB_DESKTOPCOMPRESSMODE_DEFAULT);
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
   setOnCutDesktopBlankArea(QTB_ONCUTDESKTOPBLANKAREA_DEFAULT);
 
   setDesktopOffsetX(QTB_DESKTOPOFFSETX_DEFAULT);
@@ -351,6 +355,12 @@ void Settings::readSettings()
   // load desktopScalingType
   setDesktopScalingType(settings->value(QTB_DESKTOPSCALINGTYPE,
 								 (qint32)QTB_DESKTOPSCALINGTYPE_DEFAULT).toInt());
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // load desktopCompressMode
+  setDesktopCompressMode(settings->value(QTB_DESKTOPCOMPRESSMODE,
+								 (qint32)QTB_DESKTOPCOMPRESSMODE_DEFAULT).toInt());
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
   // load onCutDesktopBlankArea
   setOnCutDesktopBlankArea(settings->value(QTB_ONCUTDESKTOPBLANKAREA,
@@ -604,6 +614,11 @@ void Settings::writeSettings()
   // save desktopScalingType
   settings->setValue(QTB_DESKTOPSCALINGTYPE, (qint32)desktopScalingType);
 
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // save desktopCompressMode
+  settings->setValue(QTB_DESKTOPCOMPRESSMODE, (qint32)desktopCompressMode);
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
   // save onCutDesktopBlankArea
   settings->setValue(QTB_ONCUTDESKTOPBLANKAREA, onCutDesktopBlankArea);
 
@@ -775,6 +790,9 @@ void Settings::printSettings() const
   qDebug() << "DesktopScalingFactor    : " << desktopScalingFactor;
   qDebug() << "DesktopScalingQuality   : " << desktopScalingQuality;
   qDebug() << "DesktopScalingType      : " << desktopScalingType;
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  qDebug() << "DesktopCompressMode     : " << desktopCompressMode;
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
   qDebug() << "CutDesktopBlankArea     : " << onCutDesktopBlankArea;
 

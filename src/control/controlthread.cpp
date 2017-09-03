@@ -248,6 +248,14 @@ PROCESS_RESULT ControlThread::processForHeader()
 		com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
 		com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
 	  }
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+	  // desktop compress mode
+	  int desktopCompressMode = settings->getDesktopCompressMode();
+	  if (desktopCompressMode > 1){
+		com_data->mouse_x *= desktopCompressMode;
+		com_data->mouse_y *= desktopCompressMode;
+	  }
+#endif // for TEST
 
 	  // save prevPos
 	  prevPos = pos;
@@ -688,6 +696,12 @@ void ControlThread::initHeader()
 		com_data->zoom	= (ZOOM)settings->getDesktopScalingFactorForZoom();
 	  }
 	}
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+	// desktop compress mode
+	if (settings->getDesktopCompressMode() > 1)
+	  com_data->zoom *= settings->getDesktopCompressMode();
+#endif // for TEST
+
 	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
 	com_data->image_cy			= (SIZE)settings->getDesktopHeight();
 	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();

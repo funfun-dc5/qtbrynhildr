@@ -249,6 +249,13 @@ typedef int SCALING_TYPE;
 #define DESKTOPSCALING_TYPE_ON_CLIENT	0
 #define DESKTOPSCALING_TYPE_ON_SERVER	1
 
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+// for desktopCompressMode
+typedef int COMPRESS_MODE;
+#define QTB_DESKTOPCOMPRESSMODE			"desktopCompressMode"
+#define QTB_DESKTOPCOMPRESSMODE_DEFAULT	1
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
 // for onCutDesktopBlankArea
 #define QTB_ONCUTDESKTOPBLANKAREA				"onCutDesktopBlankArea"
 #define QTB_ONCUTDESKTOPBLANKAREA_DEFAULT		false
@@ -1197,6 +1204,20 @@ public:
 	}
   }
 
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // get desktop compress mode
+  COMPRESS_MODE getDesktopCompressMode() const
+  {
+	return desktopCompressMode;
+  }
+
+  // set desktop compress mode
+  void setDesktopCompressMode(COMPRESS_MODE desktopCompressMode)
+  {
+	this->desktopCompressMode = desktopCompressMode;
+  }
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
   // get cut desktop blank area flag
   bool getOnCutDesktopBlankArea() const
   {
@@ -1945,6 +1966,11 @@ private:
 
   // scaling type
   volatile SCALING_TYPE desktopScalingType;
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // compress mode
+  volatile COMPRESS_MODE desktopCompressMode;
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
   // cut desktop blank area flag
   volatile bool onCutDesktopBlankArea;

@@ -74,7 +74,7 @@ const bool QTB_LOG_VIEW					= true;
 const bool QTB_TRANSLATION				= true;
 
 // in testing
-const bool QTB_IN_TESTING				= false;
+const bool QTB_IN_TESTING				= true;
 
 // recorder
 #if defined(QTB_DEV_DESKTOP)
@@ -110,8 +110,12 @@ const bool QTB_IN_TESTING				= false;
 #else // defined(QTB_DEV_DESKTOP)
 #define QTB_DRAG_AND_DROP_SUPPORT	0
 #endif // defined(QTB_DEV_DESKTOP)
+// desktop compress mode
+#define QTB_DESKTOP_COMPRESS_MODE	1
 #else // QTB_PUBLIC_MODE6_SUPPORT
 #define QTB_DRAG_AND_DROP_SUPPORT	0
+// desktop compress mode
+#define QTB_DESKTOP_COMPRESS_MODE	0
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // disable plugins support
@@ -135,6 +139,9 @@ const bool QTB_IN_TESTING				= false;
 
 // drag and drop support
 #define QTB_DRAG_AND_DROP_SUPPORT	0
+
+// desktop compress mode
+#define QTB_DESKTOP_COMPRESS_MODE	0
 
 // disable plugins support
 #define QTB_PLUGINS_DISABLE_SUPPORT	0

@@ -86,6 +86,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   optionMenu(0),
   modeSubMenu(0),
   inTestingSubMenu(0),
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  desktopCompressModeSubMenu(0),
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
   helpMenu(0),
   connectToServer_Action(0),
   disconnectToServer_Action(0),
@@ -164,6 +167,12 @@ QtBrynhildr::QtBrynhildr(Option *option)
   sendFile_Action(0),
   cancelFileTransferring_Action(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  desktopCompressMode0_Action(0),
+  desktopCompressMode2_Action(0),
+  desktopCompressMode4_Action(0),
+  desktopCompressMode8_Action(0),
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
   preferences_Action(0),
   connectToServerDialog(0),
   desktopScalingDialog(0),
@@ -1832,6 +1841,34 @@ void QtBrynhildr::createActions()
   connect(cancelFileTransferring_Action, SIGNAL(triggered()), this, SLOT(cancelFileTransferring()));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // desktop compress mode
+  desktopCompressMode0_Action = new QAction(tr("None"), this);
+  desktopCompressMode0_Action->setEnabled(true);
+  desktopCompressMode0_Action->setCheckable(true);
+  desktopCompressMode0_Action->setChecked(settings->getDesktopCompressMode() == 1);
+  desktopCompressMode0_Action->setStatusTip(tr("Desktop Compress Mode : None"));
+  connect(desktopCompressMode0_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode0()));
+  desktopCompressMode2_Action = new QAction(tr("1/2"), this);
+  desktopCompressMode2_Action->setEnabled(true);
+  desktopCompressMode2_Action->setCheckable(true);
+  desktopCompressMode2_Action->setChecked(settings->getDesktopCompressMode() == 2);
+  desktopCompressMode2_Action->setStatusTip(tr("Desktop Compress Mode : 1/2"));
+  connect(desktopCompressMode2_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode2()));
+  desktopCompressMode4_Action = new QAction(tr("1/4"), this);
+  desktopCompressMode4_Action->setEnabled(true);
+  desktopCompressMode4_Action->setCheckable(true);
+  desktopCompressMode4_Action->setChecked(settings->getDesktopCompressMode() == 4);
+  desktopCompressMode4_Action->setStatusTip(tr("Desktop Compress Mode : 1/4"));
+  connect(desktopCompressMode4_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode4()));
+  desktopCompressMode8_Action = new QAction(tr("1/8"), this);
+  desktopCompressMode8_Action->setEnabled(true);
+  desktopCompressMode8_Action->setCheckable(true);
+  desktopCompressMode8_Action->setChecked(settings->getDesktopCompressMode() == 8);
+  desktopCompressMode8_Action->setStatusTip(tr("Desktop Compress Mode : 1/8"));
+  connect(desktopCompressMode8_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode8()));
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
   // preferences
   preferences_Action = new QAction(tr("Preferences..."), this);
   preferences_Action->setStatusTip(tr("Preferences..."));
@@ -2030,6 +2067,20 @@ void QtBrynhildr::createMenus()
 	optionMenu->addSeparator();
 	inTestingSubMenu = optionMenu->addMenu(tr("In Testing"));
 	// in Testing Menu
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+	// desktop compress mode
+	desktopCompressModeSubMenu = inTestingSubMenu->addMenu(tr("Desktop Compress Mode"));
+	desktopCompressModeSubMenu->addAction(desktopCompressMode0_Action);
+	desktopCompressModeSubMenu->addAction(desktopCompressMode2_Action);
+	desktopCompressModeSubMenu->addAction(desktopCompressMode4_Action);
+	desktopCompressModeSubMenu->addAction(desktopCompressMode8_Action);
+	if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){
+	  desktopCompressModeSubMenu->setEnabled(true);
+	}
+	else {
+	  desktopCompressModeSubMenu->setEnabled(false);
+	}
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
   }
 
   menuBar()->addSeparator();
@@ -2236,6 +2287,16 @@ void QtBrynhildr::connected()
   // plugins disable
   onPluginsDisable_Action->setEnabled(true);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // desktop compress mode
+  if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){
+	desktopCompressModeSubMenu->setEnabled(true);
+  }
+  else {
+	desktopCompressModeSubMenu->setEnabled(false);
+  }
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
   // reset total frame counter
   totalFrameCounter = 0;
@@ -3830,6 +3891,46 @@ void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
   settings->setOnShowSoftwareButton(visible);
   showSoftwareButton_Action->setChecked(visible);
 }
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+// desktop compress
+void QtBrynhildr::desktopCompressMode0()
+{
+  settings->setDesktopCompressMode(1);
+
+  desktopCompressMode0_Action->setChecked(true);
+  desktopCompressMode2_Action->setChecked(false);
+  desktopCompressMode4_Action->setChecked(false);
+  desktopCompressMode8_Action->setChecked(false);
+}
+void QtBrynhildr::desktopCompressMode2()
+{
+  settings->setDesktopCompressMode(2);
+
+  desktopCompressMode0_Action->setChecked(false);
+  desktopCompressMode2_Action->setChecked(true);
+  desktopCompressMode4_Action->setChecked(false);
+  desktopCompressMode8_Action->setChecked(false);
+}
+void QtBrynhildr::desktopCompressMode4()
+{
+  settings->setDesktopCompressMode(4);
+
+  desktopCompressMode0_Action->setChecked(false);
+  desktopCompressMode2_Action->setChecked(false);
+  desktopCompressMode4_Action->setChecked(true);
+  desktopCompressMode8_Action->setChecked(false);
+}
+void QtBrynhildr::desktopCompressMode8()
+{
+  settings->setDesktopCompressMode(8);
+
+  desktopCompressMode0_Action->setChecked(false);
+  desktopCompressMode2_Action->setChecked(false);
+  desktopCompressMode4_Action->setChecked(false);
+  desktopCompressMode8_Action->setChecked(true);
+}
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
 // toggle outputKeyboardLog
 void QtBrynhildr::toggleOutputKeyboardLog()

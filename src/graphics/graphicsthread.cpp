@@ -573,10 +573,11 @@ int GraphicsThread::makeRGB24Image()
 }
 
 
-// yuv420toRGB24 version
+// yuv420toRGB24 version (select only one)
 #define YUV420TORGB24_V1 0 // float
-#define YUV420TORGB24_V2 0 // integer and shift
-#define YUV420TORGB24_V3 1 // V2 + alpha
+#define YUV420TORGB24_V2 1 // integer and shift
+#define YUV420TORGB24_V3 0 // V2 + small improvement
+
 
 #if YUV420TORGB24_V1 || YUV420TORGB24_V2
 // YUV420 convert to RGB macro
@@ -594,8 +595,8 @@ int GraphicsThread::makeRGB24Image()
 // convert YUV420 to RGB24
 int GraphicsThread::convertYUV420toRGB24()
 {
-  uchar *rgb24top = rgb24;
   int rgb24size = 0;
+  uchar *rgb24top = rgb24;
   uchar *ytop = ytopOrg;
   uchar *utop = utopOrg;
   uchar *vtop = vtopOrg;
@@ -650,17 +651,18 @@ int GraphicsThread::convertYUV420toRGB24()
 }
 #endif // YUV420TORGB24_V1 || YUV420TORGB24_V2
 
+
 #if YUV420TORGB24_V3
 // YUV420 convert to RGB macro
-#define GET_R(Y, V)		((Y           + 358 * V) >> 8)
-#define GET_G(Y, U, V)	((Y -  88 * U - 182 * V) >> 8)
-#define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
+#define GET_R(Y, R0)	((Y + R0) >> 8)
+#define GET_G(Y, G0)	((Y + G0) >> 8)
+#define GET_B(Y, B0)	((Y + B0) >> 8)
 
 // convert YUV420 to RGB24
 int GraphicsThread::convertYUV420toRGB24()
 {
-  uchar *rgb24top = rgb24;
   int rgb24size = 0;
+  uchar *rgb24top = rgb24;
   uchar *ytop = ytopOrg;
   uchar *utop = utopOrg;
   uchar *vtop = vtopOrg;
@@ -672,23 +674,29 @@ int GraphicsThread::convertYUV420toRGB24()
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
 	  int y, u, v;
+	  int r0, g0, b0;
 
 	  // set u/v
 	  u = *(utop + uvOffset) - 128;
 	  v = *(vtop + uvOffset) - 128;
+
+	  // set r0/g0/b0
+	  r0 =  358 * v;
+	  g0 = - 88 * u - 182 * v;
+	  b0 =  453 * u;
 
 	  // == xPos ==
 	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
-	  r = clip(GET_R(y, v));
+	  r = clip(GET_R(y, r0));
 	  *rgb24top++ = (uchar)r;
 	  // G
-	  g = clip(GET_G(y, u, v));
+	  g = clip(GET_G(y, g0));
 	  *rgb24top++ = (uchar)g;
 	  // B
-	  b = clip(GET_B(y, u));
+	  b = clip(GET_B(y, b0));
 	  *rgb24top++ = (uchar)b;
 
 	  // == xPos+1 ==
@@ -696,13 +704,13 @@ int GraphicsThread::convertYUV420toRGB24()
 	  y <<= 8; // y * 256
 
 	  // R
-	  r = clip(GET_R(y, v));
+	  r = clip(GET_R(y, r0));
 	  *rgb24top++ = (uchar)r;
 	  // G
-	  g = clip(GET_G(y, u, v));
+	  g = clip(GET_G(y, g0));
 	  *rgb24top++ = (uchar)g;
 	  // B
-	  b = clip(GET_B(y, u));
+	  b = clip(GET_B(y, b0));
 	  *rgb24top++ = (uchar)b;
 
 	  rgb24size += 6;

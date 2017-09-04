@@ -157,7 +157,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	if (!prevTime.isNull()){
 	  qint64 diffMSeconds = startDrawFrameTime.toMSecsSinceEpoch() - prevTime.toMSecsSinceEpoch();
 	  if (diffMSeconds != 0){
-		cout << "[" << name << "] processForHeader() : diffMSeconds = " << diffMSeconds << " (ms)" << endl << flush;
+		//cout << "[" << name << "] processForHeader() : diffMSeconds = " << diffMSeconds << " (ms)" << endl << flush;
 	  }
 	}
 	prevTime = startDrawFrameTime;
@@ -276,6 +276,13 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	if (drawTime == 0){
 	  startDrawTime = QDateTime::currentDateTime();
 	}
+#if 0 // for TEST
+	else {
+	  QDateTime currentTime = QDateTime::currentDateTime();
+	  qint64 pastTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+	  cout << "[" << name << "] NETWORK : " << pastTime << " (us)" << endl;
+	}
+#endif
   }
 
 #if QTB_PUBLIC_MODE7_SUPPORT
@@ -284,6 +291,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	vpx_codec_decode(&c_codec, (uint8_t*)buffer, receivedDataSize, 0, 0);
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
+
+  //return TRANSMIT_SUCCEEDED; // for TEST
 
 #if 0 // for TEST
   // frame skip check
@@ -296,6 +305,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  qint64 threshold = averageDrawFrameTime; // settings->getFrameInterval();
 
 	  //cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl << flush;
+	  //cout << "[" << name << "] drawTime  : " << drawTime << " (us)" << endl;
 	  //cout << "[" << name << "] threshold : " << threshold << " (us)" << endl;
 	  if (pastTime + drawTime > threshold){
 		// drop this frame
@@ -404,8 +414,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  }
 	}
 
-	//cout << "[" << name << "] interval : " << interval << " (us)" << endl << flush;
+	//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;
 	//cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl << flush;
+	//cout << "[" << name << "] interval : " << interval << " (us)" << endl << flush;
 	if (pastTime < interval){
 	  unsigned long sleepTime = interval - pastTime;
 	  //cout << "[" << name << "] sleepTime : " <<  sleepTime << " (us)" << endl << flush;
@@ -413,6 +424,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
 	else {
 	  // No wait
+	  //cout << "[" << name << "] No Sleep" << endl << flush;
 	}
   }
 

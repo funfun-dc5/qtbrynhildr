@@ -15,9 +15,6 @@
 #include <QCursor>
 #endif // !QTB_BRYNHILDR2_SUPPORT
 #include <QDateTime>
-#if 0 // for TEST
-#include <QDockWidget>
-#endif // for TEST
 #include <QHideEvent>
 #include <QLabel>
 #include <QMainWindow>
@@ -668,10 +665,6 @@ private:
   // software keyboard and button
   SK *softwareKeyboard;
   SB *softwareButton;
-#if 0 // for TEST
-  QDockWidget *softwareKeyboardDockWidget;
-  QDockWidget *softwareButtonDockWidget;
-#endif // for TEST
 
 private:
   // clear Video Quality check

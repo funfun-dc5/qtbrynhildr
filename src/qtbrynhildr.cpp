@@ -180,10 +180,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   preferenceDialog(0),
   softwareKeyboard(0),
   softwareButton(0),
-#if 0 // for TEST
-  softwareKeyboardDockWidget(0),
-  softwareButtonDockWidget(0),
-#endif // for TEST
   totalFrameCounter(0),
   currentFrameRate(0),
   currentDataRate(0),
@@ -2700,21 +2696,6 @@ void QtBrynhildr::connectToServer()
 
   // Software Keyboard and Button
   if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-#if 0 // for TEST
-	// software button
-	if (softwareButtonDockWidget == 0){
-	  softwareButtonDockWidget = new QDockWidget(tr("Software Button"));
-	  softwareButtonDockWidget->setObjectName("Software Button");
-	  softwareButtonDockWidget->setWidget(softwareButton);
-	  softwareButtonDockWidget->setAllowedAreas(Qt::TopDockWidgetArea);
-	  softwareButtonDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
-	  connect(softwareButtonDockWidget,
-			  SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareButton(bool)));
-	  addDockWidget(Qt::TopDockWidgetArea, softwareButtonDockWidget);
-	}
-	softwareButtonDockWidget->setVisible(false);
-#endif // for TEST
-
 	// software keyboard
 #if 0 // for TEST
 	if (softwareKeyboard != 0){
@@ -2753,22 +2734,6 @@ void QtBrynhildr::connectToServer()
 	  break;
 	}
 	softwareKeyboard->setVisible(false);
-#if 0 // for TEST
-	if (softwareKeyboardDockWidget != 0){
-	  removeDockWidget(softwareKeyboardDockWidget);
-	  delete softwareKeyboardDockWidget;
-	  softwareKeyboardDockWidget = 0;
-	}
-	softwareKeyboardDockWidget = new QDockWidget(tr("Software Keyboard"));
-	softwareKeyboardDockWidget->setObjectName("Software Keyboard");
-	softwareKeyboardDockWidget->setWidget(softwareKeyboard);
-	softwareKeyboardDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-	softwareKeyboardDockWidget->setWindowOpacity(QTB_WINDOW_OPACITY);
-	connect(softwareKeyboardDockWidget,
-			SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChangedSoftwareKeyboard(bool)));
-	addDockWidget(Qt::BottomDockWidgetArea, softwareKeyboardDockWidget);
-	softwareKeyboardDockWidget->setVisible(false);
-#endif // for TEST
   }
 
   // clear buffer for control
@@ -3728,13 +3693,10 @@ void QtBrynhildr::toggleShowSoftwareKeyboard()
   else {
 	settings->setOnShowSoftwareKeyboard(true);
   }
-#if 0 // for TEST
-  softwareKeyboardDockWidget->setVisible(settings->getOnShowSoftwareKeyboard());
-#else // for TEST
+
   QRect rect = calculateSoftwareKeyboardLayout();
   softwareKeyboard->setGeometry(rect);
   softwareKeyboard->setVisible(settings->getOnShowSoftwareKeyboard());
-#endif // for TEST
 }
 
 // toggle show software button
@@ -3749,13 +3711,10 @@ void QtBrynhildr::toggleShowSoftwareButton()
   else {
 	settings->setOnShowSoftwareButton(true);
   }
-#if 0 // for TEST
-  softwareButtonDockWidget->setVisible(settings->getOnShowSoftwareButton());
-#else // for TEST
+
   QRect rect = calculateSoftwareButtonLayout();
   softwareButton->setGeometry(rect);
   softwareButton->setVisible(settings->getOnShowSoftwareButton());
-#endif // for TEST
 }
 
 // select frame rate

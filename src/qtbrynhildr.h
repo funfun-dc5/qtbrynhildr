@@ -312,6 +312,7 @@ private slots:
   // log view
   void logView();
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // calulate software keyboard layout
   QRect calculateSoftwareKeyboardLayout();
 
@@ -323,6 +324,7 @@ private slots:
 
   // toggle show software button
   void toggleShowSoftwareButton();
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // select frame rate
   void selectFrameRate5();
@@ -349,11 +351,13 @@ private slots:
   // scroll mode
   void toggleOnScrollMode();
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // visibility changed software keyboard
   void visibilityChangedSoftwareKeyboard(bool visible);
 
   // visibility changed software button
   void visibilityChangedSoftwareButton(bool visible);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
   // desktop compress mode
@@ -540,11 +544,13 @@ private:
   // log view
   QAction *logViewDialog_Action;
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // show software keyboard
   QAction *showSoftwareKeyboard_Action;
 
   // show software button
   QAction *showSoftwareButton_Action;
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // frame rate
   QAction *selectFrameRate5_Action;
@@ -662,9 +668,11 @@ private:
   // preference dialog
   PreferenceDialog *preferenceDialog;
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // software keyboard and button
   SK *softwareKeyboard;
   SB *softwareButton;
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 private:
   // clear Video Quality check

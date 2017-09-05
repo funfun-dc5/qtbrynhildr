@@ -30,6 +30,7 @@ win32 {
 DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
+SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
@@ -52,6 +53,7 @@ CELT_SUPPORT = ON
 # for Linux/FreeBSD
 linux-g++-64 | linux-g++ | freebsd-g++ {
 DEFINES += QTB_RECORDER=1 PLATFORM_LINUX
+SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
@@ -61,6 +63,7 @@ LIBS += -L../libs/celt -lcelt0
 macx {
 DEFINES += QTB_RECORDER=1 PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
+SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
@@ -69,6 +72,7 @@ LIBS += -L../libs/celt -lcelt0
 # for Android
 android-g++ {
 DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
+SOFTWARE_KEYBOARD_BUTTON_SUPPORT = ON
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx_android
 LIBS += -L../libs/celt -lcelt0_android
@@ -99,6 +103,18 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 #LIBS += -L../lib/cryptopp562 -lcryptopp
 #HEADERS += function/cipher.h
 #SOURCES += function/cipher.cpp
+
+# for Software Keyboard/Button
+equals(SOFTWARE_KEYBOARD_BUTTON_SUPPORT, ON){
+HEADERS += touchpanel2/software_keyboard.h touchpanel2/sk.h
+HEADERS += touchpanel2/software_button.h touchpanel2/sb.h
+SOURCES += touchpanel2/software_keyboard.cpp touchpanel2/sk.cpp
+SOURCES += touchpanel2/software_button.cpp touchpanel2/sb.cpp
+DEFINES += QTB_SOFTWARE_KEYBOARD_AND_BUTTON=1
+}
+else {
+DEFINES += QTB_SOFTWARE_KEYBOARD_AND_BUTTON=0
+}
 
 # for CELT
 equals(CELT_SUPPORT, ON){
@@ -143,8 +159,6 @@ HEADERS += option.h desktop.h
 HEADERS += debug.h
 HEADERS += mainwindow.h logmessage.h
 HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dialog/confirm_dialog.h dialog/log_view_dialog.h
-HEADERS += touchpanel2/software_keyboard.h touchpanel2/sk.h
-HEADERS += touchpanel2/software_button.h touchpanel2/sb.h
 HEADERS += settings.h
 HEADERS += common/netthread.h
 HEADERS += control/controlthread.h
@@ -162,8 +176,6 @@ SOURCES += option.cpp desktop.cpp
 SOURCES += debug.cpp
 SOURCES += mainwindow.cpp logmessage.cpp
 SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp dialog/confirm_dialog.cpp dialog/log_view_dialog.cpp
-SOURCES += touchpanel2/software_keyboard.cpp touchpanel2/sk.cpp
-SOURCES += touchpanel2/software_button.cpp touchpanel2/sb.cpp
 SOURCES += settings.cpp
 SOURCES += common/netthread.cpp
 SOURCES += control/controlthread.cpp

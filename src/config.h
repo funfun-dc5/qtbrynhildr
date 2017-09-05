@@ -58,7 +58,7 @@ const bool QTB_WINDOW_SIZE_FIXED		= true;
 const bool QTB_DESKTOP_FRAMERATE_CONTROL= true;
 
 // software keyboard and button
-const bool QTB_SOFTWARE_KEYBOARD_AND_BUTTON		= true;
+//#define QTB_SOFTWARE_KEYBOARD_AND_BUTTON	1
 
 // scroll mode
 #if defined(QTB_DEV_DESKTOP)

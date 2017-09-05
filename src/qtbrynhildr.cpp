@@ -112,8 +112,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   desktopScalingDialog_Action(0),
   desktopCapture_Action(0),
   logViewDialog_Action(0),
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   showSoftwareKeyboard_Action(0),
   showSoftwareButton_Action(0),
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   selectFrameRate5_Action(0),
   selectFrameRate10_Action(0),
   selectFrameRate20_Action(0),
@@ -178,8 +180,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   desktopScalingDialog(0),
   logViewDialog(0),
   preferenceDialog(0),
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   softwareKeyboard(0),
   softwareButton(0),
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   totalFrameCounter(0),
   currentFrameRate(0),
   currentDataRate(0),
@@ -554,27 +558,28 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // preference dialog
   preferenceDialog = new PreferenceDialog(settings, this);
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // set up Software Button and Keyboard
-  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	// keyboard
-	//	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
-	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), mainWindow);
-	softwareKeyboard->setVisible(false);
+  // keyboard
+  //	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+  softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), mainWindow);
+  softwareKeyboard->setVisible(false);
 #if 0 // for TEST
-	softwareKeyboard->setGeometry(40,350,1120,300);
-	softwareKeyboard->setVisible(true);
+  softwareKeyboard->setGeometry(40,350,1120,300);
+  softwareKeyboard->setVisible(true);
 #endif // for TEST
 
-	// button
-	//	softwareButton = new SB(settings, mainWindow->getMouseBuffer(), this);
-	softwareButton = new SB(settings, mainWindow->getMouseBuffer(), mainWindow);
-	softwareButton->setVisible(false);
-	connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
+  // button
+  //	softwareButton = new SB(settings, mainWindow->getMouseBuffer(), this);
+  softwareButton = new SB(settings, mainWindow->getMouseBuffer(), mainWindow);
+  softwareButton->setVisible(false);
+  connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 0 // for TEST
-	softwareButton->setGeometry(40,30,1188,450);
-	softwareButton->setVisible(true);
+  softwareButton->setGeometry(40,30,1188,450);
+  softwareButton->setVisible(true);
 #endif // for TEST
-  }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
 
 #ifdef USE_KEYLAYOUTFILE
   // for Key Layout File
@@ -1440,23 +1445,23 @@ void QtBrynhildr::createActions()
 	connect(windowSizeFixed_Action, SIGNAL(triggered()), this, SLOT(toggleWindowSizeFixed()));
   }
 
-  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	// Show Software Keyboard
-	showSoftwareKeyboard_Action = new QAction(tr("Show Software Keyboard"), this);
-	showSoftwareKeyboard_Action->setStatusTip(tr("Show Software Keyboard"));
-	showSoftwareKeyboard_Action->setEnabled(false);
-	showSoftwareKeyboard_Action->setCheckable(true);
-	showSoftwareKeyboard_Action->setChecked(settings->getOnShowSoftwareKeyboard());
-	connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // Show Software Keyboard
+  showSoftwareKeyboard_Action = new QAction(tr("Show Software Keyboard"), this);
+  showSoftwareKeyboard_Action->setStatusTip(tr("Show Software Keyboard"));
+  showSoftwareKeyboard_Action->setEnabled(false);
+  showSoftwareKeyboard_Action->setCheckable(true);
+  showSoftwareKeyboard_Action->setChecked(settings->getOnShowSoftwareKeyboard());
+  connect(showSoftwareKeyboard_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareKeyboard()));
 
-	// Show Software Button
-	showSoftwareButton_Action = new QAction(tr("Show Software Button"), this);
-	showSoftwareButton_Action->setStatusTip(tr("Show Software Button"));
-	showSoftwareButton_Action->setEnabled(false);
-	showSoftwareButton_Action->setCheckable(true);
-	showSoftwareButton_Action->setChecked(settings->getOnShowSoftwareButton());
-	connect(showSoftwareButton_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareButton()));
-  }
+  // Show Software Button
+  showSoftwareButton_Action = new QAction(tr("Show Software Button"), this);
+  showSoftwareButton_Action->setStatusTip(tr("Show Software Button"));
+  showSoftwareButton_Action->setEnabled(false);
+  showSoftwareButton_Action->setCheckable(true);
+  showSoftwareButton_Action->setChecked(settings->getOnShowSoftwareButton());
+  connect(showSoftwareButton_Action, SIGNAL(triggered()), this, SLOT(toggleShowSoftwareButton()));
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // Video Quality Action MINIMUM
   videoQuality_MINIMUM_Action = new QAction(tr("Video Quality : Minimum"), this);
@@ -1910,11 +1915,11 @@ void QtBrynhildr::createMenus()
   displayMenu->addAction(showFrameRate_Action);
 
   // software keyboard and button
-  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	displayMenu->addSeparator();
-	displayMenu->addAction(showSoftwareButton_Action);
-	displayMenu->addAction(showSoftwareKeyboard_Action);
-  }
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  displayMenu->addSeparator();
+  displayMenu->addAction(showSoftwareButton_Action);
+  displayMenu->addAction(showSoftwareKeyboard_Action);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // desktop scale fixed
 #if defined(QTB_DEV_DESKTOP)
@@ -2201,23 +2206,23 @@ void QtBrynhildr::updateFrameRate()
 void QtBrynhildr::connected()
 {
   // enabled software keyboard/button
-  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 #if defined(Q_OS_WIN)
-	if (settings->getKeyboardType() != KEYBOARD_TYPE_NATIVE){
-	  if (showSoftwareKeyboard_Action != 0)
-		showSoftwareKeyboard_Action->setEnabled(true);
-
-	  if (showSoftwareButton_Action != 0)
-		showSoftwareButton_Action->setEnabled(true);
-	}
-#else // defined(Q_OS_WIN)
+  if (settings->getKeyboardType() != KEYBOARD_TYPE_NATIVE){
 	if (showSoftwareKeyboard_Action != 0)
 	  showSoftwareKeyboard_Action->setEnabled(true);
 
 	if (showSoftwareButton_Action != 0)
 	  showSoftwareButton_Action->setEnabled(true);
-#endif // defined(Q_OS_WIN)
   }
+#else // defined(Q_OS_WIN)
+  if (showSoftwareKeyboard_Action != 0)
+	showSoftwareKeyboard_Action->setEnabled(true);
+
+  if (showSoftwareButton_Action != 0)
+	showSoftwareButton_Action->setEnabled(true);
+#endif // defined(Q_OS_WIN)
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // enabled disconnect to server
   disconnectToServer_Action->setEnabled(true);
@@ -2323,14 +2328,14 @@ void QtBrynhildr::connected()
 // disconnected
 void QtBrynhildr::disconnected()
 {
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // disabled software keyboard/button
-  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	if (showSoftwareKeyboard_Action != 0)
-	  showSoftwareKeyboard_Action->setEnabled(false);
+  if (showSoftwareKeyboard_Action != 0)
+	showSoftwareKeyboard_Action->setEnabled(false);
 
-	if (showSoftwareButton_Action != 0)
+  if (showSoftwareButton_Action != 0)
 	  showSoftwareButton_Action->setEnabled(false);
-  }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // disabled disconnect to server
   disconnectToServer_Action->setEnabled(false);
@@ -2477,6 +2482,7 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 	setDesktopScalingFactor(event->size());
   }
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // resize software keyboard/button
   if (settings->getOnShowSoftwareKeyboard()){
 	QRect rect = calculateSoftwareKeyboardLayout();
@@ -2486,6 +2492,7 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 	QRect rect = calculateSoftwareButtonLayout();
 	softwareButton->setGeometry(rect);
   }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 }
 
 // window hide event
@@ -2694,47 +2701,46 @@ void QtBrynhildr::connectToServer()
 								 eventConverter->getEventConverterName());
   }
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // Software Keyboard and Button
-  if (QTB_SOFTWARE_KEYBOARD_AND_BUTTON){
-	// software keyboard
+  // software keyboard
 #if 0 // for TEST
-	if (softwareKeyboard != 0){
-	  delete softwareKeyboard;
-	  softwareKeyboard = 0;
-	}
-	softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
-#endif // for TEST
-	KEYBOARD_TYPE keyboardType = settings->getKeyboardType();
-	// TODO: check keyboardType range
-	switch(keyboardType){
-	case KEYBOARD_TYPE_JP:
-	  softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_JP);
-	  break;
-	case KEYBOARD_TYPE_US:
-	  softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_US);
-	  break;
-	case KEYBOARD_TYPE_NATIVE:
-#if defined(Q_OS_WIN)
-	  // Nothing to do
-#else // defined(Q_OS_WIN)
-	  ABORT(); // available for windows only
-#endif // defined(Q_OS_WIN)
-	  break;
-	default: // key layout file
-#ifdef USE_KEYLAYOUTFILE
-	  int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
-	  // set key layout file to software keyboard
-	  //	  cout << "key layout file index = " << index << endl << flush;
-	  KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
-	  softwareKeyboard->setKeytopType(keyLayoutFile);
-	  settings->setKeyboardTypeName(keyLayoutFile->getName());
-#else // USE_KEYLAYOUTFILE
-	  ABORT();
-#endif // USE_KEYLAYOUTFILE
-	  break;
-	}
-	softwareKeyboard->setVisible(false);
+  if (softwareKeyboard != 0){
+	delete softwareKeyboard;
+	softwareKeyboard = 0;
   }
+  softwareKeyboard = new SK(settings, mainWindow->getKeyBuffer(), this);
+#endif // for TEST
+  // TODO: check keyboardType range
+  switch(keyboardType){
+  case KEYBOARD_TYPE_JP:
+	softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_JP);
+	break;
+  case KEYBOARD_TYPE_US:
+	softwareKeyboard->setKeytopType(SoftwareKeyboard::KEYTOP_TYPE_US);
+	break;
+  case KEYBOARD_TYPE_NATIVE:
+#if defined(Q_OS_WIN)
+	// Nothing to do
+#else // defined(Q_OS_WIN)
+	ABORT(); // available for windows only
+#endif // defined(Q_OS_WIN)
+	break;
+  default: // key layout file
+#ifdef USE_KEYLAYOUTFILE
+	int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
+	// set key layout file to software keyboard
+	//	  cout << "key layout file index = " << index << endl << flush;
+	KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
+	softwareKeyboard->setKeytopType(keyLayoutFile);
+	settings->setKeyboardTypeName(keyLayoutFile->getName());
+#else // USE_KEYLAYOUTFILE
+	ABORT();
+#endif // USE_KEYLAYOUTFILE
+	break;
+  }
+  softwareKeyboard->setVisible(false);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // clear buffer for control
   mainWindow->getKeyBuffer()->clear();
@@ -3636,6 +3642,7 @@ void QtBrynhildr::logView()
   }
 }
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 // calulate software keyboard layout
 QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
 {
@@ -3684,38 +3691,33 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
 // toggle show software keyboard
 void QtBrynhildr::toggleShowSoftwareKeyboard()
 {
-  if (!QTB_SOFTWARE_KEYBOARD_AND_BUTTON)
-	return;
-
   if (settings->getOnShowSoftwareKeyboard()){
 	settings->setOnShowSoftwareKeyboard(false);
+	softwareKeyboard->setVisible(false);
   }
   else {
+	QRect rect = calculateSoftwareKeyboardLayout();
+	softwareKeyboard->setGeometry(rect);
 	settings->setOnShowSoftwareKeyboard(true);
+	softwareKeyboard->setVisible(true);
   }
-
-  QRect rect = calculateSoftwareKeyboardLayout();
-  softwareKeyboard->setGeometry(rect);
-  softwareKeyboard->setVisible(settings->getOnShowSoftwareKeyboard());
 }
 
 // toggle show software button
 void QtBrynhildr::toggleShowSoftwareButton()
 {
-  if (!QTB_SOFTWARE_KEYBOARD_AND_BUTTON)
-	return;
-
   if (settings->getOnShowSoftwareButton()){
 	settings->setOnShowSoftwareButton(false);
+	softwareButton->setVisible(false);
   }
   else {
+	QRect rect = calculateSoftwareButtonLayout();
+	softwareButton->setGeometry(rect);
 	settings->setOnShowSoftwareButton(true);
+	softwareButton->setVisible(true);
   }
-
-  QRect rect = calculateSoftwareButtonLayout();
-  softwareButton->setGeometry(rect);
-  softwareButton->setVisible(settings->getOnShowSoftwareButton());
 }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 // select frame rate
 void QtBrynhildr::selectFrameRate5()
@@ -3843,6 +3845,7 @@ void QtBrynhildr::toggleOnScrollMode()
   }
 }
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 // visibility changed software keyboard
 void QtBrynhildr::visibilityChangedSoftwareKeyboard(bool visible)
 {
@@ -3856,6 +3859,7 @@ void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
   settings->setOnShowSoftwareButton(visible);
   showSoftwareButton_Action->setChecked(visible);
 }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
 // desktop compress

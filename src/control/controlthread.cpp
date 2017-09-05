@@ -1232,8 +1232,7 @@ QCursor ControlThread::createColorMouseCursor(uchar *image)
   //  cursor.save("jpg/ZCursor_pixmap.bmp", "BMP");
   int hotX = (int)com_data->cursor_hotspot_x;
   int hotY = (int)com_data->cursor_hotspot_y;
-  QCursor newCursor(cursor, hotX, hotY);
-  return newCursor;
+  return QCursor(cursor, hotX, hotY);
 }
 
 // create monochrome mouse cursor
@@ -1308,9 +1307,8 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
   bitmap.save("jpg/ZCursor_bitmap.bmp", "BMP");
   maskBitmap.save("jpg/ZCursor_mask.bmp", "BMP");
 #endif // for TEST
-  QCursor newCursor(bitmap, maskBitmap, hotX, hotY);
 
-  return  newCursor;
+  return QCursor(bitmap, maskBitmap, hotX, hotY);
 }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 

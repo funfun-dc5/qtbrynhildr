@@ -27,6 +27,7 @@
 #if QTB_PUBLIC_MODE6_SUPPORT
 #include <QProgressBar>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#include <QRect>
 #include <QScrollArea>
 #include <QShowEvent>
 #include <QSize>
@@ -315,10 +316,10 @@ private slots:
   void logView();
 
   // calulate software keyboard layout
-  void calculateSoftwareKeyboardLayout();
+  QRect calculateSoftwareKeyboardLayout();
 
   // calulate software button layout
-  void calculateSoftwareButtonLayout();
+  QRect calculateSoftwareButtonLayout();
 
   // toggle show software keyboard
   void toggleShowSoftwareKeyboard();

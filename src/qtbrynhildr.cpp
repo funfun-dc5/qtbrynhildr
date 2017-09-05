@@ -2482,10 +2482,14 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
   }
 
   // resize software keyboard/button
-  if (settings->getOnShowSoftwareKeyboard())
-	calculateSoftwareKeyboardLayout();  
-  if (settings->getOnShowSoftwareButton())
-	calculateSoftwareButtonLayout();  
+  if (settings->getOnShowSoftwareKeyboard()){
+	QRect rect = calculateSoftwareKeyboardLayout();
+	softwareKeyboard->setGeometry(rect);
+  }
+  if (settings->getOnShowSoftwareButton()){
+	QRect rect = calculateSoftwareButtonLayout();
+	softwareButton->setGeometry(rect);
+  }
 }
 
 // window hide event
@@ -3668,7 +3672,7 @@ void QtBrynhildr::logView()
 }
 
 // calulate software keyboard layout
-void QtBrynhildr::calculateSoftwareKeyboardLayout()
+QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
 {
   // calc geometry
   QSize desktopSize = mainWindow->size();
@@ -3688,11 +3692,11 @@ void QtBrynhildr::calculateSoftwareKeyboardLayout()
   //  cout << "x = " << x << endl;
   //  cout << "y = " << y << endl << flush;
 
-  softwareKeyboard->setGeometry(x, y, width, height);
+  return QRect(x, y, width, height);
 }
 
 // calulate software button layout
-void QtBrynhildr::calculateSoftwareButtonLayout()
+QRect QtBrynhildr::calculateSoftwareButtonLayout()
 {
   // calc geometry
   QSize desktopSize = mainWindow->size();
@@ -3709,7 +3713,7 @@ void QtBrynhildr::calculateSoftwareButtonLayout()
   int x = (desktopSize.width() - width) * 0.5;
   int y = (desktopSize.height() - height) * 0.05;
 
-  softwareButton->setGeometry(x, y, width, height);
+  return QRect(x, y, width, height);
 }
 
 // toggle show software keyboard
@@ -3727,7 +3731,8 @@ void QtBrynhildr::toggleShowSoftwareKeyboard()
 #if 0 // for TEST
   softwareKeyboardDockWidget->setVisible(settings->getOnShowSoftwareKeyboard());
 #else // for TEST
-  calculateSoftwareKeyboardLayout();
+  QRect rect = calculateSoftwareKeyboardLayout();
+  softwareKeyboard->setGeometry(rect);
   softwareKeyboard->setVisible(settings->getOnShowSoftwareKeyboard());
 #endif // for TEST
 }
@@ -3747,7 +3752,8 @@ void QtBrynhildr::toggleShowSoftwareButton()
 #if 0 // for TEST
   softwareButtonDockWidget->setVisible(settings->getOnShowSoftwareButton());
 #else // for TEST
-  calculateSoftwareButtonLayout();
+  QRect rect = calculateSoftwareButtonLayout();
+  softwareButton->setGeometry(rect);
   softwareButton->setVisible(settings->getOnShowSoftwareButton());
 #endif // for TEST
 }

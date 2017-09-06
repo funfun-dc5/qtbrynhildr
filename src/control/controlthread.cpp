@@ -700,7 +700,7 @@ void ControlThread::initHeader()
 	// desktop compress mode
 	if (settings->getDesktopCompressMode() > 1)
 	  com_data->zoom *= settings->getDesktopCompressMode();
-#endif // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
 	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
 	com_data->image_cy			= (SIZE)settings->getDesktopHeight();

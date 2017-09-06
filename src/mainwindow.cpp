@@ -170,13 +170,13 @@ void MainWindow::refreshDesktop(QImage image)
 	}
   }
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if 0 // QTB_DESKTOP_COMPRESS_MODE // for TEST
   // desktop compress mode
   if (settings->getDesktopCompressMode() > 1){
 	currentSize = currentSize * settings->getDesktopCompressMode();
 	image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
   }
-#endif
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
   // capture desktop image
   if (QTB_DESKTOP_IMAGE_CAPTURE){

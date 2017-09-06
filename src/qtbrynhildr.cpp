@@ -2075,7 +2075,7 @@ void QtBrynhildr::createMenus()
 	desktopCompressModeSubMenu->addAction(desktopCompressMode2_Action);
 	desktopCompressModeSubMenu->addAction(desktopCompressMode4_Action);
 	desktopCompressModeSubMenu->addAction(desktopCompressMode8_Action);
-	if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){
+	if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION7){
 	  desktopCompressModeSubMenu->setEnabled(true);
 	}
 	else {
@@ -2291,7 +2291,7 @@ void QtBrynhildr::connected()
 
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
   // desktop compress mode
-  if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){
+  if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION7){
 	desktopCompressModeSubMenu->setEnabled(true);
   }
   else {

@@ -108,8 +108,8 @@ Source: "..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion tou
 ;;Root: HKCU; Subkey: "Software\{#AuthName}\{#Name}"; Flags: uninsdeletekey
 
 [Icons]
-Name: "{commondesktop}\{#Name}"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}"; Tasks: desktopicon
-Name: "{group}\{#Name}"; Filename: "{app}\bin\qtbrynhildr.exe"; WorkingDir: "{app}";
+Name: "{commondesktop}\{#Name}"; Filename: "{app}\bin\QtBrynhildr.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{group}\{#Name}"; Filename: "{app}\bin\QtBrynhildr.exe"; WorkingDir: "{app}";
 
 Name: "{commondesktop}\{#Name} ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
 

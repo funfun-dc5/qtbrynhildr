@@ -288,6 +288,12 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_PUBLIC_MODE7_SUPPORT
   // decode vp8
   if (com_data->video_mode == VIDEO_MODE_COMPRESS){
+	// initialize libvpx
+	if (!doneVpxInit){
+	  memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
+	  vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
+	  doneVpxInit = true;
+	}
 	vpx_codec_decode(&c_codec, (uint8_t*)buffer, receivedDataSize, 0, 0);
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
@@ -448,15 +454,6 @@ void GraphicsThread::connectedToServer()
 
   // reset previous frame time to Null
   previousGetFrameRateTime = QDateTime();
-
-#if QTB_PUBLIC_MODE7_SUPPORT
-  // initialize libvpx
-  if (!doneVpxInit && settings->getPublicModeVersion() >= PUBLICMODE_VERSION7){
-	memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
-	vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
-	doneVpxInit = true;
-  }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   NetThread::connectedToServer();
 }

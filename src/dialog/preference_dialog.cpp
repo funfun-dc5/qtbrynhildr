@@ -50,14 +50,17 @@ void PreferenceDialog::resizeEvent(QResizeEvent *event)
 void PreferenceDialog::setup()
 {
   // publicModeVersion
-  comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "MODE 5");
 #if QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "MODE 5");
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC6 - MODE_PUBLIC5, "MODE 6");
 #if QTB_PUBLIC_MODE7_SUPPORT
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC7 - MODE_PUBLIC5, "MODE 7");
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicModeVersion->setCurrentIndex(settings->getPublicModeVersion() - MODE_PUBLIC5);
+#else // QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicModeVersion->insertItem(0, "MODE 5");
+  comboBox_publicModeVersion->setCurrentIndex(0);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // onBrynhildr2Support
   checkBox_onBrynhildr2Support->
@@ -105,26 +108,28 @@ void PreferenceDialog::setup()
   spinBox_doubleClickThreshold->setValue(settings->getDoubleClickThreshold());
 
   // onTransferFileSupport
+#if QTB_PUBLIC_MODE6_SUPPORT
   checkBox_onTransferFileSupport->
 	setCheckState(settings->getOnTransferFileSupport() ? Qt::Checked : Qt::Unchecked);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // onTransferFileSupportByDragAndDrop
 #if QTB_DRAG_AND_DROP_SUPPORT
   checkBox_onTransferFileSupportByDragAndDrop->
 	setCheckState(settings->getOnTransferFileSupportByDragAndDrop() ? Qt::Checked : Qt::Unchecked);
-#else // QTB_DRAG_AND_DROP_SUPPORT
-  checkBox_onTransferFileSupportByDragAndDrop->
-	setCheckState(Qt::Unchecked);
-  checkBox_onTransferFileSupportByDragAndDrop->setEnabled(false);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
   // onShowTotalProgressForTransferFile
+#if QTB_DRAG_AND_DROP_SUPPORT
   checkBox_onShowTotalProgressForTransferFile->
 	setCheckState(settings->getOnShowTotalProgressForTransferFile() ? Qt::Checked : Qt::Unchecked);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
 
   // onTransferClipboardSupport
+#if QTB_PUBLIC_MODE6_SUPPORT
   checkBox_onTransferClipboardSupport->
 	setCheckState(settings->getOnTransferClipboardSupport() ? Qt::Checked : Qt::Unchecked);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if !QTB_PUBLIC_MODE6_SUPPORT
   // onTransferFileSupport

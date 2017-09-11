@@ -121,7 +121,7 @@
     <item row="4" column="4">
      <widget class="QPushButton" name="resetButton">
       <property name="text">
-       <string> Reset scale</string>
+       <string>Reset scale</string>
       </property>
      </widget>
     </item>

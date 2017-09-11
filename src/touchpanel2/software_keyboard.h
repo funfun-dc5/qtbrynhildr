@@ -55,7 +55,7 @@ public:
   SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = 0);
 #endif // USE_KEYLAYOUTFILE
   // destructor
-  //  ~SoftwareKeyboard();
+  ~SoftwareKeyboard();
 
   // get keytop type
   KEYTOP_TYPE getKeytopType();
@@ -169,6 +169,7 @@ private:
 	ID_KEY_65,
 	ID_KEY_66,
 	ID_KEY_67,
+	ID_KEY_68,
 	ID_KEY_NUM,
 	ID_KEY_0		= ID_KEY_NUM,
 	ID_KEY_LSHIFT	= ID_KEY_43,
@@ -178,7 +179,8 @@ private:
 	ID_KEY_LALT		= ID_KEY_58,
 	ID_KEY_RALT		= ID_KEY_63,
 	ID_KEY_LFn		= ID_KEY_57,
-	ID_KEY_RFn		= ID_KEY_64
+	ID_KEY_RFn		= ID_KEY_64,
+	ID_KEY_Fn		= ID_KEY_68
   } ID_KEY;
 
 private:
@@ -217,7 +219,7 @@ private:
 private:
   // original size for layout
   static const int WIDTH = 270;
-  static const int HEIGHT = 75;
+  static const int HEIGHT = 135;
 
   // initial factor
   const qreal INITIAL_XFACTOR = 4.0;
@@ -230,82 +232,85 @@ private:
   // layout table for keyboard
   const QRect keyLayout[ID_KEY_NUM] = {
 	// 1st row
-	QRect(  0,  0, 18, 15),
-	QRect( 18,  0, 18, 15),
-	QRect( 36,  0, 18, 15),
-	QRect( 54,  0, 18, 15),
-	QRect( 72,  0, 18, 15),
-	QRect( 90,  0, 18, 15),
-	QRect(108,  0, 18, 15),
-	QRect(126,  0, 18, 15),
-	QRect(144,  0, 18, 15),
-	QRect(162,  0, 18, 15),
-	QRect(180,  0, 18, 15),
-	QRect(198,  0, 18, 15),
-	QRect(216,  0, 18, 15),
-	QRect(234,  0, 18, 15),
-	QRect(252,  0, 18, 15),
-
-	// 2nd row
-	QRect(  0, 15, 24, 15),
-	QRect( 24, 15, 18, 15),
-	QRect( 42, 15, 18, 15),
-	QRect( 60, 15, 18, 15),
-	QRect( 78, 15, 18, 15),
-	QRect( 96, 15, 18, 15),
-	QRect(114, 15, 18, 15),
-	QRect(132, 15, 18, 15),
-	QRect(150, 15, 18, 15),
-	QRect(168, 15, 18, 15),
-	QRect(186, 15, 18, 15),
-	QRect(204, 15, 18, 15),
-	QRect(222, 15, 26, 15),
-	QRect(248, 15, 22, 30),
-
-	// 3rd row
-	QRect(  0, 30, 32, 15),
-	QRect( 32, 30, 18, 15),
-	QRect( 50, 30, 18, 15),
-	QRect( 68, 30, 18, 15),
-	QRect( 86, 30, 18, 15),
-	QRect(104, 30, 18, 15),
-	QRect(122, 30, 18, 15),
-	QRect(140, 30, 18, 15),
-	QRect(158, 30, 18, 15),
-	QRect(176, 30, 18, 15),
-	QRect(194, 30, 18, 15),
-	QRect(212, 30, 18, 15),
-	QRect(230, 30, 18, 15),
-
-	// 4th row
-	QRect(  0, 45, 36, 15),
-	QRect( 36, 45, 18, 15),
-	QRect( 54, 45, 18, 15),
-	QRect( 72, 45, 18, 15),
-	QRect( 90, 45, 18, 15),
-	QRect(108, 45, 18, 15),
-	QRect(126, 45, 18, 15),
-	QRect(144, 45, 18, 15),
-	QRect(162, 45, 18, 15),
-	QRect(180, 45, 18, 15),
-	QRect(198, 45, 18, 15),
-	QRect(216, 45, 18, 15),
-	QRect(234, 45, 18, 15),
-	QRect(252, 45, 18, 15),
-
-	// 5th row
-	QRect(  0, 60, 36, 15),
+	QRect(  0, 60, 18, 15),
+	QRect( 18, 60, 18, 15),
 	QRect( 36, 60, 18, 15),
 	QRect( 54, 60, 18, 15),
 	QRect( 72, 60, 18, 15),
-	QRect( 90, 60, 72, 15),
+	QRect( 90, 60, 18, 15),
+	QRect(108, 60, 18, 15),
+	QRect(126, 60, 18, 15),
+	QRect(144, 60, 18, 15),
 	QRect(162, 60, 18, 15),
 	QRect(180, 60, 18, 15),
 	QRect(198, 60, 18, 15),
 	QRect(216, 60, 18, 15),
 	QRect(234, 60, 18, 15),
-	QRect(252, 60, 18, 15)
-  };
+	QRect(252, 60, 18, 15),
+
+	// 2nd row
+	QRect(  0, 75, 24, 15),
+	QRect( 24, 75, 18, 15),
+	QRect( 42, 75, 18, 15),
+	QRect( 60, 75, 18, 15),
+	QRect( 78, 75, 18, 15),
+	QRect( 96, 75, 18, 15),
+	QRect(114, 75, 18, 15),
+	QRect(132, 75, 18, 15),
+	QRect(150, 75, 18, 15),
+	QRect(168, 75, 18, 15),
+	QRect(186, 75, 18, 15),
+	QRect(204, 75, 18, 15),
+	QRect(222, 75, 26, 15),
+	QRect(248, 75, 22, 30),
+
+	// 3rd row
+	QRect(  0, 90, 32, 15),
+	QRect( 32, 90, 18, 15),
+	QRect( 50, 90, 18, 15),
+	QRect( 68, 90, 18, 15),
+	QRect( 86, 90, 18, 15),
+	QRect(104, 90, 18, 15),
+	QRect(122, 90, 18, 15),
+	QRect(140, 90, 18, 15),
+	QRect(158, 90, 18, 15),
+	QRect(176, 90, 18, 15),
+	QRect(194, 90, 18, 15),
+	QRect(212, 90, 18, 15),
+	QRect(230, 90, 18, 15),
+
+	// 4th row
+	QRect(  0,105, 36, 15),
+	QRect( 36,105, 18, 15),
+	QRect( 54,105, 18, 15),
+	QRect( 72,105, 18, 15),
+	QRect( 90,105, 18, 15),
+	QRect(108,105, 18, 15),
+	QRect(126,105, 18, 15),
+	QRect(144,105, 18, 15),
+	QRect(162,105, 18, 15),
+	QRect(180,105, 18, 15),
+	QRect(198,105, 18, 15),
+	QRect(216,105, 18, 15),
+	QRect(234,105, 18, 15),
+	QRect(252,105, 18, 15),
+
+	// 5th row
+	QRect(  0,120, 36, 15),
+	QRect( 36,120, 18, 15),
+	QRect( 54,120, 18, 15),
+	QRect( 72,120, 18, 15),
+	QRect( 90,120, 72, 15),
+	QRect(162,120, 18, 15),
+	QRect(180,120, 18, 15),
+	QRect(198,120, 18, 15),
+	QRect(216,120, 18, 15),
+	QRect(234,120, 18, 15),
+	QRect(252,120, 18, 15),
+
+	// Fn button
+	QRect(  0,  0, 18, 15)
+};
 
   // layout table for keyboard
   typedef struct {
@@ -316,6 +321,11 @@ private:
 
   // key top table
   const KeyTop *keyTopTable;
+
+#if 0 // for TEST
+  // temporary key top table
+  KeyTop *tempKeyTopTable;
+#endif // for TEST
 
   // key top table for JP
   const KeyTop keyTopTable_JP[ID_KEY_NUM] = {
@@ -395,7 +405,9 @@ private:
 //	{{"→",		"→",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
 	{{"\u2190",	"\u2190",	(uchar)VK_LEFT	},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
 	{{"\u2193",	"\u2193",	(uchar)VK_DOWN	},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
-	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
+	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}},	// ID_KEY_67
+
+	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}}	// ID_KEY_68
   };
 
   // key top table for US
@@ -474,7 +486,9 @@ private:
 //	{{"→",		"→",	(uchar)VK_RIGHT		},	{"End",		(uchar)VK_END		}},	// ID_KEY_67
 	{{"\u2190",	"\u2190",	(uchar)VK_LEFT	},	{"Home",	(uchar)VK_HOME		}},	// ID_KEY_65
 	{{"\u2193",	"\u2193",	(uchar)VK_DOWN	},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
-	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}}	// ID_KEY_67
+	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}},	// ID_KEY_67
+
+	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}}	// ID_KEY_68
   };
 
 #ifdef USE_KEYLAYOUTFILE

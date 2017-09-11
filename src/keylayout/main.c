@@ -18,7 +18,7 @@ char *platform[ID_PLATFORM_NUM] = {
 };
 
 // version
-const char *version = "0.0.2";
+const char *version = "0.0.3";
 
 // for TEST
 int main(int argc, char *argv[])

@@ -80,6 +80,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   soundCacheSubMenu(0),
   controlMenu(0),
   sendKeySubMenu(0),
+  selectPublicModeVersionSubMenu(0),
 #if QTB_RECORDER
   recordAndReplaySubMenu(0),
 #endif // QTB_RECORDER
@@ -148,6 +149,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   onControl_Action(0),
   onGraphics_Action(0),
   onSound_Action(0),
+  selectPublicModeVersion5_Action(0),
+  selectPublicModeVersion6_Action(0),
+  selectPublicModeVersion7_Action(0),
 #if QTB_RECORDER
   startRecordingControl_Action(0),
   stopRecordingControl_Action(0),
@@ -1738,6 +1742,30 @@ void QtBrynhildr::createActions()
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // select public mode version Action
+  selectPublicModeVersion5_Action = new QAction(tr("MODE 5"), this);
+  //  selectPublicModeVersion5_Action->setEnabled(false);
+  selectPublicModeVersion5_Action->setCheckable(true);
+  selectPublicModeVersion5_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION5);
+  selectPublicModeVersion5_Action->setStatusTip(tr("Public Mode 5"));
+  connect(selectPublicModeVersion5_Action, SIGNAL(triggered()), this, SLOT(selectPublicModeVersion5()));
+
+  selectPublicModeVersion6_Action = new QAction(tr("MODE 6"), this);
+  //  selectPublicModeVersion6_Action->setEnabled(false);
+  selectPublicModeVersion6_Action->setCheckable(true);
+  selectPublicModeVersion6_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION6);
+  selectPublicModeVersion6_Action->setStatusTip(tr("Public Mode 6"));
+  connect(selectPublicModeVersion6_Action, SIGNAL(triggered()), this, SLOT(selectPublicModeVersion6()));
+
+  selectPublicModeVersion7_Action = new QAction(tr("MODE 7"), this);
+  //  selectPublicModeVersion7_Action->setEnabled(false);
+  selectPublicModeVersion7_Action->setCheckable(true);
+  selectPublicModeVersion7_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION7);
+  selectPublicModeVersion7_Action->setStatusTip(tr("Public Mode 7"));
+  connect(selectPublicModeVersion7_Action, SIGNAL(triggered()), this, SLOT(selectPublicModeVersion7()));
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
 #if QTB_RECORDER
   // start recording control
   startRecordingControl_Action = new QAction(tr("Start Recording"), this);
@@ -2035,6 +2063,15 @@ void QtBrynhildr::createMenus()
   controlMenu->addAction(onControl_Action);
   controlMenu->addAction(onGraphics_Action);
   controlMenu->addAction(onSound_Action);
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // for select publicmode version
+  controlMenu->addSeparator();
+  selectPublicModeVersionSubMenu = controlMenu->addMenu(tr("Select Public Mode Version"));
+  selectPublicModeVersionSubMenu->addAction(selectPublicModeVersion5_Action);
+  selectPublicModeVersionSubMenu->addAction(selectPublicModeVersion6_Action);
+  selectPublicModeVersionSubMenu->addAction(selectPublicModeVersion7_Action);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_RECORDER
   // for record and replay
@@ -3226,6 +3263,84 @@ void QtBrynhildr::toggleOnSound()
 	onSound_Action->setChecked(true);
   }
 }
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+// refresh public mode
+void QtBrynhildr::refreshPublicMode()
+{
+  // menus, drag and drop
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// send clipboard
+	sendClipboard_Action->setEnabled(true);
+
+	// send file
+	sendFile_Action->setEnabled(true);
+
+	// cancel file transferring
+	cancelFileTransferring_Action->setEnabled(false);
+
+	// drag and drop
+	mainWindow->setAcceptDrops(true);
+  }
+  else {
+	// send clipboard
+	sendClipboard_Action->setEnabled(false);
+
+	// send file
+	sendFile_Action->setEnabled(false);
+
+	// cancel file transferring
+	cancelFileTransferring_Action->setEnabled(false);
+
+	// drag and drop
+	mainWindow->setAcceptDrops(false);
+  }
+
+  // set window title
+  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+
+  // mouse cursor
+  if (settings->getPublicModeVersion() != PUBLICMODE_VERSION7){
+	// change mouse cursor
+	changeMouseCursor(Qt::CrossCursor);
+  }
+}
+
+// select public mode version
+void QtBrynhildr::selectPublicModeVersion5()
+{
+  settings->setPublicModeVersion(PUBLICMODE_VERSION5);
+  selectPublicModeVersion5_Action->setChecked(true);
+  selectPublicModeVersion6_Action->setChecked(false);
+#if QTB_PUBLIC_MODE7_SUPPORT
+  selectPublicModeVersion7_Action->setChecked(false);
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+
+  refreshPublicMode();
+}
+void QtBrynhildr::selectPublicModeVersion6()
+{
+  settings->setPublicModeVersion(PUBLICMODE_VERSION6);
+  selectPublicModeVersion5_Action->setChecked(false);
+  selectPublicModeVersion6_Action->setChecked(true);
+#if QTB_PUBLIC_MODE7_SUPPORT
+  selectPublicModeVersion7_Action->setChecked(false);
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+
+  refreshPublicMode();
+}
+#if QTB_PUBLIC_MODE7_SUPPORT
+void QtBrynhildr::selectPublicModeVersion7()
+{
+  settings->setPublicModeVersion(PUBLICMODE_VERSION7);
+  selectPublicModeVersion5_Action->setChecked(false);
+  selectPublicModeVersion6_Action->setChecked(false);
+  selectPublicModeVersion7_Action->setChecked(true);
+
+  refreshPublicMode();
+}
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
 void QtBrynhildr::setOnPluginsDisable()

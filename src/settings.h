@@ -955,12 +955,16 @@ public:
   // get display mouse cursor flag
   bool getOnDisplayMouseCursor()
   {
+#if QTB_PUBLIC_MODE6_SUPPORT
 	if (getPublicModeVersion() >= PUBLICMODE_VERSION7){
 	  return onDisplayMouseCursor;
 	}
 	else { // MODE5/6
 	  return true;
 	}
+#else // QTB_PUBLIC_MODE6_SUPPORT
+	return true;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
   }
 
   // set display mouse cursor flag

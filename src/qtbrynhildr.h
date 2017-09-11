@@ -259,6 +259,19 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+private:
+  // refresh public mode
+  void refreshPublicMode();
+private slots:
+  // select public mode version
+  void selectPublicModeVersion5();
+  void selectPublicModeVersion6();
+#if QTB_PUBLIC_MODE7_SUPPORT
+  void selectPublicModeVersion7();
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
 #if QTB_RECORDER
   // record and replay
   void startRecordingControl();
@@ -455,6 +468,9 @@ private:
   // Send Key Sub Menu
   QMenu *sendKeySubMenu;
 
+  // Select Public Mode Version Sub Menu
+  QMenu *selectPublicModeVersionSubMenu;
+
 #if QTB_RECORDER
   // Record and Replay Sub Menu
   QMenu *recordAndReplaySubMenu;
@@ -606,6 +622,11 @@ private:
 
   // toggle onSound
   QAction *onSound_Action;
+
+  // publi mode version
+  QAction *selectPublicModeVersion5_Action;
+  QAction *selectPublicModeVersion6_Action;
+  QAction *selectPublicModeVersion7_Action;
 
 #if QTB_RECORDER
   // start recording control

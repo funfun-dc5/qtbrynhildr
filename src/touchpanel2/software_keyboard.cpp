@@ -4,6 +4,7 @@
 // Common Header
 
 // System Header
+#include <cstring>
 #include <fstream> // for TEST
 #include <iostream> // for TEST
 
@@ -38,6 +39,9 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   :
   QWidget(parent),
   keyTopTable(0),
+#if 0 // for TEST
+  tempKeyTopTable(0),
+#endif // for TEST
 #ifdef USE_KEYLAYOUTFILE
   klf(0),
 #endif // USE_KEYLAYOUTFILE
@@ -89,6 +93,19 @@ SoftwareKeyboard::SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent)
   setKeytopType(klf);
 }
 #endif // USE_KEYLAYOUTFILE
+
+// destructor
+SoftwareKeyboard::~SoftwareKeyboard()
+{
+  // delete objects
+#if 0 // for TEST
+  // temporary key top table
+  if (tempKeyTopTable != 0){
+	delete [] tempKeyTopTable;
+	tempKeyTopTable = 0;
+  }
+#endif // for TEST
+}
 
 // get keytop type
 SoftwareKeyboard::KEYTOP_TYPE SoftwareKeyboard::getKeytopType()
@@ -154,6 +171,21 @@ void SoftwareKeyboard::setKeytopType(KeyLayoutFile *klf)
   this->klf = klf;
 
   keyTopTable = klf->keyTopTable;
+#if 0 // for TEST
+  if (klf->softkeynum < ID_KEY_NUM){
+	// 1) allocate a new table (size = ID_KEY_NUM)
+	tempKeyTopTable = new KeyTop[ID_KEY_NUM];
+
+	// 2) copy US keyboard table to the new table
+	memcpy(tempKeyTopTable, keyTopTable_US, sizeof(KeyTop)*ID_KEY_NUM);
+
+	// 3) overwrite klf->keyTopTable to the new table
+	memcpy(tempKeyTopTable, klf->keyTopTable, sizeof(KeyTop)*klf->softkeynum);
+
+	// 4) set new keyTopTable
+	keyTopTable = tempKeyTopTable;
+  }
+#endif // for TEST
 
   update();
 }
@@ -180,16 +212,16 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
   QPainter painter(this);
 
   // fill keyboard panel
-  QRect rect = QRect(QPoint(0,0), keyboardSize);
-  //QColor panelColor = QColor::fromRgb(15, 31, 64);
-  QColor panelColor = QColor::fromRgb(30, 30, 30);
-  painter.fillRect(rect, panelColor);
+  //QRect rect = QRect(QPoint(0,0), keyboardSize);
+  QColor panelColor = QColor::fromRgb(15, 31, 64);
+  //QColor panelColor = QColor::fromRgb(30, 30, 30);
+  //painter.fillRect(rect, panelColor);
   //  painter.fillRect(rect, Qt::darkCyan);
   //cout << "paint! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
 
   // change color for Pen
-  //QColor penColor = QColor::fromRgb(61, 124, 250);
-  QColor penColor = QColor::fromRgb(192, 192, 192);
+  QColor penColor = QColor::fromRgb(61, 124, 250);
+  //QColor penColor = QColor::fromRgb(192, 192, 192);
   painter.setPen(penColor);
   // change font size
   QFont font = painter.font();
@@ -205,6 +237,8 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 	  QRect rect = layout[i].rect;
 	  if (layout[i].pushed)
 		painter.fillRect(rect, Qt::black);
+	  else
+		painter.fillRect(rect, panelColor);
 	  painter.drawRect(rect);
 	  painter.drawText(rect,
 					   Qt::AlignCenter,
@@ -220,6 +254,8 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 	  QRect rect = layout[i].rect;
 	  if (layout[i].pushed)
 		painter.fillRect(rect, Qt::black);
+	  else
+		painter.fillRect(rect, panelColor);
 	  painter.drawRect(rect);
 	  painter.drawText(rect,
 					   Qt::AlignCenter,
@@ -234,6 +270,8 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 	QRect rect = layout[i].rect;
 	if (layout[i].pushed)
 	  painter.fillRect(rect, Qt::black);
+	else
+	  painter.fillRect(rect, panelColor);
 	painter.drawRect(rect);
 	painter.drawText(rect,
 					 Qt::AlignCenter,

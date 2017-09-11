@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
   QClipboard *clipboard = QApplication::clipboard();
   qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(option, clipboard);
 #else // QTB_PUBLIC_MODE6_SUPPORT
-  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(option, argv);
+  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(option);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   if (qtbrynhildr->getShutdownFlag()){
 	// shutdown now

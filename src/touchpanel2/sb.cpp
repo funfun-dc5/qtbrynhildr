@@ -29,66 +29,53 @@ SB::SB(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent)
   // for DEBUG
   outputLog(false)
 {
-  // Info
-  buttonTopTable[ID_BUTTON_12].buttonTop = "Ver. " QTB_VERSION QTB_RCNAME;
-
-  // Monitor
-  MONITOR_NO monitorNo = settings->getMonitorNo();
-  switch(monitorNo){
-  case 1:
-	SoftwareButton::pressedButton(ID_BUTTON_3);
-	break;
-  case 2:
-	SoftwareButton::pressedButton(ID_BUTTON_4);
-	break;
-  case 3:
-	SoftwareButton::pressedButton(ID_BUTTON_5);
-	break;
-  case 4:
-	SoftwareButton::pressedButton(ID_BUTTON_6);
-	break;
-  case 5:
-	SoftwareButton::pressedButton(ID_BUTTON_7);
-	break;
-  case 6:
-	SoftwareButton::pressedButton(ID_BUTTON_8);
-	break;
-  case 7:
-	SoftwareButton::pressedButton(ID_BUTTON_9);
-	break;
-  case 8:
-	SoftwareButton::pressedButton(ID_BUTTON_10);
-	break;
-  case 9:
-	SoftwareButton::pressedButton(ID_BUTTON_11);
-	break;
-  }
-
   // Sound
   if (settings->getOnSound()){
-	SoftwareButton::pressedButton(ID_BUTTON_15);
+	SoftwareButton::pressedButton(ID_BUTTON_5);
   }
   else {
-	SoftwareButton::pressedButton(ID_BUTTON_14);
+	SoftwareButton::pressedButton(ID_BUTTON_4);
+  }
+
+  // Sound Cache
+  int soundCacheTime = settings->getSoundCacheTime();
+  switch(soundCacheTime){
+  case 100:
+	SoftwareButton::pressedButton(ID_BUTTON_8);
+	break;
+  case 200:
+	SoftwareButton::pressedButton(ID_BUTTON_9);
+	break;
+  case 300:
+	SoftwareButton::pressedButton(ID_BUTTON_10);
+	break;
+  case 400:
+	SoftwareButton::pressedButton(ID_BUTTON_11);
+	break;
+  case 500:
+	SoftwareButton::pressedButton(ID_BUTTON_12);
+	break;
+  default:
+	break;
   }
 
   // Sound Quality
   SOUND_QUALITY soundQuality = settings->getSoundQuality();
   switch(soundQuality){
   case SOUND_QUALITY_MINIMUM:
-	SoftwareButton::pressedButton(ID_BUTTON_18);
+	SoftwareButton::pressedButton(ID_BUTTON_15);
 	break;
   case SOUND_QUALITY_LOW:
-	SoftwareButton::pressedButton(ID_BUTTON_19);
+	SoftwareButton::pressedButton(ID_BUTTON_16);
 	break;
   case SOUND_QUALITY_STANDARD:
-	SoftwareButton::pressedButton(ID_BUTTON_20);
+	SoftwareButton::pressedButton(ID_BUTTON_17);
 	break;
   case SOUND_QUALITY_HIGH:
-	SoftwareButton::pressedButton(ID_BUTTON_21);
+	SoftwareButton::pressedButton(ID_BUTTON_18);
 	break;
   case SOUND_QUALITY_MAXIMUM:
-	SoftwareButton::pressedButton(ID_BUTTON_22);
+	SoftwareButton::pressedButton(ID_BUTTON_19);
 	break;
   }
 
@@ -96,19 +83,52 @@ SB::SB(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent)
   VIDEO_QUALITY videoQuality = settings->getVideoQuality();
   switch(videoQuality){
   case VIDEO_QUALITY_MINIMUM:
-	SoftwareButton::pressedButton(ID_BUTTON_25);
-	break;
-  case VIDEO_QUALITY_LOW:
 	SoftwareButton::pressedButton(ID_BUTTON_26);
 	break;
-  case VIDEO_QUALITY_STANDARD:
+  case VIDEO_QUALITY_LOW:
 	SoftwareButton::pressedButton(ID_BUTTON_27);
 	break;
-  case VIDEO_QUALITY_HIGH:
+  case VIDEO_QUALITY_STANDARD:
 	SoftwareButton::pressedButton(ID_BUTTON_28);
 	break;
-  case VIDEO_QUALITY_MAXIMUM:
+  case VIDEO_QUALITY_HIGH:
 	SoftwareButton::pressedButton(ID_BUTTON_29);
+	break;
+  case VIDEO_QUALITY_MAXIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_30);
+	break;
+  }
+
+  // Video FPS
+  int frameRate = settings->getFrameRate();
+  switch(frameRate){
+  case 5:
+	SoftwareButton::pressedButton(ID_BUTTON_34);
+	break;
+  case 10:
+	SoftwareButton::pressedButton(ID_BUTTON_35);
+	break;
+  case 30:
+	SoftwareButton::pressedButton(ID_BUTTON_36);
+	break;
+  case 60:
+	SoftwareButton::pressedButton(ID_BUTTON_37);
+	break;
+  case 0:
+	SoftwareButton::pressedButton(ID_BUTTON_38);
+	break;
+  }
+
+  // Public Mode
+  int publicModeVersion = settings->getPublicModeVersion();
+  switch(publicModeVersion){
+  case PUBLICMODE_VERSION5:
+	SoftwareButton::pressedButton(ID_BUTTON_22);
+	break;
+  case PUBLICMODE_VERSION6:
+	break;
+  case PUBLICMODE_VERSION7:
+	SoftwareButton::pressedButton(ID_BUTTON_23);
 	break;
   }
 }
@@ -129,48 +149,81 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 
   switch (id){
   case ID_BUTTON_1:
-	// Option
+	// Fn
 	break;
   case ID_BUTTON_2:
 	// Monitor
+	// TODO : next monitor
 	break;
   case ID_BUTTON_3:
+	// Sound
+	break;
   case ID_BUTTON_4:
-  case ID_BUTTON_5:
-  case ID_BUTTON_6:
-  case ID_BUTTON_7:
-  case ID_BUTTON_8:
-  case ID_BUTTON_9:
-  case ID_BUTTON_10:
-  case ID_BUTTON_11:
-	{
-	  // monitor No.1 - No.9
-	  MONITOR_NO monitorNo = id - ID_BUTTON_3 + 1;
-	  if (monitorNo <= settings->getMonitorCount()){
-		settings->setMonitorNo(monitorNo);
-		updated = true;
-	  }
-	  else {
-		// NOT available monitor
-		return;
-	  }
-	}
-	break;
-  case ID_BUTTON_12:
-	// Info Button
-	break;
-  case ID_BUTTON_13:
-	// Sound Button
-	break;
-  case ID_BUTTON_14:
-	// Sound OFF Button
+	// Sound OFF
 	settings->setOnSound(false);
 	break;
-  case ID_BUTTON_15:
-	// Sound ON Button
+  case ID_BUTTON_5:
+	// Sound ON
 	settings->setOnSound(true);
 	break;
+  case ID_BUTTON_6:
+	// Info
+	break;
+  case ID_BUTTON_7:
+	// Sound Cache
+	break;
+  case ID_BUTTON_8:
+	// Sound Cache (100 ms)
+	settings->setSoundCacheTime(100);
+	break;
+  case ID_BUTTON_9:
+	// Sound Cache (200 ms)
+	settings->setSoundCacheTime(200);
+	break;
+  case ID_BUTTON_10:
+	// Sound Cache (300 ms)
+	settings->setSoundCacheTime(300);
+	break;
+  case ID_BUTTON_11:
+	// Sound Cache (400 ms)
+	settings->setSoundCacheTime(400);
+	break;
+  case ID_BUTTON_12:
+	// Sound Cache (500 ms)
+	settings->setSoundCacheTime(500);
+	break;
+  case ID_BUTTON_13:
+	// Option Button
+	break;
+  case ID_BUTTON_14:
+	// Sound Quality
+	break;
+  case ID_BUTTON_15:
+	// Sound Quality (Lowest)
+	settings->setSoundQuality(SOUND_QUALITY_MINIMUM);
+	updated = true;
+	break;
   case ID_BUTTON_16:
+	// Sound Quality (Low)
+	settings->setSoundQuality(SOUND_QUALITY_LOW);
+	updated = true;
+	break;
+  case ID_BUTTON_17:
+	// Sound Quality (Standard)
+	settings->setSoundQuality(SOUND_QUALITY_STANDARD);
+	updated = true;
+	break;
+  case ID_BUTTON_18:
+	// Sound Quality (High)
+	settings->setSoundQuality(SOUND_QUALITY_HIGH);
+	updated = true;
+	break;
+  case ID_BUTTON_19:
+	// Sound Quality (Highest)
+	settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
+	updated = true;
+	break;
+  case ID_BUTTON_20:
 	// Wheel +
 	if (settings->getConnected()){
 	  MouseInfoValue value;
@@ -178,35 +231,18 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	  mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
 	}
 	break;
-  case ID_BUTTON_17:
-	// Sound Quality
-	break;
-  case ID_BUTTON_18:
-	// Sound Quality (Lowest)
-	settings->setSoundQuality(SOUND_QUALITY_MINIMUM);
-	updated = true;
-	break;
-  case ID_BUTTON_19:
-	// Sound Quality (Low)
-	settings->setSoundQuality(SOUND_QUALITY_LOW);
-	updated = true;
-	break;
-  case ID_BUTTON_20:
-	// Sound Quality (Standard)
-	settings->setSoundQuality(SOUND_QUALITY_STANDARD);
-	updated = true;
-	break;
   case ID_BUTTON_21:
-	// Sound Quality (High)
-	settings->setSoundQuality(SOUND_QUALITY_HIGH);
-	updated = true;
+	// Public Mode
 	break;
   case ID_BUTTON_22:
-	// Sound Quality (Highest)
-	settings->setSoundQuality(SOUND_QUALITY_MAXIMUM);
-	updated = true;
+	// Public Mode 5
+	settings->setPublicModeVersion(5);
 	break;
   case ID_BUTTON_23:
+	// Public Mode 7
+	settings->setPublicModeVersion(7);
+	break;
+  case ID_BUTTON_24:
 	// Wheel -
 	if (settings->getConnected()){
 	  MouseInfoValue value;
@@ -214,35 +250,35 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	  mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
 	}
 	break;
-  case ID_BUTTON_24:
+  case ID_BUTTON_25:
 	// Video Quality
 	break;
-  case ID_BUTTON_25:
+  case ID_BUTTON_26:
 	// Video Quality (Lowest)
 	settings->setVideoQuality(VIDEO_QUALITY_MINIMUM);
 	updated = true;
 	break;
-  case ID_BUTTON_26:
+  case ID_BUTTON_27:
 	// Video Quality (Low)
 	settings->setVideoQuality(VIDEO_QUALITY_LOW);
 	updated = true;
 	break;
-  case ID_BUTTON_27:
+  case ID_BUTTON_28:
 	// Video Quality (Standard)
 	settings->setVideoQuality(VIDEO_QUALITY_STANDARD);
 	updated = true;
 	break;
-  case ID_BUTTON_28:
+  case ID_BUTTON_29:
 	// Video Quality (High)
 	settings->setVideoQuality(VIDEO_QUALITY_HIGH);
 	updated = true;
 	break;
-  case ID_BUTTON_29:
+  case ID_BUTTON_30:
 	// Video Quality (Highest)
 	settings->setVideoQuality(VIDEO_QUALITY_MAXIMUM);
 	updated = true;
 	break;
-  case ID_BUTTON_30:
+  case ID_BUTTON_31:
 	// Mouse Left Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
@@ -259,7 +295,7 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	  previousClickTime = currentTime;
 	}
 	break;
-  case ID_BUTTON_31:
+  case ID_BUTTON_32:
 	// Mouse Right Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
@@ -275,6 +311,29 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	  previousClick = TYPE_MOUSE_RIGHT_BUTTON;
 	  previousClickTime = currentTime;
 	}
+	break;
+  case ID_BUTTON_33:
+	// Video FPS
+	break;
+  case ID_BUTTON_34:
+	// Video FPS (Minimum)
+	settings->setFrameRate(5);
+	break;
+  case ID_BUTTON_35:
+	// Video FPS (10)
+	settings->setFrameRate(10);
+	break;
+  case ID_BUTTON_36:
+	// Video FPS (30)
+	settings->setFrameRate(30);
+	break;
+  case ID_BUTTON_37:
+	// Video FPS (60)
+	settings->setFrameRate(60);
+	break;
+  case ID_BUTTON_38:
+	// Video FPS (Maximum)
+	settings->setFrameRate(0);
 	break;
   default:
 	// error
@@ -300,50 +359,20 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
   value.button = MOUSE_BUTTON_UP;
 
   switch (id){
-  case ID_BUTTON_1:
-  case ID_BUTTON_2:
-  case ID_BUTTON_3:
-  case ID_BUTTON_4:
-  case ID_BUTTON_5:
-  case ID_BUTTON_6:
-  case ID_BUTTON_7:
-  case ID_BUTTON_8:
-  case ID_BUTTON_9:
-  case ID_BUTTON_10:
-  case ID_BUTTON_11:
-  case ID_BUTTON_12:
-  case ID_BUTTON_13:
-  case ID_BUTTON_14:
-  case ID_BUTTON_15:
-  case ID_BUTTON_16:
-  case ID_BUTTON_17:
-  case ID_BUTTON_18:
-  case ID_BUTTON_19:
-  case ID_BUTTON_20:
-  case ID_BUTTON_21:
-  case ID_BUTTON_22:
-  case ID_BUTTON_23:
-  case ID_BUTTON_24:
-  case ID_BUTTON_25:
-  case ID_BUTTON_26:
-  case ID_BUTTON_27:
-  case ID_BUTTON_28:
-  case ID_BUTTON_29:
-	break;
-  case ID_BUTTON_30:
+  case ID_BUTTON_31:
 	// Mouse Left Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
 	}
 	break;
-  case ID_BUTTON_31:
+  case ID_BUTTON_32:
 	// Mouse Right Button
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
 	}
 	break;
   default:
-	// error
+	// Nothing to do
 	break;
   }
 

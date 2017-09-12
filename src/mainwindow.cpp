@@ -540,6 +540,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 	  pos.x = currentMousePos.x();
 	  pos.y = currentMousePos.y();
 	  mouseBuffer->setMousePos(pos);
+	  //parent->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 	  // set cursor point color to control thread
 	  parent->setCursorPointColor(image.pixel(currentMousePos));

@@ -122,6 +122,14 @@ public:
   void setCursorPointColor(QRgb cursorPointColor);
 #endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // move top of software keyboard
+  void moveTopOfSoftwareKeyboard(int y);
+
+  // move top of software button
+  void moveTopOfSoftwareButton(int y);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
 public slots:
   // connect to server
   void connectToServer();
@@ -337,6 +345,12 @@ private slots:
 
   // toggle show software button
   void toggleShowSoftwareButton();
+
+  // setup software keyboard
+  void setupSoftwareKeyboard();
+
+  // setup software button
+  void setupSoftwareButton();
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // select frame rate

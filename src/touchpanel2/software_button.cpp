@@ -31,6 +31,9 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   onShowSoundQualityButton(false),
   onShowVideoQualityButton(false),
   onShowSoundButton(false),
+  onShowSoundCacheButton(false),
+  onShowPublicModeButton(false),
+  onShowVideoFPSButton(false),
   // for DEBUG
   outputLog(false)
 {
@@ -49,6 +52,7 @@ QSize SoftwareButton::resetSize()
 {
   // initialize layout
   calculateLayout(5, 5);
+  resize(buttonSize);
   return buttonSize;
 }
 
@@ -74,6 +78,7 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 
   // draw all buttons
   for(int i = ID_BUTTON_1; i < ID_BUTTON_NUM; i++){
+	//if (true){
 	if (buttonTopTable[i].visible){
 	  QRect rect = layout[i].rect;
 	  if (layout[i].pushed)
@@ -169,98 +174,144 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 
   switch (id){
   case ID_BUTTON_1:
-	// Option
-	toggleOptionButton();
+	// Fn
 	break;
   case ID_BUTTON_2:
 	// Monitor
-	toggleShowMonitorButton();
 	break;
   case ID_BUTTON_3:
+	// clear buttons
+	clearButtons();
+	// Sound
+	toggleShowSoundButton();
+	break;
   case ID_BUTTON_4:
   case ID_BUTTON_5:
+	// Sound ON/OFF
+	for(int i = ID_BUTTON_4; i <= ID_BUTTON_5; i++){
+	  layout[i].pushed = false;
+	  layout[i].selected = false;
+	}
+	layout[id].selected = true;
+	break;
   case ID_BUTTON_6:
+	// Info button
+	// Nothing to do
+	return;
+	break;
   case ID_BUTTON_7:
+	// clear buttons
+	clearButtons();
+	// Sound Cache
+	toggleShowSoundCacheButton();
+	break;
   case ID_BUTTON_8:
   case ID_BUTTON_9:
   case ID_BUTTON_10:
   case ID_BUTTON_11:
-	for(int i = ID_BUTTON_3; i <= ID_BUTTON_11; i++){
+  case ID_BUTTON_12:
+	for(int i = ID_BUTTON_8; i <= ID_BUTTON_12; i++){
 	  layout[i].pushed = false;
 	  layout[i].selected = false;
 	}
 	layout[id].selected = true;
-	break;
-  case ID_BUTTON_12:
-	// Info Button
-	// Nothing to do
-	return;
 	break;
   case ID_BUTTON_13:
-	// Sound Button
-	toggleShowSoundButton();
+	// Option
+	toggleOptionButton();
 	break;
   case ID_BUTTON_14:
-	// Sound OFF Button
-  case ID_BUTTON_15:
-	// Sound ON Button
-	for(int i = ID_BUTTON_14; i <= ID_BUTTON_15; i++){
-	  layout[i].pushed = false;
-	  layout[i].selected = false;
-	}
-	layout[id].selected = true;
-	break;
-  case ID_BUTTON_16:
-	// Wheel +
-	break;
-  case ID_BUTTON_17:
+	// clear buttons
+	clearButtons();
 	// Sound Quality
 	toggleShowSoundQualityButton();
 	break;
-  case ID_BUTTON_18:
+  case ID_BUTTON_15:
 	// Sound Quality (Lowest)
-  case ID_BUTTON_19:
+  case ID_BUTTON_16:
 	// Sound Quality (Low)
-  case ID_BUTTON_20:
+  case ID_BUTTON_17:
 	// Sound Quality (Standard)
-  case ID_BUTTON_21:
+  case ID_BUTTON_18:
 	// Sound Quality (High)
-  case ID_BUTTON_22:
+  case ID_BUTTON_19:
 	// Sound Quality (Highest)
-	for(int i = ID_BUTTON_18; i <= ID_BUTTON_22; i++){
+	for(int i = ID_BUTTON_15; i <= ID_BUTTON_19; i++){
 	  layout[i].pushed = false;
 	  layout[i].selected = false;
 	}
 	layout[id].selected = true;
 	break;
+  case ID_BUTTON_20:
+	// Wheel +
+	break;
+  case ID_BUTTON_21:
+	// clear buttons
+	clearButtons();
+	// Public Mode
+	toggleShowPublicModeButton();
+	break;
+  case ID_BUTTON_22:
   case ID_BUTTON_23:
-	// Wheel -
+	// Public Mode
+	for(int i = ID_BUTTON_22; i <= ID_BUTTON_23; i++){
+	  layout[i].pushed = false;
+	  layout[i].selected = false;
+	}
+	layout[id].selected = true;
 	break;
   case ID_BUTTON_24:
+	// Wheel -
+	break;
+  case ID_BUTTON_25:
+	// clear buttons
+	clearButtons();
 	// Video Quality
 	toggleShowVideoQualityButton();
 	break;
-  case ID_BUTTON_25:
-	// Video Quality (Lowest)
   case ID_BUTTON_26:
-	// Video Quality (Low)
+	// Video Quality (Lowest)
   case ID_BUTTON_27:
-	// Video Quality (Standard)
+	// Video Quality (Low)
   case ID_BUTTON_28:
-	// Video Quality (High)
+	// Video Quality (Standard)
   case ID_BUTTON_29:
+	// Video Quality (High)
+  case ID_BUTTON_30:
 	// Video Quality (Highest)
-	for(int i = ID_BUTTON_25; i <= ID_BUTTON_29; i++){
+	for(int i = ID_BUTTON_26; i <= ID_BUTTON_30; i++){
 	  layout[i].pushed = false;
 	  layout[i].selected = false;
 	}
 	layout[id].selected = true;
 	break;
-  case ID_BUTTON_30:
+  case ID_BUTTON_31:
 	// Mouse Left Button
 	break;
-  case ID_BUTTON_31:
+  case ID_BUTTON_32:
 	// Mouse Right Button
+	break;
+  case ID_BUTTON_33:
+	// clear buttons
+	clearButtons();
+	// Video FPS
+	toggleShowVideoFPSButton();
+	break;
+  case ID_BUTTON_34:
+	// Video FPS (Minimum)
+  case ID_BUTTON_35:
+	// Video FPS (10)
+  case ID_BUTTON_36:
+	// Video FPS (30)
+  case ID_BUTTON_37:
+	// Video FPS (60)
+  case ID_BUTTON_38:
+	// Video FPS (Maximum)
+	for(int i = ID_BUTTON_34; i <= ID_BUTTON_38; i++){
+	  layout[i].pushed = false;
+	  layout[i].selected = false;
+	}
+	layout[id].selected = true;
 	break;
   default:
 	// error
@@ -317,55 +368,51 @@ SoftwareButton::ID_BUTTON SoftwareButton::getID(QPoint pos)
   return ID_BUTTON_0;
 }
 
+// clear buttons
+void SoftwareButton::clearButtons()
+{
+  // clear buttons
+  if (onShowSoundButton)
+	toggleShowSoundButton();
+  if (onShowSoundQualityButton)
+	toggleShowSoundQualityButton();
+  if (onShowVideoQualityButton)
+	toggleShowVideoQualityButton();
+  if (onShowSoundCacheButton)
+	toggleShowSoundCacheButton();
+  if (onShowPublicModeButton)
+	toggleShowPublicModeButton();
+  if (onShowVideoFPSButton)
+	toggleShowVideoFPSButton();
+}
+
 // toggle option button
 void SoftwareButton::toggleOptionButton()
 {
   onOptionButton = !onOptionButton;
 
-  layout[ID_BUTTON_1].pushed = onOptionButton;
-  layout[ID_BUTTON_1].selected = onOptionButton;
+  layout[ID_BUTTON_13].pushed = onOptionButton;
+  layout[ID_BUTTON_13].selected = onOptionButton;
 
   // monitor option button
   buttonTopTable[ID_BUTTON_2].visible = onOptionButton;
   // sound option button
-  buttonTopTable[ID_BUTTON_13].visible = onOptionButton;
-  // sound quality option button
-  buttonTopTable[ID_BUTTON_17].visible = onOptionButton;
-  // sound video option button
-  buttonTopTable[ID_BUTTON_24].visible = onOptionButton;
+  buttonTopTable[ID_BUTTON_3].visible = onOptionButton;
+  // sound cache button
+  buttonTopTable[ID_BUTTON_7].visible = onOptionButton;
+  // sound quality button
+  buttonTopTable[ID_BUTTON_14].visible = onOptionButton;
+  // publilc mode button
+  buttonTopTable[ID_BUTTON_21].visible = onOptionButton;
+  // video quality button
+  buttonTopTable[ID_BUTTON_25].visible = onOptionButton;
+  // video FPS button
+  buttonTopTable[ID_BUTTON_33].visible = onOptionButton;
 
   if(!onOptionButton){
 	// clear buttons
-	if (onShowMonitorButton)
-	  toggleShowMonitorButton();
-	if (onShowSoundQualityButton)
-	  toggleShowSoundQualityButton();
-	if (onShowVideoQualityButton)
-	  toggleShowVideoQualityButton();
-	if (onShowSoundButton)
-	  toggleShowSoundButton();
+	clearButtons();
   }
-
-  update();
-}
-
-// toggle monitor button
-void SoftwareButton::toggleShowMonitorButton()
-{
-  onShowMonitorButton = !onShowMonitorButton;
-
-  layout[ID_BUTTON_2].pushed = onShowMonitorButton;
-  layout[ID_BUTTON_2].selected = onShowMonitorButton;
-
-  buttonTopTable[ID_BUTTON_3].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_4].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_5].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_6].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_7].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_8].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_9].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_10].visible = onShowMonitorButton;
-  buttonTopTable[ID_BUTTON_11].visible = onShowMonitorButton;
 
   update();
 }
@@ -375,11 +422,11 @@ void SoftwareButton::toggleShowSoundButton()
 {
   onShowSoundButton = !onShowSoundButton;
 
-  layout[ID_BUTTON_13].pushed = onShowSoundButton;
-  layout[ID_BUTTON_13].selected = onShowSoundButton;
+  layout[ID_BUTTON_3].pushed = onShowSoundButton;
+  layout[ID_BUTTON_3].selected = onShowSoundButton;
 
-  buttonTopTable[ID_BUTTON_14].visible = onShowSoundButton;
-  buttonTopTable[ID_BUTTON_15].visible = onShowSoundButton;
+  buttonTopTable[ID_BUTTON_4].visible = onShowSoundButton;
+  buttonTopTable[ID_BUTTON_5].visible = onShowSoundButton;
 
   update();
 }
@@ -389,14 +436,14 @@ void SoftwareButton::toggleShowSoundQualityButton()
 {
   onShowSoundQualityButton = !onShowSoundQualityButton;
 
-  layout[ID_BUTTON_17].pushed = onShowSoundQualityButton;
-  layout[ID_BUTTON_17].selected = onShowSoundQualityButton;
+  layout[ID_BUTTON_14].pushed = onShowSoundQualityButton;
+  layout[ID_BUTTON_14].selected = onShowSoundQualityButton;
 
+  buttonTopTable[ID_BUTTON_15].visible = onShowSoundQualityButton;
+  buttonTopTable[ID_BUTTON_16].visible = onShowSoundQualityButton;
+  buttonTopTable[ID_BUTTON_17].visible = onShowSoundQualityButton;
   buttonTopTable[ID_BUTTON_18].visible = onShowSoundQualityButton;
   buttonTopTable[ID_BUTTON_19].visible = onShowSoundQualityButton;
-  buttonTopTable[ID_BUTTON_20].visible = onShowSoundQualityButton;
-  buttonTopTable[ID_BUTTON_21].visible = onShowSoundQualityButton;
-  buttonTopTable[ID_BUTTON_22].visible = onShowSoundQualityButton;
 
   update();
 }
@@ -406,14 +453,62 @@ void SoftwareButton::toggleShowVideoQualityButton()
 {
   onShowVideoQualityButton = !onShowVideoQualityButton;
 
-  layout[ID_BUTTON_24].pushed = onShowVideoQualityButton;
-  layout[ID_BUTTON_24].selected = onShowVideoQualityButton;
+  layout[ID_BUTTON_25].pushed = onShowVideoQualityButton;
+  layout[ID_BUTTON_25].selected = onShowVideoQualityButton;
 
-  buttonTopTable[ID_BUTTON_25].visible = onShowVideoQualityButton;
   buttonTopTable[ID_BUTTON_26].visible = onShowVideoQualityButton;
   buttonTopTable[ID_BUTTON_27].visible = onShowVideoQualityButton;
   buttonTopTable[ID_BUTTON_28].visible = onShowVideoQualityButton;
   buttonTopTable[ID_BUTTON_29].visible = onShowVideoQualityButton;
+  buttonTopTable[ID_BUTTON_30].visible = onShowVideoQualityButton;
+
+  update();
+}
+
+// toggle sound cache button
+void SoftwareButton::toggleShowSoundCacheButton()
+{
+  onShowSoundCacheButton = !onShowSoundCacheButton;
+
+  layout[ID_BUTTON_7].pushed = onShowSoundCacheButton;
+  layout[ID_BUTTON_7].selected = onShowSoundCacheButton;
+
+  buttonTopTable[ID_BUTTON_8].visible = onShowSoundCacheButton;
+  buttonTopTable[ID_BUTTON_9].visible = onShowSoundCacheButton;
+  buttonTopTable[ID_BUTTON_10].visible = onShowSoundCacheButton;
+  buttonTopTable[ID_BUTTON_11].visible = onShowSoundCacheButton;
+  buttonTopTable[ID_BUTTON_12].visible = onShowSoundCacheButton;
+
+  update();
+}
+
+// toggle public mode button
+void SoftwareButton::toggleShowPublicModeButton()
+{
+  onShowPublicModeButton = !onShowPublicModeButton;
+
+  layout[ID_BUTTON_21].pushed = onShowPublicModeButton;
+  layout[ID_BUTTON_21].selected = onShowPublicModeButton;
+
+  buttonTopTable[ID_BUTTON_22].visible = onShowPublicModeButton;
+  buttonTopTable[ID_BUTTON_23].visible = onShowPublicModeButton;
+
+  update();
+}
+
+// toggle video FPS button
+void SoftwareButton::toggleShowVideoFPSButton()
+{
+  onShowVideoFPSButton = !onShowVideoFPSButton;
+
+  layout[ID_BUTTON_33].pushed = onShowVideoFPSButton;
+  layout[ID_BUTTON_33].selected = onShowVideoFPSButton;
+
+  buttonTopTable[ID_BUTTON_34].visible = onShowVideoFPSButton;
+  buttonTopTable[ID_BUTTON_35].visible = onShowVideoFPSButton;
+  buttonTopTable[ID_BUTTON_36].visible = onShowVideoFPSButton;
+  buttonTopTable[ID_BUTTON_37].visible = onShowVideoFPSButton;
+  buttonTopTable[ID_BUTTON_38].visible = onShowVideoFPSButton;
 
   update();
 }

@@ -222,7 +222,11 @@ typedef int KEYBOARD_TYPE;
 
 // for soundCacheTime (ms)
 #define QTB_SOUNDCACHETIME			"soundCacheTime"
-#define QTB_SOUNDCACHETIME_DEFAULT	0
+#if defined(QTB_DEV_TABLET)
+#define QTB_SOUNDCACHETIME_DEFAULT	100
+#else // defined(QTB_DEV_TABLET)
+#define QTB_SOUNDCACHETIME_DEFAULT	100
+#endif // defined(QTB_DEV_TABLET)
 
 // for onKeepOriginalDesktopSize
 #define QTB_ONKEEPORIGINALDESKTOPSIZE "onKeepOriginalDesktopSize"

@@ -3758,6 +3758,22 @@ void QtBrynhildr::logView()
 }
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+// move top of software keyboard
+void QtBrynhildr::moveTopOfSoftwareKeyboard(int y)
+{
+  QRect rect = softwareKeyboard->geometry();
+  rect.moveTop(y);
+  softwareKeyboard->setGeometry(rect);
+}
+
+// move top of software button
+void QtBrynhildr::moveTopOfSoftwareButton(int y)
+{
+  QRect rect = softwareButton->geometry();
+  rect.moveTop(y);
+  softwareButton->setGeometry(rect);
+}
+
 // calulate software keyboard layout
 QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
 {
@@ -3769,13 +3785,12 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   int width = desktopSize.width() * 0.9;
   int height = size.height() * ((double)width / size.width());
 
-  //  cout << "width = " << width << endl;
-  //  cout << "height = " << height << endl << flush;
-
   // calc position
   int x = (desktopSize.width() - width) * 0.5;
-  int y = (desktopSize.height() - height) * 0.9;
+  int y = (desktopSize.height() - height) * 0.8;
 
+  //  cout << "width = " << width << endl;
+  //  cout << "height = " << height << endl << flush;
   //  cout << "x = " << x << endl;
   //  cout << "y = " << y << endl << flush;
 
@@ -3793,12 +3808,15 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   int width = desktopSize.width() * 0.9;
   int height = size.height() * ((double)width / size.width());
 
-  //  cout << "width = " << width << endl;
-  //  cout << "height = " << height << endl << flush;
-
   // calc position
   int x = (desktopSize.width() - width) * 0.5;
-  int y = (desktopSize.height() - height) * 0.05;
+  int y = (desktopSize.height() - height) * 0.8;
+
+  //  cout << "width = " << width << endl;
+  //  cout << "height = " << height << endl << flush;
+  //  cout << "x = " << x << endl;
+  //  cout << "y = " << y << endl << flush;
+
 
   return QRect(x, y, width, height);
 }
@@ -3811,9 +3829,9 @@ void QtBrynhildr::toggleShowSoftwareKeyboard()
 	softwareKeyboard->setVisible(false);
   }
   else {
+	settings->setOnShowSoftwareKeyboard(true);
 	QRect rect = calculateSoftwareKeyboardLayout();
 	softwareKeyboard->setGeometry(rect);
-	settings->setOnShowSoftwareKeyboard(true);
 	softwareKeyboard->setVisible(true);
   }
 }
@@ -3826,11 +3844,31 @@ void QtBrynhildr::toggleShowSoftwareButton()
 	softwareButton->setVisible(false);
   }
   else {
+	settings->setOnShowSoftwareButton(true);
 	QRect rect = calculateSoftwareButtonLayout();
 	softwareButton->setGeometry(rect);
-	settings->setOnShowSoftwareButton(true);
 	softwareButton->setVisible(true);
   }
+}
+
+// setup software keyboard
+void QtBrynhildr::setupSoftwareKeyboard()
+{
+  settings->setOnShowSoftwareKeyboard(true);
+  QRect rect = calculateSoftwareKeyboardLayout();
+  rect.moveTop(mainWindow->getSize().height()); // outside desktop
+  softwareKeyboard->setGeometry(rect);
+  softwareKeyboard->setVisible(true);
+}
+
+// setup software button
+void QtBrynhildr::setupSoftwareButton()
+{
+  settings->setOnShowSoftwareButton(true);
+  QRect rect = calculateSoftwareButtonLayout();
+  rect.moveTop(mainWindow->getSize().height()); // outside desktop
+  softwareButton->setGeometry(rect);
+  softwareButton->setVisible(true);
 }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 

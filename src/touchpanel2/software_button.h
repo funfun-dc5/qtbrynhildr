@@ -81,6 +81,13 @@ protected:
 	ID_BUTTON_29,
 	ID_BUTTON_30,
 	ID_BUTTON_31,
+	ID_BUTTON_32,
+	ID_BUTTON_33,
+	ID_BUTTON_34,
+	ID_BUTTON_35,
+	ID_BUTTON_36,
+	ID_BUTTON_37,
+	ID_BUTTON_38,
 	ID_BUTTON_NUM,
 	ID_BUTTON_0 = ID_BUTTON_NUM
   } ID_BUTTON;
@@ -99,11 +106,11 @@ private:
   // get ID
   ID_BUTTON getID(QPoint pos);
 
+  // clear buttons
+  void clearButtons();
+
   // toggle option button
   void toggleOptionButton();
-
-  // toggle monitor button
-  void toggleShowMonitorButton();
 
   // toggle sound button
   void toggleShowSoundButton();
@@ -114,6 +121,15 @@ private:
   // toggle video quality button
   void toggleShowVideoQualityButton();
 
+  // toggle sound cache button
+  void toggleShowSoundCacheButton();
+
+  // toggle public mode button
+  void toggleShowPublicModeButton();
+
+  // toggle video FPS button
+  void toggleShowVideoFPSButton();
+
 protected:
   // button top
   typedef struct {
@@ -123,47 +139,61 @@ protected:
 
   // key top table
   ButtonTop buttonTopTable[ID_BUTTON_NUM] = {
+	// 1st row
 	{"Fn",				true},  	// ID_BUTTON_1
 	{"Monitor",			false},		// ID_BUTTON_2
-	{"1",				false},		// ID_BUTTON_3
-	{"2",				false},		// ID_BUTTON_4
-	{"3",				false},	 	// ID_BUTTON_5
-	{"4",				false},		// ID_BUTTON_6
-	{"5",				false},		// ID_BUTTON_7
-	{"6",				false},		// ID_BUTTON_8
-	{"7",				false},		// ID_BUTTON_9
-	{"8",				false},		// ID_BUTTON_10
-	{"9",				false},		// ID_BUTTON_11
+	{"Sound",			false},		// ID_BUTTON_3
+	{"Off",				false},		// ID_BUTTON_4
+	{"On",				false},		// ID_BUTTON_5
 
-	{"Info",			true},	 	// ID_BUTTON_12
-	{"Sound",			false},	 	// ID_BUTTON_13
-	{"OFF",				false},	 	// ID_BUTTON_14
-	{"ON",				false},	 	// ID_BUTTON_15
+	// 2nd row
+	{"00.0 fps\n\n00.0 Mbps",true},	// ID_BUTTON_6
+	{"Sound\nCache",	false},		// ID_BUTTON_7
+	{"1",				false},		// ID_BUTTON_8
+	{"2",				false},		// ID_BUTTON_9
+	{"3",				false},		// ID_BUTTON_10
+	{"4",				false},		// ID_BUTTON_11
+	{"5",				false},	 	// ID_BUTTON_12
 
-	{"Wheel+",			true},	 	// ID_BUTTON_16
-	{"Sound Quality",	false},		// ID_BUTTON_17
-	{"Lowest",			false},		// ID_BUTTON_18
-	{"Low",				false},		// ID_BUTTON_19
-	{"Standard",		false},		// ID_BUTTON_20
-	{"High",			false},		// ID_BUTTON_21
-	{"Highest",			false}, 	// ID_BUTTON_22
+	// 3rd row
+	{"Option",			true},	 	// ID_BUTTON_13
+	{"Sound\nQuality",	false},	 	// ID_BUTTON_14
+	{"1",				false},	 	// ID_BUTTON_15
+	{"2",				false},		// ID_BUTTON_16
+	{"3",				false},		// ID_BUTTON_17
+	{"4",				false},		// ID_BUTTON_18
+	{"5",				false},		// ID_BUTTON_19
 
-	{"Wheel-",			true},		// ID_BUTTON_23
-	{"Video Quality",	false},		// ID_BUTTON_24
-	{"Lowest",			false},	 	// ID_BUTTON_25
-	{"Low",				false},	 	// ID_BUTTON_26
-	{"Standard",		false},		// ID_BUTTON_27
-	{"High",			false},	 	// ID_BUTTON_28
-	{"Highest",			false}, 	// ID_BUTTON_29
+	// 4th row
+	{"Wheel +",			true},		// ID_BUTTON_20
+	{"Video\nCodec",	false},		// ID_BUTTON_21
+	{"MJPEG",			false},		// ID_BUTTON_22
+	{"Compress",		false},	 	// ID_BUTTON_23
 
-	{"Left",			true},	 	// ID_BUTTON_30
-	{"Right",			true}	 	// ID_BUTTON_31
+	// 5th row
+	{"Wheel -",			true},	 	// ID_BUTTON_24
+	{"Video\nQuality",	false},	 	// ID_BUTTON_25
+	{"1",				false}, 	// ID_BUTTON_26
+	{"2",				false},	 	// ID_BUTTON_27
+	{"3",				false},	 	// ID_BUTTON_28
+	{"4",				false},	 	// ID_BUTTON_29
+	{"5",				false},	 	// ID_BUTTON_30
+
+	// 6th row
+	{"Left",			true},	 	// ID_BUTTON_31
+	{"Right",			true},	 	// ID_BUTTON_32
+	{"Video\nFPS",		false},	 	// ID_BUTTON_33
+	{"Minimum",			false},	 	// ID_BUTTON_34
+	{"10",				false},	 	// ID_BUTTON_35
+	{"30",				false},	 	// ID_BUTTON_36
+	{"60",				false},	 	// ID_BUTTON_37
+	{"Maximum",			false}	 	// ID_BUTTON_38
   };
 
 private:
   // original size for layout
-  static const int WIDTH = 198;
-  static const int HEIGHT = 75;
+  static const int WIDTH = 144;
+  static const int HEIGHT = 90;
 
   // button size
   QSize buttonSize;
@@ -176,41 +206,50 @@ private:
 	QRect( 36,  0, 18, 15),
 	QRect( 54,  0, 18, 15),
 	QRect( 72,  0, 18, 15),
-	QRect( 90,  0, 18, 15),
-	QRect(108,  0, 18, 15),
-	QRect(126,  0, 18, 15),
-	QRect(144,  0, 18, 15),
-	QRect(162,  0, 18, 15),
-	QRect(180,  0, 18, 15),
 
 	// 2nd row
 	QRect(  0, 15, 18, 15),
-	QRect( 18, 15, 18, 15),
 	QRect( 36, 15, 18, 15),
 	QRect( 54, 15, 18, 15),
+	QRect( 72, 15, 18, 15),
+	QRect( 90, 15, 18, 15),
+	QRect(108, 15, 18, 15),
+	QRect(126, 15, 18, 15),
 
 	// 3rd row
 	QRect(  0, 30, 18, 15),
-	QRect( 18, 30, 18, 15),
 	QRect( 36, 30, 18, 15),
 	QRect( 54, 30, 18, 15),
 	QRect( 72, 30, 18, 15),
 	QRect( 90, 30, 18, 15),
 	QRect(108, 30, 18, 15),
+	QRect(126, 30, 18, 15),
 
 	// 4th row
 	QRect(  0, 45, 18, 15),
-	QRect( 18, 45, 18, 15),
 	QRect( 36, 45, 18, 15),
 	QRect( 54, 45, 18, 15),
 	QRect( 72, 45, 18, 15),
-	QRect( 90, 45, 18, 15),
-	QRect(108, 45, 18, 15),
 
 	// 5th row
 	QRect(  0, 60, 18, 15),
-	QRect( 18, 60, 18, 15),
-  };
+	QRect( 36, 60, 18, 15),
+	QRect( 54, 60, 18, 15),
+	QRect( 72, 60, 18, 15),
+	QRect( 90, 60, 18, 15),
+	QRect(108, 60, 18, 15),
+	QRect(126, 60, 18, 15),
+
+	// 6th row
+	QRect(  0, 75, 18, 15),
+	QRect( 18, 75, 18, 15),
+	QRect( 36, 75, 18, 15),
+	QRect( 54, 75, 18, 15),
+	QRect( 72, 75, 18, 15),
+	QRect( 90, 75, 18, 15),
+	QRect(108, 75, 18, 15),
+	QRect(126, 75, 18, 15)
+};
 
   // layout table for button
   typedef struct {
@@ -234,6 +273,15 @@ private:
 
   // show sound button flag
   bool onShowSoundButton;
+
+  // show sound cache button flag
+  bool onShowSoundCacheButton;
+
+  // show public mode button flag
+  bool onShowPublicModeButton;
+
+  // show video FPS button flag
+  bool onShowVideoFPSButton;
 
   // output log flag
   bool outputLog;

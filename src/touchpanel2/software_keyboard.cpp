@@ -4,7 +4,9 @@
 // Common Header
 
 // System Header
+#if 0 // for TEST
 #include <cstring>
+#endif // for TEST
 #include <fstream> // for TEST
 #include <iostream> // for TEST
 

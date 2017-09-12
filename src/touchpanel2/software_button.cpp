@@ -34,6 +34,8 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   onShowSoundCacheButton(false),
   onShowPublicModeButton(false),
   onShowVideoFPSButton(false),
+  currentFrameRate(0.0),
+  currentDataRate(0.0),
   // for DEBUG
   outputLog(false)
 {
@@ -86,10 +88,21 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 	  else
 		painter.fillRect(rect, panelColor);
 	  painter.drawRect(rect);
-	  painter.drawText(rect,
-					   Qt::AlignCenter,
-					   buttonTopTable[i].buttonTop
-					   );
+	  if (i == ID_BUTTON_6){ // Info
+		QString str = QString("%1 fps\n\n%2 Mbps").
+		  arg(currentFrameRate, 4, 'f', 1, ' ').
+		  arg(currentDataRate, 4, 'f', 1, ' ');
+		painter.drawText(rect,
+						 Qt::AlignCenter,
+						 str
+						 );
+	  }
+	  else {
+		painter.drawText(rect,
+						 Qt::AlignCenter,
+						 buttonTopTable[i].buttonTop
+						 );
+	  }
 	}
   }
 
@@ -177,11 +190,15 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	// Fn
 	break;
   case ID_BUTTON_2:
+	// clear buttons
+	clearButtons();
 	// Monitor
 	break;
   case ID_BUTTON_3:
-	// clear buttons
-	clearButtons();
+	if (!onShowSoundButton){
+	  // clear buttons
+	  clearButtons();
+	}
 	// Sound
 	toggleShowSoundButton();
 	break;
@@ -200,8 +217,10 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	return;
 	break;
   case ID_BUTTON_7:
-	// clear buttons
-	clearButtons();
+	if (!onShowSoundCacheButton){
+	  // clear buttons
+	  clearButtons();
+	}
 	// Sound Cache
 	toggleShowSoundCacheButton();
 	break;
@@ -221,8 +240,10 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	toggleOptionButton();
 	break;
   case ID_BUTTON_14:
-	// clear buttons
-	clearButtons();
+	if (!onShowSoundQualityButton){
+	  // clear buttons
+	  clearButtons();
+	}
 	// Sound Quality
 	toggleShowSoundQualityButton();
 	break;
@@ -246,8 +267,10 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	// Wheel +
 	break;
   case ID_BUTTON_21:
-	// clear buttons
-	clearButtons();
+	if (!onShowPublicModeButton){
+	  // clear buttons
+	  clearButtons();
+	}
 	// Public Mode
 	toggleShowPublicModeButton();
 	break;
@@ -264,8 +287,10 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	// Wheel -
 	break;
   case ID_BUTTON_25:
-	// clear buttons
-	clearButtons();
+	if (!onShowVideoQualityButton){
+	  // clear buttons
+	  clearButtons();
+	}
 	// Video Quality
 	toggleShowVideoQualityButton();
 	break;
@@ -292,8 +317,10 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 	// Mouse Right Button
 	break;
   case ID_BUTTON_33:
-	// clear buttons
-	clearButtons();
+	if (!onShowVideoFPSButton){
+	  // clear buttons
+	  clearButtons();
+	}
 	// Video FPS
 	toggleShowVideoFPSButton();
 	break;

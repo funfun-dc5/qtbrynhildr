@@ -28,6 +28,18 @@ public:
   // reset size
   QSize resetSize();
 
+  // set current frame rate
+  void setCurrentFrameRate(double currentFrameRate)
+  {
+	this->currentFrameRate = currentFrameRate;
+  }
+
+  // set current data rate
+  void setCurrentDataRate(double currentDataRate)
+  {
+	this->currentDataRate = currentDataRate;
+  }
+
 protected:
   // paint event
   void paintEvent(QPaintEvent *event) override;
@@ -282,6 +294,12 @@ private:
 
   // show video FPS button flag
   bool onShowVideoFPSButton;
+
+  // current frame rate
+  double currentFrameRate;
+
+  // current data rate
+  double currentDataRate;
 
   // output log flag
   bool outputLog;

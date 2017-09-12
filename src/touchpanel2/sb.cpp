@@ -153,7 +153,13 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_2:
 	// Monitor
-	// TODO : next monitor
+	{
+	  // set next monitor number
+	  MONITOR_COUNT monitorCount = settings->getMonitorCount();
+	  MONITOR_NO monitorNo = settings->getMonitorNo();
+	  monitorNo =  (monitorNo < monitorCount) ? monitorNo + 1 : 1;
+	  settings->setMonitorNo(monitorNo);
+	}
 	break;
   case ID_BUTTON_3:
 	// Sound

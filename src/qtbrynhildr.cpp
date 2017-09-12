@@ -2222,6 +2222,35 @@ void QtBrynhildr::updateFrameRate()
   }
 
   // update fps
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  if (settings->getOnShowFrameRate() ||
+	  settings->getOnShowSoftwareButton()){
+	if (!settings->getConnected()){
+	  currentFrameRate = 0;
+	  currentDataRate = 0;
+	}
+	//currentFrameRate = settings->getFrameInterval(); // for TEST
+	//currentFrameRate = settings->getFrameDrawTime(); // for TEST
+	if (settings->getOnShowFrameRate()){ // Status Bar
+	  QString str = QString(tr("Frame Rate : ")+"%1 [%2 Mbps]").
+		arg(currentFrameRate, 4, 'f', 1, ' ').
+		arg(currentDataRate, 4, 'f', 1, ' ');
+	  frameRateLabel->setText(str);
+	}
+	else {
+	  frameRateLabel->clear();
+	}
+	if (settings->getOnShowSoftwareButton()){ // Software Button
+	  if (softwareButton != 0){
+		softwareButton->setCurrentFrameRate(currentFrameRate);
+		softwareButton->setCurrentDataRate(currentDataRate);
+	  }
+	}
+  }
+  else {
+	frameRateLabel->clear();
+  }
+#else // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   if (settings->getOnShowFrameRate()){
 	if (!settings->getConnected()){
 	  currentFrameRate = 0;
@@ -2229,7 +2258,7 @@ void QtBrynhildr::updateFrameRate()
 	}
 	//currentFrameRate = settings->getFrameInterval(); // for TEST
 	//currentFrameRate = settings->getFrameDrawTime(); // for TEST
-	QString str = QString(tr("Frame Rate: ")+"%1 [%2 Mbps]").
+	QString str = QString(tr("Frame Rate : ")+"%1 [%2 Mbps]").
 	  arg(currentFrameRate, 4, 'f', 1, ' ').
 	  arg(currentDataRate, 4, 'f', 1, ' ');
 	frameRateLabel->setText(str);
@@ -2237,6 +2266,7 @@ void QtBrynhildr::updateFrameRate()
   else {
 	frameRateLabel->clear();
   }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 }
 
 // connected
@@ -4163,7 +4193,12 @@ void QtBrynhildr::timerExpired()
   //  cout << "timerExpired!" << endl << flush;
 
   // update current frame rate
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  if (settings->getOnShowFrameRate() ||
+	  settings->getOnShowSoftwareButton()){
+#else // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   if (settings->getOnShowFrameRate()){
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 	static int refreshCounter = 1;
 	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
 	  // frame rate

@@ -1230,9 +1230,9 @@
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="2232"/>
-        <source>Frame Rate: </source>
+        <source>Frame Rate : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>フレームレート: </translation>
+        <translation>フレームレート : </translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="2204"/>

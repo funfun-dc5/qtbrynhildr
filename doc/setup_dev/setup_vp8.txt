@@ -1,0 +1,44 @@
+---------------------------------------------------------------------------
+ Setup VP8
+---------------------------------------------------------------------------
+
+1) download VPX library v1.40 source code
+
+ http://downloads.webmproject.org/releases/webm/index.html
+
+2) build static library (libvpx.a)
+
+see `./configure --help`
+
+[common]
+ configure script option : --target=xxxx-xxxx-xxxx   --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests
+
+[MinGW] --target=x86-win32-gcc
+
+[MSVC] --target=x86-win32-vs12
+
+[MSVC x64] --target=x86_64-win32-vs12
+
+[Linux] --target=x86-linux-gcc
+
+[Linux x64] --target=x86_64-linux-gcc
+
+[macOS] --target=x86_64-darwin14-gcc
+
+
+[additional options]
+
+
+[android]
+ configure script option : [common] --disable-runtime-cpu-detect --sdk-path=/opt/android-ndk-r14b
+
+ add -mfloat-sbi=softfp -mfpu=neon to CFLAGS, CXXFLAGS
+
+
+3) copy header files and static library
+
+ copy to qtbrynhilr/libs/vpx
+
+ vp8dx.h,vpx_encoder.h,vpx_integer.h,vp8.h,vpx_codec.h,vpx_frame_buffer.h,svc_context.h,vp8cx.h,vpx_decoder.h, vpx_image.h and libvpx.a
+
+4) build Qt Brynhildr

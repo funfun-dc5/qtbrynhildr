@@ -211,19 +211,18 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
 
-  QPainter painter(this);
-
-  // fill keyboard panel
-  //QRect rect = QRect(QPoint(0,0), keyboardSize);
-  QColor panelColor = QColor::fromRgb(15, 31, 64);
-  //QColor panelColor = QColor::fromRgb(30, 30, 30);
-  //painter.fillRect(rect, panelColor);
-  //  painter.fillRect(rect, Qt::darkCyan);
   //cout << "paint! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
 
-  // change color for Pen
+  // panel color
+  QColor panelColor = QColor::fromRgb(15, 31, 64);
+  //QColor panelColor = QColor::fromRgb(30, 30, 30);
   QColor penColor = QColor::fromRgb(61, 124, 250);
   //QColor penColor = QColor::fromRgb(192, 192, 192);
+
+  // painter
+  QPainter painter(this);
+
+  // change color for Pen
   painter.setPen(penColor);
   // change font size
   QFont font = painter.font();
@@ -237,10 +236,12 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
   if (onShiftKey){
 	for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
 	  QRect rect = layout[i].rect;
-	  if (layout[i].pushed)
-		painter.fillRect(rect, Qt::black);
-	  else
-		painter.fillRect(rect, panelColor);
+	  if (layout[i].pushed){
+		painter.setBrush(Qt::black);
+	  }
+	  else {
+		painter.setBrush(panelColor);
+	  }
 	  painter.drawRect(rect);
 	  painter.drawText(rect,
 					   Qt::AlignCenter,

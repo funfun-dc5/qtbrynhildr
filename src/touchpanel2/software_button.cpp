@@ -45,6 +45,9 @@ SoftwareButton::SoftwareButton(QWidget *parent)
 	layout[i].selected = false;
   }
 
+  // for Info
+  layout[ID_BUTTON_6].pushed = true;
+
   // initialize layout
   calculateLayout(5, 5);
 }
@@ -67,15 +70,16 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
 
-  QPainter painter(this);
-
-  QColor panelColor = QColor::fromRgb(15, 31, 64);
-  // change color for Pen
+  // pen color
   QColor penColor = QColor::fromRgb(61, 124, 250);
-  painter.setPen(penColor);
+  QPen pen = QPen(penColor);
+  pen.setWidth(5);
+
+  // painter
+  QPainter painter(this);
   // change font size
   QFont font = painter.font();
-  font.setPixelSize(12);
+  font.setPixelSize(14);
   painter.setFont(font);
 
   // draw all buttons
@@ -83,11 +87,21 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 	//if (true){
 	if (buttonTopTable[i].visible){
 	  QRect rect = layout[i].rect;
-	  if (layout[i].pushed)
-		painter.fillRect(rect, Qt::black);
-	  else
-		painter.fillRect(rect, panelColor);
-	  painter.drawRect(rect);
+	  if (layout[i].pushed){
+		painter.setBrush(penColor);
+	  }
+	  else {
+		painter.setBrush(Qt::black);
+	  }
+	  painter.setPen(pen);
+	  painter.drawRoundRect(rect);
+	  //painter.drawRect(rect);
+	  if (layout[i].pushed){
+		painter.setPen(Qt::black);
+	  }
+	  else {
+		painter.setPen(penColor);
+	  }
 	  if (i == ID_BUTTON_6){ // Info
 		QString str = QString("%1 fps\n\n%2 Mbps").
 		  arg(currentFrameRate, 4, 'f', 1, ' ').
@@ -355,6 +369,17 @@ void SoftwareButton::releasedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog)
 	cout << "Released: ID_BUTTON = " << id << endl << flush;
+
+  switch (id){
+  case ID_BUTTON_6:
+	// Info button
+	// Nothing to do
+	return;
+	break;
+  default:
+	// fall through
+	break;
+  }
 
   // update buttons
   if (!layout[id].selected){

@@ -534,7 +534,8 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	if (!settings->getOnShowSoftwareButton()){
+	if (!(settings->getOnShowSoftwareKeyboard() ||
+		  settings->getOnShowSoftwareButton())){
 	  currentMousePos = event->pos();
 	  MOUSE_POS pos;
 	  pos.x = currentMousePos.x();

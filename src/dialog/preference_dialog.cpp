@@ -75,8 +75,8 @@ void PreferenceDialog::resizeEvent(QResizeEvent *event)
   Q_UNUSED(event);
 }
 
-// setup
-void PreferenceDialog::setup()
+// get from settings
+void PreferenceDialog::getFromSettings()
 {
   // publicModeVersion
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -152,6 +152,9 @@ void PreferenceDialog::setup()
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if !QTB_PUBLIC_MODE6_SUPPORT
+  // publicModeVersion
+  comboBox_publicModeVersion->setEnabled(false);
+
   // onTransferFileSupport
   checkBox_onTransferFileSupport->setEnabled(false);
 
@@ -186,6 +189,14 @@ void PreferenceDialog::setup()
   // onGamePadSupport
   checkBox_onGamePadSupport->
 	setCheckState(settings->getOnGamePadSupport() ? Qt::Checked : Qt::Unchecked);
+#if !defined(Q_OS_WIN)
+  checkBox_onGamePadSupport->setEnabled(false);
+#endif // defined(Q_OS_WIN)
+}
+
+// set to settings
+void PreferenceDialog::setToSettings()
+{
 }
 
 // settings for Tablet
@@ -219,7 +230,7 @@ void PreferenceDialog::showEvent(QShowEvent *event)
 {
   Q_UNUSED(event)
 
-  setup();
+  getFromSettings();
 }
 
 //---------------------------------------------------------------------------
@@ -260,6 +271,7 @@ void PreferenceDialog::clicked(QAbstractButton *button)
 
 	if (changed){
 	  // set values to settings
+	  setToSettings();
 	}
   }
   else if (buttonBox->buttonRole(button) == QDialogButtonBox::RejectRole){

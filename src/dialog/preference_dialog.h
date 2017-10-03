@@ -31,8 +31,11 @@ protected:
   void showEvent(QShowEvent *event);
 
 private:
-  // setup
-  void setup();
+  // get from settings
+  void getFromSettings();
+
+  // set to settings
+  void setToSettings();
 
   // resettings for dialog
   void resetting();

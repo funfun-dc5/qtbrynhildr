@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>624</width>
-    <height>575</height>
+    <width>515</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>530</y>
+     <x>150</x>
+     <y>400</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -34,8 +34,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>631</width>
-     <height>521</height>
+     <width>521</width>
+     <height>391</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -50,7 +50,7 @@
       <rect>
        <x>30</x>
        <y>290</y>
-       <width>165</width>
+       <width>461</width>
        <height>22</height>
       </rect>
      </property>
@@ -63,32 +63,22 @@
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QSpinBox" name="spinBox_serverNameListSize"/>
       </item>
      </layout>
-    </widget>
-    <widget class="QSplitter" name="splitter_publicModeVersion">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>40</y>
-       <width>131</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QLabel" name="label_publicModeVersion">
-      <property name="text">
-       <string>Public Mode</string>
-      </property>
-     </widget>
-     <widget class="QComboBox" name="comboBox_publicModeVersion">
-      <property name="currentText">
-       <string/>
-      </property>
-     </widget>
     </widget>
     <widget class="QCheckBox" name="checkBox_onBrynhildr2Support">
      <property name="geometry">
@@ -108,7 +98,7 @@
       <rect>
        <x>31</x>
        <y>141</y>
-       <width>301</width>
+       <width>271</width>
        <height>16</height>
       </rect>
      </property>
@@ -121,7 +111,7 @@
       <rect>
        <x>31</x>
        <y>190</y>
-       <width>281</width>
+       <width>271</width>
        <height>16</height>
       </rect>
      </property>
@@ -134,13 +124,39 @@
       <rect>
        <x>31</x>
        <y>240</y>
-       <width>261</width>
+       <width>271</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
       <string>Check Update At Bootup</string>
      </property>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>40</y>
+       <width>451</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_publicModeVersion">
+        <property name="text">
+         <string>Public Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox_publicModeVersion">
+        <property name="currentText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_keyboard">
@@ -156,16 +172,16 @@
        <height>194</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_keyLayoutList">
+     <layout class="QHBoxLayout" name="horizontalLayout_keylayoutList">
       <item>
-       <widget class="QLabel" name="label_keyLayoutList">
+       <widget class="QLabel" name="label_keylayoutList">
         <property name="text">
          <string>Key Layout List</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QListView" name="listView_keyLayoutList"/>
+       <widget class="QListView" name="listView_keylayoutList"/>
       </item>
      </layout>
     </widget>
@@ -174,7 +190,7 @@
       <rect>
        <x>20</x>
        <y>40</y>
-       <width>224</width>
+       <width>471</width>
        <height>30</height>
       </rect>
      </property>
@@ -190,7 +206,7 @@
        <widget class="QLineEdit" name="lineEdit_keylayoutPath"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_keyLayoutPath">
+       <widget class="QPushButton" name="pushButton_keylayoutPath">
         <property name="text">
          <string>...</string>
         </property>
@@ -208,7 +224,7 @@
       <rect>
        <x>30</x>
        <y>240</y>
-       <width>181</width>
+       <width>451</width>
        <height>22</height>
       </rect>
      </property>
@@ -221,6 +237,19 @@
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QSpinBox" name="spinBox_doubleClickThreshold"/>
       </item>
      </layout>
@@ -230,7 +259,7 @@
       <rect>
        <x>30</x>
        <y>31</y>
-       <width>181</width>
+       <width>261</width>
        <height>16</height>
       </rect>
      </property>
@@ -243,7 +272,7 @@
       <rect>
        <x>30</x>
        <y>80</y>
-       <width>181</width>
+       <width>261</width>
        <height>16</height>
       </rect>
      </property>
@@ -256,7 +285,7 @@
       <rect>
        <x>30</x>
        <y>130</y>
-       <width>181</width>
+       <width>261</width>
        <height>16</height>
       </rect>
      </property>
@@ -269,7 +298,7 @@
       <rect>
        <x>30</x>
        <y>180</y>
-       <width>181</width>
+       <width>261</width>
        <height>16</height>
       </rect>
      </property>
@@ -287,7 +316,7 @@
       <rect>
        <x>30</x>
        <y>240</y>
-       <width>306</width>
+       <width>461</width>
        <height>25</height>
       </rect>
      </property>
@@ -371,9 +400,9 @@
     <widget class="QWidget" name="layoutWidget_6">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>160</y>
-       <width>169</width>
+       <x>20</x>
+       <y>70</y>
+       <width>451</width>
        <height>22</height>
       </rect>
      </property>
@@ -393,9 +422,9 @@
     <widget class="QWidget" name="layoutWidget_7">
      <property name="geometry">
       <rect>
-       <x>31</x>
-       <y>52</y>
-       <width>183</width>
+       <x>20</x>
+       <y>20</y>
+       <width>451</width>
        <height>22</height>
       </rect>
      </property>
@@ -421,8 +450,8 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>140</y>
-       <width>263</width>
+       <y>70</y>
+       <width>471</width>
        <height>25</height>
       </rect>
      </property>
@@ -450,8 +479,8 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>50</y>
-       <width>314</width>
+       <y>20</y>
+       <width>471</width>
        <height>25</height>
       </rect>
      </property>
@@ -483,8 +512,8 @@
     <widget class="QCheckBox" name="checkBox_onGamePadSupport">
      <property name="geometry">
       <rect>
-       <x>21</x>
-       <y>41</y>
+       <x>20</x>
+       <y>30</y>
        <width>181</width>
        <height>16</height>
       </rect>

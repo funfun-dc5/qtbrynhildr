@@ -167,6 +167,9 @@ const bool QTB_IN_TESTING				= true;
 #define QTB_UPDATECHECK				0
 #endif // defined(QTB_DEV_DESKTOP)
 
+// preference dialog
+//#define QTB_PREFERENCE				1
+
 // debug
 #define QTB_DEBUG					1
 #define QTB_DEBUG_KEYBOARD			false

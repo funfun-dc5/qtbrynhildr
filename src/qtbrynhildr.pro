@@ -14,7 +14,6 @@ FORMS = GUI/connect_to_server_dialog.ui
 FORMS += GUI/desktop_scaling_dialog.ui
 FORMS += GUI/confirm_dialog.ui
 FORMS += GUI/log_view_dialog.ui
-FORMS += GUI/preference_dialog.ui
 
 # C++11
 CONFIG += c++11
@@ -30,7 +29,8 @@ win32 {
 DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
-SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
+DESKTOP = ON
+CELT_SUPPORT = ON
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
@@ -38,7 +38,7 @@ LIBS += -L../libs/celt -lcelt0
 
 # for MSVC 2015
 win32-msvc2015 {
-CELT_SUPPORT = ON
+#CELT_SUPPORT = ON
 QMAKE_CXXFLAGS += /wd4819
 QMAKE_LFLAGS += /LTCG
 DEFINES += YY_NO_UNISTD_H
@@ -47,13 +47,13 @@ HEADERS += common/msvc.h
 
 # for MinGW
 win32-g++ {
-CELT_SUPPORT = ON
+#CELT_SUPPORT = ON
 }
 
 # for Linux/FreeBSD
 linux-g++-64 | linux-g++ | freebsd-g++ {
 DEFINES += QTB_RECORDER=1 PLATFORM_LINUX
-SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
+DESKTOP = ON
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
@@ -63,7 +63,7 @@ LIBS += -L../libs/celt -lcelt0
 macx {
 DEFINES += QTB_RECORDER=1 PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
-SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
+DESKTOP = ON
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
@@ -72,7 +72,7 @@ LIBS += -L../libs/celt -lcelt0
 # for Android
 android-g++ {
 DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
-SOFTWARE_KEYBOARD_BUTTON_SUPPORT = ON
+DESKTOP = OFF
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx_android
 LIBS += -L../libs/celt -lcelt0_android
@@ -96,6 +96,15 @@ DISTFILES += \
     $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtServiceLoader.java
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
+}
+
+equals(DESKTOP, ON){
+SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
+PREFERENCE_DIALOG = ON
+}
+else {
+SOFTWARE_KEYBOARD_BUTTON_SUPPORT = ON
+PREFERENCE_DIALOG = OFF
 }
 
 # for crypto++
@@ -149,6 +158,17 @@ SOURCES += util/httpgetter.cpp
 INCLUDEPATH += ../libs/vpx
 #LIBS += -L../libs/vpx -lvpx
 
+# for preference dialog
+equals(PREFERENCE_DIALOG, ON){
+FORMS += GUI/preference_dialog.ui
+HEADERS += dialog/preference_dialog.h
+SOURCES += dialog/preference_dialog.cpp
+DEFINES += QTB_PREFERENCE=1
+}
+else {
+DEFINES += QTB_PREFERENCE=0
+}
+
 # Input
 HEADERS += version.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h
@@ -185,6 +205,3 @@ SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
-
-HEADERS += dialog/preference_dialog.h
-SOURCES += dialog/preference_dialog.cpp

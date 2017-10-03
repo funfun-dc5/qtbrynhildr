@@ -38,7 +38,9 @@
 #include "dialog/connect_to_server_dialog.h"
 #include "dialog/desktop_scaling_dialog.h"
 #include "dialog/log_view_dialog.h"
+#if QTB_PREFERENCE
 #include "dialog/preference_dialog.h"
+#endif // QTB_PREFERENCE
 #if QTB_CRYPTOGRAM
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
@@ -237,8 +239,10 @@ private slots:
   void cancelFileTransferring();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if QTB_PREFERENCE
   // preferences
   void preferences();
+#endif // QTB_PREFERENCE
 
   // set video quality
   void setVideoQuality_MINIMUM();
@@ -688,8 +692,10 @@ private:
   QAction *desktopCompressMode8_Action;
 #endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
+#if QTB_PREFERENCE
   // preferences
   QAction *preferences_Action;
+#endif // QTB_PREFERENCE
 
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;
@@ -700,8 +706,10 @@ private:
   // log view dialog
   LogViewDialog *logViewDialog;
 
+#if QTB_PREFERENCE
   // preference dialog
   PreferenceDialog *preferenceDialog;
+#endif // QTB_PREFERENCE
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // software keyboard and button

@@ -179,11 +179,15 @@ QtBrynhildr::QtBrynhildr(Option *option)
   desktopCompressMode4_Action(0),
   desktopCompressMode8_Action(0),
 #endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_PREFERENCE
   preferences_Action(0),
+#endif // QTB_PREFERENCE
   connectToServerDialog(0),
   desktopScalingDialog(0),
   logViewDialog(0),
+#if QTB_PREFERENCE
   preferenceDialog(0),
+#endif // QTB_PREFERENCE
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   softwareKeyboard(0),
   softwareButton(0),
@@ -559,8 +563,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	logViewDialog = new LogViewDialog(settings, this);
   }
 
+#if QTB_PREFERENCE
   // preference dialog
   preferenceDialog = new PreferenceDialog(settings, this);
+#endif // QTB_PREFERENCE
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // set up Software Button and Keyboard
@@ -1898,11 +1904,13 @@ void QtBrynhildr::createActions()
   connect(desktopCompressMode8_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode8()));
 #endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
+#if QTB_PREFERENCE
   // preferences
   preferences_Action = new QAction(tr("Preferences..."), this);
   preferences_Action->setStatusTip(tr("Preferences..."));
   preferences_Action->setEnabled(true);
   connect(preferences_Action, SIGNAL(triggered()), this, SLOT(preferences()));
+#endif // QTB_PREFERENCE
 }
 
 // create Menus
@@ -1925,10 +1933,10 @@ void QtBrynhildr::createMenus()
 	fileMenu->addAction(cancelFileTransferring_Action);
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#if 0 // for TEST
+#if QTB_PREFERENCE
   fileMenu->addSeparator();
   fileMenu->addAction(preferences_Action);
-#endif // for TEST
+#endif // QTB_PREFERENCE
 #if defined(QTB_DEV_DESKTOP)
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -3033,15 +3041,17 @@ void QtBrynhildr::cancelFileTransferring()
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+#if QTB_PREFERENCE
 // preferences
 void QtBrynhildr::preferences()
 {
-  cout << "enter preferences()" << endl << flush;
+  //cout << "enter preferences()" << endl << flush;
 
   preferenceDialog->show();
 
-  cout << "leave preferences()" << endl << flush;
+  //cout << "leave preferences()" << endl << flush;
 }
+#endif // QTB_PREFERENCE
 
 // clear Video Quality check
 void QtBrynhildr::clearVideoQualityCheck()

@@ -38,24 +38,84 @@ private:
   void resetting();
 
 private slots:
-
+#if 0
   // accept button
   void accept();
   // reject button
   void reject();
+#endif
   // clicked button
   void clicked(QAbstractButton *button);
+
+
+  void on_comboBox_publicModeVersion_currentIndexChanged(int index);
+
+  void on_checkBox_onBrynhildr2Support_stateChanged(int state);
+
+  void on_checkBox_onOpenConnectToServerDialogAtBootup_stateChanged(int state);
+
+  void on_checkBox_onConfirmAtExit_stateChanged(int state);
+
+  void on_checkBox_onCheckUpdateAtBootup_stateChanged(int state);
+
+  void on_spinBox_serverNameListSize_valueChanged(int i);
+
+  void on_lineEdit_keylayoutPath_textChanged();
+
+  void on_checkBox_onHoldMouseControl_stateChanged(int state);
+
+  void on_checkBox_onDisplayMouseCursor_stateChanged(int state);
+
+  void on_checkBox_onShowMouseCursorMarker_stateChanged(int state);
+
+  void on_spinBox_doubleClickThreshold_valueChanged(int i);
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  void on_checkBox_onTransferFileSupport_stateChanged(int state);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_DRAG_AND_DROP_SUPPORT
+  void on_checkBox_onTransferFileSupportByDragAndDrop_stateChanged(int state);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
+#if QTB_DRAG_AND_DROP_SUPPORT
+  void on_checkBox_onShowTotalProgressForTransferFile_stateChanged(int state);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  void on_checkBox_onTransferClipboardSupport_stateChanged(int state);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  void on_spinBox_graphicsBufferSize_valueChanged(int i);
+
+  void on_spinBox_soundBufferSize_valueChanged(int i);
+
+  void on_lineEdit_outputPath_textChanged();
+
+  void on_lineEdit_logFile_textChanged();
+
+  void on_lineEdit_keyboardLogFile_textChanged();
+
+  void on_checkBox_onGamePadSupport_stateChanged(int state);
+
+
+  void on_pushButton_keylayoutPath_clicked();
+
+  void on_pushButton_outputPath_clicked();
+
+  void on_pushButton_logFile_clicked();
+
+  void on_pushButton_keyboardLogFile_clicked();
 
 private:
   // settings
   Settings *settings;
 
+  // changed flag
+  bool changed;
+
   // output log flag
   bool outputLog;
-
-public:
-
-private:
 };
 
 } // end of namespace qtbrynhildr

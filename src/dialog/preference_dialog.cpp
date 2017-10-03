@@ -9,6 +9,7 @@
 
 // Qt Header
 #include <QDialog>
+#include <QFileDialog>
 #include <QRect>
 
 // Local Header
@@ -26,18 +27,46 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   //  QDialog(parent),
   QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
   settings(settings),
+  changed(false),
   // for DEBUG
   outputLog(false)
 {
   setupUi(this);
-
-  setup();
 
   // resetting
   resetting();
 
   // fix size
   setFixedSize(size());
+
+  // publicModeVersion
+#if QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "MODE 5");
+  comboBox_publicModeVersion->insertItem(MODE_PUBLIC6 - MODE_PUBLIC5, "MODE 6");
+#if QTB_PUBLIC_MODE7_SUPPORT
+  comboBox_publicModeVersion->insertItem(MODE_PUBLIC7 - MODE_PUBLIC5, "MODE 7");
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+#else // QTB_PUBLIC_MODE6_SUPPORT
+  comboBox_publicModeVersion->insertItem(0, "MODE 5");
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // serverNameListSize
+  spinBox_serverNameListSize->setMinimum(5);	// for TEST
+  spinBox_serverNameListSize->setMaximum(100);	// for TEST
+
+  // doubleClickThreshold
+  spinBox_doubleClickThreshold->setMinimum(100);	// for TEST
+  spinBox_doubleClickThreshold->setMaximum(1000);	// for TEST
+
+  // graphicsBufferSize
+  spinBox_graphicsBufferSize->setMinimum(256);		// for TEST
+  spinBox_graphicsBufferSize->setMaximum(10240);	// for TEST
+
+  // soundBufferSize
+  spinBox_soundBufferSize->setMinimum(256);		// for TEST
+  spinBox_soundBufferSize->setMaximum(10240);	// for TEST
+
+  connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 }
 
 // resize event
@@ -51,14 +80,8 @@ void PreferenceDialog::setup()
 {
   // publicModeVersion
 #if QTB_PUBLIC_MODE6_SUPPORT
-  comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "MODE 5");
-  comboBox_publicModeVersion->insertItem(MODE_PUBLIC6 - MODE_PUBLIC5, "MODE 6");
-#if QTB_PUBLIC_MODE7_SUPPORT
-  comboBox_publicModeVersion->insertItem(MODE_PUBLIC7 - MODE_PUBLIC5, "MODE 7");
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   comboBox_publicModeVersion->setCurrentIndex(settings->getPublicModeVersion() - MODE_PUBLIC5);
 #else // QTB_PUBLIC_MODE6_SUPPORT
-  comboBox_publicModeVersion->insertItem(0, "MODE 5");
   comboBox_publicModeVersion->setCurrentIndex(0);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -79,11 +102,10 @@ void PreferenceDialog::setup()
 	setCheckState(settings->getOnCheckUpdateAtBootup() ? Qt::Checked : Qt::Unchecked);
 
   // serverNameListSize
-  spinBox_serverNameListSize->setMinimum(5);	// for TEST
-  spinBox_serverNameListSize->setMaximum(100);	// for TEST
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());
 
   // keylayoutPath
+  lineEdit_keylayoutPath->clear();
   lineEdit_keylayoutPath->insert(settings->getKeylayoutPath());
 
   // onHoldMouseControl
@@ -103,8 +125,6 @@ void PreferenceDialog::setup()
 	setCheckState(settings->getOnShowMouseCursorMarker() ? Qt::Checked : Qt::Unchecked);
 
   // doubleClickThreshold
-  spinBox_doubleClickThreshold->setMinimum(100);	// for TEST
-  spinBox_doubleClickThreshold->setMaximum(1000);	// for TEST
   spinBox_doubleClickThreshold->setValue(settings->getDoubleClickThreshold());
 
   // onTransferFileSupport
@@ -146,29 +166,26 @@ void PreferenceDialog::setup()
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // graphicsBufferSize
-  spinBox_graphicsBufferSize->setMinimum(256);		// for TEST
-  spinBox_graphicsBufferSize->setMaximum(10240);	// for TEST
   spinBox_graphicsBufferSize->setValue(settings->getGraphicsBufferSize()/1024);
 
   // soundBufferSize
-  spinBox_soundBufferSize->setMinimum(256);		// for TEST
-  spinBox_soundBufferSize->setMaximum(10240);	// for TEST
   spinBox_soundBufferSize->setValue(settings->getSoundBufferSize()/1024);
 
   // outputPath
+  lineEdit_outputPath->clear();
   lineEdit_outputPath->insert(settings->getOutputPath());
 
   // logFile
+  lineEdit_logFile->clear();
   lineEdit_logFile->insert(settings->getLogFile());
 
   // keyboardLogFile
+  lineEdit_keyboardLogFile->clear();
   lineEdit_keyboardLogFile->insert(settings->getKeyboardLogFile());
 
   // onGamePadSupport
   checkBox_onGamePadSupport->
 	setCheckState(settings->getOnGamePadSupport() ? Qt::Checked : Qt::Unchecked);
-
-  connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 }
 
 // settings for Tablet
@@ -183,12 +200,17 @@ void PreferenceDialog::resetting()
   int dialogHeight = desktopHeight * 0.5;
   int fontPointSize = 14;
 
+  // set minimum width
+
   // resetting dialog window size and font size
   resize(dialogWidth, dialogHeight);
   layoutWidget_1->setGeometry(QRect(20, 20, dialogWidth-40, dialogHeight-40));
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
+#else // defined(QTB_DEV_TABLET)
+  // set minimum width
+
 #endif // defined(QTB_DEV_TABLET)
 }
 
@@ -196,11 +218,14 @@ void PreferenceDialog::resetting()
 void PreferenceDialog::showEvent(QShowEvent *event)
 {
   Q_UNUSED(event)
+
+  setup();
 }
 
 //---------------------------------------------------------------------------
 // private slot
 //---------------------------------------------------------------------------
+#if 0
 // accept button
 void PreferenceDialog::accept()
 {
@@ -216,6 +241,7 @@ void PreferenceDialog::reject()
 	cout << "reject()." << endl << flush; // for DEBUG
   hide();
 }
+#endif
 
 // clicked button
 void PreferenceDialog::clicked(QAbstractButton *button)
@@ -223,9 +249,206 @@ void PreferenceDialog::clicked(QAbstractButton *button)
   if (outputLog)
 	cout << "clicked()." << endl << flush; // for DEBUG
 
-  if (button->text() == "Apply"){
-	cout << "clicked(Apply)." << endl << flush; // for DEBUG
+  if (buttonBox->buttonRole(button) == QDialogButtonBox::ApplyRole ||
+	  buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole){
+	if (outputLog){
+	  if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole)
+		cout << "clicked(Accept)." << endl << flush; // for DEBUG
+	  else
+		cout << "clicked(Apply)." << endl << flush; // for DEBUG
+	}
+
+	if (changed){
+	  // set values to settings
+	}
   }
+  else if (buttonBox->buttonRole(button) == QDialogButtonBox::RejectRole){
+	if (outputLog)
+	  cout << "clicked(Reject)." << endl << flush; // for DEBUG
+	// ignore change
+  }
+
+  // reset changed flag
+  changed = false;
+}
+
+
+void PreferenceDialog::on_comboBox_publicModeVersion_currentIndexChanged(int index)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onBrynhildr2Support_stateChanged(int state)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onOpenConnectToServerDialogAtBootup_stateChanged(int state)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onConfirmAtExit_stateChanged(int state)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onCheckUpdateAtBootup_stateChanged(int state)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_spinBox_serverNameListSize_valueChanged(int i)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_lineEdit_keylayoutPath_textChanged()
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onHoldMouseControl_stateChanged(int state)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onDisplayMouseCursor_stateChanged(int state)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onShowMouseCursorMarker_stateChanged(int state)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_spinBox_doubleClickThreshold_valueChanged(int i)
+{
+  changed = true;
+}
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+void PreferenceDialog::on_checkBox_onTransferFileSupport_stateChanged(int state)
+{
+  changed = true;
+}
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_DRAG_AND_DROP_SUPPORT
+void PreferenceDialog::on_checkBox_onTransferFileSupportByDragAndDrop_stateChanged(int state)
+{
+  changed = true;
+}
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
+#if QTB_DRAG_AND_DROP_SUPPORT
+void PreferenceDialog::on_checkBox_onShowTotalProgressForTransferFile_stateChanged(int state)
+{
+  changed = true;
+}
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+void PreferenceDialog::on_checkBox_onTransferClipboardSupport_stateChanged(int state)
+{
+  changed = true;
+}
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+void PreferenceDialog::on_spinBox_graphicsBufferSize_valueChanged(int i)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_spinBox_soundBufferSize_valueChanged(int i)
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_lineEdit_outputPath_textChanged()
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_lineEdit_logFile_textChanged()
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_lineEdit_keyboardLogFile_textChanged()
+{
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_onGamePadSupport_stateChanged(int state)
+{
+  changed = true;
+}
+
+
+// select button of key layout path
+void PreferenceDialog::on_pushButton_keylayoutPath_clicked()
+{
+  if (outputLog)
+	cout << "on_pushButton_keylayoutPath_clicked()." << endl << flush; // for DEBUG
+
+  QString dir = QFileDialog::getExistingDirectory(this,
+												  tr("Open Directory"),
+												  ".",
+												  QFileDialog::ShowDirsOnly |
+												  QFileDialog::DontResolveSymlinks);
+  if (dir == ""){
+	// Nothing to do
+	return;
+  }
+
+  // keylayoutPath
+  lineEdit_keylayoutPath->clear();
+  lineEdit_keylayoutPath->insert(dir);
+  changed = true;
+
+  if (outputLog)
+	cout << "Open Directory : " << qPrintable(dir) << endl << flush;
+}
+
+// select button of output path
+void PreferenceDialog::on_pushButton_outputPath_clicked()
+{
+  if (outputLog)
+	cout << "on_pushButton_outputPath_clicked()." << endl << flush; // for DEBUG
+
+  QString dir = QFileDialog::getExistingDirectory(this,
+												  tr("Open Directory"),
+												  ".",
+												  QFileDialog::ShowDirsOnly |
+												  QFileDialog::DontResolveSymlinks);
+  if (dir == ""){
+	// Nothing to do
+	return;
+  }
+
+  // outputPath
+  lineEdit_outputPath->clear();
+  lineEdit_outputPath->insert(dir);
+  changed = true;
+
+  if (outputLog)
+	cout << "Open Directory : " << qPrintable(dir) << endl << flush;
+}
+
+// select button of logfile
+void PreferenceDialog::on_pushButton_logFile_clicked()
+{
+  if (outputLog)
+	cout << "on_pushButton_logFile_clicked()." << endl << flush; // for DEBUG
+}
+
+// select button of keyboard logfile
+void PreferenceDialog::on_pushButton_keyboardLogFile_clicked()
+{
+  if (outputLog)
+	cout << "on_pushButton_keyboardLogFile_clicked()." << endl << flush; // for DEBUG
 }
 
 } // end of namespace qtbrynhildr

@@ -11,12 +11,10 @@ namespace qtbrynhildr {
 // Protocol Header for PUBLIC MODE of Brynhildr
 // for x64 architecture
 
-#if QTB_BRYNHILDR2_SUPPORT
 // server version
 typedef int	SERVER_VERSION;
 #define SERVER_VERSION_BRYNHILDR	1	// brynhildr
 #define SERVER_VERSION_BRYNHILDR2	2	// brynhildr 2
-#endif // QTB_BRYNHILDR2_SUPPORT
 
 // data type
 typedef char	DATA_TYPE;
@@ -121,7 +119,6 @@ typedef char	VIDEO_QUALITY;
 #define VIDEO_QUALITY_HIGH			7	// high quality
 #define VIDEO_QUALITY_MAXIMUM		9	// maximum quality
 
-#if QTB_BRYNHILDR2_SUPPORT
 // mouse cursor
 typedef char	MOUSE_CURSOR;
 #define MOUSE_CURSOR_AUTO			0	// auto
@@ -130,7 +127,6 @@ typedef char	MOUSE_CURSOR;
 
 // gamepad value
 typedef int	GAMEPAD_VALUE;
-#endif // QTB_BRYNHILDR2_SUPPORT
 
 // mode
 typedef	char	MODE;

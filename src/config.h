@@ -87,11 +87,6 @@ const bool QTB_IN_TESTING				= true;
 // cryptogram
 #define QTB_CRYPTOGRAM				0
 
-// brynhildr version 2 support
-#define QTB_BRYNHILDR2_SUPPORT		1
-
-#if QTB_BRYNHILDR2_SUPPORT
-
 // celt support
 #ifndef QTB_CELT_SUPPORT
 #define QTB_CELT_SUPPORT			1
@@ -129,33 +124,6 @@ const bool QTB_IN_TESTING				= true;
 
 // disable plugins support
 #define QTB_PLUGINS_DISABLE_SUPPORT	1
-
-#else // QTB_BRYNHILDR2_SUPPORT
-
-// celt support
-#ifndef QTB_CELT_SUPPORT
-#define QTB_CELT_SUPPORT			0
-#endif
-
-// extra mouse button support
-#define QTB_EXTRA_BUTTON_SUPPORT	0
-
-// public mode 6 support
-#define QTB_PUBLIC_MODE6_SUPPORT	0
-
-// drag and drop support
-#define QTB_DRAG_AND_DROP_SUPPORT	0
-
-// desktop compress mode
-#define QTB_DESKTOP_COMPRESS_MODE	0
-
-// disable plugins support
-#define QTB_PLUGINS_DISABLE_SUPPORT	0
-
-// public mode 7 support
-#define QTB_PUBLIC_MODE7_SUPPORT	0
-
-#endif // QTB_BRYNHILDR2_SUPPORT
 
 // auto complete
 #define QTB_AUTO_COMPLETE			1

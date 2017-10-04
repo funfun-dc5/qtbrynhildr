@@ -78,26 +78,17 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   KEYDOWN			keydown;
   VIDEO_QUALITY		video_quality;
   BYTE				dummy9[3];			// padding 6 bytes
-#if QTB_BRYNHILDR2_SUPPORT
   MOUSE_CURSOR		mouse_cursor;		// mouse cursor
   BYTE				dummy10[23];		// padding 23 bytes
   GAMEPAD_VALUE		gamepad1;			// gamepad (Xpos)
   GAMEPAD_VALUE		gamepad2;			// gamepad (Ypos)
   GAMEPAD_VALUE		gamepad3;			// gamepad (Zpos)
   GAMEPAD_VALUE		gamepad4;			// gamepad (Rpos)
-#else // QTB_BRYNHILDR2_SUPPORT
-  BYTE				dummy10[40];		// padding 40 bytes
-#endif // QTB_BRYNHILDR2_SUPPORT
   POS				client_scroll_x;
   POS				client_scroll_y;
-#if QTB_BRYNHILDR2_SUPPORT
   VIDEO_MODE		video_mode;
   BYTE				dummy11[19];		// padding 19 bytes
   SERVER_VERSION	server_version;		// version of server
-#else // QTB_BRYNHILDR2_SUPPORT
-  VIDEO_MODE		video_mode;
-  BYTE				dummy11[23];		// padding 23 bytes
-#endif // QTB_BRYNHILDR2_SUPPORT
   ZOOM				zoom;
   BYTE				dummy12[4];			// padding 4 bytes
   MODE				mode;
@@ -105,15 +96,11 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   SOUND_QUALITY		sound_quality;
   BYTE				dummy14[3];			// padding 3 bytes
   unsigned char		frame_no;			// frame number
-#if QTB_BRYNHILDR2_SUPPORT
   BYTE				dummy15[3];			// padding 3 bytes
   GAMEPAD_VALUE		gamepad5;			// gamepad (Pov)
   GAMEPAD_VALUE		gamepad6;			// gamepad (Buttons)
   GAMEPAD_VALUE		gamepad7;			// gamepad (Upos)
   GAMEPAD_VALUE		gamepad8;			// gamepad (Vpos)
-#else // QTB_BRYNHILDR2_SUPPORT
-  BYTE				dummy15[19];		// padding 19 bytes
-#endif // QTB_BRYNHILDR2_SUPPORT
 } COM_DATA;
 #if _MSC_VER
 #pragma pack(pop)

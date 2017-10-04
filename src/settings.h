@@ -178,7 +178,6 @@ typedef int KEYBOARD_TYPE;
 #define QTB_FRAMERATE_DEFAULT	30
 #endif // defined(QTB_DEV_TABLET)
 
-#if QTB_BRYNHILDR2_SUPPORT
 // for displayMouseCursor
 #define QTB_ONDISPLAYMOUSECURSOR			"onDisplayMouseCursor"
 #if defined(QTB_DEV_TABLET)
@@ -196,7 +195,6 @@ typedef int KEYBOARD_TYPE;
 // for onBrynhildr2Support
 #define QTB_ONBRYNHILDR2SUPPORT			"onBrynhildr2Support"
 #define QTB_ONBRYNHILDR2SUPPORT_DEFAULT	true
-#endif // QTB_BRYNHILDR2_SUPPORT
 
 // for onSound
 #define QTB_ONSOUND				"onSound"
@@ -955,7 +953,6 @@ public:
 	return stringTable[(int)videoQuality];
   }
 
-#if QTB_BRYNHILDR2_SUPPORT
   // get display mouse cursor flag
   bool getOnDisplayMouseCursor()
   {
@@ -1000,7 +997,6 @@ public:
   {
 	this->onBrynhildr2Support = onBrynhildr2Support;
   }
-#endif // QTB_BRYNHILDR2_SUPPORT
 
   // get frame rate (FPS)
   unsigned int getFrameRate()
@@ -1945,11 +1941,9 @@ private:
   volatile bool onGraphics;
   volatile VIDEO_QUALITY videoQuality;
 
-#if QTB_BRYNHILDR2_SUPPORT
   volatile bool onDisplayMouseCursor;
   volatile bool onGamePadSupport;
   volatile bool onBrynhildr2Support;
-#endif // QTB_BRYNHILDR2_SUPPORT
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;
 

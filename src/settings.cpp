@@ -40,11 +40,9 @@ Settings::Settings(const char *iniFileName)
   onSendClipboard(false),
   sendFileCount(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#if QTB_BRYNHILDR2_SUPPORT
   onDisplayMouseCursor(false),
   onGamePadSupport(false),
   onBrynhildr2Support(true),
-#endif // QTB_BRYNHILDR2_SUPPORT
   monitorCount(0),
   onShowSoftwareKeyboard(false),
   onShowSoftwareButton(false),
@@ -90,11 +88,9 @@ Settings::Settings(const char *iniFileName)
   setOnControlOffWithGraphicsOff(QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT);
   setOnGraphics(QTB_ONGRAPHICS_DEFAULT);
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
-#if QTB_BRYNHILDR2_SUPPORT
   setOnDisplayMouseCursor(QTB_ONDISPLAYMOUSECURSOR_DEFAULT);
   setOnGamePadSupport(QTB_ONGAMEPADSUPPORT_DEFAULT);
   setOnBrynhildr2Support(QTB_ONBRYNHILDR2SUPPORT_DEFAULT);
-#endif // QTB_BRYNHILDR2_SUPPORT
   setFrameRate(QTB_FRAMERATE_DEFAULT);
   setOnSound(QTB_ONSOUND_DEFAULT);
 #if QTB_CELT_SUPPORT
@@ -301,7 +297,6 @@ void Settings::readSettings()
   setVideoQuality(settings->value(QTB_VIDEOQUALITY,
 								  (qint32)QTB_VIDEOQUALITY_DEFAULT).toInt());
 
-#if QTB_BRYNHILDR2_SUPPORT
   // load onDisplayMouseCursor
   setOnDisplayMouseCursor(settings->value(QTB_ONDISPLAYMOUSECURSOR,
 										  QTB_ONDISPLAYMOUSECURSOR_DEFAULT).toBool());
@@ -313,7 +308,6 @@ void Settings::readSettings()
   // load onBrynhildr2Support
   setOnBrynhildr2Support(settings->value(QTB_ONBRYNHILDR2SUPPORT,
 										 QTB_ONBRYNHILDR2SUPPORT_DEFAULT).toBool());
-#endif // QTB_BRYNHILDR2_SUPPORT
 
   // load frameRate
   setFrameRate(settings->value(QTB_FRAMERATE,
@@ -571,7 +565,6 @@ void Settings::writeSettings()
   // save videoQuality
   settings->setValue(QTB_VIDEOQUALITY, (qint32)videoQuality);
 
-#if QTB_BRYNHILDR2_SUPPORT
   // save onDisplayMouseCursor
   settings->setValue(QTB_ONDISPLAYMOUSECURSOR, onDisplayMouseCursor);
 
@@ -580,7 +573,6 @@ void Settings::writeSettings()
 
   // save onBrynhildr2Support
   settings->setValue(QTB_ONBRYNHILDR2SUPPORT, onBrynhildr2Support);
-#endif // QTB_BRYNHILDR2_SUPPORT
 
   // save frameRate
   settings->setValue(QTB_FRAMERATE, (qint32)frameRate);
@@ -762,10 +754,8 @@ void Settings::printSettings() const
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
-#if QTB_BRYNHILDR2_SUPPORT
   qDebug() << "DisplayMouseCursor : " << onDisplayMouseCursor;
   qDebug() << "GamePadSupport: " << onGamePadSupport;
-#endif // QTB_BRYNHILDR2_SUPPORT
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
 #if QTB_EXTRA_BUTTON_SUPPORT
   qDebug() << "  ExtraButtonSupport : " << onExtraButtonSupport;
@@ -826,9 +816,7 @@ void Settings::printSettings() const
   qDebug() << "TransferClipboardSupport: " << onTransferClipboardSupport;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
-#if QTB_BRYNHILDR2_SUPPORT
   qDebug() << "Brynhildr2Support       : " << onBrynhildr2Support;
-#endif // QTB_BRYNHILDR2_SUPPORT
 
   qDebug() << "------------------------------------------";
   qDebug() << "Graphics Buffer Size (bytes) : " << graphicsBufferSize;

@@ -199,11 +199,7 @@ bool checkProtocolHeader(bool outputLog)
   offset = (char*)&(com_data.dummy10[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy10 offset = " << offset;
-#if QTB_BRYNHILDR2_SUPPORT
   if (offset == 145){
-#else // QTB_BRYNHILDR2_SUPPORT
-  if (offset == 144){
-#endif // QTB_BRYNHILDR2_SUPPORT
 	if (outputLog)
 	  cout << " : ok" << endl;
   }

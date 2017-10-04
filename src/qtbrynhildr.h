@@ -11,9 +11,6 @@
 #if QTB_PUBLIC_MODE6_SUPPORT
 #include <QClipboard>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#if !QTB_BRYNHILDR2_SUPPORT
-#include <QCursor>
-#endif // !QTB_BRYNHILDR2_SUPPORT
 #include <QDateTime>
 #include <QHideEvent>
 #include <QLabel>
@@ -151,10 +148,8 @@ public slots:
   // Desktop clear
   void onDesktopClear();
 
-#if QTB_BRYNHILDR2_SUPPORT
   // change mouse cursor
   void changeMouseCursor(const QCursor &cursor);
-#endif // QTB_BRYNHILDR2_SUPPORT
 
   // network error handler
   void onNetworkError(bool doRetry);

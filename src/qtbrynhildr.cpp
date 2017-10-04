@@ -699,11 +699,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
 		  SIGNAL(setFileTransferProgressBarValue(int)),
 		  SLOT(setFileTransferProgressBarValue(int)));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#if QTB_BRYNHILDR2_SUPPORT
   connect(controlThread,
 		  SIGNAL(changeMouseCursor(const QCursor &)),
 		  SLOT(changeMouseCursor(const QCursor &)));
-#endif // QTB_BRYNHILDR2_SUPPORT
 
   // graphics thread
   connect(graphicsThread,
@@ -1255,13 +1253,11 @@ void QtBrynhildr::onDesktopClear()
   refreshWindow();
 }
 
-#if QTB_BRYNHILDR2_SUPPORT
 // change mouse cursor
 void QtBrynhildr::changeMouseCursor(const QCursor &cursor)
 {
   setCursor(cursor);
 }
-#endif // QTB_BRYNHILDR2_SUPPORT
 
 // network error handler
 void QtBrynhildr::onNetworkError(bool doRetry)

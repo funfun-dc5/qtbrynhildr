@@ -12,9 +12,6 @@
 #if QTB_PUBLIC_MODE6_SUPPORT
 #include <QClipboard>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#if !QTB_BRYNHILDR2_SUPPORT
-#include <QCursor>
-#endif // !QTB_BRYNHILDR2_SUPPORT
 #include <QLocale>
 #include <QThread>
 #include <QTranslator>

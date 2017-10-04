@@ -40,9 +40,7 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
 #endif // QTB_RECORDER
   :
   NetThread("ControlThread", settings, mainWindow),
-#if QTB_BRYNHILDR2_SUPPORT
   serverVersion(SERVER_VERSION_BRYNHILDR2),
-#endif // QTB_BRYNHILDR2_SUPPORT
   keyBuffer(0),
   mouseBuffer(0),
 #if QTB_RECORDER
@@ -338,12 +336,10 @@ PROCESS_RESULT ControlThread::processForHeader()
   cout.flags(flags);
 #endif
 
-#if QTB_BRYNHILDR2_SUPPORT
   // for GamePad
   if (settings->getOnGamePadSupport()){
 	setGamePadControl();
   }
-#endif // QTB_BRYNHILDR2_SUPPORT
 
 #if 0 // for DEBUG
   static bool oneFlag = true;
@@ -478,7 +474,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 	// checked password
 	doneCheckPassword = true;
 
-#if QTB_BRYNHILDR2_SUPPORT
 	if (!settings->getOnBrynhildr2Support()){
 	  // same as Brynhildr (<= 1.1.5)
 	  com_data->server_version = SERVER_VERSION_BRYNHILDR;
@@ -502,7 +497,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 		}
 	  }
 	}
-#endif // QTB_BRYNHILDR2_SUPPORT
   }
 
   // check monitor no
@@ -663,13 +657,11 @@ void ControlThread::initHeader()
   com_data->mode		= MODE_PUBLIC5;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->monitor_no	= settings->getMonitorNo();
-#if QTB_BRYNHILDR2_SUPPORT
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
 	com_data->mouse_cursor = settings->getOnDisplayMouseCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
 	if (settings->getOnShowSoftwareButton())
 	  com_data->mouse_cursor = MOUSE_CURSOR_ON;
   }
-#endif // QTB_BRYNHILDR2_SUPPORT
 
   // for control
   com_data->control		= settings->getOnControl() ? CONTROL_ON : CONTROL_OFF;
@@ -740,7 +732,6 @@ void ControlThread::initHeader()
 }
 
 // set gamepad control info.
-#if QTB_BRYNHILDR2_SUPPORT
 #if defined(Q_OS_WIN)
 void ControlThread::setGamePadControl()
 {
@@ -812,7 +803,6 @@ void ControlThread::setGamePadControl()
 }
 #endif // defined(Q_OS_WIN)
 
-#endif // QTB_BRYNHILDR2_SUPPORT
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 

@@ -602,7 +602,12 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // Key Layout File Reader
   //  QString keylayoutDirPath = QString(".") + QTB_KEYLAYOUT_FILE_PATH; // for TEST
   keyLayoutFileReader = new KeyLayoutFileReader(dirPath);
+  // set keylayout file information to dialog
   connectToServerDialog->addKeyboardTypeList(keyLayoutFileReader->getKeyboardTypeList());
+#if QTB_PREFERENCE
+  preferenceDialog->setKeylayoutList(keyLayoutFileReader->getKeyboardTypeList());
+#endif // QTB_PREFERENCE
+
   if (settings->getKeyboardType() == KEYBOARD_TYPE_KLF){
 	// set keyboard type (real index)
 	KEYBOARD_TYPE keyboardType =

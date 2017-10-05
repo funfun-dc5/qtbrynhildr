@@ -9,6 +9,7 @@
 
 // Qt Header
 #include <QDialog>
+#include <QDir>
 #include <QFileDialog>
 #include <QRect>
 
@@ -28,6 +29,7 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
   settings(settings),
   changed(false),
+  resultOfSetToSettings(false),
   // for DEBUG
   outputLog(false)
 {
@@ -66,6 +68,14 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   spinBox_soundBufferSize->setMinimum(256);		// for TEST
   spinBox_soundBufferSize->setMaximum(10240);	// for TEST
 
+#if 1 // for TEST
+  // set Read Only
+  lineEdit_keylayoutPath->setReadOnly(true);
+  lineEdit_outputPath->setReadOnly(true);
+  lineEdit_logFile->setReadOnly(true);
+  lineEdit_keyboardLogFile->setReadOnly(true);
+#endif
+
   connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 }
 
@@ -75,26 +85,23 @@ void PreferenceDialog::resizeEvent(QResizeEvent *event)
   Q_UNUSED(event);
 }
 
+// set keylayout file list
+void PreferenceDialog::setKeylayoutList(const QStringList keylayoutList)
+{
+  listWidget_keylayoutList->addItems(keylayoutList);
+}
+
 // get from settings
 void PreferenceDialog::getFromSettings()
 {
   // publicModeVersion
 #if QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicModeVersion->setCurrentIndex(settings->getPublicModeVersion() - MODE_PUBLIC5);
+  publicModeVersionChanged(settings->getPublicModeVersion());
 #else // QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicModeVersion->setCurrentIndex(0);
+  publicModeVersionChanged(MODE_PUBLIC5);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  if (settings->getPublicModeVersion() < MODE_PUBLIC6){
-	// publicModeVersion
-	comboBox_publicModeVersion->setEnabled(false);
-  }
-
-  // onBrynhildr2Support
-  checkBox_onBrynhildr2Support->
-	setCheckState(settings->getOnBrynhildr2Support() ? Qt::Checked : Qt::Unchecked);
-  if (settings->getPublicModeVersion() < MODE_PUBLIC6){
-	checkBox_onBrynhildr2Support->setEnabled(false);
-  }
 
   // onOpenConnectToServerDialogAtBootup
   checkBox_onOpenConnectToServerDialogAtBootup->
@@ -112,8 +119,7 @@ void PreferenceDialog::getFromSettings()
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());
 
   // keylayoutPath
-  lineEdit_keylayoutPath->clear();
-  lineEdit_keylayoutPath->insert(settings->getKeylayoutPath());
+  lineEdit_keylayoutPath->setText(settings->getKeylayoutPath());
 
   // onHoldMouseControl
   checkBox_onHoldMouseControl->
@@ -139,36 +145,24 @@ void PreferenceDialog::getFromSettings()
   checkBox_onTransferFileSupport->
 	setCheckState(settings->getOnTransferFileSupport() ? Qt::Checked : Qt::Unchecked);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  if (settings->getPublicModeVersion() < MODE_PUBLIC6){
-	checkBox_onTransferFileSupport->setEnabled(false);
-  }
 
   // onTransferFileSupportByDragAndDrop
 #if QTB_DRAG_AND_DROP_SUPPORT
   checkBox_onTransferFileSupportByDragAndDrop->
 	setCheckState(settings->getOnTransferFileSupportByDragAndDrop() ? Qt::Checked : Qt::Unchecked);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
-  if (settings->getPublicModeVersion() < MODE_PUBLIC6){
-	checkBox_onTransferFileSupportByDragAndDrop->setEnabled(false);
-  }
 
   // onShowTotalProgressForTransferFile
 #if QTB_DRAG_AND_DROP_SUPPORT
   checkBox_onShowTotalProgressForTransferFile->
 	setCheckState(settings->getOnShowTotalProgressForTransferFile() ? Qt::Checked : Qt::Unchecked);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
-  if (settings->getPublicModeVersion() < MODE_PUBLIC6){
-	checkBox_onShowTotalProgressForTransferFile->setEnabled(false);
-  }
 
   // onTransferClipboardSupport
 #if QTB_PUBLIC_MODE6_SUPPORT
   checkBox_onTransferClipboardSupport->
 	setCheckState(settings->getOnTransferClipboardSupport() ? Qt::Checked : Qt::Unchecked);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  if (settings->getPublicModeVersion() < MODE_PUBLIC6){
-	checkBox_onTransferClipboardSupport->setEnabled(false);
-  }
 
   // graphicsBufferSize
   spinBox_graphicsBufferSize->setValue(settings->getGraphicsBufferSize()/1024);
@@ -177,16 +171,13 @@ void PreferenceDialog::getFromSettings()
   spinBox_soundBufferSize->setValue(settings->getSoundBufferSize()/1024);
 
   // outputPath
-  lineEdit_outputPath->clear();
-  lineEdit_outputPath->insert(settings->getOutputPath());
+  lineEdit_outputPath->setText(settings->getOutputPath());
 
   // logFile
-  lineEdit_logFile->clear();
-  lineEdit_logFile->insert(settings->getLogFile());
+  lineEdit_logFile->setText(settings->getLogFile());
 
   // keyboardLogFile
-  lineEdit_keyboardLogFile->clear();
-  lineEdit_keyboardLogFile->insert(settings->getKeyboardLogFile());
+  lineEdit_keyboardLogFile->setText(settings->getKeyboardLogFile());
 
   // onGamePadSupport
   checkBox_onGamePadSupport->
@@ -197,17 +188,15 @@ void PreferenceDialog::getFromSettings()
 }
 
 // set to settings
-void PreferenceDialog::setToSettings()
+bool PreferenceDialog::setToSettings()
 {
+  bool result = true;
+
   // publicModeVersion
 #if QTB_PUBLIC_MODE6_SUPPORT
   settings->
 	setPublicModeVersion(comboBox_publicModeVersion->currentIndex() + MODE_PUBLIC5);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-
-  // onBrynhildr2Support
-  settings->
-	setOnBrynhildr2Support(checkBox_onBrynhildr2Support->checkState() == Qt::Checked);
 
   // onOpenConnectToServerDialogAtBootup
   settings->
@@ -296,6 +285,8 @@ void PreferenceDialog::setToSettings()
   // onGamePadSupport
   settings->
 	setOnGamePadSupport(checkBox_onGamePadSupport->checkState() == Qt::Checked);
+
+  return result;
 }
 
 // settings for Tablet
@@ -330,20 +321,23 @@ void PreferenceDialog::showEvent(QShowEvent *event)
   Q_UNUSED(event);
 
   getFromSettings();
+
+  resultOfSetToSettings = true;
 }
 
 //---------------------------------------------------------------------------
 // private slot
 //---------------------------------------------------------------------------
-#if 0
 // accept button
 void PreferenceDialog::accept()
 {
   if (outputLog)
 	cout << "accept()." << endl << flush; // for DEBUG
-  hide();
+  if (resultOfSetToSettings)
+	hide();
 }
 
+#if 0
 // reject button
 void PreferenceDialog::reject()
 {
@@ -370,7 +364,7 @@ void PreferenceDialog::clicked(QAbstractButton *button)
 
 	if (changed){
 	  // set values to settings
-	  setToSettings();
+	  resultOfSetToSettings = setToSettings();
 	}
   }
   else if (buttonBox->buttonRole(button) == QDialogButtonBox::RejectRole){
@@ -383,17 +377,36 @@ void PreferenceDialog::clicked(QAbstractButton *button)
   changed = false;
 }
 
+void PreferenceDialog::publicModeVersionChanged(int version)
+{
+  // change enabled state
+  if (version < MODE_PUBLIC6){
+	// MODE5
+	checkBox_onTransferFileSupport->setEnabled(false);
+
+	checkBox_onTransferFileSupportByDragAndDrop->setEnabled(false);
+
+	checkBox_onShowTotalProgressForTransferFile->setEnabled(false);
+
+	checkBox_onTransferClipboardSupport->setEnabled(false);
+  }
+  else {
+	// MODE6/7
+	checkBox_onTransferFileSupport->setEnabled(true);
+
+	checkBox_onTransferFileSupportByDragAndDrop->setEnabled(true);
+
+	checkBox_onShowTotalProgressForTransferFile->setEnabled(true);
+
+	checkBox_onTransferClipboardSupport->setEnabled(true);
+  }
+}
 
 void PreferenceDialog::on_comboBox_publicModeVersion_currentIndexChanged(int index)
 {
   Q_UNUSED(index);
 
-  changed = true;
-}
-
-void PreferenceDialog::on_checkBox_onBrynhildr2Support_stateChanged(int state)
-{
-  Q_UNUSED(state);
+  publicModeVersionChanged(index + MODE_PUBLIC5);
 
   changed = true;
 }
@@ -462,7 +475,9 @@ void PreferenceDialog::on_spinBox_doubleClickThreshold_valueChanged(int i)
 #if QTB_PUBLIC_MODE6_SUPPORT
 void PreferenceDialog::on_checkBox_onTransferFileSupport_stateChanged(int state)
 {
-  Q_UNUSED(state);
+
+  checkBox_onTransferFileSupportByDragAndDrop->setEnabled(state == Qt::Checked);
+  checkBox_onShowTotalProgressForTransferFile->setEnabled(state == Qt::Checked);
 
   changed = true;
 }
@@ -539,7 +554,7 @@ void PreferenceDialog::on_pushButton_keylayoutPath_clicked()
 	cout << "on_pushButton_keylayoutPath_clicked()." << endl << flush; // for DEBUG
 
   QString dir = QFileDialog::getExistingDirectory(this,
-												  tr("Open Directory"),
+												  tr("Select path"),
 												  ".",
 												  QFileDialog::ShowDirsOnly |
 												  QFileDialog::DontResolveSymlinks);
@@ -549,8 +564,8 @@ void PreferenceDialog::on_pushButton_keylayoutPath_clicked()
   }
 
   // keylayoutPath
-  lineEdit_keylayoutPath->clear();
-  lineEdit_keylayoutPath->insert(dir);
+  dir = QDir::toNativeSeparators(dir);
+  lineEdit_keylayoutPath->setText(dir);
   changed = true;
 
   if (outputLog)
@@ -564,7 +579,7 @@ void PreferenceDialog::on_pushButton_outputPath_clicked()
 	cout << "on_pushButton_outputPath_clicked()." << endl << flush; // for DEBUG
 
   QString dir = QFileDialog::getExistingDirectory(this,
-												  tr("Open Directory"),
+												  tr("Select path"),
 												  ".",
 												  QFileDialog::ShowDirsOnly |
 												  QFileDialog::DontResolveSymlinks);
@@ -574,8 +589,8 @@ void PreferenceDialog::on_pushButton_outputPath_clicked()
   }
 
   // outputPath
-  lineEdit_outputPath->clear();
-  lineEdit_outputPath->insert(dir);
+  dir = QDir::toNativeSeparators(dir);
+  lineEdit_outputPath->setText(dir);
   changed = true;
 
   if (outputLog)
@@ -587,6 +602,24 @@ void PreferenceDialog::on_pushButton_logFile_clicked()
 {
   if (outputLog)
 	cout << "on_pushButton_logFile_clicked()." << endl << flush; // for DEBUG
+
+  // prepare for log file
+  QString fileName =
+	QFileDialog::getSaveFileName(this,
+								 tr("Select file"),
+								 ".");
+  if (fileName == ""){
+	// Nothing to do
+	return;
+  }
+
+  // logFile
+  fileName = QDir::toNativeSeparators(fileName);
+  lineEdit_logFile->setText(fileName);
+  changed = true;
+
+  if (outputLog)
+	cout << "Open File : " << qPrintable(fileName) << endl << flush;
 }
 
 // select button of keyboard logfile
@@ -594,6 +627,24 @@ void PreferenceDialog::on_pushButton_keyboardLogFile_clicked()
 {
   if (outputLog)
 	cout << "on_pushButton_keyboardLogFile_clicked()." << endl << flush; // for DEBUG
+
+  // prepare for keyboard log file
+  QString fileName =
+	QFileDialog::getSaveFileName(this,
+								 tr("Select file"),
+								 ".");
+  if (fileName == ""){
+	// Nothing to do
+	return;
+  }
+
+  // keyboardLogFile
+  fileName = QDir::toNativeSeparators(fileName);
+  lineEdit_keyboardLogFile->setText(fileName);
+  changed = true;
+
+  if (outputLog)
+	cout << "Open File : " << qPrintable(fileName) << endl << flush;
 }
 
 } // end of namespace qtbrynhildr

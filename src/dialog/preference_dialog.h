@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QFont>
 #include <QResizeEvent>
+#include <QStringList>
 
 // Local Header
 #include "settings.h"
@@ -26,6 +27,9 @@ public:
   // resize event
   void resizeEvent(QResizeEvent *event);
 
+  // set keylayout file list
+  void setKeylayoutList(const QStringList keylayoutList);
+
 protected:
   // show Event
   void showEvent(QShowEvent *event);
@@ -35,25 +39,24 @@ private:
   void getFromSettings();
 
   // set to settings
-  void setToSettings();
+  bool setToSettings();
 
   // resettings for dialog
   void resetting();
 
 private slots:
-#if 0
   // accept button
   void accept();
+#if 0
   // reject button
   void reject();
 #endif
   // clicked button
   void clicked(QAbstractButton *button);
 
+  void publicModeVersionChanged(int version);
 
   void on_comboBox_publicModeVersion_currentIndexChanged(int index);
-
-  void on_checkBox_onBrynhildr2Support_stateChanged(int state);
 
   void on_checkBox_onOpenConnectToServerDialogAtBootup_stateChanged(int state);
 
@@ -116,6 +119,9 @@ private:
 
   // changed flag
   bool changed;
+
+  // check result
+  bool resultOfSetToSettings;
 
   // output log flag
   bool outputLog;

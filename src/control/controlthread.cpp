@@ -13,6 +13,7 @@
 // Qt Header
 #if QTB_PUBLIC_MODE6_SUPPORT
 #include <QByteArray>
+#include <QDir>
 #include <QFileInfo>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_PUBLIC_MODE7_SUPPORT

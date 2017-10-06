@@ -11,6 +11,9 @@
 
 // Qt Header
 #include <QDateTime>
+#if QTB_PUBLIC_MODE6_SUPPORT
+#include <QDir>
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QKeyEvent>
 #include <QMimeData>
 #include <QPainter>

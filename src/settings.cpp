@@ -858,12 +858,7 @@ QString Settings::getDefaultOutputPath() const
 // get default keylayout path
 QString Settings::getDefaultKeylayoutPath() const
 {
-#if 0 // for TEST
-  QFileInfo fileInfo(settings->fileName());
-  return QDir::toNativeSeparators(fileInfo.absolutePath() + QTB_KEYLAYOUT_FILE_PATH);
-#else
-  return QDir::toNativeSeparators(qApp->applicationDirPath() + QTB_KEYLAYOUT_FILE_PATH);
-#endif
+  return QDir::toNativeSeparators(qApp->applicationDirPath() + QTB_KEYLAYOUT_FILE_PATH  + QDir::separator());
 }
 
 // get Default Log File

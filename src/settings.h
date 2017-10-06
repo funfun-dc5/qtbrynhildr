@@ -10,6 +10,7 @@
 #include <cstring>
 
 // Qt Header
+#include <QDir>
 #include <QSettings>
 #include <QString>
 #if QTB_AUTO_COMPLETE
@@ -1791,6 +1792,9 @@ public:
   // set output path
   void setOutputPath(QString outputPath)
   {
+	if (!outputPath.endsWith(QDir::separator())){
+	  outputPath.append(QDir::separator());
+	}
 	this->outputPath = outputPath;
   }
 
@@ -1803,6 +1807,9 @@ public:
   // set keylayout path
   void setKeylayoutPath(QString keylayoutPath)
   {
+	if (!keylayoutPath.endsWith(QDir::separator())){
+	  keylayoutPath.append(QDir::separator());
+	}
 	this->keylayoutPath = keylayoutPath;
   }
 

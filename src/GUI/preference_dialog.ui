@@ -63,20 +63,11 @@
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       <widget class="QSpinBox" name="spinBox_serverNameListSize">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spinBox_serverNameListSize"/>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -85,7 +76,7 @@
       <rect>
        <x>31</x>
        <y>91</y>
-       <width>271</width>
+       <width>451</width>
        <height>16</height>
       </rect>
      </property>
@@ -98,7 +89,7 @@
       <rect>
        <x>31</x>
        <y>140</y>
-       <width>271</width>
+       <width>451</width>
        <height>16</height>
       </rect>
      </property>
@@ -111,7 +102,7 @@
       <rect>
        <x>31</x>
        <y>190</y>
-       <width>271</width>
+       <width>451</width>
        <height>16</height>
       </rect>
      </property>
@@ -119,7 +110,7 @@
       <string>Check Update At Bootup</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget_2">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -179,12 +170,12 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget_4">
      <property name="geometry">
       <rect>
        <x>21</x>
        <y>100</y>
-       <width>344</width>
+       <width>471</width>
        <height>194</height>
       </rect>
      </property>
@@ -206,7 +197,7 @@
     <attribute name="title">
      <string>Mouse</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget_4">
+    <widget class="QWidget" name="layoutWidget_5">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -219,25 +210,19 @@
       <item>
        <widget class="QLabel" name="label_doubleClickThreshold">
         <property name="text">
-         <string>Double Click (ms)</string>
+         <string>Double Click Threshold</string>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+       <widget class="QSpinBox" name="spinBox_doubleClickThreshold">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
+        <property name="suffix">
+         <string notr="true"> (ms)</string>
         </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="spinBox_doubleClickThreshold"/>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -246,7 +231,7 @@
       <rect>
        <x>30</x>
        <y>31</y>
-       <width>261</width>
+       <width>441</width>
        <height>16</height>
       </rect>
      </property>
@@ -259,7 +244,7 @@
       <rect>
        <x>30</x>
        <y>80</y>
-       <width>261</width>
+       <width>451</width>
        <height>16</height>
       </rect>
      </property>
@@ -272,7 +257,7 @@
       <rect>
        <x>30</x>
        <y>130</y>
-       <width>261</width>
+       <width>451</width>
        <height>16</height>
       </rect>
      </property>
@@ -285,7 +270,7 @@
       <rect>
        <x>30</x>
        <y>180</y>
-       <width>261</width>
+       <width>451</width>
        <height>16</height>
       </rect>
      </property>
@@ -298,7 +283,7 @@
     <attribute name="title">
      <string>File and Clipboard</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget_5">
+    <widget class="QWidget" name="layoutWidget_6">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -332,7 +317,7 @@
       <rect>
        <x>31</x>
        <y>31</y>
-       <width>301</width>
+       <width>461</width>
        <height>16</height>
       </rect>
      </property>
@@ -345,7 +330,7 @@
       <rect>
        <x>31</x>
        <y>81</y>
-       <width>301</width>
+       <width>461</width>
        <height>16</height>
       </rect>
      </property>
@@ -358,7 +343,7 @@
       <rect>
        <x>31</x>
        <y>131</y>
-       <width>301</width>
+       <width>461</width>
        <height>16</height>
       </rect>
      </property>
@@ -371,7 +356,7 @@
       <rect>
        <x>30</x>
        <y>180</y>
-       <width>301</width>
+       <width>461</width>
        <height>16</height>
       </rect>
      </property>
@@ -384,7 +369,7 @@
     <attribute name="title">
      <string>Buffer</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget_6">
+    <widget class="QWidget" name="layoutWidget_7">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -397,16 +382,23 @@
       <item>
        <widget class="QLabel" name="label_soundBufferSize">
         <property name="text">
-         <string>Sound Buffer Size (KB) </string>
+         <string>Sound Buffer Size</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spinBox_soundBufferSize"/>
+       <widget class="QSpinBox" name="spinBox_soundBufferSize">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="suffix">
+         <string notr="true"> (KB)</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget_7">
+    <widget class="QWidget" name="layoutWidget_8">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -419,12 +411,19 @@
       <item>
        <widget class="QLabel" name="label_graphicsBufferSize">
         <property name="text">
-         <string>Graphics Buffer Size (KB) </string>
+         <string>Graphics Buffer Size</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spinBox_graphicsBufferSize"/>
+       <widget class="QSpinBox" name="spinBox_graphicsBufferSize">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="suffix">
+         <string notr="true"> (KB)</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -433,7 +432,7 @@
     <attribute name="title">
      <string>Log</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget_8">
+    <widget class="QWidget" name="layoutWidget_9">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -462,7 +461,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="layoutWidget_9">
+    <widget class="QWidget" name="layoutWidget_10">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -501,7 +500,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>181</width>
+       <width>471</width>
        <height>16</height>
       </rect>
      </property>
@@ -512,6 +511,35 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>comboBox_publicModeVersion</tabstop>
+  <tabstop>checkBox_onOpenConnectToServerDialogAtBootup</tabstop>
+  <tabstop>checkBox_onConfirmAtExit</tabstop>
+  <tabstop>checkBox_onCheckUpdateAtBootup</tabstop>
+  <tabstop>spinBox_serverNameListSize</tabstop>
+  <tabstop>pushButton_keylayoutPath</tabstop>
+  <tabstop>checkBox_onHoldMouseControl</tabstop>
+  <tabstop>checkBox_onExtraButtonSupport</tabstop>
+  <tabstop>checkBox_onDisplayMouseCursor</tabstop>
+  <tabstop>checkBox_onShowMouseCursorMarker</tabstop>
+  <tabstop>spinBox_doubleClickThreshold</tabstop>
+  <tabstop>checkBox_onTransferFileSupport</tabstop>
+  <tabstop>checkBox_onTransferFileSupportByDragAndDrop</tabstop>
+  <tabstop>checkBox_onShowTotalProgressForTransferFile</tabstop>
+  <tabstop>checkBox_onTransferClipboardSupport</tabstop>
+  <tabstop>pushButton_outputPath</tabstop>
+  <tabstop>spinBox_graphicsBufferSize</tabstop>
+  <tabstop>spinBox_soundBufferSize</tabstop>
+  <tabstop>pushButton_keyboardLogFile</tabstop>
+  <tabstop>pushButton_logFile</tabstop>
+  <tabstop>checkBox_onGamePadSupport</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>lineEdit_logFile</tabstop>
+  <tabstop>lineEdit_outputPath</tabstop>
+  <tabstop>lineEdit_keyboardLogFile</tabstop>
+  <tabstop>lineEdit_keylayoutPath</tabstop>
+  <tabstop>listWidget_keylayoutList</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

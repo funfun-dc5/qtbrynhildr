@@ -53,20 +53,16 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // serverNameListSize
-  spinBox_serverNameListSize->setMinimum(5);	// for TEST
-  spinBox_serverNameListSize->setMaximum(100);	// for TEST
+  spinBox_serverNameListSize->setRange(5, 100);	// for TEST
 
   // doubleClickThreshold
-  spinBox_doubleClickThreshold->setMinimum(100);	// for TEST
-  spinBox_doubleClickThreshold->setMaximum(1000);	// for TEST
+  spinBox_doubleClickThreshold->setRange(100, 1000); // for TEST
 
   // graphicsBufferSize
-  spinBox_graphicsBufferSize->setMinimum(256);		// for TEST
-  spinBox_graphicsBufferSize->setMaximum(10240);	// for TEST
+  spinBox_graphicsBufferSize->setRange(256, 10240); // for TEST
 
   // soundBufferSize
-  spinBox_soundBufferSize->setMinimum(256);		// for TEST
-  spinBox_soundBufferSize->setMaximum(10240);	// for TEST
+  spinBox_soundBufferSize->setRange(256, 1024); // for TEST
 
 #if 1 // for TEST
   // set Read Only

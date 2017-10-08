@@ -179,9 +179,9 @@
     </message>
     <message>
         <location filename="../GUI/preference_dialog.ui"/>
-        <source>Double Click (ms)</source>
+        <source>Double Click Threshold</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>ダブルクリックの間隔 (ms)</translation>
+        <translation>ダブルクリックの間隔</translation>
     </message>
     <message>
         <location filename="../GUI/preference_dialog.ui"/>
@@ -251,15 +251,15 @@
     </message>
     <message>
         <location filename="../GUI/preference_dialog.ui"/>
-        <source>Sound Buffer Size (KB) </source>
+        <source>Sound Buffer Size</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>サウンド用バッファサイズ (KB) </translation>
+        <translation>サウンド用バッファサイズ</translation>
     </message>
     <message>
         <location filename="../GUI/preference_dialog.ui"/>
-        <source>Graphics Buffer Size (KB) </source>
+        <source>Graphics Buffer Size</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>グラフィックス用バッファサイズ (KB) </translation>
+        <translation>グラフィックス用バッファサイズ</translation>
     </message>
     <message>
         <location filename="../GUI/preference_dialog.ui"/>

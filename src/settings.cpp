@@ -165,6 +165,8 @@ Settings::Settings(const char *iniFileName)
 
   setDoubleClickThreshold(QTB_DOUBLECLICKTHRESHOLD_DEFAULT);
 
+  setNumOfThreadForConvert(QTB_NUMBOFTHREADFORCONVERT_DEFAULT);
+
   setOutputGraphicsDataToFile(QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT);
   setOutputSoundDataToFile(QTB_OUTPUTSOUNDDATATOFILE_DEFAULT);
   setOutputSoundDataToWavFile(QTB_OUTPUTSOUNDDATATOWAVFILE_DEFAULT);
@@ -470,6 +472,10 @@ void Settings::readSettings()
   setDoubleClickThreshold(settings->value(QTB_DOUBLECLICKTHRESHOLD,
 										  QTB_DOUBLECLICKTHRESHOLD_DEFAULT).toInt());
 
+  // load numOfThreadForConvert
+  setNumOfThreadForConvert(settings->value(QTB_NUMBOFTHREADFORCONVERT,
+										   QTB_NUMBOFTHREADFORCONVERT_DEFAULT).toInt());
+
   // load outputGraphicsDataToFile
   setOutputGraphicsDataToFile(settings->value(QTB_OUTPUTGRAPHICSDATATOFILE,
 											  QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT).toBool());
@@ -696,6 +702,9 @@ void Settings::writeSettings()
   // save doubleClickThreshold
   settings->setValue(QTB_DOUBLECLICKTHRESHOLD, doubleClickThreshold);
 
+  // save numOfThreadForConvert
+  settings->setValue(QTB_NUMBOFTHREADFORCONVERT, numOfThreadForConvert);
+
   // save outputGraphicsDataToFile
   settings->setValue(QTB_OUTPUTGRAPHICSDATATOFILE, outputGraphicsDataToFile);
 
@@ -823,6 +832,7 @@ void Settings::printSettings() const
   qDebug() << "Sound    Buffer Size (bytes) : " << soundBufferSize;
 
   qDebug() << "Double Click Threshold(msecond) : " << doubleClickThreshold;
+  qDebug() << "Number Of Thread For Convert    : " << numOfThreadForConvert;
 
   qDebug() << "------------------------------------------";
   qDebug() << "DBG: output Graphics Data To File    : " << outputGraphicsDataToFile;

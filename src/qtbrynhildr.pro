@@ -24,6 +24,10 @@ CONFIG += c++11
 # for check spec
 # message($$QMAKESPEC)
 
+# for multi thread converter
+QT += concurrent
+DEFINES += QTB_MULTI_THREAD_CONVERTER
+
 # for Windows (MinGW, MSVC)
 win32 {
 DEFINES += QWT_DLL PLATFORM_WINDOWS

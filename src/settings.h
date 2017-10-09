@@ -384,6 +384,10 @@ typedef int COMPRESS_MODE;
 #define QTB_DOUBLECLICKTHRESHOLD			"doubleClickThreshold"
 #define QTB_DOUBLECLICKTHRESHOLD_DEFAULT	500
 
+// for numOfThreadForConvert
+#define QTB_NUMBOFTHREADFORCONVERT			"numOfThreadForConvert"
+#define QTB_NUMBOFTHREADFORCONVERT_DEFAULT	0
+
 // for outputGraphicsDataToFile
 #define QTB_OUTPUTGRAPHICSDATATOFILE			"outputGraphicsDataToFile"
 #define QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT	false
@@ -1718,6 +1722,18 @@ public:
 	doubleClickThreshold = threshold;
   }
 
+  // get number of thread for convert
+  int getNumOfThreadForConvert() const
+  {
+	return numOfThreadForConvert;
+  }
+
+  // set number of thread for convert
+  void setNumOfThreadForConvert(int numOfThreadForConvert)
+  {
+	this->numOfThreadForConvert = numOfThreadForConvert;
+  }
+
   // get output graphics flag
   bool getOutputGraphicsDataToFile() const
   {
@@ -2093,8 +2109,11 @@ private:
   volatile int graphicsBufferSize;
   volatile int soundBufferSize;
 
-  // threshold
+  // double click threshold
   volatile int doubleClickThreshold;
+
+  // number of thread for convert
+  volatile int numOfThreadForConvert;
 
   // Debug
   volatile bool outputGraphicsDataToFile;

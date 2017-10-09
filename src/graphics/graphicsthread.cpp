@@ -16,6 +16,9 @@
 #include <iostream>
 
 // Qt Header
+#if QTB_MULTI_THREAD_CONVERTER
+#include <QtConcurrent>
+#endif // QTB_MULTI_THREAD_CONVERTER
 
 // Local Header
 #include "graphicsthread.h"
@@ -23,6 +26,26 @@
 #include "qtbrynhildr.h"
 
 namespace qtbrynhildr {
+
+#if QTB_MULTI_THREAD_CONVERTER
+// for qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+// parameters
+int width;
+int uvNext;
+int rgb24Next;
+
+// qtbrynhhildr::clip() (NOT GraphicsThread::clip())
+// clip
+inline int clip(int val)
+{
+  if (val < 0) return 0;
+  if (val > 255) return 255;
+  return val;
+}
+
+// qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+#endif // QTB_MULTI_THREAD_CONVERTER
 
 //---------------------------------------------------------------------------
 // public
@@ -536,6 +559,12 @@ int GraphicsThread::makeRGB24Image()
 	vtopOrg = utopOrg + size / 4;
 	uvNext = width / 2;
 	rgb24Next = - width * 3 * 2;
+#if QTB_MULTI_THREAD_CONVERTER
+	// set for qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+	qtbrynhildr::width = width;
+	qtbrynhildr::uvNext = uvNext;
+	qtbrynhildr::rgb24Next = rgb24Next;
+#endif // QTB_MULTI_THREAD_CONVERTER
   }
 
   // create yuv420
@@ -565,10 +594,133 @@ int GraphicsThread::makeRGB24Image()
 	buf += stride;
   }
 
+#if QTB_MULTI_THREAD_CONVERTER
+  // number of thread
+  int numOfThread = settings->getNumOfThreadForConvert();
+  //  int numOfThread = 0; // 0 or 1 or 2 or 4
+  if (numOfThread <= 1 || height % 2 != 0){
+	// convert YUV420 to RGB24
+	return convertYUV420toRGB24();
+  }
+  else { // numOfThread >= 2
+	// 1 thread or 2 thread or 4 thread version
+	QFuture<int> f1, f2, f3, f4;
+	int linesOfThread = height / numOfThread;
+
+	// for 1st thread
+	uchar *rgb24top = rgb24 + width * (height - 1) * 3;
+	uchar *ytop = ytopOrg;
+	uchar *utop = utopOrg;
+	uchar *vtop = vtopOrg;
+
+	// start thread
+	f1 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
+
+	// for 2nd thread
+	rgb24top -= (width * linesOfThread) * 3;
+	ytop += width * linesOfThread;
+	utop += uvNext * linesOfThread/2;
+	vtop += uvNext * linesOfThread/2;
+
+	// start thread
+	f2 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
+
+	// for 3rd thread
+	if (numOfThread >= 4){
+	  rgb24top -= (width * linesOfThread) * 3;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
+
+	  // start thread
+	  f3 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
+	}
+
+	// for 4th thread
+	if (numOfThread >= 4){
+	  rgb24top -= (width * linesOfThread) * 3;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
+
+	  // start thread
+	  f4 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
+	}
+
+	// wait for all threads finished
+	f1.waitForFinished();
+	f2.waitForFinished();
+	f3.waitForFinished();
+	f4.waitForFinished();
+
+	return size * 3;
+  }
+#else // QTB_MULTI_THREAD_CONVERTER
   // convert YUV420 to RGB24
   return convertYUV420toRGB24();
+#endif // QTB_MULTI_THREAD_CONVERTER
 }
 
+#if QTB_MULTI_THREAD_CONVERTER
+
+// YUV420 convert to RGB macro
+#define GET_R(Y, V)		((256 * Y           + 358 * V) >> 8)
+#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
+#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
+
+
+// qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 2, uvOffset++){
+	  int r, g, b;
+	  int y, u, v;
+
+	  // set u/v
+	  u = *(utop + uvOffset) - 128;
+	  v = *(vtop + uvOffset) - 128;
+
+	  // == xPos ==
+	  y = *ytop++;
+
+	  // R
+	  r = qtbrynhildr::clip(GET_R(y, v));
+	  *rgb24top++ = (uchar)r;
+	  // G
+	  g = qtbrynhildr::clip(GET_G(y, u, v));
+	  *rgb24top++ = (uchar)g;
+	  // B
+	  b = qtbrynhildr::clip(GET_B(y, u));
+	  *rgb24top++ = (uchar)b;
+
+	  // == xPos+1 ==
+	  y = *ytop++;
+
+	  // R
+	  r = qtbrynhildr::clip(GET_R(y, v));
+	  *rgb24top++ = (uchar)r;
+	  // G
+	  g = qtbrynhildr::clip(GET_G(y, u, v));
+	  *rgb24top++ = (uchar)g;
+	  // B
+	  b = qtbrynhildr::clip(GET_B(y, u));
+	  *rgb24top++ = (uchar)b;
+
+	  rgb24size += 6;
+	}
+	rgb24top += qtbrynhildr::rgb24Next;
+	if (yPos & 0x1){
+	  utop += qtbrynhildr::uvNext;
+	  vtop += qtbrynhildr::uvNext;
+	}
+  }
+  return rgb24size;
+}
+
+#endif  // QTB_MULTI_THREAD_CONVERTER
 
 // yuv420toRGB24 version (select one)
 #define YUV420TORGB24_V1 0 // float

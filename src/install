@@ -257,6 +257,7 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Network.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Widgets.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Concurrent.dll ${DISTDIR}/bin
 			if [ "$1" = "" ] ; then
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin

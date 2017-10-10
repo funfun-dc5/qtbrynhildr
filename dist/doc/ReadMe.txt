@@ -721,6 +721,7 @@ onTransferClipboard=true
 graphicsBufferSize=1048576
 soundBufferSize=1048576
 doubleClickThreshold=500
+numOfThreadForConvert=0
 outputGraphicsDataToFile=false
 outputSoundDataToFile=false
 outputSoundDataToWavFile=false
@@ -996,6 +997,13 @@ Qtのバージョンにより必要なランタイムライブラリパッケー
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+Ver.2.0.4 : 2017/10/xx
+            [新規機能]
+             ・モード7のデスクトップ画像の変換処理をマルチスレッドで行う仕組みをテスト実装
+
+            [その他変更]
+             ・Qt5.9.2でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
+
 Ver.2.0.3 : 2017/09/19
             [新規機能]
              ・サーバ接続中にパブリックモードを変更する機能を追加

@@ -6,6 +6,7 @@ QMAKE=qmake
 #
 LOCALPATH=
 PATHLIST=
+QTVERSION=5.9.2
 
 case $UNAME in
 	CYGWIN*)
@@ -19,10 +20,10 @@ case $UNAME in
 					# ignore
 					;;
 				msvc)
-					QTROOT="/c/Tools/develop/Qt/Qt5.9.1/5.9.1/msvc2015"
+					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015"
 					;;
 				msvc64)
-					QTROOT="/c/Tools/develop/Qt/Qt5.9.1/5.9.1/msvc2015_64"
+					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015_64"
 					;;
 				*)
 					echo "setup_qt5 : Unkown argument : $1"
@@ -30,12 +31,13 @@ case $UNAME in
 					;;
 			esac
 		else
-			# Qt5.9.1
-			QTROOT="/c/Tools/develop/Qt/Qt5.9.1/5.9.1/mingw53_32"
-			MINGWROOT="/c/Tools/develop/Qt/Qt5.9.1/Tools/mingw530_32"
-			# Qt5.6.2 for XP/Vista
-#			QTROOT="/c/Tools/develop/Qt/Qt5.6.2/5.6/mingw49_32"
-#			MINGWROOT="/c/Tools/develop/Qt/Qt5.6.2/Tools/mingw492_32"
+			# Qt5.9
+			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
+			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw530_32"
+			# Qt5.6 for XP/Vista
+#			QTVERSION=5.6.3
+#			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw49_32"
+#			MINGWROOT="/c/Tools/develop/Qt/${QTVERSION}/Tools/mingw492_32"
 			# MinGW
 			PATHLIST=${MINGWROOT}/bin:${PATHLIST}
 		fi
@@ -43,7 +45,7 @@ case $UNAME in
 	Linux)
 		case $UNAMEM in
 			x86_64)
-				QTROOT=/opt/Qt5.9.1/5.9.1/gcc_64
+				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/gcc_64
 				;;
 			i686)
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
@@ -75,7 +77,7 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
-				QTROOT=/opt/Qt5.9.1/5.9.1/clang_64
+				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/clang_64
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

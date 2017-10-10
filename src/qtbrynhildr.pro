@@ -26,7 +26,7 @@ CONFIG += c++11
 
 # for multi thread converter
 QT += concurrent
-DEFINES += QTB_MULTI_THREAD_CONVERTER
+DEFINES += QTB_MULTI_THREAD_CONVERTER=1
 
 # for Windows (MinGW, MSVC)
 win32 {

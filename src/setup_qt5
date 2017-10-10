@@ -37,7 +37,7 @@ case $UNAME in
 			# Qt5.6 for XP/Vista
 #			QTVERSION=5.6.3
 #			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw49_32"
-#			MINGWROOT="/c/Tools/develop/Qt/${QTVERSION}/Tools/mingw492_32"
+#			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw492_32"
 			# MinGW
 			PATHLIST=${MINGWROOT}/bin:${PATHLIST}
 		fi

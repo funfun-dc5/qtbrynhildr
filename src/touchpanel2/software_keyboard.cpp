@@ -59,6 +59,9 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   // for DEBUG
   outputLog(false)
 {
+  // set widget attributes
+  setAttribute(Qt::WA_NoSystemBackground, true); // NOT fill background
+
   // reset flag
   for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
 	layout[i].pushed = false;

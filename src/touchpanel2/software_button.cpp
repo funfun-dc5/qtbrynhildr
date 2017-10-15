@@ -39,6 +39,9 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   // for DEBUG
   outputLog(false)
 {
+  // set widget attributes
+  setAttribute(Qt::WA_NoSystemBackground, true); // NOT fill background
+
   // reset flag
   for(int i = ID_BUTTON_1; i < ID_BUTTON_NUM; i++){
 	layout[i].pushed = false;

@@ -160,20 +160,12 @@ typedef int KEYBOARD_TYPE;
 
 // for videoQuality
 #define QTB_VIDEOQUALITY			"videoQuality"
-#if defined(QTB_DEV_TABLET)
-#define QTB_VIDEOQUALITY_DEFAULT	VIDEO_QUALITY_STANDARD // MINIMUM
-#else // defined(QTB_DEV_TABLET)
 #define QTB_VIDEOQUALITY_DEFAULT	VIDEO_QUALITY_STANDARD
-#endif // defined(QTB_DEV_TABLET)
 
 // for frameRate
 #define QTB_FRAMERATE			"frameRate"
 #define FRAMERATE_MAXIMUM		0
-#if defined(QTB_DEV_TABLET)
-#define QTB_FRAMERATE_DEFAULT	10
-#else // defined(QTB_DEV_TABLET)
 #define QTB_FRAMERATE_DEFAULT	30
-#endif // defined(QTB_DEV_TABLET)
 
 // for displayMouseCursor
 #define QTB_ONDISPLAYMOUSECURSOR			"onDisplayMouseCursor"
@@ -205,11 +197,7 @@ typedef int KEYBOARD_TYPE;
 
 // for soundQuality
 #define QTB_SOUNDQUALITY			"soundQuality"
-#if defined(QTB_DEV_TABLET)
-#define QTB_SOUNDQUALITY_DEFAULT	SOUND_QUALITY_STANDARD // MINIMUM
-#else // defined(QTB_DEV_TABLET)
 #define QTB_SOUNDQUALITY_DEFAULT	SOUND_QUALITY_STANDARD
-#endif // defined(QTB_DEV_TABLET)
 
 // for soundCapture
 #define QTB_SOUNDCAPTURE			"soundCapture"
@@ -217,11 +205,7 @@ typedef int KEYBOARD_TYPE;
 
 // for soundCacheTime (ms)
 #define QTB_SOUNDCACHETIME			"soundCacheTime"
-#if defined(QTB_DEV_TABLET)
 #define QTB_SOUNDCACHETIME_DEFAULT	100
-#else // defined(QTB_DEV_TABLET)
-#define QTB_SOUNDCACHETIME_DEFAULT	100
-#endif // defined(QTB_DEV_TABLET)
 
 // for onKeepOriginalDesktopSize
 #define QTB_ONKEEPORIGINALDESKTOPSIZE "onKeepOriginalDesktopSize"
@@ -382,7 +366,7 @@ typedef int COMPRESS_MODE;
 
 // for numOfThreadForConvert
 #define QTB_NUMBOFTHREADFORCONVERT			"numOfThreadForConvert"
-#define QTB_NUMBOFTHREADFORCONVERT_DEFAULT	0
+#define QTB_NUMBOFTHREADFORCONVERT_DEFAULT	2
 
 // for outputGraphicsDataToFile
 #define QTB_OUTPUTGRAPHICSDATATOFILE			"outputGraphicsDataToFile"

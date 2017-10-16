@@ -330,7 +330,11 @@ typedef int COMPRESS_MODE;
 
 // for onShowMouseCursorMarker
 #define QTB_ONSHOWMOUSECURSORMARKER			"onShowMouseCursorMarker"
+#if defined(QTB_DEV_TABLET)
+#define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	true
+#else // defined(QTB_DEV_TABLET)
 #define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	false
+#endif // defined(QTB_DEV_TABLET)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 // for onTransferFileSupport

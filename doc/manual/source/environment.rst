@@ -13,8 +13,8 @@
 
 (1) Windows版  [#]_ 
 ^^^^^^^^^^^^^^^^^^^^
-  * Windows XP      (64bit/32bit)
-  * Windows Vista   (64bit/32bit)
+  * Windows XP      (64bit/32bit) (Qt5.6以下でビルド)
+  * Windows Vista   (64bit/32bit) (Qt5.6以下でビルド)
   * Windows 7       (64bit/32bit)
   * Windows 8       (64bit/32bit)
   * Windows 8.1     (64bit/32bit)

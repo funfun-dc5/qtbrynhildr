@@ -37,7 +37,12 @@
 
 (1) リリースに入れる修正をbranchからmasterにマージ
 
-(2) master上でリリース用にversion.h/qtbrynhildr.rc/qtbrynhildr.iss.templateを変更
+(2) master上でリリース用に以下を変更
+
+    version.h
+    qtbrynhildr.rc
+    qtbrynhildr.iss.template
+    AndroidManifest.xml
 
  qtbrynhildr.rcのFILEVERSION, FileVersionは、以下のルールとする。
  (*)PRODUCTVERSION, ProductVersionには適用しない

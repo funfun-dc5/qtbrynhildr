@@ -74,66 +74,86 @@ Desktop::Desktop()
   // OS Version
   QString kernelVersion = QSysInfo::kernelVersion();
   if (kernelVersion.startsWith("10.")){			// Windows 10
+#if QTB_SCROLLAREA
 	correctWindowWidth = 2;
 	correctWindowHeight = 3;
+#endif // QTB_SCROLLAREA
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = 0;
   }
   else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
+#if QTB_SCROLLAREA
 	correctWindowWidth = 2;
 	correctWindowHeight = 3;
+#endif // QTB_SCROLLAREA
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -2;
   }
   else if (kernelVersion.startsWith("6.2")){	// Windows 8
+#if QTB_SCROLLAREA
 	correctWindowWidth = 2;
 	correctWindowHeight = 3;
+#endif // QTB_SCROLLAREA
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -2;
   }
   else if (kernelVersion.startsWith("6.1")){	// Windows 7
+#if QTB_SCROLLAREA
 	correctWindowWidth = 2;
 	correctWindowHeight = 4;
+#endif // QTB_SCROLLAREA
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -4;
   }
   else {
 	// NOT supported Version
+#if QTB_SCROLLAREA
 	correctWindowWidth = 2;
 	correctWindowHeight = 3;
+#endif // QTB_SCROLLAREA
 	heightOfMenuBarInHiding = -1;
 	heightOfStatusBarInHiding = -2;
   }
 #elif defined(Q_OS_LINUX)
 #if defined(Q_OS_ANDROID)
   // Android
+#if QTB_SCROLLAREA
   correctWindowWidth = 2;
   correctWindowHeight = 4;
+#endif // QTB_SCROLLAREA
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
 #else // defined(Q_OS_ANDROID)
   // Linux Desktop
+#if QTB_SCROLLAREA
   correctWindowWidth = 2;
   correctWindowHeight = 2;
+#endif // QTB_SCROLLAREA
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
 #endif // defined(Q_OS_ANDROID)
 #elif defined(Q_OS_CYGWIN)
   // Cygwin
+#if QTB_SCROLLAREA
   correctWindowWidth = 2;
   correctWindowHeight = 2;
+#endif // QTB_SCROLLAREA
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
 #elif defined(Q_OS_FREEBSD)
   // FreeBSD
+#if QTB_SCROLLAREA
   correctWindowWidth = 0;
   correctWindowHeight = 0;
+#endif // QTB_SCROLLAREA
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
 #elif defined(Q_OS_OSX)
   // Darwin
+#if QTB_SCROLLAREA
   correctWindowWidth = 0;
   correctWindowHeight = 0;
+#endif // QTB_SCROLLAREA
   heightOfMenuBarInHiding = -1;
   heightOfStatusBarInHiding = 0;
 #endif

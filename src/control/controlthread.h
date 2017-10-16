@@ -14,7 +14,11 @@
 #include "function/recorder.h"
 #endif // QTB_RECORDER
 #include "keybuffer.h"
+#if QTB_SCROLLAREA
 #include "mainwindow.h"
+#else // QTB_SCROLLAREA
+#include "desktopwindow.h"
+#endif // QTB_SCROLLAREA
 #include "mousebuffer.h"
 #if QTB_PUBLIC_MODE6_SUPPORT
 #include "parameters.h"

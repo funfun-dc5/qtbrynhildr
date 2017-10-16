@@ -30,7 +30,7 @@ DEFINES += QTB_MULTI_THREAD_CONVERTER=1
 
 # for Windows (MinGW, MSVC)
 win32 {
-DEFINES += QWT_DLL PLATFORM_WINDOWS
+DEFINES += QWT_DLL PLATFORM_WINDOWS QTB_SCROLLAREA=1
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 DESKTOP = ON
@@ -181,7 +181,7 @@ HEADERS += machine/protocols_x86.h machine/protocols_x64.h machine/protocols_com
 HEADERS += qtbrynhildr.h
 HEADERS += option.h desktop.h
 HEADERS += debug.h
-HEADERS += mainwindow.h logmessage.h
+HEADERS += logmessage.h
 HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dialog/confirm_dialog.h dialog/log_view_dialog.h
 HEADERS += settings.h
 HEADERS += common/netthread.h
@@ -198,7 +198,7 @@ SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
 SOURCES += option.cpp desktop.cpp
 SOURCES += debug.cpp
-SOURCES += mainwindow.cpp logmessage.cpp
+SOURCES += logmessage.cpp
 SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp dialog/confirm_dialog.cpp dialog/log_view_dialog.cpp
 SOURCES += settings.cpp
 SOURCES += common/netthread.cpp
@@ -209,3 +209,9 @@ SOURCES += sound/soundthread.cpp
 SOURCES += sound/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
+
+HEADERS += mainwindow.h
+SOURCES += mainwindow.cpp
+
+#HEADERS += desktopwindow.h desktopimage.h view.h
+#SOURCES += desktopwindow.cpp desktopimage.cpp view.cpp

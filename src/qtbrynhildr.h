@@ -22,7 +22,13 @@
 #include <QProgressBar>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QRect>
+#if QTB_SCROLLAREA
 #include <QScrollArea>
+#else // QTB_SCROLLAREA
+#include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#endif // QTB_SCROLLAREA
 #include <QShowEvent>
 #include <QSize>
 #include <QString>
@@ -42,7 +48,11 @@
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
+#if QTB_SCROLLAREA
 #include "mainwindow.h"
+#else // QTB_SCROLLAREA
+#include "desktopwindow.h"
+#endif // QTB_SCROLLAREA
 #include "option.h"
 #if QTB_RECORDER
 #include "function/recorder.h"
@@ -438,8 +448,13 @@ private:
 
 private:
   // GUI
+#if QTB_SCROLLAREA
   // scroll area
   QScrollArea *scrollArea;
+#else // QTB_SCROLLAREA
+  QGraphicsView *view;
+  QGraphicsScene *scene;
+#endif // QTB_SCROLLAREA
   // main window
   MainWindow *mainWindow;
   // window size

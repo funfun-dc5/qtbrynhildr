@@ -26,7 +26,7 @@ GraphicsView::GraphicsView(QGraphicsScene *scene)
   setDragMode(QGraphicsView::NoDrag);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  setAlignment(Qt::AlignCenter);
 }
 
 // destructor

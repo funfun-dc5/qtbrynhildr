@@ -15,9 +15,9 @@
 namespace qtbrynhildr {
 
 // constructor
-GraphicsView::GraphicsView(QGraphicsScene *scene)
+GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent)
   :
-  QGraphicsView(scene),
+  QGraphicsView(scene, parent),
   // for DEBUG
   outputLog(true)
 {

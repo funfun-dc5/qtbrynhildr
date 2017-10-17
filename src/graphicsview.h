@@ -23,7 +23,7 @@ class GraphicsView : public QGraphicsView
 
 public:
   // constructor
-  GraphicsView(QGraphicsScene *scene);
+  GraphicsView(QGraphicsScene *scene, QWidget *parent = Q_NULLPTR);
   // destructor
   ~GraphicsView();
 

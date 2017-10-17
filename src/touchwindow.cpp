@@ -89,7 +89,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   scene->addItem(desktopImage);
 
   // create view
-  view = new GraphicsView(scene);
+  view = new GraphicsView(scene, this);
   //  qDebug() << "view->size() = " << view->size();
 
   QVBoxLayout *layout = new QVBoxLayout;

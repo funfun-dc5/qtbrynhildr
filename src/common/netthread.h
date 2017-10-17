@@ -27,9 +27,9 @@
 // Local Header
 #include "logmessage.h"
 #if QTB_SCROLLAREA
-#include "mainwindow.h"
-#else // QTB_SCROLLAREA
 #include "desktopwindow.h"
+#else // QTB_SCROLLAREA
+#include "touchwindow.h"
 #endif // QTB_SCROLLAREA
 #include "settings.h"
 

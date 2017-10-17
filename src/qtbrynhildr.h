@@ -49,9 +49,9 @@
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
 #if QTB_SCROLLAREA
-#include "mainwindow.h"
-#else // QTB_SCROLLAREA
 #include "desktopwindow.h"
+#else // QTB_SCROLLAREA
+#include "touchwindow.h"
 #include "graphicsview.h"
 #endif // QTB_SCROLLAREA
 #include "option.h"

@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -11,7 +11,6 @@
 
 // Qt Header
 #include <QDateTime>
-#include <QGraphicsItem>
 #include <QKeyEvent>
 #include <QMimeData>
 #include <QPainter>
@@ -24,11 +23,9 @@
 #if 1 // for qDebug()
 #include <QtCore>
 #endif
-#include <QVBoxLayout>
 
 // Local Header
 #include "config.h"
-#include "desktopwindow.h"
 #if defined(QTB_NET_UNIX)
 #include "dialog/desktop_scaling_dialog.h"
 #endif // defined(QTB_NET_UNIX)
@@ -41,9 +38,6 @@ namespace qtbrynhildr {
 MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   :
   QWidget(parent),
-  desktopImage(0),
-  scene(0),
-  view(0),
   settings(settings),
   eventConverter(0),
   onShiftKey(false),
@@ -59,7 +53,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   // for DEBUG
   outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
   outputLogForMouse(QTB_DEBUG_MOUSE),
-  outputLog(true)
+  outputLog(false)
 {
   // save parent
   this->parent = parent;
@@ -78,22 +72,6 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
 
   // open keyboard log file
   openKeyboardLogFile(settings->getKeyboardLogFile());
-
-  // create desktop view
-
-  // create desktop image
-  desktopImage = new DesktopImage();
-
-  // create scene
-  scene = new QGraphicsScene(this);
-  scene->addItem(desktopImage);
-
-  // create view
-  view = new GraphicsView(scene);
-
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(view);
-  setLayout(layout);
 }
 
 // destructor
@@ -103,10 +81,6 @@ MainWindow::~MainWindow()
   closeKeyboardLogFile();
 
   // delete objects
-  if (scene != 0){
-	delete scene;
-	scene = 0;
-  }
   if (keyBuffer != 0){
 	delete keyBuffer;
 	keyBuffer = 0;
@@ -195,6 +169,14 @@ void MainWindow::refreshDesktop(QImage image)
 	}
   }
 
+#if 0 // QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // desktop compress mode
+  if (settings->getDesktopCompressMode() > 1){
+	currentSize = currentSize * settings->getDesktopCompressMode();
+	image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+  }
+#endif // QTB_DESKTOP_COMPRESS_MODE
+
   // capture desktop image
   if (QTB_DESKTOP_IMAGE_CAPTURE){
 	if (settings->getOnDesktopCapture()){
@@ -212,8 +194,8 @@ void MainWindow::refreshDesktop(QImage image)
 	}
   }
 
-  desktopImage->setImage(image);
-  //  scene->setSceneRect(0, 0, image.width(), image.height());
+  // copy QImage
+  this->image = image;
 
   // resize window
   if (previousSize != currentSize){
@@ -237,7 +219,6 @@ void MainWindow::refreshDesktop(QImage image)
 	// refresh image
 	update();
   }
-  //qDebug() << "view->size() = " << view->size();
 }
 
 // resize window
@@ -265,11 +246,6 @@ void MainWindow::resizeWindow()
 		  height = screenSize.height();
 		}
 
-#if 0 // for TEST
-		qDebug() << "currentSize = " << currentSize;
-		qDebug() << "screenSize = " << screenSize;
-		cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush; // for DEBUG
-#endif
 		// resize
 		parent->resize(width, height);
 
@@ -283,9 +259,16 @@ void MainWindow::resizeWindow()
 // clear desktop window
 void MainWindow::clearDesktop()
 {
-  QImage image(currentSize, QImage::Format_RGB32);
-  image.fill(Qt::gray);
-  refreshDesktop(image);
+  //  cout << "clearDesktop()" << endl << flush;
+#if 0 // for TEST
+  if (settings->getConnected()){
+	return;
+  }
+#endif
+  if (!image.isNull()){
+	image.fill(Qt::gray);
+	update();
+  }
 }
 
 // get window size
@@ -314,6 +297,40 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 void MainWindow::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
+
+  if (image.isNull()){
+	return;
+  }
+
+#if 1 // for TEST
+  QPainter painter(this);
+  painter.drawImage(0, 0, image);
+  // draw marker for mouse cursor
+  if (drawMarkerCounter > 0){
+	int length = drawMarkerCounter*10;
+	int x = currentMousePos.x() - length/2;
+	int y = currentMousePos.y() - length/2;
+
+	painter.setRenderHint(QPainter::Antialiasing, false);
+	painter.setPen(QPen(Qt::green, 4));
+	painter.drawArc(x, y, length, length, 0*360, 16*360);
+
+	drawMarkerCounter--;
+  }
+#if 0 // for TEST
+  else {
+	drawMarkerCounter = 30;
+  }
+#endif // for TEST
+#else // for TEST
+  QImage image2(image.size().width(), image.size().height(), QImage::Format_ARGB32_Premultiplied);
+  QPainter imagePainter(&image2);
+  imagePainter.setRenderHint(QPainter::Antialiasing, true);
+  imagePainter.drawImage(0, 0, image);
+
+  QPainter widgetPainter(this);
+  widgetPainter.drawImage(0, 0, image2);
+#endif // for TEST
 }
 
 // widget leave event

@@ -1,12 +1,10 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef DESKTOPWINDOW_H
-#define DESKTOPWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 // Common Header
 #include "common/common.h"
-
-// System Header
 
 // Qt Header
 #if defined(Q_OS_WIN)
@@ -26,17 +24,13 @@
 #include <QSize>
 #include <QTextStream>
 #include <QWheelEvent>
-#include <QWidget>
-#include <QGraphicsScene>
 
 // Local Header
 #include "control/keybuffer.h"
 #include "control/mousebuffer.h"
-#include "desktopimage.h"
-#include "graphicsview.h"
+#include "desktopwindow.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
-
 
 namespace qtbrynhildr {
 
@@ -56,6 +50,7 @@ public:
   MainWindow(Settings *settings, QtBrynhildr *parent);
   // destructor
   ~MainWindow();
+
   // set event converter
   void setEventConverter(EventConverter *eventConverter);
 
@@ -168,20 +163,14 @@ private:
   }
 
 private:
-  // desktop image
-  DesktopImage *desktopImage;
-
-  // scene
-  QGraphicsScene *scene;
-
-  // view
-  GraphicsView *view;
-
   // settings
   Settings *settings;
 
   // parent
   QtBrynhildr *parent;
+
+  // image
+  QImage image;
 
   // window size
   QSize currentSize;
@@ -242,4 +231,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // DESKTOPWINDOW_H
+#endif // MAINWINDOW_H

@@ -213,12 +213,12 @@ SOURCES += function/recorder.cpp
 # for new feature
 NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
-HEADERS += desktopwindow.h desktopimage.h graphicsview.h
-SOURCES += desktopwindow.cpp desktopimage.cpp graphicsview.cpp
+HEADERS += touchwindow.h desktopimage.h graphicsview.h
+SOURCES += touchwindow.cpp desktopimage.cpp graphicsview.cpp
 DEFINES += QTB_SCROLLAREA=0
 }
 else {
-HEADERS += mainwindow.h
-SOURCES += mainwindow.cpp
+HEADERS += desktopwindow.h
+SOURCES += desktopwindow.cpp
 DEFINES += QTB_SCROLLAREA=1
 }

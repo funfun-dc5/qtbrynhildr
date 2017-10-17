@@ -19,7 +19,7 @@ FORMS += GUI/log_view_dialog.ui
 CONFIG += c++11
 
 # for DEBUG
-#CONFIG += console
+CONFIG += console
 
 # for check spec
 # message($$QMAKESPEC)
@@ -30,7 +30,7 @@ DEFINES += QTB_MULTI_THREAD_CONVERTER=1
 
 # for Windows (MinGW, MSVC)
 win32 {
-DEFINES += QWT_DLL PLATFORM_WINDOWS QTB_SCROLLAREA=1
+DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 DESKTOP = ON
@@ -210,8 +210,15 @@ SOURCES += sound/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 
+# for new feature
+NEW_FEATURE = ON
+equals(NEW_FEATURE, ON){
+HEADERS += desktopwindow.h desktopimage.h graphicsview.h
+SOURCES += desktopwindow.cpp desktopimage.cpp graphicsview.cpp
+DEFINES += QTB_SCROLLAREA=0
+}
+else {
 HEADERS += mainwindow.h
 SOURCES += mainwindow.cpp
-
-#HEADERS += desktopwindow.h desktopimage.h view.h
-#SOURCES += desktopwindow.cpp desktopimage.cpp view.cpp
+DEFINES += QTB_SCROLLAREA=1
+}

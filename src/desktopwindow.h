@@ -33,8 +33,8 @@
 #include "control/keybuffer.h"
 #include "control/mousebuffer.h"
 #include "desktopimage.h"
+#include "graphicsview.h"
 #include "settings.h"
-#include "view.h"
 #include "windows/eventconverter.h"
 
 
@@ -174,8 +174,8 @@ private:
   // scene
   QGraphicsScene *scene;
 
-  // View
-  View *view;
+  // view
+  GraphicsView *view;
 
   // settings
   Settings *settings;

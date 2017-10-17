@@ -28,8 +28,19 @@ DesktopImage::~DesktopImage()
 
 QRectF DesktopImage::boundingRect() const
 {
-  return QRectF(0, 0, image.width()-1, image.height()-1); // for TEST
+  return QRectF(0, 0, image.width(), image.height());
 }
+
+#if 0
+QRectF DesktopImage::sceneBoundingRect() const
+{
+  return QRectF(0, 0, image.width(), image.height()); // for TEST
+}
+
+QPainterPath DesktopImage::shape() const
+{
+}
+#endif
 
 void DesktopImage::paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
@@ -50,7 +61,6 @@ void DesktopImage::setImage(QImage image)
 {
   //  cout << "enter setImage()" << endl << flush;
   this->image = image;
-  setPos(QPointF(-image.width()/2, -image.height()/2));
   update();
   //  cout << "leave setImage()" << endl << flush;
 }

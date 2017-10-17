@@ -11,9 +11,6 @@
 
 // Qt Header
 #include <QDateTime>
-#if QTB_PUBLIC_MODE6_SUPPORT
-#include <QDir>
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QKeyEvent>
 #include <QMimeData>
 #include <QPainter>
@@ -29,12 +26,12 @@
 
 // Local Header
 #include "config.h"
-#include "mainwindow.h"
-#include "parameters.h"
-#include "qtbrynhildr.h"
 #if defined(QTB_NET_UNIX)
 #include "dialog/desktop_scaling_dialog.h"
 #endif // defined(QTB_NET_UNIX)
+#include "mainwindow.h"
+#include "parameters.h"
+#include "qtbrynhildr.h"
 
 namespace qtbrynhildr {
 
@@ -55,9 +52,9 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   keyboardLogFile(0),
   keyboardLogFileStream(0),
   // for DEBUG
-  outputLog(false),
   outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
-  outputLogForMouse(QTB_DEBUG_MOUSE)
+  outputLogForMouse(QTB_DEBUG_MOUSE),
+  outputLog(false)
 {
   // save parent
   this->parent = parent;
@@ -356,19 +353,19 @@ void MainWindow::printMouseButtonEvent(QMouseEvent *event)
 {
   switch (event->button()){
   case Qt::LeftButton:
-	cout << "Left Button : ";
+	cout << "Left Button    : ";
 	break;
   case Qt::RightButton:
-	cout << "Right Button : ";
+	cout << "Right Button   : ";
 	break;
   case Qt::MiddleButton:
-	cout << "Middle Button : ";
+	cout << "Middle Button  : ";
 	break;
   case Qt::ForwardButton:
 	cout << "Forward Button : ";
 	break;
   case Qt::BackButton:
-	cout << "Back Button : ";
+	cout << "Back Button    : ";
 	break;
   default:
 	cout << "Unknown Button : ";

@@ -218,14 +218,14 @@ private:
   // keyboard log file stream
   QTextStream *keyboardLogFileStream;
 
-  // output log flag
-  bool outputLog;
-
   // output log flag for keyboard
   bool outputLogForKeyboard;
 
   // output log flag for mouse
   bool outputLogForMouse;
+
+  // output log flag
+  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

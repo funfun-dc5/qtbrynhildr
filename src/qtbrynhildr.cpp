@@ -22,7 +22,7 @@
 #if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QFileDialog>
 #endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
-#if !QTB_SCROLLAREA
+#if QTB_SCROLLAREA
 #include <QGraphicsLinearLayout>
 #endif // QTB_SCROLLAREA
 #include <QLocale>
@@ -73,8 +73,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_SCROLLAREA
   scrollArea(0),
 #else // QTB_SCROLLAREA
-  view(0),
   scene(0),
+  view(0),
 #endif // QTB_SCROLLAREA
   mainWindow(0),
   connectionLabel(0),
@@ -2514,13 +2514,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	return;
   }
 
-#if QTB_SCROLLAREA
   int width = windowSize.width() -  settings->getDesktop()->getCorrectWindowWidth();
   int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar() - settings->getDesktop()->getCorrectWindowHeight();
-#else // QTB_SCROLLAREA
-  int width = windowSize.width();
-  int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar();
-#endif // QTB_SCROLLAREA
 
   QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
   if (mainWindow->getSize().width() > screenSize.width()){

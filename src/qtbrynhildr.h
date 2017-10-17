@@ -52,6 +52,7 @@
 #include "mainwindow.h"
 #else // QTB_SCROLLAREA
 #include "desktopwindow.h"
+#include "graphicsview.h"
 #endif // QTB_SCROLLAREA
 #include "option.h"
 #if QTB_RECORDER
@@ -452,8 +453,8 @@ private:
   // scroll area
   QScrollArea *scrollArea;
 #else // QTB_SCROLLAREA
-  QGraphicsView *view;
   QGraphicsScene *scene;
+  GraphicsView *view;
 #endif // QTB_SCROLLAREA
   // main window
   MainWindow *mainWindow;

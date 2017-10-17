@@ -9,7 +9,7 @@
 // System Header
 
 // Qt Header
-#include <QGraphicsItem>
+#include <QGraphicsObject>
 #include <QImage>
 #include <QPainter>
 
@@ -18,8 +18,11 @@
 
 namespace qtbrynhildr {
 
-class DesktopImage : public QGraphicsItem
+// DesktopImage
+class DesktopImage : public QGraphicsObject
 {
+  Q_OBJECT
+
 public:
   // constructor
   DesktopImage();
@@ -27,6 +30,7 @@ public:
   ~DesktopImage();
 
   QRectF boundingRect() const override;
+  //  QRectF sceneBoundingRect() const;
   //  QPainterPath shape() const override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
 

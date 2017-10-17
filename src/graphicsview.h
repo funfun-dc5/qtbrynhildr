@@ -1,23 +1,21 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef VIEW_H
-#define VIEW_H
+#ifndef GRAPHICSVIEW_H
+#define GRAPHICSVIEW_H
 // Common Header
 #include "common/common.h"
 
 // System Header
 
 // Qt Header
-#include <QFrame>
 #include <QGraphicsView>
+#include <QGraphicsScene>
 
 // Local Header
 
 
 namespace qtbrynhildr {
-
-class View;
 
 class GraphicsView : public QGraphicsView
 {
@@ -25,33 +23,11 @@ class GraphicsView : public QGraphicsView
 
 public:
   // constructor
-  GraphicsView(View *view)
-	:
-	QGraphicsView(),
-	view(view)
-  {
-  }
+  GraphicsView(QGraphicsScene *scene);
   // destructor
-  //  ~GraphicsView()
+  ~GraphicsView();
 
-private:
-  // view
-  View *view;
-};
-
-class View : public QWidget
-{
-  Q_OBJECT
-
-public:
-  // constructor
-  View(QWidget *parent = 0);
-  // destructor
-  ~View();
-
-  QGraphicsView *view() const;
-
-#if 0
+#if 1
 protected:
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
@@ -66,13 +42,10 @@ protected:
 #endif
 
 private:
-  // graphics view
-  GraphicsView *graphicsView;
-
   // output log flag
   bool outputLog;
 };
 
 } // end of namespace qtbrynhildr
 
-#endif // VIEW_H
+#endif // GRAPHICSVIEW_H

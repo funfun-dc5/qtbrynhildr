@@ -43,7 +43,6 @@ public:
 	return maxImageDataSize;
   }
 
-#if QTB_SCROLLAREA
   // get correct widow width
   int getCorrectWindowWidth() const
   {
@@ -55,7 +54,6 @@ public:
   {
 	return correctWindowHeight;
   }
-#endif // QTB_SCROLLAREA
 
   // get height of menu bar in hiding
   int getHeightOfMenuBarInHiding() const

@@ -21,6 +21,9 @@
 #include <QList>
 #include <QUrl>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#if 1 // for qDebug()
+#include <QtCore>
+#endif
 #include <QVBoxLayout>
 
 // Local Header
@@ -53,12 +56,12 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
 #endif // defined(Q_OS_OSX)
   keyboardLogFile(0),
   keyboardLogFileStream(0),
-  outputLogForKeyboard(true),
-  outputLogForMouse(true),
   // for DEBUG
+  outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
+  outputLogForMouse(QTB_DEBUG_MOUSE),
   outputLog(true)
 {
-  // save aprent (QtBrynhidlr)
+  // save parent
   this->parent = parent;
 
   // setting main window
@@ -76,19 +79,17 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   // open keyboard log file
   openKeyboardLogFile(settings->getKeyboardLogFile());
 
-  // create view
+  // create desktop view
 
+  // create desktop image
   desktopImage = new DesktopImage();
-#if 0 // for TEST
-  QImage image(":/images/qtbrynhildr48.ico");
-  desktopImage->setImage(image);
-#endif // for TEST
 
+  // create scene
   scene = new QGraphicsScene(this);
   scene->addItem(desktopImage);
 
-  view = new View(this);
-  view->view()->setScene(scene);
+  // create view
+  view = new GraphicsView(scene);
 
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(view);
@@ -137,8 +138,106 @@ MouseBuffer *MainWindow::getMouseBuffer() const
 // reflesh desktop window
 void MainWindow::refreshDesktop(QImage image)
 {
+  // return if not initialized
+  if (image.isNull()){
+	return;
+  }
+  if (!settings->getConnected()){
+	return;
+  }
+
+  // cut blank area
+  if (QTB_CUT_DESKTOP_BLANK_AREA){
+	// for offset
+	if (settings->getOnCutDesktopBlankArea()){
+	  if (settings->getDesktopOffsetX() != 0 || settings->getDesktopOffsetY() != 0){
+		image = image.copy(0,0,
+						   image.size().width()  - settings->getDesktopOffsetX(),
+						   image.size().height() - settings->getDesktopOffsetY());
+	  }
+	}
+  }
+
+  // save size
+  currentSize = desktopSize = image.size();
+
+  // capture desktop image for original size
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	if (settings->getOnDesktopCapture() &&
+		!settings->getDesktopCaptureFormat().startsWith(".")){
+	  QDateTime now = QDateTime::currentDateTime();
+	  QString filename = settings->getOutputPath() +
+		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
+		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
+		"." + settings->getDesktopCaptureFormat();
+
+	  // save to file
+	  image.save(filename);
+
+	  // reset desktop capture flag
+	  settings->setOnDesktopCapture(false);
+	}
+  }
+
+  // scaling image
+  if (QTB_DESKTOP_IMAGE_SCALING){
+	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
+	  qreal scalingFactor = getDesktopScalingFactor(currentSize);
+	  if (scalingFactor != 1.0){
+		// scale
+		currentSize = currentSize * scalingFactor;
+		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+	  }
+	  // save scaling factor
+	  if (scalingFactor != settings->getDesktopScalingFactor()){
+		settings->setDesktopScalingFactor(scalingFactor);
+	  }
+	}
+  }
+
+  // capture desktop image
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	if (settings->getOnDesktopCapture()){
+	  QDateTime now = QDateTime::currentDateTime();
+	  QString filename = settings->getOutputPath() +
+		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
+		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
+		settings->getDesktopCaptureFormat();
+
+	  // save to file
+	  image.save(filename);
+
+	  // reset desktop capture flag
+	  settings->setOnDesktopCapture(false);
+	}
+  }
+
   desktopImage->setImage(image);
-  update();
+  //  scene->setSceneRect(0, 0, image.width(), image.height());
+
+  // resize window
+  if (previousSize != currentSize){
+#if 0 // for DEBUG
+	cout << "resize..." << endl; // for DEBUG
+	cout << "image.size().width()  = " << image.size().width() << endl; // for DEBUG
+	cout << "image.size().height() = " << image.size().height() << endl << flush; // for DEBUG
+#endif
+	previousSize = currentSize;
+	// resize main window
+	resize(currentSize.width(), currentSize.height());
+
+	resizeWindow();
+  }
+  else if (settings->getDesktop()->isChangedCurrentScreen()) {
+	// if current screen is changed.
+	// refresh
+	resizeWindow();
+  }
+  else {
+	// refresh image
+	update();
+  }
+  //qDebug() << "view->size() = " << view->size();
 }
 
 // resize window
@@ -155,8 +254,8 @@ void MainWindow::resizeWindow()
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
 	  if (settings->getOnKeepOriginalDesktopSize() && !(parent->isMaximized() || parent->isMinimized())){
-		int width = currentSize.width();
-		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar();
+		int width = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
+		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
 
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
 		if (width > screenSize.width()){
@@ -166,6 +265,11 @@ void MainWindow::resizeWindow()
 		  height = screenSize.height();
 		}
 
+#if 0 // for TEST
+		qDebug() << "currentSize = " << currentSize;
+		qDebug() << "screenSize = " << screenSize;
+		cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush; // for DEBUG
+#endif
 		// resize
 		parent->resize(width, height);
 
@@ -412,12 +516,18 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	if (!settings->getOnShowSoftwareButton()){
+	if (!(settings->getOnShowSoftwareKeyboard() ||
+		  settings->getOnShowSoftwareButton())){
 	  currentMousePos = event->pos();
 	  MOUSE_POS pos;
 	  pos.x = currentMousePos.x();
 	  pos.y = currentMousePos.y();
 	  mouseBuffer->setMousePos(pos);
+	  //parent->moveTopOfSoftwareKeyboard(pos.y); // for TEST
+#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+	  // set cursor point color to control thread
+	  parent->setCursorPointColor(image.pixel(currentMousePos));
+#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 	}
   }
 }

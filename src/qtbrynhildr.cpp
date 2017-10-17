@@ -22,9 +22,9 @@
 #if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QFileDialog>
 #endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
 #include <QGraphicsLinearLayout>
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -70,12 +70,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 QtBrynhildr::QtBrynhildr(Option *option)
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   :
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
   scrollArea(0),
-#else // QTB_SCROLLAREA
+#else // QTB_DESKTOPWINDOW
   scene(0),
   view(0),
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
   mainWindow(0),
   connectionLabel(0),
   frameRateLabel(0),
@@ -476,7 +476,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // Main Window Widget
   mainWindow = new MainWindow(settings, this);
 
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -494,7 +494,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   scrollArea->setPalette(originalPalette); // change QPalette::Window to black
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
-#else // QTB_SCROLLAREA
+#else // QTB_DESKTOPWINDOW
   mainWindow->setBackgroundRole(QPalette::Window);
   mainWindow->setAutoFillBackground(true);
   setCentralWidget(mainWindow);
@@ -505,7 +505,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   mainWindow->setPalette(originalPalette); // change QPalette::Window to black
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 
   // create Main Window
   createActions();
@@ -3669,14 +3669,14 @@ void QtBrynhildr::fullScreen()
 	  menuBar()->setVisible(false);
 	  statusBar()->setVisible(false);
 	}
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	mainWindow->setOnFullScreen(true);
 	scrollArea->setPalette(fullScreenPalette); // change QPalette::Window to black
-#else // QTB_SCROLLAREA
+#else // QTB_DESKTOPWINDOW
 	mainWindow->setOnFullScreen(true);
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 	showFullScreen();
   }
   else {
@@ -3687,14 +3687,14 @@ void QtBrynhildr::fullScreen()
 	  menuBar()->setVisible(settings->getOnShowMenuBar());
 	  statusBar()->setVisible(settings->getOnShowStatusBar());
 	}
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	mainWindow->setOnFullScreen(false);
 	scrollArea->setPalette(originalPalette); // restore original QPalette::Window
-#else // QTB_SCROLLAREA
+#else // QTB_DESKTOPWINDOW
 	mainWindow->setOnFullScreen(false);
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 	showNormal();
   }
   // set checked flag
@@ -3763,20 +3763,20 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	settings->setOnWindowSizeFixed(checked);
 	static QSize orgMaximumSize = maximumSize();
 	static QSize orgMinimumSize = minimumSize();
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
 	static Qt::ScrollBarPolicy hpolicy = scrollArea->horizontalScrollBarPolicy();
 	static Qt::ScrollBarPolicy vpolicy = scrollArea->horizontalScrollBarPolicy();
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 	if (checked){
 	  // set maximum size (current size)
 	  setMaximumSize(size());
 	  // set minimum size (current size)
 	  setMinimumSize(size());
 	  // diable scroll bar
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
 	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 	  // disable maximum button
 #if defined(Q_OS_WIN)
 	  Qt::WindowFlags flags = windowFlags();
@@ -3789,10 +3789,10 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	  setMaximumSize(orgMaximumSize);
 	  setMinimumSize(orgMinimumSize);
 	  // enable scroll bar
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
 	  scrollArea->setHorizontalScrollBarPolicy(hpolicy);
 	  scrollArea->setVerticalScrollBarPolicy(vpolicy);
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 	  // restore window flags
 #if defined(Q_OS_WIN)
 	  Qt::WindowFlags flags = windowFlags();

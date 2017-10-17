@@ -39,6 +39,9 @@ QRectF DesktopImage::sceneBoundingRect() const
 
 QPainterPath DesktopImage::shape() const
 {
+  QPainterPath path;
+  path.addRect(0,0,1280,800);
+  return path;
 }
 #endif
 

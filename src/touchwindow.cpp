@@ -79,7 +79,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   // open keyboard log file
   openKeyboardLogFile(settings->getKeyboardLogFile());
 
-  // create desktop view
+  // create touch window
 
   // create desktop image
   desktopImage = new DesktopImage();
@@ -90,6 +90,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
 
   // create view
   view = new GraphicsView(scene);
+  //  qDebug() << "view->size() = " << view->size();
 
   QVBoxLayout *layout = new QVBoxLayout;
   layout->addWidget(view);
@@ -237,7 +238,7 @@ void MainWindow::refreshDesktop(QImage image)
 	// refresh image
 	update();
   }
-  //qDebug() << "view->size() = " << view->size();
+  //  qDebug() << "view->size() = " << view->size();
 }
 
 // resize window

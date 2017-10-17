@@ -26,11 +26,11 @@
 
 // Local Header
 #include "logmessage.h"
-#if QTB_SCROLLAREA
+#if QTB_DESKTOPWINDOW
 #include "desktopwindow.h"
-#else // QTB_SCROLLAREA
+#else // QTB_DESKTOPWINDOW
 #include "touchwindow.h"
-#endif // QTB_SCROLLAREA
+#endif // QTB_DESKTOPWINDOW
 #include "settings.h"
 
 namespace qtbrynhildr {

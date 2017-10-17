@@ -12,6 +12,7 @@
 #include <QGraphicsObject>
 #include <QImage>
 #include <QPainter>
+#include <QPainterPath>
 
 // Local Header
 

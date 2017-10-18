@@ -596,7 +596,7 @@ int GraphicsThread::makeRGB24Image()
 
 #if QTB_MULTI_THREAD_CONVERTER
   // number of thread
-  int numOfThread = settings->getNumOfThreadForConvert();
+  int numOfThread = settings->getConvertThreadCount();
   //  int numOfThread = 0; // 0 or 1 or 2 or 4
   if (numOfThread <= 1 || height % 2 != 0){
 	// convert YUV420 to RGB24

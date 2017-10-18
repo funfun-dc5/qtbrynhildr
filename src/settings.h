@@ -374,9 +374,9 @@ typedef int COMPRESS_MODE;
 #define QTB_DOUBLECLICKTHRESHOLD			"doubleClickThreshold"
 #define QTB_DOUBLECLICKTHRESHOLD_DEFAULT	500
 
-// for numOfThreadForConvert
-#define QTB_NUMBOFTHREADFORCONVERT			"numOfThreadForConvert"
-#define QTB_NUMBOFTHREADFORCONVERT_DEFAULT	2
+// for convertThreadCount
+#define QTB_CONVERTTHREADCOUNT				"convertThreadCount"
+#define QTB_CONVERTTHREADCOUNT_DEFAULT		2
 
 // for outputGraphicsDataToFile
 #define QTB_OUTPUTGRAPHICSDATATOFILE			"outputGraphicsDataToFile"
@@ -1712,16 +1712,16 @@ public:
 	doubleClickThreshold = threshold;
   }
 
-  // get number of thread for convert
-  int getNumOfThreadForConvert() const
+  // get convert thread count
+  int getConvertThreadCount() const
   {
-	return numOfThreadForConvert;
+	return convertThreadCount;
   }
 
-  // set number of thread for convert
-  void setNumOfThreadForConvert(int numOfThreadForConvert)
+  // set convert thread count
+  void setConvertThreadCount(int convertThreadCount)
   {
-	this->numOfThreadForConvert = numOfThreadForConvert;
+	this->convertThreadCount = convertThreadCount;
   }
 
   // get output graphics flag
@@ -2102,8 +2102,8 @@ private:
   // double click threshold
   volatile int doubleClickThreshold;
 
-  // number of thread for convert
-  volatile int numOfThreadForConvert;
+  // convert thread count
+  volatile int convertThreadCount;
 
   // Debug
   volatile bool outputGraphicsDataToFile;

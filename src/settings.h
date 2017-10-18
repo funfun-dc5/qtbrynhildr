@@ -34,7 +34,11 @@
 #define QTB_ORGANIZATION		"mcz-xoxo"
 
 // application
+#if !_WIN64
 #define QTB_APPLICATION			"Qt Brynhildr"
+#else // !_WIN64
+#define QTB_APPLICATION			"Qt Brynhildr 64"
+#endif // !_WIN64
 
 // translation file path
 #define QTB_TRANSLATION_FILE_PATH	":/translations/"

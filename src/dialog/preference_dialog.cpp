@@ -55,6 +55,12 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   // serverNameListSize
   spinBox_serverNameListSize->setRange(5, 100);	// for TEST
 
+  // convertThreadCount
+  comboBox_convertThreadCount->insertItem(0, tr("none"));
+  comboBox_convertThreadCount->insertItem(1, tr("2 threads"));
+  comboBox_convertThreadCount->insertItem(2, tr("4 threads"));
+  //  comboBox_convertThreadCount->insertItem(3, tr("8 threads"));
+
   // doubleClickThreshold
   spinBox_doubleClickThreshold->setRange(100, 1000); // for TEST
 
@@ -113,6 +119,9 @@ void PreferenceDialog::getFromSettings()
 
   // serverNameListSize
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());
+
+  // convertThreadCount
+  comboBox_convertThreadCount->setCurrentIndex(settings->getConvertThreadCount()/2);
 
   // keylayoutPath
   lineEdit_keylayoutPath->setText(settings->getKeylayoutPath());
@@ -209,6 +218,10 @@ bool PreferenceDialog::setToSettings()
   // serverNameListSize
   settings->
 	setServerNameListSize(spinBox_serverNameListSize->value());
+
+  // convertThreadCount
+  settings->
+	setConvertThreadCount(comboBox_convertThreadCount->currentIndex()*2);
 
   // keylayoutPath
   settings->
@@ -431,6 +444,13 @@ void PreferenceDialog::on_checkBox_onCheckUpdateAtBootup_stateChanged(int state)
 void PreferenceDialog::on_spinBox_serverNameListSize_valueChanged(int i)
 {
   Q_UNUSED(i);
+
+  changed = true;
+}
+
+void PreferenceDialog::on_comboBox_convertThreadCount_currentIndexChanged(int index)
+{
+  Q_UNUSED(index);
 
   changed = true;
 }

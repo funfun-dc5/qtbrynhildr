@@ -66,6 +66,8 @@ private slots:
 
   void on_spinBox_serverNameListSize_valueChanged(int i);
 
+  void on_comboBox_convertThreadCount_currentIndexChanged(int index);
+
   void on_lineEdit_keylayoutPath_textChanged();
 
   void on_checkBox_onHoldMouseControl_stateChanged(int state);

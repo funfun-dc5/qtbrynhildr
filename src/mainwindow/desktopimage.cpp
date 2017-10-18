@@ -26,6 +26,22 @@ DesktopImage::~DesktopImage()
 {
 }
 
+// set image
+void DesktopImage::setImage(QImage image)
+{
+  //  cout << "enter setImage()" << endl << flush;
+  // copy
+  this->image = image;
+
+  //  cout << "leave setImage()" << endl << flush;
+}
+
+// get color
+QRgb DesktopImage::getColor(QPoint pos)
+{
+  return image.pixel(pos);
+}
+
 QRectF DesktopImage::boundingRect() const
 {
   return QRectF(-image.width()/2, -image.height()/2, image.width(), image.height());
@@ -57,16 +73,6 @@ void DesktopImage::paint(QPainter *painter, const QStyleOptionGraphicsItem *item
   painter->drawImage(-image.width()/2, -image.height()/2, image);
 
   //  cout << "leave paint()" << endl << flush;
-}
-
-// set image
-void DesktopImage::setImage(QImage image)
-{
-  //  cout << "enter setImage()" << endl << flush;
-  // copy
-  this->image = image;
-
-  //  cout << "leave setImage()" << endl << flush;
 }
 
 void DesktopImage::mousePressEvent(QGraphicsSceneMouseEvent *event)

@@ -13,6 +13,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QPainterPath>
+#include <QRgb>
 
 // Local Header
 
@@ -37,6 +38,9 @@ public:
 
   // set image
   void setImage(QImage image);
+
+  // get color
+  QRgb getColor(QPoint pos);
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *event);

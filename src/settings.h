@@ -34,11 +34,7 @@
 #define QTB_ORGANIZATION		"mcz-xoxo"
 
 // application
-#if !_WIN64
 #define QTB_APPLICATION			"Qt Brynhildr"
-#else // !_WIN64
-#define QTB_APPLICATION			"Qt Brynhildr 64"
-#endif // !_WIN64
 
 // translation file path
 #define QTB_TRANSLATION_FILE_PATH	":/translations/"
@@ -57,6 +53,12 @@
 #define QTB_GENERATEDVERSION_DEFAULT	QTB_VERSION_NUMBER
 #define QTB_CURRENTVERSION				"currentVersion"
 #define QTB_CURRENTVERSION_DEFAULT		QTB_VERSION_NUMBER
+
+#define QTB_INFOKERNELTYPE				"infoKernelType"
+#define QTB_INFOKERNELVERSION			"infoKernelVersion"
+#define QTB_INFOPRODUCTTYPE				"infoProductType"
+#define QTB_INFOPRODUCTVERSION			"infoProductVersion"
+#define QTB_INFOBUILDABI				"infoBuildAbi"
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 // for publicModeVersion

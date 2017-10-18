@@ -211,7 +211,7 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 
 # for new feature
-NEW_FEATURE = ON
+NEW_FEATURE = OFF
 equals(NEW_FEATURE, ON){
 HEADERS += touchwindow.h graphicsview.h desktopimage.h
 SOURCES += touchwindow.cpp graphicsview.cpp desktopimage.cpp

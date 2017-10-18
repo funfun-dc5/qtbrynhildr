@@ -525,6 +525,13 @@ void Settings::readSettings()
 // save settings to setting file or registry
 void Settings::writeSettings()
 {
+  // save informations (write only)
+  settings->setValue(QTB_INFOKERNELTYPE,		QSysInfo::kernelType());
+  settings->setValue(QTB_INFOKERNELVERSION,		QSysInfo::kernelVersion());
+  settings->setValue(QTB_INFOPRODUCTTYPE,		QSysInfo::productType());
+  settings->setValue(QTB_INFOPRODUCTVERSION,	QSysInfo::productVersion());
+  settings->setValue(QTB_INFOBUILDABI,			QSysInfo::buildAbi());
+
   // save version information
   settings->setValue(QTB_GENERATEDVERSION, (qint32)generatedVersion);
   settings->setValue(QTB_CURRENTVERSION, (qint32)currentVersion);

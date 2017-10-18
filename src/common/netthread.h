@@ -27,9 +27,9 @@
 // Local Header
 #include "logmessage.h"
 #if QTB_DESKTOPWINDOW
-#include "desktopwindow.h"
+#include "mainwindow/desktopwindow.h"
 #else // QTB_DESKTOPWINDOW
-#include "touchwindow.h"
+#include "mainwindow/touchwindow.h"
 #endif // QTB_DESKTOPWINDOW
 #include "settings.h"
 

@@ -10,7 +10,7 @@
 #include <QPainter>
 
 // Local Header
-#include "graphicsview.h"
+#include "mainwindow/graphicsview.h"
 
 namespace qtbrynhildr {
 

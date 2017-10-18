@@ -9,7 +9,7 @@
 // Qt Header
 
 // Local Header
-#include "desktopimage.h"
+#include "mainwindow/desktopimage.h"
 
 namespace qtbrynhildr {
 

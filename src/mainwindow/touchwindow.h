@@ -32,8 +32,8 @@
 // Local Header
 #include "control/keybuffer.h"
 #include "control/mousebuffer.h"
-#include "desktopimage.h"
-#include "graphicsview.h"
+#include "mainwindow/desktopimage.h"
+#include "mainwindow/graphicsview.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
 

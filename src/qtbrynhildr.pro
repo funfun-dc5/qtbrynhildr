@@ -19,7 +19,7 @@ FORMS += GUI/log_view_dialog.ui
 CONFIG += c++11
 
 # for DEBUG
-CONFIG += console
+#CONFIG += console
 
 # for check spec
 # message($$QMAKESPEC)
@@ -211,14 +211,14 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 
 # for new feature
-NEW_FEATURE = OFF
+NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
-HEADERS += touchwindow.h graphicsview.h desktopimage.h
-SOURCES += touchwindow.cpp graphicsview.cpp desktopimage.cpp
+HEADERS += mainwindow/touchwindow.h mainwindow/graphicsview.h mainwindow/desktopimage.h
+SOURCES += mainwindow/touchwindow.cpp mainwindow/graphicsview.cpp mainwindow/desktopimage.cpp
 DEFINES += QTB_DESKTOPWINDOW=0
 }
 else {
-HEADERS += desktopwindow.h
-SOURCES += desktopwindow.cpp
+HEADERS += mainwindow/desktopwindow.h
+SOURCES += mainwindow/desktopwindow.cpp
 DEFINES += QTB_DESKTOPWINDOW=1
 }

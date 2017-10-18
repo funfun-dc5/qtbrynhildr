@@ -31,9 +31,9 @@
 #if defined(QTB_NET_UNIX)
 #include "dialog/desktop_scaling_dialog.h"
 #endif // defined(QTB_NET_UNIX)
+#include "mainwindow/touchwindow.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
-#include "touchwindow.h"
 
 namespace qtbrynhildr {
 
@@ -238,7 +238,9 @@ void MainWindow::refreshDesktop(QImage image)
 	// refresh image
 	update();
   }
-  //  qDebug() << "view->size() = " << view->size();
+  view->setSceneRect(scene->itemsBoundingRect());
+  qDebug() << "view->size() = " << view->size();
+  qDebug() << "view->sceneRect() = " << view->sceneRect();
 }
 
 // resize window

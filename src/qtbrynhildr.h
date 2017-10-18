@@ -49,10 +49,10 @@
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
 #if QTB_DESKTOPWINDOW
-#include "desktopwindow.h"
+#include "mainwindow/desktopwindow.h"
 #else // QTB_DESKTOPWINDOW
-#include "touchwindow.h"
-#include "graphicsview.h"
+#include "mainwindow/touchwindow.h"
+#include "mainwindow/graphicsview.h"
 #endif // QTB_DESKTOPWINDOW
 #include "option.h"
 #if QTB_RECORDER

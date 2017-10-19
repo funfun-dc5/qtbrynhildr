@@ -340,6 +340,10 @@ void Option::printSpec() const
   cout << " KEYLAYOUTFILE";
 #endif // USE_KEYLAYOUTFILE
 
+#if QTB_PORTABLE_VERSION
+  cout << " PORTABLE";
+#endif // QTB_PORTABLE_VERSION
+
   cout << endl << flush;
 }
 

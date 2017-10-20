@@ -2,8 +2,8 @@
 UNAME=`uname`
 UNAMEM=`uname -m`
 ARCH=x86
-
-source ./setup_qt5 $1
+PORTABLEVERSION=OFF
+export TARGET=$1
 
 # check arg1
 if [ -n "$1" ] ; then
@@ -12,10 +12,15 @@ if [ -n "$1" ] ; then
 			;;
 		man)
 			;;
+		portable)
+			PORTABLEVERSION=ON
+			TARGET=
+			;;
 		cygwin)
 			;;
 		msvc64)
 			ARCH=x86_64
+			APPSUFIX=64
 			;;
 		msvc)
 			ARCH=x86
@@ -31,10 +36,15 @@ if [ -n "$1" ] ; then
 	esac
 fi
 
+source ./setup_qt5
+
 # check arg2
 if [ -n "$2" ] ; then
 	case $2 in
 		clean)
+			;;
+		portable)
+			PORTABLEVERSION=ON
 			;;
 		*)
 			echo "Unkown argument2 : $2"
@@ -56,8 +66,9 @@ DATE=`date +%Y%m%d`
 # check environment
 case $UNAME in
 	CYGWIN*)
-		if [ -n "$1" ] ; then
-			case $1 in
+		PKGNAME="windows"
+		if [ -n "$TARGET" ] ; then
+			case $TARGET in
 				cygwin)
 					UNAMEM=`uname -m`
 					case $UNAMEM in
@@ -104,8 +115,8 @@ case $UNAME in
 				echo "Installing for Linux armv7l..."
 				;;
 		esac
-		if [ -n "$1" ] ; then
-			case $1 in
+		if [ -n "$TARGET" ] ; then
+			case $TARGET in
 				ubuntu64)
 					PKGNAME="ubuntu_x64"
 					;;
@@ -150,7 +161,7 @@ case $UNAME in
 esac
 
 # clean
-if [ "$1" = "clean" -o "$2" = "clean" ] ; then
+if [ "$TARGET" = "clean" -o "$2" = "clean" ] ; then
 	echo "Cleaning..."
 	if [ "${DISTDIR}" = "" ] ; then
 		echo "DISTDIR is empty!! Please check!"
@@ -182,7 +193,7 @@ if [ "$1" = "clean" -o "$2" = "clean" ] ; then
 fi
 
 # man
-if [ "$1" = "man" ] ; then
+if [ "$TARGET" = "man" ] ; then
 	echo "Installing manual..."
 	case $UNAME in
 		CYGWIN*)
@@ -231,7 +242,7 @@ fi
 case $UNAME in
 	CYGWIN*)
 		# check
-		if [ "$1" = "" -o "$1" = "msvc" -o "$1" = "msvc64" ] ; then
+		if [ "$TARGET" = "" -o "$TARGET" = "msvc" -o "$TARGET" = "msvc64" ] ; then
 			echo "Installing for windows..."
 			if [ ! -x release/${APP}.exe ] ; then
 				echo "NOT Found ${APP}.exe"
@@ -242,8 +253,6 @@ case $UNAME in
 				exit 1;
 			fi
 			VERSION=`release/${APP}.exe -vv`
-			# make package string
-			PKGSTRING="${APP}-windows-v${VERSION}-${DATE}.exe"
 			# for windows
 			# create directory
 			mkdir -p ${DISTDIR}/bin
@@ -258,7 +267,7 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Network.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Widgets.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Concurrent.dll ${DISTDIR}/bin
-			if [ "$1" = "" ] ; then
+			if [ "$TARGET" = "" ] ; then
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
@@ -288,19 +297,40 @@ case $UNAME in
 			make html
 			make install
 			popd
-			# create .iss
-			echo "create .iss file"
 			pushd ../dist
 			cd windows
-			find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss.awk > tmp_bin.iss
-			cd ..
-			find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss_manual.awk > tmp.iss
-			cat windows/${ISS}.template | sed -f script/buildtool${1}.sed > new_template.iss
-			cat new_template.iss windows/tmp_bin.iss tmp.iss > windows/${ISS}
-			rm -f windows/tmp_bin.iss tmp.iss new_template.iss
+			if [ "${PORTABLEVERSION}" = "OFF" ] ; then
+				# create .iss
+				echo "create .iss file"
+				find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss.awk > tmp_bin.iss
+				cd ..
+				find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss_manual.awk > tmp.iss
+				cat windows/${ISS}.template | sed -f script/buildtool${1}.sed > new_template.iss
+				cat new_template.iss windows/tmp_bin.iss tmp.iss > windows/${ISS}
+				rm -f windows/tmp_bin.iss tmp.iss new_template.iss
+			else
+				# portable version package
+				echo "create portable version package"
+				# make package string
+				PKGSTRING="${APP}${APPSUFIX}-${PKGNAME}-v${VERSION}-Portable"
+				# 1) make top directory
+				mkdir ${PKGSTRING}
+				mkdir -p ${PKGSTRING}/doc/manual
+				# 2) move bin into the directory
+				mv bin ${PKGSTRING}
+				# 3) copy doc into the directory
+				# copy document file
+				${INSTALL} ${INSTALLFLAGS} ../doc/ReadMe.txt ${PKGSTRING}/doc
+				${INSTALL} ${INSTALLFLAGS} ../doc/LICENSE.txt ${PKGSTRING}/doc
+				# copy manual file
+				cp -r ../doc/manual/* ${PKGSTRING}/doc/manual
+				rm -f ${PKGSTRING}/doc/manual/.gitkeep
+				# 4) archive package
+				zip -9 -r ${PKGSTRING}.zip ${PKGSTRING}
+			fi
 			popd
 		fi
-		if [ "$1" = "cygwin" ] ; then
+		if [ "$TARGET" = "cygwin" ] ; then
 			# check
 			echo "Installing for cygwin..."
 			if [ ! -x ./${APP} ] ; then

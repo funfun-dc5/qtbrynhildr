@@ -525,8 +525,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
   // set window title
 #if QTB_PUBLIC_MODE6_SUPPORT
-  //  setWindowTitle(tr(QTB_APPLICATION)+"  - MODE  " + QString::number(settings->getPublicModeVersion()) +" -");
-  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+  setupWindowTitle();
 #else // QTB_PUBLIC_MODE6_SUPPORT
   setWindowTitle(tr(QTB_APPLICATION));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
@@ -2407,7 +2406,7 @@ void QtBrynhildr::connected()
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // set window title
-  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+  setupWindowTitle();
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // refresh menu
@@ -3327,6 +3326,16 @@ void QtBrynhildr::toggleOnSound()
 }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
+// setup window title
+void QtBrynhildr::setupWindowTitle()
+{
+#if !QTB_PORTABLE_VERSION
+  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+#else // !QTB_PORTABLE_VERSION
+  setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" -");
+#endif // !QTB_PORTABLE_VERSION
+}
+
 // refresh public mode
 void QtBrynhildr::refreshPublicMode()
 {
@@ -3359,7 +3368,7 @@ void QtBrynhildr::refreshPublicMode()
   }
 
   // set window title
-  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+  setupWindowTitle();
 
   // mouse cursor
   if (settings->getPublicModeVersion() != PUBLICMODE_VERSION7){

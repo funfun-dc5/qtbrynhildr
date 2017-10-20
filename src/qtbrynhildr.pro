@@ -24,6 +24,9 @@ CONFIG += c++11
 # for check spec
 # message($$QMAKESPEC)
 
+# for portable version
+#DEFINES += QTB_PORTABLE_VERSION=1
+
 # for multi thread converter
 QT += concurrent
 DEFINES += QTB_MULTI_THREAD_CONVERTER=1

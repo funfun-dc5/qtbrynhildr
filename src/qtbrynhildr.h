@@ -279,6 +279,8 @@ private slots:
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 private:
+  // setup window title
+  void setupWindowTitle();
   // refresh public mode
   void refreshPublicMode();
 private slots:

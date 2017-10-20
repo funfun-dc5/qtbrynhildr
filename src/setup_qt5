@@ -10,8 +10,8 @@ QTVERSION=5.9.2
 
 case $UNAME in
 	CYGWIN*)
-		if [ -n "$1" ] ; then
-			case $1 in
+		if [ -n "$TARGET" ] ; then
+			case $TARGET in
 				cygwin)
 					QTROOT="/usr"
 					QMAKE="qmake-qt5"
@@ -26,7 +26,7 @@ case $UNAME in
 					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015_64"
 					;;
 				*)
-					echo "setup_qt5 : Unkown argument : $1"
+					echo "setup_qt5 : Unkown argument : $TARGET"
 					exit 1
 					;;
 			esac

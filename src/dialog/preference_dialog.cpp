@@ -70,13 +70,23 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   // soundBufferSize
   spinBox_soundBufferSize->setRange(256, 1024); // for TEST
 
-#if 1 // for TEST
   // set Read Only
   lineEdit_keylayoutPath->setReadOnly(true);
   lineEdit_outputPath->setReadOnly(true);
   lineEdit_logFile->setReadOnly(true);
   lineEdit_keyboardLogFile->setReadOnly(true);
+#if QTB_PORTABLE_VERSION
+#if 0
+  lineEdit_keylayoutPath->setEnabled(false);
+  lineEdit_outputPath->setEnabled(false);
+  lineEdit_logFile->setEnabled(false);
+  lineEdit_keyboardLogFile->setEnabled(false);
 #endif
+  pushButton_keylayoutPath->setEnabled(false);
+  pushButton_outputPath->setEnabled(false);
+  pushButton_logFile->setEnabled(false);
+  pushButton_keyboardLogFile->setEnabled(false);
+#endif // QTB_PORTABLE_VERSION
 
   connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 }

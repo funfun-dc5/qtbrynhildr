@@ -501,6 +501,7 @@ void Settings::readSettings()
   //  setOutputKeyboardLog(settings->value(QTB_OUTPUTKEYBOARDLOG,
   //									   QTB_OUTPUTKEYBOARDLOG_DEFAULT).toBool());
 
+#if !QTB_PORTABLE_VERSION
   // load output path
   setOutputPath(settings->value(QTB_OUTPUTPATH,
 								getDefaultOutputPath()).toString());
@@ -516,6 +517,7 @@ void Settings::readSettings()
   // load keyboard log file
   setKeyboardLogFile(settings->value(QTB_KEYBOARDLOGFILE,
 									 getDefaultKeyboardLogFile()).toString());
+#endif // !QTB_PORTABLE_VERSION
 
   // load desktop capture format
   setDesktopCaptureFormat(settings->value(QTB_DESKTOPCAPTUREFORMAT,
@@ -732,6 +734,7 @@ void Settings::writeSettings()
   // save outputKeyboardLog
   //  settings->setValue(QTB_OUTPUTKEYBOARDLOG, outputKeyboardLog);
 
+#if !QTB_PORTABLE_VERSION
   // save outputPath
   settings->setValue(QTB_OUTPUTPATH, outputPath);
 
@@ -743,6 +746,7 @@ void Settings::writeSettings()
 
   // save keyboardLogFile
   settings->setValue(QTB_KEYBOARDLOGFILE, keyboardLogFile);
+#endif // !QTB_PORTABLE_VERSION
 
   // save desktopCaptureFormat
   settings->setValue(QTB_DESKTOPCAPTUREFORMAT, desktopCaptureFormat);

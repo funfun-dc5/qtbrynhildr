@@ -28,11 +28,11 @@ Option::Option(int argc, char *argv[])
   password(0),
   hostType(0),
   iniFileName(0),
-#if defined(QTB_DEV_TABLET) // for TEST
+#if defined(QTB_DEV_TOUCHPANEL) // for TEST
   initFlag(true),
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
   initFlag(false),
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
   debug(0),
   fullScreenFlag(false),
 #if QTB_CELT_SUPPORT

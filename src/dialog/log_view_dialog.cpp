@@ -51,7 +51,7 @@ void LogViewDialog::resizeEvent(QResizeEvent *event)
 // settings for Tablet
 void LogViewDialog::resetting()
 {
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
@@ -65,7 +65,7 @@ void LogViewDialog::resetting()
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 // set plain text

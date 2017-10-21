@@ -64,7 +64,7 @@ bool ConfirmDialog::getConfirmFlag() const
 // settings for Tablet
 void ConfirmDialog::resetting()
 {
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
@@ -78,7 +78,7 @@ void ConfirmDialog::resetting()
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 //---------------------------------------------------------------------------

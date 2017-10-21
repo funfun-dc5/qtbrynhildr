@@ -19,7 +19,7 @@ namespace qtbrynhildr {
 
 // for device type
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-#define QTB_DEV_TABLET
+#define QTB_DEV_TOUCHPANEL
 #elif defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_CYGWIN)
 #define QTB_DEV_DESKTOP
 #else

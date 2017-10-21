@@ -140,7 +140,7 @@ void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
 // settings for Tablet
 void ConnectToServerDialog::resetting()
 {
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
@@ -162,7 +162,7 @@ void ConnectToServerDialog::resetting()
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
   // set minimum width
   comboBox_hostname->setMinimumWidth(180);
   comboBox_hosttype->setMinimumWidth(180);
@@ -170,7 +170,7 @@ void ConnectToServerDialog::resetting()
   spinBox_portno->setMinimumWidth(180);
   lineEdit_password->setMinimumWidth(180);
   comboBox_publicmode->setMinimumWidth(180);
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 //---------------------------------------------------------------------------

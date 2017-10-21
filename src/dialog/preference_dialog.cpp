@@ -311,7 +311,7 @@ bool PreferenceDialog::setToSettings()
 // settings for Tablet
 void PreferenceDialog::resetting()
 {
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
   int desktopWidth = currentScreen.width();
   int desktopHeight = currentScreen.height();
@@ -328,10 +328,10 @@ void PreferenceDialog::resetting()
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
   // set minimum width
 
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 // show Event

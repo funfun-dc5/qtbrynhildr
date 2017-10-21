@@ -80,12 +80,12 @@ typedef int PUBLIC_MODEVERSION;
 
 // for serverName
 #define QTB_SERVERNAME			"serverName"
-#if defined(QTB_DEV_TABLET) // for TEST
+#if defined(QTB_DEV_TOUCHPANEL) // for TEST
 #define QTB_SERVERNAME_DEFAULT	"192.168.10.5"
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
 //#define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
 #define QTB_SERVERNAME_DEFAULT	""
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_AUTO_COMPLETE
 // for serverNameListSize
@@ -175,11 +175,11 @@ typedef int KEYBOARD_TYPE;
 
 // for displayMouseCursor
 #define QTB_ONDISPLAYMOUSECURSOR			"onDisplayMouseCursor"
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	true
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	false
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 // for onGamePadSupport
 #define QTB_ONGAMEPADSUPPORT			"onGamePadSupport"
 #if defined(Q_OS_WIN)
@@ -223,11 +223,11 @@ typedef int KEYBOARD_TYPE;
 
 // for desktopScaringQuality
 #define QTB_DESKTOPSCALINGQUALITY			"desktopScalingQuality"
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_DESKTOPSCALINGQUALITY_DEFAULT	DESKTOPSCALINGQUALITY_FAST
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_DESKTOPSCALINGQUALITY_DEFAULT	DESKTOPSCALINGQUALITY_SMOOTH
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #define DESKTOPSCALINGQUALITY_SMOOTH		Qt::SmoothTransformation
 #define DESKTOPSCALINGQUALITY_FAST			Qt::FastTransformation
 
@@ -304,11 +304,11 @@ typedef int COMPRESS_MODE;
 
 // for onShowMenuBar
 #define QTB_ONSHOWMENUBAR					"onShowMenuBar"
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWMENUBAR_DEFAULT			false
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWMENUBAR_DEFAULT			true
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowStatusBar
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
@@ -336,11 +336,11 @@ typedef int COMPRESS_MODE;
 
 // for onShowMouseCursorMarker
 #define QTB_ONSHOWMOUSECURSORMARKER			"onShowMouseCursorMarker"
-#if defined(QTB_DEV_TABLET)
+#if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	true
-#else // defined(QTB_DEV_TABLET)
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	false
-#endif // defined(QTB_DEV_TABLET)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_PUBLIC_MODE6_SUPPORT
 // for onTransferFileSupport

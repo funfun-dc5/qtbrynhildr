@@ -6,7 +6,7 @@
 
 // version
 #define QTB_VERSION				"2.0.5"
-#define QTB_RCNAME				"-gv"
+#define QTB_RCNAME				"-android"
 #define QTB_VERSION_NUMBER		205
 
 // year

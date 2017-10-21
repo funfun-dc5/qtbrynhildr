@@ -103,6 +103,11 @@ public:
 
 protected:
   // for event handling
+#if defined(QTB_DEV_TOUCHPANEL) // for TEST
+  // event
+  bool event(QEvent *event);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // window event
   void paintEvent(QPaintEvent *event);
 

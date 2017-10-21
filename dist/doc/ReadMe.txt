@@ -680,7 +680,6 @@ onExtraButtonSupport=true
 onControlOffWithGraphicsOff=true
 onGraphics=true
 videoQuality=5
-onDisplayCursor=false
 onGamePadSupport=true
 onBrynhildr2Support=true
 frameRate=30
@@ -998,6 +997,11 @@ Qtのバージョンにより必要なランタイムライブラリパッケー
 10. 変更履歴
 ----------------------------------------------------------------------
 Ver.2.0.6 : 2017/11/xx
+            [不具合修正]
+             ・「設定」ダイアログや「パブリックモード選択」メニューでモードを変更した場合に
+               マウスカーソルの表示やメニューの選択状態が不正となる場合がある不具合修正
+               設定名onDisplayMouseCursorが無効となる
+
             [その他変更]
              ・ポータブル版の作成環境を追加
                .iniファイル、ログファイル、出力パスを変更

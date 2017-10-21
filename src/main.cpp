@@ -120,6 +120,11 @@ int main(int argc, char *argv[])
   app.installNativeEventFilter(qtbrynhildr->getMainWindow());
 #endif // defined(Q_OS_WIN)
 
+  // set attribute
+#if defined(QTB_DEV_TOUCHPANEL)
+  app.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents, false);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // display main window
   qtbrynhildr->setFocus(Qt::ActiveWindowFocusReason);
   qtbrynhildr->show();

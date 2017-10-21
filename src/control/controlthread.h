@@ -141,6 +141,11 @@ private:
   // server version
   SERVER_VERSION serverVersion;
 
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // current mode
+  PUBLICMODE_VERSION currentMode;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
   // keyboard buffer
   KeyBuffer *keyBuffer;
 

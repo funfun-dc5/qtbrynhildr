@@ -144,10 +144,6 @@ void PreferenceDialog::getFromSettings()
   checkBox_onExtraButtonSupport->
 	setCheckState(settings->getOnExtraButtonSupport() ? Qt::Checked : Qt::Unchecked);
 
-  // onDisplayMouseCursor
-  checkBox_onDisplayMouseCursor->
-	setCheckState(settings->getOnDisplayMouseCursor() ? Qt::Checked : Qt::Unchecked);
-
   // onShowMouseCursorMarker
   checkBox_onShowMouseCursorMarker->
 	setCheckState(settings->getOnShowMouseCursorMarker() ? Qt::Checked : Qt::Unchecked);
@@ -244,10 +240,6 @@ bool PreferenceDialog::setToSettings()
   // onExtraButtonSupport
   settings->
 	setOnExtraButtonSupport(checkBox_onExtraButtonSupport->checkState() == Qt::Checked);
-
-  // onDisplayMouseCursor
-  settings->
-	setOnDisplayMouseCursor(checkBox_onDisplayMouseCursor->checkState() == Qt::Checked);
 
   // onShowMouseCursorMarker
   settings->
@@ -471,13 +463,6 @@ void PreferenceDialog::on_lineEdit_keylayoutPath_textChanged()
 }
 
 void PreferenceDialog::on_checkBox_onHoldMouseControl_stateChanged(int state)
-{
-  Q_UNUSED(state);
-
-  changed = true;
-}
-
-void PreferenceDialog::on_checkBox_onDisplayMouseCursor_stateChanged(int state)
 {
   Q_UNUSED(state);
 

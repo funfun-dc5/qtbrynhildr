@@ -42,6 +42,7 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   :
   NetThread("ControlThread", settings, mainWindow),
   serverVersion(SERVER_VERSION_BRYNHILDR2),
+  currentMode(0),
   keyBuffer(0),
   mouseBuffer(0),
 #if QTB_RECORDER
@@ -512,6 +513,31 @@ PROCESS_RESULT ControlThread::processForHeader()
   if (counter_control < 5){
 	counter_control++;
   }
+
+#if QTB_PUBLIC_MODE7_SUPPORT
+  if (currentMode == 0){
+	// save current mode
+	currentMode = settings->getPublicModeVersion();
+  }
+  else if (currentMode != settings->getPublicModeVersion()){
+	// save current mode
+	currentMode = settings->getPublicModeVersion();
+	if (currentMode == PUBLICMODE_VERSION7){
+		if (settings->getOnDisplayMouseCursor()){
+		  emit changeMouseCursor(Qt::CrossCursor);
+		}
+		else {
+		  emit changeMouseCursor(Qt::ArrowCursor);
+		}
+	}
+	else {
+	  // to Cross Cursor
+	  emit changeMouseCursor(Qt::CrossCursor);
+	}
+	// refresh menu
+	emit refreshMenu();
+  }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   return PROCESS_SUCCEEDED;
 }

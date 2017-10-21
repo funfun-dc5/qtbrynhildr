@@ -136,7 +136,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -274,24 +274,11 @@
       <string>Extra Button Support</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_onDisplayMouseCursor">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>130</y>
-       <width>451</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Display Mouse Cursor</string>
-     </property>
-    </widget>
     <widget class="QCheckBox" name="checkBox_onShowMouseCursorMarker">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>180</y>
+       <y>130</y>
        <width>451</width>
        <height>16</height>
       </rect>
@@ -542,7 +529,6 @@
   <tabstop>pushButton_keylayoutPath</tabstop>
   <tabstop>checkBox_onHoldMouseControl</tabstop>
   <tabstop>checkBox_onExtraButtonSupport</tabstop>
-  <tabstop>checkBox_onDisplayMouseCursor</tabstop>
   <tabstop>checkBox_onShowMouseCursorMarker</tabstop>
   <tabstop>spinBox_doubleClickThreshold</tabstop>
   <tabstop>checkBox_onTransferFileSupport</tabstop>

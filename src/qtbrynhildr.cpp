@@ -1067,6 +1067,9 @@ void QtBrynhildr::refreshMenu()
   // recording and replaying
   refreshRecordingAndReplayMenu();
 #endif // QTB_RECORDER
+
+  // public mode
+  refreshPublicMode();
 }
 
 // refresh video quality menu
@@ -3339,6 +3342,12 @@ void QtBrynhildr::setupWindowTitle()
 // refresh public mode
 void QtBrynhildr::refreshPublicMode()
 {
+  selectPublicModeVersion5_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION5);
+  selectPublicModeVersion6_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION6);
+#if QTB_PUBLIC_MODE7_SUPPORT
+  selectPublicModeVersion7_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION7);
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+
   // menus, drag and drop
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// send clipboard
@@ -3381,22 +3390,12 @@ void QtBrynhildr::refreshPublicMode()
 void QtBrynhildr::selectPublicModeVersion5()
 {
   settings->setPublicModeVersion(PUBLICMODE_VERSION5);
-  selectPublicModeVersion5_Action->setChecked(true);
-  selectPublicModeVersion6_Action->setChecked(false);
-#if QTB_PUBLIC_MODE7_SUPPORT
-  selectPublicModeVersion7_Action->setChecked(false);
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   refreshPublicMode();
 }
 void QtBrynhildr::selectPublicModeVersion6()
 {
   settings->setPublicModeVersion(PUBLICMODE_VERSION6);
-  selectPublicModeVersion5_Action->setChecked(false);
-  selectPublicModeVersion6_Action->setChecked(true);
-#if QTB_PUBLIC_MODE7_SUPPORT
-  selectPublicModeVersion7_Action->setChecked(false);
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   refreshPublicMode();
 }
@@ -3404,9 +3403,6 @@ void QtBrynhildr::selectPublicModeVersion6()
 void QtBrynhildr::selectPublicModeVersion7()
 {
   settings->setPublicModeVersion(PUBLICMODE_VERSION7);
-  selectPublicModeVersion5_Action->setChecked(false);
-  selectPublicModeVersion6_Action->setChecked(false);
-  selectPublicModeVersion7_Action->setChecked(true);
 
   refreshPublicMode();
 }

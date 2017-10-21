@@ -72,8 +72,6 @@ private slots:
 
   void on_checkBox_onHoldMouseControl_stateChanged(int state);
 
-  void on_checkBox_onDisplayMouseCursor_stateChanged(int state);
-
   void on_checkBox_onShowMouseCursorMarker_stateChanged(int state);
 
   void on_spinBox_doubleClickThreshold_valueChanged(int i);

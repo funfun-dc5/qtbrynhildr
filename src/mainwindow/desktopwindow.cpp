@@ -293,6 +293,14 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 
 // event handler
 
+#if defined(QTB_DEV_TOUCHPANEL) // for TEST
+// event
+bool MainWindow::event(QEvent *event)
+{
+  return QWidget::event(event);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 // paint event
 void MainWindow::paintEvent(QPaintEvent *event)
 {

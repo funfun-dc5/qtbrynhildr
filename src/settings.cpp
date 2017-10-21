@@ -40,7 +40,6 @@ Settings::Settings(const char *iniFileName)
   onSendClipboard(false),
   sendFileCount(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  onDisplayMouseCursor(false),
   onGamePadSupport(false),
   onBrynhildr2Support(true),
   monitorCount(0),
@@ -93,7 +92,6 @@ Settings::Settings(const char *iniFileName)
   setOnControlOffWithGraphicsOff(QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT);
   setOnGraphics(QTB_ONGRAPHICS_DEFAULT);
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
-  setOnDisplayMouseCursor(QTB_ONDISPLAYMOUSECURSOR_DEFAULT);
   setOnGamePadSupport(QTB_ONGAMEPADSUPPORT_DEFAULT);
   setOnBrynhildr2Support(QTB_ONBRYNHILDR2SUPPORT_DEFAULT);
   setFrameRate(QTB_FRAMERATE_DEFAULT);
@@ -303,10 +301,6 @@ void Settings::readSettings()
   // load videoQualilty
   setVideoQuality(settings->value(QTB_VIDEOQUALITY,
 								  (qint32)QTB_VIDEOQUALITY_DEFAULT).toInt());
-
-  // load onDisplayMouseCursor
-  setOnDisplayMouseCursor(settings->value(QTB_ONDISPLAYMOUSECURSOR,
-										  QTB_ONDISPLAYMOUSECURSOR_DEFAULT).toBool());
 
   // load onGamePadSupport
   setOnGamePadSupport(settings->value(QTB_ONGAMEPADSUPPORT,
@@ -585,9 +579,6 @@ void Settings::writeSettings()
   // save videoQuality
   settings->setValue(QTB_VIDEOQUALITY, (qint32)videoQuality);
 
-  // save onDisplayMouseCursor
-  settings->setValue(QTB_ONDISPLAYMOUSECURSOR, onDisplayMouseCursor);
-
   // save onGamePadSupport
   settings->setValue(QTB_ONGAMEPADSUPPORT, onGamePadSupport);
 
@@ -779,7 +770,6 @@ void Settings::printSettings() const
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
-  qDebug() << "DisplayMouseCursor : " << onDisplayMouseCursor;
   qDebug() << "GamePadSupport: " << onGamePadSupport;
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
 #if QTB_EXTRA_BUTTON_SUPPORT

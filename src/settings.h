@@ -72,7 +72,7 @@
 #else // QTB_PUBLIC_MODE7_SUPPORT
 #define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION6
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-typedef int PUBLIC_MODEVERSION;
+typedef int PUBLICMODE_VERSION;
 #define PUBLICMODE_VERSION5		5
 #define PUBLICMODE_VERSION6		6
 #define PUBLICMODE_VERSION7		7
@@ -174,7 +174,6 @@ typedef int KEYBOARD_TYPE;
 #define QTB_FRAMERATE_DEFAULT	30
 
 // for displayMouseCursor
-#define QTB_ONDISPLAYMOUSECURSOR			"onDisplayMouseCursor"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	true
 #else // defined(QTB_DEV_TOUCHPANEL)
@@ -486,13 +485,13 @@ public:
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // get public mode version
-  PUBLIC_MODEVERSION getPublicModeVersion() const
+  PUBLICMODE_VERSION getPublicModeVersion() const
   {
 	return publicModeVersion;
   }
 
   // set public mode version
-  void setPublicModeVersion(PUBLIC_MODEVERSION publicModeVersion)
+  void setPublicModeVersion(PUBLICMODE_VERSION publicModeVersion)
   {
 	ASSERT(publicModeVersion == PUBLICMODE_VERSION5 ||
 		   publicModeVersion == PUBLICMODE_VERSION6 ||
@@ -953,7 +952,7 @@ public:
   {
 #if QTB_PUBLIC_MODE6_SUPPORT
 	if (getPublicModeVersion() >= PUBLICMODE_VERSION7){
-	  return onDisplayMouseCursor;
+	  return QTB_ONDISPLAYMOUSECURSOR_DEFAULT;
 	}
 	else { // MODE5/6
 	  return true;
@@ -961,12 +960,6 @@ public:
 #else // QTB_PUBLIC_MODE6_SUPPORT
 	return true;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  }
-
-  // set display mouse cursor flag
-  void setOnDisplayMouseCursor(bool onDisplayMouseCursor)
-  {
-	this->onDisplayMouseCursor = onDisplayMouseCursor;
   }
 
   // get gamepad support flag
@@ -1897,7 +1890,7 @@ private:
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // public mode version
-  volatile PUBLIC_MODEVERSION publicModeVersion;
+  volatile PUBLICMODE_VERSION publicModeVersion;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // server name
@@ -1954,7 +1947,6 @@ private:
   volatile bool onGraphics;
   volatile VIDEO_QUALITY videoQuality;
 
-  volatile bool onDisplayMouseCursor;
   volatile bool onGamePadSupport;
   volatile bool onBrynhildr2Support;
   volatile unsigned int frameRate;

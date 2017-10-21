@@ -326,7 +326,8 @@ case $UNAME in
 				cp -r ../doc/manual/* ${PKGSTRING}/doc/manual
 				rm -f ${PKGSTRING}/doc/manual/.gitkeep
 				# 4) archive package
-				zip -9 -r ${PKGSTRING}.zip ${PKGSTRING}
+				#zip -9 -r ${PKGSTRING}.zip ${PKGSTRING}
+				7z a -r -sfx ${PKGSTRING}.exe ${PKGSTRING}
 			fi
 			popd
 		fi

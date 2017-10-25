@@ -32,6 +32,7 @@
 #if defined(QTB_NET_UNIX)
 #include "dialog/desktop_scaling_dialog.h"
 #endif // defined(QTB_NET_UNIX)
+#include "mainwindow/desktopwindow.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
 

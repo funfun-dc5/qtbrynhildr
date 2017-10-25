@@ -17,6 +17,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #endif // QTB_DRAG_AND_DROP_SUPPORT
+#include <QGraphicsScene>
 #include <QImage>
 #include <QKeyEvent>
 #include <QLabel>
@@ -27,7 +28,6 @@
 #include <QTextStream>
 #include <QWheelEvent>
 #include <QWidget>
-#include <QGraphicsScene>
 
 // Local Header
 #include "control/keybuffer.h"
@@ -173,8 +173,11 @@ private:
   }
 
 private:
-  // desktop image
-  DesktopImage *desktopImage;
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
+
+  // settings
+  Settings *settings;
 
   // scene
   QGraphicsScene *scene;
@@ -182,11 +185,8 @@ private:
   // view
   GraphicsView *view;
 
-  // settings
-  Settings *settings;
-
-  // qtbrynhildr
-  QtBrynhildr *qtbrynhildr;
+  // desktop image
+  DesktopImage *desktopImage;
 
   // window size
   QSize currentSize;

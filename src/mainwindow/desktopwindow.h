@@ -24,11 +24,11 @@
 #include <QSize>
 #include <QTextStream>
 #include <QWheelEvent>
+#include <QWidget>
 
 // Local Header
 #include "control/keybuffer.h"
 #include "control/mousebuffer.h"
-#include "mainwindow/desktopwindow.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
 

@@ -44,11 +44,11 @@ namespace qtbrynhildr {
 MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   :
   QWidget(qtbrynhildr),
-  desktopImage(0),
-  scene(0),
-  view(0),
   qtbrynhildr(qtbrynhildr),
   settings(settings),
+  scene(0),
+  view(0),
+  desktopImage(0),
   eventConverter(0),
   onShiftKey(false),
   heightOfMenuBar(0),

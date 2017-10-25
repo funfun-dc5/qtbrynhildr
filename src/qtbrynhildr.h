@@ -460,8 +460,6 @@ private:
 #endif // QTB_DESKTOPWINDOW
   // main window
   MainWindow *mainWindow;
-  // window size
-  QSize mainWindowSize;
 
   // connection label
   QLabel *connectionLabel;

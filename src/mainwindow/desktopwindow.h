@@ -47,7 +47,7 @@ class MainWindow : public QWidget
 
 public:
   // constructor
-  MainWindow(Settings *settings, QtBrynhildr *parent);
+  MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr);
   // destructor
   ~MainWindow();
 
@@ -168,11 +168,11 @@ private:
   }
 
 private:
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
+
   // settings
   Settings *settings;
-
-  // parent
-  QtBrynhildr *parent;
 
   // image
   QImage image;

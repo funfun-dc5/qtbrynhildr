@@ -41,12 +41,13 @@
 namespace qtbrynhildr {
 
 // constructor
-MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
+MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   :
-  QWidget(parent),
+  QWidget(qtbrynhildr),
   desktopImage(0),
   scene(0),
   view(0),
+  qtbrynhildr(qtbrynhildr),
   settings(settings),
   eventConverter(0),
   onShiftKey(false),
@@ -64,9 +65,6 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *parent)
   outputLogForMouse(QTB_DEBUG_MOUSE),
   outputLog(true)
 {
-  // save parent
-  this->parent = parent;
-
   // setting main window
   //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -259,7 +257,7 @@ void MainWindow::resizeWindow()
   // resize if NOT full screen
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
-	  if (settings->getOnKeepOriginalDesktopSize() && !(parent->isMaximized() || parent->isMinimized())){
+	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
 		int width = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
 		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
 
@@ -277,7 +275,7 @@ void MainWindow::resizeWindow()
 		cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush; // for DEBUG
 #endif
 		// resize
-		parent->resize(width, height);
+		qtbrynhildr->resize(width, height);
 
 		// refresh image
 		update();
@@ -555,10 +553,10 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 	  pos.x = currentMousePos.x();
 	  pos.y = currentMousePos.y();
 	  mouseBuffer->setMousePos(pos);
-	  //parent->moveTopOfSoftwareKeyboard(pos.y); // for TEST
+	  //qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 	  // set cursor point color to control thread
-	  parent->setCursorPointColor(desktopImage->getColor(currentMousePos));
+	  qtbrynhildr->setCursorPointColor(desktopImage->getColor(currentMousePos));
 #endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 	}
   }
@@ -608,7 +606,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 	  settings->getOnControl()){
 	// exit full screen
 	if (onFullScreen && VK_Code == VK_ESCAPE){
-	  parent->exitFullScreen();
+	  qtbrynhildr->exitFullScreen();
 	  return;
 	}
 	// check shift key status

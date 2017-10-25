@@ -53,7 +53,7 @@ class MainWindow : public QWidget
 
 public:
   // constructor
-  MainWindow(Settings *settings, QtBrynhildr *parent);
+  MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr);
   // destructor
   ~MainWindow();
   // set event converter
@@ -185,8 +185,8 @@ private:
   // settings
   Settings *settings;
 
-  // parent
-  QtBrynhildr *parent;
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
 
   // window size
   QSize currentSize;

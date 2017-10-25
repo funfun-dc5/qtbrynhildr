@@ -16,6 +16,9 @@
 #include <QPainter>
 #include <QPoint>
 #include <QSize>
+#if defined(QTB_DEV_TOUCHPANEL)
+#include <QTouchEvent>
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #if QTB_PUBLIC_MODE6_SUPPORT
 #include <QList>
 #include <QUrl>
@@ -161,12 +164,23 @@ void MainWindow::refreshDesktop(QImage image)
 		// scale
 		currentSize = currentSize * scalingFactor;
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){
 		settings->setDesktopScalingFactor(scalingFactor);
 	  }
 	}
+#if 0
+	else { // DESKTOPSCALING_TYPE_ON_SERVER
+	  if (settings->getDesktopScalingFactor() > 1.0){
+		// scale
+		currentSize = currentSize * settings->getDesktopScalingFactor();
+		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+	  }
+	}
+#endif
   }
 
 #if 0 // QTB_DESKTOP_COMPRESS_MODE // for TEST
@@ -293,10 +307,37 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 
 // event handler
 
-#if defined(QTB_DEV_TOUCHPANEL) // for TEST
+#if defined(QTB_DEV_TOUCHPANEL)
 // event
 bool MainWindow::event(QEvent *event)
 {
+  switch(event->type()){
+  case QEvent::TouchBegin:
+  case QEvent::TouchUpdate:
+  case QEvent::TouchEnd:
+	{
+	  QTouchEvent *touchEvent = (QTouchEvent *)(event);
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+	  if (touchPoints.count() == 1){
+		// 1 - finger action
+		//  1) tap        : move mouse cursor and push left button
+		//  2) double tap : -- ( -> move mouse cursor and push right button)
+		//  3) drag       : push right button and move mouse cursor (at origianl scale)
+		//                : move viewport (at NOT origianl scale)
+		//  4) flick      : push right button and move mouse cursor (at origianl scale)
+		//                : move viewport (at NOT origianl scale)
+		//  5) long tap   : --
+	  }
+	  else if (touchPoints.count() == 2){
+		// 2 - finger action
+		//  1) pinch in/out : scaling
+	  }
+	}
+	//	return true;
+  default:
+	break;
+  }
+
   return QWidget::event(event);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)

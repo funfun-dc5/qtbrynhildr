@@ -17,6 +17,9 @@
 #include <QPainter>
 #include <QPoint>
 #include <QSize>
+#if defined(QTB_DEV_TOUCHPANEL)
+#include <QTouchEvent>
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #if QTB_PUBLIC_MODE6_SUPPORT
 #include <QList>
 #include <QUrl>
@@ -312,6 +315,32 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 }
 
 // event handler
+#if defined(QTB_DEV_TOUCHPANEL)
+// event
+bool MainWindow::event(QEvent *event)
+{
+  switch(event->type()){
+  case QEvent::TouchBegin:
+  case QEvent::TouchUpdate:
+  case QEvent::TouchEnd:
+	{
+	  QTouchEvent *touchEvent = (QTouchEvent *)(event);
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+	  if (touchPoints.count() == 1){
+		// 1 finger
+	  }
+	  else if (touchPoints.count() == 2){
+		// 2 finger
+	  }
+	}
+	return true;
+  default:
+	break;
+  }
+
+  return QWidget::event(event);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // paint event
 void MainWindow::paintEvent(QPaintEvent *event)

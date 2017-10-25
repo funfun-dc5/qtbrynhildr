@@ -103,7 +103,7 @@ public:
 
 protected:
   // for event handling
-#if defined(QTB_DEV_TOUCHPANEL) // for TEST
+#if defined(QTB_DEV_TOUCHPANEL)
   // event
   bool event(QEvent *event);
 #endif // defined(QTB_DEV_TOUCHPANEL)

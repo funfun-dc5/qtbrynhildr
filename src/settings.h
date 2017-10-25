@@ -81,7 +81,7 @@ typedef int PUBLICMODE_VERSION;
 // for serverName
 #define QTB_SERVERNAME			"serverName"
 #if defined(QTB_DEV_TOUCHPANEL) // for TEST
-#define QTB_SERVERNAME_DEFAULT	"192.168.10.5"
+#define QTB_SERVERNAME_DEFAULT	"192.168.10.3"
 #else // defined(QTB_DEV_TOUCHPANEL)
 //#define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
 #define QTB_SERVERNAME_DEFAULT	""

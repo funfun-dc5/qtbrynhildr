@@ -2516,8 +2516,13 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	return;
   }
 
-  int width = windowSize.width() -  settings->getDesktop()->getCorrectWindowWidth();
-  int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar() - settings->getDesktop()->getCorrectWindowHeight();
+  int width = windowSize.width();
+  int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar();
+#if QTB_DESKTOPWINDOW
+  // correct
+  width  -= settings->getDesktop()->getCorrectWindowWidth();
+  height -= settings->getDesktop()->getCorrectWindowHeight();
+#endif // QTB_DESKTOPWINDOW
 
   QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
   if (mainWindow->getSize().width() > screenSize.width()){

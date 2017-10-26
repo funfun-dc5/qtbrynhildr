@@ -18,6 +18,7 @@
 #include <QDropEvent>
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QImage>
 #include <QKeyEvent>
 #include <QLabel>
@@ -32,8 +33,6 @@
 // Local Header
 #include "control/keybuffer.h"
 #include "control/mousebuffer.h"
-#include "mainwindow/desktopimage.h"
-#include "mainwindow/graphicsview.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
 
@@ -44,9 +43,9 @@ class QtBrynhildr;
 
 // MainWindow
 #if defined(Q_OS_WIN)
-class MainWindow : public QWidget, public QAbstractNativeEventFilter
+class MainWindow : public QGraphicsView, public QAbstractNativeEventFilter
 #else // defined(Q_OS_WIN)
-class MainWindow : public QWidget
+class MainWindow : public QGraphicsView
 #endif // defined(Q_OS_WIN)
 {
   Q_OBJECT
@@ -136,6 +135,9 @@ protected:
   void dropEvent(QDropEvent *event);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
+  // draw background
+  void drawBackground(QPainter *painter, const QRectF &rect);
+
 private:
 #if defined(Q_OS_WIN)
   // native event filter
@@ -180,13 +182,10 @@ private:
   Settings *settings;
 
   // scene
-  QGraphicsScene *scene;
+  QGraphicsScene scene;
 
-  // view
-  GraphicsView *view;
-
-  // desktop image
-  DesktopImage *desktopImage;
+  // image
+  QImage image;
 
   // window size
   QSize currentSize;

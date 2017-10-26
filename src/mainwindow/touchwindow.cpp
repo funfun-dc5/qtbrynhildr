@@ -43,12 +43,9 @@ namespace qtbrynhildr {
 // constructor
 MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   :
-  QWidget(qtbrynhildr),
+  QGraphicsView(qtbrynhildr),
   qtbrynhildr(qtbrynhildr),
   settings(settings),
-  scene(0),
-  view(0),
-  desktopImage(0),
   eventConverter(0),
   onShiftKey(false),
   heightOfMenuBar(0),
@@ -81,21 +78,12 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   openKeyboardLogFile(settings->getKeyboardLogFile());
 
   // create touch window
-
-  // create desktop image
-  desktopImage = new DesktopImage();
-
-  // create scene
-  scene = new QGraphicsScene(this);
-  scene->addItem(desktopImage);
-
-  // create view
-  view = new GraphicsView(scene, this);
-  //  qDebug() << "view->size() = " << view->size();
-
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(view);
-  setLayout(layout);
+  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+#if 1 // for TEST
+  scene.setSceneRect(-640, -400, 1280, 800);
+  setScene(&scene);
+  ensureVisible(-640, -400, 1280, 800, 0, 0);
+#endif
 }
 
 // destructor
@@ -105,10 +93,6 @@ MainWindow::~MainWindow()
   closeKeyboardLogFile();
 
   // delete objects
-  if (scene != 0){
-	delete scene;
-	scene = 0;
-  }
   if (keyBuffer != 0){
 	delete keyBuffer;
 	keyBuffer = 0;
@@ -214,7 +198,7 @@ void MainWindow::refreshDesktop(QImage image)
 	}
   }
 
-  desktopImage->setImage(image);
+  this->image = image;
   //  scene->setSceneRect(0, 0, image.width(), image.height());
 
   // resize window
@@ -239,9 +223,6 @@ void MainWindow::refreshDesktop(QImage image)
 	// refresh image
 	update();
   }
-  view->setSceneRect(scene->itemsBoundingRect());
-  qDebug() << "view->size() = " << view->size();
-  qDebug() << "view->sceneRect() = " << view->sceneRect();
 }
 
 // resize window
@@ -258,8 +239,8 @@ void MainWindow::resizeWindow()
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
 	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
-		int width = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
-		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+		int width = currentSize.width();
+		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar();
 
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
 		if (width > screenSize.width()){
@@ -310,6 +291,18 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
   if (QTB_DESKTOP_FULL_SCREEN){
 	this->onFullScreen = onFullScreen;
   }
+}
+
+// minimum size hint
+QSize MainWindow::minimumSizeHint() const
+{
+  return currentSize;
+}
+
+// size hint
+QSize MainWindow::sizeHint() const
+{
+  return currentSize;
 }
 
 // event handler
@@ -772,6 +765,12 @@ void MainWindow::dropEvent(QDropEvent *event)
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
+// draw background
+void MainWindow::drawBackground(QPainter *painter, const QRectF &rect)
+{
+  painter->drawImage(rect.topLeft(), image, rect);
+}
+
 // scroll area
 bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)
 {
@@ -885,18 +884,6 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
   }
 
   return scalingFactor;
-}
-
-// minimum size hint
-QSize MainWindow::minimumSizeHint() const
-{
-  return currentSize;
-}
-
-// size hint
-QSize MainWindow::sizeHint() const
-{
-  return currentSize;
 }
 
 //----------------------------------------------------------------------

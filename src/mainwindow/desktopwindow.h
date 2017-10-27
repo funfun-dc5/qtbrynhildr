@@ -1,8 +1,8 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DESKTOPWINDOW_H
+#define DESKTOPWINDOW_H
 // Common Header
 #include "common/common.h"
 
@@ -36,20 +36,20 @@ namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-// MainWindow
+// DesktopWindow
 #if defined(Q_OS_WIN)
-class MainWindow : public QWidget, public QAbstractNativeEventFilter
+class DesktopWindow : public QWidget, public QAbstractNativeEventFilter
 #else // defined(Q_OS_WIN)
-class MainWindow : public QWidget
+class DesktopWindow : public QWidget
 #endif // defined(Q_OS_WIN)
 {
   Q_OBJECT
 
 public:
   // constructor
-  MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr);
+  DesktopWindow(Settings *settings, QtBrynhildr *qtbrynhildr);
   // destructor
-  ~MainWindow();
+  ~DesktopWindow();
 
   // set event converter
   void setEventConverter(EventConverter *eventConverter);
@@ -236,4 +236,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // MAINWINDOW_H
+#endif // DESKTOPWINDOW_H

@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_WIN)
   // install native event filter
-  app.installNativeEventFilter(qtbrynhildr->getMainWindow());
+  app.installNativeEventFilter(qtbrynhildr->getDesktopWindow());
 #endif // defined(Q_OS_WIN)
 
   // set attribute

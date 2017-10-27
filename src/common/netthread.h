@@ -83,7 +83,7 @@ class NetThread : public QThread
 
 public:
   // constructor
-  NetThread(const char *name, Settings *settings, MainWindow *mainWindow);
+  NetThread(const char *name, Settings *settings, DesktopWindow *desktopWindow);
   // destructor
   ~NetThread();
 
@@ -135,8 +135,8 @@ protected:
   long receiveData(SOCKET sock, char *buf, long size);
 
 protected:
-  // MainWindow
-  MainWindow *mainWindow;
+  // desktop window
+  DesktopWindow *desktopWindow;
 
   // thread name
   const char *name;

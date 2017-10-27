@@ -39,7 +39,7 @@
 namespace qtbrynhildr {
 
 // constructor
-MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
+DesktopWindow::DesktopWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   :
   QWidget(qtbrynhildr),
   qtbrynhildr(qtbrynhildr),
@@ -77,7 +77,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
 }
 
 // destructor
-MainWindow::~MainWindow()
+DesktopWindow::~DesktopWindow()
 {
   // close keyboard log file
   closeKeyboardLogFile();
@@ -94,25 +94,25 @@ MainWindow::~MainWindow()
 }
 
 // set event converter
-void MainWindow::setEventConverter(EventConverter *eventConverter)
+void DesktopWindow::setEventConverter(EventConverter *eventConverter)
 {
   this->eventConverter = eventConverter;
 }
 
 // get keyboard buffer
-KeyBuffer *MainWindow::getKeyBuffer() const
+KeyBuffer *DesktopWindow::getKeyBuffer() const
 {
   return keyBuffer;
 }
 
 // get mouse buffer
-MouseBuffer *MainWindow::getMouseBuffer() const
+MouseBuffer *DesktopWindow::getMouseBuffer() const
 {
   return mouseBuffer;
 }
 
 // reflesh desktop window
-void MainWindow::refreshDesktop(QImage image)
+void DesktopWindow::refreshDesktop(QImage image)
 {
   // return if not initialized
   if (image.isNull()){
@@ -235,7 +235,7 @@ void MainWindow::refreshDesktop(QImage image)
 }
 
 // resize window
-void MainWindow::resizeWindow()
+void DesktopWindow::resizeWindow()
 {
   // check size
   if (!currentSize.isValid()){
@@ -270,7 +270,7 @@ void MainWindow::resizeWindow()
 }
 
 // clear desktop window
-void MainWindow::clearDesktop()
+void DesktopWindow::clearDesktop()
 {
   //  cout << "clearDesktop()" << endl << flush;
 #if 0 // for TEST
@@ -285,19 +285,19 @@ void MainWindow::clearDesktop()
 }
 
 // get window size
-QSize MainWindow::getSize() const
+QSize DesktopWindow::getSize() const
 {
   return currentSize;
 }
 
 // get window size
-QSize MainWindow::getDesktopSize() const
+QSize DesktopWindow::getDesktopSize() const
 {
   return desktopSize;
 }
 
 // set full screen flag
-void MainWindow::setOnFullScreen(bool onFullScreen)
+void DesktopWindow::setOnFullScreen(bool onFullScreen)
 {
   if (QTB_DESKTOP_FULL_SCREEN){
 	this->onFullScreen = onFullScreen;
@@ -308,7 +308,7 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 
 #if defined(QTB_DEV_TOUCHPANEL)
 // event
-bool MainWindow::event(QEvent *event)
+bool DesktopWindow::event(QEvent *event)
 {
   switch(event->type()){
   case QEvent::TouchBegin:
@@ -342,7 +342,7 @@ bool MainWindow::event(QEvent *event)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 // paint event
-void MainWindow::paintEvent(QPaintEvent *event)
+void DesktopWindow::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
 
@@ -382,7 +382,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 }
 
 // widget leave event
-void MainWindow::leaveEvent(QEvent *event)
+void DesktopWindow::leaveEvent(QEvent *event)
 {
   Q_UNUSED(event);
 
@@ -396,7 +396,7 @@ void MainWindow::leaveEvent(QEvent *event)
 //----------------------------------------------------------------------
 
 // print mouse button event
-void MainWindow::printMouseButtonEvent(QMouseEvent *event)
+void DesktopWindow::printMouseButtonEvent(QMouseEvent *event)
 {
   switch (event->button()){
   case Qt::LeftButton:
@@ -423,7 +423,7 @@ void MainWindow::printMouseButtonEvent(QMouseEvent *event)
 }
 
 // set mouse button event
-void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
+void DesktopWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
 {
   switch (event->button()){
   case Qt::LeftButton:
@@ -450,10 +450,10 @@ void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
 }
 
 // mouse press event
-void MainWindow::mousePressEvent(QMouseEvent *event)
+void DesktopWindow::mousePressEvent(QMouseEvent *event)
 {
   if (outputLogForMouse){
-	cout << "[MainWindow] mousePressEvent: ";
+	cout << "[DesktopWindow] mousePressEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -482,11 +482,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 }
 
 // mouse release event
-void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+void DesktopWindow::mouseReleaseEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[MainWindow] mouseReleaseEvent: ";
+	cout << "[DesktopWindow] mouseReleaseEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -520,11 +520,11 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 }
 
 // mouse double click event
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
+void DesktopWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[MainWindow] mouseDoubleClickEvent: ";
+	cout << "[DesktopWindow] mouseDoubleClickEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -545,13 +545,13 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 // mouse wheel event
-void MainWindow::wheelEvent(QWheelEvent *event)
+void DesktopWindow::wheelEvent(QWheelEvent *event)
 {
   int degrees = event->delta() / 8;
   // for DEBUG
   if (outputLogForMouse){
 	int ticks = degrees/15;
-	cout << "[MainWindow] wheelEvent: " << degrees << "(ticks = " << ticks << ")"; // for DEBUG
+	cout << "[DesktopWindow] wheelEvent: " << degrees << "(ticks = " << ticks << ")"; // for DEBUG
   }
 
   if (settings->getConnected() &&
@@ -571,11 +571,11 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 }
 
 // mouse move event
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
+void DesktopWindow::mouseMoveEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-    cout << "[MainWindow] mouseMoveEvent: (x, y) = (" <<
+    cout << "[DesktopWindow] mouseMoveEvent: (x, y) = (" <<
 	  event->pos().x() << "," << event->pos().y() << ")" << endl << flush; // for DEBUG
   }
 
@@ -602,7 +602,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 //----------------------------------------------------------------------
 
 // key press event
-void MainWindow::keyPressEvent(QKeyEvent *event)
+void DesktopWindow::keyPressEvent(QKeyEvent *event)
 {
   // check event converter
   if (eventConverter == 0){
@@ -625,7 +625,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
   // get VK_Code from Key_*
   uchar VK_Code = eventConverter->getVKCode(event);
   if (outputLogForKeyboard){
-	qDebug() << "[MainWindow]" << eventConverter->getEventConverterName() << // for DEBUG
+	qDebug() << "[DesktopWindow]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Press   : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
 	  ":" << hex << VK_Code;
   }
@@ -678,7 +678,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 }
 
 // key release event
-void MainWindow::keyReleaseEvent(QKeyEvent *event)
+void DesktopWindow::keyReleaseEvent(QKeyEvent *event)
 {
   // check event converter
   if (eventConverter == 0){
@@ -696,7 +696,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
   // get VK_Code from Key_*
   uchar VK_Code = eventConverter->getVKCode(event);
   if (outputLogForKeyboard){
-	qDebug() << "[MainWindow]" << eventConverter->getEventConverterName() << // for DEBUG
+	qDebug() << "[DesktopWindow]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Release : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
 	  ":" << hex << VK_Code;
   }
@@ -766,7 +766,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 // drag and drop events
 //----------------------------------------------------------------------
 // drag enter event
-void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+void DesktopWindow::dragEnterEvent(QDragEnterEvent *event)
 {
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
@@ -778,7 +778,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 }
 
 // drop event
-void MainWindow::dropEvent(QDropEvent *event)
+void DesktopWindow::dropEvent(QDropEvent *event)
 {
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
@@ -808,7 +808,7 @@ void MainWindow::dropEvent(QDropEvent *event)
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
 // scroll area
-bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)
+bool DesktopWindow::scrollArea(uchar VK_Code, bool onKeyPress)
 {
   bool result = false;
 
@@ -859,7 +859,7 @@ bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)
 }
 
 // get desktop scaling factor
-qreal MainWindow::getDesktopScalingFactor(QSize size)
+qreal DesktopWindow::getDesktopScalingFactor(QSize size)
 {
   Q_UNUSED(size);
 
@@ -869,7 +869,7 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 	unsigned long maxImageDataSize = settings->getDesktop()->getMaxImageDataSize();
 	if (maxImageDataSize == 0){
 	  if (settings->getOutputLog()){
-		cout << "[MainWindow] scaled... maxImageDataSize = " << maxImageDataSize << endl << flush;
+		cout << "[DesktopWindow] scaled... maxImageDataSize = " << maxImageDataSize << endl << flush;
 	  }
 	  return scalingFactor;
 	}
@@ -899,8 +899,8 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 		else {
 		  // Can't shmget() in QXcbShmImage::QXcbShmImage() in qxcbbackingstore.cpp
 		  if (settings->getOutputLog()){
-			cout << "[MainWindow] Can't scale... imageDataSize    = " << imageDataSize << endl;
-			cout << "[MainWindow] Can't scale... maxImageDataSize = " << maxImageDataSize << endl << flush;
+			cout << "[DesktopWindow] Can't scale... imageDataSize    = " << imageDataSize << endl;
+			cout << "[DesktopWindow] Can't scale... maxImageDataSize = " << maxImageDataSize << endl << flush;
 		  }
 		  // scale down
 		  scalingFactor -= unitFactor;
@@ -923,13 +923,13 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 }
 
 // minimum size hint
-QSize MainWindow::minimumSizeHint() const
+QSize DesktopWindow::minimumSizeHint() const
 {
   return currentSize;
 }
 
 // size hint
-QSize MainWindow::sizeHint() const
+QSize DesktopWindow::sizeHint() const
 {
   return currentSize;
 }
@@ -938,7 +938,7 @@ QSize MainWindow::sizeHint() const
 // native event filter
 //----------------------------------------------------------------------
 #if defined(Q_OS_WIN)
-bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
   Q_UNUSED(result);
 
@@ -1001,7 +1001,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
 	  case VK_OEM_ENLW:
-		//		cout << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		//		cout << "[DesktopWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYDOWN);
 		return true;
 		break;
@@ -1009,7 +1009,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
 	  case 229:
-		//		cout << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		//		cout << "[DesktopWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
 		break;
@@ -1022,14 +1022,14 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
 	  case VK_OEM_ENLW:
-		//		cout << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		//		cout << "[DesktopWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYUP);
 		return true;
 		break;
 	  case VK_CONVERT:
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
-		//		cout << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		//		cout << "[DesktopWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
 		break;
@@ -1071,7 +1071,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 // for X11
 #include <xcb/xcb.h>
 
-bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
+bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
 {
   if (!(settings->getConnected()) ||
 	  !(settings->getOnControl())){
@@ -1089,7 +1089,7 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, l
 // keyboard log file
 //----------------------------------------------------------------------
 // open keyboard log file
-bool MainWindow::openKeyboardLogFile(QString filename)
+bool DesktopWindow::openKeyboardLogFile(QString filename)
 {
   if (keyboardLogFile != 0)
 	return false;
@@ -1109,7 +1109,7 @@ bool MainWindow::openKeyboardLogFile(QString filename)
 }
 
 // close keyboard log file
-bool MainWindow::closeKeyboardLogFile()
+bool DesktopWindow::closeKeyboardLogFile()
 {
   if (keyboardLogFile == 0)
 	return false;

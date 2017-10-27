@@ -35,12 +35,12 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 #if QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder)
+ControlThread::ControlThread(Settings *settings, DesktopWindow *desktopWindow, Recorder *recorder)
 #else  // QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
+ControlThread::ControlThread(Settings *settings, DesktopWindow *desktopWindow)
 #endif // QTB_RECORDER
   :
-  NetThread("ControlThread", settings, mainWindow),
+  NetThread("ControlThread", settings, desktopWindow),
   serverVersion(SERVER_VERSION_BRYNHILDR2),
   currentMode(0),
   keyBuffer(0),
@@ -54,10 +54,10 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   outputLog = false; // for DEBUG
 
   // keyboard buffer
-  keyBuffer = mainWindow->getKeyBuffer();
+  keyBuffer = desktopWindow->getKeyBuffer();
 
   // mouse buffer
-  mouseBuffer = mainWindow->getMouseBuffer();
+  mouseBuffer = desktopWindow->getMouseBuffer();
 
   // initialize key and mouse information
   keydownSHIFT	= KEYDOWN_OFF;
@@ -213,8 +213,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  // set information
 	  com_data->mouse_move = MOUSE_MOVE_ON;
 	  if (QTB_DESKTOP_IMAGE_SCALING){
-		QSize windowSize = mainWindow->getSize();
-		QSize desktopSize = mainWindow->getDesktopSize();
+		QSize windowSize = desktopWindow->getSize();
+		QSize desktopSize = desktopWindow->getDesktopSize();
 		if (windowSize.width() < 0 || windowSize.height() < 0 ||
 			desktopSize.width() < 0 || desktopSize.height() < 0){
 		  // Nothing to do

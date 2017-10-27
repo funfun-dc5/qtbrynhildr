@@ -109,8 +109,8 @@ public:
   // destructor
   ~QtBrynhildr();
 
-  // get main window
-  MainWindow *getMainWindow() const;
+  // get desktop window
+  DesktopWindow *getDesktopWindow() const;
 
   // shutdown flag
   bool getShutdownFlag() const;
@@ -454,8 +454,8 @@ private:
 #else // QTB_DESKTOPWINDOW
   QGraphicsView *graphicsView;
 #endif // QTB_DESKTOPWINDOW
-  // main window
-  MainWindow *mainWindow;
+  // desktop window
+  DesktopWindow *desktopWindow;
 
   // connection label
   QLabel *connectionLabel;

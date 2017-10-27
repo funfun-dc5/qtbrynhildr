@@ -248,8 +248,13 @@ void DesktopWindow::resizeWindow()
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
 	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
-		int width = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
-		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+		int width = currentSize.width();
+		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar();
+#if QTB_DESKTOPWINDOW
+		// correct
+		width  += settings->getDesktop()->getCorrectWindowWidth();
+		height += settings->getDesktop()->getCorrectWindowHeight();
+#endif // QTB_DESKTOPWINDOW
 
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
 		if (width > screenSize.width()){

@@ -216,8 +216,8 @@ SOURCES += function/recorder.cpp
 # for new feature
 NEW_FEATURE = OFF
 equals(NEW_FEATURE, ON){
-HEADERS += mainwindow/touchwindow.h mainwindow/desktopimage.h
-SOURCES += mainwindow/touchwindow.cpp mainwindow/desktopimage.cpp
+HEADERS += mainwindow/desktopwindow.h
+SOURCES += mainwindow/desktopwindow.cpp
 DEFINES += QTB_DESKTOPWINDOW=0
 }
 else {

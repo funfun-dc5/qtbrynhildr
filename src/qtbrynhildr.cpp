@@ -491,14 +491,18 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #else // QTB_DESKTOPWINDOW
-  desktopWindow->setBackgroundRole(QPalette::Window);
-  desktopWindow->setAutoFillBackground(true);
-  setCentralWidget(desktopWindow);
+  // Graphics View
+  graphicsView = new QGraphicsView;
+  graphicsView->setBackgroundRole(QPalette::Window);
+  graphicsView->setAutoFillBackground(true);
+  // set Widget
+  graphicsView->setFocusProxy(desktopWindow);
+  setCentralWidget(graphicsView);
   // initialize palette
-  originalPalette = fullScreenPalette = desktopWindow->palette();
+  originalPalette = fullScreenPalette = graphicsView->palette();
   // for original
   originalPalette.setColor(QPalette::Window, Qt::gray);
-  desktopWindow->setPalette(originalPalette); // change QPalette::Window to black
+  graphicsView->setPalette(originalPalette); // change QPalette::Window to black
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #endif // QTB_DESKTOPWINDOW

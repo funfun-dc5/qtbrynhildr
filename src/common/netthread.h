@@ -26,11 +26,7 @@
 
 // Local Header
 #include "logmessage.h"
-#if QTB_DESKTOPWINDOW
 #include "mainwindow/desktopwindow.h"
-#else // QTB_DESKTOPWINDOW
-#include "mainwindow/touchwindow.h"
-#endif // QTB_DESKTOPWINDOW
 #include "settings.h"
 
 namespace qtbrynhildr {

@@ -25,7 +25,6 @@
 #if QTB_DESKTOPWINDOW
 #include <QScrollArea>
 #else // QTB_DESKTOPWINDOW
-#include <QGraphicsScene>
 #include <QGraphicsView>
 #endif // QTB_DESKTOPWINDOW
 #include <QShowEvent>
@@ -50,8 +49,7 @@
 #if QTB_DESKTOPWINDOW
 #include "mainwindow/desktopwindow.h"
 #else // QTB_DESKTOPWINDOW
-#include "mainwindow/touchwindow.h"
-#include "mainwindow/graphicsview.h"
+//#include "mainwindow/touchwindow.h"
 #endif // QTB_DESKTOPWINDOW
 #include "option.h"
 #if QTB_RECORDER
@@ -454,8 +452,7 @@ private:
   // scroll area
   QScrollArea *scrollArea;
 #else // QTB_DESKTOPWINDOW
-  QGraphicsScene *scene;
-  GraphicsView *view;
+  QGraphicsView *graphicsView;
 #endif // QTB_DESKTOPWINDOW
   // main window
   MainWindow *mainWindow;

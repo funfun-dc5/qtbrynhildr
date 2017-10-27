@@ -22,9 +22,6 @@
 #if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
 #include <QFileDialog>
 #endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
-#if QTB_DESKTOPWINDOW
-#include <QGraphicsLinearLayout>
-#endif // QTB_DESKTOPWINDOW
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -73,8 +70,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_DESKTOPWINDOW
   scrollArea(0),
 #else // QTB_DESKTOPWINDOW
-  scene(0),
-  view(0),
+  graphicsView(0),
 #endif // QTB_DESKTOPWINDOW
   mainWindow(0),
   connectionLabel(0),
@@ -3682,11 +3678,9 @@ void QtBrynhildr::fullScreen()
 #if QTB_DESKTOPWINDOW
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	mainWindow->setOnFullScreen(true);
 	scrollArea->setPalette(fullScreenPalette); // change QPalette::Window to black
-#else // QTB_DESKTOPWINDOW
-	mainWindow->setOnFullScreen(true);
 #endif // QTB_DESKTOPWINDOW
+	mainWindow->setOnFullScreen(true);
 	showFullScreen();
   }
   else {
@@ -3700,11 +3694,9 @@ void QtBrynhildr::fullScreen()
 #if QTB_DESKTOPWINDOW
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	mainWindow->setOnFullScreen(false);
 	scrollArea->setPalette(originalPalette); // restore original QPalette::Window
-#else // QTB_DESKTOPWINDOW
-	mainWindow->setOnFullScreen(false);
 #endif // QTB_DESKTOPWINDOW
+	mainWindow->setOnFullScreen(false);
 	showNormal();
   }
   // set checked flag

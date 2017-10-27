@@ -10,6 +10,7 @@
 
 // Qt Header
 #include <QGraphicsObject>
+#include <QGraphicsObject>
 #include <QImage>
 #include <QPainter>
 #include <QPainterPath>
@@ -27,13 +28,15 @@ class DesktopImage : public QGraphicsObject
 
 public:
   // constructor
-  DesktopImage();
+  DesktopImage(QGraphicsItem *parent = Q_NULLPTR);
   // destructor
   ~DesktopImage();
 
   QRectF boundingRect() const override;
-  //  QRectF sceneBoundingRect() const;
-  //  QPainterPath shape() const override;
+#if 0
+  QRectF sceneBoundingRect() const;
+  QPainterPath shape() const override;
+#endif
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
 
   // set image

@@ -46,6 +46,7 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   QGraphicsView(qtbrynhildr),
   qtbrynhildr(qtbrynhildr),
   settings(settings),
+  desktopImage(0),
   eventConverter(0),
   onShiftKey(false),
   heightOfMenuBar(0),
@@ -78,12 +79,21 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   openKeyboardLogFile(settings->getKeyboardLogFile());
 
   // create touch window
-  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-#if 1 // for TEST
+
   scene.setSceneRect(-640, -400, 1280, 800);
+  scene.setItemIndexMethod(QGraphicsScene::NoIndex);
+
+  // create desktop image
+  desktopImage = new DesktopImage();
+  desktopImage->setPos(-640, -400);
+  scene.addItem(desktopImage);
+
   setScene(&scene);
+
+  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ensureVisible(-640, -400, 1280, 800, 0, 0);
-#endif
 }
 
 // destructor
@@ -198,7 +208,8 @@ void MainWindow::refreshDesktop(QImage image)
 	}
   }
 
-  this->image = image;
+  // set desktop image
+  desktopImage->setImage(image);
   //  scene->setSceneRect(0, 0, image.width(), image.height());
 
   // resize window
@@ -221,7 +232,7 @@ void MainWindow::refreshDesktop(QImage image)
   }
   else {
 	// refresh image
-	update();
+	viewport()->update();
   }
 }
 
@@ -259,7 +270,7 @@ void MainWindow::resizeWindow()
 		qtbrynhildr->resize(width, height);
 
 		// refresh image
-		update();
+		viewport()->update();
 	  }
 	}
   }
@@ -329,7 +340,7 @@ bool MainWindow::event(QEvent *event)
 	break;
   }
 
-  return QWidget::event(event);
+  return QGraphicsView::event(event);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
@@ -764,12 +775,6 @@ void MainWindow::dropEvent(QDropEvent *event)
   settings->setSendFileCount(fileNames.count());
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
-
-// draw background
-void MainWindow::drawBackground(QPainter *painter, const QRectF &rect)
-{
-  painter->drawImage(rect.topLeft(), image, rect);
-}
 
 // scroll area
 bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)

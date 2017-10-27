@@ -1,12 +1,10 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef DESKTOPWINDOW_H
-#define DESKTOPWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 // Common Header
 #include "common/common.h"
-
-// System Header
 
 // Qt Header
 #if defined(Q_OS_WIN)
@@ -33,6 +31,7 @@
 // Local Header
 #include "control/keybuffer.h"
 #include "control/mousebuffer.h"
+#include "mainwindow/desktopimage.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
 
@@ -135,9 +134,6 @@ protected:
   void dropEvent(QDropEvent *event);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-  // draw background
-  void drawBackground(QPainter *painter, const QRectF &rect);
-
 private:
 #if defined(Q_OS_WIN)
   // native event filter
@@ -181,11 +177,11 @@ private:
   // settings
   Settings *settings;
 
+  // desktop image
+  DesktopImage *desktopImage;
+
   // scene
   QGraphicsScene scene;
-
-  // image
-  QImage image;
 
   // window size
   QSize currentSize;
@@ -246,4 +242,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // DESKTOPWINDOW_H
+#endif // MAINWINDOW_H

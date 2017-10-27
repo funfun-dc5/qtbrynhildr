@@ -14,8 +14,9 @@
 namespace qtbrynhildr {
 
 // constructor
-DesktopImage::DesktopImage()
+DesktopImage::DesktopImage(QGraphicsItem *parent)
   :
+  QGraphicsObject(parent),
   // for DEBUG
   outputLog(true)
 {

@@ -3864,16 +3864,22 @@ void QtBrynhildr::moveTopOfSoftwareButton(int y)
 QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
 {
   // calc geometry
-  QSize desktopSize = mainWindow->size();
+  QSize windowSize = this->size();
   QSize size = softwareKeyboard->resetSize();
+  windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
+#if QTB_DESKTOPWINDOW
+  // correct
+  windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
+  windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
+#endif // QTB_DESKTOPWINDOW
 
   // calc size
-  int width = desktopSize.width() * 0.9;
+  int width = windowSize.width() * 0.9;
   int height = size.height() * ((double)width / size.width());
 
   // calc position
-  int x = (desktopSize.width() - width) * 0.5;
-  int y = (desktopSize.height() - height) * 0.8;
+  int x = (windowSize.width() - width) * 0.5;
+  int y = (windowSize.height() - height) * 0.8;
 
   //  cout << "width = " << width << endl;
   //  cout << "height = " << height << endl << flush;
@@ -3887,16 +3893,22 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
 QRect QtBrynhildr::calculateSoftwareButtonLayout()
 {
   // calc geometry
-  QSize desktopSize = mainWindow->size();
+  QSize windowSize = this->size();
   QSize size = softwareButton->resetSize();
+  windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
+#if QTB_DESKTOPWINDOW
+  // correct
+  windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
+  windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
+#endif // QTB_DESKTOPWINDOW
 
   // calc size
-  int width = desktopSize.width() * 0.9;
+  int width = windowSize.width() * 0.9;
   int height = size.height() * ((double)width / size.width());
 
   // calc position
-  int x = (desktopSize.width() - width) * 0.5;
-  int y = (desktopSize.height() - height) * 0.8;
+  int x = (windowSize.width() - width) * 0.5;
+  int y = (windowSize.height() - height) * 0.8;
 
   //  cout << "width = " << width << endl;
   //  cout << "height = " << height << endl << flush;

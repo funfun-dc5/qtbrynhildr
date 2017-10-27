@@ -25,7 +25,6 @@
 #if QTB_DESKTOPWINDOW
 #include <QScrollArea>
 #else // QTB_DESKTOPWINDOW
-#include <QGraphicsProxyWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #endif // QTB_DESKTOPWINDOW

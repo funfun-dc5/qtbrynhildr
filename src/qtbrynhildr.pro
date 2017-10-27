@@ -214,10 +214,10 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 
 # for new feature
-NEW_FEATURE = ON
+NEW_FEATURE = OFF
 equals(NEW_FEATURE, ON){
-HEADERS += mainwindow/touchwindow.h
-SOURCES += mainwindow/touchwindow.cpp
+HEADERS += mainwindow/touchwindow.h mainwindow/desktopimage.h
+SOURCES += mainwindow/touchwindow.cpp mainwindow/desktopimage.cpp
 DEFINES += QTB_DESKTOPWINDOW=0
 }
 else {

@@ -25,8 +25,6 @@
 #if QTB_DESKTOPWINDOW
 #include <QScrollArea>
 #else // QTB_DESKTOPWINDOW
-#include <QGraphicsProxyWidget>
-#include <QGraphicsScene>
 #include <QGraphicsView>
 #endif // QTB_DESKTOPWINDOW
 #include <QShowEvent>
@@ -51,8 +49,7 @@
 #if QTB_DESKTOPWINDOW
 #include "mainwindow/desktopwindow.h"
 #else // QTB_DESKTOPWINDOW
-#include "mainwindow/touchwindow.h"
-#include "mainwindow/graphicsview.h"
+//#include "mainwindow/touchwindow.h"
 #endif // QTB_DESKTOPWINDOW
 #include "option.h"
 #if QTB_RECORDER
@@ -112,8 +109,8 @@ public:
   // destructor
   ~QtBrynhildr();
 
-  // get main window
-  MainWindow *getMainWindow() const;
+  // get desktop window
+  DesktopWindow *getDesktopWindow() const;
 
   // shutdown flag
   bool getShutdownFlag() const;
@@ -455,11 +452,10 @@ private:
   // scroll area
   QScrollArea *scrollArea;
 #else // QTB_DESKTOPWINDOW
-  QGraphicsScene *scene;
-  GraphicsView *view;
+  QGraphicsView *graphicsView;
 #endif // QTB_DESKTOPWINDOW
-  // main window
-  MainWindow *mainWindow;
+  // desktop window
+  DesktopWindow *desktopWindow;
 
   // connection label
   QLabel *connectionLabel;

@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -11,10 +11,8 @@
 
 // Qt Header
 #include <QDateTime>
-#include <QGraphicsItem>
 #include <QKeyEvent>
 #include <QMimeData>
-#include <QPainter>
 #include <QPoint>
 #include <QSize>
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -27,28 +25,23 @@
 #if 1 // for qDebug()
 #include <QtCore>
 #endif
-#include <QVBoxLayout>
 
 // Local Header
 #include "config.h"
 #if defined(QTB_NET_UNIX)
 #include "dialog/desktop_scaling_dialog.h"
 #endif // defined(QTB_NET_UNIX)
-#include "mainwindow/touchwindow.h"
+#include "mainwindow/desktoppanel.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
 
 namespace qtbrynhildr {
 
 // constructor
-MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
+DesktopPanel::DesktopPanel(Settings *settings, QtBrynhildr *qtbrynhildr)
   :
-  QWidget(qtbrynhildr),
   qtbrynhildr(qtbrynhildr),
   settings(settings),
-  scene(0),
-  view(0),
-  desktopImage(0),
   eventConverter(0),
   onShiftKey(false),
   heightOfMenuBar(0),
@@ -63,14 +56,8 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
   // for DEBUG
   outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
   outputLogForMouse(QTB_DEBUG_MOUSE),
-  outputLog(true)
+  outputLog(false)
 {
-  // setting main window
-  //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  setFocusPolicy(Qt::StrongFocus);
-  setMouseTracking(true); // mouse tracking mode on
-
   // create keyboard buffer
   keyBuffer = new KeyBuffer(QTB_KEYBOARD_BUFFER_SIZE);
 
@@ -79,36 +66,15 @@ MainWindow::MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr)
 
   // open keyboard log file
   openKeyboardLogFile(settings->getKeyboardLogFile());
-
-  // create touch window
-
-  // create desktop image
-  desktopImage = new DesktopImage();
-
-  // create scene
-  scene = new QGraphicsScene(this);
-  scene->addItem(desktopImage);
-
-  // create view
-  view = new GraphicsView(scene, this);
-  //  qDebug() << "view->size() = " << view->size();
-
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(view);
-  setLayout(layout);
 }
 
 // destructor
-MainWindow::~MainWindow()
+DesktopPanel::~DesktopPanel()
 {
   // close keyboard log file
   closeKeyboardLogFile();
 
   // delete objects
-  if (scene != 0){
-	delete scene;
-	scene = 0;
-  }
   if (keyBuffer != 0){
 	delete keyBuffer;
 	keyBuffer = 0;
@@ -120,25 +86,25 @@ MainWindow::~MainWindow()
 }
 
 // set event converter
-void MainWindow::setEventConverter(EventConverter *eventConverter)
+void DesktopPanel::setEventConverter(EventConverter *eventConverter)
 {
   this->eventConverter = eventConverter;
 }
 
 // get keyboard buffer
-KeyBuffer *MainWindow::getKeyBuffer() const
+KeyBuffer *DesktopPanel::getKeyBuffer() const
 {
   return keyBuffer;
 }
 
 // get mouse buffer
-MouseBuffer *MainWindow::getMouseBuffer() const
+MouseBuffer *DesktopPanel::getMouseBuffer() const
 {
   return mouseBuffer;
 }
 
 // reflesh desktop window
-void MainWindow::refreshDesktop(QImage image)
+void DesktopPanel::refreshDesktop(QImage image)
 {
   // return if not initialized
   if (image.isNull()){
@@ -189,13 +155,32 @@ void MainWindow::refreshDesktop(QImage image)
 		// scale
 		currentSize = currentSize * scalingFactor;
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){
 		settings->setDesktopScalingFactor(scalingFactor);
 	  }
 	}
+#if 0
+	else { // DESKTOPSCALING_TYPE_ON_SERVER
+	  if (settings->getDesktopScalingFactor() > 1.0){
+		// scale
+		currentSize = currentSize * settings->getDesktopScalingFactor();
+		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+	  }
+	}
+#endif
   }
+
+#if 0 // QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // desktop compress mode
+  if (settings->getDesktopCompressMode() > 1){
+	currentSize = currentSize * settings->getDesktopCompressMode();
+	image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+  }
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
   // capture desktop image
   if (QTB_DESKTOP_IMAGE_CAPTURE){
@@ -214,8 +199,8 @@ void MainWindow::refreshDesktop(QImage image)
 	}
   }
 
-  desktopImage->setImage(image);
-  //  scene->setSceneRect(0, 0, image.width(), image.height());
+  // copy QImage
+  this->image = image;
 
   // resize window
   if (previousSize != currentSize){
@@ -226,7 +211,7 @@ void MainWindow::refreshDesktop(QImage image)
 #endif
 	previousSize = currentSize;
 	// resize main window
-	resize(currentSize.width(), currentSize.height());
+	resizeDesktop(currentSize.width(), currentSize.height());
 
 	resizeWindow();
   }
@@ -236,16 +221,13 @@ void MainWindow::refreshDesktop(QImage image)
 	resizeWindow();
   }
   else {
-	// refresh image
-	update();
+	// update image
+	updateDesktop();
   }
-  view->setSceneRect(scene->itemsBoundingRect());
-  qDebug() << "view->size() = " << view->size();
-  qDebug() << "view->sceneRect() = " << view->sceneRect();
 }
 
 // resize window
-void MainWindow::resizeWindow()
+void DesktopPanel::resizeWindow()
 {
   // check size
   if (!currentSize.isValid()){
@@ -258,8 +240,13 @@ void MainWindow::resizeWindow()
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
 	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
-		int width = currentSize.width() + settings->getDesktop()->getCorrectWindowWidth();
-		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar() + settings->getDesktop()->getCorrectWindowHeight();
+		int width = currentSize.width();
+		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar();
+#if !QTB_DESKTOPPANEL
+		// correct
+		width  += settings->getDesktop()->getCorrectWindowWidth();
+		height += settings->getDesktop()->getCorrectWindowHeight();
+#endif // QTB_DESKTOPPANEL
 
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
 		if (width > screenSize.width()){
@@ -269,43 +256,45 @@ void MainWindow::resizeWindow()
 		  height = screenSize.height();
 		}
 
-#if 0 // for TEST
-		qDebug() << "currentSize = " << currentSize;
-		qDebug() << "screenSize = " << screenSize;
-		cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush; // for DEBUG
-#endif
 		// resize
 		qtbrynhildr->resize(width, height);
 
-		// refresh image
-		update();
+		// update image
+		updateDesktop();
 	  }
 	}
   }
 }
 
 // clear desktop window
-void MainWindow::clearDesktop()
+void DesktopPanel::clearDesktop()
 {
-  QImage image(currentSize, QImage::Format_RGB32);
-  image.fill(Qt::gray);
-  refreshDesktop(image);
+  //  cout << "clearDesktop()" << endl << flush;
+#if 0 // for TEST
+  if (settings->getConnected()){
+	return;
+  }
+#endif
+  if (!image.isNull()){
+	image.fill(Qt::gray);
+	updateDesktop();
+  }
 }
 
 // get window size
-QSize MainWindow::getSize() const
+QSize DesktopPanel::getSize() const
 {
   return currentSize;
 }
 
 // get window size
-QSize MainWindow::getDesktopSize() const
+QSize DesktopPanel::getDesktopSize() const
 {
   return desktopSize;
 }
 
 // set full screen flag
-void MainWindow::setOnFullScreen(bool onFullScreen)
+void DesktopPanel::setOnFullScreen(bool onFullScreen)
 {
   if (QTB_DESKTOP_FULL_SCREEN){
 	this->onFullScreen = onFullScreen;
@@ -313,9 +302,10 @@ void MainWindow::setOnFullScreen(bool onFullScreen)
 }
 
 // event handler
+
 #if defined(QTB_DEV_TOUCHPANEL)
 // event
-bool MainWindow::event(QEvent *event)
+bool DesktopPanel::event(QEvent *event)
 {
   switch(event->type()){
   case QEvent::TouchBegin:
@@ -325,13 +315,21 @@ bool MainWindow::event(QEvent *event)
 	  QTouchEvent *touchEvent = (QTouchEvent *)(event);
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
 	  if (touchPoints.count() == 1){
-		// 1 finger
+		// 1 - finger action
+		//  1) tap        : move mouse cursor and push left button
+		//  2) double tap : -- ( -> move mouse cursor and push right button)
+		//  3) drag       : push right button and move mouse cursor (at origianl scale)
+		//                : move viewport (at NOT origianl scale)
+		//  4) flick      : push right button and move mouse cursor (at origianl scale)
+		//                : move viewport (at NOT origianl scale)
+		//  5) long tap   : --
 	  }
 	  else if (touchPoints.count() == 2){
-		// 2 finger
+		// 2 - finger action
+		//  1) pinch in/out : scaling
 	  }
 	}
-	return true;
+	//	return true;
   default:
 	break;
   }
@@ -340,28 +338,12 @@ bool MainWindow::event(QEvent *event)
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-// paint event
-void MainWindow::paintEvent(QPaintEvent *event)
-{
-  Q_UNUSED(event);
-}
-
-// widget leave event
-void MainWindow::leaveEvent(QEvent *event)
-{
-  Q_UNUSED(event);
-
-  if (settings->getOnClipCursor()){
-	QCursor::setPos(mapToGlobal(currentMousePos));
-  }
-}
-
 //----------------------------------------------------------------------
 // mouse events
 //----------------------------------------------------------------------
 
 // print mouse button event
-void MainWindow::printMouseButtonEvent(QMouseEvent *event)
+void DesktopPanel::printMouseButtonEvent(QMouseEvent *event)
 {
   switch (event->button()){
   case Qt::LeftButton:
@@ -388,7 +370,7 @@ void MainWindow::printMouseButtonEvent(QMouseEvent *event)
 }
 
 // set mouse button event
-void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
+void DesktopPanel::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
 {
   switch (event->button()){
   case Qt::LeftButton:
@@ -415,10 +397,10 @@ void MainWindow::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
 }
 
 // mouse press event
-void MainWindow::mousePressEvent(QMouseEvent *event)
+void DesktopPanel::mousePressEvent(QMouseEvent *event)
 {
   if (outputLogForMouse){
-	cout << "[MainWindow] mousePressEvent: ";
+	cout << "[DesktopPanel] mousePressEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -447,11 +429,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 }
 
 // mouse release event
-void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[MainWindow] mouseReleaseEvent: ";
+	cout << "[DesktopPanel] mouseReleaseEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -485,11 +467,11 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 }
 
 // mouse double click event
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
+void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[MainWindow] mouseDoubleClickEvent: ";
+	cout << "[DesktopPanel] mouseDoubleClickEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -510,13 +492,13 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 // mouse wheel event
-void MainWindow::wheelEvent(QWheelEvent *event)
+void DesktopPanel::wheelEvent(QWheelEvent *event)
 {
   int degrees = event->delta() / 8;
   // for DEBUG
   if (outputLogForMouse){
 	int ticks = degrees/15;
-	cout << "[MainWindow] wheelEvent: " << degrees << "(ticks = " << ticks << ")"; // for DEBUG
+	cout << "[DesktopPanel] wheelEvent: " << degrees << "(ticks = " << ticks << ")"; // for DEBUG
   }
 
   if (settings->getConnected() &&
@@ -536,11 +518,11 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 }
 
 // mouse move event
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
+void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-    cout << "[MainWindow] mouseMoveEvent: (x, y) = (" <<
+    cout << "[DesktopPanel] mouseMoveEvent: (x, y) = (" <<
 	  event->pos().x() << "," << event->pos().y() << ")" << endl << flush; // for DEBUG
   }
 
@@ -556,7 +538,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 	  //qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 	  // set cursor point color to control thread
-	  qtbrynhildr->setCursorPointColor(desktopImage->getColor(currentMousePos));
+	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
 #endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
 	}
   }
@@ -567,7 +549,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 //----------------------------------------------------------------------
 
 // key press event
-void MainWindow::keyPressEvent(QKeyEvent *event)
+void DesktopPanel::keyPressEvent(QKeyEvent *event)
 {
   // check event converter
   if (eventConverter == 0){
@@ -590,7 +572,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
   // get VK_Code from Key_*
   uchar VK_Code = eventConverter->getVKCode(event);
   if (outputLogForKeyboard){
-	qDebug() << "[MainWindow]" << eventConverter->getEventConverterName() << // for DEBUG
+	qDebug() << "[DesktopPanel]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Press   : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
 	  ":" << hex << VK_Code;
   }
@@ -643,7 +625,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 }
 
 // key release event
-void MainWindow::keyReleaseEvent(QKeyEvent *event)
+void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 {
   // check event converter
   if (eventConverter == 0){
@@ -661,7 +643,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
   // get VK_Code from Key_*
   uchar VK_Code = eventConverter->getVKCode(event);
   if (outputLogForKeyboard){
-	qDebug() << "[MainWindow]" << eventConverter->getEventConverterName() << // for DEBUG
+	qDebug() << "[DesktopPanel]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Release : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
 	  ":" << hex << VK_Code;
   }
@@ -731,7 +713,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 // drag and drop events
 //----------------------------------------------------------------------
 // drag enter event
-void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+void DesktopPanel::dragEnterEvent(QDragEnterEvent *event)
 {
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
@@ -743,7 +725,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 }
 
 // drop event
-void MainWindow::dropEvent(QDropEvent *event)
+void DesktopPanel::dropEvent(QDropEvent *event)
 {
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
@@ -773,7 +755,7 @@ void MainWindow::dropEvent(QDropEvent *event)
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
 // scroll area
-bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)
+bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
 {
   bool result = false;
 
@@ -824,7 +806,7 @@ bool MainWindow::scrollArea(uchar VK_Code, bool onKeyPress)
 }
 
 // get desktop scaling factor
-qreal MainWindow::getDesktopScalingFactor(QSize size)
+qreal DesktopPanel::getDesktopScalingFactor(QSize size)
 {
   Q_UNUSED(size);
 
@@ -834,7 +816,7 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 	unsigned long maxImageDataSize = settings->getDesktop()->getMaxImageDataSize();
 	if (maxImageDataSize == 0){
 	  if (settings->getOutputLog()){
-		cout << "[MainWindow] scaled... maxImageDataSize = " << maxImageDataSize << endl << flush;
+		cout << "[DesktopPanel] scaled... maxImageDataSize = " << maxImageDataSize << endl << flush;
 	  }
 	  return scalingFactor;
 	}
@@ -864,8 +846,8 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
 		else {
 		  // Can't shmget() in QXcbShmImage::QXcbShmImage() in qxcbbackingstore.cpp
 		  if (settings->getOutputLog()){
-			cout << "[MainWindow] Can't scale... imageDataSize    = " << imageDataSize << endl;
-			cout << "[MainWindow] Can't scale... maxImageDataSize = " << maxImageDataSize << endl << flush;
+			cout << "[DesktopPanel] Can't scale... imageDataSize    = " << imageDataSize << endl;
+			cout << "[DesktopPanel] Can't scale... maxImageDataSize = " << maxImageDataSize << endl << flush;
 		  }
 		  // scale down
 		  scalingFactor -= unitFactor;
@@ -887,174 +869,11 @@ qreal MainWindow::getDesktopScalingFactor(QSize size)
   return scalingFactor;
 }
 
-// minimum size hint
-QSize MainWindow::minimumSizeHint() const
-{
-  return currentSize;
-}
-
-// size hint
-QSize MainWindow::sizeHint() const
-{
-  return currentSize;
-}
-
-//----------------------------------------------------------------------
-// native event filter
-//----------------------------------------------------------------------
-#if defined(Q_OS_WIN)
-bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
-{
-  Q_UNUSED(result);
-
-  if (!(settings->getConnected()) ||
-	  !(settings->getOnControl())){
-	return false;
-  }
-  if (eventType == "windows_generic_MSG"){
-	MSG *msg = static_cast<MSG *>(message);
-	// KEY
-	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
-	  // send All key event in nativeEventFilter
-	  if (msg->message == WM_KEYDOWN){
-#if 0 // for TEST
-		// VK_LXXXX/RXXXX -> VK_XXXX
-		switch(msg->wParam){
-		case VK_LSHIFT:
-		case VK_RSHIFT:
-		  msg->wParam = VK_SHIFT;
-		  break;
-		case VK_LCONTROL:
-		case VK_RCONTROL:
-		  msg->wParam = VK_CONTROL;
-		  break;
-		case VK_LMENU:
-		case VK_RMENU:
-		  msg->wParam = VK_MENU;
-		  break;
-		}
-#endif // for TEST
-		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
-		return true;
-	  }
-	  else if (msg->message == WM_KEYUP){
-#if 0 // for TEST
-		// VK_LXXXX/RXXXX -> VK_XXXX
-		switch(msg->wParam){
-		case VK_LSHIFT:
-		case VK_RSHIFT:
-		  msg->wParam = VK_SHIFT;
-		  break;
-		case VK_LCONTROL:
-		case VK_RCONTROL:
-		  msg->wParam = VK_CONTROL;
-		  break;
-		case VK_LMENU:
-		case VK_RMENU:
-		  msg->wParam = VK_MENU;
-		  break;
-		}
-#endif // for TEST
-		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
-		return true;
-	  }
-	  // NOTE: never fall through
-	}
-
-	// except for KEYBOARD_TYPE_NATIVE
-	if (msg->message == WM_KEYDOWN){
-	  switch(msg->wParam){
-	  case VK_OEM_AUTO:
-	  case VK_OEM_ENLW:
-		//		cout << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
-		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYDOWN);
-		return true;
-		break;
-	  case VK_CONVERT:
-	  case VK_NONCONVERT:
-	  case VK_OEM_ATTN:
-	  case 229:
-		//		cout << "[MainWindow] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
-		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
-		return true;
-		break;
-	  default:
-		return false;
-		break;
-	  }
-	}
-	else if (msg->message == WM_KEYUP){
-	  switch(msg->wParam){
-	  case VK_OEM_AUTO:
-	  case VK_OEM_ENLW:
-		//		cout << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
-		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYUP);
-		return true;
-		break;
-	  case VK_CONVERT:
-	  case VK_NONCONVERT:
-	  case VK_OEM_ATTN:
-		//		cout << "[MainWindow] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
-		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
-		return true;
-		break;
-	  default:
-		return false;
-		break;
-	  }
-	}
-	// SYSKEY
-	else if (msg->message == WM_SYSKEYDOWN){
-	  switch(msg->wParam){
-	  case VK_MENU:
-		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
-		return true;
-		break;
-	  default:
-		return false;
-		break;
-	  }
-	}
-	else if (msg->message == WM_SYSKEYUP){
-	  switch(msg->wParam){
-	  case VK_MENU:
-		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
-		return true;
-		break;
-	  default:
-		return false;
-		break;
-	  }
-	}
-  }
-  return false;
-}
-#endif // defined(Q_OS_WIN)
-
-#if 0 // for TEST
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-// for X11
-#include <xcb/xcb.h>
-
-bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
-{
-  if (!(settings->getConnected()) ||
-	  !(settings->getOnControl())){
-	return false;
-  }
-  if (eventType == "xcb_generic_event_t"){
-	xcb_generic_event_t *ev = static_cast<xcb_generic_event_t *>(message);
-  }
-  return false;
-}
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-#endif
-
 //----------------------------------------------------------------------
 // keyboard log file
 //----------------------------------------------------------------------
 // open keyboard log file
-bool MainWindow::openKeyboardLogFile(QString filename)
+bool DesktopPanel::openKeyboardLogFile(QString filename)
 {
   if (keyboardLogFile != 0)
 	return false;
@@ -1074,7 +893,7 @@ bool MainWindow::openKeyboardLogFile(QString filename)
 }
 
 // close keyboard log file
-bool MainWindow::closeKeyboardLogFile()
+bool DesktopPanel::closeKeyboardLogFile()
 {
   if (keyboardLogFile == 0)
 	return false;

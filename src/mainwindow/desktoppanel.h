@@ -1,12 +1,10 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef DESKTOPWINDOW_H
-#define DESKTOPWINDOW_H
+#ifndef DESKTOPPANEL_H
+#define DESKTOPPANEL_H
 // Common Header
 #include "common/common.h"
-
-// System Header
 
 // Qt Header
 #if defined(Q_OS_WIN)
@@ -17,7 +15,6 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #endif // QTB_DRAG_AND_DROP_SUPPORT
-#include <QGraphicsScene>
 #include <QImage>
 #include <QKeyEvent>
 #include <QLabel>
@@ -32,30 +29,22 @@
 // Local Header
 #include "control/keybuffer.h"
 #include "control/mousebuffer.h"
-#include "mainwindow/desktopimage.h"
-#include "mainwindow/graphicsview.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
-
 
 namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-// MainWindow
-#if defined(Q_OS_WIN)
-class MainWindow : public QWidget, public QAbstractNativeEventFilter
-#else // defined(Q_OS_WIN)
-class MainWindow : public QWidget
-#endif // defined(Q_OS_WIN)
+// DesktopPanel
+class DesktopPanel
 {
-  Q_OBJECT
-
 public:
   // constructor
-  MainWindow(Settings *settings, QtBrynhildr *qtbrynhildr);
+  DesktopPanel(Settings *settings, QtBrynhildr *qtbrynhildr);
   // destructor
-  ~MainWindow();
+  ~DesktopPanel();
+
   // set event converter
   void setEventConverter(EventConverter *eventConverter);
 
@@ -101,10 +90,11 @@ public:
 	this->drawMarkerCounter = drawMarkerCounter;
   }
 
-  // minimum size hint
-  QSize minimumSizeHint() const;
-  // size hint
-  QSize sizeHint() const;
+  // resize desktop
+  virtual void resizeDesktop(int width, int height) = 0;
+
+  // update desktop
+  virtual void updateDesktop() = 0;
 
 protected:
   // for event handling
@@ -112,12 +102,6 @@ protected:
   // event
   bool event(QEvent *event);
 #endif // defined(QTB_DEV_TOUCHPANEL)
-
-  // window event
-  void paintEvent(QPaintEvent *event);
-
-  // widget leave event
-  void leaveEvent(QEvent *event);
 
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
@@ -137,11 +121,6 @@ protected:
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
 private:
-#if defined(Q_OS_WIN)
-  // native event filter
-  bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
-#endif // defined(Q_OS_WIN)
-
   // open keyboard log file
   bool openKeyboardLogFile(QString filename);
 
@@ -172,21 +151,15 @@ private:
 	return heightOfStatusBar;
   }
 
-private:
+protected:
   // qtbrynhildr
   QtBrynhildr *qtbrynhildr;
 
   // settings
   Settings *settings;
 
-  // scene
-  QGraphicsScene *scene;
-
-  // view
-  GraphicsView *view;
-
-  // desktop image
-  DesktopImage *desktopImage;
+  // image
+  QImage image;
 
   // window size
   QSize currentSize;
@@ -247,4 +220,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // DESKTOPWINDOW_H
+#endif // DESKTOPPANEL_H

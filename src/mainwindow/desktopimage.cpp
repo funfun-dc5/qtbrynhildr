@@ -14,8 +14,10 @@
 namespace qtbrynhildr {
 
 // constructor
-DesktopImage::DesktopImage()
+DesktopImage::DesktopImage(Settings *settings, QtBrynhildr *qtbrynhildr, QGraphicsItem *parent)
   :
+  DesktopWindow(settings, qtbrynhildr),
+  QGraphicsObject(parent),
   // for DEBUG
   outputLog(true)
 {
@@ -26,25 +28,9 @@ DesktopImage::~DesktopImage()
 {
 }
 
-// set image
-void DesktopImage::setImage(QImage image)
-{
-  //  cout << "enter setImage()" << endl << flush;
-  // copy
-  this->image = image;
-
-  //  cout << "leave setImage()" << endl << flush;
-}
-
-// get color
-QRgb DesktopImage::getColor(QPoint pos)
-{
-  return image.pixel(pos);
-}
-
 QRectF DesktopImage::boundingRect() const
 {
-  return QRectF(-image.width()/2, -image.height()/2, image.width(), image.height());
+  return QRectF(0,0,0,0);
 }
 
 #if 0
@@ -65,29 +51,7 @@ void DesktopImage::paint(QPainter *painter, const QStyleOptionGraphicsItem *item
 {
   //  cout << "enter paint()" << endl << flush;
 
-  if (image.isNull()){
-	//	cout << "return paint() : image is null" << endl << flush;
-	return;
-  }
-
-  painter->drawImage(-image.width()/2, -image.height()/2, image);
-
   //  cout << "leave paint()" << endl << flush;
-}
-
-void DesktopImage::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-  cout << "mousePressEvent" << endl << flush;
-}
-
-void DesktopImage::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-  cout << "mouseReleaseEvent" << endl << flush;
-}
-
-void DesktopImage::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-  cout << "mouseMoveEvent" << endl << flush;
 }
 
 } // end of namespace qtbrynhildr

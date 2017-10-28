@@ -69,18 +69,6 @@ public:
   // get desktop window size
   QSize getDesktopSize() const;
 
-  // set height of menu bar
-  void setHeightOfMenuBar(int heightOfMenuBar)
-  {
-	this->heightOfMenuBar = heightOfMenuBar;
-  }
-
-  // height of status bar
-  void setHeightOfStatusBar(int heightOfStatusBar)
-  {
-	this->heightOfStatusBar = heightOfStatusBar;
-  }
-
   // set full screen flag
   void setOnFullScreen(bool onFullScreen);
 
@@ -139,31 +127,6 @@ private:
   // get desktop scaling factor
   qreal getDesktopScalingFactor(QSize targetSize);
 
-  // get height of menu bar
-  int getHeightOfMenuBar()
-  {
-	if (heightOfMenuBar == 0)
-	  return 0;
-
-	if (settings->getOnShowMenuBar()){
-	  return heightOfMenuBar;
-	}
-	else {
-	  return heightOfMenuBarInHiding;
-	}
-  }
-
-  // get height of status bar
-  int getHeightOfStatusBar()
-  {
-	if (settings->getOnShowStatusBar()){
-	  return heightOfStatusBar;
-	}
-	else {
-	  return heightOfStatusBarInHiding;
-	}
-  }
-
 protected:
   // qtbrynhildr
   QtBrynhildr *qtbrynhildr;
@@ -197,18 +160,6 @@ protected:
 
   // current mouse position
   QPoint currentMousePos;
-
-  // height of menu bar in hiding
-  int heightOfMenuBarInHiding;
-
-  // height of status bar in hiding
-  int heightOfStatusBarInHiding;
-
-  // height of menu bar
-  int heightOfMenuBar;
-
-  // height of status bar
-  int heightOfStatusBar;
 
   // full screen flag
   bool onFullScreen;

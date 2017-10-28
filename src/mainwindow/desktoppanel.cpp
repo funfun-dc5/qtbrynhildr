@@ -44,10 +44,6 @@ DesktopPanel::DesktopPanel(Settings *settings, QtBrynhildr *qtbrynhildr)
   settings(settings),
   eventConverter(0),
   onShiftKey(false),
-  heightOfMenuBarInHiding(0),
-  heightOfStatusBarInHiding(0),
-  heightOfMenuBar(0),
-  heightOfStatusBar(0),
   onFullScreen(false),
   drawMarkerCounter(0),
 #if defined(Q_OS_OSX)
@@ -68,10 +64,6 @@ DesktopPanel::DesktopPanel(Settings *settings, QtBrynhildr *qtbrynhildr)
 
   // open keyboard log file
   openKeyboardLogFile(settings->getKeyboardLogFile());
-
-  // get window information
-  heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
-  heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
 }
 
 // destructor
@@ -247,7 +239,7 @@ void DesktopPanel::resizeWindow()
 	if (!onFullScreen){
 	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
 		int width = currentSize.width();
-		int height = currentSize.height() + getHeightOfMenuBar() + getHeightOfStatusBar();
+		int height = currentSize.height() + qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar();
 #if QTB_DESKTOPWINDOW
 		// correct
 		width  += settings->getDesktop()->getCorrectWindowWidth();

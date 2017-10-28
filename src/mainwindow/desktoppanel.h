@@ -142,13 +142,26 @@ private:
   // get height of menu bar
   int getHeightOfMenuBar()
   {
-	return heightOfMenuBar;
+	if (heightOfMenuBar == 0)
+	  return 0;
+
+	if (settings->getOnShowMenuBar()){
+	  return heightOfMenuBar;
+	}
+	else {
+	  return heightOfMenuBarInHiding;
+	}
   }
 
   // get height of status bar
   int getHeightOfStatusBar()
   {
-	return heightOfStatusBar;
+	if (settings->getOnShowStatusBar()){
+	  return heightOfStatusBar;
+	}
+	else {
+	  return heightOfStatusBarInHiding;
+	}
   }
 
 protected:
@@ -184,6 +197,12 @@ protected:
 
   // current mouse position
   QPoint currentMousePos;
+
+  // height of menu bar in hiding
+  int heightOfMenuBarInHiding;
+
+  // height of status bar in hiding
+  int heightOfStatusBarInHiding;
 
   // height of menu bar
   int heightOfMenuBar;

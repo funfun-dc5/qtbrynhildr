@@ -35,12 +35,12 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 #if QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow, Recorder *recorder)
+ControlThread::ControlThread(Settings *settings, DesktopWindow *desktopWindow, Recorder *recorder)
 #else  // QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
+ControlThread::ControlThread(Settings *settings, DesktopWindow *desktopWindow)
 #endif // QTB_RECORDER
   :
-  NetThread("ControlThread", settings, mainWindow),
+  NetThread("ControlThread", settings, desktopWindow),
   serverVersion(SERVER_VERSION_BRYNHILDR2),
   currentMode(0),
   keyBuffer(0),
@@ -54,10 +54,10 @@ ControlThread::ControlThread(Settings *settings, MainWindow *mainWindow)
   outputLog = false; // for DEBUG
 
   // keyboard buffer
-  keyBuffer = mainWindow->getKeyBuffer();
+  keyBuffer = desktopWindow->getKeyBuffer();
 
   // mouse buffer
-  mouseBuffer = mainWindow->getMouseBuffer();
+  mouseBuffer = desktopWindow->getMouseBuffer();
 
   // initialize key and mouse information
   keydownSHIFT	= KEYDOWN_OFF;
@@ -213,8 +213,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  // set information
 	  com_data->mouse_move = MOUSE_MOVE_ON;
 	  if (QTB_DESKTOP_IMAGE_SCALING){
-		QSize windowSize = mainWindow->getSize();
-		QSize desktopSize = mainWindow->getDesktopSize();
+		QSize windowSize = desktopWindow->getSize();
+		QSize desktopSize = desktopWindow->getDesktopSize();
 		if (windowSize.width() < 0 || windowSize.height() < 0 ||
 			desktopSize.width() < 0 || desktopSize.height() < 0){
 		  // Nothing to do
@@ -710,9 +710,21 @@ void ControlThread::initHeader()
   com_data->zoom			= (ZOOM)1.0;
   if (settings->getOnGraphics()){
 	// Graphics ON
+	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
+	com_data->image_cy			= (SIZE)settings->getDesktopHeight();
+	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
+	com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
+	com_data->video_quality		= settings->getVideoQuality();
+	// scaling
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-	  if (settings->getDesktopScalingFactor() != 1.0){
+	  if (settings->getDesktopScalingFactor() <= 1.0){
+		// scale down
 		com_data->zoom	= (ZOOM)settings->getDesktopScalingFactorForZoom();
+	  }
+	  else {
+		// scale up
+		com_data->image_cx *= settings->getDesktopScalingFactorForZoom();
+		com_data->image_cy *= settings->getDesktopScalingFactorForZoom();
 	  }
 	}
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
@@ -720,12 +732,6 @@ void ControlThread::initHeader()
 	if (settings->getDesktopCompressMode() > 1)
 	  com_data->zoom *= settings->getDesktopCompressMode();
 #endif // QTB_DESKTOP_COMPRESS_MODE
-
-	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
-	com_data->image_cy			= (SIZE)settings->getDesktopHeight();
-	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
-	com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
-	com_data->video_quality		= settings->getVideoQuality();
   }
   else {
 	// Graphics OFF

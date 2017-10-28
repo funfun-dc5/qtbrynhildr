@@ -16,41 +16,30 @@
 #include <QRgb>
 
 // Local Header
+#include "mainwindow/desktopwindow.h"
 
 
 namespace qtbrynhildr {
 
 // DesktopImage
-class DesktopImage : public QGraphicsObject
+  class DesktopImage : public DesktopWindow, public QGraphicsObject
 {
   Q_OBJECT
 
 public:
   // constructor
-  DesktopImage();
+  DesktopImage(Settings *settings, QtBrynhildr *qtbrynhildr, QGraphicsItem *parent = Q_NULLPTR);
   // destructor
   ~DesktopImage();
 
   QRectF boundingRect() const override;
-  //  QRectF sceneBoundingRect() const;
-  //  QPainterPath shape() const override;
+#if 0
+  QRectF sceneBoundingRect() const;
+  QPainterPath shape() const override;
+#endif
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
 
-  // set image
-  void setImage(QImage image);
-
-  // get color
-  QRgb getColor(QPoint pos);
-
-protected:
-  void mousePressEvent(QGraphicsSceneMouseEvent *event);
-  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-
 private:
-  // desktop image
-  QImage image;
-
   // output log flag
   bool outputLog;
 };

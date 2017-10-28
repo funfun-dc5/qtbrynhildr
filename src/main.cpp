@@ -117,11 +117,11 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_WIN)
   // install native event filter
-  app.installNativeEventFilter(qtbrynhildr->getMainWindow());
+  app.installNativeEventFilter(qtbrynhildr->getDesktopWindow());
 #endif // defined(Q_OS_WIN)
 
   // set attribute
-#if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // defined(QTB_DEV_TOUCHPANEL) // 0 for TEST
   app.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents, false);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

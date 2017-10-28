@@ -216,12 +216,12 @@ SOURCES += function/recorder.cpp
 # for new feature
 NEW_FEATURE = OFF
 equals(NEW_FEATURE, ON){
-HEADERS += mainwindow/desktopwindow.h
-SOURCES += mainwindow/desktopwindow.cpp
+HEADERS += mainwindow/desktoppanelobject.h
+SOURCES += mainwindow/desktoppanelobject.cpp
 DEFINES += QTB_DESKTOPWINDOW=0
 }
 else {
-HEADERS += mainwindow/desktopwindow.h
-SOURCES += mainwindow/desktopwindow.cpp
+HEADERS += mainwindow/desktopwindow.h mainwindow/desktoppanel.h
+SOURCES += mainwindow/desktopwindow.cpp mainwindow/desktoppanel.cpp
 DEFINES += QTB_DESKTOPWINDOW=1
 }

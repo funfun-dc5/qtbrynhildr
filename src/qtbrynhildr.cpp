@@ -564,8 +564,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "statusBar height = " + QString::number(heightOfStatusBar));
   }
-  desktopWindow->setHeightOfMenuBar(heightOfMenuBar);
-  desktopWindow->setHeightOfStatusBar(heightOfStatusBar);
   heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
   heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
 

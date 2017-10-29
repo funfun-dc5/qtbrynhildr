@@ -721,11 +721,13 @@ void ControlThread::initHeader()
 		// scale down
 		com_data->zoom	= (ZOOM)settings->getDesktopScalingFactorForZoom();
 	  }
+#if defined(QTB_DEV_TOUCHPANEL)
 	  else {
 		// scale up
 		com_data->image_cx *= settings->getDesktopScalingFactorForZoom();
 		com_data->image_cy *= settings->getDesktopScalingFactorForZoom();
 	  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
 	}
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
 	// desktop compress mode

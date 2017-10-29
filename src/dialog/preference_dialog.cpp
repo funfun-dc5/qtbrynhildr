@@ -127,6 +127,10 @@ void PreferenceDialog::getFromSettings()
   checkBox_onCheckUpdateAtBootup->
 	setCheckState(settings->getOnCheckUpdateAtBootup() ? Qt::Checked : Qt::Unchecked);
 
+  // desktopScalingType
+  checkBox_desktopScalingType->
+	setCheckState(settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER ? Qt::Checked : Qt::Unchecked);
+
   // serverNameListSize
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());
 
@@ -220,6 +224,11 @@ bool PreferenceDialog::setToSettings()
   // onCheckUpdateAtBootup
   settings->
 	setOnCheckUpdateAtBootup(checkBox_onCheckUpdateAtBootup->checkState() == Qt::Checked);
+
+  // desktopScalingType
+  settings->
+	setDesktopScalingType(checkBox_desktopScalingType->checkState() == Qt::Checked ?
+						  DESKTOPSCALING_TYPE_ON_SERVER : DESKTOPSCALING_TYPE_ON_CLIENT);
 
   // serverNameListSize
   settings->
@@ -437,6 +446,13 @@ void PreferenceDialog::on_checkBox_onConfirmAtExit_stateChanged(int state)
 }
 
 void PreferenceDialog::on_checkBox_onCheckUpdateAtBootup_stateChanged(int state)
+{
+  Q_UNUSED(state);
+
+  changed = true;
+}
+
+void PreferenceDialog::on_checkBox_desktopScalingType_stateChanged(int state)
 {
   Q_UNUSED(state);
 

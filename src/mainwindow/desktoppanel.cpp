@@ -161,7 +161,7 @@ void DesktopPanel::refreshDesktop(QImage image)
 		settings->setDesktopScalingFactor(scalingFactor);
 	  }
 	}
-#if 0
+#if defined(QTB_DEV_DESKTOP)
 	else { // DESKTOPSCALING_TYPE_ON_SERVER
 	  if (settings->getDesktopScalingFactor() > 1.0){
 		// scale
@@ -169,7 +169,7 @@ void DesktopPanel::refreshDesktop(QImage image)
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 	  }
 	}
-#endif
+#endif // defined(QTB_DEV_DESKTOP)
   }
 
 #if 0 // QTB_DESKTOP_COMPRESS_MODE // for TEST

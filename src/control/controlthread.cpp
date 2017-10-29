@@ -721,7 +721,7 @@ void ControlThread::initHeader()
 		// scale down
 		com_data->zoom	= (ZOOM)settings->getDesktopScalingFactorForZoom();
 	  }
-#if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // defined(QTB_DEV_TOUCHPANEL) // 0 for TEST
 	  else {
 		// scale up
 		com_data->image_cx *= settings->getDesktopScalingFactorForZoom();

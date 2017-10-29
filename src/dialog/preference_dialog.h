@@ -64,6 +64,8 @@ private slots:
 
   void on_checkBox_onCheckUpdateAtBootup_stateChanged(int state);
 
+  void on_checkBox_desktopScalingType_stateChanged(int state);
+
   void on_spinBox_serverNameListSize_valueChanged(int i);
 
   void on_comboBox_convertThreadCount_currentIndexChanged(int index);

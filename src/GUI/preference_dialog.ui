@@ -49,7 +49,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>240</y>
+       <y>330</y>
        <width>451</width>
        <height>22</height>
       </rect>
@@ -157,6 +157,19 @@
        <widget class="QComboBox" name="comboBox_convertThreadCount"/>
       </item>
      </layout>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_desktopScalingType">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>240</y>
+       <width>451</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scale Desktop at Server</string>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_keyboard">
@@ -382,7 +395,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>80</y>
        <width>451</width>
        <height>22</height>
       </rect>
@@ -411,7 +424,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
+       <y>30</y>
        <width>451</width>
        <height>22</height>
       </rect>
@@ -445,7 +458,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>70</y>
+       <y>90</y>
        <width>471</width>
        <height>25</height>
       </rect>
@@ -474,7 +487,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
+       <y>30</y>
        <width>471</width>
        <height>25</height>
       </rect>

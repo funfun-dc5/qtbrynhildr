@@ -30,9 +30,9 @@ namespace qtbrynhildr {
 #if QTB_MULTI_THREAD_CONVERTER
 // for qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
 // parameters
-int width;
-int uvNext;
-int rgb24Next;
+int width = 0;
+int uvNext = 0;
+int rgb24Next = 0;
 
 // qtbrynhhildr::clip() (NOT GraphicsThread::clip())
 // clip
@@ -69,6 +69,13 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopWindow *desktopWindow)
 #endif // USE_PPM_LOADER_FOR_VP8
   rgb24(0),
   doneVpxInit(false),
+  hwidth(0),
+  ytopOrg(0),
+  utopOrg(0),
+  vtopOrg(0),
+  size(0),
+  uvNext(0),
+  rgb24Next(0),
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   buffer(0)
 {
@@ -79,6 +86,11 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopWindow *desktopWindow)
 
   // create image
   image = new QImage();
+
+#if QTB_PUBLIC_MODE7_SUPPORT
+  // foe vpx
+  memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
 // destructor

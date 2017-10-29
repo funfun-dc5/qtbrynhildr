@@ -61,7 +61,10 @@ QSize DesktopWindow::sizeHint() const
 #if defined(QTB_DEV_TOUCHPANEL)
   // event
 bool DesktopWindow::event(QEvent *event){
-  DesktopPanel::event(event);
+  if (DesktopPanel::event(event))
+	return true;
+  else
+	return QWidget::event(event);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

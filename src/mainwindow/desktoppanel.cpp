@@ -327,12 +327,12 @@ bool DesktopPanel::event(QEvent *event)
 		//  1) pinch in/out : scaling
 	  }
 	}
-	//	return true;
+	//return true;
   default:
 	break;
   }
 
-  return QWidget::event(event);
+  return false;
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

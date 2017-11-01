@@ -414,6 +414,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "OS Type    : " + QSysInfo::kernelType());
   // kernel version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "OS Version : " + QSysInfo::kernelVersion());
+  // Qt version
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Qt Version : " + (QString)qVersion());
 
   // current product name
   if (settings->getOutputLog()){

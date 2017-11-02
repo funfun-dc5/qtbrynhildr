@@ -215,8 +215,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  if (QTB_DESKTOP_IMAGE_SCALING){
 		QSize windowSize = desktopWindow->getSize();
 		QSize desktopSize = desktopWindow->getDesktopSize();
-		if (windowSize.width() < 0 || windowSize.height() < 0 ||
-			desktopSize.width() < 0 || desktopSize.height() < 0){
+		if (!(windowSize.isValid() && desktopSize.isValid())){
 		  // Nothing to do
 		  com_data->mouse_move = MOUSE_MOVE_OFF;
 		}

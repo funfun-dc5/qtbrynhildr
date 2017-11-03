@@ -69,10 +69,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
   :
 #if QTB_DESKTOPWINDOW
   scrollArea(0),
+  desktopWindow(0),
 #else // QTB_DESKTOPWINDOW
   graphicsView(0),
 #endif // QTB_DESKTOPWINDOW
-  desktopWindow(0),
+  desktopPanel(0),
   connectionLabel(0),
   frameRateLabel(0),
   fileMenu(0),
@@ -471,8 +472,15 @@ QtBrynhildr::QtBrynhildr(Option *option)
   //------------------------------------------------------------
   // create window
   //------------------------------------------------------------
+#if QTB_DESKTOPWINDOW
   // Desktop Window Widget
   desktopWindow = new DesktopWindow(settings, this);
+  desktopPanel = desktopWindow;
+#else // QTB_DESKTOPWINDOW
+  // Desktop Panel Object
+  desktopPanelObject = new DesktopPanelObject(settings, this);
+  desktopPanel = desktopPanelObject;
+#endif // QTB_DESKTOPWINDOW
 
 #if QTB_DESKTOPWINDOW
   // Scroll Area
@@ -493,12 +501,14 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #else // QTB_DESKTOPWINDOW
-  // Graphics View
-  graphicsView = new QGraphicsView;
+  // scene
+  graphicsScene = new QGraphicsScene(this);
+  graphicsScene->addItem(desktopPanelObject);
+  // view
+  graphicsView = new GraphicsView(graphicsScene, desktopPanel);
   graphicsView->setBackgroundRole(QPalette::Window);
   graphicsView->setAutoFillBackground(true);
   // set Widget
-  graphicsView->setFocusProxy(desktopWindow);
   setCentralWidget(graphicsView);
   // initialize palette
   originalPalette = fullScreenPalette = graphicsView->palette();
@@ -591,8 +601,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // set up Software Button and Keyboard
   // keyboard
-  //	softwareKeyboard = new SK(settings, desktopWindow->getKeyBuffer(), this);
-  softwareKeyboard = new SK(settings, desktopWindow->getKeyBuffer(), desktopWindow);
+  //	softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), this);
+  softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), desktopPanel);
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
   softwareKeyboard->setGeometry(40,350,1120,300);
@@ -600,8 +610,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #endif // for TEST
 
   // button
-  //	softwareButton = new SB(settings, desktopWindow->getMouseBuffer(), this);
-  softwareButton = new SB(settings, desktopWindow->getMouseBuffer(), desktopWindow);
+  //	softwareButton = new SB(settings, desktopPanel->getMouseBuffer(), this);
+  softwareButton = new SB(settings, desktopPanel->getMouseBuffer(), desktopPanel);
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 0 // for TEST
@@ -646,7 +656,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
   // Event Converter
   eventConverter = new EventConverter();
-  desktopWindow->setEventConverter(eventConverter);
+  desktopPanel->setEventConverter(eventConverter);
 
 #if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard dataChanged
@@ -659,9 +669,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // create threads
   //------------------------------------------------------------
 #if QTB_RECORDER
-  controlThread = new ControlThread(settings, desktopWindow, recorder);
+  controlThread = new ControlThread(settings, desktopPanel, recorder);
 #else // QTB_RECORDER
-  controlThread = new ControlThread(settings, desktopWindow);
+  controlThread = new ControlThread(settings, desktopPanel);
 #endif // QTB_RECORDER
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
@@ -983,10 +993,24 @@ QtBrynhildr::~QtBrynhildr()
   logMessage->closeLogFile();
 }
 
+#if QTB_DESKTOPWINDOW
 // get desktop window
 DesktopWindow *QtBrynhildr::getDesktopWindow() const
 {
   return desktopWindow;
+}
+#else // QTB_DESKTOPWINDOW
+// get desktop panel object
+DesktopPanelObject *QtBrynhildr::getDesktopPanelObject() const
+{
+  return desktopPanelObject;
+}
+#endif // QTB_DESKTOPWINDOW
+
+// get desktop panel
+DesktopPanel *QtBrynhildr::getDesktopPanel() const
+{
+  return desktopPanel;
 }
 
 // exit full screen
@@ -1034,7 +1058,7 @@ void QtBrynhildr::refreshWindow()
 {
   // output log for Window Size
   if (settings->getOutputLog()){
-	QSize size = desktopWindow->getSize();
+	QSize size = desktopPanel->getSize();
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "WindowSize : (" +
 								 QString::number(size.width())  + "," +
@@ -1044,7 +1068,7 @@ void QtBrynhildr::refreshWindow()
 
   // refresh desktop
   if (settings->getConnected()){
-	desktopWindow->resizeWindow();
+	desktopPanel->resizeWindow();
   }
 
   // update status bar
@@ -1244,7 +1268,7 @@ void QtBrynhildr::onDesktopChanged(QImage image)
 	return;
 
   // update desktop
-  desktopWindow->refreshDesktop(image);
+  desktopPanel->refreshDesktop(image);
 
   // set desktop scaling factor for full screen mode
   if (onSetDesktopScalingFactorForFullScreen){
@@ -1277,7 +1301,7 @@ void QtBrynhildr::onDesktopChanged(QImage image)
 // desktop clear
 void QtBrynhildr::onDesktopClear()
 {
-  desktopWindow->clearDesktop();
+  desktopPanel->clearDesktop();
   refreshWindow();
 }
 
@@ -2379,7 +2403,11 @@ void QtBrynhildr::connected()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
+#if QTB_DESKTOPWINDOW
 	desktopWindow->setAcceptDrops(true);
+#else // QTB_DESKTOPWINDOW
+	desktopPanelObject->setAcceptDrops(true);
+#endif // QTB_DESKTOPWINDOW
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -2492,7 +2520,11 @@ void QtBrynhildr::disconnected()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
+#if QTB_DESKTOPWINDOW
 	desktopWindow->setAcceptDrops(false);
+#else // QTB_DESKTOPWINDOW
+	desktopPanelObject->setAcceptDrops(false);
+#endif // QTB_DESKTOPWINDOW
   }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -2511,7 +2543,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	// NOT change scaling
 	return;
   }
-  QSize desktopSize = desktopWindow->getDesktopSize();
+  QSize desktopSize = desktopPanel->getDesktopSize();
   if (!desktopSize.isValid()){
 	return;
   }
@@ -2525,11 +2557,11 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 #endif // QTB_DESKTOPWINDOW
 
   QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
-  if (desktopWindow->getSize().width() > screenSize.width()){
-	width = desktopWindow->getSize().width();
+  if (desktopPanel->getSize().width() > screenSize.width()){
+	width = desktopPanel->getSize().width();
   }
-  if (desktopWindow->getSize().height() > screenSize.height()){
-	height = desktopWindow->getSize().height();
+  if (desktopPanel->getSize().height() > screenSize.height()){
+	height = desktopPanel->getSize().height();
   }
 
   int desktopWidth = desktopSize.width();
@@ -2640,7 +2672,7 @@ void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
 	//	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
 	// marker for mouse cursor
 	if (settings->getOnShowMouseCursorMarker()){
-	  desktopWindow->setDrawMarkerCounter(10);
+	  desktopPanel->setDrawMarkerCounter(10);
 	}
 	break;
   case QContextMenuEvent::Keyboard:
@@ -2757,7 +2789,7 @@ void QtBrynhildr::connectToServer()
   }
 
   // clear desktop
-  desktopWindow->clearDesktop();
+  desktopPanel->clearDesktop();
 
   // set event converter
   KEYBOARD_TYPE keyboardType = settings->getKeyboardType();
@@ -2813,7 +2845,7 @@ void QtBrynhildr::connectToServer()
 	delete softwareKeyboard;
 	softwareKeyboard = 0;
   }
-  softwareKeyboard = new SK(settings, desktopWindow->getKeyBuffer(), this);
+  softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), this);
 #endif // for TEST
   // TODO: check keyboardType range
   switch(keyboardType){
@@ -2847,8 +2879,8 @@ void QtBrynhildr::connectToServer()
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // clear buffer for control
-  desktopWindow->getKeyBuffer()->clear();
-  desktopWindow->getMouseBuffer()->clear();
+  desktopPanel->getKeyBuffer()->clear();
+  desktopPanel->getMouseBuffer()->clear();
 
   // initialize socket
   initSocket();
@@ -2872,8 +2904,8 @@ void QtBrynhildr::reconnectToServer()
   }
 
   // clear buffer for control
-  desktopWindow->getKeyBuffer()->clear();
-  desktopWindow->getMouseBuffer()->clear();
+  desktopPanel->getKeyBuffer()->clear();
+  desktopPanel->getMouseBuffer()->clear();
 
   // counter for control
   counter_control = 0;
@@ -3282,8 +3314,8 @@ void QtBrynhildr::toggleOnControl()
 	onControl = false;
 	onControl_Action->setChecked(false);
 	// clear device buffer
-	desktopWindow->getKeyBuffer()->clear();
-	desktopWindow->getMouseBuffer()->clear();
+	desktopPanel->getKeyBuffer()->clear();
+	desktopPanel->getMouseBuffer()->clear();
   }
   else {
 	settings->setOnControl(true);
@@ -3365,7 +3397,11 @@ void QtBrynhildr::refreshPublicMode()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
+#if QTB_DESKTOPWINDOW
 	desktopWindow->setAcceptDrops(true);
+#else // QTB_DESKTOPWINDOW
+	desktopPanelObject->setAcceptDrops(true);
+#endif // QTB_DESKTOPWINDOW
   }
   else {
 	// send clipboard
@@ -3378,7 +3414,11 @@ void QtBrynhildr::refreshPublicMode()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
+#if QTB_DESKTOPWINDOW
 	desktopWindow->setAcceptDrops(false);
+#else // QTB_DESKTOPWINDOW
+	desktopPanelObject->setAcceptDrops(false);
+#endif // QTB_DESKTOPWINDOW
   }
 
   // set window title
@@ -3520,7 +3560,7 @@ void QtBrynhildr::sendKey_CTRL_ALT_DEL()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopWindow->getKeyBuffer();
+	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
 
 	// press
 	keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYDOWN); // CTRL key press
@@ -3540,7 +3580,7 @@ void QtBrynhildr::sendKey_ALT_F4()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopWindow->getKeyBuffer();
+	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
 
 	// press
 	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYDOWN); // ALT key press
@@ -3557,7 +3597,7 @@ void QtBrynhildr::sendKey_CTRL_ESC()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopWindow->getKeyBuffer();
+	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
 
 	// press
 	keyBuffer->put(VK_CONTROL,	KEYCODE_FLG_KEYDOWN); // CTRL key press
@@ -3574,7 +3614,7 @@ void QtBrynhildr::sendKey_WINDOWS()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopWindow->getKeyBuffer();
+	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
 
 	// press
 	keyBuffer->put(VK_LWIN,	KEYCODE_FLG_KEYDOWN); // Windows key press
@@ -3589,7 +3629,7 @@ void QtBrynhildr::sendKey_PrintScreen()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopWindow->getKeyBuffer();
+	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
 
 	// press
 	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYDOWN); // PrintScreen key press
@@ -3604,7 +3644,7 @@ void QtBrynhildr::sendKey_ALT_PrintScreen()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopWindow->getKeyBuffer();
+	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
 
 	// press
 	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYDOWN); // ALT key press
@@ -3665,7 +3705,7 @@ void QtBrynhildr::fullScreen()
 #endif // defined(QTB_DESKTOP)
 
 #if 0 // for DEBUG
-  QSize size = desktopWindow->getSize();
+  QSize size = desktopPanel->getSize();
   cout << "fullScreen() : width  = " << size.width() << endl << flush;
   cout << "fullScreen() : height = " << size.height() << endl << flush;
 #endif
@@ -3684,7 +3724,7 @@ void QtBrynhildr::fullScreen()
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setPalette(fullScreenPalette); // change QPalette::Window to black
 #endif // QTB_DESKTOPWINDOW
-	desktopWindow->setOnFullScreen(true);
+	desktopPanel->setOnFullScreen(true);
 	showFullScreen();
   }
   else {
@@ -3700,7 +3740,7 @@ void QtBrynhildr::fullScreen()
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setPalette(originalPalette); // restore original QPalette::Window
 #endif // QTB_DESKTOPWINDOW
-	desktopWindow->setOnFullScreen(false);
+	desktopPanel->setOnFullScreen(false);
 	showNormal();
   }
   // set checked flag
@@ -3950,7 +3990,7 @@ void QtBrynhildr::setupSoftwareKeyboard()
 {
   settings->setOnShowSoftwareKeyboard(true);
   QRect rect = calculateSoftwareKeyboardLayout();
-  rect.moveTop(desktopWindow->getSize().height()); // outside desktop
+  rect.moveTop(desktopPanel->getSize().height()); // outside desktop
   softwareKeyboard->setGeometry(rect);
   softwareKeyboard->setVisible(true);
 }
@@ -3960,7 +4000,7 @@ void QtBrynhildr::setupSoftwareButton()
 {
   settings->setOnShowSoftwareButton(true);
   QRect rect = calculateSoftwareButtonLayout();
-  rect.moveTop(desktopWindow->getSize().height()); // outside desktop
+  rect.moveTop(desktopPanel->getSize().height()); // outside desktop
   softwareButton->setGeometry(rect);
   softwareButton->setVisible(true);
 }

@@ -28,7 +28,7 @@ class SoundThread : public NetThread
 
 public:
   // constructor
-  SoundThread(Settings *settings, DesktopWindow *desktopWindow = 0);
+  SoundThread(Settings *settings, DesktopPanel *desktopPanel = 0);
   // destructor
   ~SoundThread();
 

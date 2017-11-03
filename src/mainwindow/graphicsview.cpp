@@ -15,9 +15,10 @@
 namespace qtbrynhildr {
 
 // constructor
-GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent)
+GraphicsView::GraphicsView(QGraphicsScene *scene, DesktopPanel *desktopPanel, QWidget *parent)
   :
   QGraphicsView(scene, parent),
+  desktopPanel(desktopPanel),
   // for DEBUG
   outputLog(true)
 {
@@ -38,38 +39,45 @@ GraphicsView::~GraphicsView()
 // mouse event 
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
-  cout << "mousePressEvent" << endl << flush;
+  //  cout << "mousePressEvent" << endl << flush;
+  desktopPanel->mousePressEvent(event);
 }
 
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
-  cout << "mouseReleaseEvent" << endl << flush;
+  //  cout << "mouseReleaseEvent" << endl << flush;
+  desktopPanel->mouseReleaseEvent(event);
 }
 
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  cout << "mouseDoubleClicEvent" << endl << flush;
+  //  cout << "mouseDoubleClicEvent" << endl << flush;
+  desktopPanel->mouseDoubleClickEvent(event);
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
-  cout << "mouseMoveEvent" << endl << flush;
+  //  cout << "mouseMoveEvent" << endl << flush;
+  desktopPanel->mouseMoveEvent(event);
 }
 
 void GraphicsView::wheelEvent(QWheelEvent *event)
 {
-  cout << "wheelEvent" << endl << flush;
+  //  cout << "wheelEvent" << endl << flush;
+  desktopPanel->wheelEvent(event);
 }
 
 // keyboard event
 void GraphicsView::keyPressEvent(QKeyEvent *event)
 {
-  cout << "keyPressEvent" << endl << flush;
+  //  cout << "keyPressEvent" << endl << flush;
+  desktopPanel->keyPressEvent(event);
 }
 
 void GraphicsView::keyReleaseEvent(QKeyEvent *event)
 {
-  cout << "keyReleaseEvent" << endl << flush;
+  //  cout << "keyReleaseEvent" << endl << flush;
+  desktopPanel->keyReleaseEvent(event);
 }
 #endif
 

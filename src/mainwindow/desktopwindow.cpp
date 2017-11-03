@@ -79,6 +79,17 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
 
 #if 1 // for TEST
   QPainter painter(this);
+#if 0 // for TEST
+  // set scale factor
+  if (QTB_DESKTOP_IMAGE_SCALING){
+	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
+	  qreal scalingFactor = settings->getDesktopScalingFactor();
+	  if (scalingFactor != 1.0){
+		painter.scale(scalingFactor, scalingFactor);
+	  }
+	}
+  }
+#endif
   painter.drawImage(0, 0, image);
   // draw marker for mouse cursor
   if (drawMarkerCounter > 0){

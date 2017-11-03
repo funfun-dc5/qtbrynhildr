@@ -30,11 +30,37 @@ DesktopPanelObject::~DesktopPanelObject()
 // resize desktop
 void DesktopPanelObject::resizeDesktop(int width, int height)
 {
+  cout << "resizeDesktop()" << endl << flush;
 }
 
 // refresh desktop
 void DesktopPanelObject::updateDesktop()
 {
+  //  cout << "updateDesktop()" << endl << flush;
+  update();
+}
+
+QRectF DesktopPanelObject::boundingRect() const
+{
+  return QRectF(-image.width()/2, -image.height()/2, image.width(), image.height());
+}
+
+void DesktopPanelObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
+
+  // set scale factor
+  if (QTB_DESKTOP_IMAGE_SCALING){
+	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
+	  qreal scalingFactor = settings->getDesktopScalingFactor();
+	  if (scalingFactor != 1.0){
+		painter->scale(scalingFactor, scalingFactor);
+	  }
+	}
+  }
+  // draw image
+  painter->drawImage(-image.width()/2, -image.height()/2, image);
 }
 
 //----------------------------------------------------------------------

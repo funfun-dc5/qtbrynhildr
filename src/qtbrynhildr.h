@@ -25,7 +25,7 @@
 #if QTB_DESKTOPWINDOW
 #include <QScrollArea>
 #else // QTB_DESKTOPWINDOW
-#include <QGraphicsView>
+#include <QGraphicsScene>
 #endif // QTB_DESKTOPWINDOW
 #include <QShowEvent>
 #include <QSize>
@@ -46,10 +46,12 @@
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
+#include "mainwindow/desktoppanel.h"
 #if QTB_DESKTOPWINDOW
 #include "mainwindow/desktopwindow.h"
 #else // QTB_DESKTOPWINDOW
-//#include "mainwindow/touchwindow.h"
+#include "mainwindow/graphicsview.h"
+#include "mainwindow/desktoppanelobject.h"
 #endif // QTB_DESKTOPWINDOW
 #include "option.h"
 #if QTB_RECORDER
@@ -109,8 +111,16 @@ public:
   // destructor
   ~QtBrynhildr();
 
+#if QTB_DESKTOPWINDOW
   // get desktop window
   DesktopWindow *getDesktopWindow() const;
+#else // QTB_DESKTOPWINDOW
+  // get desktop panel objecy
+  DesktopPanelObject *getDesktopPanelObject() const;
+#endif // QTB_DESKTOPWINDOW
+
+  // get desktop panel
+  DesktopPanel *getDesktopPanel() const;
 
   // shutdown flag
   bool getShutdownFlag() const;
@@ -451,11 +461,19 @@ private:
 #if QTB_DESKTOPWINDOW
   // scroll area
   QScrollArea *scrollArea;
-#else // QTB_DESKTOPWINDOW
-  QGraphicsView *graphicsView;
-#endif // QTB_DESKTOPWINDOW
   // desktop window
   DesktopWindow *desktopWindow;
+#else // QTB_DESKTOPWINDOW
+  // view
+  GraphicsView *graphicsView;
+  // scene
+  QGraphicsScene *graphicsScene;
+  // desktop panel object
+  DesktopPanelObject *desktopPanelObject;
+#endif // QTB_DESKTOPWINDOW
+
+  // desktop panel
+  DesktopPanel *desktopPanel;
 
   // connection label
   QLabel *connectionLabel;

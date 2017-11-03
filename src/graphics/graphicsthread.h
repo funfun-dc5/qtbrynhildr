@@ -43,7 +43,7 @@ class GraphicsThread : public NetThread
 
 public:
   // constructor
-  GraphicsThread(Settings *settings, DesktopWindow *desktopWindow = 0);
+  GraphicsThread(Settings *settings, DesktopPanel *desktopPanel = 0);
   // destructor
   ~GraphicsThread();
 

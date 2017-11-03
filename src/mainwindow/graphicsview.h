@@ -13,7 +13,7 @@
 #include <QGraphicsScene>
 
 // Local Header
-
+#include "mainwindow/desktoppanel.h"
 
 namespace qtbrynhildr {
 
@@ -23,7 +23,7 @@ class GraphicsView : public QGraphicsView
 
 public:
   // constructor
-  GraphicsView(QGraphicsScene *scene, QWidget *parent = Q_NULLPTR);
+  GraphicsView(QGraphicsScene *scene, DesktopPanel *desktopPanel, QWidget *parent = Q_NULLPTR);
   // destructor
   ~GraphicsView();
 
@@ -42,6 +42,9 @@ protected:
 #endif
 
 private:
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
   // output log flag
   bool outputLog;
 };

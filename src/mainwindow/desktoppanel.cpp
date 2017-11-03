@@ -152,7 +152,9 @@ void DesktopPanel::refreshDesktop(QImage image)
 	  if (scalingFactor != 1.0){
 		// scale
 		currentSize = currentSize * scalingFactor;
+#if defined(QTB_DEV_DESKTOP)
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+#endif // defined(QTB_DEV_DESKTOP)
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	  }

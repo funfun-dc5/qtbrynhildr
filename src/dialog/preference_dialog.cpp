@@ -130,6 +130,12 @@ void PreferenceDialog::getFromSettings()
   // desktopScalingType
   checkBox_desktopScalingType->
 	setCheckState(settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER ? Qt::Checked : Qt::Unchecked);
+  if (settings->getConnected()){
+	checkBox_desktopScalingType->setEnabled(false);
+  }
+  else {
+	checkBox_desktopScalingType->setEnabled(true);
+  }
 
   // serverNameListSize
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());

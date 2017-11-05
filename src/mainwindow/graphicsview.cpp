@@ -35,7 +35,15 @@ GraphicsView::~GraphicsView()
 {
 }
 
-#if 1
+// scale
+void GraphicsView::setScale(qreal scalingFactor)
+{
+  QMatrix matrix;
+
+  matrix.scale(scalingFactor, scalingFactor);
+  setMatrix(matrix);
+}
+
 // mouse event 
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
@@ -79,6 +87,5 @@ void GraphicsView::keyReleaseEvent(QKeyEvent *event)
   //  cout << "keyReleaseEvent" << endl << flush;
   desktopPanel->keyReleaseEvent(event);
 }
-#endif
 
 } // end of namespace qtbrynhildr

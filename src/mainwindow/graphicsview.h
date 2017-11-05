@@ -27,7 +27,9 @@ public:
   // destructor
   ~GraphicsView();
 
-#if 1
+  // scale
+  void setScale(qreal scalingFactor);
+
 protected:
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
@@ -39,7 +41,6 @@ protected:
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
-#endif
 
 private:
   // desktop panel

@@ -30,7 +30,8 @@ DesktopPanelObject::~DesktopPanelObject()
 // resize desktop
 void DesktopPanelObject::resizeDesktop(int width, int height)
 {
-  cout << "resizeDesktop()" << endl << flush;
+  //  cout << "resizeDesktop()" << endl << flush;
+  //  cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush;
 }
 
 // refresh desktop
@@ -50,15 +51,6 @@ void DesktopPanelObject::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
-  // set scale factor
-  if (QTB_DESKTOP_IMAGE_SCALING){
-	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
-	  qreal scalingFactor = settings->getDesktopScalingFactor();
-	  if (scalingFactor != 1.0){
-		painter->scale(scalingFactor, scalingFactor);
-	  }
-	}
-  }
   // draw image
   painter->drawImage(-image.width()/2, -image.height()/2, image);
 }

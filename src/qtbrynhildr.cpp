@@ -1267,6 +1267,14 @@ void QtBrynhildr::onDesktopChanged(QImage image)
   if (!settings->getConnected())
 	return;
 
+#if !QTB_DESKTOPWINDOW
+  static qreal previousScalingFactor = 1.0;
+  if (previousScalingFactor != settings->getDesktopScalingFactor()){
+	graphicsView->setScale(settings->getDesktopScalingFactor());
+	previousScalingFactor = settings->getDesktopScalingFactor();
+  }
+#endif // !QTB_DESKTOPWINDOW
+
   // update desktop
   desktopPanel->refreshDesktop(image);
 
@@ -1276,26 +1284,6 @@ void QtBrynhildr::onDesktopChanged(QImage image)
 	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
 	setDesktopScalingFactor(screenSize);
   }
-
-#if 0 // for TEST
-  // update current frame rate
-  if (settings->getOnShowFrameRate()){
-	static int refreshCounter = 1;
-	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
-	  // frame rate
-	  currentFrameRate = graphicsThread->getFrameRate();
-	  // data rate
-	  long controlDataRate = controlThread->getDataRate();
-	  long graphicsDataRate = graphicsThread->getDataRate();
-	  long soundDataRate = soundThread->getDataRate();
-	  // Mbps
-	  currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
-	  updateFrameRate();
-	  refreshCounter = 1;
-	}
-	refreshCounter++;
-  }
-#endif // for TEST
 }
 
 // desktop clear
@@ -2604,9 +2592,7 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 
   QMainWindow::resizeEvent(event);
 
-#if 0 // for TEST
-  cout << "resizeEvent()" << endl << flush;
-#endif // for TEST
+  //  cout << "resizeEvent()" << endl << flush;
 
   // rescaling desktop
   if (settings->getOnKeepOriginalDesktopSize() &&

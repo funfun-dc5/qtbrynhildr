@@ -154,9 +154,9 @@ void DesktopPanel::refreshDesktop(QImage image)
 		currentSize = currentSize * scalingFactor;
 #if defined(QTB_DEV_DESKTOP)
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-#endif // defined(QTB_DEV_DESKTOP)
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+#endif // defined(QTB_DEV_DESKTOP)
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){
@@ -256,8 +256,10 @@ void DesktopPanel::resizeWindow()
 		  height = screenSize.height();
 		}
 
+#if QTB_DESKTOPWINDOW
 		// resize
 		qtbrynhildr->resize(width, height);
+#endif // QTB_DESKTOPWINDOW
 
 		// update image
 		updateDesktop();

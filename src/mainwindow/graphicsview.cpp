@@ -24,6 +24,7 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, DesktopPanel *desktopPanel, QW
 {
   setRenderHint(QPainter::Antialiasing, false);
   setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+  //  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
   setDragMode(QGraphicsView::NoDrag);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

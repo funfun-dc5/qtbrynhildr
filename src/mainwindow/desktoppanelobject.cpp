@@ -20,6 +20,7 @@ DesktopPanelObject::DesktopPanelObject(Settings *settings, QtBrynhildr *qtbrynhi
   QGraphicsObject(parent),
   DesktopPanel(settings, qtbrynhildr)
 {
+  setCacheMode(QGraphicsItem::ItemCoordinateCache);
 }
 
 // destructor
@@ -30,6 +31,9 @@ DesktopPanelObject::~DesktopPanelObject()
 // resize desktop
 void DesktopPanelObject::resizeDesktop(int width, int height)
 {
+  Q_UNUSED(width);
+  Q_UNUSED(height);
+
   //  cout << "resizeDesktop()" << endl << flush;
   //  cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush;
 }

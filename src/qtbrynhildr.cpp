@@ -497,12 +497,13 @@ QtBrynhildr::QtBrynhildr(Option *option)
   originalPalette = fullScreenPalette = scrollArea->palette();
   // for original
   originalPalette.setColor(QPalette::Window, Qt::gray);
-  scrollArea->setPalette(originalPalette); // change QPalette::Window to black
+  scrollArea->setPalette(originalPalette); // change QPalette::Window to gray
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #else // QTB_DESKTOPWINDOW
   // scene
   graphicsScene = new QGraphicsScene(this);
+  graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
   graphicsScene->addItem(desktopPanelObject);
   // view
   graphicsView = new GraphicsView(graphicsScene, desktopPanel);
@@ -513,7 +514,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // initialize palette
   originalPalette = fullScreenPalette = graphicsView->palette();
   // for original
-  originalPalette.setColor(QPalette::Window, Qt::gray);
+  originalPalette.setColor(QPalette::Window, Qt::black);
   graphicsView->setPalette(originalPalette); // change QPalette::Window to black
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
@@ -3356,7 +3357,11 @@ void QtBrynhildr::toggleOnSound()
 void QtBrynhildr::setupWindowTitle()
 {
 #if !QTB_PORTABLE_VERSION
+#if QTB_DESKTOPWINDOW
   setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+#else // QTB_DESKTOPWINDOW
+  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [NEW DESKTOP]");
+#endif // QTB_DESKTOPWINDOW
 #else // !QTB_PORTABLE_VERSION
   setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" -");
 #endif // !QTB_PORTABLE_VERSION

@@ -602,7 +602,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // set up Software Button and Keyboard
   // keyboard
   //	softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), this);
-  softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), desktopPanel);
+  softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), this);
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
   softwareKeyboard->setGeometry(40,350,1120,300);
@@ -611,7 +611,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
   // button
   //	softwareButton = new SB(settings, desktopPanel->getMouseBuffer(), this);
-  softwareButton = new SB(settings, desktopPanel->getMouseBuffer(), desktopPanel);
+  softwareButton = new SB(settings, desktopPanel->getMouseBuffer(), this);
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 0 // for TEST

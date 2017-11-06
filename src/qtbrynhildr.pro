@@ -214,7 +214,7 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 
 # for new feature
-NEW_FEATURE = OFF
+NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
 HEADERS += mainwindow/desktoppanelobject.h mainwindow/graphicsview.h mainwindow/desktoppanel.h
 SOURCES += mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp mainwindow/desktoppanel.cpp

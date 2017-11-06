@@ -2589,12 +2589,11 @@ void QtBrynhildr::closeEvent(QCloseEvent *event)
 // window resize event
 void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
-  Q_UNUSED(event);
-
   QMainWindow::resizeEvent(event);
 
   //  cout << "resizeEvent()" << endl << flush;
 
+#if QTB_DESKTOPWINDOW
   // rescaling desktop
   if (settings->getOnKeepOriginalDesktopSize() &&
 	  settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
@@ -2616,6 +2615,7 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 	softwareButton->setGeometry(rect);
   }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#endif // QTB_DESKTOPWINDOW
 }
 
 // window hide event

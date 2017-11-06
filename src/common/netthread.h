@@ -26,7 +26,7 @@
 
 // Local Header
 #include "logmessage.h"
-#include "mainwindow/desktopwindow.h"
+#include "mainwindow/desktoppanel.h"
 #include "settings.h"
 
 namespace qtbrynhildr {
@@ -79,7 +79,7 @@ class NetThread : public QThread
 
 public:
   // constructor
-  NetThread(const char *name, Settings *settings, DesktopWindow *desktopWindow);
+  NetThread(const char *name, Settings *settings, DesktopPanel *desktopPanel);
   // destructor
   ~NetThread();
 
@@ -131,8 +131,8 @@ protected:
   long receiveData(SOCKET sock, char *buf, long size);
 
 protected:
-  // desktop window
-  DesktopWindow *desktopWindow;
+  // desktop panel
+  DesktopPanel *desktopPanel;
 
   // thread name
   const char *name;

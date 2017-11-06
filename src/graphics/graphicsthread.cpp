@@ -51,9 +51,9 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // public
 //---------------------------------------------------------------------------
 // constructor
-GraphicsThread::GraphicsThread(Settings *settings, DesktopWindow *desktopWindow)
+GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   :
-  NetThread("GraphicsThread", settings, desktopWindow),
+  NetThread("GraphicsThread", settings, desktopPanel),
   image(0),
   frameCounter(0),
   averageDrawFrameTime(0),

@@ -20,6 +20,7 @@ DesktopPanelObject::DesktopPanelObject(Settings *settings, QtBrynhildr *qtbrynhi
   QGraphicsObject(parent),
   DesktopPanel(settings, qtbrynhildr)
 {
+  setCacheMode(QGraphicsItem::ItemCoordinateCache);
 }
 
 // destructor
@@ -30,11 +31,32 @@ DesktopPanelObject::~DesktopPanelObject()
 // resize desktop
 void DesktopPanelObject::resizeDesktop(int width, int height)
 {
+  Q_UNUSED(width);
+  Q_UNUSED(height);
+
+  //  cout << "resizeDesktop()" << endl << flush;
+  //  cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush;
 }
 
 // refresh desktop
 void DesktopPanelObject::updateDesktop()
 {
+  //  cout << "updateDesktop()" << endl << flush;
+  update();
+}
+
+QRectF DesktopPanelObject::boundingRect() const
+{
+  return QRectF(-image.width()/2, -image.height()/2, image.width(), image.height());
+}
+
+void DesktopPanelObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
+
+  // draw image
+  painter->drawImage(-image.width()/2, -image.height()/2, image);
 }
 
 //----------------------------------------------------------------------

@@ -26,9 +26,9 @@
 namespace qtbrynhildr {
 
 // constructor
-SoundThread::SoundThread(Settings *settings, DesktopWindow *desktopWindow)
+SoundThread::SoundThread(Settings *settings, DesktopPanel *desktopPanel)
   :
-  NetThread("SoundThread", settings, desktopWindow),
+  NetThread("SoundThread", settings, desktopPanel),
   soundBuffer(0),
   soundBufferSize(0),
   soundCacheTime(-1),

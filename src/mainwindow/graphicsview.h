@@ -13,7 +13,7 @@
 #include <QGraphicsScene>
 
 // Local Header
-
+#include "mainwindow/desktoppanel.h"
 
 namespace qtbrynhildr {
 
@@ -23,11 +23,13 @@ class GraphicsView : public QGraphicsView
 
 public:
   // constructor
-  GraphicsView(QGraphicsScene *scene, QWidget *parent = Q_NULLPTR);
+  GraphicsView(QGraphicsScene *scene, DesktopPanel *desktopPanel, QWidget *parent = Q_NULLPTR);
   // destructor
   ~GraphicsView();
 
-#if 1
+  // scale
+  void setScale(qreal scalingFactor);
+
 protected:
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
@@ -39,9 +41,11 @@ protected:
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
-#endif
 
 private:
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
   // output log flag
   bool outputLog;
 };

@@ -11,6 +11,10 @@
 // Qt Header
 #include <QGraphicsItem>
 #include <QGraphicsObject>
+#include <QPainter>
+#include <QRectF>
+#include <QStyleOptionGraphicsItem>
+#include <QWidget>
 
 // Local Header
 #include "mainwindow/desktoppanel.h"
@@ -39,6 +43,10 @@ public:
 
   // update desktop
   void updateDesktop();
+
+protected:
+  QRectF boundingRect() const;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
 
 private:
 #if defined(Q_OS_WIN)

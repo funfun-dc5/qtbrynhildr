@@ -33,9 +33,9 @@ class ControlThread : public NetThread
 public:
   // constructor
 #if QTB_RECORDER
-ControlThread(Settings *settings, DesktopWindow *desktopWindow, Recorder *recorder);
+ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder);
 #else  // QTB_RECORDER
-ControlThread(Settings *settings, DesktopWindow *desktopWindow);
+ControlThread(Settings *settings, DesktopPanel *desktopPanel);
 #endif // QTB_RECORDER
   // destructor
   ~ControlThread();

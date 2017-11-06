@@ -5,7 +5,7 @@
                   android:name="org.qtproject.qt5.android.bindings.QtActivity"
                   android:theme="@style/qtbrynhildr_theme"
                   android:label="Qt Brynhildr"
-                  android:icon="@drawable/qtbrynhildr"
+                  android:icon="@mipmap/qtbrynhildr"
                   android:screenOrientation="landscape"
                   android:launchMode="singleTop">
             <intent-filter>

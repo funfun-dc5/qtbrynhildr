@@ -65,16 +65,16 @@ private:
 public:
   // FACTOR for slider
 #if _MSC_VER
-  const qreal SLIDER_FACTOR = 10.0;
+  const qreal SLIDER_FACTOR = 20.0;
 #else  // _MSC_VER
-  constexpr static const qreal SLIDER_FACTOR = 10.0;
+  constexpr static const qreal SLIDER_FACTOR = 20.0;
 #endif // _MSC_VER
 
 private:
   // MINIMUM for slider
   static const int SLIDER_MINIMUM = 1;
   // MAXIMUM for slider
-  static const int SLIDER_MAXIMUM = 20;
+  static const int SLIDER_MAXIMUM = 40;
 };
 
 } // end of namespace qtbrynhildr

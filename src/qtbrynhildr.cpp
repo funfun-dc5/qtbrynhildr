@@ -476,13 +476,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // Desktop Window Widget
   desktopWindow = new DesktopWindow(settings, this);
   desktopPanel = desktopWindow;
-#else // QTB_DESKTOPWINDOW
-  // Desktop Panel Object
-  desktopPanelObject = new DesktopPanelObject(settings, this);
-  desktopPanel = desktopPanelObject;
-#endif // QTB_DESKTOPWINDOW
 
-#if QTB_DESKTOPWINDOW
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -501,6 +495,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #else // QTB_DESKTOPWINDOW
+  // Desktop Panel Object
+  desktopPanelObject = new DesktopPanelObject(settings, this);
+  desktopPanel = desktopPanelObject;
+
   // scene
   graphicsScene = new QGraphicsScene(this);
   graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -2657,10 +2655,6 @@ void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
   switch(event->reason()){
   case QContextMenuEvent::Mouse:
 	//	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
-	// marker for mouse cursor
-	if (settings->getOnShowMouseCursorMarker()){
-	  desktopPanel->setDrawMarkerCounter(10);
-	}
 	break;
   case QContextMenuEvent::Keyboard:
 	//	cout << "Context Menu Event by Keyboard (Menu button)" << endl << flush;

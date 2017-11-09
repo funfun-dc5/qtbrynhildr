@@ -43,6 +43,10 @@ protected:
   void keyReleaseEvent(QKeyEvent *event);
 
 private:
+  // map to desktop
+  bool mapToDesktop(QPoint &point);
+
+private:
   // desktop panel
   DesktopPanel *desktopPanel;
 

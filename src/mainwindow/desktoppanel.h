@@ -66,7 +66,7 @@ public:
   // get window size
   QSize getSize() const;
 
-  // get desktop window size
+  // get desktop size
   QSize getDesktopSize() const;
 
   // set full screen flag

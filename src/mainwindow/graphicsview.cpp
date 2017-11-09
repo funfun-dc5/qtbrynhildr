@@ -8,6 +8,7 @@
 
 // Qt Header
 #include <QPainter>
+#include <QDebug>
 
 // Local Header
 #include "mainwindow/graphicsview.h"
@@ -49,25 +50,55 @@ void GraphicsView::setScale(qreal scalingFactor)
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
   //  cout << "mousePressEvent" << endl << flush;
-  desktopPanel->mousePressEvent(event);
+  QPoint pos = mapToScene(event->pos()).toPoint();
+  //  qDebug() << "pos of scene = " << pos;
+  if (mapToDesktop(pos)){
+	//	qDebug() << "pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanel->mouseMoveEvent(newEvent);
+	desktopPanel->mousePressEvent(newEvent);
+  }
 }
 
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
   //  cout << "mouseReleaseEvent" << endl << flush;
-  desktopPanel->mouseReleaseEvent(event);
+  QPoint pos = mapToScene(event->pos()).toPoint();
+  //  qDebug() << "pos of scene = " << pos;
+  if (mapToDesktop(pos)){
+	//	qDebug() << "pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanel->mouseReleaseEvent(newEvent);
+  }
 }
 
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //  cout << "mouseDoubleClicEvent" << endl << flush;
-  desktopPanel->mouseDoubleClickEvent(event);
+  QPoint pos = mapToScene(event->pos()).toPoint();
+  //  qDebug() << "pos of scene = " << pos;
+  if (mapToDesktop(pos)){
+	//	qDebug() << "pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanel->mouseDoubleClickEvent(newEvent);
+  }
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
-  //  cout << "mouseMoveEvent" << endl << flush;
-  desktopPanel->mouseMoveEvent(event);
+  cout << "mouseMoveEvent" << endl << flush;
 }
 
 void GraphicsView::wheelEvent(QWheelEvent *event)
@@ -87,6 +118,21 @@ void GraphicsView::keyReleaseEvent(QKeyEvent *event)
 {
   //  cout << "keyReleaseEvent" << endl << flush;
   desktopPanel->keyReleaseEvent(event);
+}
+
+// map to desktop
+bool GraphicsView::mapToDesktop(QPoint &point)
+{
+  QSize size = desktopPanel->getSize();
+  QRect rect(-size.width()/2, -size.height()/2, size.width(), size.height());
+  if (rect.contains(point)){
+	point.setX(point.x() + size.width()/2);
+	point.setY(point.y() + size.height()/2);
+	return true;
+  }
+  else {
+	return false;
+  }
 }
 
 } // end of namespace qtbrynhildr

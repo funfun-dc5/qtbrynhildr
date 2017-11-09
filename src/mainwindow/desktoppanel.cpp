@@ -52,8 +52,8 @@ DesktopPanel::DesktopPanel(Settings *settings, QtBrynhildr *qtbrynhildr)
   keyboardLogFile(0),
   keyboardLogFileStream(0),
   // for DEBUG
-  outputLogForKeyboard(QTB_DEBUG_KEYBOARD),
-  outputLogForMouse(QTB_DEBUG_MOUSE),
+  outputLogForKeyboard(false),
+  outputLogForMouse(false),
   outputLog(false)
 {
   // create keyboard buffer
@@ -289,7 +289,7 @@ QSize DesktopPanel::getSize() const
   return currentSize;
 }
 
-// get window size
+// get desktop size
 QSize DesktopPanel::getDesktopSize() const
 {
   return desktopSize;
@@ -413,6 +413,12 @@ void DesktopPanel::mousePressEvent(QMouseEvent *event)
 	  MouseInfoValue value;
 	  value.button = MOUSE_BUTTON_DOWN;
 	  setMouseButtonEvent(event, value);
+#if !QTB_DESKTOPWINDOW
+	  // marker for mouse cursor
+	  if (settings->getOnShowMouseCursorMarker()){
+		setDrawMarkerCounter(10);
+	  }
+#endif // !QTB_DESKTOPWINDOW
 	}
 	else {
 	  if (event->button() == Qt::LeftButton){
@@ -500,7 +506,7 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
   // for DEBUG
   if (outputLogForMouse){
 	int ticks = degrees/15;
-	cout << "[DesktopPanel] wheelEvent: " << degrees << "(ticks = " << ticks << ")"; // for DEBUG
+	cout << "[DesktopPanel] wheelEvent: " << degrees << " (ticks = " << ticks << ")" << endl << flush; // for DEBUG
   }
 
   if (settings->getConnected() &&

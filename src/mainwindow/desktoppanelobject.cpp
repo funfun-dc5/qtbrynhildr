@@ -55,8 +55,24 @@ void DesktopPanelObject::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
+  int hwidth = image.width()/2;
+  int hheight = image.height()/2;
+
   // draw image
-  painter->drawImage(-image.width()/2, -image.height()/2, image);
+  painter->drawImage(-hwidth, -hheight, image);
+
+  // draw marker for mouse cursor
+  if (drawMarkerCounter > 0){
+	int length = drawMarkerCounter*10;
+	int x = currentMousePos.x() - length/2 - hwidth;
+	int y = currentMousePos.y() - length/2 - hheight;
+
+	painter->setRenderHint(QPainter::Antialiasing, false);
+	painter->setPen(QPen(Qt::green, 4));
+	painter->drawArc(x, y, length, length, 0*360, 16*360);
+
+	drawMarkerCounter--;
+  }
 }
 
 //----------------------------------------------------------------------

@@ -140,8 +140,6 @@ const bool QTB_IN_TESTING				= true;
 
 // debug
 #define QTB_DEBUG					1
-#define QTB_DEBUG_KEYBOARD			false
-#define QTB_DEBUG_MOUSE				false
 
 } // end of namespace qtbrynhildr
 

@@ -24,12 +24,16 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, DesktopPanel *desktopPanel, QW
   outputLog(true)
 {
   setRenderHint(QPainter::Antialiasing, false);
-  setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
-  //  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+  //  setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
   setDragMode(QGraphicsView::NoDrag);
+  setResizeAnchor(QGraphicsView::AnchorViewCenter);
+  setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+  setAlignment(Qt::AlignCenter);
+#if !QTB_DESKTOPWINDOW
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setAlignment(Qt::AlignCenter);
+#endif // !QTB_DESKTOPWINDOW
 }
 
 // destructor
@@ -99,6 +103,15 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
   cout << "mouseMoveEvent" << endl << flush;
+  //  cout << "mouseDoubleClicEvent" << endl << flush;
+  QPoint pos = mapToScene(event->pos()).toPoint();
+  //  qDebug() << "pos of scene = " << pos;
+  if (mapToDesktop(pos)){
+	qDebug() << "pos of desktop = " << pos;
+  }
+  else {
+	QGraphicsView::mouseMoveEvent(event);
+  }
 }
 
 void GraphicsView::wheelEvent(QWheelEvent *event)

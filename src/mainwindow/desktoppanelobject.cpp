@@ -55,6 +55,7 @@ void DesktopPanelObject::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
+  // set half width, half height
   int hwidth = image.width()/2;
   int hheight = image.height()/2;
 

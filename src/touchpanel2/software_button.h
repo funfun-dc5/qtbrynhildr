@@ -42,22 +42,22 @@ public:
 
 protected:
   // paint event
-  void paintEvent(QPaintEvent *event) override;
+  void paintEvent(QPaintEvent *event);
 
   // resize event
-  void resizeEvent(QResizeEvent *event) override;
+  void resizeEvent(QResizeEvent *event);
 
 #if 0
   // minimum size hint
-  QSize minimumSizeHint() const override;
+  QSize minimumSizeHint() const;
 #endif
 
   // size hint
-  QSize sizeHint() const override;
+  QSize sizeHint() const;
 
   // mouse event
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
 
 protected:
   // button id

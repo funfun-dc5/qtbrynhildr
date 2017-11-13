@@ -31,6 +31,12 @@ public:
   void setScale(qreal scalingFactor);
 
 protected:
+  // for event handling
+#if defined(QTB_DEV_TOUCHPANEL)
+  // event
+  bool event(QEvent *event);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);

@@ -46,6 +46,13 @@
 // translation file prefix
 #define QTB_TRANSLATION_FILE_PREFIX	"qtbrynhildr_"
 
+// desktop background color
+#if QTB_DESKTOPWINDOW
+#define QTB_DESKTOP_BACKGROUND_COLOR Qt::gray
+#else // QTB_DESKTOPWINDOW
+#define QTB_DESKTOP_BACKGROUND_COLOR Qt::black
+#endif // QTB_DESKTOPWINDOW
+
 // key layout file directory
 #define QTB_KEYLAYOUT_FILE_PATH		"/keylayout"
 #define QTB_KEYLAYOUT_FILE_SUFFIX	".kl"
@@ -323,7 +330,11 @@ typedef int COMPRESS_MODE;
 
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
+#if QTB_DESKTOPWINDOW
 #define QTB_ONFULLSCREENATCONNECTED_DEFAULT			false
+#else // QTB_DESKTOPWINDOW
+#define QTB_ONFULLSCREENATCONNECTED_DEFAULT			true
+#endif // QTB_DESKTOPWINDOW
 
 // for onHideMenuAndStatusBarAtFullScreen
 #define QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN			"onHideMenuAndStatusBarAtFullScreen"

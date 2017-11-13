@@ -278,7 +278,7 @@ void DesktopPanel::clearDesktop()
   }
 #endif
   if (!image.isNull()){
-	image.fill(Qt::gray);
+	image.fill(QTB_DESKTOP_BACKGROUND_COLOR);
 	updateDesktop();
   }
 }
@@ -413,12 +413,6 @@ void DesktopPanel::mousePressEvent(QMouseEvent *event)
 	  MouseInfoValue value;
 	  value.button = MOUSE_BUTTON_DOWN;
 	  setMouseButtonEvent(event, value);
-#if !QTB_DESKTOPWINDOW
-	  // marker for mouse cursor
-	  if (settings->getOnShowMouseCursorMarker()){
-		setDrawMarkerCounter(10);
-	  }
-#endif // !QTB_DESKTOPWINDOW
 	}
 	else {
 	  if (event->button() == Qt::LeftButton){
@@ -548,6 +542,12 @@ void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 	  // set cursor point color to control thread
 	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
 #endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#if !QTB_DESKTOPWINDOW
+	  // marker for mouse cursor
+	  if (settings->getOnShowMouseCursorMarker()){
+		setDrawMarkerCounter(10);
+	  }
+#endif // !QTB_DESKTOPWINDOW
 	}
   }
 }

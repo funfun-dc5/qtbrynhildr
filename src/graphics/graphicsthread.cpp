@@ -386,7 +386,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 		if (image->isNull()){
 		  delete image;
 		  image = new QImage(width, height, QImage::Format_RGB888);
-		  image->fill(Qt::gray);
+		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
 		}
 	  }
 #else // USE_PPM_LOADER_FOR_VP8
@@ -400,7 +400,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 		if (image->isNull()){
 		  delete image;
 		  image = new QImage(width, height, QImage::Format_RGB888);
-		  image->fill(Qt::gray);
+		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
 		}
 	  }
 

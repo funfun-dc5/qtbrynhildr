@@ -24,8 +24,9 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, DesktopPanel *desktopPanel, QW
   outputLog(true)
 {
   setRenderHint(QPainter::Antialiasing, false);
+  setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   //  setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
-  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+  //  setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
   setDragMode(QGraphicsView::NoDrag);
   setResizeAnchor(QGraphicsView::AnchorViewCenter);
   setTransformationAnchor(QGraphicsView::AnchorViewCenter);
@@ -50,6 +51,13 @@ void GraphicsView::setScale(qreal scalingFactor)
   setMatrix(matrix);
 }
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // event
+bool GraphicsView::event(QEvent *event){
+  return QGraphicsView::event(event);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 // mouse event 
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
@@ -64,13 +72,18 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	desktopPanel->mouseMoveEvent(newEvent);
+#if 0 // for TEST
 	desktopPanel->mousePressEvent(newEvent);
+#endif // 0 // for TEST
   }
 }
 
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
   //  cout << "mouseReleaseEvent" << endl << flush;
+#if 1 // for TEST
+  Q_UNUSED(event);
+#else // for TEST
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (mapToDesktop(pos)){
@@ -82,11 +95,15 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseReleaseEvent(newEvent);
   }
+#endif // for TEST
 }
 
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //  cout << "mouseDoubleClicEvent" << endl << flush;
+#if 1 // for TEST
+  Q_UNUSED(event);
+#else // for TEST
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (mapToDesktop(pos)){
@@ -98,11 +115,15 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseDoubleClickEvent(newEvent);
   }
+#endif // for TEST
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
-  cout << "mouseMoveEvent" << endl << flush;
+  //  cout << "mouseMoveEvent" << endl << flush;
+#if 1 // for TEST
+  Q_UNUSED(event);
+#else // for TEST
   //  cout << "mouseDoubleClicEvent" << endl << flush;
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
@@ -112,6 +133,7 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
   else {
 	QGraphicsView::mouseMoveEvent(event);
   }
+#endif // for TEST
 }
 
 void GraphicsView::wheelEvent(QWheelEvent *event)

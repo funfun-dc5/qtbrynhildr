@@ -19,7 +19,7 @@ FORMS += GUI/log_view_dialog.ui
 CONFIG += c++11
 
 # for DEBUG
-CONFIG += console
+#CONFIG += console
 
 # for check spec
 # message($$QMAKESPEC)
@@ -216,12 +216,12 @@ SOURCES += function/recorder.cpp
 # for new feature
 NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
-HEADERS += mainwindow/desktoppanelobject.h mainwindow/graphicsview.h mainwindow/desktoppanel.h
-SOURCES += mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp mainwindow/desktoppanel.cpp
+HEADERS += mainwindow/desktoppanel.h mainwindow/desktoppanelobject.h mainwindow/graphicsview.h
+SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp
 DEFINES += QTB_DESKTOPWINDOW=0
 }
 else {
-HEADERS += mainwindow/desktopwindow.h mainwindow/desktoppanel.h
-SOURCES += mainwindow/desktopwindow.cpp mainwindow/desktoppanel.cpp
+HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
+SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
 DEFINES += QTB_DESKTOPWINDOW=1
 }

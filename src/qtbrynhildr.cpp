@@ -490,8 +490,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // initialize palette
   originalPalette = fullScreenPalette = scrollArea->palette();
   // for original
-  originalPalette.setColor(QPalette::Window, Qt::gray);
-  scrollArea->setPalette(originalPalette); // change QPalette::Window to gray
+  originalPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
+  scrollArea->setPalette(originalPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #else // QTB_DESKTOPWINDOW
@@ -512,8 +512,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // initialize palette
   originalPalette = fullScreenPalette = graphicsView->palette();
   // for original
-  originalPalette.setColor(QPalette::Window, Qt::black);
-  graphicsView->setPalette(originalPalette); // change QPalette::Window to black
+  originalPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
+  graphicsView->setPalette(originalPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #endif // QTB_DESKTOPWINDOW
@@ -2023,7 +2023,7 @@ void QtBrynhildr::createMenus()
   if (QTB_DESKTOP_FULL_SCREEN){
 	displayMenu->addAction(fullScreen_Action);
   }
-#endif // defined(QTB_DEV_DESKTOP)&& !defined(Q_OS_OSX)
+#endif // defined(QTB_DEV_DESKTOP)
 
   // video menu
   videoMenu = menuBar()->addMenu(tr("Video"));

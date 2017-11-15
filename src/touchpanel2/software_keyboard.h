@@ -408,7 +408,7 @@ private:
 	{{"\u2193",	"\u2193",	(uchar)VK_DOWN	},	{"PgD",		(uchar)VK_NEXT		}},	// ID_KEY_66
 	{{"\u2192",	"\u2192",	(uchar)VK_RIGHT	},	{"End",		(uchar)VK_END		}},	// ID_KEY_67
 
-	{{"Fn",		"Fn",	(uchar)VK_NONE_00	},	{"Fn",		(uchar)VK_NONE_00	}}	// ID_KEY_68
+	{{"Close",	"Close",(uchar)VK_NONE_00	},	{"Close",	(uchar)VK_NONE_00	}}	// ID_KEY_68
   };
 
   // key top table for US

@@ -8,21 +8,30 @@
 
 // Qt Header
 #include <QPainter>
+#if defined(QTB_DEV_TOUCHPANEL)
+#include <QTouchEvent>
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #include <QDebug>
 
 // Local Header
 #include "mainwindow/graphicsview.h"
+#include "qtbrynhildr.h"
 
 namespace qtbrynhildr {
 
 // constructor
-GraphicsView::GraphicsView(QGraphicsScene *scene, DesktopPanel *desktopPanel, QWidget *parent)
+GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWidget *parent)
   :
   QGraphicsView(scene, parent),
-  desktopPanel(desktopPanel),
-  // for DEBUG
+  qtbrynhildr(qtbrynhildr),
+  desktopPanel(qtbrynhildr->getDesktopPanel()),
+// for DEBUG
   outputLog(true)
 {
+#if defined(QTB_DEV_TOUCHPANEL)
+  setAttribute(Qt::WA_AcceptTouchEvents, true);
+#endif // defined(QTB_DEV_TOUCHPANEL)
   setRenderHint(QPainter::Antialiasing, false);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   //  setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
@@ -52,9 +61,44 @@ void GraphicsView::setScale(qreal scalingFactor)
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // event
-bool GraphicsView::event(QEvent *event){
-  return QGraphicsView::event(event);
+// event
+bool GraphicsView::viewportEvent(QEvent *event){
+  switch(event->type()){
+  case QEvent::TouchBegin:
+  case QEvent::TouchUpdate:
+  case QEvent::TouchEnd:
+	{
+	  qDebug() << "event type  = " << event->type();
+
+	  QTouchEvent *touchEvent = (QTouchEvent*)event;
+	  qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+	  if (touchPoints.count() == 1){
+		// 1 finger
+		qDebug() << "== 1 Point == ";
+		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
+		qDebug() << "pos = " << touchPoint.pos();
+		//		break; // to QGraphicsView::viewportEvent(event)
+		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
+		  qtbrynhildr->toggleSoftwareButton();
+		}
+	  }
+	  else if (touchPoints.count() == 2){
+		// 2 fingers
+		qDebug() << "== 2 Point == ";
+	  }
+	  else {
+		// others
+		qDebug() << "== many Point == ";
+	  }
+	  return true;
+	}
+	break;
+  default:
+	break;
+  }
+  return QGraphicsView::viewportEvent(event);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
@@ -64,7 +108,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
   //  cout << "mousePressEvent" << endl << flush;
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
-  if (mapToDesktop(pos)){
+  if (convertToDesktop(pos)){
 	//	qDebug() << "pos of desktop = " << pos;
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
 											QPointF(pos),
@@ -86,7 +130,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 #else // for TEST
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
-  if (mapToDesktop(pos)){
+  if (convertToDesktop(pos)){
 	//	qDebug() << "pos of desktop = " << pos;
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
 											QPointF(pos),
@@ -106,7 +150,7 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 #else // for TEST
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
-  if (mapToDesktop(pos)){
+  if (convertToDesktop(pos)){
 	//	qDebug() << "pos of desktop = " << pos;
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
 											QPointF(pos),
@@ -127,7 +171,7 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
   //  cout << "mouseDoubleClicEvent" << endl << flush;
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
-  if (mapToDesktop(pos)){
+  if (convertToDesktop(pos)){
 	qDebug() << "pos of desktop = " << pos;
   }
   else {
@@ -155,8 +199,8 @@ void GraphicsView::keyReleaseEvent(QKeyEvent *event)
   desktopPanel->keyReleaseEvent(event);
 }
 
-// map to desktop
-bool GraphicsView::mapToDesktop(QPoint &point)
+// convert to desktop
+bool GraphicsView::convertToDesktop(QPoint &point)
 {
   QSize size = desktopPanel->getSize();
   QRect rect(-size.width()/2, -size.height()/2, size.width(), size.height());

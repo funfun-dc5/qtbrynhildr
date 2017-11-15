@@ -9,6 +9,7 @@
 // Qt Header
 
 // Local Header
+#include "qtbrynhildr.h"
 #include "sk.h"
 
 using namespace std; // for TEST
@@ -19,11 +20,12 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-SK::SK(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent)
+SK::SK(Settings *settings, KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr)
   :
-  SoftwareKeyboard(parent),
+  SoftwareKeyboard(qtbrynhildr),
   settings(settings),
   keyBuffer(keyBuffer),
+  qtbrynhildr(qtbrynhildr),
   // for DEBUG
   outputLog(false)
 {
@@ -32,6 +34,21 @@ SK::SK(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent)
 //---------------------------------------------------------------------------
 // protected
 //---------------------------------------------------------------------------
+// pressed key
+void SK::pressedKey(ID_KEY id)
+{
+  SoftwareKeyboard::pressedKey(id);
+}
+
+// released key
+void SK::releasedKey(ID_KEY id)
+{
+  SoftwareKeyboard::releasedKey(id);
+  if (id == ID_KEY_Fn){
+	qtbrynhildr->toggleSoftwareKeyboard();
+  }
+}
+
 // key down
 void SK::keyDown(uchar key)
 {

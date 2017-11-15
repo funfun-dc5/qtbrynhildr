@@ -99,7 +99,7 @@ protected:
   // key up
   virtual void keyUp(uchar key);
 
-private:
+protected:
   // key id
   typedef enum {
 	ID_KEY_1,
@@ -183,18 +183,19 @@ private:
 	ID_KEY_Fn		= ID_KEY_68
   } ID_KEY;
 
+protected:
+  // pressed key
+  virtual void pressedKey(ID_KEY id);
+
+  // released key
+  virtual void releasedKey(ID_KEY id);
+
 private:
   // calculate layout
   void calculateLayout(qreal xFactor, qreal yFactor);
 
   // get ID
   ID_KEY getID(QPoint pos) const;
-
-  // pressed key
-  void pressedKey(ID_KEY id);
-
-  // released key
-  void releasedKey(ID_KEY id);
 
   // shift key
   uchar pressedShiftKey(ID_KEY id);

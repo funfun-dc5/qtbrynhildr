@@ -9,6 +9,7 @@
 // Qt Header
 
 // Local Header
+#include "qtbrynhildr.h"
 #include "sb.h"
 
 using namespace std; // for TEST
@@ -19,11 +20,12 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-SB::SB(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent)
+SB::SB(Settings *settings, MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr)
   :
-  SoftwareButton(parent),
+  SoftwareButton(qtbrynhildr),
   settings(settings),
   mouseBuffer(mouseBuffer),
+  qtbrynhildr(qtbrynhildr),
   previousClick(TYPE_MOUSE_INVALID),
   previousClickTime(QDateTime::currentDateTime()),
   // for DEBUG
@@ -365,6 +367,10 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
   value.button = MOUSE_BUTTON_UP;
 
   switch (id){
+  case ID_BUTTON_1:
+	// Fn
+	qtbrynhildr->toggleSoftwareButton();
+	break;
   case ID_BUTTON_31:
 	// Mouse Left Button
 	if (settings->getConnected()){

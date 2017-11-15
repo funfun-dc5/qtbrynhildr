@@ -125,8 +125,8 @@ int main(int argc, char *argv[])
 #endif // defined(Q_OS_WIN)
 
   // set attribute
-#if 0 // defined(QTB_DEV_TOUCHPANEL) // 0 for TEST
-  app.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents, false);
+#if defined(QTB_DEV_TOUCHPANEL)
+  app.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents, true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // display main window

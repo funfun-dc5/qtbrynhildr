@@ -374,6 +374,9 @@ void SoftwareButton::releasedButton(SoftwareButton::ID_BUTTON id)
 	cout << "Released: ID_BUTTON = " << id << endl << flush;
 
   switch (id){
+  case ID_BUTTON_1:
+	// Fn
+	break;
   case ID_BUTTON_6:
 	// Info button
 	// Nothing to do

@@ -145,6 +145,12 @@ public:
 
   // move top of software button
   void moveTopOfSoftwareButton(int y);
+
+  // toggle software keyboard
+  void toggleSoftwareKeyboard();
+  // toggle software button
+  void toggleSoftwareButton();
+
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 public slots:
@@ -397,7 +403,7 @@ private slots:
   // scroll mode
   void toggleOnScrollMode();
 
-#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // visibility changed software keyboard
   void visibilityChangedSoftwareKeyboard(bool visible);
 

@@ -15,6 +15,8 @@
 
 namespace qtbrynhildr {
 
+class QtBrynhildr;
+
 // SoftwareButton
 class SB : public SoftwareButton
 {
@@ -22,7 +24,7 @@ class SB : public SoftwareButton
 
 public:
   // constructor
-  SB(Settings *settings, MouseBuffer *mouseBuffer, QWidget *parent = 0);
+  SB(Settings *settings, MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr);
   // destructor
   //  ~SB();
 
@@ -39,6 +41,9 @@ private:
 
   // mouse buffer
   MouseBuffer *mouseBuffer;
+
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
 
   // previous click button
   MouseInfoType previousClick;

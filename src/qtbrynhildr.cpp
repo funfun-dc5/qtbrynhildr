@@ -504,9 +504,17 @@ QtBrynhildr::QtBrynhildr(Option *option)
   graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
   graphicsScene->addItem(desktopPanelObject);
   // view
-  graphicsView = new GraphicsView(graphicsScene, desktopPanel);
+  graphicsView = new GraphicsView(graphicsScene, this);
   graphicsView->setBackgroundRole(QPalette::Window);
   graphicsView->setAutoFillBackground(true);
+#if defined(QTB_DEV_TOUCHPANEL)
+  int screenWidth = settings->getDesktop()->getCurrentScreen().size().width();
+  int screenHeight = settings->getDesktop()->getCurrentScreen().size().height();
+  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight - 10,
+											screenWidth/4, 10));
+  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth/8 * 3, screenHeight - 10,
+											  screenWidth/4, 10));
+#endif // defined(QTB_DEV_TOUCHPANEL)
   // set Widget
   setCentralWidget(graphicsView);
   // initialize palette
@@ -3946,12 +3954,14 @@ void QtBrynhildr::toggleShowSoftwareKeyboard()
   if (settings->getOnShowSoftwareKeyboard()){
 	settings->setOnShowSoftwareKeyboard(false);
 	softwareKeyboard->setVisible(false);
+	showSoftwareKeyboard_Action->setChecked(false);
   }
   else {
 	settings->setOnShowSoftwareKeyboard(true);
 	QRect rect = calculateSoftwareKeyboardLayout();
 	softwareKeyboard->setGeometry(rect);
 	softwareKeyboard->setVisible(true);
+	showSoftwareKeyboard_Action->setChecked(true);
   }
 }
 
@@ -3961,12 +3971,14 @@ void QtBrynhildr::toggleShowSoftwareButton()
   if (settings->getOnShowSoftwareButton()){
 	settings->setOnShowSoftwareButton(false);
 	softwareButton->setVisible(false);
+	showSoftwareButton_Action->setChecked(false);
   }
   else {
 	settings->setOnShowSoftwareButton(true);
 	QRect rect = calculateSoftwareButtonLayout();
 	softwareButton->setGeometry(rect);
 	softwareButton->setVisible(true);
+	showSoftwareButton_Action->setChecked(true);
   }
 }
 
@@ -3989,6 +4001,18 @@ void QtBrynhildr::setupSoftwareButton()
   softwareButton->setGeometry(rect);
   softwareButton->setVisible(true);
 }
+
+// toggle software keyboard
+void QtBrynhildr::toggleSoftwareKeyboard()
+{
+  toggleShowSoftwareKeyboard();
+}
+// toggle software button
+void QtBrynhildr::toggleSoftwareButton()
+{
+  toggleShowSoftwareButton();
+}
+
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 // select frame rate
@@ -4117,7 +4141,7 @@ void QtBrynhildr::toggleOnScrollMode()
   }
 }
 
-#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 // visibility changed software keyboard
 void QtBrynhildr::visibilityChangedSoftwareKeyboard(bool visible)
 {

@@ -15,16 +15,24 @@
 
 namespace qtbrynhildr {
 
+class QtBrynhildr;
+
 // SoftwareKeyboard
 class SK : public SoftwareKeyboard
 {
 public:
   // constructor
-  SK(Settings *settings, KeyBuffer *keyBuffer, QWidget *parent = 0);
+  SK(Settings *settings, KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr);
   // destructor
   //  ~SK();
 
 protected:
+  // pressed key
+  void pressedKey(ID_KEY id);
+
+  // released key
+  void releasedKey(ID_KEY id);
+
   // key down
   void keyDown(uchar key) override;
   
@@ -37,6 +45,9 @@ private:
 
   // key buffer
   KeyBuffer *keyBuffer;
+
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
 
   // output log flag
   bool outputLog;

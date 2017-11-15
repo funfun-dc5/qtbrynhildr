@@ -85,19 +85,34 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		qDebug() << "pos = " << touchPoint.pos();
 		//		break; // to QGraphicsView::viewportEvent(event)
 		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
-		  QPoint currentPos = touchPoint.pos().toPoint();
-		  QPoint startPos = touchPoint.startPos().toPoint();
-		  qDebug() << "softwareButtonRect = " << softwareButtonRect;
-		  qDebug() << "softwareKeyboardRect = " << softwareKeyboardRect;
-		  qDebug() << "currentPos = " << currentPos;
-		  qDebug() << "startPos = " << startPos;
-		  if (softwareButtonRect.contains(startPos) &&
-			  !softwareButtonRect.contains(currentPos)){
-			qtbrynhildr->toggleSoftwareButton();
+		  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
+		  if (distance < 20){ // for TEST (Nexus7(2013):1920x1200)
+			// tap
+			qDebug() << "TAP";
+			QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													touchPoint.pos(),
+													Qt::LeftButton,
+													Qt::LeftButton,
+													Qt::NoModifier);
+			mousePressEvent(newEvent);
 		  }
-		  else if (softwareKeyboardRect.contains(startPos) &&
-				   !softwareKeyboardRect.contains(currentPos)){
-			qtbrynhildr->toggleSoftwareKeyboard();
+		  else {
+			QPoint currentPos = touchPoint.pos().toPoint();
+			QPoint startPos = touchPoint.startPos().toPoint();
+#if 0
+			qDebug() << "softwareButtonRect = " << softwareButtonRect;
+			qDebug() << "softwareKeyboardRect = " << softwareKeyboardRect;
+			qDebug() << "currentPos = " << currentPos;
+			qDebug() << "startPos = " << startPos;
+#endif
+			if (softwareButtonRect.contains(startPos) &&
+				!softwareButtonRect.contains(currentPos)){
+			  qtbrynhildr->toggleSoftwareButton();
+			}
+			else if (softwareKeyboardRect.contains(startPos) &&
+					 !softwareKeyboardRect.contains(currentPos)){
+			  qtbrynhildr->toggleSoftwareKeyboard();
+			}
 		  }
 		}
 	  }
@@ -119,7 +134,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-// mouse event 
+// mouse event
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
   //  cout << "mousePressEvent" << endl << flush;

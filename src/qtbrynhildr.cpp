@@ -576,12 +576,12 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // set window information
   int screenWidth = settings->getDesktop()->getCurrentScreen().size().width();
   int screenHeight = settings->getDesktop()->getCurrentScreen().size().height();
-  qDebug() << "screenSize = " << settings->getDesktop()->getCurrentScreen();
+  //  qDebug() << "screenSize = " << settings->getDesktop()->getCurrentScreen();
   screenHeight += heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
   screenHeight += 20; // for TEST (Nexus7(2013):1920x1200)
-  qDebug() << "screenHeight = " << screenHeight;
-  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight - 40, screenWidth/4, 40));
-  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth/8 * 3, screenHeight - 40, screenWidth/4, 40));
+  //  qDebug() << "screenHeight = " << screenHeight;
+  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight - 50, screenWidth/4, 50));  // for TEST (Nexus7(2013):1920x1200)
+  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth/8 * 3, screenHeight - 50, screenWidth/4, 50)); // for TEST (Nexus7(2013):1920x1200)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
@@ -3907,7 +3907,7 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
 #endif // QTB_DESKTOPWINDOW
 
   // calc size
-  int width = windowSize.width() * 0.9;
+  int width = windowSize.width() * 0.95;
   int height = size.height() * ((double)width / size.width());
 
   // calc position

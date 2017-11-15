@@ -25,12 +25,16 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   :
   QGraphicsView(scene, parent),
   qtbrynhildr(qtbrynhildr),
+  settings(qtbrynhildr->getSettings()),
   desktopPanel(qtbrynhildr->getDesktopPanel()),
+  keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer()),
 // for DEBUG
   outputLog(true)
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);
+#else // defined(QTB_DEV_TOUCHPANEL)
+  setMouseTracking(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   setRenderHint(QPainter::Antialiasing, false);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -40,10 +44,10 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   setResizeAnchor(QGraphicsView::AnchorViewCenter);
   setTransformationAnchor(QGraphicsView::AnchorViewCenter);
   setAlignment(Qt::AlignCenter);
-#if !QTB_DESKTOPWINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-#endif // !QTB_DESKTOPWINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 // destructor
@@ -115,19 +119,20 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 											event->button(),
 											event->buttons(),
 											event->modifiers());
+#if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->mouseMoveEvent(newEvent);
-#if 0 // for TEST
+#else // defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->mousePressEvent(newEvent);
-#endif // 0 // for TEST
+#endif // defined(QTB_DEV_TOUCHPANEL)
   }
 }
 
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
   //  cout << "mouseReleaseEvent" << endl << flush;
-#if 1 // for TEST
+#if defined(QTB_DEV_TOUCHPANEL)
   Q_UNUSED(event);
-#else // for TEST
+#else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -139,15 +144,15 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseReleaseEvent(newEvent);
   }
-#endif // for TEST
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //  cout << "mouseDoubleClicEvent" << endl << flush;
-#if 1 // for TEST
+#if defined(QTB_DEV_TOUCHPANEL)
   Q_UNUSED(event);
-#else // for TEST
+#else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -159,25 +164,30 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseDoubleClickEvent(newEvent);
   }
-#endif // for TEST
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
   //  cout << "mouseMoveEvent" << endl << flush;
-#if 1 // for TEST
+#if defined(QTB_DEV_TOUCHPANEL)
   Q_UNUSED(event);
-#else // for TEST
-  //  cout << "mouseDoubleClicEvent" << endl << flush;
+#else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
-	qDebug() << "pos of desktop = " << pos;
+	//	qDebug() << "pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanel->mouseMoveEvent(newEvent);
   }
   else {
 	QGraphicsView::mouseMoveEvent(event);
   }
-#endif // for TEST
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 void GraphicsView::wheelEvent(QWheelEvent *event)
@@ -199,6 +209,18 @@ void GraphicsView::keyReleaseEvent(QKeyEvent *event)
   desktopPanel->keyReleaseEvent(event);
 }
 
+#if QTB_DRAG_AND_DROP_SUPPORT
+// drag and drop
+void GraphicsView::dragEnterEvent(QDragEnterEvent *event)
+{
+  desktopPanel->dragEnterEvent(event);
+}
+void GraphicsView::dropEvent(QDropEvent *event)
+{
+  desktopPanel->dropEvent(event);
+}
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
 // convert to desktop
 bool GraphicsView::convertToDesktop(QPoint &point)
 {
@@ -213,5 +235,157 @@ bool GraphicsView::convertToDesktop(QPoint &point)
 	return false;
   }
 }
+
+//----------------------------------------------------------------------
+// native event filter
+//----------------------------------------------------------------------
+#if defined(Q_OS_WIN)
+bool GraphicsView::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+{
+  Q_UNUSED(result);
+
+  if (!(settings->getConnected()) ||
+	  !(settings->getOnControl())){
+	return false;
+  }
+
+  if (eventType == "windows_generic_MSG"){
+	MSG *msg = static_cast<MSG *>(message);
+	// KEY
+	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
+	  // send All key event in nativeEventFilter
+	  if (msg->message == WM_KEYDOWN){
+#if 0 // for TEST
+		// VK_LXXXX/RXXXX -> VK_XXXX
+		switch(msg->wParam){
+		case VK_LSHIFT:
+		case VK_RSHIFT:
+		  msg->wParam = VK_SHIFT;
+		  break;
+		case VK_LCONTROL:
+		case VK_RCONTROL:
+		  msg->wParam = VK_CONTROL;
+		  break;
+		case VK_LMENU:
+		case VK_RMENU:
+		  msg->wParam = VK_MENU;
+		  break;
+		}
+#endif // for TEST
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
+		return true;
+	  }
+	  else if (msg->message == WM_KEYUP){
+#if 0 // for TEST
+		// VK_LXXXX/RXXXX -> VK_XXXX
+		switch(msg->wParam){
+		case VK_LSHIFT:
+		case VK_RSHIFT:
+		  msg->wParam = VK_SHIFT;
+		  break;
+		case VK_LCONTROL:
+		case VK_RCONTROL:
+		  msg->wParam = VK_CONTROL;
+		  break;
+		case VK_LMENU:
+		case VK_RMENU:
+		  msg->wParam = VK_MENU;
+		  break;
+		}
+#endif // for TEST
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
+		return true;
+	  }
+	  // NOTE: never fall through
+	}
+
+	// except for KEYBOARD_TYPE_NATIVE
+	if (msg->message == WM_KEYDOWN){
+	  switch(msg->wParam){
+	  case VK_OEM_AUTO:
+	  case VK_OEM_ENLW:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYDOWN);
+		return true;
+		break;
+	  case VK_CONVERT:
+	  case VK_NONCONVERT:
+	  case VK_OEM_ATTN:
+	  case 229:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+	else if (msg->message == WM_KEYUP){
+	  switch(msg->wParam){
+	  case VK_OEM_AUTO:
+	  case VK_OEM_ENLW:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYUP);
+		return true;
+		break;
+	  case VK_CONVERT:
+	  case VK_NONCONVERT:
+	  case VK_OEM_ATTN:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+	// SYSKEY
+	else if (msg->message == WM_SYSKEYDOWN){
+	  switch(msg->wParam){
+	  case VK_MENU:
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+	else if (msg->message == WM_SYSKEYUP){
+	  switch(msg->wParam){
+	  case VK_MENU:
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+  }
+  return false;
+}
+#endif // defined(Q_OS_WIN)
+
+#if 0 // for TEST
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+// for X11
+#include <xcb/xcb.h>
+
+bool GraphicsView::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
+{
+  if (!(settings->getConnected()) ||
+	  !(settings->getOnControl())){
+	return false;
+  }
+  if (eventType == "xcb_generic_event_t"){
+	xcb_generic_event_t *ev = static_cast<xcb_generic_event_t *>(message);
+  }
+  return false;
+}
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#endif
 
 } // end of namespace qtbrynhildr

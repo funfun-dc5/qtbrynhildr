@@ -9,18 +9,31 @@
 // System Header
 
 // Qt Header
+#include <QByteArray>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QPaintEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QRect>
 
 // Local Header
+#include "control/keybuffer.h"
 #include "mainwindow/desktoppanel.h"
+#include "settings.h"
 
 namespace qtbrynhildr {
 
 class QtBrynhildr;
 
+#if defined(Q_OS_WIN)
+class GraphicsView : public QGraphicsView, public QAbstractNativeEventFilter
+#else // defined(Q_OS_WIN)
 class GraphicsView : public QGraphicsView
+#endif // defined(Q_OS_WIN)
 {
   Q_OBJECT
 
@@ -65,16 +78,33 @@ protected:
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
 
+#if QTB_DRAG_AND_DROP_SUPPORT
+  // drag and drop
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dropEvent(QDropEvent *event);
+#endif // QTB_DRAG_AND_DROP_SUPPORT
+
 private:
   // convert to desktop
   bool convertToDesktop(QPoint &point);
+
+#if defined(Q_OS_WIN)
+  // native event filter
+  bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+#endif // defined(Q_OS_WIN)
 
 private:
   // qtbrynhildr
   QtBrynhildr *qtbrynhildr;
 
+  // settings
+  Settings *settings;
+
   // desktop panel
   DesktopPanel *desktopPanel;
+
+  // key buffer
+  KeyBuffer *keyBuffer;
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // for software button

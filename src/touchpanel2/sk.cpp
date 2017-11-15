@@ -20,12 +20,12 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-SK::SK(Settings *settings, KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr)
+SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr)
   :
   SoftwareKeyboard(qtbrynhildr),
-  settings(settings),
   keyBuffer(keyBuffer),
   qtbrynhildr(qtbrynhildr),
+  settings(qtbrynhildr->getSettings()),
   // for DEBUG
   outputLog(false)
 {

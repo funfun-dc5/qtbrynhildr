@@ -34,7 +34,7 @@ class DesktopWindow : public QWidget, public DesktopPanel
 
 public:
   // constructor
-  DesktopWindow(Settings *settings, QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
+  DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
   // destructor
   ~DesktopWindow();
 

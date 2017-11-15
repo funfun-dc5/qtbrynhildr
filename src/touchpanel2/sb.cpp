@@ -20,12 +20,12 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-SB::SB(Settings *settings, MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr)
+SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr)
   :
   SoftwareButton(qtbrynhildr),
-  settings(settings),
   mouseBuffer(mouseBuffer),
   qtbrynhildr(qtbrynhildr),
+  settings(qtbrynhildr->getSettings()),
   previousClick(TYPE_MOUSE_INVALID),
   previousClickTime(QDateTime::currentDateTime()),
   // for DEBUG

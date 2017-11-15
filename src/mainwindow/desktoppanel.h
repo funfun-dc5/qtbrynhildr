@@ -41,7 +41,7 @@ class DesktopPanel
 {
 public:
   // constructor
-  DesktopPanel(Settings *settings, QtBrynhildr *qtbrynhildr);
+  DesktopPanel(QtBrynhildr *qtbrynhildr);
   // destructor
   ~DesktopPanel();
 
@@ -84,9 +84,11 @@ public:
   // update desktop
   virtual void updateDesktop() = 0;
 
-#if !defined(QTB_DESKTOPWINDOW)
+#if QTB_DESKTOPWINDOW
 protected:
-#endif // defined(QTB_DESKTOPWINDOW)
+#else // QTB_DESKTOPWINDOW
+public:
+#endif // QTB_DESKTOPWINDOW
   // for event handling
 #if defined(QTB_DEV_TOUCHPANEL)
   // event

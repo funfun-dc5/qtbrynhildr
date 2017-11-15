@@ -152,7 +152,7 @@ protected:
   // key top table
   ButtonTop buttonTopTable[ID_BUTTON_NUM] = {
 	// 1st row
-	{"Fn",				true},  	// ID_BUTTON_1
+	{"Close",			true},  	// ID_BUTTON_1
 	{"Monitor",			false},		// ID_BUTTON_2
 	{"Sound",			false},		// ID_BUTTON_3
 	{"Off",				false},		// ID_BUTTON_4

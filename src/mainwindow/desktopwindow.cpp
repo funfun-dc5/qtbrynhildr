@@ -17,10 +17,10 @@
 namespace qtbrynhildr {
 
 // constructor
-DesktopWindow::DesktopWindow(Settings *settings, QtBrynhildr *qtbrynhildr, QWidget *parent)
+DesktopWindow::DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :
   QWidget(parent),
-  DesktopPanel(settings, qtbrynhildr)
+  DesktopPanel(qtbrynhildr)
 {
   //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

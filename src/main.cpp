@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 #if QTB_DESKTOPWINDOW
   app.installNativeEventFilter(qtbrynhildr->getDesktopWindow());
 #else // QTB_DESKTOPWINDOW
-  app.installNativeEventFilter(qtbrynhildr->getDesktopPanelObject());
+  app.installNativeEventFilter(qtbrynhildr->getGraphicsView());
 #endif // QTB_DESKTOPWINDOW
 #endif // defined(Q_OS_WIN)
 

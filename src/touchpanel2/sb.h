@@ -24,7 +24,7 @@ class SB : public SoftwareButton
 
 public:
   // constructor
-  SB(Settings *settings, MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr);
+  SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr);
   // destructor
   //  ~SB();
 
@@ -36,14 +36,14 @@ protected:
   void releasedButton(ID_BUTTON id) override;
 
 private:
-  // settings
-  Settings *settings;
-
   // mouse buffer
   MouseBuffer *mouseBuffer;
 
   // qtbrynhildr
   QtBrynhildr *qtbrynhildr;
+
+  // settings
+  Settings *settings;
 
   // previous click button
   MouseInfoType previousClick;

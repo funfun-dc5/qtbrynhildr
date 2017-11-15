@@ -24,17 +24,13 @@ namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-#if defined(Q_OS_WIN)
-class DesktopPanelObject : public QGraphicsObject, public DesktopPanel, public QAbstractNativeEventFilter
-#else // defined(Q_OS_WIN)
 class DesktopPanelObject : public QGraphicsObject, public DesktopPanel
-#endif // defined(Q_OS_WIN)
 {
   Q_OBJECT
 
 public:
   // constructor
-  DesktopPanelObject(Settings *settings, QtBrynhildr *qtbrynhildr, QGraphicsItem *parent = Q_NULLPTR);
+  DesktopPanelObject(QtBrynhildr *qtbrynhildr, QGraphicsItem *parent = Q_NULLPTR);
   // destructor
   ~DesktopPanelObject();
 
@@ -47,12 +43,6 @@ public:
 protected:
   QRectF boundingRect() const;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
-
-private:
-#if defined(Q_OS_WIN)
-  // native event filter
-  bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
-#endif // defined(Q_OS_WIN)
 };
 
 } // end of namespace qtbrynhildr

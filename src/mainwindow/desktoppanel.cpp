@@ -38,10 +38,10 @@
 namespace qtbrynhildr {
 
 // constructor
-DesktopPanel::DesktopPanel(Settings *settings, QtBrynhildr *qtbrynhildr)
+DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
   :
   qtbrynhildr(qtbrynhildr),
-  settings(settings),
+  settings(qtbrynhildr->getSettings()),
   eventConverter(0),
   onShiftKey(false),
   onFullScreen(false),

@@ -474,7 +474,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   //------------------------------------------------------------
 #if QTB_DESKTOPWINDOW
   // Desktop Window Widget
-  desktopWindow = new DesktopWindow(settings, this);
+  desktopWindow = new DesktopWindow(this);
   desktopPanel = desktopWindow;
 
   // Scroll Area
@@ -496,7 +496,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #else // QTB_DESKTOPWINDOW
   // Desktop Panel Object
-  desktopPanelObject = new DesktopPanelObject(settings, this);
+  desktopPanelObject = new DesktopPanelObject(this);
   desktopPanel = desktopPanelObject;
 
   // scene
@@ -608,8 +608,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // set up Software Button and Keyboard
   // keyboard
-  //	softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), this);
-  softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), this);
+  //	softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this);
+  softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this);
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
   softwareKeyboard->setGeometry(40,350,1120,300);
@@ -617,8 +617,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #endif // for TEST
 
   // button
-  //	softwareButton = new SB(settings, desktopPanel->getMouseBuffer(), this);
-  softwareButton = new SB(settings, desktopPanel->getMouseBuffer(), this);
+  //	softwareButton = new SB(desktopPanel->getMouseBuffer(), this);
+  softwareButton = new SB(desktopPanel->getMouseBuffer(), this);
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 0 // for TEST
@@ -1007,10 +1007,10 @@ DesktopWindow *QtBrynhildr::getDesktopWindow() const
   return desktopWindow;
 }
 #else // QTB_DESKTOPWINDOW
-// get desktop panel object
-DesktopPanelObject *QtBrynhildr::getDesktopPanelObject() const
+// get graphics view
+GraphicsView *QtBrynhildr::getGraphicsView() const
 {
-  return desktopPanelObject;
+  return graphicsView;
 }
 #endif // QTB_DESKTOPWINDOW
 

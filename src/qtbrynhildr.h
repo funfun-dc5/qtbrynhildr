@@ -111,12 +111,18 @@ public:
   // destructor
   ~QtBrynhildr();
 
+  // get settings
+  Settings *getSettings() const
+  {
+	return settings;
+  }
+
 #if QTB_DESKTOPWINDOW
   // get desktop window
   DesktopWindow *getDesktopWindow() const;
 #else // QTB_DESKTOPWINDOW
-  // get desktop panel objecy
-  DesktopPanelObject *getDesktopPanelObject() const;
+  // get graphics view
+  GraphicsView *getGraphicsView() const;
 #endif // QTB_DESKTOPWINDOW
 
   // get desktop panel

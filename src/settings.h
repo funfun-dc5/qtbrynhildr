@@ -327,9 +327,9 @@ typedef int COMPRESS_MODE;
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
 #if defined(QTB_DEV_TOUCHPANEL)
-#define QTB_ONFULLSCREENATCONNECTED_DEFAULT			false
-#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONFULLSCREENATCONNECTED_DEFAULT			true
+#else // defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONFULLSCREENATCONNECTED_DEFAULT			false
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onHideMenuAndStatusBarAtFullScreen

@@ -134,6 +134,9 @@ public:
   // exit full screen
   void exitFullScreen();
 
+  // get height of title bar
+  int getHeightOfTitleBar();
+
   // get height of menu bar
   int getHeightOfMenuBar();
 
@@ -873,10 +876,8 @@ private:
   QProgressBar	*progressBar;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
-#if 0 // for TEST
   // height of title bar
   int heightOfTitleBar;
-#endif // for TEST
 
   // height of menu bar in hiding
   int heightOfMenuBarInHiding;

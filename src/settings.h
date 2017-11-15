@@ -322,7 +322,11 @@ typedef int COMPRESS_MODE;
 
 // for onShowStatusBar
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONSHOWSTATUSBAR_DEFAULT			false
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"

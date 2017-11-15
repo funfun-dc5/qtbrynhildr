@@ -85,7 +85,20 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		qDebug() << "pos = " << touchPoint.pos();
 		//		break; // to QGraphicsView::viewportEvent(event)
 		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
-		  qtbrynhildr->toggleSoftwareButton();
+		  QPoint currentPos = touchPoint.pos().toPoint();
+		  QPoint startPos = touchPoint.startPos().toPoint();
+		  qDebug() << "softwareButtonRect = " << softwareButtonRect;
+		  qDebug() << "softwareKeyboardRect = " << softwareKeyboardRect;
+		  qDebug() << "currentPos = " << currentPos;
+		  qDebug() << "startPos = " << startPos;
+		  if (softwareButtonRect.contains(startPos) &&
+			  !softwareButtonRect.contains(currentPos)){
+			qtbrynhildr->toggleSoftwareButton();
+		  }
+		  else if (softwareKeyboardRect.contains(startPos) &&
+				   !softwareKeyboardRect.contains(currentPos)){
+			qtbrynhildr->toggleSoftwareKeyboard();
+		  }
 		}
 	  }
 	  else if (touchPoints.count() == 2){

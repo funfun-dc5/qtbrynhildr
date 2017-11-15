@@ -230,9 +230,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_PUBLIC_MODE6_SUPPORT
   progressBar(0),
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-#if 0 // for TEST
   heightOfTitleBar(0),
-#endif // for TEST
   heightOfMenuBarInHiding(0),
   heightOfStatusBarInHiding(0),
   heightOfMenuBar(0),
@@ -507,14 +505,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   graphicsView = new GraphicsView(graphicsScene, this);
   graphicsView->setBackgroundRole(QPalette::Window);
   graphicsView->setAutoFillBackground(true);
-#if defined(QTB_DEV_TOUCHPANEL)
-  int screenWidth = settings->getDesktop()->getCurrentScreen().size().width();
-  int screenHeight = settings->getDesktop()->getCurrentScreen().size().height();
-  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight - 10,
-											screenWidth/4, 10));
-  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth/8 * 3, screenHeight - 10,
-											  screenWidth/4, 10));
-#endif // defined(QTB_DEV_TOUCHPANEL)
   // set Widget
   setCentralWidget(graphicsView);
   // initialize palette
@@ -549,11 +539,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   setWindowTitle(tr(QTB_APPLICATION));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
-#if 0 // for TEST
-  // set height of title bar
-  heightOfTitleBar = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
-#endif // for TEST
-
   // set window flags
   Qt::WindowFlags flags = windowFlags();
   flags |= Qt::CustomizeWindowHint;
@@ -575,6 +560,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   refreshWindow();
 
   // get window information
+  heightOfTitleBar = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight) + 2;
   heightOfMenuBar = menuBar()->sizeHint().height();
   heightOfStatusBar = statusBar()->sizeHint().height();
   if (settings->getOutputLog()){
@@ -585,6 +571,18 @@ QtBrynhildr::QtBrynhildr(Option *option)
   }
   heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
   heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // set window information
+  int screenWidth = settings->getDesktop()->getCurrentScreen().size().width();
+  int screenHeight = settings->getDesktop()->getCurrentScreen().size().height();
+  qDebug() << "screenSize = " << settings->getDesktop()->getCurrentScreen();
+  screenHeight += heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
+  screenHeight += 20; // for TEST (Nexus7(2013):1920x1200)
+  qDebug() << "screenHeight = " << screenHeight;
+  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight - 40, screenWidth/4, 40));
+  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth/8 * 3, screenHeight - 40, screenWidth/4, 40));
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
   connectToServerDialog = new ConnectToServerDialog(settings, this);
@@ -1025,6 +1023,12 @@ void QtBrynhildr::exitFullScreen()
 {
   if (fullScreenMode)
 	fullScreen();
+}
+
+// get height of title bar
+int QtBrynhildr::getHeightOfTitleBar()
+{
+  return heightOfTitleBar;
 }
 
 // get height of menu bar

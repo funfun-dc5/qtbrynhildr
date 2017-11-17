@@ -81,7 +81,7 @@ public:
   // constructor
   NetThread(const char *name, Settings *settings, DesktopPanel *desktopPanel);
   // destructor
-  ~NetThread();
+  virtual ~NetThread();
 
   // exit thread
   void exitThread();

@@ -43,7 +43,7 @@ public:
   // constructor
   DesktopPanel(QtBrynhildr *qtbrynhildr);
   // destructor
-  ~DesktopPanel();
+  virtual ~DesktopPanel();
 
   // set event converter
   void setEventConverter(EventConverter *eventConverter);

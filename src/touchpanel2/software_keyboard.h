@@ -55,7 +55,7 @@ public:
   SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = 0);
 #endif // USE_KEYLAYOUTFILE
   // destructor
-  ~SoftwareKeyboard();
+  virtual ~SoftwareKeyboard();
 
   // get keytop type
   KEYTOP_TYPE getKeytopType();

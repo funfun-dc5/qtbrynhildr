@@ -23,7 +23,7 @@ public:
   // constructor
   SoftwareButton(QWidget *parent = 0);
   // destructor
-  //  ~SoftwareButton();
+  //  virtual ~SoftwareButton();
 
   // reset size
   QSize resetSize();

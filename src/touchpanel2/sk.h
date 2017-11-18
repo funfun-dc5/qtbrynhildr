@@ -28,10 +28,10 @@ public:
 
 protected:
   // pressed key
-  void pressedKey(ID_KEY id);
+  void pressedKey(ID_KEY id) override;
 
   // released key
-  void releasedKey(ID_KEY id);
+  void releasedKey(ID_KEY id) override;
 
   // key down
   void keyDown(uchar key) override;

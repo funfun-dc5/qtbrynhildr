@@ -11,6 +11,7 @@
 #if defined(QTB_DEV_TOUCHPANEL)
 #include <QTouchEvent>
 #endif // defined(QTB_DEV_TOUCHPANEL)
+#include <QTransform>
 
 #include <QDebug>
 
@@ -28,6 +29,9 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   settings(qtbrynhildr->getSettings()),
   desktopPanel(qtbrynhildr->getDesktopPanel()),
   keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer()),
+#if 0 // for TEST
+  centerPos(QPointF(0,0)),
+#endif // for TEST
 // for DEBUG
   outputLog(true)
 {
@@ -48,6 +52,7 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 #endif // defined(QTB_DEV_TOUCHPANEL)
+  ensureVisible(QRectF(0,0,0,0), 0, 0);
 }
 
 // destructor
@@ -58,10 +63,10 @@ GraphicsView::~GraphicsView()
 // scale
 void GraphicsView::setScale(qreal scalingFactor)
 {
-  QMatrix matrix;
+  QTransform transform;
 
-  matrix.scale(scalingFactor, scalingFactor);
-  setMatrix(matrix);
+  transform.scale(scalingFactor, scalingFactor);
+  setTransform(transform);
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -95,6 +100,12 @@ bool GraphicsView::viewportEvent(QEvent *event){
 													Qt::LeftButton,
 													Qt::NoModifier);
 			mousePressEvent(newEvent);
+
+			QRectF rect = sceneRect();
+			qDebug() << "sceneRect = " << rect;
+			setSceneRect(-960, -540, 960, 540);
+			rect = sceneRect();
+			qDebug() << "sceneRect = " << rect;
 		  }
 		  else {
 			QPoint currentPos = touchPoint.pos().toPoint();
@@ -119,6 +130,33 @@ bool GraphicsView::viewportEvent(QEvent *event){
 	  else if (touchPoints.count() == 2){
 		// 2 fingers
 		qDebug() << "== 2 Point == ";
+		const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+		const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+#if 1
+		qreal currentScalingFactor =
+		  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
+		  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+		currentScalingFactor *= 0.4;
+		qreal scalingFactor = settings->getDesktopScalingFactor();
+		if(touchEvent->touchPointStates() & Qt::TouchPointReleased){
+		  scalingFactor *= currentScalingFactor;
+		  currentScalingFactor = 1.0;
+		}
+		settings->setDesktopScalingFactor(scalingFactor * currentScalingFactor);
+		scalingFactor = settings->getDesktopScalingFactor();
+		setScale(scalingFactor);
+#else
+		if(touchEvent->touchPointStates() & Qt::TouchPointReleased){
+		  qreal currentScalingFactor =
+			QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
+			QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+		  qreal scalingFactor = settings->getDesktopScalingFactor();
+		  scalingFactor *= currentScalingFactor;
+		  settings->setDesktopScalingFactor(scalingFactor);
+		  scalingFactor = settings->getDesktopScalingFactor();
+		  setScale(scalingFactor);
+		}
+#endif
 	  }
 	  else {
 		// others

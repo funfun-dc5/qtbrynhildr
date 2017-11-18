@@ -226,6 +226,11 @@ typedef int KEYBOARD_TYPE;
 // for desktopScalingFactor
 #define QTB_DESKTOPSCALINGFACTOR	"desktopScalingFactor"
 #define QTB_DESKTOPSCALINGFACTOR_DEFAULT 1.0
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT 1.0
+#else // defined(QTB_DEV_TOUCHPANEL)
+#define QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT 0.1
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for desktopScaringQuality
 #define QTB_DESKTOPSCALINGQUALITY			"desktopScalingQuality"
@@ -1174,12 +1179,17 @@ public:
   // set desktop scaling factor
   void setDesktopScalingFactor(qreal desktopScalingFactor)
   {
-	if (desktopScalingFactor == 0.0){
-	  // ignore
-	  return;
+	if (desktopScalingFactor < desktopScalingFactorLimit){
+	  desktopScalingFactor = desktopScalingFactorLimit;
 	}
 	this->desktopScalingFactor = desktopScalingFactor;
 	this->desktopScalingFactorForZoom = 1.0/desktopScalingFactor;
+  }
+
+  // set desktop scaling factor limit
+  void setDesktopScalingFactorLimit(qreal desktopScalingFactorLimit)
+  {
+	this->desktopScalingFactorLimit = desktopScalingFactorLimit;
   }
 
   // get scaling quality
@@ -1986,6 +1996,7 @@ private:
   // scaling factor
   volatile qreal desktopScalingFactor;
   volatile qreal desktopScalingFactorForZoom;
+  volatile qreal desktopScalingFactorLimit;
 
   // scaling quality
   volatile Qt::TransformationMode desktopScalingQuality;

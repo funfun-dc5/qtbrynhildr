@@ -85,6 +85,10 @@ private:
   // native event filter
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 #endif // defined(Q_OS_WIN)
+
+private:
+  // output log flag
+  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

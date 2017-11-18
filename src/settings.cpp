@@ -104,6 +104,7 @@ Settings::Settings(const char *iniFileName)
 
   setOnKeepOriginalDesktopSize(QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT);
   setDesktopScalingFactor(QTB_DESKTOPSCALINGFACTOR_DEFAULT);
+  setDesktopScalingFactorLimit(QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT);
   setDesktopScalingQuality(QTB_DESKTOPSCALINGQUALITY_DEFAULT);
   setDesktopScalingType(QTB_DESKTOPSCALINGTYPE_DEFAULT);
 

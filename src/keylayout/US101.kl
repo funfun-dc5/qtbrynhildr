@@ -233,4 +233,4 @@ Key_LaunchMail,			VK_LAUNCH_MAIL,			SHIFTKEY_THROUGH
 65, "←",	"←",	VK_LEFT,		"Home", VK_HOME
 66, "↓",	"↓",	VK_DOWN,		"PgD",	VK_NEXT
 67, "→",	"→",	VK_RIGHT,		"End",	VK_END
-68, "Fn",	"Fn",   VK_NONE_00,		"Fn",	VK_NONE_00
+68, "Close","Close",VK_NONE_00,		"Close",VK_NONE_00

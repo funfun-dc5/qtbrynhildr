@@ -317,7 +317,7 @@ SOCKET NetThread::socketToServer()
 	break;
   }
   // free all addrinfo
-  while (topAddrinfo != NULL){
+  while(topAddrinfo != NULL){
 	addrinfo = topAddrinfo;
 	topAddrinfo = addrinfo->ai_next;
 	freeaddrinfo(addrinfo);

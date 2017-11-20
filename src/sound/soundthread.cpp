@@ -264,7 +264,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 
 		int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
-		while (chunks){
+		while(chunks){
 		  qint64 len = soundBuffer->size(audioOutput->periodSize());
 
 		  // write PCM data
@@ -296,7 +296,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
-	  while (chunks){
+	  while(chunks){
 		qint64 len = soundBuffer->size(audioOutput->periodSize());
 
 		// write PCM data

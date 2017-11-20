@@ -38,7 +38,9 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);
 #else // defined(QTB_DEV_TOUCHPANEL)
+#if !QTB_TEST_TOUCHPANEL_ON_DESKTOP
   setMouseTracking(true);
+#endif // !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #endif // defined(QTB_DEV_TOUCHPANEL)
   setRenderHint(QPainter::Antialiasing, false);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -188,6 +190,9 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 #if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->mouseMoveEvent(newEvent);
 #else // defined(QTB_DEV_TOUCHPANEL)
+#if QTB_TEST_TOUCHPANEL_ON_DESKTOP
+	desktopPanel->mouseMoveEvent(newEvent);
+#endif // QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	desktopPanel->mousePressEvent(newEvent);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }

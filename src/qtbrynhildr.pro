@@ -213,6 +213,9 @@ SOURCES += sound/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 
+# for TEST (QTB_TEST_xxxx)
+DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
+
 # for new feature
 NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){

@@ -26,7 +26,7 @@
 #include "version.h"
 
 // for DEBUG
-#include "debug.h"
+#include "util/debug.h"
 
 //using namespace qtbrynhildr;
 

@@ -22,8 +22,8 @@
 #include "cipher.h"
 #endif // QTB_CRYPTGRAM
 #include "common/protocols.h"
-#include "desktop.h"
 #include "parameters.h"
+#include "util/desktop.h"
 #include "version.h"
 
 // for Settings

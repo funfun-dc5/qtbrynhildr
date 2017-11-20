@@ -43,7 +43,7 @@ public:
 	return maxImageDataSize;
   }
 
-#if QTB_DESKTOPWINDOW
+#if !QTB_NEW_DESKTOPWINDOW
   // get correct widow width
   int getCorrectWindowWidth() const
   {
@@ -55,7 +55,7 @@ public:
   {
 	return correctWindowHeight;
   }
-#endif // QTB_DESKTOPWINDOW
+#endif // !QTB_NEW_DESKTOPWINDOW
 
   // get height of menu bar in hiding
   int getHeightOfMenuBarInHiding() const
@@ -82,13 +82,13 @@ private:
   // max image size
   unsigned long maxImageDataSize;
 
-#if QTB_DESKTOPWINDOW
+#if !QTB_NEW_DESKTOPWINDOW
   // correct window width
   int correctWindowWidth;
 
   // correct window height
   int correctWindowHeight;
-#endif // QTB_DESKTOPWINDOW
+#endif // !QTB_NEW_DESKTOPWINDOW
 
   // height of menu bar in hiding
   int heightOfMenuBarInHiding;

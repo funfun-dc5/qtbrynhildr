@@ -22,11 +22,11 @@
 #include <QProgressBar>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QRect>
-#if QTB_DESKTOPWINDOW
-#include <QScrollArea>
-#else // QTB_DESKTOPWINDOW
+#if QTB_NEW_DESKTOPWINDOW
 #include <QGraphicsScene>
-#endif // QTB_DESKTOPWINDOW
+#else // QTB_NEW_DESKTOPWINDOW
+#include <QScrollArea>
+#endif // QTB_NEW_DESKTOPWINDOW
 #include <QShowEvent>
 #include <QSize>
 #include <QString>
@@ -47,12 +47,12 @@
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
 #include "mainwindow/desktoppanel.h"
-#if QTB_DESKTOPWINDOW
-#include "mainwindow/desktopwindow.h"
-#else // QTB_DESKTOPWINDOW
+#if QTB_NEW_DESKTOPWINDOW
 #include "mainwindow/graphicsview.h"
 #include "mainwindow/desktoppanelobject.h"
-#endif // QTB_DESKTOPWINDOW
+#else // QTB_NEW_DESKTOPWINDOW
+#include "mainwindow/desktopwindow.h"
+#endif // QTB_NEW_DESKTOPWINDOW
 #include "option.h"
 #if QTB_RECORDER
 #include "function/recorder.h"
@@ -117,13 +117,13 @@ public:
 	return settings;
   }
 
-#if QTB_DESKTOPWINDOW
-  // get desktop window
-  DesktopWindow *getDesktopWindow() const;
-#else // QTB_DESKTOPWINDOW
+#if QTB_NEW_DESKTOPWINDOW
   // get graphics view
   GraphicsView *getGraphicsView() const;
-#endif // QTB_DESKTOPWINDOW
+#else // QTB_NEW_DESKTOPWINDOW
+  // get desktop window
+  DesktopWindow *getDesktopWindow() const;
+#endif // QTB_NEW_DESKTOPWINDOW
 
   // get desktop panel
   DesktopPanel *getDesktopPanel() const;
@@ -473,19 +473,19 @@ private:
 
 private:
   // GUI
-#if QTB_DESKTOPWINDOW
-  // scroll area
-  QScrollArea *scrollArea;
-  // desktop window
-  DesktopWindow *desktopWindow;
-#else // QTB_DESKTOPWINDOW
+#if QTB_NEW_DESKTOPWINDOW
   // view
   GraphicsView *graphicsView;
   // scene
   QGraphicsScene *graphicsScene;
   // desktop panel object
   DesktopPanelObject *desktopPanelObject;
-#endif // QTB_DESKTOPWINDOW
+#else // QTB_NEW_DESKTOPWINDOW
+  // scroll area
+  QScrollArea *scrollArea;
+  // desktop window
+  DesktopWindow *desktopWindow;
+#endif // QTB_NEW_DESKTOPWINDOW
 
   // desktop panel
   DesktopPanel *desktopPanel;

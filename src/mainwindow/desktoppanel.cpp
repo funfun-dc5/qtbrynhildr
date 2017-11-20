@@ -152,11 +152,11 @@ void DesktopPanel::refreshDesktop(QImage image)
 	  if (scalingFactor != 1.0){
 		// scale
 		currentSize = currentSize * scalingFactor;
-#if QTB_DESKTOPWINDOW
+#if !QTB_NEW_DESKTOPWINDOW
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-#endif // QTB_DESKTOPWINDOW
+#endif // !QTB_NEW_DESKTOPWINDOW
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){
@@ -242,11 +242,11 @@ void DesktopPanel::resizeWindow()
 	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
 		int width = currentSize.width();
 		int height = currentSize.height() + qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar();
-#if QTB_DESKTOPWINDOW
+#if !QTB_NEW_DESKTOPWINDOW
 		// correct
 		width  += settings->getDesktop()->getCorrectWindowWidth();
 		height += settings->getDesktop()->getCorrectWindowHeight();
-#endif // QTB_DESKTOPWINDOW
+#endif // !QTB_NEW_DESKTOPWINDOW
 
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
 		if (width > screenSize.width()){
@@ -256,10 +256,10 @@ void DesktopPanel::resizeWindow()
 		  height = screenSize.height();
 		}
 
-#if QTB_DESKTOPWINDOW
+#if !QTB_NEW_DESKTOPWINDOW
 		// resize
 		qtbrynhildr->resize(width, height);
-#endif // QTB_DESKTOPWINDOW
+#endif // !QTB_NEW_DESKTOPWINDOW
 
 		// update image
 		updateDesktop();

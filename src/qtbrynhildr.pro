@@ -182,11 +182,11 @@ HEADERS += common/common.h common/util.h common/protocols.h
 HEADERS += machine/protocols_x86.h machine/protocols_x64.h machine/protocols_common.h
 
 HEADERS += qtbrynhildr.h
-HEADERS += option.h desktop.h
-HEADERS += debug.h
+HEADERS += option.h
 HEADERS += logmessage.h
 HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dialog/confirm_dialog.h dialog/log_view_dialog.h
 HEADERS += settings.h
+HEADERS += util/desktop.h util/debug.h
 HEADERS += common/netthread.h
 HEADERS += control/controlthread.h
 HEADERS += control/keybuffer.h control/mousebuffer.h
@@ -199,8 +199,8 @@ HEADERS += function/recorder.h
 
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
-SOURCES += option.cpp desktop.cpp
-SOURCES += debug.cpp
+SOURCES += option.cpp
+SOURCES += util/desktop.cpp util/debug.cpp
 SOURCES += logmessage.cpp
 SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp dialog/confirm_dialog.cpp dialog/log_view_dialog.cpp
 SOURCES += settings.cpp
@@ -221,10 +221,10 @@ NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
 HEADERS += mainwindow/desktoppanel.h mainwindow/desktoppanelobject.h mainwindow/graphicsview.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp
-DEFINES += QTB_DESKTOPWINDOW=0
+DEFINES += QTB_NEW_DESKTOPWINDOW=1
 }
 else {
 HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
-DEFINES += QTB_DESKTOPWINDOW=1
+DEFINES += QTB_NEW_DESKTOPWINDOW=0
 }

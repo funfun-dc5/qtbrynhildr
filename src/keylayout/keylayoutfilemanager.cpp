@@ -33,7 +33,7 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
   QDir dir(layoutfilepath);
   QFileInfoList list = dir.entryInfoList();
 
-  for (int i = 0; i < list.size(); i++){
+  for (int i = 0, size = list.size(); i < size; i++){
 	QFileInfo fileInfo = list.at(i);
 	QString filename = fileInfo.fileName();
 	if (filename.endsWith(QTB_KEYLAYOUT_FILE_SUFFIX)){

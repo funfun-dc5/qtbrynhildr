@@ -47,11 +47,11 @@
 #define QTB_TRANSLATION_FILE_PREFIX	"qtbrynhildr_"
 
 // desktop background color
-#if QTB_DESKTOPWINDOW
+#if defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #define QTB_DESKTOP_BACKGROUND_COLOR Qt::gray
-#else // QTB_DESKTOPWINDOW
+#else // defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #define QTB_DESKTOP_BACKGROUND_COLOR Qt::black
-#endif // QTB_DESKTOPWINDOW
+#endif // defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 
 // key layout file directory
 #define QTB_KEYLAYOUT_FILE_PATH		"/keylayout"
@@ -184,11 +184,7 @@ typedef int KEYBOARD_TYPE;
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	true
 #else // defined(QTB_DEV_TOUCHPANEL)
-#if QTB_TEST_TOUCHPANEL_ON_DESKTOP
-#define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	true
-#else // QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	false
-#endif // QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #endif // defined(QTB_DEV_TOUCHPANEL)
 // for onGamePadSupport
 #define QTB_ONGAMEPADSUPPORT			"onGamePadSupport"
@@ -978,16 +974,16 @@ public:
   // get display mouse cursor flag
   bool getOnDisplayMouseCursor()
   {
-#if QTB_PUBLIC_MODE6_SUPPORT
+#if QTB_PUBLIC_MODE7_SUPPORT && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	if (getPublicModeVersion() >= PUBLICMODE_VERSION7){
 	  return QTB_ONDISPLAYMOUSECURSOR_DEFAULT;
 	}
 	else { // MODE5/6
 	  return true;
 	}
-#else // QTB_PUBLIC_MODE6_SUPPORT
+#else // QTB_PUBLIC_MODE7_SUPPORT && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	return true;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
+#endif // QTB_PUBLIC_MODE7_SUPPORT && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
   }
 
   // get gamepad support flag
@@ -1617,7 +1613,11 @@ public:
   // get show mouse cursor marker flag
   bool getOnShowMouseCursorMarker() const
   {
+#if QTB_TEST_TOUCHPANEL_ON_DESKTOP
+	return true;
+#else // QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	return onShowMouseCursorMarker;
+#endif // QTB_TEST_TOUCHPANEL_ON_DESKTOP
   }
 
   // set show mouse cursor marker flag

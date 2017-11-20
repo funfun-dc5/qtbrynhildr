@@ -538,16 +538,18 @@ void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 	  pos.y = currentMousePos.y();
 	  mouseBuffer->setMousePos(pos);
 	  //qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
-#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#if QTB_PUBLIC_MODE7_SUPPORT
+#if !defined(Q_OS_WIN)
 	  // set cursor point color to control thread
 	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
-#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
-#if !QTB_DESKTOPWINDOW
+#endif // !defined(Q_OS_WIN)
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	  // marker for mouse cursor
 	  if (settings->getOnShowMouseCursorMarker()){
 		setDrawMarkerCounter(10);
 	  }
-#endif // !QTB_DESKTOPWINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 	}
   }
 }

@@ -50,10 +50,10 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   setResizeAnchor(QGraphicsView::AnchorViewCenter);
   setTransformationAnchor(QGraphicsView::AnchorViewCenter);
   setAlignment(Qt::AlignCenter);
-#if defined(QTB_DEV_TOUCHPANEL)
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
   ensureVisible(QRectF(0,0,0,0), 0, 0);
 }
 
@@ -191,9 +191,19 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 	desktopPanel->mouseMoveEvent(newEvent);
 #else // defined(QTB_DEV_TOUCHPANEL)
 #if QTB_TEST_TOUCHPANEL_ON_DESKTOP
-	desktopPanel->mouseMoveEvent(newEvent);
-#endif // QTB_TEST_TOUCHPANEL_ON_DESKTOP
+	// Left Button -> move cursor
+	if (event->button() == Qt::LeftButton){
+	  desktopPanel->mouseMoveEvent(newEvent);
+	  desktopPanel->mousePressEvent(newEvent);
+	}
+	// Right Button -> move center of view
+	else if (event->button() == Qt::RightButton){
+	  QPointF posF = mapToScene(event->pos());
+	  centerOn(posF);
+	}
+#else // QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	desktopPanel->mousePressEvent(newEvent);
+#endif // QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }
 }

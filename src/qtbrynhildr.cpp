@@ -3696,10 +3696,10 @@ void QtBrynhildr::toggleShowFrameRate()
 // full screen
 void QtBrynhildr::fullScreen()
 {
-#if defined(QTB_DESKTOP)
+#if defined(QTB_DEV_DESKTOP)
   if (!QTB_DESKTOP_FULL_SCREEN)
 	return;
-#endif // defined(QTB_DESKTOP)
+#endif // defined(QTB_DEV_DESKTOP)
 
 #if 0 // for DEBUG
   QSize size = desktopPanel->getSize();

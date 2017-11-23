@@ -21,6 +21,7 @@
 #include <QMouseEvent>
 #include <QObject>
 #include <QPaintEvent>
+#include <QPoint>
 #include <QSize>
 #include <QTextStream>
 #include <QWheelEvent>
@@ -84,7 +85,12 @@ public:
   // update desktop
   virtual void updateDesktop() = 0;
 
-public:
+  // get current mouse position
+  QPoint getCurrentMousePos() const
+  {
+	return currentMousePos;
+  }
+
   // for event handling
 #if defined(QTB_DEV_TOUCHPANEL)
   // event

@@ -7,6 +7,7 @@
 // System Header
 
 // Qt Header
+#include <QCursor>
 #include <QPainter>
 #include <QSize>
 #include <QtGui>

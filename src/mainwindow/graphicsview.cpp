@@ -7,6 +7,7 @@
 // System Header
 
 // Qt Header
+#include <QCursor>
 #include <QPainter>
 #if defined(QTB_DEV_TOUCHPANEL)
 #include <QTouchEvent>
@@ -170,6 +171,16 @@ bool GraphicsView::viewportEvent(QEvent *event){
   return QGraphicsView::viewportEvent(event);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
+
+// widget leave event
+void GraphicsView::leaveEvent(QEvent *event)
+{
+  Q_UNUSED(event);
+
+  if (settings->getOnClipCursor()){
+	QCursor::setPos(mapToGlobal(desktopPanel->getCurrentMousePos()));
+  }
+}
 
 // mouse event
 void GraphicsView::mousePressEvent(QMouseEvent *event)

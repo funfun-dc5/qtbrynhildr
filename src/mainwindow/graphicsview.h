@@ -9,6 +9,7 @@
 // System Header
 
 // Qt Header
+#include <QAbstractNativeEventFilter>
 #include <QByteArray>
 #include <QDragEnterEvent>
 #include <QDropEvent>
@@ -66,6 +67,9 @@ protected:
   // viewport event
   bool viewportEvent(QEvent *event);
 #endif // defined(QTB_DEV_TOUCHPANEL)
+
+  // widget leave event
+  void leaveEvent(QEvent *event);
 
   // mouse event 
   void mousePressEvent(QMouseEvent *event);

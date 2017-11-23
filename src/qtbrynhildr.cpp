@@ -238,6 +238,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
   onControl(true),
   onGraphics(true),
   onSound(true),
+  keyBuffer(0),
+  mouseBuffer(0),
   timer(0),
   onCheckUpdateInBackground(false),
   // for DEBUG
@@ -516,6 +518,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   fullScreenPalette.setColor(QPalette::Window, Qt::black);
 #endif // QTB_NEW_DESKTOPWINDOW
 
+  // set key/mouse buffer
+  keyBuffer = desktopPanel->getKeyBuffer();
+  mouseBuffer = desktopPanel->getMouseBuffer();
+
   // create Main Window
   createActions();
   createMenus();
@@ -607,9 +613,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // set up Software Button and Keyboard
   // keyboard
 #if QTB_NEW_DESKTOPWINDOW
-  softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this, graphicsView);
+  softwareKeyboard = new SK(keyBuffer, this, graphicsView);
 #else // QTB_NEW_DESKTOPWINDOW
-  softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this, desktopWindow);
+  softwareKeyboard = new SK(keyBuffer, this, desktopWindow);
 #endif // QTB_NEW_DESKTOPWINDOW
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
@@ -619,9 +625,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
   // button
 #if QTB_NEW_DESKTOPWINDOW
-  softwareButton = new SB(desktopPanel->getMouseBuffer(), this, graphicsView);
+  softwareButton = new SB(mouseBuffer, this, graphicsView);
 #else // QTB_NEW_DESKTOPWINDOW
-  softwareButton = new SB(desktopPanel->getMouseBuffer(), this, desktopWindow);
+  softwareButton = new SB(mouseBuffer, this, desktopWindow);
 #endif // QTB_NEW_DESKTOPWINDOW
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
@@ -2844,7 +2850,7 @@ void QtBrynhildr::connectToServer()
 	delete softwareKeyboard;
 	softwareKeyboard = 0;
   }
-  softwareKeyboard = new SK(settings, desktopPanel->getKeyBuffer(), this);
+  softwareKeyboard = new SK(settings, keyBuffer, this);
 #endif // for TEST
   // TODO: check keyboardType range
   switch(keyboardType){
@@ -2903,8 +2909,8 @@ void QtBrynhildr::reconnectToServer()
   }
 
   // clear buffer for control
-  desktopPanel->getKeyBuffer()->clear();
-  desktopPanel->getMouseBuffer()->clear();
+  keyBuffer->clear();
+  mouseBuffer->clear();
 
   // counter for control
   counter_control = 0;
@@ -3313,8 +3319,8 @@ void QtBrynhildr::toggleOnControl()
 	onControl = false;
 	onControl_Action->setChecked(false);
 	// clear device buffer
-	desktopPanel->getKeyBuffer()->clear();
-	desktopPanel->getMouseBuffer()->clear();
+	keyBuffer->clear();
+	mouseBuffer->clear();
   }
   else {
 	settings->setOnControl(true);
@@ -3563,8 +3569,6 @@ void QtBrynhildr::sendKey_CTRL_ALT_DEL()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
-
 	// press
 	keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYDOWN); // CTRL key press
 	keyBuffer->put(VK_MENU, KEYCODE_FLG_KEYDOWN); // ALT key press
@@ -3583,8 +3587,6 @@ void QtBrynhildr::sendKey_ALT_F4()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
-
 	// press
 	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYDOWN); // ALT key press
 	keyBuffer->put(VK_F4,	KEYCODE_FLG_KEYDOWN); // F4 key press
@@ -3600,8 +3602,6 @@ void QtBrynhildr::sendKey_CTRL_ESC()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
-
 	// press
 	keyBuffer->put(VK_CONTROL,	KEYCODE_FLG_KEYDOWN); // CTRL key press
 	keyBuffer->put(VK_ESCAPE,	KEYCODE_FLG_KEYDOWN); // ESC key press
@@ -3617,8 +3617,6 @@ void QtBrynhildr::sendKey_WINDOWS()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
-
 	// press
 	keyBuffer->put(VK_LWIN,	KEYCODE_FLG_KEYDOWN); // Windows key press
 
@@ -3632,8 +3630,6 @@ void QtBrynhildr::sendKey_PrintScreen()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
-
 	// press
 	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYDOWN); // PrintScreen key press
 
@@ -3647,8 +3643,6 @@ void QtBrynhildr::sendKey_ALT_PrintScreen()
 {
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	KeyBuffer *keyBuffer = desktopPanel->getKeyBuffer();
-
 	// press
 	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYDOWN); // ALT key press
 	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYDOWN); // PrintScreen key press

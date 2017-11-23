@@ -900,6 +900,12 @@ private:
   bool onGraphics;
   bool onSound;
 
+  // key buffer
+  KeyBuffer *keyBuffer;
+
+  // mouse buffer
+  MouseBuffer *mouseBuffer;
+
   // timer for main thread
   QTimer *timer;
 

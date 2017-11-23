@@ -20,9 +20,9 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr)
+SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   :
-  SoftwareKeyboard(qtbrynhildr),
+  SoftwareKeyboard(parent),
   keyBuffer(keyBuffer),
   qtbrynhildr(qtbrynhildr),
   settings(qtbrynhildr->getSettings()),

@@ -13,6 +13,7 @@
 #include <QWidget>
 
 // Local Header
+#include "config.h"
 
 namespace qtbrynhildr {
 
@@ -27,6 +28,14 @@ public:
 
   // reset size
   QSize resetSize();
+
+#if 0
+  // minimum size hint
+  QSize minimumSizeHint() const;
+#endif
+
+  // size hint
+  QSize sizeHint() const;
 
   // set current frame rate
   void setCurrentFrameRate(double currentFrameRate)
@@ -47,17 +56,10 @@ protected:
   // resize event
   void resizeEvent(QResizeEvent *event);
 
-#if 0
-  // minimum size hint
-  QSize minimumSizeHint() const;
-#endif
-
-  // size hint
-  QSize sizeHint() const;
-
   // mouse event
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseReleaseEvent(QMouseEvent *event);
+  virtual void mouseMoveEvent(QMouseEvent *event);
 
 protected:
   // button id
@@ -307,4 +309,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // BUTTON_H
+#endif // SOFTWARE_BUTTON_H

@@ -606,8 +606,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // set up Software Button and Keyboard
   // keyboard
-  //	softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this);
-  softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this);
+#if QTB_NEW_DESKTOPWINDOW
+  softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this, graphicsView);
+#else // QTB_NEW_DESKTOPWINDOW
+  softwareKeyboard = new SK(desktopPanel->getKeyBuffer(), this, desktopWindow);
+#endif // QTB_NEW_DESKTOPWINDOW
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
   softwareKeyboard->setGeometry(40,350,1120,300);
@@ -615,8 +618,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #endif // for TEST
 
   // button
-  //	softwareButton = new SB(desktopPanel->getMouseBuffer(), this);
-  softwareButton = new SB(desktopPanel->getMouseBuffer(), this);
+#if QTB_NEW_DESKTOPWINDOW
+  softwareButton = new SB(desktopPanel->getMouseBuffer(), this, graphicsView);
+#else // QTB_NEW_DESKTOPWINDOW
+  softwareButton = new SB(desktopPanel->getMouseBuffer(), this, desktopWindow);
+#endif // QTB_NEW_DESKTOPWINDOW
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 0 // for TEST

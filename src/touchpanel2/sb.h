@@ -24,7 +24,7 @@ class SB : public SoftwareButton
 
 public:
   // constructor
-  SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr);
+  SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent);
   // destructor
   //  ~SB();
 

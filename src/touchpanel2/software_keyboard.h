@@ -74,13 +74,6 @@ public:
   // reset size
   QSize resetSize();
 
-protected:
-  // paint event
-  void paintEvent(QPaintEvent *event);
-
-  // resize event
-  void resizeEvent(QResizeEvent *event);
-
 #if 0
   // minimum size hint
   QSize minimumSizeHint() const;
@@ -89,13 +82,21 @@ protected:
   // size hint
   QSize sizeHint() const;
 
+protected:
+  // paint event
+  void paintEvent(QPaintEvent *event);
+
+  // resize event
+  void resizeEvent(QResizeEvent *event);
+
   // mouse event
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseReleaseEvent(QMouseEvent *event);
+  virtual void mouseMoveEvent(QMouseEvent *event);
 
   // key down
   virtual void keyDown(uchar key);
-  
+
   // key up
   virtual void keyUp(uchar key);
 

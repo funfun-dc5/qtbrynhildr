@@ -57,10 +57,15 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   pushedAltKey(ID_KEY_0),
   pushedFnKey(ID_KEY_0),
   // for DEBUG
-  outputLog(false)
+  outputLog(true)
 {
   // set widget attributes
   setAttribute(Qt::WA_NoSystemBackground, true); // NOT fill background
+
+#if defined(QTB_DEV_DESKTOP)
+  // mouse tracking on
+  setMouseTracking(true);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // reset flag
   for(int i = ID_KEY_1; i < ID_KEY_NUM; i++){
@@ -205,6 +210,22 @@ QSize SoftwareKeyboard::resetSize()
   return size;
 }
 
+#if 0
+// minimum size hint
+QSize SoftwareKeyboard::minimumSizeHint() const
+{
+  QSize size = keyboardSize + QSize(1, 1);
+  return size;
+}
+#endif
+
+// size hint
+QSize SoftwareKeyboard::sizeHint() const
+{
+  QSize size = keyboardSize + QSize(1, 1);
+  return size;
+}
+
 //---------------------------------------------------------------------------
 // protected
 //---------------------------------------------------------------------------
@@ -306,22 +327,6 @@ void SoftwareKeyboard::resizeEvent(QResizeEvent *event)
   }
 }
 
-#if 0
-// minimum size hint
-QSize SoftwareKeyboard::minimumSizeHint() const
-{
-  QSize size = keyboardSize + QSize(1, 1);
-  return size;
-}
-#endif
-
-// size hint
-QSize SoftwareKeyboard::sizeHint() const
-{
-  QSize size = keyboardSize + QSize(1, 1);
-  return size;
-}
-
 // mouse event
 void SoftwareKeyboard::mousePressEvent(QMouseEvent *event)
 {
@@ -341,7 +346,15 @@ void SoftwareKeyboard::mouseReleaseEvent(QMouseEvent *event)
   releasedKey(id);
 }
 
- // key down
+void SoftwareKeyboard::mouseMoveEvent(QMouseEvent *event)
+{
+  ID_KEY id = getID(event->pos());
+  if (id == ID_KEY_0){
+	QWidget::mouseMoveEvent(event);
+  }
+}
+
+// key down
 void SoftwareKeyboard::keyDown(uchar key)
 {
   if (outputLog){
@@ -349,7 +362,7 @@ void SoftwareKeyboard::keyDown(uchar key)
   }
 }
   
- // key up
+// key up
 void SoftwareKeyboard::keyUp(uchar key)
 {
   if (outputLog){

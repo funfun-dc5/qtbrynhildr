@@ -117,11 +117,11 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_WIN)
   // install native event filter
-#if QTB_DESKTOPWINDOW
-  app.installNativeEventFilter(qtbrynhildr->getDesktopWindow());
-#else // QTB_DESKTOPWINDOW
+#if QTB_NEW_DESKTOPWINDOW
   app.installNativeEventFilter(qtbrynhildr->getGraphicsView());
-#endif // QTB_DESKTOPWINDOW
+#else // QTB_NEW_DESKTOPWINDOW
+  app.installNativeEventFilter(qtbrynhildr->getDesktopWindow());
+#endif // QTB_NEW_DESKTOPWINDOW
 #endif // defined(Q_OS_WIN)
 
   // set attribute

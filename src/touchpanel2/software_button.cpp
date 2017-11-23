@@ -12,6 +12,8 @@
 #include <QPainter>
 #include <QPen>
 
+#include <QDebug>
+
 // Local Header
 #include "software_button.h"
 
@@ -42,6 +44,11 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   // set widget attributes
   setAttribute(Qt::WA_NoSystemBackground, true); // NOT fill background
 
+#if defined(QTB_DEV_DESKTOP)
+  // mouse tracking on
+  setMouseTracking(true);
+#endif // defined(QTB_DEV_DESKTOP)
+
   // reset flag
   for(int i = ID_BUTTON_1; i < ID_BUTTON_NUM; i++){
 	layout[i].pushed = false;
@@ -62,6 +69,22 @@ QSize SoftwareButton::resetSize()
   calculateLayout(5, 5);
   resize(buttonSize);
   return buttonSize;
+}
+
+#if 0
+// minimum size hint
+QSize SoftwareButton::minimumSizeHint() const
+{
+  QSize size = buttonSize + QSize(1, 1);
+  return size;
+}
+#endif
+
+// size hint
+QSize SoftwareButton::sizeHint() const
+{
+  QSize size = buttonSize + QSize(1, 1);
+  return size;
 }
 
 //---------------------------------------------------------------------------
@@ -145,22 +168,6 @@ void SoftwareButton::resizeEvent(QResizeEvent *event)
   }
 }
 
-#if 0
-// minimum size hint
-QSize SoftwareButton::minimumSizeHint() const
-{
-  QSize size = buttonSize + QSize(1, 1);
-  return size;
-}
-#endif
-
-// size hint
-QSize SoftwareButton::sizeHint() const
-{
-  QSize size = buttonSize + QSize(1, 1);
-  return size;
-}
-
 // mouse event
 void SoftwareButton::mousePressEvent(QMouseEvent *event)
 {
@@ -194,6 +201,14 @@ void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
 	QWidget::mouseReleaseEvent(event);
   }
 #endif // for TEST
+}
+
+void SoftwareButton::mouseMoveEvent(QMouseEvent *event)
+{
+  ID_BUTTON id = getID(event->pos());
+  if (id == ID_BUTTON_0){
+	QWidget::mouseMoveEvent(event);
+  }
 }
 
 // pressed button

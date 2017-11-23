@@ -29,10 +29,7 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   settings(qtbrynhildr->getSettings()),
   desktopPanel(qtbrynhildr->getDesktopPanel()),
   keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer()),
-#if 0 // for TEST
-  centerPos(QPointF(0,0)),
-#endif // for TEST
-// for DEBUG
+  // for DEBUG
   outputLog(true)
 {
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -54,7 +51,6 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 #endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
-  ensureVisible(QRectF(0,0,0,0), 0, 0);
 }
 
 // destructor
@@ -102,12 +98,13 @@ bool GraphicsView::viewportEvent(QEvent *event){
 													Qt::LeftButton,
 													Qt::NoModifier);
 			mousePressEvent(newEvent);
-
+#if 0
 			QRectF rect = sceneRect();
 			qDebug() << "sceneRect = " << rect;
 			setSceneRect(-960, -540, 960, 540);
 			rect = sceneRect();
 			qDebug() << "sceneRect = " << rect;
+#endif
 		  }
 		  else {
 			QPoint currentPos = touchPoint.pos().toPoint();
@@ -194,7 +191,6 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 	// Left Button -> move cursor
 	if (event->button() == Qt::LeftButton){
 	  desktopPanel->mouseMoveEvent(newEvent);
-	  desktopPanel->mousePressEvent(newEvent);
 	}
 	// Right Button -> move center of view
 	else if (event->button() == Qt::RightButton){
@@ -211,9 +207,9 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
   //  cout << "mouseReleaseEvent" << endl << flush;
-#if defined(QTB_DEV_TOUCHPANEL)
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
   Q_UNUSED(event);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -225,13 +221,13 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseReleaseEvent(newEvent);
   }
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
 }
 
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //  cout << "mouseDoubleClicEvent" << endl << flush;
-#if defined(QTB_DEV_TOUCHPANEL)
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
   Q_UNUSED(event);
 #else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
@@ -245,15 +241,13 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseDoubleClickEvent(newEvent);
   }
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
 }
 
+#if defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
   //  cout << "mouseMoveEvent" << endl << flush;
-#if defined(QTB_DEV_TOUCHPANEL)
-  Q_UNUSED(event);
-#else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -268,7 +262,6 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
   else {
 	QGraphicsView::mouseMoveEvent(event);
   }
-#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 void GraphicsView::wheelEvent(QWheelEvent *event)
@@ -276,6 +269,7 @@ void GraphicsView::wheelEvent(QWheelEvent *event)
   //  cout << "wheelEvent" << endl << flush;
   desktopPanel->wheelEvent(event);
 }
+#endif // defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 
 // keyboard event
 void GraphicsView::keyPressEvent(QKeyEvent *event)

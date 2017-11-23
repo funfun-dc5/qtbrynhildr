@@ -20,9 +20,9 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr)
+SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   :
-  SoftwareButton(qtbrynhildr),
+  SoftwareButton(parent),
   mouseBuffer(mouseBuffer),
   qtbrynhildr(qtbrynhildr),
   settings(qtbrynhildr->getSettings()),

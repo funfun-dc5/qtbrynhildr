@@ -22,7 +22,7 @@ class SK : public SoftwareKeyboard
 {
 public:
   // constructor
-  SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr);
+  SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent);
   // destructor
   //  ~SK();
 
@@ -35,7 +35,7 @@ protected:
 
   // key down
   void keyDown(uchar key) override;
-  
+
   // key up
   void keyUp(uchar key) override;
 

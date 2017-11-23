@@ -84,11 +84,7 @@ public:
   // update desktop
   virtual void updateDesktop() = 0;
 
-#if QTB_NEW_DESKTOPWINDOW
 public:
-#else // QTB_NEW_DESKTOPWINDOW
-protected:
-#endif // QTB_NEW_DESKTOPWINDOW
   // for event handling
 #if defined(QTB_DEV_TOUCHPANEL)
   // event

@@ -108,6 +108,11 @@ public:
   void dropEvent(QDropEvent *event);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
+#if defined(Q_OS_WIN)
+  // native event filter
+  bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+#endif // defined(Q_OS_WIN)
+
 private:
   // open keyboard log file
   bool openKeyboardLogFile(QString filename);

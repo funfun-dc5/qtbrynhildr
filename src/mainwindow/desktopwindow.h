@@ -7,6 +7,7 @@
 #include "common/common.h"
 
 // Qt Header
+#include <QAbstractNativeEventFilter>
 #include <QByteArray>
 #include <QDragEnterEvent>
 #include <QDropEvent>

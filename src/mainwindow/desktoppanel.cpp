@@ -401,6 +401,7 @@ void DesktopPanel::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
 // mouse press event
 void DesktopPanel::mousePressEvent(QMouseEvent *event)
 {
+  // for DEBUG
   if (outputLogForMouse){
 	cout << "[DesktopPanel] mousePressEvent: ";
 	printMouseButtonEvent(event);
@@ -784,6 +785,155 @@ void DesktopPanel::dropEvent(QDropEvent *event)
   settings->setSendFileCount(fileNames.count());
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
+
+#if defined(Q_OS_WIN)
+// native event filter
+bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+{
+  Q_UNUSED(result);
+
+  if (!(settings->getConnected()) ||
+	  !(settings->getOnControl())){
+	return false;
+  }
+  if (eventType == "windows_generic_MSG"){
+	MSG *msg = static_cast<MSG *>(message);
+	// KEY
+	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
+	  // send All key event in nativeEventFilter
+	  if (msg->message == WM_KEYDOWN){
+#if 0 // for TEST
+		// VK_LXXXX/RXXXX -> VK_XXXX
+		switch(msg->wParam){
+		case VK_LSHIFT:
+		case VK_RSHIFT:
+		  msg->wParam = VK_SHIFT;
+		  break;
+		case VK_LCONTROL:
+		case VK_RCONTROL:
+		  msg->wParam = VK_CONTROL;
+		  break;
+		case VK_LMENU:
+		case VK_RMENU:
+		  msg->wParam = VK_MENU;
+		  break;
+		}
+#endif // for TEST
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
+		return true;
+	  }
+	  else if (msg->message == WM_KEYUP){
+#if 0 // for TEST
+		// VK_LXXXX/RXXXX -> VK_XXXX
+		switch(msg->wParam){
+		case VK_LSHIFT:
+		case VK_RSHIFT:
+		  msg->wParam = VK_SHIFT;
+		  break;
+		case VK_LCONTROL:
+		case VK_RCONTROL:
+		  msg->wParam = VK_CONTROL;
+		  break;
+		case VK_LMENU:
+		case VK_RMENU:
+		  msg->wParam = VK_MENU;
+		  break;
+		}
+#endif // for TEST
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
+		return true;
+	  }
+	  // NOTE: never fall through
+	}
+
+	// except for KEYBOARD_TYPE_NATIVE
+	if (msg->message == WM_KEYDOWN){
+	  switch(msg->wParam){
+	  case VK_OEM_AUTO:
+	  case VK_OEM_ENLW:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYDOWN);
+		return true;
+		break;
+	  case VK_CONVERT:
+	  case VK_NONCONVERT:
+	  case VK_OEM_ATTN:
+	  case 229:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+	else if (msg->message == WM_KEYUP){
+	  switch(msg->wParam){
+	  case VK_OEM_AUTO:
+	  case VK_OEM_ENLW:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYUP);
+		return true;
+		break;
+	  case VK_CONVERT:
+	  case VK_NONCONVERT:
+	  case VK_OEM_ATTN:
+		//		cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+	// SYSKEY
+	else if (msg->message == WM_SYSKEYDOWN){
+	  switch(msg->wParam){
+	  case VK_MENU:
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+	else if (msg->message == WM_SYSKEYUP){
+	  switch(msg->wParam){
+	  case VK_MENU:
+		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
+		return true;
+		break;
+	  default:
+		return false;
+		break;
+	  }
+	}
+  }
+  return false;
+}
+#endif // defined(Q_OS_WIN)
+
+#if 0 // for TEST
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+// for X11
+#include <xcb/xcb.h>
+
+bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
+{
+  if (!(settings->getConnected()) ||
+	  !(settings->getOnControl())){
+	return false;
+  }
+  if (eventType == "xcb_generic_event_t"){
+	xcb_generic_event_t *ev = static_cast<xcb_generic_event_t *>(message);
+  }
+  return false;
+}
+#endif // defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#endif
 
 // scroll area
 bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)

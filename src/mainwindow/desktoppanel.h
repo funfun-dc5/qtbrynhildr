@@ -92,6 +92,12 @@ public:
   }
 
   // for event handling
+#if QTB_NEW_DESKTOPWINDOW
+public:
+#else // QTB_NEW_DESKTOPWINDOW
+protected:
+#endif // QTB_NEW_DESKTOPWINDOW
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // event
   bool event(QEvent *event);

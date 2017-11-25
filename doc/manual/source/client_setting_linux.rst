@@ -23,9 +23,9 @@
 
 (2).Qt5のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^
- [64bit版 Qt5.9.2]
+ [64bit版 Qt5.9.3]
 
- <http://download.qt.io/archive/qt/5.9/5.9.2/qt-opensource-linux-x64-5.9.2.run>
+ <http://download.qt.io/archive/qt/5.9/5.9.3/qt-opensource-linux-x64-5.9.3.run>
 
  [32bit版 Qt5.4.2]
 

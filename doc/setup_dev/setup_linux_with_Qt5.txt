@@ -7,10 +7,10 @@
  example)
 
  [64bit]
- http://download.qt.io/archive/qt/5.9/5.9.2/qt-opensource-linux-x64-5.9.2.run
+ http://download.qt.io/archive/qt/5.9/5.9.3/qt-opensource-linux-x64-5.9.3.run
 
- chmod 755 qt-opensource-linux-x64-5.9.2.run
- sudo ./qt-opensource-linux-x64-5.9.2.run
+ chmod 755 qt-opensource-linux-x64-5.9.3.run
+ sudo ./qt-opensource-linux-x64-5.9.3.run
 
  (*) If you don't have g++ command, do "sudo apt-get install g++"
      and you may have to do "sudo apt-get install libglu1-mesa-dev" for openGL.

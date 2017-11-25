@@ -117,7 +117,7 @@
  以下を環境に合わせてダウンロードします。
 
  [64bit]
- http://download.qt.io/archive/qt/5.9/5.9.2/qt-opensource-linux-x64-5.9.2.run
+ http://download.qt.io/archive/qt/5.9/5.9.3/qt-opensource-linux-x64-5.9.3.run
 
  [32bit]
  http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run
@@ -126,8 +126,8 @@
 
  例)
 
- chmod 755 ./qt-opensource-linux-x64-5.9.2.run
- sudo ./qt-opensource-linux-x64-5.9.2.run
+ chmod 755 ./qt-opensource-linux-x64-5.9.3.run
+ sudo ./qt-opensource-linux-x64-5.9.3.run
 
  (注) 上記をインストールしなくても起動することがありますが、メニューの場所が異なったり、
       文字化けが発生する可能性があります。

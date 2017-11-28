@@ -54,6 +54,7 @@ HEADERS += common/msvc.h
 
 # for MinGW
 win32-g++ {
+LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
 }
 

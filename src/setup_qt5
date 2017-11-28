@@ -39,7 +39,7 @@ case $UNAME in
 #			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw49_32"
 #			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw492_32"
 			# MinGW
-			PATHLIST=${MINGWROOT}/bin:${PATHLIST}
+			PATHLIST=${MINGWROOT}/bin
 		fi
 	;;
 	Linux)
@@ -96,9 +96,18 @@ IFS=:
 for dir in $PATHLIST
 do
 	if [ -d $dir ]; then
-		LOCALPATH="${LOCALPATH}:${dir}"
+		if [ "${LOCALPATH}" = "" ] ; then
+			LOCALPATH="${dir}"
+		else
+			LOCALPATH="${LOCALPATH}:${dir}"
+		fi
 	else
 		echo no path $dir
 	fi
 done
-PATH=${LOCALPATH}:${PATH}
+IFS=
+if [ "${PATH}" = "" ] ; then
+	PATH=${LOCALPATH}
+else
+	PATH=${LOCALPATH}:${PATH}
+fi

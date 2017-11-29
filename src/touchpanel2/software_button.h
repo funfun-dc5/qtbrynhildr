@@ -56,6 +56,9 @@ protected:
   // resize event
   void resizeEvent(QResizeEvent *event);
 
+  // is on button
+  bool isOnButton() const;
+
   // mouse event
   virtual void mousePressEvent(QMouseEvent *event);
   virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -272,6 +275,9 @@ private:
 	bool selected;
   } Layout;
   Layout layout[ID_BUTTON_NUM];
+
+  // on button
+  bool onButton;
 
   // option button status flag
   bool onOptionButton;

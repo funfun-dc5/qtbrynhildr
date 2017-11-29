@@ -89,6 +89,9 @@ protected:
   // resize event
   void resizeEvent(QResizeEvent *event);
 
+  // is on button
+  bool isOnButton() const;
+
   // mouse event
   virtual void mousePressEvent(QMouseEvent *event);
   virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -503,6 +506,9 @@ private:
 
   // keyboard size
   QSize keyboardSize;
+
+  // on button
+  bool onButton;
 
   // shift key status
   bool onShiftKey;

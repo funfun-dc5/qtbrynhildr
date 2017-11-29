@@ -28,6 +28,10 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   settings(qtbrynhildr->getSettings()),
   previousClick(TYPE_MOUSE_INVALID),
   previousClickTime(QDateTime::currentDateTime()),
+#if QTB_NEW_DESKTOPWINDOW
+  desktopPanel(qtbrynhildr->getDesktopPanel()),
+  graphicsView(qtbrynhildr->getGraphicsView()),
+#endif // QTB_NEW_DESKTOPWINDOW
   // for DEBUG
   outputLog(false)
 {
@@ -390,6 +394,65 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
 
   SoftwareButton::releasedButton(id);
 }
+
+#if QTB_NEW_DESKTOPWINDOW
+// mouse event
+void SB::mousePressEvent(QMouseEvent *event)
+{
+  SoftwareButton::mousePressEvent(event);
+  if (!isOnButton()){
+	QPoint pos = event->pos() + this->pos();
+	QPoint scenePos = graphicsView->mapToScene(pos).toPoint();
+	if (graphicsView->convertToDesktop(scenePos)){
+		// need to convert pos
+		QMouseEvent *newEvent = new QMouseEvent(event->type(),
+												scenePos,
+												event->button(),
+												event->buttons(),
+												event->modifiers());
+		desktopPanel->mousePressEvent(newEvent);
+	}
+  }
+}
+
+void SB::mouseReleaseEvent(QMouseEvent *event)
+{
+  SoftwareButton::mouseReleaseEvent(event);
+  if (!isOnButton()){
+	QPoint pos = event->pos() + this->pos();
+	QPoint scenePos = graphicsView->mapToScene(pos).toPoint();
+	if (graphicsView->convertToDesktop(scenePos)){
+		// need to convert pos
+		QMouseEvent *newEvent = new QMouseEvent(event->type(),
+												scenePos,
+												event->button(),
+												event->buttons(),
+												event->modifiers());
+		desktopPanel->mouseReleaseEvent(newEvent);
+	}
+  }
+}
+
+void SB::mouseMoveEvent(QMouseEvent *event)
+{
+  SoftwareButton::mouseMoveEvent(event);
+#if 1
+  if (!isOnButton()){
+	QPoint pos = event->pos() + this->pos();
+	QPoint scenePos = graphicsView->mapToScene(pos).toPoint();
+	if (graphicsView->convertToDesktop(scenePos)){
+		// need to convert pos
+		QMouseEvent *newEvent = new QMouseEvent(event->type(),
+												scenePos,
+												event->button(),
+												event->buttons(),
+												event->modifiers());
+		desktopPanel->mouseMoveEvent(newEvent);
+	}
+  }
+#endif
+}
+#endif // QTB_NEW_DESKTOPWINDOW
 
 //---------------------------------------------------------------------------
 // private

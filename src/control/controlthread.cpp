@@ -685,7 +685,7 @@ void ControlThread::initHeader()
   com_data->monitor_no	= settings->getMonitorNo();
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
 	com_data->mouse_cursor = settings->getOnDisplayMouseCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;
-	if (settings->getOnShowSoftwareButton())
+	if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton())
 	  com_data->mouse_cursor = MOUSE_CURSOR_ON;
   }
 

@@ -48,6 +48,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   klf(0),
 #endif // USE_KEYLAYOUTFILE
   type(KEYTOP_TYPE_UNKNOWN),
+  onButton(false),
   onShiftKey(false),
   onControlKey(false),
   onAltKey(false),
@@ -57,7 +58,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   pushedAltKey(ID_KEY_0),
   pushedFnKey(ID_KEY_0),
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
   // set widget attributes
   setAttribute(Qt::WA_NoSystemBackground, true); // NOT fill background
@@ -327,6 +328,12 @@ void SoftwareKeyboard::resizeEvent(QResizeEvent *event)
   }
 }
 
+// is on button
+bool SoftwareKeyboard::isOnButton() const
+{
+  return onButton;
+}
+
 // mouse event
 void SoftwareKeyboard::mousePressEvent(QMouseEvent *event)
 {
@@ -335,6 +342,12 @@ void SoftwareKeyboard::mousePressEvent(QMouseEvent *event)
 
   ID_KEY id = getID(event->pos());
   pressedKey(id);
+  if (id != ID_KEY_0){
+	onButton = true;
+  }
+  else {
+	onButton = false;
+  }
 }
 
 void SoftwareKeyboard::mouseReleaseEvent(QMouseEvent *event)
@@ -344,13 +357,23 @@ void SoftwareKeyboard::mouseReleaseEvent(QMouseEvent *event)
 
   ID_KEY id = getID(event->pos());
   releasedKey(id);
+  if (id != ID_KEY_0){
+	onButton = true;
+  }
+  else {
+	onButton = false;
+  }
 }
 
 void SoftwareKeyboard::mouseMoveEvent(QMouseEvent *event)
 {
   ID_KEY id = getID(event->pos());
-  if (id == ID_KEY_0){
+  if (id != ID_KEY_0){
+	onButton = true;
+  }
+  else {
 	QWidget::mouseMoveEvent(event);
+	onButton = false;
   }
 }
 

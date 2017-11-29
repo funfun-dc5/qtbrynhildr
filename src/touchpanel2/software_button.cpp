@@ -28,6 +28,7 @@ namespace qtbrynhildr {
 SoftwareButton::SoftwareButton(QWidget *parent)
   :
   QWidget(parent),
+  onButton(false),
   onOptionButton(false),
   onShowMonitorButton(false),
   onShowSoundQualityButton(false),
@@ -168,6 +169,12 @@ void SoftwareButton::resizeEvent(QResizeEvent *event)
   }
 }
 
+// is on button
+bool SoftwareButton::isOnButton() const
+{
+  return onButton;
+}
+
 // mouse event
 void SoftwareButton::mousePressEvent(QMouseEvent *event)
 {
@@ -179,9 +186,11 @@ void SoftwareButton::mousePressEvent(QMouseEvent *event)
 #else // for TEST
   if (id != ID_BUTTON_0){
 	pressedButton(id);
+	onButton = true;
   }
   else {
 	QWidget::mousePressEvent(event);
+	onButton = false;
   }
 #endif // for TEST
 }
@@ -196,9 +205,11 @@ void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
 #else // for TEST
   if (id != ID_BUTTON_0){
 	releasedButton(id);
+	onButton = true;
   }
   else {
 	QWidget::mouseReleaseEvent(event);
+	onButton = false;
   }
 #endif // for TEST
 }
@@ -206,8 +217,12 @@ void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
 void SoftwareButton::mouseMoveEvent(QMouseEvent *event)
 {
   ID_BUTTON id = getID(event->pos());
-  if (id == ID_BUTTON_0){
+  if (id != ID_BUTTON_0){
+	onButton = true;
+  }
+  else {
 	QWidget::mouseMoveEvent(event);
+	onButton = false;
   }
 }
 

@@ -417,10 +417,17 @@ void DesktopPanel::mousePressEvent(QMouseEvent *event)
 	}
 	else {
 	  if (event->button() == Qt::LeftButton){
+		currentMousePos = event->pos();
 		MOUSE_POS pos;
 		pos.x = event->pos().x();
 		pos.y = event->pos().y();
 		mouseBuffer->setMousePos(pos);
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+		// marker for mouse cursor
+		if (settings->getOnShowMouseCursorMarker()){
+		  setDrawMarkerCounter(10);
+		}
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	  }
 	}
 #else // for TEST

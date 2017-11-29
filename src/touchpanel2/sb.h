@@ -12,6 +12,10 @@
 #include "control/mousebuffer.h"
 #include "settings.h"
 #include "software_button.h"
+#if QTB_NEW_DESKTOPWINDOW
+#include "mainwindow/desktoppanel.h"
+#include "mainwindow/graphicsview.h"
+#endif // QTB_NEW_DESKTOPWINDOW
 
 namespace qtbrynhildr {
 
@@ -35,6 +39,13 @@ protected:
   // released button
   void releasedButton(ID_BUTTON id) override;
 
+#if QTB_NEW_DESKTOPWINDOW
+  // mouse event
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseReleaseEvent(QMouseEvent *event);
+  virtual void mouseMoveEvent(QMouseEvent *event);
+#endif // QTB_NEW_DESKTOPWINDOW
+
 private:
   // mouse buffer
   MouseBuffer *mouseBuffer;
@@ -50,6 +61,14 @@ private:
 
   // previous click time
   QDateTime previousClickTime;
+
+#if QTB_NEW_DESKTOPWINDOW
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
+  // graphics view
+  GraphicsView *graphicsView;
+#endif // QTB_NEW_DESKTOPWINDOW
 
   // output log flag
   bool outputLog;

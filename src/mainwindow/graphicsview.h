@@ -47,6 +47,9 @@ public:
   // scale
   void setScale(qreal scalingFactor);
 
+  // convert to desktop
+  bool convertToDesktop(QPoint &point);
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // for software button
   void setSoftwareButtonRect(QRect rect)
@@ -91,9 +94,6 @@ protected:
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
 private:
-  // convert to desktop
-  bool convertToDesktop(QPoint &point);
-
 #if defined(Q_OS_WIN)
   // native event filter
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);

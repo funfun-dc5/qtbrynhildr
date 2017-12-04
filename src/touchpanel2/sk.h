@@ -13,7 +13,6 @@
 #include "settings.h"
 #include "software_keyboard.h"
 #if QTB_NEW_DESKTOPWINDOW
-#include "mainwindow/desktoppanel.h"
 #include "mainwindow/graphicsview.h"
 #endif // QTB_NEW_DESKTOPWINDOW
 
@@ -61,9 +60,6 @@ private:
   Settings *settings;
 
 #if QTB_NEW_DESKTOPWINDOW
-  // desktop panel
-  DesktopPanel *desktopPanel;
-
   // graphics view
   GraphicsView *graphicsView;
 #endif // QTB_NEW_DESKTOPWINDOW

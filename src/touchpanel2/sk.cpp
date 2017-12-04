@@ -27,7 +27,6 @@ SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   qtbrynhildr(qtbrynhildr),
   settings(qtbrynhildr->getSettings()),
 #if QTB_NEW_DESKTOPWINDOW
-  desktopPanel(qtbrynhildr->getDesktopPanel()),
   graphicsView(qtbrynhildr->getGraphicsView()),
 #endif // QTB_NEW_DESKTOPWINDOW
   // for DEBUG
@@ -82,16 +81,12 @@ void SK::mousePressEvent(QMouseEvent *event)
   SoftwareKeyboard::mousePressEvent(event);
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
-	QPoint scenePos = graphicsView->mapToScene(pos).toPoint();
-	if (graphicsView->convertToDesktop(scenePos)){
-		// need to convert pos
-		QMouseEvent *newEvent = new QMouseEvent(event->type(),
-												scenePos,
-												event->button(),
-												event->buttons(),
-												event->modifiers());
-		desktopPanel->mousePressEvent(newEvent);
-	}
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											pos,
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	graphicsView->mousePressEventForSP(newEvent);
   }
 }
 
@@ -100,37 +95,27 @@ void SK::mouseReleaseEvent(QMouseEvent *event)
   SoftwareKeyboard::mouseReleaseEvent(event);
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
-	QPoint scenePos = graphicsView->mapToScene(pos).toPoint();
-	if (graphicsView->convertToDesktop(scenePos)){
-		// need to convert pos
-		QMouseEvent *newEvent = new QMouseEvent(event->type(),
-												scenePos,
-												event->button(),
-												event->buttons(),
-												event->modifiers());
-		desktopPanel->mouseReleaseEvent(newEvent);
-	}
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											pos,
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	graphicsView->mouseReleaseEventForSP(newEvent);
   }
 }
 
 void SK::mouseMoveEvent(QMouseEvent *event)
 {
   SoftwareKeyboard::mouseMoveEvent(event);
-#if 1
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
-	QPoint scenePos = graphicsView->mapToScene(pos).toPoint();
-	if (graphicsView->convertToDesktop(scenePos)){
-		// need to convert pos
-		QMouseEvent *newEvent = new QMouseEvent(event->type(),
-												scenePos,
-												event->button(),
-												event->buttons(),
-												event->modifiers());
-		desktopPanel->mouseMoveEvent(newEvent);
-	}
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											pos,
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	graphicsView->mouseMoveEventForSP(newEvent);
   }
-#endif
 }
 #endif // QTB_NEW_DESKTOPWINDOW
 

@@ -14,11 +14,13 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QEvent>
-#include <QKeyEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QKeyEvent>
+#include <QMargins>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QSize>
 #include <QRect>
 
 // Local Header
@@ -44,11 +46,20 @@ public:
   // destructor
   ~GraphicsView();
 
+  // size hint
+  QSize sizeHint() const;
+
   // scale
   void setScale(qreal scalingFactor);
 
-  // convert to desktop
-  bool convertToDesktop(QPoint &point);
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // mouse press event software panel
+  void mousePressEventForSP(QMouseEvent *event);
+  // mouse release event software panel
+  void mouseReleaseEventForSP(QMouseEvent *event);
+  // mouse move event software panel
+  void mouseMoveEventForSP(QMouseEvent *event);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // for software button
@@ -78,8 +89,8 @@ protected:
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
   void mouseDoubleClickEvent(QMouseEvent *event);
-#if defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
   void mouseMoveEvent(QMouseEvent *event);
+#if defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
   void wheelEvent(QWheelEvent *event);
 #endif // defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 
@@ -93,7 +104,13 @@ protected:
   void dropEvent(QDropEvent *event);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
+  // viewport size hint
+  QSize viewportSizeHint() const;
+
 private:
+  // convert to desktop
+  bool convertToDesktop(QPoint &point);
+
 #if defined(Q_OS_WIN)
   // native event filter
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);

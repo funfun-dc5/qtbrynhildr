@@ -394,6 +394,69 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
   SoftwareButton::releasedButton(id);
 }
 
+// for event handling
+#if defined(QTB_DEV_TOUCHPANEL)
+// event
+bool SB::event(QEvent *event)
+{
+  switch(event->type()){
+  case QEvent::TouchBegin:
+  case QEvent::TouchUpdate:
+  case QEvent::TouchEnd:
+	{
+	  qDebug() << "event type  = " << event->type();
+
+	  QTouchEvent *touchEvent = (QTouchEvent*)event;
+	  qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+	  if (touchPoints.count() == 1){
+		// 1 finger
+		qDebug() << "== 1 Point == ";
+		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
+		qDebug() << "pos = " << touchPoint.pos();
+		//		break; // to QGraphicsView::viewportEvent(event)
+		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
+		  qDebug() << "Released";
+		  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
+		  if (distance < 20){ // for TEST (Nexus7(2013):1920x1200)
+			// tap
+			qDebug() << "TAP";
+			QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													touchPoint.pos(),
+													Qt::LeftButton,
+													Qt::LeftButton,
+													Qt::NoModifier);
+			// left mouse button press and release
+			mousePressEvent(newEvent);
+			mouseReleaseEvent(newEvent);
+		  }
+		}
+	  }
+	  else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
+		qDebug() << "Moved";
+		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
+		// move mouse cursor
+		QPoint pos = touchPoint.pos().toPoint();
+		QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
+												pos,
+												Qt::NoButton,
+												Qt::NoButton,
+												Qt::NoModifier);
+
+		  // move
+		  mouseMoveEvent(newEvent);
+	  }
+	  return true;
+	}
+	break;
+  default:
+	break;
+  }
+  return QWidget::event(event);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if QTB_NEW_DESKTOPWINDOW
 // mouse event
 void SB::mousePressEvent(QMouseEvent *event)

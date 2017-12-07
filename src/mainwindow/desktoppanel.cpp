@@ -521,28 +521,31 @@ void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 	  event->pos().x() << "," << event->pos().y() << ")" << endl << flush; // for DEBUG
   }
 
+  // move mouse cursor
+  moveMouseCursor(event, true);
+}
+
+// move mouse cursor
+void DesktopPanel::moveMouseCursor(QMouseEvent *event, bool marker)
+{
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-	if (!settings->getOnShowSoftwareButton()){
-	  currentMousePos = event->pos();
-	  MOUSE_POS pos;
-	  pos.x = currentMousePos.x();
-	  pos.y = currentMousePos.y();
-	  mouseBuffer->setMousePos(pos);
-	  //qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
+	currentMousePos = event->pos();
+	MOUSE_POS pos;
+	pos.x = currentMousePos.x();
+	pos.y = currentMousePos.y();
+	mouseBuffer->setMousePos(pos);
+	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if QTB_PUBLIC_MODE7_SUPPORT
 #if !defined(Q_OS_WIN)
-	  // set cursor point color to control thread
-	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+	// set cursor point color to control thread
+	qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
 #endif // !defined(Q_OS_WIN)
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
-	  // marker for mouse cursor
-	  if (settings->getOnShowMouseCursorMarker()){
-		setDrawMarkerCounter(10);
-	  }
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
-#endif // QTB_PUBLIC_MODE7_SUPPORT
+	// marker for mouse cursor
+	if (settings->getOnShowMouseCursorMarker() && marker){
+	  setDrawMarkerCounter(10);
 	}
+#endif // QTB_PUBLIC_MODE7_SUPPORT
   }
 }
 

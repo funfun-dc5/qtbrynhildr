@@ -7,6 +7,7 @@
 // System Header
 
 // Qt Header
+#include <QEvent>
 
 // Local Header
 #include "control/mousebuffer.h"
@@ -37,6 +38,12 @@ protected:
 
   // released button
   void releasedButton(ID_BUTTON id) override;
+
+  // for event handling
+#if defined(QTB_DEV_TOUCHPANEL)
+  // event
+  bool event(QEvent *event);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_NEW_DESKTOPWINDOW
   // mouse event

@@ -110,6 +110,9 @@ protected:
   void mouseMoveEvent(QMouseEvent *event);
   void wheelEvent(QWheelEvent *event);
 
+  // move mouse cursor
+  void moveMouseCursor(QMouseEvent *event, bool marker = true);
+
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);

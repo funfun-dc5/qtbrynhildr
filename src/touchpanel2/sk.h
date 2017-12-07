@@ -7,6 +7,7 @@
 // System Header
 
 // Qt Header
+#include <QEvent>
 
 // Local Header
 #include "control/keybuffer.h"
@@ -41,6 +42,12 @@ protected:
 
   // key up
   void keyUp(uchar key) override;
+
+  // for event handling
+#if defined(QTB_DEV_TOUCHPANEL)
+  // event
+  bool event(QEvent *event);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_NEW_DESKTOPWINDOW
   // mouse event

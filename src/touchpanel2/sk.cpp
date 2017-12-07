@@ -114,20 +114,23 @@ bool SK::event(QEvent *event)
 			mouseReleaseEvent(newEvent);
 		  }
 		}
-	  }
-	  else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
-		qDebug() << "Moved";
-		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
-		// move mouse cursor
-		QPoint pos = touchPoint.pos().toPoint();
-		QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
-												pos,
-												Qt::NoButton,
-												Qt::NoButton,
-												Qt::NoModifier);
+		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
+		  qDebug() << "Moved";
+		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
+		  // move mouse cursor
+		  QPoint pos = touchPoint.pos().toPoint();
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
+												  pos,
+												  Qt::NoButton,
+												  Qt::NoButton,
+												  Qt::NoModifier);
 
 		  // move
 		  mouseMoveEvent(newEvent);
+		}
+	  }
+	  else if (touchPoints.count() == 2){
+		// 2 fingers
 	  }
 	  return true;
 	}

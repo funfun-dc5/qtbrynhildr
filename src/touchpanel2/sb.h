@@ -47,9 +47,9 @@ protected:
 
 #if QTB_NEW_DESKTOPWINDOW
   // mouse event
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
-  virtual void mouseMoveEvent(QMouseEvent *event);
+  virtual void mousePressEvent(QMouseEvent *event) override;
+  virtual void mouseReleaseEvent(QMouseEvent *event) override;
+  virtual void mouseMoveEvent(QMouseEvent *event) override;
 #endif // QTB_NEW_DESKTOPWINDOW
 
 private:

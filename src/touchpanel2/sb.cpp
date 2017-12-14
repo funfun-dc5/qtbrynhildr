@@ -449,7 +449,7 @@ bool SB::event(QEvent *event)
 	  }
 	  else if (touchPoints.count() == 2){
 		// 2 fingers
-		// YET: scaling
+		// Yet: scaling
 	  }
 	  return true;
 	}

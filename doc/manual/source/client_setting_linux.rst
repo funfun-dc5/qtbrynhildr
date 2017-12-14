@@ -13,23 +13,13 @@
 
  <https://github.com/funfun-dc5/qtbrynhildr/releases>
 
- [64bit版]
-
-   QtBrynhildr-linux_x64-v100.run
-
- [32bit版]
-
-   QtBrynhildr-linux_x86-v100.run
 
 (2).Qt5のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^
- [64bit版 Qt5.9.3]
+ 以下からダウンロードします。
 
- <http://download.qt.io/archive/qt/5.9/5.9.3/qt-opensource-linux-x64-5.9.3.run>
+ <https://www1.qt.io/developers/>
 
- [32bit版 Qt5.4.2]
-
- <http://download.qt.io/archive/qt/5.4/5.4.2/qt-opensource-linux-x86-5.4.2.run>
 
 2. Qt5のインストール
 --------------------------

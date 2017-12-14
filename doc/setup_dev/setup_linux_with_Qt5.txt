@@ -4,9 +4,12 @@
 
 1) install Qt5 and g++
 
+ Qt5: https://www1.qt.io/developers/
+
  example)
 
  [64bit]
+
  http://download.qt.io/archive/qt/5.9/5.9.3/qt-opensource-linux-x64-5.9.3.run
 
  chmod 755 qt-opensource-linux-x64-5.9.3.run

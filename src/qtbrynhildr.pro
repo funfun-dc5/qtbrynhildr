@@ -93,15 +93,7 @@ DISTFILES += \
     $$PWD/../dist/android/res/drawable-mdpi/qtbrynhildr.png \
     $$PWD/../dist/android/res/drawable-xhdpi/qtbrynhildr.png \
     $$PWD/../dist/android/res/drawable-xxhdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/build.gradle
-
-DISTFILES += \
-    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtActivity.java \
-    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtActivityLoader.java \
-    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
-    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtLoader.java \
-    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtService.java \
-    $$PWD/../dist/android/src/org/qtproject/qt5/android/bindings/QtServiceLoader.java
+    $$PWD/../dist/android/res/mipmap/qtbrynhildr.png
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 }
@@ -229,12 +221,3 @@ HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
 DEFINES += QTB_NEW_DESKTOPWINDOW=0
 }
-
-DISTFILES += \
-    ../dist/android_new/AndroidManifest.xml \
-    ../dist/android_new/gradle/wrapper/gradle-wrapper.jar \
-    ../dist/android_new/gradlew \
-    ../dist/android_new/res/values/libs.xml \
-    ../dist/android_new/build.gradle \
-    ../dist/android_new/gradle/wrapper/gradle-wrapper.properties \
-    ../dist/android_new/gradlew.bat

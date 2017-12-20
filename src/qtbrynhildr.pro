@@ -218,7 +218,7 @@ SOURCES += function/recorder.cpp
 DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 
 # for new feature
-NEW_FEATURE = OFF
+NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
 HEADERS += mainwindow/desktoppanel.h mainwindow/desktoppanelobject.h mainwindow/graphicsview.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp
@@ -229,3 +229,12 @@ HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
 DEFINES += QTB_NEW_DESKTOPWINDOW=0
 }
+
+DISTFILES += \
+    ../dist/android_new/AndroidManifest.xml \
+    ../dist/android_new/gradle/wrapper/gradle-wrapper.jar \
+    ../dist/android_new/gradlew \
+    ../dist/android_new/res/values/libs.xml \
+    ../dist/android_new/build.gradle \
+    ../dist/android_new/gradle/wrapper/gradle-wrapper.properties \
+    ../dist/android_new/gradlew.bat

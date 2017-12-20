@@ -34,6 +34,10 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   // for DEBUG
   outputLog(false)
 {
+#if defined(QTB_DEV_TOUCHPANEL)
+  setAttribute(Qt::WA_AcceptTouchEvents, true);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // Sound
   if (settings->getOnSound()){
 	SoftwareButton::pressedButton(ID_BUTTON_5);
@@ -433,7 +437,14 @@ bool SB::event(QEvent *event)
 		  }
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
-		  qDebug() << "Moved";
+		  qDebug() << "Moved:SB";
+#if 1 // for TEST
+		  QPoint currentPos = touchPoint.pos().toPoint();
+		  QPoint lastPos = touchPoint.lastPos().toPoint();
+		  QPoint move = currentPos - lastPos;
+		  qDebug() << "move = " << move;
+		  graphicsView->mouseMoveRelatively(move);
+#else  // for TEST
 		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 		  // move mouse cursor
 		  QPoint pos = touchPoint.pos().toPoint();
@@ -445,6 +456,7 @@ bool SB::event(QEvent *event)
 
 		  // move
 		  mouseMoveEvent(newEvent);
+#endif // for TEST
 		}
 	  }
 	  else if (touchPoints.count() == 2){

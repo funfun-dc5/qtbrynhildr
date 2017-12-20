@@ -303,6 +303,56 @@ void DesktopPanel::setOnFullScreen(bool onFullScreen)
   }
 }
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+// mouse move
+void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	currentMousePos = mousePos;
+	MOUSE_POS pos;
+	pos.x = currentMousePos.x();
+	pos.y = currentMousePos.y();
+	mouseBuffer->setMousePos(pos);
+	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
+#if QTB_PUBLIC_MODE7_SUPPORT
+#if !defined(Q_OS_WIN)
+	// set cursor point color to control thread
+	qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+#endif // !defined(Q_OS_WIN)
+	// marker for mouse cursor
+	if (settings->getOnShowMouseCursorMarker() && marker){
+	  setDrawMarkerCounter(10);
+	}
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+  }
+}
+
+// mouse move relatively
+void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	currentMousePos += mousePos;
+	MOUSE_POS pos;
+	pos.x = currentMousePos.x();
+	pos.y = currentMousePos.y();
+	mouseBuffer->setMousePos(pos);
+	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
+#if QTB_PUBLIC_MODE7_SUPPORT
+#if !defined(Q_OS_WIN)
+	// set cursor point color to control thread
+	qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+#endif // !defined(Q_OS_WIN)
+	// marker for mouse cursor
+	if (settings->getOnShowMouseCursorMarker() && marker){
+	  setDrawMarkerCounter(10);
+	}
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+  }
+}
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
 // event handler
 
 #if defined(QTB_DEV_TOUCHPANEL)

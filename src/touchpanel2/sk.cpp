@@ -115,7 +115,7 @@ bool SK::event(QEvent *event)
 		  }
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
-		  qDebug() << "Moved";
+		  qDebug() << "Moved:SK";
 		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 		  // move mouse cursor
 		  QPoint pos = touchPoint.pos().toPoint();

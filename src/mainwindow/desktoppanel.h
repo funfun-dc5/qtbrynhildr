@@ -91,6 +91,13 @@ public:
 	return currentMousePos;
   }
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // mouse move
+  void mouseMove(QPoint mousePos, bool marker = true);
+  // mouse move relatively
+  void mouseMoveRelatively(QPoint mousePos, bool marker = true);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
   // for event handling
 #if QTB_NEW_DESKTOPWINDOW
 public:

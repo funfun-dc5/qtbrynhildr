@@ -9,10 +9,10 @@
 // Qt Header
 #include <QCursor>
 #include <QPainter>
-#if defined(QTB_DEV_TOUCHPANEL)
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #include <QScrollBar>
 #include <QTouchEvent>
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #include <QTransform>
 
 #include <QDebug>
@@ -31,6 +31,10 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   settings(qtbrynhildr->getSettings()),
   desktopPanel(qtbrynhildr->getDesktopPanel()),
   keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer()),
+#if defined(QTB_DEV_TOUCHPANEL)
+  scalingFactor(1.0),
+  scalingFactorForFullScreen(1.0),
+#endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
   outputLog(true)
 {
@@ -114,6 +118,10 @@ void GraphicsView::setScale(qreal scalingFactor)
   qDebug() << "horizontalScrollBar.maximum = " << horizontalScrollBar()->maximum();
   qDebug() << "horizontalScrollBar.value   = " << horizontalScrollBar()->value();
 #endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+  // save scaling factor
+  this->scalingFactor = scalingFactor;
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
 }
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -133,6 +141,19 @@ void GraphicsView::mouseReleaseEventForSP(QMouseEvent *event)
 void GraphicsView::mouseMoveEventForSP(QMouseEvent *event)
 {
   mouseMoveEvent(event);
+}
+
+// mouse move
+void GraphicsView::mouseMove(QPoint mousePos, bool marker)
+{
+  desktopPanel->mouseMove(mousePos, marker);
+}
+
+// mouse move relatively
+void GraphicsView::mouseMoveRelatively(QPoint mousePos, bool marker)
+{
+  mousePos /= scalingFactor;
+  desktopPanel->mouseMoveRelatively(mousePos, marker);
 }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
@@ -195,10 +216,29 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  }
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
+		  qDebug() << "Moved:GraphicsView";
 		  QPoint currentPos = touchPoint.pos().toPoint();
 		  QPoint lastPos = touchPoint.lastPos().toPoint();
 		  // move mouse cursor
-		  if (settings->getDesktopScalingFactor() <= 1.0){
+		  if (settings->getDesktopScalingFactor() <= scalingFactorForFullScreen){
+#if 1 // for TEST
+			if (!settings->getOnShowSoftwareButton()){
+			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													  touchPoint.pos(),
+													  Qt::LeftButton,
+													  Qt::LeftButton,
+													  Qt::NoModifier);
+			  // move
+			  mouseMoveEvent(newEvent);
+			}
+			else {
+			  QPoint currentPos = touchPoint.pos().toPoint();
+			  QPoint lastPos = touchPoint.lastPos().toPoint();
+			  QPoint move = currentPos - lastPos;
+			  qDebug() << "move = " << move;
+			  mouseMoveRelatively(move);
+			}
+#else // for TEST
 			QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 													touchPoint.pos(),
 													Qt::LeftButton,
@@ -206,6 +246,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 													Qt::NoModifier);
 			// move
 			mouseMoveEvent(newEvent);
+#endif // for TEST
 		  }
 		  // scroll desktop
 		  else {

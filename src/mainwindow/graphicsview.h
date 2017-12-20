@@ -20,6 +20,7 @@
 #include <QMargins>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QPoint>
 #include <QSize>
 #include <QRect>
 
@@ -52,6 +53,13 @@ public:
   // scale
   void setScale(qreal scalingFactor);
 
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+  void setScalingFactorForFullScreen(qreal scalingFactorForFullScreen)
+  {
+	this->scalingFactorForFullScreen = scalingFactorForFullScreen;
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // mouse press event software panel
   void mousePressEventForSP(QMouseEvent *event);
@@ -59,6 +67,10 @@ public:
   void mouseReleaseEventForSP(QMouseEvent *event);
   // mouse move event software panel
   void mouseMoveEventForSP(QMouseEvent *event);
+  // mouse move
+  void mouseMove(QPoint mousePos, bool marker = true);
+  // mouse move relatively
+  void mouseMoveRelatively(QPoint mousePos, bool marker = true);
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -136,6 +148,14 @@ private:
   // for software keyboard
   QRect softwareKeyboardRect;
 #endif // defined(QTB_DEV_TOUCHPANEL)
+
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+  // scaling factor
+  qreal scalingFactor;
+  // scaling factor for fullscreen
+  qreal scalingFactorForFullScreen;
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+
 
   // output log flag
   bool outputLog;

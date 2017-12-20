@@ -1306,6 +1306,9 @@ void QtBrynhildr::onDesktopChanged(QImage image)
 	onSetDesktopScalingFactorForFullScreen = false;
 	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
 	setDesktopScalingFactor(screenSize);
+#if QTB_NEW_DESKTOPWINDOW
+	graphicsView->setScalingFactorForFullScreen(settings->getDesktopScalingFactor());
+#endif // QTB_NEW_DESKTOPWINDOW
   }
 }
 

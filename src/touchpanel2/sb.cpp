@@ -461,7 +461,24 @@ bool SB::event(QEvent *event)
 	  }
 	  else if (touchPoints.count() == 2){
 		// 2 fingers
-		// Yet: scaling
+		qDebug() << "== 2 Point == ";
+		const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+		const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+		qreal currentScalingFactor =
+		  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
+		  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+		qDebug() << "currentScalingFactor = " << currentScalingFactor;
+		qreal scalingFactor = settings->getDesktopScalingFactor();
+		if (currentScalingFactor < 1.0){
+		  scalingFactor -= 0.01;
+		}
+		else {
+		  scalingFactor += 0.01;
+		}
+		settings->setDesktopScalingFactor(scalingFactor);
+		scalingFactor = settings->getDesktopScalingFactor();
+		qDebug() << "scalingFactor = " << scalingFactor;
+		graphicsView->setScale(scalingFactor);
 	  }
 	  return true;
 	}
@@ -478,6 +495,7 @@ bool SB::event(QEvent *event)
 void SB::mousePressEvent(QMouseEvent *event)
 {
   SoftwareButton::mousePressEvent(event);
+#if 0 // for TEST
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
@@ -487,11 +505,13 @@ void SB::mousePressEvent(QMouseEvent *event)
 											event->modifiers());
 	graphicsView->mousePressEventForSP(newEvent);
   }
+#endif
 }
 
 void SB::mouseReleaseEvent(QMouseEvent *event)
 {
   SoftwareButton::mouseReleaseEvent(event);
+#if 0 // for TEST
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
@@ -501,6 +521,7 @@ void SB::mouseReleaseEvent(QMouseEvent *event)
 											event->modifiers());
 	graphicsView->mouseReleaseEventForSP(newEvent);
   }
+#endif
 }
 
 void SB::mouseMoveEvent(QMouseEvent *event)

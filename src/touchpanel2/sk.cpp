@@ -99,20 +99,27 @@ bool SK::event(QEvent *event)
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 		qDebug() << "pos = " << touchPoint.pos();
 		//		break; // to QGraphicsView::viewportEvent(event)
-		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
-		  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
-		  if (distance < 20){ // for TEST (Nexus7(2013):1920x1200)
-			// tap
-			qDebug() << "TAP";
-			QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
-													touchPoint.pos(),
-													Qt::LeftButton,
-													Qt::LeftButton,
-													Qt::NoModifier);
-			// left mouse button press and release
-			mousePressEvent(newEvent);
-			mouseReleaseEvent(newEvent);
-		  }
+		if(touchEvent->touchPointStates() == Qt::TouchPointPressed){
+		  qDebug() << "Pressed";
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+												  touchPoint.pos(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+		  // left mouse button press
+		  mousePressEvent(newEvent);
+		}
+		else if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
+		  qDebug() << "Released";
+		  // tap
+		  qDebug() << "TAP";
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+												  touchPoint.pos(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+		  // left mouse button release
+		  mouseReleaseEvent(newEvent);
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
 		  qDebug() << "Moved:SK";

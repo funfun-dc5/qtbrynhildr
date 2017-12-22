@@ -199,7 +199,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  else {
 			QPoint currentPos = touchPoint.pos().toPoint();
 			QPoint startPos = touchPoint.startPos().toPoint();
-#if 0 // for TEST
+#if 1 // for TEST
 			qDebug() << "softwareButtonRect = " << softwareButtonRect;
 			qDebug() << "softwareKeyboardRect = " << softwareKeyboardRect;
 			qDebug() << "currentPos = " << currentPos;
@@ -207,22 +207,27 @@ bool GraphicsView::viewportEvent(QEvent *event){
 #endif // for TEST
 			// show software button
 			if (softwareButtonRect.contains(startPos) &&
-				!softwareButtonRect.contains(currentPos)){
+				!softwareButtonRect.contains(currentPos, true)){
 			  qtbrynhildr->toggleSoftwareButton();
 			}
 			// show software keyboard
 			else if (softwareKeyboardRect.contains(startPos) &&
-					 !softwareKeyboardRect.contains(currentPos)){
+					 !softwareKeyboardRect.contains(currentPos, true)){
 			  qtbrynhildr->toggleSoftwareKeyboard();
 			}
 		  }
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
 		  qDebug() << "Moved:GraphicsView";
+		  QPoint startPos = touchPoint.startPos().toPoint();
 		  QPoint currentPos = touchPoint.pos().toPoint();
 		  QPoint lastPos = touchPoint.lastPos().toPoint();
 		  // move mouse cursor
-		  if (settings->getDesktopScalingFactor() <= scalingFactorForFullScreen){
+		  if (softwareButtonRect.contains(startPos, true) ||
+			  softwareKeyboardRect.contains(startPos, true)){
+			// Nothing to do
+		  }
+		  else if (settings->getDesktopScalingFactor() <= scalingFactorForFullScreen){
 #if 1 // for TEST
 			if (!settings->getOnShowSoftwareButton()){
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
@@ -270,10 +275,10 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
 		  qDebug() << "currentScalingFactor = " << currentScalingFactor;
 		  if (currentScalingFactor < 1.0){
-			scalingFactor -= 0.01;
+			scalingFactor -= 0.02;
 		  }
 		  else {
-			scalingFactor += 0.01;
+			scalingFactor += 0.02;
 		  }
 		  settings->setDesktopScalingFactor(scalingFactor);
 		  scalingFactor = settings->getDesktopScalingFactor();

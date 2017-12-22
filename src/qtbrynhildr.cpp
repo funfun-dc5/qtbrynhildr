@@ -586,8 +586,15 @@ QtBrynhildr::QtBrynhildr(Option *option)
   screenHeight += heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
   screenHeight += 20; // for TEST (Nexus7(2013):1920x1200)
   //  qDebug() << "screenHeight = " << screenHeight;
+#if 1
+  // type 1 (bottom size)
   graphicsView->setSoftwareButtonRect(QRect(0, screenHeight - 50, screenWidth/4, 50));  // for TEST (Nexus7(2013):1920x1200)
   graphicsView->setSoftwareKeyboardRect(QRect(screenWidth/8 * 3, screenHeight - 50, screenWidth/4, 50)); // for TEST (Nexus7(2013):1920x1200)
+#else
+  // type 2 (left side and right side)
+  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight/8 * 3, 80, screenHeight/4));  // for TEST (Nexus7(2013):1920x1200)
+  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth - 80, screenHeight/8 * 3, screenWidth, screenHeight/4)); // for TEST (Nexus7(2013):1920x1200)
+#endif
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
@@ -3910,7 +3917,7 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size
-  int width = windowSize.width() * 0.95;
+  int width = windowSize.width() * 0.98;
   int height = size.height() * ((double)width / size.width());
 
   // calc position
@@ -3939,7 +3946,7 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size
-  int width = windowSize.width() * 0.9;
+  int width = windowSize.width() * 0.95;
   int height = size.height() * ((double)width / size.width());
 
   // calc position

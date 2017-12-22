@@ -106,7 +106,7 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
   QPainter painter(this);
   // change font size
   QFont font = painter.font();
-  font.setPixelSize(14);
+  font.setPixelSize(32);
   painter.setFont(font);
 
   // draw all buttons

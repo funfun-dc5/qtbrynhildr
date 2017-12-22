@@ -159,7 +159,6 @@ public:
   void toggleSoftwareKeyboard();
   // toggle software button
   void toggleSoftwareButton();
-
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 public slots:

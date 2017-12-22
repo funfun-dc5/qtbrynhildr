@@ -68,6 +68,9 @@ private:
   // previous click time
   QDateTime previousClickTime;
 
+  // mouse left button
+  bool pressedMouseLeftButton;
+
 #if QTB_NEW_DESKTOPWINDOW
   // graphics view
   GraphicsView *graphicsView;

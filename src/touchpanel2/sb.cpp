@@ -28,6 +28,7 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   settings(qtbrynhildr->getSettings()),
   previousClick(TYPE_MOUSE_INVALID),
   previousClickTime(QDateTime::currentDateTime()),
+  pressedMouseLeftButton(false),
 #if QTB_NEW_DESKTOPWINDOW
   graphicsView(qtbrynhildr->getGraphicsView()),
 #endif // QTB_NEW_DESKTOPWINDOW
@@ -308,6 +309,7 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	  }
 	  previousClick = TYPE_MOUSE_LEFT_BUTTON;
 	  previousClickTime = currentTime;
+	  pressedMouseLeftButton = true;
 	}
 	break;
   case ID_BUTTON_32:
@@ -383,6 +385,7 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
 	if (settings->getConnected()){
 	  mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
 	}
+	pressedMouseLeftButton = false;
 	break;
   case ID_BUTTON_32:
 	// Mouse Right Button
@@ -420,21 +423,27 @@ bool SB::event(QEvent *event)
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 		qDebug() << "pos = " << touchPoint.pos();
 		//		break; // to QGraphicsView::viewportEvent(event)
-		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
+		if(touchEvent->touchPointStates() == Qt::TouchPointPressed){
+		  qDebug() << "Pressed";
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+												  touchPoint.pos(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+		  // left mouse button press
+		  mousePressEvent(newEvent);
+		}
+		else if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
 		  qDebug() << "Released";
-		  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
-		  if (distance < 20){ // for TEST (Nexus7(2013):1920x1200)
-			// tap
-			qDebug() << "TAP";
-			QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
-													touchPoint.pos(),
-													Qt::LeftButton,
-													Qt::LeftButton,
-													Qt::NoModifier);
-			// left mouse button press and release
-			mousePressEvent(newEvent);
-			mouseReleaseEvent(newEvent);
-		  }
+		  // tap
+		  qDebug() << "TAP";
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+												  touchPoint.pos(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+		  // left mouse button release
+		  mouseReleaseEvent(newEvent);
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
 		  qDebug() << "Moved:SB";
@@ -462,23 +471,35 @@ bool SB::event(QEvent *event)
 	  else if (touchPoints.count() == 2){
 		// 2 fingers
 		qDebug() << "== 2 Point == ";
-		const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
-		const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
-		qreal currentScalingFactor =
-		  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
-		  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
-		qDebug() << "currentScalingFactor = " << currentScalingFactor;
-		qreal scalingFactor = settings->getDesktopScalingFactor();
-		if (currentScalingFactor < 1.0){
-		  scalingFactor -= 0.01;
+		if (pressedMouseLeftButton){
+		  // drag
+		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.last();
+		  QPoint currentPos = touchPoint.pos().toPoint();
+		  QPoint lastPos = touchPoint.lastPos().toPoint();
+		  QPoint move = currentPos - lastPos;
+		  qDebug() << "move = " << move;
+		  graphicsView->mouseMoveRelatively(move);
 		}
 		else {
-		  scalingFactor += 0.01;
+		  // pinch in/out
+		  const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+		  const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+		  qreal currentScalingFactor =
+			QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
+			QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+		  qDebug() << "currentScalingFactor = " << currentScalingFactor;
+		  qreal scalingFactor = settings->getDesktopScalingFactor();
+		  if (currentScalingFactor < 1.0){
+			scalingFactor -= 0.02;
+		  }
+		  else {
+			scalingFactor += 0.02;
+		  }
+		  settings->setDesktopScalingFactor(scalingFactor);
+		  scalingFactor = settings->getDesktopScalingFactor();
+		  qDebug() << "scalingFactor = " << scalingFactor;
+		  graphicsView->setScale(scalingFactor);
 		}
-		settings->setDesktopScalingFactor(scalingFactor);
-		scalingFactor = settings->getDesktopScalingFactor();
-		qDebug() << "scalingFactor = " << scalingFactor;
-		graphicsView->setScale(scalingFactor);
 	  }
 	  return true;
 	}

@@ -252,7 +252,7 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
   // change font size
   QFont font = painter.font();
   font.setFamily("Courier");
-  font.setPixelSize(16);
+  font.setPixelSize(32);
   //font.setStyleStrategy(QFont::NoAntialias);
   //  qDebug() << "family = " << font.family();
   painter.setFont(font);

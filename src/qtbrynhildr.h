@@ -411,6 +411,12 @@ private slots:
   // scroll mode
   void toggleOnScrollMode();
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // touchpanel interface type
+  void touchpanelInterfaceTypeKeroRemote();
+  void touchpanelInterfaceTypeQtBrynhildr();
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // visibility changed software keyboard
   void visibilityChangedSoftwareKeyboard(bool visible);
@@ -538,6 +544,11 @@ private:
 
   // Mode Sub Menu
   QMenu *modeSubMenu;
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // touchpanel Interface Type Sub Menu
+  QMenu *touchpanelInterfaceTypeSubMenu;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // In Testing Sub Menu
   QMenu *inTestingSubMenu;
@@ -712,6 +723,13 @@ private:
   // toggle scroll mode
   QAction *onScrollMode_Action;
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // touchpanel interface type KeroRemote
+  QAction *touchpanelInterfaceTypeKeroRemote_Action;
+  // touchpanel interface type QtBrynhildr
+  QAction *touchpanelInterfaceTypeQtBrynhildr_Action;
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // send clipboard
   QAction *sendClipboard_Action;
@@ -754,6 +772,14 @@ private:
   // software keyboard and button
   SK *softwareKeyboard;
   SB *softwareButton;
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  struct {
+	QRect softwareButtonRect;
+	QRect softwareKeyboardRect;
+  } touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_NUM];
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 private:

@@ -91,6 +91,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #endif // QTB_RECORDER
   optionMenu(0),
   modeSubMenu(0),
+#if defined(QTB_DEV_TOUCHPANEL)
+  touchpanelInterfaceTypeSubMenu(0),
+#endif // defined(QTB_DEV_TOUCHPANEL)
   inTestingSubMenu(0),
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
   desktopCompressModeSubMenu(0),
@@ -173,6 +176,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   sendKey5_Action(0),
   sendKey6_Action(0),
   onScrollMode_Action(0),
+#if defined(QTB_DEV_TOUCHPANEL)
+  touchpanelInterfaceTypeKeroRemote_Action(0),
+  touchpanelInterfaceTypeQtBrynhildr_Action(0),
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #if QTB_PUBLIC_MODE6_SUPPORT
   sendClipboard_Action(0),
   sendFile_Action(0),
@@ -586,15 +593,18 @@ QtBrynhildr::QtBrynhildr(Option *option)
   screenHeight += heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
   screenHeight += 20; // for TEST (Nexus7(2013):1920x1200)
   //  qDebug() << "screenHeight = " << screenHeight;
-#if 1
-  // type 1 (bottom size)
-  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight - 50, screenWidth/4, 50));  // for TEST (Nexus7(2013):1920x1200)
-  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth/8 * 3, screenHeight - 50, screenWidth/4, 50)); // for TEST (Nexus7(2013):1920x1200)
-#else
-  // type 2 (left side and right side)
-  graphicsView->setSoftwareButtonRect(QRect(0, screenHeight/8 * 3, 80, screenHeight/4));  // for TEST (Nexus7(2013):1920x1200)
-  graphicsView->setSoftwareKeyboardRect(QRect(screenWidth - 80, screenHeight/8 * 3, screenWidth, screenHeight/4)); // for TEST (Nexus7(2013):1920x1200)
-#endif
+
+  // setup touchpanel interface
+  // keroremote
+  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareButtonRect =
+	QRect(0, screenHeight - 50, screenWidth/4, 50);
+  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareKeyboardRect =
+	QRect(screenWidth/8 * 3, screenHeight - 50, screenWidth/4, 50);
+  // qtbrynhilr
+  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareButtonRect =
+	QRect(0, screenHeight/8 * 3, 80, screenHeight/4);
+  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
+	QRect(screenWidth - 80, screenHeight/8 * 3, screenWidth, screenHeight/4);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
@@ -1925,6 +1935,27 @@ void QtBrynhildr::createActions()
 	connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
   }
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // touchpanel interface type
+  touchpanelInterfaceTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
+  touchpanelInterfaceTypeKeroRemote_Action->setEnabled(true);
+  touchpanelInterfaceTypeKeroRemote_Action->setCheckable(true);
+  touchpanelInterfaceTypeKeroRemote_Action->setChecked(
+					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE);
+  touchpanelInterfaceTypeKeroRemote_Action->setStatusTip(tr("KeroRemote Type"));
+  connect(touchpanelInterfaceTypeKeroRemote_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelInterfaceTypeKeroRemote()));
+
+  touchpanelInterfaceTypeQtBrynhildr_Action = new QAction(tr("Qt Brynhildr Type"), this);
+  touchpanelInterfaceTypeQtBrynhildr_Action->setEnabled(true);
+  touchpanelInterfaceTypeQtBrynhildr_Action->setCheckable(true);
+  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(
+					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR);
+  touchpanelInterfaceTypeQtBrynhildr_Action->setStatusTip(tr("Qt Brynhildr Type"));
+  connect(touchpanelInterfaceTypeQtBrynhildr_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelInterfaceTypeQtBrynhildr()));
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // send clipboard
   sendClipboard_Action = new QAction(tr("Send Clipboard"), this);
@@ -2173,6 +2204,14 @@ void QtBrynhildr::createMenus()
 	modeSubMenu = optionMenu->addMenu(tr("Mode"));
 	modeSubMenu->addAction(onScrollMode_Action);
   }
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // touchpanel interface type
+  touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface Type"));
+  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeKeroRemote_Action);
+  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeQtBrynhildr_Action);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   optionMenu->addSeparator();
   optionMenu->addAction(outputKeyboardLog_Action);
   optionMenu->addAction(outputLog_Action);
@@ -2891,6 +2930,12 @@ void QtBrynhildr::connectToServer()
 	break;
   }
   softwareKeyboard->setVisible(false);
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // set touchpanel interface
+  graphicsView->setSoftwareButtonRect(touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareButtonRect);
+  graphicsView->setSoftwareKeyboardRect(touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareKeyboardRect);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // clear buffer for control
@@ -4154,6 +4199,23 @@ void QtBrynhildr::toggleOnScrollMode()
 	settings->setOnScrollMode(true);
   }
 }
+
+#if defined(QTB_DEV_TOUCHPANEL)
+// touchpanel interface type
+void QtBrynhildr::touchpanelInterfaceTypeKeroRemote()
+{
+  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE);
+  touchpanelInterfaceTypeKeroRemote_Action->setChecked(true);
+  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(false);
+}
+
+void QtBrynhildr::touchpanelInterfaceTypeQtBrynhildr()
+{
+  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR);
+  touchpanelInterfaceTypeKeroRemote_Action->setChecked(false);
+  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(true);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 // visibility changed software keyboard

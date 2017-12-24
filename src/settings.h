@@ -401,6 +401,15 @@ typedef int COMPRESS_MODE;
 #define QTB_CONVERTTHREADCOUNT				"convertThreadCount"
 #define QTB_CONVERTTHREADCOUNT_DEFAULT		2
 
+#if defined(QTB_DEV_TOUCHPANEL)
+// for touchpanelInterfaceType
+#define QTB_TOUCHPANELINTERFACETYPE				"touchpanelInterfaceType"
+#define QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE	0
+#define QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR	1
+#define QTB_TOUCHPANELINTERFACETYPE_NUM			2
+#define QTB_TOUCHPANELINTERFACETYPE_DEFAULT		QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 // for outputGraphicsDataToFile
 #define QTB_OUTPUTGRAPHICSDATATOFILE			"outputGraphicsDataToFile"
 #define QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT	false
@@ -1750,6 +1759,20 @@ public:
 	this->convertThreadCount = convertThreadCount;
   }
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // get touchpanelInterfaceType
+  int getTouchpanelInterfaceType() const
+  {
+	return touchpanelInterfaceType;
+  }
+
+  // set convert thread count
+  void setTouchpanelInterfaceType(int touchpanelInterfaceType)
+  {
+	this->touchpanelInterfaceType = touchpanelInterfaceType;
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // get output graphics flag
   bool getOutputGraphicsDataToFile() const
   {
@@ -2130,6 +2153,11 @@ private:
 
   // convert thread count
   volatile int convertThreadCount;
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // for touchpanelInterfaceType
+  volatile int touchpanelInterfaceType;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // Debug
   volatile bool outputGraphicsDataToFile;

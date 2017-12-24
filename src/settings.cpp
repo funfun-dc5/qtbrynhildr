@@ -171,6 +171,10 @@ Settings::Settings(const char *iniFileName)
 
   setConvertThreadCount(QTB_CONVERTTHREADCOUNT_DEFAULT);
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_DEFAULT);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   setOutputGraphicsDataToFile(QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT);
   setOutputSoundDataToFile(QTB_OUTPUTSOUNDDATATOFILE_DEFAULT);
   setOutputSoundDataToWavFile(QTB_OUTPUTSOUNDDATATOWAVFILE_DEFAULT);
@@ -476,6 +480,12 @@ void Settings::readSettings()
   setConvertThreadCount(settings->value(QTB_CONVERTTHREADCOUNT,
 										   QTB_CONVERTTHREADCOUNT_DEFAULT).toInt());
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // load touchpanelInterfaceType
+  setTouchpanelInterfaceType(settings->value(QTB_TOUCHPANELINTERFACETYPE,
+											 QTB_TOUCHPANELINTERFACETYPE_DEFAULT).toInt());
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // load outputGraphicsDataToFile
   setOutputGraphicsDataToFile(settings->value(QTB_OUTPUTGRAPHICSDATATOFILE,
 											  QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT).toBool());
@@ -711,6 +721,11 @@ void Settings::writeSettings()
   // save convertThreadCount
   settings->setValue(QTB_CONVERTTHREADCOUNT, convertThreadCount);
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // save touchpanelInterfaceType
+  settings->setValue(QTB_TOUCHPANELINTERFACETYPE, touchpanelInterfaceType);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // save outputGraphicsDataToFile
   settings->setValue(QTB_OUTPUTGRAPHICSDATATOFILE, outputGraphicsDataToFile);
 
@@ -840,6 +855,9 @@ void Settings::printSettings() const
 
   qDebug() << "Double Click Threshold(msecond) : " << doubleClickThreshold;
   qDebug() << "Convert Thread Count         : " << convertThreadCount;
+#if defined(QTB_DEV_TOUCHPANEL)
+  qDebug() << "TouchpanelInterfaceType      : " << touchpanelInterfaceType;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   qDebug() << "------------------------------------------";
   qDebug() << "DBG: output Graphics Data To File    : " << outputGraphicsDataToFile;

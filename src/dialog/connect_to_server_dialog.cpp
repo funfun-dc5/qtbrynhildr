@@ -14,7 +14,6 @@
 
 // Local Header
 #include "connect_to_server_dialog.h"
-//#define QTB_DEV_TOUCHPANEL 1 // for TEST
 
 namespace qtbrynhildr {
 

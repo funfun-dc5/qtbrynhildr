@@ -136,6 +136,7 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
 	SoftwareButton::pressedButton(ID_BUTTON_22);
 	break;
   case PUBLICMODE_VERSION6:
+	SoftwareButton::pressedButton(ID_BUTTON_22);
 	break;
   case PUBLICMODE_VERSION7:
 	SoftwareButton::pressedButton(ID_BUTTON_23);
@@ -252,11 +253,11 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_22:
 	// Public Mode 5
-	settings->setPublicModeVersion(5);
+	settings->setPublicModeVersion(PUBLICMODE_VERSION5);
 	break;
   case ID_BUTTON_23:
 	// Public Mode 7
-	settings->setPublicModeVersion(7);
+	settings->setPublicModeVersion(PUBLICMODE_VERSION7);
 	break;
   case ID_BUTTON_24:
 	// Wheel -

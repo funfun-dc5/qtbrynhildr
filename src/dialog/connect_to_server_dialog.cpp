@@ -14,6 +14,7 @@
 
 // Local Header
 #include "connect_to_server_dialog.h"
+//#define QTB_DEV_TOUCHPANEL 1 // for TEST
 
 namespace qtbrynhildr {
 
@@ -43,13 +44,24 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 	serverNameList->append(settings->getServerName());
   }
 #endif // for DEBUG
+
 #if QTB_AUTO_COMPLETE
   completer = new QCompleter(*serverNameList, this);
+#endif // QTB_AUTO_COMPLETE
+
+#if defined(QTB_DEV_TOUCHPANEL) // for TEST
+  lineEdit_hostname->insert(settings->getServerName()); // for TEST
+#if QTB_AUTO_COMPLETE
+  lineEdit_hostname->setCompleter(completer);
+#endif // QTB_AUTO_COMPLETE
+#else // defined(QTB_DEV_TOUCHPANEL)
+#if QTB_AUTO_COMPLETE
   comboBox_hostname->setCompleter(completer);
+#endif // QTB_AUTO_COMPLETE
   comboBox_hostname->addItems(*serverNameList);
   comboBox_hostname->setCurrentIndex(serverNameList->indexOf(QRegExp(settings->getServerName())));
   comboBox_hostname->setEditable(true);
-#endif // QTB_AUTO_COMPLETE
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // server type field
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_XP,		STRING_SERVER_TYPE_WINDOWS_XP);
@@ -149,7 +161,11 @@ void ConnectToServerDialog::resetting()
   int fontPointSize = 14;
 
   // set minimum width
+#if defined(QTB_DEV_TOUCHPANEL)
+  lineEdit_hostname->setMinimumWidth(300);
+#else // defined(QTB_DEV_TOUCHPANEL)
   comboBox_hostname->setMinimumWidth(300);
+#endif // defined(QTB_DEV_TOUCHPANEL)
   comboBox_hosttype->setMinimumWidth(300);
   comboBox_keyboardtype->setMinimumWidth(300);
   spinBox_portno->setMinimumWidth(300);
@@ -164,7 +180,11 @@ void ConnectToServerDialog::resetting()
   setFont(currentFont);
 #else // defined(QTB_DEV_TOUCHPANEL)
   // set minimum width
+#if defined(QTB_DEV_TOUCHPANEL)
+  lineEdit_hostname->setMinimumWidth(180);
+#else // defined(QTB_DEV_TOUCHPANEL)
   comboBox_hostname->setMinimumWidth(180);
+#endif // defined(QTB_DEV_TOUCHPANEL)
   comboBox_hosttype->setMinimumWidth(180);
   comboBox_keyboardtype->setMinimumWidth(180);
   spinBox_portno->setMinimumWidth(180);
@@ -177,11 +197,19 @@ void ConnectToServerDialog::resetting()
 // private slot
 //---------------------------------------------------------------------------
 // server name field
+#if defined(QTB_DEV_TOUCHPANEL)
+void ConnectToServerDialog::on_lineEdit_hostname_textChanged()
+{
+  if (outputLog)
+	cout << "text Changed : hostname : " << endl << flush; // for DEBUG
+}
+#else // defined(QTB_DEV_TOUCHPANEL)
 void ConnectToServerDialog::on_comboBox_hostname_currentIndexChanged(int index)
 {
   if (outputLog)
 	cout << "index Changed : hostname : index = " << index << endl << flush; // for DEBUG
 }
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // server type field
 void ConnectToServerDialog::on_comboBox_hosttype_currentIndexChanged(int index)
@@ -260,6 +288,21 @@ void ConnectToServerDialog::accept()
 	cout << "accept()." << endl << flush; // for DEBUG
 
   // server name
+#if defined(QTB_DEV_TOUCHPANEL)
+  if (lineEdit_hostname->text().size() > 0){
+	QString serverName = lineEdit_hostname->text();
+	settings->setServerName(serverName);
+#if QTB_AUTO_COMPLETE
+	if (!(serverNameList->contains(serverName))){
+	  serverNameList->insert(0, serverName);
+	}
+#endif // QTB_AUTO_COMPLETE
+  }
+  else {
+	// Yet: error
+	return;
+  }
+#else // defined(QTB_DEV_TOUCHPANEL)
   if (comboBox_hostname->currentText().size() > 0){
 	QString serverName = comboBox_hostname->currentText();
 	settings->setServerName(serverName);
@@ -273,6 +316,7 @@ void ConnectToServerDialog::accept()
 	// Yet: error
 	return;
   }
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // host type
   settings->setServerType(comboBox_hosttype->currentIndex());

@@ -94,11 +94,9 @@ typedef int PUBLICMODE_VERSION;
 #define QTB_SERVERNAME_DEFAULT	""
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_AUTO_COMPLETE
 // for serverNameListSize
 #define QTB_SERVERNAMELISTSIZE			"serverNameListSize"
 #define QTB_SERVERNAMELISTSIZE_DEFAULT	10
-#endif // QTB_AUTO_COMPLETE
 
 // for serverType
 #define QTB_SERVERTYPE			"serverType"
@@ -593,7 +591,6 @@ public:
 	return true;
   }
 
-#if QTB_AUTO_COMPLETE
   // get server name list
   QStringList *getServerNameList() const
   {
@@ -625,7 +622,6 @@ public:
 
   // write server name list
   void writeServerNameList();
-#endif // QTB_AUTO_COMPLETE
 
   // get server type
   SERVER_TYPE getServerType() const
@@ -1952,13 +1948,11 @@ private:
   // server name
   QString serverName;
 
-#if QTB_AUTO_COMPLETE
   // server name list size
   volatile int serverNameListSize;
 
   // server name list
   QStringList *serverNameList;
-#endif // QTB_AUTO_COMPLETE
 
   // server type
   volatile SERVER_TYPE serverType;

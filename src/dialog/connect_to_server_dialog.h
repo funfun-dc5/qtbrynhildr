@@ -18,7 +18,11 @@
 
 // Local Header
 #include "settings.h"
+#if defined(QTB_DEV_TOUCHPANEL)
+#include "ui_connect_to_server_dialog_touchpanel.h"
+#else // defined(QTB_DEV_TOUCHPANEL)
 #include "ui_connect_to_server_dialog.h"
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 namespace qtbrynhildr {
 
@@ -48,7 +52,11 @@ private:
 
 private slots:
   // hostname field
+#if defined(QTB_DEV_TOUCHPANEL)
+  void on_lineEdit_hostname_textChanged();
+#else // defined(QTB_DEV_TOUCHPANEL)
   void on_comboBox_hostname_currentIndexChanged(int index);
+#endif // defined(QTB_DEV_TOUCHPANEL)
   // hosttype field
   void on_comboBox_hosttype_currentIndexChanged(int index);
   // keyboard type field

@@ -9,10 +9,10 @@
 // Qt Header
 #include <QCursor>
 #include <QPainter>
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_TOUCHPANEL)
 #include <QScrollBar>
 #include <QTouchEvent>
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #include <QTransform>
 
 #include <QDebug>
@@ -41,9 +41,7 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);
 #else // defined(QTB_DEV_TOUCHPANEL)
-#if !QTB_TEST_TOUCHPANEL_ON_DESKTOP
   setMouseTracking(true);
-#endif // !QTB_TEST_TOUCHPANEL_ON_DESKTOP
 #endif // defined(QTB_DEV_TOUCHPANEL)
   setRenderHint(QPainter::Antialiasing, false);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -53,10 +51,10 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   setResizeAnchor(QGraphicsView::AnchorViewCenter);
   setTransformationAnchor(QGraphicsView::AnchorViewCenter);
   setAlignment(Qt::AlignCenter);
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_TOUCHPANEL)
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // defined(QTB_DEV_TOUCHPANEL)
   setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
   setViewportMargins(0, 0, 0, 0);
 }
@@ -91,7 +89,7 @@ void GraphicsView::setScale(qreal scalingFactor)
   qDebug() << "diffSize = " << diffSize;
 
 #if 0 // for TEST
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_TOUCHPANEL)
 #if 1
   //  verticalScrollBar()->setRange(1, diffSize.height()-1);
   //  verticalScrollBar()->setValue(diffSize.height()/2);
@@ -118,12 +116,12 @@ void GraphicsView::setScale(qreal scalingFactor)
   qDebug() << "horizontalScrollBar.minimum = " << horizontalScrollBar()->minimum();
   qDebug() << "horizontalScrollBar.maximum = " << horizontalScrollBar()->maximum();
   qDebug() << "horizontalScrollBar.value   = " << horizontalScrollBar()->value();
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #endif
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_TOUCHPANEL)
   // save scaling factor
   this->scalingFactor = scalingFactor;
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -323,14 +321,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 											event->button(),
 											event->buttons(),
 											event->modifiers());
-#if QTB_TEST_TOUCHPANEL_ON_DESKTOP
-	// Left Button -> move cursor
-	if (event->button() == Qt::LeftButton){
-	  desktopPanel->mouseMoveEvent(newEvent);
-	}
-#else // QTB_TEST_TOUCHPANEL_ON_DESKTOP
 	desktopPanel->mousePressEvent(newEvent);
-#endif // QTB_TEST_TOUCHPANEL_ON_DESKTOP
   }
 }
 
@@ -353,7 +344,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //  cout << "mouseDoubleClicEvent" << endl << flush;
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_TOUCHPANEL)
   Q_UNUSED(event);
 #else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
@@ -367,7 +358,7 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseDoubleClickEvent(newEvent);
   }
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
@@ -389,13 +380,13 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
   }
 }
 
-#if defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_DESKTOP)
 void GraphicsView::wheelEvent(QWheelEvent *event)
 {
   //  cout << "wheelEvent" << endl << flush;
   desktopPanel->wheelEvent(event);
 }
-#endif // defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // defined(QTB_DEV_DESKTOP)
 
 // keyboard event
 void GraphicsView::keyPressEvent(QKeyEvent *event)

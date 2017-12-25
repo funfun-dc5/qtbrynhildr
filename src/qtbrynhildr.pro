@@ -102,10 +102,16 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 equals(DESKTOP, ON){
 SOFTWARE_KEYBOARD_BUTTON_SUPPORT = OFF
 PREFERENCE_DIALOG = ON
+HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
+SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
+DEFINES += QTB_NEW_DESKTOPWINDOW=0
 }
 else {
 SOFTWARE_KEYBOARD_BUTTON_SUPPORT = ON
 PREFERENCE_DIALOG = OFF
+HEADERS += mainwindow/desktoppanel.h mainwindow/desktoppanelobject.h mainwindow/graphicsview.h
+SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp
+DEFINES += QTB_NEW_DESKTOPWINDOW=1
 }
 
 # for crypto++
@@ -211,14 +217,8 @@ SOURCES += function/recorder.cpp
 DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 
 # for new feature
-NEW_FEATURE = ON
-equals(NEW_FEATURE, ON){
-HEADERS += mainwindow/desktoppanel.h mainwindow/desktoppanelobject.h mainwindow/graphicsview.h
-SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp
-DEFINES += QTB_NEW_DESKTOPWINDOW=1
-}
-else {
-HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
-SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
-DEFINES += QTB_NEW_DESKTOPWINDOW=0
-}
+# NEW_FEATURE = ON
+# equals(NEW_FEATURE, ON){
+# }
+# else {
+# }

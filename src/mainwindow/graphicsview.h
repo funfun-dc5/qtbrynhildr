@@ -102,9 +102,9 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event);
   void mouseDoubleClickEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
-#if defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#if defined(QTB_DEV_DESKTOP)
   void wheelEvent(QWheelEvent *event);
-#endif // defined(QTB_DEV_DESKTOP) && !QTB_TEST_TOUCHPANEL_ON_DESKTOP
+#endif // defined(QTB_DEV_DESKTOP)
 
   // keyboard event
   void keyPressEvent(QKeyEvent *event);

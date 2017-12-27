@@ -6,7 +6,7 @@
 サーバ
 ------
 
- Brynhildr/Siegfriedのページの **SystemRequirements** を参照してください。
+ Brynhildrのページの **SystemRequirements** を参照してください。
 
 クライアント
 ------------

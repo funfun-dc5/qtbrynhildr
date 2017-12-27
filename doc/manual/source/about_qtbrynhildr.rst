@@ -27,9 +27,6 @@ Qt Brynhildrとは
  .. [#] 簡単に言うと「目の前にないWindowsのPCを他のPCなどから操作できる」ようにするための
         ソフトウェアです。操作したいPCに別途サーバソフトウェアをインストールする必要があります。
 
- .. [#] パブリックモードを有効にしたSiegfriedにも接続できます。SiegfriedはBrynhildrの原作者
-        IchiGekiさんが公開されているリモートデスクトップソフトウェアです。
-
 
  Windows版 Qt Brynhildr
 

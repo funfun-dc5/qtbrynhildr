@@ -96,7 +96,7 @@
 
  (2) サーバについて
 
-  [1] お使いのBrynhildr/Siegfriedのバージョン
+  [1] お使いのBrynhildrのバージョン
 
   [2] 不具合発生時のlog.txtの内容
     (brynhildr.exeと同じ場所に空の"log.txt"を作成する必要があります)

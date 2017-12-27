@@ -3,18 +3,16 @@
 リンク
 =======================
 
-1. Brynhildr/Siegfriedに関するページ
+1. Brynhildrに関するページ
 ------------------------------------
 
 * 原作者IchiGekiさんのブログ
 
  「リモートデスクトップを開発してるエンジニアのブログ。」<http://blog.x-row.net/>
 
-* Brynhildr/Siegfriedのページ
+* Brynhildrのページ
 
  「Brynhildr - 高速度型リモートデスクトップ」        <http://blog.x-row.net/?p=2455>
-
- 「Siegfried - 高圧縮型リモートデスクトップ」        <http://blog.x-row.net/?p=7879>
 
 * KeroKeyboardのページ
 

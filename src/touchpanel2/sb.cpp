@@ -561,6 +561,17 @@ void SB::mouseMoveEvent(QMouseEvent *event)
 }
 #endif // QTB_NEW_DESKTOPWINDOW
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // hide event
+void SB::hideEvent(QHideEvent *event)
+{
+  Q_UNUSED(event);
+
+  // save settings
+  settings->writeSettings();
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------

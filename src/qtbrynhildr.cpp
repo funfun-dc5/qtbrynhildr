@@ -2510,6 +2510,11 @@ void QtBrynhildr::connected()
 	fullScreen();
 	onSetDesktopScalingFactorForFullScreen = true;
   }
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // save settings
+  settings->writeSettings();
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 // disconnected

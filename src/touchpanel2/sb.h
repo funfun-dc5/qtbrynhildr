@@ -52,6 +52,11 @@ protected:
   virtual void mouseMoveEvent(QMouseEvent *event) override;
 #endif // QTB_NEW_DESKTOPWINDOW
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // hide event
+  virtual void hideEvent(QHideEvent *event) override;
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 private:
   // mouse buffer
   MouseBuffer *mouseBuffer;

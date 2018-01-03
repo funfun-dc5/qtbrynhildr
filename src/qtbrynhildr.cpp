@@ -2207,7 +2207,7 @@ void QtBrynhildr::createMenus()
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel interface type
-  touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface Type"));
+  touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface"));
   touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeKeroRemote_Action);
   touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeQtBrynhildr_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)

@@ -10,7 +10,7 @@
 #define QTB_VERSION_NUMBER		209
 
 // year
-#define QTB_YEAR		"2015-2017"
+#define QTB_YEAR		"2015-2018"
 
 // URL of blog
 #define QTB_BLOG		"<a href=\"http://mcz-xoxo.cocolog-nifty.com/blog/\">http://mcz-xoxo.cocolog-nifty.com/blog/</a>"

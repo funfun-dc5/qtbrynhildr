@@ -6,8 +6,7 @@ Qt Brynhildrとは
  このソフトウェアは **仕様の公開されているパブリックモード** で動作させた
  Brynhildrサーバに接続するためのクライアントソフトウェア [#]_ です。
 
- サーバ機能は今の所持っていませんので、サーバとしては
- Brynhildr  [#]_ (最新を推奨)をご利用ください。
+ サーバ機能は今の所持っていませんので、サーバとしては Brynhildr (最新を推奨)をご利用ください。
 
  **また、公開されているパブリックモードでは現状ファイルの送受信、クリップボードの
  共有はできない仕様になっていますので、これらの機能が必要な場合はBrynhildrの
@@ -33,7 +32,7 @@ Qt Brynhildrとは
  .. image:: images/qtbrynhildr_on_windows.jpg
 
            
-Linux(Ubuntu)版 Qt Brynhildr
+ Linux(Ubuntu)版 Qt Brynhildr
 
  .. image:: images/qtbrynhildr_on_ubuntu.png
 

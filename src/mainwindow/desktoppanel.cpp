@@ -149,6 +149,18 @@ void DesktopPanel::refreshDesktop(QImage image)
   if (QTB_DESKTOP_IMAGE_SCALING){
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
 	  qreal scalingFactor = getDesktopScalingFactor(currentSize);
+#if 0 // for TEST
+	  if (settings->getOnKeepWindowSize() &&
+		  currentSize != previousSize){
+		// recalculate scaling factor
+		qreal widthRate = previousSize.width()/currentSize.width();
+		qreal heightRate = previousSize.height()/currentSize.height();
+		qreal rate = widthRate < heightRate ? widthRate : heightRate;
+		scalingFactor *= rate;
+		// flag clear
+		settings->setOnKeepWindowSize(false);
+	  }
+#endif // 0 // for TEST
 	  if (scalingFactor != 1.0){
 		// scale
 		currentSize = currentSize * scalingFactor;

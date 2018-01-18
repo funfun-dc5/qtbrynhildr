@@ -1323,6 +1323,13 @@ public:
 	case 8:
 	case 9:
 	case MONITOR_NO_ALL:
+	  if ((this->monitorNo != MONITOR_NO_ALL && monitorNo == MONITOR_NO_ALL) ||
+		  (this->monitorNo == MONITOR_NO_ALL && monitorNo != MONITOR_NO_ALL)){
+		setOnKeepWindowSize(true);
+	  }
+	  else {
+		setOnKeepWindowSize(false);
+	  }
 	  this->monitorNo = monitorNo;
 	  break;
 	default:
@@ -1342,6 +1349,18 @@ public:
   void setMonitorCount(MONITOR_COUNT monitorCount)
   {
 	this->monitorCount = monitorCount;
+  }
+
+  // get keep window size flag
+  bool getOnKeepWindowSize() const
+  {
+	return onKeepWindowSize;
+  }
+
+  // set keep window size flag
+  void setOnKeepWindowSize(bool onKeepWindowSize)
+  {
+	this->onKeepWindowSize = onKeepWindowSize;
   }
 
   // get open connect to server dialog at bootup flag
@@ -2033,6 +2052,9 @@ private:
 
   // monitor count
   volatile MONITOR_COUNT monitorCount;
+
+  // keep window size
+  volatile bool onKeepWindowSize;
 
   // open connect to server dialog at bootup
   volatile bool onOpenConnectToServerDialogAtBootup;

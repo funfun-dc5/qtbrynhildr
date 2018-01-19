@@ -133,7 +133,9 @@ GraphicsThread::~GraphicsThread()
 // get frame rate
 double GraphicsThread::getFrameRate()
 {
+#if 0 // for TEST
   if (!settings->getOnGraphics()) return 0.0;
+#endif // 0 // for TEST
 
   QDateTime currentTime = QDateTime::currentDateTime();
   double fps = 0.0;
@@ -607,69 +609,67 @@ int GraphicsThread::makeRGB24Image()
   }
 
 #if QTB_MULTI_THREAD_CONVERTER
-  // number of thread
+  // number of thread 1 or 2 or 4
   int numOfThread = settings->getConvertThreadCount();
-  //  int numOfThread = 0; // 0 or 1 or 2 or 4
+  uchar *rgb24top = rgb24 + width * (height - 1) * 3;
+  uchar *ytop = ytopOrg;
+  uchar *utop = utopOrg;
+  uchar *vtop = vtopOrg;
+  // 1 thread version
   if (numOfThread <= 1 || height % 2 != 0){
 	// convert YUV420 to RGB24
-	return convertYUV420toRGB24();
+	return convertYUV420toRGB24(ytop, utop, vtop, rgb24top, height);
   }
   else { // numOfThread >= 2
-	// 1 thread or 2 thread or 4 thread version
-	QFuture<int> f1, f2, f3, f4;
+	// 2 thread or 4 thread version
+	QFuture<int> f1, f2, f3;
 	int linesOfThread = height / numOfThread;
 
-	// for 1st thread
-	uchar *rgb24top = rgb24 + width * (height - 1) * 3;
-	uchar *ytop = ytopOrg;
-	uchar *utop = utopOrg;
-	uchar *vtop = vtopOrg;
-
-	// start thread
+	// start 1st thread
 	f1 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
 
-	// for 2nd thread
+	if (numOfThread > 2){
+	  // for next thread
+	  rgb24top -= (width * linesOfThread) * 3;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
+
+	  // start 2nd thread
+	  f2 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
+	}
+
+	// for 3rd thread
+	if (numOfThread > 3){
+	  // for next thread
+	  rgb24top -= (width * linesOfThread) * 3;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
+
+	  // start 3rd thread
+	  f3 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
+	}
+
+	// for next thread
 	rgb24top -= (width * linesOfThread) * 3;
 	ytop += width * linesOfThread;
 	utop += uvNext * linesOfThread/2;
 	vtop += uvNext * linesOfThread/2;
 
-	// start thread
-	f2 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
-
-	// for 3rd thread
-	if (numOfThread >= 4){
-	  rgb24top -= (width * linesOfThread) * 3;
-	  ytop += width * linesOfThread;
-	  utop += uvNext * linesOfThread/2;
-	  vtop += uvNext * linesOfThread/2;
-
-	  // start thread
-	  f3 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
-	}
-
-	// for 4th thread
-	if (numOfThread >= 4){
-	  rgb24top -= (width * linesOfThread) * 3;
-	  ytop += width * linesOfThread;
-	  utop += uvNext * linesOfThread/2;
-	  vtop += uvNext * linesOfThread/2;
-
-	  // start thread
-	  f4 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24, ytop, utop, vtop, rgb24top, linesOfThread);
-	}
+	// for last thread (GraphicsThread::convertYUV420toRGB24())
+	convertYUV420toRGB24(ytop, utop, vtop, rgb24top, linesOfThread);
 
 	// wait for all threads finished
 	f1.waitForFinished();
 	f2.waitForFinished();
 	f3.waitForFinished();
-	f4.waitForFinished();
 
 	return size * 3;
   }
 #else // QTB_MULTI_THREAD_CONVERTER
   // convert YUV420 to RGB24
-  return convertYUV420toRGB24();
+  return convertYUV420toRGB24(ytop, utop, vtop, rgb24top, height);
 #endif // QTB_MULTI_THREAD_CONVERTER
 }
 
@@ -874,16 +874,9 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // YUV420TORGB24_VERSION == 2
 
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24()
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
-  uchar *rgb24top = rgb24;
-  uchar *ytop = ytopOrg;
-  uchar *utop = utopOrg;
-  uchar *vtop = vtopOrg;
-
-  // last line top
-  rgb24top += width * (height - 1) * 3;
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -940,16 +933,9 @@ int GraphicsThread::convertYUV420toRGB24()
 #define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
 
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24()
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
-  uchar *rgb24top = rgb24;
-  uchar *ytop = ytopOrg;
-  uchar *utop = utopOrg;
-  uchar *vtop = vtopOrg;
-
-  // last line top
-  rgb24top += width * (height - 1) * 3;
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -1006,16 +992,9 @@ int GraphicsThread::convertYUV420toRGB24()
 
 #if YUV420TORGB24_VERSION == 4
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24()
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  uchar *rgb24top = rgb24;
   int rgb24size = 0;
-  uchar *ytop = ytopOrg;
-  uchar *utop = utopOrg;
-  uchar *vtop = vtopOrg;
-
-  // last line top
-  rgb24top += width * (height - 1) * 3;
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -1074,16 +1053,9 @@ int GraphicsThread::convertYUV420toRGB24()
 
 #if YUV420TORGB24_VERSION == 5
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24()
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  uchar *rgb24top = rgb24;
   int rgb24size = 0;
-  uchar *ytop = ytopOrg;
-  uchar *utop = utopOrg;
-  uchar *vtop = vtopOrg;
-
-  // last line top
-  rgb24top += width * (height - 1) * 3;
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 4, uvOffset += 2){

@@ -74,6 +74,9 @@ protected:
 
 #if QTB_PUBLIC_MODE7_SUPPORT
 private:
+  // make YUV420 image
+  bool makeYUV420Image();
+
   // make RGB24 image
   int makeRGB24Image();
 

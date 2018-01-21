@@ -367,6 +367,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	onClearDesktop = false;
 
 	bool desktopLoadResult = false;
+	// ------------------------------------------------------------------------------
+	// Motion JPEG (Mode 5/6)
+	// ------------------------------------------------------------------------------
 	if (com_data->video_mode == VIDEO_MODE_MJPEG){
 	  // load a JPEG data to desktop
 	  desktopLoadResult = image->loadFromData((const uchar *)buffer,
@@ -374,6 +377,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 											  "JPEG");
 	}
 #if QTB_PUBLIC_MODE7_SUPPORT
+	// ------------------------------------------------------------------------------
+	// VP8 (Mode 7)
+	// ------------------------------------------------------------------------------
 	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	  // VP8
 #if USE_PPM_LOADER_FOR_VP8
@@ -410,7 +416,10 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #endif // USE_PPM_LOADER_FOR_VP8
 	}
 	else {
-	  // illegal VIDEO_MODE
+	  // ------------------------------------------------------------------------------
+	  // unknown VIDEO_MODE
+	  // ------------------------------------------------------------------------------
+	  // desktopLoadResult = false;
 	}
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
@@ -526,14 +535,14 @@ void GraphicsThread::shutdownConnection()
 // private
 //---------------------------------------------------------------------------
 #if QTB_PUBLIC_MODE7_SUPPORT
-// make RGB24 image
-int GraphicsThread::makeRGB24Image()
+// make YUV420 image
+inline bool GraphicsThread::makeYUV420Image()
 {
   // get 1 frame image (YUV420)
   vpx_codec_iter_t iter = 0;
   vpx_image_t *img = vpx_codec_get_frame(&c_codec, &iter);
   if (img == 0) {
-	return 0;
+	return false;
   }
 
   // set size
@@ -555,9 +564,9 @@ int GraphicsThread::makeRGB24Image()
 	}
 	ppm = new uchar[width * height * 3 + PPM_HEADER_SIZE_MAX];
 	// make PPM header
-	snprintf((char*)ppm, PPM_HEADER_SIZE_MAX, PPM_HEADER_FORMAT, width, height);
+	int length = snprintf((char*)ppm, PPM_HEADER_SIZE_MAX, PPM_HEADER_FORMAT, width, height);
 	// set rgb24 top
-	rgb24 = ppm + strlen((char*)ppm);
+	rgb24 = ppm + length;
 #else // USE_PPM_LOADER_FOR_VP8
 	if (rgb24 != 0){
 	  delete [] rgb24;
@@ -606,6 +615,17 @@ int GraphicsThread::makeRGB24Image()
 	memcpy(top, buf, hwidth);
 	top += hwidth;
 	buf += stride;
+  }
+
+  return true;
+}
+
+// make RGB24 image
+int GraphicsThread::makeRGB24Image()
+{
+  // make yuv420 image
+  if (!makeYUV420Image()){
+	return 0;
   }
 
 #if QTB_MULTI_THREAD_CONVERTER

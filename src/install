@@ -287,7 +287,9 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
 			# install key layout file compiler
 			echo "install klfcompiler..."
-			(cd keylayout; make)
+			if [ "$TARGET" = "" ] ; then
+				(cd keylayout; make)
+			fi
 			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
 			# copy key layout file sample
 			echo "copy key layout file sample..."

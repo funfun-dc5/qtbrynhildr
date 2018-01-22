@@ -274,6 +274,14 @@ typedef int COMPRESS_MODE;
 // MAX desktop height for server
 #define QTB_MAX_SERVER_DESKTOP_HIGHT	2048
 
+// for monitorChangeType
+typedef enum {
+  MONITOR_CHANGE_TYPE_NONE,
+  MONITOR_CHANGE_TYPE_SINGLE_TO_SINGLE,
+  MONITOR_CHANGE_TYPE_SINGLE_TO_ALL,
+  MONITOR_CHANGE_TYPE_ALL_TO_SINGLE
+} MONITOR_CHANGE_TYPE;
+
 // for monitorNo
 #define QTB_MONITOR_NO					"monitorNo"
 #define QTB_MONITOR_NO_DEFAULT			1
@@ -1309,6 +1317,18 @@ public:
 	return true;
   }
 
+  // get monitor change type
+  MONITOR_CHANGE_TYPE getMonitorChangeType() const
+  {
+	return monitorChangeType;
+  }
+
+  // set monitor change type
+  void setMonitorChangeType(MONITOR_CHANGE_TYPE monitorChangeType)
+  {
+	this->monitorChangeType = monitorChangeType;
+  }
+
   // get monitor no
   MONITOR_NO getMonitorNo() const
   {
@@ -1329,6 +1349,18 @@ public:
 	case 8:
 	case 9:
 	case MONITOR_NO_ALL:
+	  if (this->monitorNo != MONITOR_NO_ALL && monitorNo == MONITOR_NO_ALL){
+		// single monitor to All monitor
+		setMonitorChangeType(MONITOR_CHANGE_TYPE_SINGLE_TO_ALL);
+	  }
+	  else if (this->monitorNo == MONITOR_NO_ALL && monitorNo != MONITOR_NO_ALL){
+		// All monitor to single monitor
+		setMonitorChangeType(MONITOR_CHANGE_TYPE_ALL_TO_SINGLE);
+	  }
+	  else {
+		// single monitor to single monitor
+		setMonitorChangeType(MONITOR_CHANGE_TYPE_SINGLE_TO_SINGLE);
+	  }
 	  this->monitorNo = monitorNo;
 	  break;
 	default:
@@ -2047,6 +2079,9 @@ private:
 
   // monitor count
   volatile MONITOR_COUNT monitorCount;
+
+  // monitorChangeType
+  volatile MONITOR_CHANGE_TYPE monitorChangeType;
 
   // open connect to server dialog at bootup
   volatile bool onOpenConnectToServerDialogAtBootup;

@@ -2121,9 +2121,7 @@ void QtBrynhildr::createMenus()
   selectMonitorNoSubMenu->addAction(selectMonitorNo7_Action);
   selectMonitorNoSubMenu->addAction(selectMonitorNo8_Action);
   selectMonitorNoSubMenu->addAction(selectMonitorNo9_Action);
-#if 0 // for TEST
   selectMonitorNoSubMenu->addAction(selectMonitorNoAll_Action);
-#endif
 
   // for control
   controlMenu->addSeparator();
@@ -2577,8 +2575,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 
   int desktopWidth = desktopSize.width();
   int desktopHeight = desktopSize.height();
-  float widthFactor = (float)width/desktopWidth;
-  float heightFactor = (float)height/desktopHeight;
+  qreal widthFactor = (qreal)width/desktopWidth;
+  qreal heightFactor = (qreal)height/desktopHeight;
   if (widthFactor < heightFactor){
 	settings->setDesktopScalingFactor(widthFactor);
   }

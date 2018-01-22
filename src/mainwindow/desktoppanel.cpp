@@ -125,7 +125,9 @@ void DesktopPanel::refreshDesktop(QImage image)
   }
 
   // save size
-  currentSize = desktopSize = image.size();
+  currentSize = image.size();
+  bool isSameSize = currentSize == desktopSize;
+  desktopSize = currentSize;
 
   // capture desktop image for original size
   if (QTB_DESKTOP_IMAGE_CAPTURE){
@@ -149,6 +151,19 @@ void DesktopPanel::refreshDesktop(QImage image)
   if (QTB_DESKTOP_IMAGE_SCALING){
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
 	  qreal scalingFactor = getDesktopScalingFactor(currentSize);
+	  if (!isSameSize){
+		// recalculate scaling factor
+		qreal widthRate = (qreal)previousSize.width()/currentSize.width();
+		qreal heightRate = (qreal)previousSize.height()/currentSize.height();
+		if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_SINGLE_TO_ALL){
+		  scalingFactor = widthRate < heightRate ? widthRate : heightRate;
+		}
+		else if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_ALL_TO_SINGLE){
+		  scalingFactor = widthRate > heightRate ? widthRate : heightRate;
+		}
+		// flag clear
+		settings->setMonitorChangeType(MONITOR_CHANGE_TYPE_NONE);
+	  }
 	  if (scalingFactor != 1.0){
 		// scale
 		currentSize = currentSize * scalingFactor;

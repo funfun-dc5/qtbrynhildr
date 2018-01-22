@@ -402,6 +402,27 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  }
 #else // USE_PPM_LOADER_FOR_VP8
 	  int rgb24size = makeRGB24Image();
+#if 0 // for getting test data
+	  {
+		static int frameNo = 1;
+		if (frameNo == 40){ // sampling at 40th frame
+		  fstream file;
+		  // save yuv420
+		  file.open("yuv420_1920x1080.dat", ios::out | ios::binary | ios::trunc);
+		  if (file.is_open()){
+			file.write((char*)yuv420, width * height + width * height / 2);
+			file.close();
+		  }
+		  // save rgb24
+		  file.open("rgb24_1920x1080.dat", ios::out | ios::binary | ios::trunc);
+		  if (file.is_open()){
+			file.write((char*)rgb24, width * height * 3);
+			file.close();
+		  }
+		}
+		frameNo++;
+	  }
+#endif // for getting test data
 	  if (rgb24size != 0){
 		// create QImage from RGB24
 		delete image;

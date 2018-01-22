@@ -76,6 +76,9 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   size(0),
   uvNext(0),
   rgb24Next(0),
+  type(RGB24IMAGE_SCALING_TYPE_100),
+  widthRGB24Image(0),
+  heightRGB24Image(0),
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   buffer(0)
 {
@@ -393,7 +396,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  else {
 		if (image->isNull()){
 		  delete image;
-		  image = new QImage(width, height, QImage::Format_RGB888);
+		  image = new QImage(widthRGB24Image, heightRGB24Image, QImage::Format_RGB888);
 		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
 		}
 	  }
@@ -402,12 +405,12 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  if (rgb24size != 0){
 		// create QImage from RGB24
 		delete image;
-		image = new QImage(rgb24, width, height, QImage::Format_RGB888);
+		image = new QImage(rgb24, widthRGB24Image, heightRGB24Image, QImage::Format_RGB888);
 	  }
 	  else {
 		if (image->isNull()){
 		  delete image;
-		  image = new QImage(width, height, QImage::Format_RGB888);
+		  image = new QImage(widthRGB24Image, heightRGB24Image, QImage::Format_RGB888);
 		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
 		}
 	  }
@@ -535,13 +538,59 @@ void GraphicsThread::shutdownConnection()
 // private
 //---------------------------------------------------------------------------
 #if QTB_PUBLIC_MODE7_SUPPORT
+// setup for yuv420, rgb24
+inline bool GraphicsThread::setup()
+{
+  // size of rgb24 image (Yet: 100%)
+  widthRGB24Image = width;
+  heightRGB24Image = height;
+
+  // allocate yuv420/rgb24 buffer
+  if (yuv420 != 0){
+	delete [] yuv420;
+  }
+  yuv420 = new uchar[width * height + width * height / 2];
+#if USE_PPM_LOADER_FOR_VP8
+  if (ppm != 0){
+	delete [] ppm;
+  }
+  ppm = new uchar[widthRGB24Image * heightRGB24Image * 3 + PPM_HEADER_SIZE_MAX];
+  // make PPM header
+  int length = snprintf((char*)ppm, PPM_HEADER_SIZE_MAX, PPM_HEADER_FORMAT, widthRGB24Image, heightRGB24Image);
+  // set rgb24 top
+  rgb24 = ppm + length;
+#else // USE_PPM_LOADER_FOR_VP8
+  if (rgb24 != 0){
+	delete [] rgb24;
+  }
+  rgb24 = new uchar[widthRGB24Image * heightRGB24Image * 3];
+#endif // USE_PPM_LOADER_FOR_VP8
+
+  // calc parameters
+  hwidth = width / 2;
+  size = width * height;
+  ytopOrg = (uchar*)yuv420;
+  utopOrg = ytopOrg + size;
+  vtopOrg = utopOrg + size / 4;
+  uvNext = width / 2;
+  rgb24Next = - widthRGB24Image * 3 * 2;
+#if QTB_MULTI_THREAD_CONVERTER
+  // set for qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+  qtbrynhildr::width = width;
+  qtbrynhildr::uvNext = uvNext;
+  qtbrynhildr::rgb24Next = rgb24Next;
+#endif // QTB_MULTI_THREAD_CONVERTER
+
+  return true;
+}
+
 // make YUV420 image
 inline bool GraphicsThread::makeYUV420Image()
 {
   // get 1 frame image (YUV420)
   vpx_codec_iter_t iter = 0;
   vpx_image_t *img = vpx_codec_get_frame(&c_codec, &iter);
-  if (img == 0) {
+  if (img == 0){
 	return false;
   }
 
@@ -553,41 +602,10 @@ inline bool GraphicsThread::makeYUV420Image()
 	height = img->d_h;
 	//  cout << "width = " << width << endl << "height = " << height << endl << flush;
 
-	// allocate yuv420/rgb24 buffer
-	if (yuv420 != 0){
-	  delete [] yuv420;
+	// setup for yuv420, rgb24
+	if (!setup()){
+	  return false;
 	}
-	yuv420 = new uchar[width * height + width * height / 2];
-#if USE_PPM_LOADER_FOR_VP8
-	if (ppm != 0){
-	  delete [] ppm;
-	}
-	ppm = new uchar[width * height * 3 + PPM_HEADER_SIZE_MAX];
-	// make PPM header
-	int length = snprintf((char*)ppm, PPM_HEADER_SIZE_MAX, PPM_HEADER_FORMAT, width, height);
-	// set rgb24 top
-	rgb24 = ppm + length;
-#else // USE_PPM_LOADER_FOR_VP8
-	if (rgb24 != 0){
-	  delete [] rgb24;
-	}
-	rgb24 = new uchar[width * height * 3];
-#endif // USE_PPM_LOADER_FOR_VP8
-
-	// calc parameters
-	hwidth = width / 2;
-	size = width * height;
-	ytopOrg = (uchar*)yuv420;
-	utopOrg = ytopOrg + size;
-	vtopOrg = utopOrg + size / 4;
-	uvNext = width / 2;
-	rgb24Next = - width * 3 * 2;
-#if QTB_MULTI_THREAD_CONVERTER
-	// set for qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-	qtbrynhildr::width = width;
-	qtbrynhildr::uvNext = uvNext;
-	qtbrynhildr::rgb24Next = rgb24Next;
-#endif // QTB_MULTI_THREAD_CONVERTER
   }
 
   // create yuv420
@@ -621,7 +639,7 @@ inline bool GraphicsThread::makeYUV420Image()
 }
 
 // make RGB24 image
-int GraphicsThread::makeRGB24Image()
+inline int GraphicsThread::makeRGB24Image()
 {
   // make yuv420 image
   if (!makeYUV420Image()){

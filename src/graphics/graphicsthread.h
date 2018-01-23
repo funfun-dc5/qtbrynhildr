@@ -101,11 +101,14 @@ private:
   // make RGB24 image
   inline int makeRGB24Image();
 
-  // convert YUV420 to RGB24
+  // convert YUV420 to RGB24 (Full Convert)
   int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
-  //  int convertYUV420toRGB24_75(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
-  //  int convertYUV420toRGB24_50(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
-  //  int convertYUV420toRGB24_25(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+  // convert YUV420 to RGB24 (75% compressed)
+  int convertYUV420toRGB24_75(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+  // convert YUV420 to RGB24 (50% compressed)
+  int convertYUV420toRGB24_50(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+  // convert YUV420 to RGB24 (25% compressed)
+  int convertYUV420toRGB24_25(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
 
   // clip
   int clip(int val)

@@ -10,7 +10,7 @@
 #include <QEvent>
 
 // Local Header
-#include "control/mousebuffer.h"
+#include "controlthread/mousebuffer.h"
 #include "settings.h"
 #include "software_button.h"
 #if QTB_NEW_DESKTOPWINDOW

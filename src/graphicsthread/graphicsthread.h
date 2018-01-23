@@ -32,6 +32,26 @@
 #define PPM_HEADER_FORMAT "P6\n%d %d\n255\n"
 #endif // USE_PPM_LOADER_FOR_VP8
 
+// RGB image format
+#if USE_PPM_LOADER_FOR_VP8
+#define FORMAT_RGB888 1 // fixed
+#else // USE_PPM_LOADER_FOR_VP8
+//#define FORMAT_RGB888 1
+#define FORMAT_RGBA8888 1
+#endif // USE_PPM_LOADER_FOR_VP8
+
+// RGB888 (3bytes) format info.
+#if FORMAT_RGB888
+#define IMAGE_FORMAT QImage::Format_RGB888
+#define IMAGE_FORMAT_SIZE 3
+#endif // FORMAT_RGB888
+
+// RGBA8888 (4bytes) format info.
+#if FORMAT_RGBA8888
+#define IMAGE_FORMAT QImage::Format_RGBA8888
+#define IMAGE_FORMAT_SIZE 4
+#endif // FORMAT_RGBA8888
+
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {
@@ -74,11 +94,17 @@ protected:
 
 #if QTB_PUBLIC_MODE7_SUPPORT
 private:
-  // make RGB24 image
-  int makeRGB24Image();
+  // setup for yuv420, rgb24
+  inline bool setup();
 
-  // convert YUV420 to RGB24
-  int convertYUV420toRGB24();
+  // make YUV420 image
+  inline bool makeYUV420Image();
+
+  // make RGB24 image
+  inline int makeRGB24Image();
+
+  // convert YUV420 to RGB24 (Full Convert)
+  int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
 
   // clip
   int clip(int val)
@@ -152,6 +178,7 @@ private:
 
   // codec context
   vpx_codec_ctx_t c_codec;
+
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
 private:

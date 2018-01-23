@@ -135,12 +135,12 @@ DEFINES += QTB_SOFTWARE_KEYBOARD_AND_BUTTON=0
 # for CELT
 equals(CELT_SUPPORT, ON){
 INCLUDEPATH += ../libs/celt
-HEADERS += sound/converter.h sound/converter_celt.h
-SOURCES += sound/converter.cpp sound/converter_celt.cpp
+HEADERS += soundthread/converter.h soundthread/converter_celt.h
+SOURCES += soundthread/converter.cpp soundthread/converter_celt.cpp
 #INCLUDEPATH += ../libs/opus
 #LIBS += -L../libs/opus -lopus
-#HEADERS += sound/converter.h sound/converter_opus.h
-#SOURCES += sound/converter.cpp sound/converter_opus.cpp
+#HEADERS += soundthread/converter.h soundthread/converter_opus.h
+#SOURCES += soundthread/converter.cpp soundthread/converter_opus.cpp
 DEFINES += QTB_CELT_SUPPORT=1
 }
 else {
@@ -188,12 +188,12 @@ HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dia
 HEADERS += settings.h
 HEADERS += util/desktop.h util/debug.h
 HEADERS += common/netthread.h
-HEADERS += control/controlthread.h
-HEADERS += control/keybuffer.h control/mousebuffer.h
-HEADERS += graphics/graphicsthread.h
-HEADERS += sound/soundthread.h
-HEADERS += sound/soundbuffer.h
-HEADERS += sound/wave.h
+HEADERS += controlthread/controlthread.h
+HEADERS += controlthread/keybuffer.h controlthread/mousebuffer.h
+HEADERS += graphicsthread/graphicsthread.h
+HEADERS += soundthread/soundthread.h
+HEADERS += soundthread/soundbuffer.h
+HEADERS += soundthread/wave.h
 HEADERS += windows/eventconverter.h windows/ntfs.h windows/keycodes.h windows/keyevent.h
 HEADERS += function/recorder.h
 
@@ -205,11 +205,11 @@ SOURCES += logmessage.cpp
 SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp dialog/confirm_dialog.cpp dialog/log_view_dialog.cpp
 SOURCES += settings.cpp
 SOURCES += common/netthread.cpp
-SOURCES += control/controlthread.cpp
-SOURCES += control/keybuffer.cpp control/mousebuffer.cpp
-SOURCES += graphics/graphicsthread.cpp
-SOURCES += sound/soundthread.cpp
-SOURCES += sound/soundbuffer.cpp
+SOURCES += controlthread/controlthread.cpp
+SOURCES += controlthread/keybuffer.cpp controlthread/mousebuffer.cpp
+SOURCES += graphicsthread/graphicsthread.cpp
+SOURCES += soundthread/soundthread.cpp
+SOURCES += soundthread/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 

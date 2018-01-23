@@ -28,8 +28,8 @@
 #include <QWidget>
 
 // Local Header
-#include "control/keybuffer.h"
-#include "control/mousebuffer.h"
+#include "controlthread/keybuffer.h"
+#include "controlthread/mousebuffer.h"
 #include "settings.h"
 #include "windows/eventconverter.h"
 

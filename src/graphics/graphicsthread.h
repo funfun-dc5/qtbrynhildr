@@ -41,24 +41,6 @@ class GraphicsThread : public NetThread
 {
   Q_OBJECT
 
-#if QTB_PUBLIC_MODE7_SUPPORT
-public:
-  // rgb24 image scaling type
-  typedef enum {
-	RGB24IMAGE_SCALING_TYPE_UNKNOWN,
-	RGB24IMAGE_SCALING_TYPE_100,	// 100%
-	RGB24IMAGE_SCALING_TYPE_75,		//  75%
-	RGB24IMAGE_SCALING_TYPE_50,		//  50%
-	RGB24IMAGE_SCALING_TYPE_25,		//  25%
-  } RGB24IMAGE_SCALING_TYPE;
-
-  // set rgb24 image scaling type
-  void setRGB24ImageScalingType(RGB24IMAGE_SCALING_TYPE type)
-  {
-	this->type = type;
-  }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
-
 public:
   // constructor
   GraphicsThread(Settings *settings, DesktopPanel *desktopPanel = 0);
@@ -103,12 +85,6 @@ private:
 
   // convert YUV420 to RGB24 (Full Convert)
   int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
-  // convert YUV420 to RGB24 (75% compressed)
-  int convertYUV420toRGB24_75(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
-  // convert YUV420 to RGB24 (50% compressed)
-  int convertYUV420toRGB24_50(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
-  // convert YUV420 to RGB24 (25% compressed)
-  int convertYUV420toRGB24_25(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
 
   // clip
   int clip(int val)
@@ -182,15 +158,6 @@ private:
 
   // codec context
   vpx_codec_ctx_t c_codec;
-
-  // rgb24 image scaling type
-  RGB24IMAGE_SCALING_TYPE type;
-
-  // width of rgb24 image
-  int widthRGB24Image;
-
-  // height of rgb24 image
-  int heightRGB24Image;
 
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 

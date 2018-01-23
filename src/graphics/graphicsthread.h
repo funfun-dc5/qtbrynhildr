@@ -32,6 +32,26 @@
 #define PPM_HEADER_FORMAT "P6\n%d %d\n255\n"
 #endif // USE_PPM_LOADER_FOR_VP8
 
+// RGB image format
+#if USE_PPM_LOADER_FOR_VP8
+#define FORMAT_RGB888 1 // fixed
+#else // USE_PPM_LOADER_FOR_VP8
+//#define FORMAT_RGB888 1
+#define FORMAT_RGBA8888 1
+#endif // USE_PPM_LOADER_FOR_VP8
+
+// RGB888 (3bytes) format info.
+#if FORMAT_RGB888
+#define IMAGE_FORMAT QImage::Format_RGB888
+#define IMAGE_FORMAT_SIZE 3
+#endif // FORMAT_RGB888
+
+// RGBA8888 (4bytes) format info.
+#if FORMAT_RGBA8888
+#define IMAGE_FORMAT QImage::Format_RGBA8888
+#define IMAGE_FORMAT_SIZE 4
+#endif // FORMAT_RGBA8888
+
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {

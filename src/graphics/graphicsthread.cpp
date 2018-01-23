@@ -393,7 +393,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  else {
 		if (image->isNull()){
 		  delete image;
-		  image = new QImage(width, height, QImage::Format_RGB888);
+		  image = new QImage(width, height, IMAGE_FORMAT);
 		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
 		}
 	  }
@@ -413,7 +413,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 		  // save rgb24
 		  file.open("rgb24_1280x800.dat", ios::out | ios::binary | ios::trunc);
 		  if (file.is_open()){
-			file.write((char*)rgb24, width * height * 3);
+			file.write((char*)rgb24, width * height * IMAGE_FORMAT_SIZE);
 			file.close();
 		  }
 		}
@@ -424,12 +424,12 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 		// create QImage from RGB24
 		delete image;
 		//		cout << "rgb24size = " << rgb24size << endl << flush;
-		image = new QImage(rgb24, width, height, QImage::Format_RGB888);
+		image = new QImage(rgb24, width, height, IMAGE_FORMAT);
 	  }
 	  else {
 		if (image->isNull()){
 		  delete image;
-		  image = new QImage(width, height, QImage::Format_RGB888);
+		  image = new QImage(width, height, IMAGE_FORMAT);
 		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
 		}
 	  }
@@ -478,7 +478,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	if (drawTime == 0){
 	  static int counter = 0;
 	  if (counter == DRAW_TIME_SAMPLING_POINT){
-		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB and RGB888)
+		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB and RGB)
 		drawTime = (currentTime.toMSecsSinceEpoch() - startDrawTime.toMSecsSinceEpoch())*1000;
 		counter = 0;
 		//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;
@@ -578,7 +578,7 @@ inline bool GraphicsThread::setup()
   if (rgb24 != 0){
 	delete [] rgb24;
   }
-  rgb24 = new uchar[width * height * 3];
+  rgb24 = new uchar[width * height * IMAGE_FORMAT_SIZE];
 #endif // USE_PPM_LOADER_FOR_VP8
 
   // calc parameters
@@ -588,7 +588,7 @@ inline bool GraphicsThread::setup()
   utopOrg = ytopOrg + size;
   vtopOrg = utopOrg + size / 4;
   uvNext = width / 2;
-  rgb24Next = - width * 3 * 2;
+  rgb24Next = - width * IMAGE_FORMAT_SIZE * 2;
 #if QTB_MULTI_THREAD_CONVERTER
   // set for qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
   qtbrynhildr::width = width;
@@ -664,7 +664,7 @@ inline int GraphicsThread::makeRGB24Image()
 #if QTB_MULTI_THREAD_CONVERTER
   // number of thread 1 or 2 or 4
   int numOfThread = settings->getConvertThreadCount();
-  uchar *rgb24top = rgb24 + width * (height - 1) * 3;
+  uchar *rgb24top = rgb24 + width * (height - 1) * IMAGE_FORMAT_SIZE;
   uchar *ytop = ytopOrg;
   uchar *utop = utopOrg;
   uchar *vtop = vtopOrg;
@@ -683,7 +683,7 @@ inline int GraphicsThread::makeRGB24Image()
 
 	if (numOfThread > 2){
 	  // for next thread
-	  rgb24top -= (width * linesOfThread) * 3;
+	  rgb24top -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	  ytop += width * linesOfThread;
 	  utop += uvNext * linesOfThread/2;
 	  vtop += uvNext * linesOfThread/2;
@@ -695,7 +695,7 @@ inline int GraphicsThread::makeRGB24Image()
 	// for 3rd thread
 	if (numOfThread > 3){
 	  // for next thread
-	  rgb24top -= (width * linesOfThread) * 3;
+	  rgb24top -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	  ytop += width * linesOfThread;
 	  utop += uvNext * linesOfThread/2;
 	  vtop += uvNext * linesOfThread/2;
@@ -705,7 +705,7 @@ inline int GraphicsThread::makeRGB24Image()
 	}
 
 	// for next thread
-	rgb24top -= (width * linesOfThread) * 3;
+	rgb24top -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	ytop += width * linesOfThread;
 	utop += uvNext * linesOfThread/2;
 	vtop += uvNext * linesOfThread/2;
@@ -718,7 +718,7 @@ inline int GraphicsThread::makeRGB24Image()
 	f2.waitForFinished();
 	f3.waitForFinished();
 
-	return size * 3;
+	return size * IMAGE_FORMAT_SIZE;
   }
 #else // QTB_MULTI_THREAD_CONVERTER
   // convert YUV420 to RGB24
@@ -772,6 +772,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // B
 	  b = qtbrynhildr::clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -786,6 +790,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // B
 	  b = qtbrynhildr::clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 
 	  // check width
@@ -814,6 +822,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // B
 	  b = qtbrynhildr::clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -828,8 +840,12 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // B
 	  b = qtbrynhildr::clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
-	  rgb24size += 12;
+	  rgb24size += IMAGE_FORMAT_SIZE * 4;
 	}
 	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
@@ -874,6 +890,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // B
 	  b = qtbrynhildr::clip(GET_B_MT(y, u));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -887,8 +907,12 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // B
 	  b = qtbrynhildr::clip(GET_B_MT(y, u));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
-	  rgb24size += 6;
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
@@ -953,6 +977,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_B(y, u));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -966,8 +994,12 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_B(y, u));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
-	  rgb24size += 6;
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -1013,6 +1045,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_B(y, u));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -1027,8 +1063,12 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_B(y, u));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
-	  rgb24size += 6;
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -1078,6 +1118,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -1092,8 +1136,12 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
-	  rgb24size += 6;
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -1141,6 +1189,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -1155,6 +1207,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // check width
 	  if (xPos + 2 >= width)
@@ -1182,6 +1238,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
 	  y = *ytop++;
@@ -1196,8 +1256,12 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // B
 	  b = clip(GET_VALUE(y, b1));
 	  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
 
-	  rgb24size += 12;
+	  rgb24size += IMAGE_FORMAT_SIZE * 4;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){

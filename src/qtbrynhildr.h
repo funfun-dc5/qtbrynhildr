@@ -62,9 +62,9 @@
 #include "touchpanel2/sb.h"
 
 // thread
-#include "control/controlthread.h"
-#include "graphics/graphicsthread.h"
-#include "sound/soundthread.h"
+#include "controlthread/controlthread.h"
+#include "graphicsthread/graphicsthread.h"
+#include "soundthread/soundthread.h"
 
 #ifdef USE_KEYLAYOUTFILE
 // key layout

@@ -24,7 +24,7 @@
 #include <QRect>
 
 // Local Header
-#include "control/keybuffer.h"
+#include "controlthread/keybuffer.h"
 #include "mainwindow/desktoppanel.h"
 #include "settings.h"
 

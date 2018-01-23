@@ -10,7 +10,7 @@
 #include <QEvent>
 
 // Local Header
-#include "control/keybuffer.h"
+#include "controlthread/keybuffer.h"
 #include "settings.h"
 #include "software_keyboard.h"
 #if QTB_NEW_DESKTOPWINDOW

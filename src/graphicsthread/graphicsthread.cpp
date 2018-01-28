@@ -934,9 +934,116 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // YUV420TORGB24_VERSION 3 : V2 + small improvement 131 fps
 // YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
 // YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
+// YUV420TORGB24_VERSION 6 : float (SIMD)           xxx fps
 // =========================================================
-#define YUV420TORGB24_VERSION 5
+#define YUV420TORGB24_VERSION 6
 
+#if YUV420TORGB24_VERSION == 6
+
+#if 1 // YUV420TORGB24_VERSION == 1
+#define GET_R(Y, V)		(Y             + 1.402 * V)
+#define GET_G(Y, U, V)	(Y - 0.344 * U - 0.714 * V)
+#define GET_B(Y, U)		(Y + 1.772 * U            )
+void calc2pixels(float y_array[8], float *u_ptr, float *v_ptr, int result[8])
+{
+  float y, u, v;
+
+  // set u/v
+  u = *(u_ptr);
+  v = *(v_ptr);
+
+  y = y_array[0];
+
+  // R
+  result[0] = (int)clip(GET_R(y, v));
+  // G
+  result[1] = (int)clip(GET_G(y, u, v));
+  // B
+  result[2] = (int)clip(GET_B(y, u));
+
+  y = y_array[4];
+
+  // R
+  result[4] = (int)clip(GET_R(y, v));
+  // G
+  result[5] = (int)clip(GET_G(y, u, v));
+  // B
+  result[6] = (int)clip(GET_B(y, u));
+}
+#endif // 1 // YUV420TORGB24_VERSION == 1
+
+// convert YUV420 to RGB24
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  float y[8];
+	  float y1, y2, u, v;
+	  int result[8];
+
+	  // set y[8]
+	  y1 = (float)(*ytop++);
+	  y2 = (float)(*ytop++);
+	  y[0] = y1;
+	  y[1] = y1;
+	  y[2] = y1;
+	  y[3] = 0.0;
+	  y[4] = y2;
+	  y[5] = y2;
+	  y[6] = y2;
+	  y[7] = 0.0;
+
+	  // set u/v
+	  u = (float)(*(utop + uvOffset) - 128);
+	  v = (float)(*(vtop + uvOffset) - 128);
+
+	  calc2pixels(y, &u, &v, result);
+
+	  // set rgba32 * 2 from result int * 8
+
+	  // xPos
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  // xPos+1
+	  // R
+	  *rgb24top++ = (uchar)result[4];
+
+	  // G
+	  *rgb24top++ = (uchar)result[5];
+
+	  // B
+	  *rgb24top++ = (uchar)result[6];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+  return rgb24size;
+}
+#endif // YUV420TORGB24_VERSION == 6
 
 #if YUV420TORGB24_VERSION == 1 || YUV420TORGB24_VERSION == 2
 // YUV420 convert to RGB macro

@@ -223,7 +223,7 @@ DEFINES += QTB_USE_SIMD=1
 
 # INTEL (gcc/clang)
 QMAKE_CXXFLAGS += -mavx
-# INTEL (msvc)
+# INTEL (MSVC)
 #QMAKE_CXXFLAGS += /arch:AVX
 # ARM
 #QMAKE_CXXFLAGS += -mfpu=neon

@@ -973,11 +973,11 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // defined(_MSC_VER)
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+#if defined(__ARM_NEON__)
+
 int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
-
-#if defined(__ARM_NEON__)
 
   int result[4] Aligned(16);
 
@@ -1111,8 +1111,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vtop += uvNext;
 	}
   }
+  return rgb24size;
+}
 
 #else // defined(__ARM_NEON__)
+
+int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
 
   int result[4] Aligned(16);
 
@@ -1281,9 +1287,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vtop += qtbrynhildr::uvNext;
 	}
   }
-#endif // defined(__ARM_NEON__)
   return rgb24size;
 }
+
+#endif // defined(__ARM_NEON__)
 
 #endif // YUV420TORGB24_MT_VERSION == 6
 
@@ -1657,11 +1664,11 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 // SSE
 
 // convert YUV420 to RGB24
+#if defined(__ARM_NEON__)
+
 int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
-
-#if defined(__ARM_NEON__)
 
   int result[4] Aligned(16);
 
@@ -1795,8 +1802,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vtop += uvNext;
 	}
   }
+  return rgb24size;
+}
 
 #else // defined(__ARM_NEON__)
+
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
 
   int result[4] Aligned(16);
 
@@ -1965,9 +1978,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vtop += uvNext;
 	}
   }
-#endif // defined(__ARM_NEON__)
   return rgb24size;
 }
+
+#endif // defined(__ARM_NEON__)
 
 #endif // YUV420TORGB24_VERSION == 6
 

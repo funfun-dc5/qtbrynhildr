@@ -217,8 +217,12 @@ SOURCES += function/recorder.cpp
 DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 
 # for new feature
-# NEW_FEATURE = ON
-# equals(NEW_FEATURE, ON){
-# }
-# else {
-# }
+NEW_FEATURE = OFF
+equals(NEW_FEATURE, ON){
+DEFINES += QTB_USE_SIMD=1
+QMAKE_CXXFLAGS += -mavx
+#QMAKE_CXXFLAGS += /arch:AVX
+}
+else {
+DEFINES += QTB_USE_SIMD=0
+}

@@ -36,8 +36,8 @@
 #if USE_PPM_LOADER_FOR_VP8
 #define FORMAT_RGB888 1 // fixed
 #else // USE_PPM_LOADER_FOR_VP8
-//#define FORMAT_RGB888 1
-#define FORMAT_RGBA8888 1
+#define FORMAT_RGB888 1
+//#define FORMAT_RGBA8888 1
 #endif // USE_PPM_LOADER_FOR_VP8
 
 // RGB888 (3bytes) format info.

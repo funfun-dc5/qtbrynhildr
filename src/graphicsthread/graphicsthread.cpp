@@ -54,7 +54,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // YUV420TORGB24_VERSION 3 : V2 + small improvement 131 fps
 // YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
 // YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
-// YUV420TORGB24_VERSION 6 : integer (SSE)          165 fps
+// YUV420TORGB24_VERSION 6 : integer (SSE)          158 fps
 // YUV420TORGB24_VERSION 7 : float   (AVX)          xxx fps (SLOW)
 // =========================================================
 #if QTB_USE_SIMD
@@ -759,181 +759,57 @@ inline int GraphicsThread::makeRGB24Image()
 // 5 (2 threads)     - 192 fps
 // 6 (2 threads:SSE) - xxx fps
 
-#if YUV420TORGB24_MT_VERSION == 6
-#if defined(_MSC_VER)
-#include <intrin.h>
-#else // defined(_MSC_VER)
-#include <x86intrin.h>
-#endif // defined(_MSC_VER)
+#if YUV420TORGB24_MT_VERSION == 1
 
-// for align
-#if defined(_MSC_VER)
-#define Aligned(n)  __declspec(align(n))
-#else // defined(_MSC_VER)
-#define Aligned(n)  __attribute__((aligned(n)))
-#endif // defined(_MSC_VER)
+// YUV420 convert to RGB macro
+#define GET_R_MT(Y, V)		((256 * Y           + 358 * V) >> 8)
+#define GET_G_MT(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
+#define GET_B_MT(Y, U)		((256 * Y + 453 * U          ) >> 8)
+
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
 int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
 
-  int result[4] Aligned(16);
-
-#if 1 // for TEST
-
-  __m128i yc = _mm_setr_epi32(256, 256, 256, 0);
-  __m128i uc = _mm_setr_epi32(0,   -88, 453, 0);
-  __m128i vc = _mm_setr_epi32(358,-182,   0, 0);
-
-  __m128i constMaxV = _mm_setr_epi32(255, 255, 255, 255);
-  //  __m128i constMinV = _mm_setr_epi32(0, 0, 0, 0);
-  __m128i constMinV = _mm_setzero_si128();
-
-#else // for TEST
-
-  const int constYc[4] Aligned(16) = {256, 256, 256, 0};
-  const int constUc[4] Aligned(16) = {0,   -88, 453, 0};
-  const int constVc[4] Aligned(16) = {358,-182,   0, 0};
-
-  // 2) load Yc, Uc, Vc
-  __m128i yc = _mm_load_si128((const __m128i*)constYc);
-  __m128i uc = _mm_load_si128((const __m128i*)constUc);
-  __m128i vc = _mm_load_si128((const __m128i*)constVc);
-
-  const int constMax[4] Aligned(16) = {255, 255, 255, 255};
-  const int constMin[4] Aligned(16) = {  0,   0,   0,   0};
-
-  __m128i constMaxV = _mm_load_si128((const __m128i*)constMax);
-  __m128i constMinV = _mm_load_si128((const __m128i*)constMin);
-
-#endif // for TEST
-
-  int ya[4] Aligned(16) = {  0,   0,   0,   0};
-  int ua[4] Aligned(16) = {  0,   0,   0,   0};
-  int va[4] Aligned(16) = {  0,   0,   0,   0};
-
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 2, uvOffset++){
+	  int r, g, b;
 	  int y, u, v;
 
 	  // set u/v
-	  u = (int)(*(utop + uvOffset) - 128);
-	  v = (int)(*(vtop + uvOffset) - 128);
-	  ua[0] = u;
-	  ua[1] = u;
-	  ua[2] = u;
-	  va[0] = v;
-	  va[1] = v;
-	  va[2] = v;
+	  u = *(utop + uvOffset) - 128;
+	  v = *(vtop + uvOffset) - 128;
 
-	  // xPos
-
-	  // load U, V
-	  __m128i uv = _mm_load_si128((const __m128i*)ua);
-	  __m128i vv = _mm_load_si128((const __m128i*)va);
-
-	  // set y
-	  y = (int)(*ytop++);
-	  ya[0] = y;
-	  ya[1] = y;
-	  ya[2] = y;
-
-	  // 1) load Y
-	  __m128i yv = _mm_load_si128((const __m128i*)ya);
-
-	  // 3) Y * Yc -> Y
-	  yv = _mm_mullo_epi32(yv, yc);
-
-	  // 4) U * Uc -> U
-	  uv = _mm_mullo_epi32(uv, uc);
-
-	  // 5) V * Vc -> V
-	  vv = _mm_mullo_epi32(vv, vc);
-
-	  // 6) Y + U + V -> Y
-	  yv = _mm_add_epi32(yv, uv);
-	  yv = _mm_add_epi32(yv, vv);
-
-	  // 7) >> 8
-	  yv = _mm_srai_epi32(yv, 8);
-
-	  // 8) Y > 255 ? 255 : Y
-	  yv = _mm_min_epi32(yv, constMaxV);
-
-	  // 9)  Y < 0 ? 0 : Y
-	  yv = _mm_max_epi32(yv, constMinV);
-
-	  // 10) store to result
-	  _mm_store_si128((__m128i*)result, yv);
-
-	  // set rgba32 from result int * 4
+	  // == xPos ==
+	  y = *ytop++;
 
 	  // R
-	  *rgb24top++ = (uchar)result[0];
-
+	  r = qtbrynhildr::clip(GET_R_MT(y, v));
+	  *rgb24top++ = (uchar)r;
 	  // G
-	  *rgb24top++ = (uchar)result[1];
-
+	  g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+	  *rgb24top++ = (uchar)g;
 	  // B
-	  *rgb24top++ = (uchar)result[2];
-
+	  b = qtbrynhildr::clip(GET_B_MT(y, u));
+	  *rgb24top++ = (uchar)b;
 #if FORMAT_RGBA8888
 	  // A
 	  *rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 
-	  // xPos+1
-
-	  // load U, V
-	  uv = _mm_load_si128((const __m128i*)ua);
-	  vv = _mm_load_si128((const __m128i*)va);
-
-	  // set y
-	  y = (int)(*ytop++);
-	  ya[0] = y;
-	  ya[1] = y;
-	  ya[2] = y;
-
-	  // 1) load Y
-	  yv = _mm_load_si128((const __m128i*)ya);
-
-	  // 3) Y * Yc -> Y
-	  yv = _mm_mullo_epi32(yv, yc);
-
-	  // 4) U * Uc -> U
-	  uv = _mm_mullo_epi32(uv, uc);
-
-	  // 5) V * Vc -> V
-	  vv = _mm_mullo_epi32(vv, vc);
-
-	  // 6) Y + U + V -> Y
-	  yv = _mm_add_epi32(yv, uv);
-	  yv = _mm_add_epi32(yv, vv);
-
-	  // 7) >> 8
-	  yv = _mm_srai_epi32(yv, 8);
-
-	  // 8) Y > 255 ? 255 : Y
-	  yv = _mm_min_epi32(yv, constMaxV);
-
-	  // 9)  Y < 0 ? 0 : Y
-	  yv = _mm_max_epi32(yv, constMinV);
-
-	  // 10) store to result
-	  _mm_store_si128((__m128i*)result, yv);
-
-	  // set rgba32 from result int * 4
+	  // == xPos+1 ==
+	  y = *ytop++;
 
 	  // R
-	  *rgb24top++ = (uchar)result[0];
-
+	  r = qtbrynhildr::clip(GET_R_MT(y, v));
+	  *rgb24top++ = (uchar)r;
 	  // G
-	  *rgb24top++ = (uchar)result[1];
-
+	  g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+	  *rgb24top++ = (uchar)g;
 	  // B
-	  *rgb24top++ = (uchar)result[2];
-
+	  b = qtbrynhildr::clip(GET_B_MT(y, u));
+	  *rgb24top++ = (uchar)b;
 #if FORMAT_RGBA8888
 	  // A
 	  *rgb24top++ = (uchar)255;
@@ -949,8 +825,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   }
   return rgb24size;
 }
-
-#endif // YUV420TORGB24_MT_VERSION == 6
+#endif // YUV420TORGB24_MT_VERSION == 1
 
 #if YUV420TORGB24_MT_VERSION == 5
 
@@ -1078,92 +953,17 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 
 #endif // YUV420TORGB24_MT_VERSION == 5
 
-#if YUV420TORGB24_MT_VERSION == 1
+#if YUV420TORGB24_MT_VERSION == 6
 
-// YUV420 convert to RGB macro
-#define GET_R_MT(Y, V)		((256 * Y           + 358 * V) >> 8)
-#define GET_G_MT(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
-#define GET_B_MT(Y, U)		((256 * Y + 453 * U          ) >> 8)
-
-
-// qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
-{
-  int rgb24size = 0;
-
-  for (int yPos = 0; yPos < height; yPos++){
-	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 2, uvOffset++){
-	  int r, g, b;
-	  int y, u, v;
-
-	  // set u/v
-	  u = *(utop + uvOffset) - 128;
-	  v = *(vtop + uvOffset) - 128;
-
-	  // == xPos ==
-	  y = *ytop++;
-
-	  // R
-	  r = qtbrynhildr::clip(GET_R_MT(y, v));
-	  *rgb24top++ = (uchar)r;
-	  // G
-	  g = qtbrynhildr::clip(GET_G_MT(y, u, v));
-	  *rgb24top++ = (uchar)g;
-	  // B
-	  b = qtbrynhildr::clip(GET_B_MT(y, u));
-	  *rgb24top++ = (uchar)b;
-#if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
-#endif // FORMAT_RGBA8888
-
-	  // == xPos+1 ==
-	  y = *ytop++;
-
-	  // R
-	  r = qtbrynhildr::clip(GET_R_MT(y, v));
-	  *rgb24top++ = (uchar)r;
-	  // G
-	  g = qtbrynhildr::clip(GET_G_MT(y, u, v));
-	  *rgb24top++ = (uchar)g;
-	  // B
-	  b = qtbrynhildr::clip(GET_B_MT(y, u));
-	  *rgb24top++ = (uchar)b;
-#if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
-#endif // FORMAT_RGBA8888
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
-	}
-	rgb24top += qtbrynhildr::rgb24Next;
-	if (yPos & 0x1){
-	  utop += qtbrynhildr::uvNext;
-	  vtop += qtbrynhildr::uvNext;
-	}
-  }
-  return rgb24size;
-}
-#endif // YUV420TORGB24_MT_VERSION == 1
-
-#endif  // QTB_MULTI_THREAD_CONVERTER
-
-// =========================================================
-// YUV420TORGB24_VERSION 1 : float                   84 fps
-// YUV420TORGB24_VERSION 2 : integer and shift      129 fps
-// YUV420TORGB24_VERSION 3 : V2 + small improvement 131 fps
-// YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
-// YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
-// YUV420TORGB24_VERSION 6 : integer (SSE)          165 fps
-// YUV420TORGB24_VERSION 7 : float   (AVX)          xxx fps
-// =========================================================
-
-#if YUV420TORGB24_VERSION == 6
+#if defined(__ARM_NEON__)
+#include <arm_neon.h>
+#else // defined(__ARM_NEON__)
 #if defined(_MSC_VER)
 #include <intrin.h>
 #else // defined(_MSC_VER)
 #include <x86intrin.h>
 #endif // defined(_MSC_VER)
+#endif // defined(__ARM_NEON__)
 
 // for align
 #if defined(_MSC_VER)
@@ -1172,12 +972,147 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #define Aligned(n)  __attribute__((aligned(n)))
 #endif // defined(_MSC_VER)
 
-// SSE
-
-// convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+// qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
+
+#if defined(__ARM_NEON__)
+
+  int result[4] Aligned(16);
+
+  const int yca[4] Aligned(16) = {256,  256, 256, 0};
+  const int uca[4] Aligned(16) = {0,    -88, 453, 0};
+  const int vca[4] Aligned(16) = {358, -182,   0, 0};
+
+  int32x4_t yc = vld1q_s32(yca);
+  int32x4_t uc = vld1q_s32(uca);
+  int32x4_t vc = vld1q_s32(vca);
+
+  int32x4_t constMaxV = vdupq_n_s32(255);
+  int32x4_t constMinV = vdupq_n_s32(0);
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int y, u, v;
+	  int32x4_t yv, uv, vv;
+	  int32x4_t uv0, vv0;
+
+	  // set u/v
+	  u = (int)(*(utop + uvOffset) - 128);
+	  v = (int)(*(vtop + uvOffset) - 128);
+	  // load U, V
+	  uv0 = vdupq_n_s32(u);
+	  vv0 = vdupq_n_s32(v);
+
+	  // xPos
+
+	  // set y
+	  y = (int)(*ytop++);
+
+	  // 1) load Y
+	  yv = vdupq_n_s32(y);
+
+	  // 3) Y * Yc -> Y
+	  yv = vmulq_s32(yv, yc);
+
+	  // 4) U * Uc -> U
+	  uv = vmulq_s32(uv0, uc);
+
+	  // 5) V * Vc -> V
+	  vv = vmulq_s32(vv0, vc);
+
+	  // 6) Y + U + V -> Y
+	  yv = vaddq_s32(yv, uv);
+	  yv = vaddq_s32(yv, vv);
+
+	  // 7) >> 8
+	  yv = vsraq_n_s32(yv, yv, 8);
+
+	  // 8) Y > 255 ? 255 : Y
+	  yv = vminq_s32(yv, constMaxV);
+
+	  // 9)  Y < 0 ? 0 : Y
+	  yv = vmaxq_s32(yv, constMinV);
+
+	  // 10) store to result
+	  vst1q_s32(result, yv);
+
+	  // set rgba32 from result int * 4
+
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  // xPos+1
+
+	  // set y
+	  y = (int)(*ytop++);
+
+	  // 1) load Y
+	  yv = vdupq_n_s32(y);
+
+	  // 3) Y * Yc -> Y
+	  yv = vmulq_s32(yv, yc);
+
+	  // 4) U * Uc -> U
+	  uv = vmulq_s32(uv0, uc);
+
+	  // 5) V * Vc -> V
+	  vv = vmulq_s32(vv0, vc);
+
+	  // 6) Y + U + V -> Y
+	  yv = vaddq_s32(yv, uv);
+	  yv = vaddq_s32(yv, vv);
+
+	  // 7) >> 8
+	  yv = vsraq_n_s32(yv, yv, 8);
+
+	  // 8) Y > 255 ? 255 : Y
+	  yv = vminq_s32(yv, constMaxV);
+
+	  // 9)  Y < 0 ? 0 : Y
+	  yv = vmaxq_s32(yv, constMinV);
+
+	  // 10) store to result
+	  vst1q_s32(result, yv);
+
+	  // set rgba32 from result int * 4
+
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+
+#else // defined(__ARM_NEON__)
 
   int result[4] Aligned(16);
 
@@ -1215,8 +1150,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   int va[4] Aligned(16) = {  0,   0,   0,   0};
 
   for (int yPos = 0; yPos < height; yPos++){
-	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 2, uvOffset++){
 	  int y, u, v;
+	  __m128i yv, uv, vv;
+	  __m128i uv0, vv0;
 
 	  // set u/v
 	  u = (int)(*(utop + uvOffset) - 128);
@@ -1228,67 +1165,11 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  va[1] = v;
 	  va[2] = v;
 
+	  // load U, V
+	  uv0 = _mm_load_si128((const __m128i*)ua);
+	  vv0 = _mm_load_si128((const __m128i*)va);
+
 	  // xPos
-
-	  // load U, V
-	  __m128i uv = _mm_load_si128((const __m128i*)ua);
-	  __m128i vv = _mm_load_si128((const __m128i*)va);
-
-	  // set y
-	  y = (int)(*ytop++);
-	  ya[0] = y;
-	  ya[1] = y;
-	  ya[2] = y;
-
-	  // 1) load Y
-	  __m128i yv = _mm_load_si128((const __m128i*)ya);
-
-	  // 3) Y * Yc -> Y
-	  yv = _mm_mullo_epi32(yv, yc);
-
-	  // 4) U * Uc -> U
-	  uv = _mm_mullo_epi32(uv, uc);
-
-	  // 5) V * Vc -> V
-	  vv = _mm_mullo_epi32(vv, vc);
-
-	  // 6) Y + U + V -> Y
-	  yv = _mm_add_epi32(yv, uv);
-	  yv = _mm_add_epi32(yv, vv);
-
-	  // 7) >> 8
-	  yv = _mm_srai_epi32(yv, 8);
-
-	  // 8) Y > 255 ? 255 : Y
-	  yv = _mm_min_epi32(yv, constMaxV);
-
-	  // 9)  Y < 0 ? 0 : Y
-	  yv = _mm_max_epi32(yv, constMinV);
-
-	  // 10) store to result
-	  _mm_store_si128((__m128i*)result, yv);
-
-	  // set rgba32 from result int * 4
-
-	  // R
-	  *rgb24top++ = (uchar)result[0];
-
-	  // G
-	  *rgb24top++ = (uchar)result[1];
-
-	  // B
-	  *rgb24top++ = (uchar)result[2];
-
-#if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
-#endif // FORMAT_RGBA8888
-
-	  // xPos+1
-
-	  // load U, V
-	  uv = _mm_load_si128((const __m128i*)ua);
-	  vv = _mm_load_si128((const __m128i*)va);
 
 	  // set y
 	  y = (int)(*ytop++);
@@ -1303,10 +1184,62 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  yv = _mm_mullo_epi32(yv, yc);
 
 	  // 4) U * Uc -> U
-	  uv = _mm_mullo_epi32(uv, uc);
+	  uv = _mm_mullo_epi32(uv0, uc);
 
 	  // 5) V * Vc -> V
-	  vv = _mm_mullo_epi32(vv, vc);
+	  vv = _mm_mullo_epi32(vv0, vc);
+
+	  // 6) Y + U + V -> Y
+	  yv = _mm_add_epi32(yv, uv);
+	  yv = _mm_add_epi32(yv, vv);
+
+	  // 7) >> 8
+	  yv = _mm_srai_epi32(yv, 8);
+
+	  // 8) Y > 255 ? 255 : Y
+	  yv = _mm_min_epi32(yv, constMaxV);
+
+	  // 9)  Y < 0 ? 0 : Y
+	  yv = _mm_max_epi32(yv, constMinV);
+
+	  // 10) store to result
+	  _mm_store_si128((__m128i*)result, yv);
+
+	  // set rgba32 from result int * 4
+
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  // xPos+1
+
+	  // set y
+	  y = (int)(*ytop++);
+	  ya[0] = y;
+	  ya[1] = y;
+	  ya[2] = y;
+
+	  // 1) load Y
+	  yv = _mm_load_si128((const __m128i*)ya);
+
+	  // 3) Y * Yc -> Y
+	  yv = _mm_mullo_epi32(yv, yc);
+
+	  // 4) U * Uc -> U
+	  uv = _mm_mullo_epi32(uv0, uc);
+
+	  // 5) V * Vc -> V
+	  vv = _mm_mullo_epi32(vv0, vc);
 
 	  // 6) Y + U + V -> Y
 	  yv = _mm_add_epi32(yv, uv);
@@ -1342,167 +1275,29 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 
 	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
-	rgb24top += rgb24Next;
+	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
-	  utop += uvNext;
-	  vtop += uvNext;
+	  utop += qtbrynhildr::uvNext;
+	  vtop += qtbrynhildr::uvNext;
 	}
   }
+#endif // defined(__ARM_NEON__)
   return rgb24size;
 }
 
-#endif // YUV420TORGB24_VERSION == 6
+#endif // YUV420TORGB24_MT_VERSION == 6
 
-#if YUV420TORGB24_VERSION == 7
-#if defined(_MSC_VER)
-#include <intrin.h>
-#else // defined(_MSC_VER)
-#include <x86intrin.h>
-#endif // defined(_MSC_VER)
+#endif  // QTB_MULTI_THREAD_CONVERTER
 
-// for align
-#if defined(_MSC_VER)
-#define Aligned(n)  __declspec(align(n))
-#else // defined(_MSC_VER)
-#define Aligned(n)  __attribute__((aligned(n)))
-#endif // defined(_MSC_VER)
-
-// AVX
-
-// convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
-{
-  int rgb24size = 0;
-
-  int result[8] Aligned(32);
-
-#if 1 // for TEST
-
-  // 4) load Uk
-  __m256 uk = _mm256_setr_ps(0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0);
-  // 5) load Vk
-  __m256 vk = _mm256_setr_ps(1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0);
-
-  __m256 constMaxV = _mm256_setr_ps(255,255,255,255,255,255,255,255);
-  __m256 constMinV = _mm256_setzero_ps();
-
-#else // for TEST
-
-  const float constUc[8] Aligned(32) = {0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0};
-  const float constVc[8] Aligned(32) = {1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0};
-
-  const float constMax = 255.0;
-  const float constMin = 0.0;
-
-  // 4) load Uc
-  __m256 uc = _mm256_load_ps(constUc);
-  // 5) load Vc
-  __m256 vc = _mm256_load_ps(constVc);
-
-  __m256 constMaxV = _mm256_broadcast_ss(&constMax);
-  __m256 constMinV = _mm256_broadcast_ss(&constMin);
-
-#endif // 1 // for TEST
-
-  // set RC flag
-  unsigned long mxcsr = _mm_getcsr();
-  mxcsr &= 0xFFFF9FFF;
-  //  mxcsr |= 0x00000000;
-  //  mxcsr |= 0x00002000;
-  //  mxcsr |= 0x00004000;
-  mxcsr |= 0x00006000;
-  _mm_setcsr(mxcsr);
-
-  for (int yPos = 0; yPos < height; yPos++){
-	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
-	  float y[8] Aligned(32);
-	  float y1, y2, u, v;
-
-	  // set y[8]
-	  y1 = (float)(*ytop++);
-	  y2 = (float)(*ytop++);
-	  y[0] = y1;
-	  y[1] = y1;
-	  y[2] = y1;
-	  y[3] = 0.0;
-	  y[4] = y2;
-	  y[5] = y2;
-	  y[6] = y2;
-	  y[7] = 0.0;
-
-	  // set u/v
-	  u = (float)(*(utop + uvOffset) - 128);
-	  v = (float)(*(vtop + uvOffset) - 128);
-
-	  // ============================================================
-	  // 1) load Y vector
-	  __m256 yv = _mm256_load_ps(y);
-	  // 2) load U vector
-	  __m256 uv = _mm256_broadcast_ss(&u);
-	  // 3) load V vector
-	  __m256 vv = _mm256_broadcast_ss(&v);
-
-	  // 6) U * Uc -> U
-	  uv = _mm256_mul_ps(uv, uc);
-	  // 7) V * Vc -> V
-	  vv = _mm256_mul_ps(vv, vc);
-	  // 8) Y + U + V -> Y
-	  yv = _mm256_add_ps(yv, uv); // Y + U -> Y
-	  yv = _mm256_add_ps(yv, vv); // Y + V -> Y
-	  // 9) Y > 255 ? 255 : Y
-	  yv = _mm256_min_ps(yv, constMaxV);
-	  // 10) Y < 0 ? 0 : Y
-	  yv = _mm256_max_ps(yv, constMinV);
-	  // 11) convert float to integer
-	  __m256i yvi = _mm256_cvtps_epi32(yv);
-	  // 12) store to result
-	  _mm256_store_si256((__m256i*)result, yvi);
-	  // ============================================================
-
-	  // set rgba32 * 2 from result int * 8
-
-	  // xPos
-	  // R
-	  *rgb24top++ = (uchar)result[0];
-
-	  // G
-	  *rgb24top++ = (uchar)result[1];
-
-	  // B
-	  *rgb24top++ = (uchar)result[2];
-
-#if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
-#endif // FORMAT_RGBA8888
-
-	  // xPos+1
-	  // R
-	  *rgb24top++ = (uchar)result[4];
-
-	  // G
-	  *rgb24top++ = (uchar)result[5];
-
-	  // B
-	  *rgb24top++ = (uchar)result[6];
-
-#if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
-#endif // FORMAT_RGBA8888
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
-	}
-	rgb24top += rgb24Next;
-	if (yPos & 0x1){
-	  utop += uvNext;
-	  vtop += uvNext;
-	}
-  }
-  return rgb24size;
-}
-
-#endif // YUV420TORGB24_VERSION == 7
+// =========================================================
+// YUV420TORGB24_VERSION 1 : float                   84 fps
+// YUV420TORGB24_VERSION 2 : integer and shift      129 fps
+// YUV420TORGB24_VERSION 3 : V2 + small improvement 131 fps
+// YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
+// YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
+// YUV420TORGB24_VERSION 6 : integer (SSE)          158 fps
+// YUV420TORGB24_VERSION 7 : float   (AVX)          xxx fps
+// =========================================================
 
 #if YUV420TORGB24_VERSION == 1 || YUV420TORGB24_VERSION == 2
 // YUV420 convert to RGB macro
@@ -1839,6 +1634,508 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 }
 #endif // YUV420TORGB24_VERSION == 5
 #endif // YUV420TORGB24_VERSION == 4 || YUV420TORGB24_VERSION == 5
+
+#if YUV420TORGB24_VERSION == 6
+
+#if defined(__ARM_NEON__)
+#include <arm_neon.h>
+#else // defined(__ARM_NEON__)
+#if defined(_MSC_VER)
+#include <intrin.h>
+#else // defined(_MSC_VER)
+#include <x86intrin.h>
+#endif // defined(_MSC_VER)
+#endif // defined(__ARM_NEON__)
+
+// for align
+#if defined(_MSC_VER)
+#define Aligned(n)  __declspec(align(n))
+#else // defined(_MSC_VER)
+#define Aligned(n)  __attribute__((aligned(n)))
+#endif // defined(_MSC_VER)
+
+// SSE
+
+// convert YUV420 to RGB24
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
+
+#if defined(__ARM_NEON__)
+
+  int result[4] Aligned(16);
+
+  const int yca[4] Aligned(16) = {256,  256, 256, 0};
+  const int uca[4] Aligned(16) = {0,    -88, 453, 0};
+  const int vca[4] Aligned(16) = {358, -182,   0, 0};
+
+  int32x4_t yc = vld1q_s32(yca);
+  int32x4_t uc = vld1q_s32(uca);
+  int32x4_t vc = vld1q_s32(vca);
+
+  int32x4_t constMaxV = vdupq_n_s32(255);
+  int32x4_t constMinV = vdupq_n_s32(0);
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int y, u, v;
+	  int32x4_t yv, uv, vv;
+	  int32x4_t uv0, vv0;
+
+	  // set u/v
+	  u = (int)(*(utop + uvOffset) - 128);
+	  v = (int)(*(vtop + uvOffset) - 128);
+	  // load U, V
+	  uv0 = vdupq_n_s32(u);
+	  vv0 = vdupq_n_s32(v);
+
+	  // xPos
+
+	  // set y
+	  y = (int)(*ytop++);
+
+	  // 1) load Y
+	  yv = vdupq_n_s32(y);
+
+	  // 3) Y * Yc -> Y
+	  yv = vmulq_s32(yv, yc);
+
+	  // 4) U * Uc -> U
+	  uv = vmulq_s32(uv0, uc);
+
+	  // 5) V * Vc -> V
+	  vv = vmulq_s32(vv0, vc);
+
+	  // 6) Y + U + V -> Y
+	  yv = vaddq_s32(yv, uv);
+	  yv = vaddq_s32(yv, vv);
+
+	  // 7) >> 8
+	  yv = vsraq_n_s32(yv, yv, 8);
+
+	  // 8) Y > 255 ? 255 : Y
+	  yv = vminq_s32(yv, constMaxV);
+
+	  // 9)  Y < 0 ? 0 : Y
+	  yv = vmaxq_s32(yv, constMinV);
+
+	  // 10) store to result
+	  vst1q_s32(result, yv);
+
+	  // set rgba32 from result int * 4
+
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  // xPos+1
+
+	  // set y
+	  y = (int)(*ytop++);
+
+	  // 1) load Y
+	  yv = vdupq_n_s32(y);
+
+	  // 3) Y * Yc -> Y
+	  yv = vmulq_s32(yv, yc);
+
+	  // 4) U * Uc -> U
+	  uv = vmulq_s32(uv0, uc);
+
+	  // 5) V * Vc -> V
+	  vv = vmulq_s32(vv0, vc);
+
+	  // 6) Y + U + V -> Y
+	  yv = vaddq_s32(yv, uv);
+	  yv = vaddq_s32(yv, vv);
+
+	  // 7) >> 8
+	  yv = vsraq_n_s32(yv, yv, 8);
+
+	  // 8) Y > 255 ? 255 : Y
+	  yv = vminq_s32(yv, constMaxV);
+
+	  // 9)  Y < 0 ? 0 : Y
+	  yv = vmaxq_s32(yv, constMinV);
+
+	  // 10) store to result
+	  vst1q_s32(result, yv);
+
+	  // set rgba32 from result int * 4
+
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+
+#else // defined(__ARM_NEON__)
+
+  int result[4] Aligned(16);
+
+#if 1 // for TEST
+
+  __m128i yc = _mm_setr_epi32(256, 256, 256, 0);
+  __m128i uc = _mm_setr_epi32(0,   -88, 453, 0);
+  __m128i vc = _mm_setr_epi32(358,-182,   0, 0);
+
+  __m128i constMaxV = _mm_setr_epi32(255, 255, 255, 255);
+  //  __m128i constMinV = _mm_setr_epi32(0, 0, 0, 0);
+  __m128i constMinV = _mm_setzero_si128();
+
+#else // for TEST
+
+  const int constYc[4] Aligned(16) = {256, 256, 256, 0};
+  const int constUc[4] Aligned(16) = {0,   -88, 453, 0};
+  const int constVc[4] Aligned(16) = {358,-182,   0, 0};
+
+  // 2) load Yc, Uc, Vc
+  __m128i yc = _mm_load_si128((const __m128i*)constYc);
+  __m128i uc = _mm_load_si128((const __m128i*)constUc);
+  __m128i vc = _mm_load_si128((const __m128i*)constVc);
+
+  const int constMax[4] Aligned(16) = {255, 255, 255, 255};
+  const int constMin[4] Aligned(16) = {  0,   0,   0,   0};
+
+  __m128i constMaxV = _mm_load_si128((const __m128i*)constMax);
+  __m128i constMinV = _mm_load_si128((const __m128i*)constMin);
+
+#endif // for TEST
+
+  int ya[4] Aligned(16) = {  0,   0,   0,   0};
+  int ua[4] Aligned(16) = {  0,   0,   0,   0};
+  int va[4] Aligned(16) = {  0,   0,   0,   0};
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int y, u, v;
+	  __m128i yv, uv, vv;
+	  __m128i uv0, vv0;
+
+	  // set u/v
+	  u = (int)(*(utop + uvOffset) - 128);
+	  v = (int)(*(vtop + uvOffset) - 128);
+	  ua[0] = u;
+	  ua[1] = u;
+	  ua[2] = u;
+	  va[0] = v;
+	  va[1] = v;
+	  va[2] = v;
+
+	  // load U, V
+	  uv0 = _mm_load_si128((const __m128i*)ua);
+	  vv0 = _mm_load_si128((const __m128i*)va);
+
+	  // xPos
+
+	  // set y
+	  y = (int)(*ytop++);
+	  ya[0] = y;
+	  ya[1] = y;
+	  ya[2] = y;
+
+	  // 1) load Y
+	  yv = _mm_load_si128((const __m128i*)ya);
+
+	  // 3) Y * Yc -> Y
+	  yv = _mm_mullo_epi32(yv, yc);
+
+	  // 4) U * Uc -> U
+	  uv = _mm_mullo_epi32(uv0, uc);
+
+	  // 5) V * Vc -> V
+	  vv = _mm_mullo_epi32(vv0, vc);
+
+	  // 6) Y + U + V -> Y
+	  yv = _mm_add_epi32(yv, uv);
+	  yv = _mm_add_epi32(yv, vv);
+
+	  // 7) >> 8
+	  yv = _mm_srai_epi32(yv, 8);
+
+	  // 8) Y > 255 ? 255 : Y
+	  yv = _mm_min_epi32(yv, constMaxV);
+
+	  // 9)  Y < 0 ? 0 : Y
+	  yv = _mm_max_epi32(yv, constMinV);
+
+	  // 10) store to result
+	  _mm_store_si128((__m128i*)result, yv);
+
+	  // set rgba32 from result int * 4
+
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  // xPos+1
+
+	  // set y
+	  y = (int)(*ytop++);
+	  ya[0] = y;
+	  ya[1] = y;
+	  ya[2] = y;
+
+	  // 1) load Y
+	  yv = _mm_load_si128((const __m128i*)ya);
+
+	  // 3) Y * Yc -> Y
+	  yv = _mm_mullo_epi32(yv, yc);
+
+	  // 4) U * Uc -> U
+	  uv = _mm_mullo_epi32(uv0, uc);
+
+	  // 5) V * Vc -> V
+	  vv = _mm_mullo_epi32(vv0, vc);
+
+	  // 6) Y + U + V -> Y
+	  yv = _mm_add_epi32(yv, uv);
+	  yv = _mm_add_epi32(yv, vv);
+
+	  // 7) >> 8
+	  yv = _mm_srai_epi32(yv, 8);
+
+	  // 8) Y > 255 ? 255 : Y
+	  yv = _mm_min_epi32(yv, constMaxV);
+
+	  // 9)  Y < 0 ? 0 : Y
+	  yv = _mm_max_epi32(yv, constMinV);
+
+	  // 10) store to result
+	  _mm_store_si128((__m128i*)result, yv);
+
+	  // set rgba32 from result int * 4
+
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+#endif // defined(__ARM_NEON__)
+  return rgb24size;
+}
+
+#endif // YUV420TORGB24_VERSION == 6
+
+#if YUV420TORGB24_VERSION == 7
+
+#if defined(__ARM_NEON__)
+#include <arm_neon.h>
+#else // defined(__ARM_NEON__)
+#if defined(_MSC_VER)
+#include <intrin.h>
+#else // defined(_MSC_VER)
+#include <x86intrin.h>
+#endif // defined(_MSC_VER)
+#endif // defined(__ARM_NEON__)
+
+// for align
+#if defined(_MSC_VER)
+#define Aligned(n)  __declspec(align(n))
+#else // defined(_MSC_VER)
+#define Aligned(n)  __attribute__((aligned(n)))
+#endif // defined(_MSC_VER)
+
+// AVX
+
+// convert YUV420 to RGB24
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
+
+#if defined(__ARM_NEON__)
+
+  // Yet
+#error "NOT support AVX for ARM NEON"
+
+#else // defined(__ARM_NEON__)
+
+  int result[8] Aligned(32);
+
+#if 1 // for TEST
+
+  // 4) load Uk
+  __m256 uk = _mm256_setr_ps(0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0);
+  // 5) load Vk
+  __m256 vk = _mm256_setr_ps(1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0);
+
+  __m256 constMaxV = _mm256_setr_ps(255,255,255,255,255,255,255,255);
+  __m256 constMinV = _mm256_setzero_ps();
+
+#else // for TEST
+
+  const float constUc[8] Aligned(32) = {0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0};
+  const float constVc[8] Aligned(32) = {1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0};
+
+  const float constMax = 255.0;
+  const float constMin = 0.0;
+
+  // 4) load Uc
+  __m256 uc = _mm256_load_ps(constUc);
+  // 5) load Vc
+  __m256 vc = _mm256_load_ps(constVc);
+
+  __m256 constMaxV = _mm256_broadcast_ss(&constMax);
+  __m256 constMinV = _mm256_broadcast_ss(&constMin);
+
+#endif // 1 // for TEST
+
+  // set RC flag
+  unsigned long mxcsr = _mm_getcsr();
+  mxcsr &= 0xFFFF9FFF;
+  //  mxcsr |= 0x00000000;
+  //  mxcsr |= 0x00002000;
+  //  mxcsr |= 0x00004000;
+  mxcsr |= 0x00006000;
+  _mm_setcsr(mxcsr);
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  float y[8] Aligned(32);
+	  float y1, y2, u, v;
+	  __m256 yv, uv, vv;
+	  __m256i yvi;
+
+	  // set y[8]
+	  y1 = (float)(*ytop++);
+	  y2 = (float)(*ytop++);
+	  y[0] = y1;
+	  y[1] = y1;
+	  y[2] = y1;
+	  y[3] = 0.0;
+	  y[4] = y2;
+	  y[5] = y2;
+	  y[6] = y2;
+	  y[7] = 0.0;
+
+	  // set u/v
+	  u = (float)(*(utop + uvOffset) - 128);
+	  v = (float)(*(vtop + uvOffset) - 128);
+
+	  // ============================================================
+	  // 1) load Y vector
+	  yv = _mm256_load_ps(y);
+	  // 2) load U vector
+	  uv = _mm256_broadcast_ss(&u);
+	  // 3) load V vector
+	  vv = _mm256_broadcast_ss(&v);
+
+	  // 6) U * Uc -> U
+	  uv = _mm256_mul_ps(uv, uc);
+	  // 7) V * Vc -> V
+	  vv = _mm256_mul_ps(vv, vc);
+	  // 8) Y + U + V -> Y
+	  yv = _mm256_add_ps(yv, uv); // Y + U -> Y
+	  yv = _mm256_add_ps(yv, vv); // Y + V -> Y
+	  // 9) Y > 255 ? 255 : Y
+	  yv = _mm256_min_ps(yv, constMaxV);
+	  // 10) Y < 0 ? 0 : Y
+	  yv = _mm256_max_ps(yv, constMinV);
+	  // 11) convert float to integer
+	  yvi = _mm256_cvtps_epi32(yv);
+	  // 12) store to result
+	  _mm256_store_si256((__m256i*)result, yvi);
+	  // ============================================================
+
+	  // set rgba32 * 2 from result int * 8
+
+	  // xPos
+	  // R
+	  *rgb24top++ = (uchar)result[0];
+
+	  // G
+	  *rgb24top++ = (uchar)result[1];
+
+	  // B
+	  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  // xPos+1
+	  // R
+	  *rgb24top++ = (uchar)result[4];
+
+	  // G
+	  *rgb24top++ = (uchar)result[5];
+
+	  // B
+	  *rgb24top++ = (uchar)result[6];
+
+#if FORMAT_RGBA8888
+	  // A
+	  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	}
+  }
+#endif // defined(__ARM_NEON__)
+  return rgb24size;
+}
+
+#endif // YUV420TORGB24_VERSION == 7
 
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 

@@ -26,6 +26,45 @@ class SoundThread : public NetThread
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // sound buffer
+  SoundBuffer *soundBuffer;
+
+  // sound buffer size
+  int soundBufferSize;
+
+  // sound cache time (ms)
+  int soundCacheTime;
+
+  // sample rate
+  SAMPLERATE samplerate;
+
+  // audio format
+  QAudioFormat format;
+
+  // audio output
+  QAudioOutput *audioOutput;
+
+  // IO device
+  QIODevice *output;
+
+  // samplerate change count
+  int samplerateChangeCount;
+
+#if QTB_CELT_SUPPORT
+  // converter
+  Converter *converter;
+#endif //QTB_CELT_SUPPORT
+
+  // local buffer
+  char *buffer;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   SoundThread(Settings *settings, DesktopPanel *desktopPanel = 0);
@@ -60,40 +99,6 @@ private slots:
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif // defined(DEBUG)
-
-private:
-  // sound buffer
-  SoundBuffer *soundBuffer;
-
-  // sound buffer size
-  int soundBufferSize;
-
-  // sound cache time (ms)
-  int soundCacheTime;
-
-  // sample rate
-  SAMPLERATE samplerate;
-
-  // audio format
-  QAudioFormat format;
-
-  // audio output
-  QAudioOutput *audioOutput;
-
-  // IO device
-  QIODevice *output;
-
-  // samplerate change count
-  int samplerateChangeCount;
-
-#if QTB_CELT_SUPPORT
-  // converter
-  Converter *converter;
-#endif //QTB_CELT_SUPPORT
-
-private:
-  // local buffer
-  char *buffer;
 };
 
 } // end of namespace qtbrynhildr

@@ -27,6 +27,9 @@ class EventConverter
   friend class KeyLayoutFile;
 #endif // USE_KEYLAYOUTFILE
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 public:
   // keyboard type
   typedef enum {
@@ -38,43 +41,6 @@ public:
   } KEYTOP_TYPE;
 
 #include "windows/keyevent.h"
-
-public:
-  // constructor
-  EventConverter();
-  EventConverter(KEYTOP_TYPE type);
-#ifdef USE_KEYLAYOUTFILE
-  EventConverter(KeyLayoutFile *klf);
-#endif // USE_KEYLAYOUTFILE
-
-  // get keytop type
-  KEYTOP_TYPE getKeytopType();
-
-  // set keytop type
-  void setKeytopType(KEYTOP_TYPE type);
-
-#ifdef USE_KEYLAYOUTFILE
-  // set keytop type by key layout file
-  void setKeytopType(KeyLayoutFile *klf);
-#endif // USE_KEYLAYOUTFILE
-
-  // get Virtual Keycode
-  uchar getVKCode(QKeyEvent *keyEvent);
-
-  // get shift key control
-  ShiftKeyControl getShiftKeyControl();
-
-  // get name
-  QString getEventConverterName() const;
-
-  // get name of virtual keycode
-  static QString getVKCodeByString(uchar vkcode);
-
-private:
-#if QTB_DEBUG
-  // print KeyEvent
-  static void printKeyEvent(KeyEvent *keyEvent);
-#endif // QTB_DEBUG
 
 private:
   // key table size
@@ -421,6 +387,46 @@ private:
 
   // output log flag
   bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  EventConverter();
+  EventConverter(KEYTOP_TYPE type);
+#ifdef USE_KEYLAYOUTFILE
+  EventConverter(KeyLayoutFile *klf);
+#endif // USE_KEYLAYOUTFILE
+
+  // get keytop type
+  KEYTOP_TYPE getKeytopType();
+
+  // set keytop type
+  void setKeytopType(KEYTOP_TYPE type);
+
+#ifdef USE_KEYLAYOUTFILE
+  // set keytop type by key layout file
+  void setKeytopType(KeyLayoutFile *klf);
+#endif // USE_KEYLAYOUTFILE
+
+  // get Virtual Keycode
+  uchar getVKCode(QKeyEvent *keyEvent);
+
+  // get shift key control
+  ShiftKeyControl getShiftKeyControl();
+
+  // get name
+  QString getEventConverterName() const;
+
+  // get name of virtual keycode
+  static QString getVKCodeByString(uchar vkcode);
+
+private:
+#if QTB_DEBUG
+  // print KeyEvent
+  static void printKeyEvent(KeyEvent *keyEvent);
+#endif // QTB_DEBUG
 };
 
 } // end of namespace qtbrynhildr

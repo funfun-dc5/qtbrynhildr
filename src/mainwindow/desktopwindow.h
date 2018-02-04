@@ -33,6 +33,16 @@ class DesktopWindow : public QWidget, public DesktopPanel
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
@@ -86,10 +96,6 @@ private:
   // native event filter
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 #endif // defined(Q_OS_WIN)
-
-private:
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

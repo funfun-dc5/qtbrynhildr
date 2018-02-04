@@ -28,6 +28,13 @@ class DesktopPanelObject : public QGraphicsObject, public DesktopPanel
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   DesktopPanelObject(QtBrynhildr *qtbrynhildr, QGraphicsItem *parent = Q_NULLPTR);

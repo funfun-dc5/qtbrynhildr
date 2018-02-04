@@ -13,15 +13,9 @@ namespace qtbrynhildr {
 // Converter
 class Converter
 {
-public:
-  // constructor
-  Converter(int samplerate, int channels);
-  // destructor
-  virtual ~Converter();
-
-  // convert to PCM
-  virtual int convertToPCM(char *buffer, int len) = 0;
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 protected:
   // sample rate
   int samplerate;
@@ -31,6 +25,18 @@ protected:
 
   // output log flag
   bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  Converter(int samplerate, int channels);
+  // destructor
+  virtual ~Converter();
+
+  // convert to PCM
+  virtual int convertToPCM(char *buffer, int len) = 0;
 };
 
 } // end of namespace qtbrynhildr

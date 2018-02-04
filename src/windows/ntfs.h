@@ -15,16 +15,9 @@ namespace qtbrynhildr {
 // NTFS
 class NTFS
 {
-public:
-  // constructor
-  NTFS();
-
-  // get FILETIME (64bit:UTC) from QDateTime (LocalTime)
-  qint64 toFILETIME(QDateTime time);
-
-  // get QDateTime (LocalTime) from FILETIME (64bit:UTC)
-  QDateTime toQDateTime(qint64 filetime);
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 private:
   // NTFS Epoch (1601.1.1 01:00:00)
   QDateTime ntfsEpoch;
@@ -37,6 +30,19 @@ private:
 
   // diff from UTC
   qint64 diffUTC;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  NTFS();
+
+  // get FILETIME (64bit:UTC) from QDateTime (LocalTime)
+  qint64 toFILETIME(QDateTime time);
+
+  // get QDateTime (LocalTime) from FILETIME (64bit:UTC)
+  QDateTime toQDateTime(qint64 filetime);
 };
 
 } // end of namespace qtbrynhildr

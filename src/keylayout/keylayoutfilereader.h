@@ -18,6 +18,25 @@ namespace qtbrynhildr {
 
 // Key Layout File Reader
 class KeyLayoutFileReader {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // key layout file path
+  const char *path;
+
+  // key layout file list
+  QList<KeyLayoutFile*> list;
+
+  // Keyboard type list
+  QStringList keyboardTypeList;
+
+  // output log flag
+  const bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   KeyLayoutFileReader(const char *layoutfilepath);
@@ -36,19 +55,6 @@ public:
 private:
   // read a key layout file
   void readKeyLayoutFile(const char *file);
-
-private:
-  // key layout file path
-  const char *path;
-
-  // key layout file list
-  QList<KeyLayoutFile*> list;
-
-  // Keyboard type list
-  QStringList keyboardTypeList;
-
-  // output log flag
-  const bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

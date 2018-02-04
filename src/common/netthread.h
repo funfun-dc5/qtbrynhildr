@@ -77,6 +77,37 @@ class NetThread : public QThread
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+protected:
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
+  // thread name
+  const char *name;
+
+  // settings
+  Settings *settings;
+
+  // protocol header
+  COM_DATA *com_data;
+
+  // run thread flag
+  bool runThread;
+
+  // received data counter
+  long receivedDataCounter;
+
+  // output log flag
+  bool outputLog;
+
+  // previous time
+  QDateTime previousTime;
+  
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   NetThread(const char *name, Settings *settings, DesktopPanel *desktopPanel);
@@ -129,32 +160,6 @@ protected:
 
   // receive data
   long receiveData(SOCKET sock, char *buf, long size);
-
-protected:
-  // desktop panel
-  DesktopPanel *desktopPanel;
-
-  // thread name
-  const char *name;
-
-  // settings
-  Settings *settings;
-
-  // protocol header
-  COM_DATA *com_data;
-
-  // run thread flag
-  bool runThread;
-
-  // received data counter
-  long receivedDataCounter;
-
-  // output log flag
-  bool outputLog;
-
-private:
-  // previous time
-  QDateTime previousTime;
 
 private:
   // set socket option

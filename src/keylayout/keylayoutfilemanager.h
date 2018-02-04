@@ -16,18 +16,25 @@ namespace qtbrynhildr {
 
 // Key Layout File Manager
 class KeyLayoutFileManager {
-public:
-  // constructor
-  KeyLayoutFileManager(const char *layoutfilepath);
-  // destructor
-  ~KeyLayoutFileManager();
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 private:
   // key layout file path
   const char *path;
 
   // output log flag
   const bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  KeyLayoutFileManager(const char *layoutfilepath);
+  // destructor
+  ~KeyLayoutFileManager();
 };
 
 } // end of namespace qtbrynhildr

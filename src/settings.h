@@ -464,6 +464,274 @@ namespace qtbrynhildr {
 // Settings
 class Settings
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // settings
+  QSettings *settings;
+
+  // desktop information
+  Desktop *desktop;
+
+  // bootup flag
+  volatile bool bootupFlag;
+
+  // shutdown flag
+  volatile bool shutdownFlag;
+
+#if QTB_CRYPTOGRAM
+  // cipher
+  Cipher *cipher;
+#endif // QTB_CRYPTGRAM
+
+  // generated version
+  volatile int generatedVersion;
+
+  // current version
+  volatile int currentVersion;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // public mode version
+  volatile PUBLICMODE_VERSION publicModeVersion;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // server name
+  QString serverName;
+
+  // server name list size
+  volatile int serverNameListSize;
+
+  // server name list
+  QStringList *serverNameList;
+
+  // server type
+  volatile SERVER_TYPE serverType;
+
+  // keyboard type
+  volatile KEYBOARD_TYPE keyboardType;
+
+  // keyboard type name
+  QString keyboardTypeName;
+
+  // port
+  volatile quint16 portNo;
+
+  // password
+  QString password;
+
+  // connected
+  volatile bool connected;
+
+  // Control
+  volatile bool onControl;
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  volatile bool onPluginsDisable;
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+  volatile bool onHoldMouseControl;
+#if QTB_EXTRA_BUTTON_SUPPORT
+  volatile bool onExtraButtonSupport;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+  volatile bool onControlOffWithGraphicsOff;
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // send clipboard
+  volatile bool onSendClipboard;
+  // send clipboard string
+  QString sendClipboardString;
+  // send file count
+  volatile int sendFileCount;
+  // send file name
+  QStringList sendFileNames;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // Graphics
+  volatile bool onGraphics;
+  volatile VIDEO_QUALITY videoQuality;
+
+  volatile bool onGamePadSupport;
+  volatile bool onBrynhildr2Support;
+  volatile unsigned int frameRate;
+  volatile unsigned long frameInterval;
+
+  // Sound
+  volatile bool onSound;
+#if QTB_CELT_SUPPORT
+  volatile SOUND_TYPE soundType;
+#endif // QTB_CELT_SUPPORT
+  volatile SOUND_QUALITY soundQuality;
+  volatile SOUND_CAPTURE soundCapture;
+  volatile int soundCacheTime;
+
+  // keep original desktop size flag
+  volatile bool onKeepOriginalDesktopSize;
+
+  // scaling factor
+  volatile qreal desktopScalingFactor;
+  volatile qreal desktopScalingFactorForZoom;
+  volatile qreal desktopScalingFactorLimit;
+
+  // scaling quality
+  volatile Qt::TransformationMode desktopScalingQuality;
+
+  // scaling type
+  volatile SCALING_TYPE desktopScalingType;
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // compress mode
+  volatile COMPRESS_MODE desktopCompressMode;
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
+  // cut desktop blank area flag
+  volatile bool onCutDesktopBlankArea;
+
+  // desktop offset x
+  volatile POS desktopOffsetX;
+
+  // desktop offset y
+  volatile POS desktopOffsetY;
+
+  // desktop width
+  volatile SIZE desktopWidth;
+
+  // desktop height
+  volatile SIZE desktopHeight;
+
+  // select monitor
+  volatile MONITOR_NO monitorNo;
+
+  // monitor count
+  volatile MONITOR_COUNT monitorCount;
+
+  // monitorChangeType
+  volatile MONITOR_CHANGE_TYPE monitorChangeType;
+
+  // open connect to server dialog at bootup
+  volatile bool onOpenConnectToServerDialogAtBootup;
+
+  // check update at bootup
+  volatile bool onCheckUpdateAtBootup;
+
+  // confirm at exit
+  volatile bool onConfirmAtExit;
+
+  // save settings at exit
+  volatile bool onSaveSettingsAtExit;
+
+  // exit after replaying
+  volatile bool onExitAfterReplay;
+
+  // stays on top
+  volatile bool onStaysOnTop;
+
+  // desktop scale fixed
+  volatile bool onDesktopScaleFixed;
+
+  // window size fixed
+  volatile bool onWindowSizeFixed;
+
+  // frame less window
+  volatile bool onFrameLessWindow;
+
+  // show menu bar
+  volatile bool onShowMenuBar;
+
+  // show status bar
+  volatile bool onShowStatusBar;
+
+  // full screen
+  volatile bool onFullScreenAtConnected;
+
+  // hide menu and status bar at full screen
+  volatile bool onHideMenuAndStatusBarAtFullScreen;
+
+  // show frame rate
+  volatile bool onShowFrameRate;
+
+  // software keyboard
+  volatile bool onShowSoftwareKeyboard;
+
+  // software button
+  volatile bool onShowSoftwareButton;
+
+#if QTB_RECORDER
+  // recording
+  volatile bool onRecordingControl;
+  const char *recordingControlFileName;
+
+  // reply
+  volatile bool onReplayingControl;
+  const char *replayingControlFileName;
+#endif // QTB_RECORDER
+
+  // desktop capture
+  volatile bool onDesktopCapture;
+
+  // scroll mode
+  volatile bool onScrollMode;
+
+  // show password
+  volatile bool onShowPassword;
+
+  // clip cursor
+  volatile bool onClipCursor;
+
+  // show marker
+  volatile bool onShowMouseCursorMarker;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // send/receive file support
+  volatile bool onTransferFileSupport;
+
+  // send/receive file
+  volatile bool onShowTotalProgressForTransferFile;
+
+  // send/receive file support by drag and drop
+  volatile bool onTransferFileSupportByDragAndDrop;
+
+  // send/receive clipboard support
+  volatile bool onTransferClipboardSupport;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // buffer
+  volatile int graphicsBufferSize;
+  volatile int soundBufferSize;
+
+  // double click threshold
+  volatile int doubleClickThreshold;
+
+  // convert thread count
+  volatile int convertThreadCount;
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // for touchpanelInterfaceType
+  volatile int touchpanelInterfaceType;
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
+  // Debug
+  volatile bool outputGraphicsDataToFile;
+  volatile bool outputSoundDataToFile;
+  volatile bool outputSoundDataToWavFile;
+  volatile bool outputLog;
+  volatile bool outputKeyboardLog;
+
+  // for outputPath
+  QString outputPath;
+
+  // for keylayoutPath
+  QString keylayoutPath;
+
+  // for logFile
+  QString logFile;
+
+  // for keyboardLogFile
+  QString keyboardLogFile;
+
+  // for desktopCaptureFormat
+  QString desktopCaptureFormat;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
 #if QTB_CRYPTOGRAM
@@ -1944,268 +2212,6 @@ private:
 
   // get Default Keyboard Log File
   QString getDefaultKeyboardLogFile() const;
-
-private:
-  // settings
-  QSettings *settings;
-
-  // desktop information
-  Desktop *desktop;
-
-  // bootup flag
-  volatile bool bootupFlag;
-
-  // shutdown flag
-  volatile bool shutdownFlag;
-
-#if QTB_CRYPTOGRAM
-  // cipher
-  Cipher *cipher;
-#endif // QTB_CRYPTGRAM
-
-  // generated version
-  volatile int generatedVersion;
-
-  // current version
-  volatile int currentVersion;
-
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // public mode version
-  volatile PUBLICMODE_VERSION publicModeVersion;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-  // server name
-  QString serverName;
-
-  // server name list size
-  volatile int serverNameListSize;
-
-  // server name list
-  QStringList *serverNameList;
-
-  // server type
-  volatile SERVER_TYPE serverType;
-
-  // keyboard type
-  volatile KEYBOARD_TYPE keyboardType;
-
-  // keyboard type name
-  QString keyboardTypeName;
-
-  // port
-  volatile quint16 portNo;
-
-  // password
-  QString password;
-
-  // connected
-  volatile bool connected;
-
-  // Control
-  volatile bool onControl;
-#if QTB_PLUGINS_DISABLE_SUPPORT
-  volatile bool onPluginsDisable;
-#endif // QTB_PLUGINS_DISABLE_SUPPORT
-  volatile bool onHoldMouseControl;
-#if QTB_EXTRA_BUTTON_SUPPORT
-  volatile bool onExtraButtonSupport;
-#endif // QTB_EXTRA_BUTTON_SUPPORT
-  volatile bool onControlOffWithGraphicsOff;
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // send clipboard
-  volatile bool onSendClipboard;
-  // send clipboard string
-  QString sendClipboardString;
-  // send file count
-  volatile int sendFileCount;
-  // send file name
-  QStringList sendFileNames;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-  // Graphics
-  volatile bool onGraphics;
-  volatile VIDEO_QUALITY videoQuality;
-
-  volatile bool onGamePadSupport;
-  volatile bool onBrynhildr2Support;
-  volatile unsigned int frameRate;
-  volatile unsigned long frameInterval;
-
-  // Sound
-  volatile bool onSound;
-#if QTB_CELT_SUPPORT
-  volatile SOUND_TYPE soundType;
-#endif // QTB_CELT_SUPPORT
-  volatile SOUND_QUALITY soundQuality;
-  volatile SOUND_CAPTURE soundCapture;
-  volatile int soundCacheTime;
-
-  // keep original desktop size flag
-  volatile bool onKeepOriginalDesktopSize;
-
-  // scaling factor
-  volatile qreal desktopScalingFactor;
-  volatile qreal desktopScalingFactorForZoom;
-  volatile qreal desktopScalingFactorLimit;
-
-  // scaling quality
-  volatile Qt::TransformationMode desktopScalingQuality;
-
-  // scaling type
-  volatile SCALING_TYPE desktopScalingType;
-
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
-  // compress mode
-  volatile COMPRESS_MODE desktopCompressMode;
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
-
-  // cut desktop blank area flag
-  volatile bool onCutDesktopBlankArea;
-
-  // desktop offset x
-  volatile POS desktopOffsetX;
-
-  // desktop offset y
-  volatile POS desktopOffsetY;
-
-  // desktop width
-  volatile SIZE desktopWidth;
-
-  // desktop height
-  volatile SIZE desktopHeight;
-
-  // select monitor
-  volatile MONITOR_NO monitorNo;
-
-  // monitor count
-  volatile MONITOR_COUNT monitorCount;
-
-  // monitorChangeType
-  volatile MONITOR_CHANGE_TYPE monitorChangeType;
-
-  // open connect to server dialog at bootup
-  volatile bool onOpenConnectToServerDialogAtBootup;
-
-  // check update at bootup
-  volatile bool onCheckUpdateAtBootup;
-
-  // confirm at exit
-  volatile bool onConfirmAtExit;
-
-  // save settings at exit
-  volatile bool onSaveSettingsAtExit;
-
-  // exit after replaying
-  volatile bool onExitAfterReplay;
-
-  // stays on top
-  volatile bool onStaysOnTop;
-
-  // desktop scale fixed
-  volatile bool onDesktopScaleFixed;
-
-  // window size fixed
-  volatile bool onWindowSizeFixed;
-
-  // frame less window
-  volatile bool onFrameLessWindow;
-
-  // show menu bar
-  volatile bool onShowMenuBar;
-
-  // show status bar
-  volatile bool onShowStatusBar;
-
-  // full screen
-  volatile bool onFullScreenAtConnected;
-
-  // hide menu and status bar at full screen
-  volatile bool onHideMenuAndStatusBarAtFullScreen;
-
-  // show frame rate
-  volatile bool onShowFrameRate;
-
-  // software keyboard
-  volatile bool onShowSoftwareKeyboard;
-
-  // software button
-  volatile bool onShowSoftwareButton;
-
-#if QTB_RECORDER
-  // recording
-  volatile bool onRecordingControl;
-  const char *recordingControlFileName;
-
-  // reply
-  volatile bool onReplayingControl;
-  const char *replayingControlFileName;
-#endif // QTB_RECORDER
-
-  // desktop capture
-  volatile bool onDesktopCapture;
-
-  // scroll mode
-  volatile bool onScrollMode;
-
-  // show password
-  volatile bool onShowPassword;
-
-  // clip cursor
-  volatile bool onClipCursor;
-
-  // show marker
-  volatile bool onShowMouseCursorMarker;
-
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // send/receive file support
-  volatile bool onTransferFileSupport;
-
-  // send/receive file
-  volatile bool onShowTotalProgressForTransferFile;
-
-  // send/receive file support by drag and drop
-  volatile bool onTransferFileSupportByDragAndDrop;
-
-  // send/receive clipboard support
-  volatile bool onTransferClipboardSupport;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-  // buffer
-  volatile int graphicsBufferSize;
-  volatile int soundBufferSize;
-
-  // double click threshold
-  volatile int doubleClickThreshold;
-
-  // convert thread count
-  volatile int convertThreadCount;
-
-#if defined(QTB_DEV_TOUCHPANEL)
-  // for touchpanelInterfaceType
-  volatile int touchpanelInterfaceType;
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
-  // Debug
-  volatile bool outputGraphicsDataToFile;
-  volatile bool outputSoundDataToFile;
-  volatile bool outputSoundDataToWavFile;
-  volatile bool outputLog;
-  volatile bool outputKeyboardLog;
-
-  // for outputPath
-  QString outputPath;
-
-  // for keylayoutPath
-  QString keylayoutPath;
-
-  // for logFile
-  QString logFile;
-
-  // for keyboardLogFile
-  QString keyboardLogFile;
-
-  // for desktopCaptureFormat
-  QString desktopCaptureFormat;
 };
 
 } // end of namespace qtbrynhildr

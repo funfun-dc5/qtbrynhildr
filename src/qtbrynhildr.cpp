@@ -833,107 +833,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   }
 }
 
-// finished download
-void QtBrynhildr::finishedDownload()
-{
-  // check update
-  QByteArray byteArray = httpGetter->getPage();
-  if (byteArray.size() == 0){
-	cout << "finished downloading to file." << endl << flush;
-	return;
-  }
-
-#if 0 // for TEST
-  // save to file
-  QFile file("release_page.html");
-  file.open(QIODevice::WriteOnly);
-  file.write(byteArray);
-  file.close();
-#endif // for TEST
-
-  QString releasePage(byteArray);
-#if 1
-  // check latest release
-  int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
-  if (startIndex > 0) {
-	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
-	int lastIndex = releasePage.indexOf("\"", startIndex);
-	//  cout << "startIndex = " << startIndex << endl << flush;
-	//  cout << "lastIndex  = " << lastIndex << endl << flush;
-	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString latestTag;
-	latestTag.append(tagRef);
-	//	  cout << "latest tag = v" << qPrintable(latestTag);
-
-	startIndex = lastIndex + 2;
-	lastIndex = releasePage.indexOf("<", startIndex);
-	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString ver;
-	ver.append(verRef);
-	//	  cout << " : ver = " << qPrintable(ver) << endl << flush;
-
-	QString tag(option->getVersionString());
-	//	  tag = "169";
-	//	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
-	if (tag != latestTag){
-	  // Found new version
-	  //		cout << "Found new version" << endl << flush;
-	  int ret = QMessageBox::question(this,
-									  tr("Confirm"),
-									  tr("Found new release. Open release page?"),
-									  QMessageBox::Ok | QMessageBox::Cancel,
-									  QMessageBox::Ok);
-	  if (ret == QMessageBox::Ok){
-		QDesktopServices::openUrl(QUrl(QTB_URL_FOR_RELEASE));
-	  }
-	}
-	else {
-	  if (!onCheckUpdateInBackground){
-		// Up-to-date
-		//		cout << "Up-to-date!" << endl << flush;
-		QMessageBox::information(this, tr("Information"),
-								 tr("Up-to-date!"));
-	  }
-	  else {
-		// reset background mode
-		onCheckUpdateInBackground = false;
-	  }
-	}
-  }
-  else {
-	cout << "NOT Found tag!" << endl << flush;
-  }
-#else // for TEST
-  // display all tag and version in release page
-  int startIndex = 0;
-  while(true){
-	startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH, startIndex);
-	if (startIndex < 0) break;
-
-	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
-	int lastIndex = releasePage.indexOf("\"", startIndex);
-	//  cout << "startIndex = " << startIndex << endl << flush;
-	//  cout << "lastIndex  = " << lastIndex << endl << flush;
-	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString tag;
-	tag.append(tagRef);
-	cout << "Found tag = v" << qPrintable(tag);
-	startIndex = lastIndex;
-
-	startIndex = lastIndex + 2;
-	lastIndex = releasePage.indexOf("<", startIndex);
-	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString ver;
-	ver.append(verRef);
-	cout << " : ver = " << qPrintable(ver) << endl << flush;
-	startIndex = lastIndex;
-  }
-#endif // for TEST
-
-  // clear memory
-  httpGetter->clear();
-}
-
 // destructor
 QtBrynhildr::~QtBrynhildr()
 {
@@ -4379,6 +4278,107 @@ bool QtBrynhildr::shutdownPlatform()
   return true;
 }
 #endif // defined(QTB_NET_UNIX)
+
+// finished download
+void QtBrynhildr::finishedDownload()
+{
+  // check update
+  QByteArray byteArray = httpGetter->getPage();
+  if (byteArray.size() == 0){
+	cout << "finished downloading to file." << endl << flush;
+	return;
+  }
+
+#if 0 // for TEST
+  // save to file
+  QFile file("release_page.html");
+  file.open(QIODevice::WriteOnly);
+  file.write(byteArray);
+  file.close();
+#endif // for TEST
+
+  QString releasePage(byteArray);
+#if 1
+  // check latest release
+  int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
+  if (startIndex > 0) {
+	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
+	int lastIndex = releasePage.indexOf("\"", startIndex);
+	//  cout << "startIndex = " << startIndex << endl << flush;
+	//  cout << "lastIndex  = " << lastIndex << endl << flush;
+	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString latestTag;
+	latestTag.append(tagRef);
+	//	  cout << "latest tag = v" << qPrintable(latestTag);
+
+	startIndex = lastIndex + 2;
+	lastIndex = releasePage.indexOf("<", startIndex);
+	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString ver;
+	ver.append(verRef);
+	//	  cout << " : ver = " << qPrintable(ver) << endl << flush;
+
+	QString tag(option->getVersionString());
+	//	  tag = "169";
+	//	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
+	if (tag != latestTag){
+	  // Found new version
+	  //		cout << "Found new version" << endl << flush;
+	  int ret = QMessageBox::question(this,
+									  tr("Confirm"),
+									  tr("Found new release. Open release page?"),
+									  QMessageBox::Ok | QMessageBox::Cancel,
+									  QMessageBox::Ok);
+	  if (ret == QMessageBox::Ok){
+		QDesktopServices::openUrl(QUrl(QTB_URL_FOR_RELEASE));
+	  }
+	}
+	else {
+	  if (!onCheckUpdateInBackground){
+		// Up-to-date
+		//		cout << "Up-to-date!" << endl << flush;
+		QMessageBox::information(this, tr("Information"),
+								 tr("Up-to-date!"));
+	  }
+	  else {
+		// reset background mode
+		onCheckUpdateInBackground = false;
+	  }
+	}
+  }
+  else {
+	cout << "NOT Found tag!" << endl << flush;
+  }
+#else // for TEST
+  // display all tag and version in release page
+  int startIndex = 0;
+  while(true){
+	startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH, startIndex);
+	if (startIndex < 0) break;
+
+	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
+	int lastIndex = releasePage.indexOf("\"", startIndex);
+	//  cout << "startIndex = " << startIndex << endl << flush;
+	//  cout << "lastIndex  = " << lastIndex << endl << flush;
+	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString tag;
+	tag.append(tagRef);
+	cout << "Found tag = v" << qPrintable(tag);
+	startIndex = lastIndex;
+
+	startIndex = lastIndex + 2;
+	lastIndex = releasePage.indexOf("<", startIndex);
+	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
+	QString ver;
+	ver.append(verRef);
+	cout << " : ver = " << qPrintable(ver) << endl << flush;
+	startIndex = lastIndex;
+  }
+#endif // for TEST
+
+  // clear memory
+  httpGetter->clear();
+}
 
 void QtBrynhildr::timerExpired()
 {

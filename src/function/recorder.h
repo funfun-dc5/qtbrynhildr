@@ -20,37 +20,9 @@ namespace qtbrynhildr {
 // Recorder
 class Recorder
 {
-public:
-  // constructor
-  Recorder(Settings *settings);
-  // destructor
-  ~Recorder();
-
-  // start recording
-  void startRecording();
-
-  // stop recording
-  void stopRecording(const char *saveFileName);
-
-  // start replaying
-  void startReplaying();
-
-  // stop replaying
-  void stopReplaying();
-
-  // put com_data
-  void putCOM_DATA(COM_DATA *com_data);
-
-  // get com_data
-  COM_DATA *getCOM_DATA();
-
-private:
-  // make file header
-  void makeFileHeader();
-
-  // check file header
-  bool checkFileHeader();
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 private:
   // file header
   typedef struct {
@@ -115,6 +87,40 @@ private:
 
   // output log flag
   bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  Recorder(Settings *settings);
+  // destructor
+  ~Recorder();
+
+  // start recording
+  void startRecording();
+
+  // stop recording
+  void stopRecording(const char *saveFileName);
+
+  // start replaying
+  void startReplaying();
+
+  // stop replaying
+  void stopReplaying();
+
+  // put com_data
+  void putCOM_DATA(COM_DATA *com_data);
+
+  // get com_data
+  COM_DATA *getCOM_DATA();
+
+private:
+  // make file header
+  void makeFileHeader();
+
+  // check file header
+  bool checkFileHeader();
 };
 
 } // end of namespace qtbrynhildr

@@ -101,381 +101,9 @@ class QtBrynhildr : public QMainWindow
 {
   Q_OBJECT
 
-public:
-  // constructor
-#if QTB_PUBLIC_MODE6_SUPPORT
-  QtBrynhildr(Option *option, QClipboard *clipboard);
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  QtBrynhildr(Option *option);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-  // destructor
-  ~QtBrynhildr();
-
-  // get settings
-  Settings *getSettings() const
-  {
-	return settings;
-  }
-
-#if QTB_NEW_DESKTOPWINDOW
-  // get graphics view
-  GraphicsView *getGraphicsView() const;
-#else // QTB_NEW_DESKTOPWINDOW
-  // get desktop window
-  DesktopWindow *getDesktopWindow() const;
-#endif // QTB_NEW_DESKTOPWINDOW
-
-  // get desktop panel
-  DesktopPanel *getDesktopPanel() const;
-
-  // shutdown flag
-  bool getShutdownFlag() const;
-
-  // exit full screen
-  void exitFullScreen();
-
-  // get height of title bar
-  int getHeightOfTitleBar();
-
-  // get height of menu bar
-  int getHeightOfMenuBar();
-
-  // get height of status bar
-  int getHeightOfStatusBar();
-
-#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
-  // set cursor point color
-  void setCursorPointColor(QRgb cursorPointColor);
-#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
-
-#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-  // move top of software keyboard
-  void moveTopOfSoftwareKeyboard(int y);
-
-  // move top of software button
-  void moveTopOfSoftwareButton(int y);
-
-  // toggle software keyboard
-  void toggleSoftwareKeyboard();
-  // toggle software button
-  void toggleSoftwareButton();
-#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-
-public slots:
-  // connect to server
-  void connectToServer();
-
-  // connected
-  void connected();
-
-  // refresh window
-  void refreshWindow();
-
-  // refresh menu
-  void refreshMenu();
-
-  // desktop Changed
-  void onDesktopChanged(QImage image);
-
-  // Desktop clear
-  void onDesktopClear();
-
-  // change mouse cursor
-  void changeMouseCursor(const QCursor &cursor);
-
-  // network error handler
-  void onNetworkError(bool doRetry);
-
-  // exit applilcation
-  void exitApplication();
-
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // set clipboard
-  void setClipboard(QString clipboardString);
-
-  // set progress bar value for transfer file
-  void setFileTransferProgressBarValue(int value);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-  // output Log Message
-  void outputLogMessage(int msgID);
-
-  // output Log Message
-  void outputLogMessage(int id, const QString text);
-
-protected:
-#if 0 // for TEST
-  // change event
-  void changeEvent(QEvent *event);
-#endif // for TEST
-
-  // window close event
-  void closeEvent(QCloseEvent *event);
-
-  // window resize event
-  void resizeEvent(QResizeEvent *event);
-
-  // window hide event
-  void hideEvent(QHideEvent *event);
-
-  // window show event
-  void showEvent(QShowEvent *event);
-
-  // context menu event
-  void contextMenuEvent(QContextMenuEvent *event);
-
-private slots:
-  // popup connect to server dialog
-  void popUpConnectToServer();
-
-  // disconnect to server
-  void popUpDisconnectToServer();
-
-  // reconnect to server
-  void reconnectToServer();
-
-  // disconnect to server
-  void disconnectToServer();
-
-  // finished thread
-  void finishedNetThread();
-
-  // toggle output keyboard log mode
-  void toggleOutputKeyboardLog();
-
-  // toggle output log mode
-  void toggleOutputLog();
-
-  // about dialog
-  void about();
-
-  // check update
-  void checkUpdate();
-
-  // exit from QtBynhildr
-  void exit();
-
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // send clipboard
-  void sendClipboard();
-
-  // send file
-  void sendFile();
-
-  // cancel file transferring
-  void cancelFileTransferring();
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-#if QTB_PREFERENCE
-  // preferences
-  void preferences();
-#endif // QTB_PREFERENCE
-
-  // set video quality
-  void setVideoQuality_MINIMUM();
-  void setVideoQuality_LOW();
-  void setVideoQuality_STANDARD();
-  void setVideoQuality_HIGH();
-  void setVideoQuality_MAXIMUM();
-
-  // set sound quality
-  void setSoundQuality_MINIMUM();
-  void setSoundQuality_LOW();
-  void setSoundQuality_STANDARD();
-  void setSoundQuality_HIGH();
-  void setSoundQuality_MAXIMUM();
-
-  // set sound cache
-  void setSoundCache_0();
-  void setSoundCache_1();
-  void setSoundCache_2();
-  void setSoundCache_3();
-  void setSoundCache_4();
-  void setSoundCache_5();
-
-  // toggle onControl/onGraphics/onSound
-  void toggleOnControl();
-  void toggleOnGraphics();
-  void toggleOnSound();
-
-#if QTB_PUBLIC_MODE6_SUPPORT
-private:
-  // setup window title
-  void setupWindowTitle();
-  // refresh public mode
-  void refreshPublicMode();
-private slots:
-  // select public mode version
-  void selectPublicModeVersion5();
-  void selectPublicModeVersion6();
-#if QTB_PUBLIC_MODE7_SUPPORT
-  void selectPublicModeVersion7();
-#endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-#if QTB_RECORDER
-  // record and replay
-  void startRecordingControl();
-  void stopRecordingControl();
-  void startReplayRecordingControl();
-  void stopReplayRecordingControl();
-#endif // QTB_RECORDER
-
-#if QTB_PLUGINS_DISABLE_SUPPORT
-  // set onPluginsDisable
-  void setOnPluginsDisable();
-#endif // QTB_PLUGINS_DISABLE_SUPPORT
-
-  // send key
-#if 0 // for TEST
-  void sendKey_CTRL_ALT_DEL(); // CTRL + ALT + DEL
-#endif
-  void sendKey_ALT_F4(); // ALT + F4
-  void sendKey_CTRL_ESC(); // CTRL + ESC
-  void sendKey_WINDOWS(); // WINDOWS
-  void sendKey_PrintScreen(); // PrintScreen
-  void sendKey_ALT_PrintScreen(); // ALT + PrintScreen
-
-  // toggle show menu bar
-  void toggleShowMenuBar();
-
-  // toggle show status bar
-  void toggleShowStatusBar();
-
-  // toggle show frame rate
-  void toggleShowFrameRate();
-
-  // full screen
-  void fullScreen();
-
-  // toggle stays on top
-  void toggleStaysOnTop();
-
-  // desktop scale fixed
-  void toggleDesktopScaleFixed();
-
-  // window size fixed
-  void toggleWindowSizeFixed();
-
-  // desktop scaling
-  void desktopScaling();
-
-  // desktop capture
-  void desktopCapture();
-
-  // log view
-  void logView();
-
-#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-  // calulate software keyboard layout
-  QRect calculateSoftwareKeyboardLayout();
-
-  // calulate software button layout
-  QRect calculateSoftwareButtonLayout();
-
-  // toggle show software keyboard
-  void toggleShowSoftwareKeyboard();
-
-  // toggle show software button
-  void toggleShowSoftwareButton();
-
-  // setup software keyboard
-  void setupSoftwareKeyboard();
-
-  // setup software button
-  void setupSoftwareButton();
-#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-
-  // select frame rate
-  void selectFrameRate5();
-  void selectFrameRate10();
-  void selectFrameRate20();
-  void selectFrameRate30();
-  void selectFrameRate40();
-  void selectFrameRate50();
-  void selectFrameRate60();
-  void selectFrameRateMaximum();
-
-  // select monitor
-  void setSelectMonitorNo1();
-  void setSelectMonitorNo2();
-  void setSelectMonitorNo3();
-  void setSelectMonitorNo4();
-  void setSelectMonitorNo5();
-  void setSelectMonitorNo6();
-  void setSelectMonitorNo7();
-  void setSelectMonitorNo8();
-  void setSelectMonitorNo9();
-  void setSelectMonitorNoAll();
-
-  // scroll mode
-  void toggleOnScrollMode();
-
-#if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type
-  void touchpanelInterfaceTypeKeroRemote();
-  void touchpanelInterfaceTypeQtBrynhildr();
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
-#if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-  // visibility changed software keyboard
-  void visibilityChangedSoftwareKeyboard(bool visible);
-
-  // visibility changed software button
-  void visibilityChangedSoftwareButton(bool visible);
-#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
-  // desktop compress mode
-  void desktopCompressMode0();
-  void desktopCompressMode2();
-  void desktopCompressMode4();
-  void desktopCompressMode8();
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
-
-private:
-  // build GUI
-  void createActions();
-  void createMenus();
-  void createContextMenu();
-  void createToolBars();
-  void createStatusBar();
-
-  // settings
-  // read settings from user configuration (registry etc.)
-  void readSettings();
-  // write settings from user configuration (registry etc.)
-  void writeSettings();
-
-  // update status bar
-  void updateStatusBar();
-
-  // update connected
-  void updateConnected();
-
-  // update frame rate
-  void updateFrameRate();
-
-  // disconnected
-  void disconnected();
-
-  // set desktop scaling factor
-  void setDesktopScalingFactor(QSize windowSize);
-
-  // refresh monitor menu
-  void refreshMonitorMenu();
-
-  // video quality
-  void refreshVideoQualityMenu();
-
-  // sound quality
-  void refreshSoundQualityMenu();
-
-#if QTB_RECORDER
-  // recording and replaying
-  void refreshRecordingAndReplayMenu();
-#endif // QTB_RECORDER
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 private:
   // GUI
 #if QTB_NEW_DESKTOPWINDOW
@@ -782,38 +410,6 @@ private:
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
-private:
-  // clear Video Quality check
-  void clearVideoQualityCheck();
-
-  // clear Sound Quality check
-  void clearSoundQualityCheck();
-
-  // clear Sound Cache check
-  void clearSoundCacheCheck();
-
-  // clear Select Frame Rate
-  void clearSelectFrameRateCheck();
-
-  // clear Select Monitor No check
-  void clearSelectMonitorNoCheck();
-
-  // disabled Select Monitor No check
-  void disabledSelectMonitor();
-
-  // initialize socket
-  void initSocket();
-
-  // close socket
-  void closeSocket();
-
-  // initialize platform
-  bool initPlatform();
-
-  // shutdown platform
-  bool shutdownPlatform();
-
-private:
   // for logging
   QDateTime bootTime;
 
@@ -850,12 +446,6 @@ private:
 
   // http getter
   HttpGetter *httpGetter;
-
-private slots:
-  // finished download
-  void finishedDownload();
-
-private:
 
   // current path
   QString currentPath;
@@ -934,8 +524,414 @@ private:
   // timer for main thread
   QTimer *timer;
 
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+#if QTB_PUBLIC_MODE6_SUPPORT
+  QtBrynhildr(Option *option, QClipboard *clipboard);
+#else // QTB_PUBLIC_MODE6_SUPPORT
+  QtBrynhildr(Option *option);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+  // destructor
+  ~QtBrynhildr();
+
+  // get settings
+  Settings *getSettings() const
+  {
+	return settings;
+  }
+
+#if QTB_NEW_DESKTOPWINDOW
+  // get graphics view
+  GraphicsView *getGraphicsView() const;
+#else // QTB_NEW_DESKTOPWINDOW
+  // get desktop window
+  DesktopWindow *getDesktopWindow() const;
+#endif // QTB_NEW_DESKTOPWINDOW
+
+  // get desktop panel
+  DesktopPanel *getDesktopPanel() const;
+
+  // shutdown flag
+  bool getShutdownFlag() const;
+
+  // exit full screen
+  void exitFullScreen();
+
+  // get height of title bar
+  int getHeightOfTitleBar();
+
+  // get height of menu bar
+  int getHeightOfMenuBar();
+
+  // get height of status bar
+  int getHeightOfStatusBar();
+
+#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+  // set cursor point color
+  void setCursorPointColor(QRgb cursorPointColor);
+#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // move top of software keyboard
+  void moveTopOfSoftwareKeyboard(int y);
+
+  // move top of software button
+  void moveTopOfSoftwareButton(int y);
+
+  // toggle software keyboard
+  void toggleSoftwareKeyboard();
+  // toggle software button
+  void toggleSoftwareButton();
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
+public slots:
+  // connect to server
+  void connectToServer();
+
+  // connected
+  void connected();
+
+  // refresh window
+  void refreshWindow();
+
+  // refresh menu
+  void refreshMenu();
+
+  // desktop Changed
+  void onDesktopChanged(QImage image);
+
+  // Desktop clear
+  void onDesktopClear();
+
+  // change mouse cursor
+  void changeMouseCursor(const QCursor &cursor);
+
+  // network error handler
+  void onNetworkError(bool doRetry);
+
+  // exit applilcation
+  void exitApplication();
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // set clipboard
+  void setClipboard(QString clipboardString);
+
+  // set progress bar value for transfer file
+  void setFileTransferProgressBarValue(int value);
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // output Log Message
+  void outputLogMessage(int msgID);
+
+  // output Log Message
+  void outputLogMessage(int id, const QString text);
+
+protected:
+#if 0 // for TEST
+  // change event
+  void changeEvent(QEvent *event);
+#endif // for TEST
+
+  // window close event
+  void closeEvent(QCloseEvent *event);
+
+  // window resize event
+  void resizeEvent(QResizeEvent *event);
+
+  // window hide event
+  void hideEvent(QHideEvent *event);
+
+  // window show event
+  void showEvent(QShowEvent *event);
+
+  // context menu event
+  void contextMenuEvent(QContextMenuEvent *event);
+
 private slots:
-  void timerExpired();
+  // popup connect to server dialog
+  void popUpConnectToServer();
+
+  // disconnect to server
+  void popUpDisconnectToServer();
+
+  // reconnect to server
+  void reconnectToServer();
+
+  // disconnect to server
+  void disconnectToServer();
+
+  // finished thread
+  void finishedNetThread();
+
+  // toggle output keyboard log mode
+  void toggleOutputKeyboardLog();
+
+  // toggle output log mode
+  void toggleOutputLog();
+
+  // about dialog
+  void about();
+
+  // check update
+  void checkUpdate();
+
+  // exit from QtBynhildr
+  void exit();
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // send clipboard
+  void sendClipboard();
+
+  // send file
+  void sendFile();
+
+  // cancel file transferring
+  void cancelFileTransferring();
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_PREFERENCE
+  // preferences
+  void preferences();
+#endif // QTB_PREFERENCE
+
+  // set video quality
+  void setVideoQuality_MINIMUM();
+  void setVideoQuality_LOW();
+  void setVideoQuality_STANDARD();
+  void setVideoQuality_HIGH();
+  void setVideoQuality_MAXIMUM();
+
+  // set sound quality
+  void setSoundQuality_MINIMUM();
+  void setSoundQuality_LOW();
+  void setSoundQuality_STANDARD();
+  void setSoundQuality_HIGH();
+  void setSoundQuality_MAXIMUM();
+
+  // set sound cache
+  void setSoundCache_0();
+  void setSoundCache_1();
+  void setSoundCache_2();
+  void setSoundCache_3();
+  void setSoundCache_4();
+  void setSoundCache_5();
+
+  // toggle onControl/onGraphics/onSound
+  void toggleOnControl();
+  void toggleOnGraphics();
+  void toggleOnSound();
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+private:
+  // setup window title
+  void setupWindowTitle();
+  // refresh public mode
+  void refreshPublicMode();
+
+private slots:
+  // select public mode version
+  void selectPublicModeVersion5();
+  void selectPublicModeVersion6();
+#if QTB_PUBLIC_MODE7_SUPPORT
+  void selectPublicModeVersion7();
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+#if QTB_RECORDER
+  // record and replay
+  void startRecordingControl();
+  void stopRecordingControl();
+  void startReplayRecordingControl();
+  void stopReplayRecordingControl();
+#endif // QTB_RECORDER
+
+#if QTB_PLUGINS_DISABLE_SUPPORT
+  // set onPluginsDisable
+  void setOnPluginsDisable();
+#endif // QTB_PLUGINS_DISABLE_SUPPORT
+
+  // send key
+#if 0 // for TEST
+  void sendKey_CTRL_ALT_DEL(); // CTRL + ALT + DEL
+#endif
+  void sendKey_ALT_F4(); // ALT + F4
+  void sendKey_CTRL_ESC(); // CTRL + ESC
+  void sendKey_WINDOWS(); // WINDOWS
+  void sendKey_PrintScreen(); // PrintScreen
+  void sendKey_ALT_PrintScreen(); // ALT + PrintScreen
+
+  // toggle show menu bar
+  void toggleShowMenuBar();
+
+  // toggle show status bar
+  void toggleShowStatusBar();
+
+  // toggle show frame rate
+  void toggleShowFrameRate();
+
+  // full screen
+  void fullScreen();
+
+  // toggle stays on top
+  void toggleStaysOnTop();
+
+  // desktop scale fixed
+  void toggleDesktopScaleFixed();
+
+  // window size fixed
+  void toggleWindowSizeFixed();
+
+  // desktop scaling
+  void desktopScaling();
+
+  // desktop capture
+  void desktopCapture();
+
+  // log view
+  void logView();
+
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // calulate software keyboard layout
+  QRect calculateSoftwareKeyboardLayout();
+
+  // calulate software button layout
+  QRect calculateSoftwareButtonLayout();
+
+  // toggle show software keyboard
+  void toggleShowSoftwareKeyboard();
+
+  // toggle show software button
+  void toggleShowSoftwareButton();
+
+  // setup software keyboard
+  void setupSoftwareKeyboard();
+
+  // setup software button
+  void setupSoftwareButton();
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
+  // select frame rate
+  void selectFrameRate5();
+  void selectFrameRate10();
+  void selectFrameRate20();
+  void selectFrameRate30();
+  void selectFrameRate40();
+  void selectFrameRate50();
+  void selectFrameRate60();
+  void selectFrameRateMaximum();
+
+  // select monitor
+  void setSelectMonitorNo1();
+  void setSelectMonitorNo2();
+  void setSelectMonitorNo3();
+  void setSelectMonitorNo4();
+  void setSelectMonitorNo5();
+  void setSelectMonitorNo6();
+  void setSelectMonitorNo7();
+  void setSelectMonitorNo8();
+  void setSelectMonitorNo9();
+  void setSelectMonitorNoAll();
+
+  // scroll mode
+  void toggleOnScrollMode();
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // touchpanel interface type
+  void touchpanelInterfaceTypeKeroRemote();
+  void touchpanelInterfaceTypeQtBrynhildr();
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
+#if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // visibility changed software keyboard
+  void visibilityChangedSoftwareKeyboard(bool visible);
+
+  // visibility changed software button
+  void visibilityChangedSoftwareButton(bool visible);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+  // desktop compress mode
+  void desktopCompressMode0();
+  void desktopCompressMode2();
+  void desktopCompressMode4();
+  void desktopCompressMode8();
+#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+
+private:
+  // build GUI
+  void createActions();
+  void createMenus();
+  void createContextMenu();
+  void createToolBars();
+  void createStatusBar();
+
+  // settings
+  // read settings from user configuration (registry etc.)
+  void readSettings();
+  // write settings from user configuration (registry etc.)
+  void writeSettings();
+
+  // update status bar
+  void updateStatusBar();
+
+  // update connected
+  void updateConnected();
+
+  // update frame rate
+  void updateFrameRate();
+
+  // disconnected
+  void disconnected();
+
+  // set desktop scaling factor
+  void setDesktopScalingFactor(QSize windowSize);
+
+  // refresh monitor menu
+  void refreshMonitorMenu();
+
+  // video quality
+  void refreshVideoQualityMenu();
+
+  // sound quality
+  void refreshSoundQualityMenu();
+
+#if QTB_RECORDER
+  // recording and replaying
+  void refreshRecordingAndReplayMenu();
+#endif // QTB_RECORDER
+
+  // clear Video Quality check
+  void clearVideoQualityCheck();
+
+  // clear Sound Quality check
+  void clearSoundQualityCheck();
+
+  // clear Sound Cache check
+  void clearSoundCacheCheck();
+
+  // clear Select Frame Rate
+  void clearSelectFrameRateCheck();
+
+  // clear Select Monitor No check
+  void clearSelectMonitorNoCheck();
+
+  // disabled Select Monitor No check
+  void disabledSelectMonitor();
+
+  // initialize socket
+  void initSocket();
+
+  // close socket
+  void closeSocket();
+
+  // initialize platform
+  bool initPlatform();
+
+  // shutdown platform
+  bool shutdownPlatform();
 
 private:
   // check update in background mode
@@ -943,6 +939,12 @@ private:
 
   // output log flag
   bool outputLog;
+
+private slots:
+  // finished download
+  void finishedDownload();
+
+  void timerExpired();
 };
 
 } // end of namespace qtbrynhildr

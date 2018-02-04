@@ -17,6 +17,31 @@ struct KeyInfo {
 // KeyBuffer
 class KeyBuffer
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // buffer
+  KeyInfo *buffer;
+
+  // buffer size
+  int bufferSize;
+
+  // buffer top index
+  int topPos;
+
+  // buffer next index
+  int nextPos;
+
+  // enabled flag
+  bool enabled;
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   KeyBuffer(int size);
@@ -41,24 +66,6 @@ public:
 	this->enabled = enabled;
   }
 
-private:
-  // buffer
-  KeyInfo *buffer;
-
-  // buffer size
-  int bufferSize;
-
-  // buffer top index
-  int topPos;
-
-  // buffer next index
-  int nextPos;
-
-  // enabled flag
-  bool enabled;
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

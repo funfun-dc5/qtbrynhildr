@@ -23,6 +23,19 @@ namespace qtbrynhildr {
 
 // Cipher
 class Cipher {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  ECB_Mode<DES>::Encryption encctx;
+  ECB_Mode<DES>::Decryption decctx;
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // contructor
   Cipher(const char *key);
@@ -32,13 +45,6 @@ public:
 
   // decode string
   string decodeString(string encoded);
-
-private:
-  ECB_Mode<DES>::Encryption encctx;
-  ECB_Mode<DES>::Decryption decctx;
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

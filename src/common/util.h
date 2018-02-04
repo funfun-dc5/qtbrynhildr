@@ -17,7 +17,7 @@ using namespace std;
 #define ASSERT(cond) \
   {																		\
 	if (!(cond)) {														\
-	  cout << "Assertion FAIL : "    << __FILE__ << " : LINE : " << __LINE__ << endl; \
+	  cout << "Assertion FAIL : "    << __FILE__ << " : LINE : " << dec << __LINE__ << endl; \
 	  ::exit(EXIT_FAILURE);												\
 	}																	\
   }
@@ -28,7 +28,7 @@ using namespace std;
 // Abort Macro
 #define ABORT() \
   { \
-	cout << "Internal Error : "    << __FILE__ << " : LINE : " << __LINE__ << endl; \
+	cout << "Internal Error : "    << __FILE__ << " : LINE : " << dec << __LINE__ << endl; \
 	::exit(EXIT_FAILURE);												\
   }
 

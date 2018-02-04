@@ -26,6 +26,39 @@ class SB : public SoftwareButton
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // mouse buffer
+  MouseBuffer *mouseBuffer;
+
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
+
+  // settings
+  Settings *settings;
+
+  // previous click button
+  MouseInfoType previousClick;
+
+  // previous click time
+  QDateTime previousClickTime;
+
+  // mouse left button
+  bool pressedMouseLeftButton;
+
+#if QTB_NEW_DESKTOPWINDOW
+  // graphics view
+  GraphicsView *graphicsView;
+#endif // QTB_NEW_DESKTOPWINDOW
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent);
@@ -56,33 +89,6 @@ protected:
   // hide event
   virtual void hideEvent(QHideEvent *event) override;
 #endif // defined(QTB_DEV_TOUCHPANEL)
-
-private:
-  // mouse buffer
-  MouseBuffer *mouseBuffer;
-
-  // qtbrynhildr
-  QtBrynhildr *qtbrynhildr;
-
-  // settings
-  Settings *settings;
-
-  // previous click button
-  MouseInfoType previousClick;
-
-  // previous click time
-  QDateTime previousClickTime;
-
-  // mouse left button
-  bool pressedMouseLeftButton;
-
-#if QTB_NEW_DESKTOPWINDOW
-  // graphics view
-  GraphicsView *graphicsView;
-#endif // QTB_NEW_DESKTOPWINDOW
-
-  // output log flag
-  bool outputLog;
 
 signals:
   // refresh menu

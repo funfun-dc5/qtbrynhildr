@@ -41,6 +41,43 @@ class GraphicsView : public QGraphicsView
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
+
+  // settings
+  Settings *settings;
+
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
+  // key buffer
+  KeyBuffer *keyBuffer;
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // for software button
+  QRect softwareButtonRect;
+
+  // for software keyboard
+  QRect softwareKeyboardRect;
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
+  // scaling factor
+  qreal scalingFactor;
+  // scaling factor for fullscreen
+  qreal scalingFactorForFullScreen;
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
@@ -127,38 +164,6 @@ private:
   // native event filter
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 #endif // defined(Q_OS_WIN)
-
-private:
-  // qtbrynhildr
-  QtBrynhildr *qtbrynhildr;
-
-  // settings
-  Settings *settings;
-
-  // desktop panel
-  DesktopPanel *desktopPanel;
-
-  // key buffer
-  KeyBuffer *keyBuffer;
-
-#if defined(QTB_DEV_TOUCHPANEL)
-  // for software button
-  QRect softwareButtonRect;
-
-  // for software keyboard
-  QRect softwareKeyboardRect;
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
-  // scaling factor
-  qreal scalingFactor;
-  // scaling factor for fullscreen
-  qreal scalingFactorForFullScreen;
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
-
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

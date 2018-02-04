@@ -19,6 +19,22 @@ class ConfirmDialog : public QDialog, public Ui::ConfirmDialog
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // confirm flag
+  bool confirmFlag;
+
+  // settings
+  Settings *settings;
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   ConfirmDialog(QString msg, bool confirmFlag, Settings *settings, QWidget *parent = 0);
@@ -36,16 +52,6 @@ private:
 private slots:
   // confirm field
   void on_checkBox_confirm_stateChanged(int state);
-
-private:
-  // confirm flag
-  bool confirmFlag;
-
-  // settings
-  Settings *settings;
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

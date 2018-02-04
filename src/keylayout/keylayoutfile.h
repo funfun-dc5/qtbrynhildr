@@ -57,16 +57,9 @@ class KeyLayoutFile
   friend class EventConverter;
   friend class SoftwareKeyboard;
 
-public:
-  // constructor
-  KeyLayoutFile(const char *layoutFileImage);
-  // destructor
-  ~KeyLayoutFile();
-
-public:
-  // get name of key layout
-  const char *getName();
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 private:
   // pointer of KFL image
   const char *klfImage;
@@ -91,6 +84,18 @@ private:
 
   // pointer of key top table entry
   SoftwareKeyboard::KeyTop *keyTopTable;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  KeyLayoutFile(const char *layoutFileImage);
+  // destructor
+  ~KeyLayoutFile();
+
+  // get name of key layout
+  const char *getName();
 };
 
 } // end of namespace qtbrynhildr

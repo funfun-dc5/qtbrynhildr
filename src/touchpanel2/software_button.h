@@ -20,50 +20,9 @@ namespace qtbrynhildr {
 // SoftwareButton
 class SoftwareButton : public QWidget
 {
-public:
-  // constructor
-  SoftwareButton(QWidget *parent = 0);
-  // destructor
-  //  virtual ~SoftwareButton();
-
-  // reset size
-  QSize resetSize();
-
-#if 0
-  // minimum size hint
-  QSize minimumSizeHint() const;
-#endif
-
-  // size hint
-  QSize sizeHint() const;
-
-  // set current frame rate
-  void setCurrentFrameRate(double currentFrameRate)
-  {
-	this->currentFrameRate = currentFrameRate;
-  }
-
-  // set current data rate
-  void setCurrentDataRate(double currentDataRate)
-  {
-	this->currentDataRate = currentDataRate;
-  }
-
-protected:
-  // paint event
-  void paintEvent(QPaintEvent *event);
-
-  // resize event
-  void resizeEvent(QResizeEvent *event);
-
-  // is on button
-  bool isOnButton() const;
-
-  // mouse event
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
-  virtual void mouseMoveEvent(QMouseEvent *event);
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 protected:
   // button id
   typedef enum {
@@ -109,45 +68,6 @@ protected:
 	ID_BUTTON_0 = ID_BUTTON_NUM
   } ID_BUTTON;
 
-protected:
-  // pressed button
-  virtual void pressedButton(ID_BUTTON id);
-
-  // released button
-  virtual void releasedButton(ID_BUTTON id);
-
-private:
-  // calculate layout
-  void calculateLayout(qreal xFactor, qreal yFactor);
-
-  // get ID
-  ID_BUTTON getID(QPoint pos);
-
-  // clear buttons
-  void clearButtons();
-
-  // toggle option button
-  void toggleOptionButton();
-
-  // toggle sound button
-  void toggleShowSoundButton();
-
-  // toggle sound quality button
-  void toggleShowSoundQualityButton();
-
-  // toggle video quality button
-  void toggleShowVideoQualityButton();
-
-  // toggle sound cache button
-  void toggleShowSoundCacheButton();
-
-  // toggle public mode button
-  void toggleShowPublicModeButton();
-
-  // toggle video FPS button
-  void toggleShowVideoFPSButton();
-
-protected:
   // button top
   typedef struct {
 	QString buttonTop;
@@ -311,6 +231,91 @@ private:
 
   // output log flag
   bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  SoftwareButton(QWidget *parent = 0);
+  // destructor
+  //  virtual ~SoftwareButton();
+
+  // reset size
+  QSize resetSize();
+
+#if 0
+  // minimum size hint
+  QSize minimumSizeHint() const;
+#endif
+
+  // size hint
+  QSize sizeHint() const;
+
+  // set current frame rate
+  void setCurrentFrameRate(double currentFrameRate)
+  {
+	this->currentFrameRate = currentFrameRate;
+  }
+
+  // set current data rate
+  void setCurrentDataRate(double currentDataRate)
+  {
+	this->currentDataRate = currentDataRate;
+  }
+
+protected:
+  // paint event
+  void paintEvent(QPaintEvent *event);
+
+  // resize event
+  void resizeEvent(QResizeEvent *event);
+
+  // is on button
+  bool isOnButton() const;
+
+  // mouse event
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseReleaseEvent(QMouseEvent *event);
+  virtual void mouseMoveEvent(QMouseEvent *event);
+
+protected:
+  // pressed button
+  virtual void pressedButton(ID_BUTTON id);
+
+  // released button
+  virtual void releasedButton(ID_BUTTON id);
+
+private:
+  // calculate layout
+  void calculateLayout(qreal xFactor, qreal yFactor);
+
+  // get ID
+  ID_BUTTON getID(QPoint pos);
+
+  // clear buttons
+  void clearButtons();
+
+  // toggle option button
+  void toggleOptionButton();
+
+  // toggle sound button
+  void toggleShowSoundButton();
+
+  // toggle sound quality button
+  void toggleShowSoundQualityButton();
+
+  // toggle video quality button
+  void toggleShowVideoQualityButton();
+
+  // toggle sound cache button
+  void toggleShowSoundCacheButton();
+
+  // toggle public mode button
+  void toggleShowPublicModeButton();
+
+  // toggle video FPS button
+  void toggleShowVideoFPSButton();
 };
 
 } // end of namespace qtbrynhildr

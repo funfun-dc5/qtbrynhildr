@@ -44,6 +44,19 @@ class LogMessage : public QMessageBox
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // log file
+  QFile	*logFile;
+
+  // log file stream
+  QTextStream *logFileStream;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   LogMessage(QWidget *parent);
@@ -89,13 +102,6 @@ public:
 private:
   // check log file stream
   bool hasValidLogFileStream() const;
-
-private:
-  // log file
-  QFile	*logFile;
-
-  // log file stream
-  QTextStream *logFileStream;
 };
 
 } // end of namespace qtbrynhildr

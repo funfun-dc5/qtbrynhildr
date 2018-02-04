@@ -61,60 +61,9 @@ class GraphicsThread : public NetThread
 {
   Q_OBJECT
 
-public:
-  // constructor
-  GraphicsThread(Settings *settings, DesktopPanel *desktopPanel = 0);
-  // destructor
-  ~GraphicsThread();
-
-  // get frame rate
-  double getFrameRate();
-
-  // get total frame counter
-  unsigned int getTotalFrameCounter() const
-  {
-	return totalFrameCounter;
-  }
-
-protected:
-  // connect to server
-  CONNECT_RESULT connectToServer();
-
-  // process for header
-  PROCESS_RESULT processForHeader();
-
-  // transmit local buffer to global buffer
-  TRANSMIT_RESULT transmitBuffer();
-
-  // connected
-  void connectedToServer();
-
-  // shutdown connection
-  void shutdownConnection();
-
-#if QTB_PUBLIC_MODE7_SUPPORT
-private:
-  // setup for yuv420, rgb24
-  inline bool setup();
-
-  // make YUV420 image
-  inline bool makeYUV420Image();
-
-  // make RGB24 image
-  inline int makeRGB24Image();
-
-  // convert YUV420 to RGB24 (Full Convert)
-  int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
-
-  // clip
-  int clip(int val)
-  {
-	if (val < 0) return 0;
-	if (val > 255) return 255;
-	return val;
-  }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 private:
   // image for desktop
   QImage *image;
@@ -181,9 +130,65 @@ private:
 
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
-private:
   // local buffer
   char *buffer;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  GraphicsThread(Settings *settings, DesktopPanel *desktopPanel = 0);
+  // destructor
+  ~GraphicsThread();
+
+  // get frame rate
+  double getFrameRate();
+
+  // get total frame counter
+  unsigned int getTotalFrameCounter() const
+  {
+	return totalFrameCounter;
+  }
+
+protected:
+  // connect to server
+  CONNECT_RESULT connectToServer();
+
+  // process for header
+  PROCESS_RESULT processForHeader();
+
+  // transmit local buffer to global buffer
+  TRANSMIT_RESULT transmitBuffer();
+
+  // connected
+  void connectedToServer();
+
+  // shutdown connection
+  void shutdownConnection();
+
+#if QTB_PUBLIC_MODE7_SUPPORT
+private:
+  // setup for yuv420, rgb24
+  inline bool setup();
+
+  // make YUV420 image
+  inline bool makeYUV420Image();
+
+  // make RGB24 image
+  inline int makeRGB24Image();
+
+  // convert YUV420 to RGB24 (Full Convert)
+  int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+
+  // clip
+  int clip(int val)
+  {
+	if (val < 0) return 0;
+	if (val > 255) return 255;
+	return val;
+  }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 signals:
   // desktop Changed

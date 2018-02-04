@@ -13,6 +13,31 @@ namespace qtbrynhildr {
 // SoundBuffer
 class SoundBuffer
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // local buffer
+  char *buffer;
+
+  // local buffer for copying 2 region
+  char *pairBuffer;
+
+  // buffer size
+  int bufferSize;
+
+  // buffer top index
+  int topPos;
+
+  // buffer next index
+  int nextPos;
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   SoundBuffer(int size);
@@ -33,25 +58,6 @@ public:
 
   // get available data size (max size = len)
   long size(int len) const;
-
-private:
-  // local buffer
-  char *buffer;
-
-  // local buffer for copying 2 region
-  char *pairBuffer;
-
-  // buffer size
-  int bufferSize;
-
-  // buffer top index
-  int topPos;
-
-  // buffer next index
-  int nextPos;
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

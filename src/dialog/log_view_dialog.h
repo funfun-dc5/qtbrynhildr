@@ -19,6 +19,22 @@ class LogViewDialog : public QDialog, public Ui::LogViewDialog
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // top position of log
+  qint64 topPos;
+
+  // last position of log
+  qint64 lastPos;
+
+  // settings
+  Settings *settings;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   LogViewDialog(Settings *settings, QWidget *parent = 0);
@@ -42,16 +58,6 @@ private:
 private slots:
   // reset
   void on_buttonBox_clicked(QAbstractButton *button);
-
-private:
-  // top position of log
-  qint64 topPos;
-
-  // last position of log
-  qint64 lastPos;
-
-  // settings
-  Settings *settings;
 };
 
 } // end of namespace qtbrynhildr

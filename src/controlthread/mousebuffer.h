@@ -41,6 +41,34 @@ typedef struct {
 // MouseBuffer
 class MouseBuffer
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // buffer
+  MouseInfo *buffer;
+
+  // buffer size
+  int bufferSize;
+
+  // buffer top index
+  int topPos;
+
+  // buffer next index
+  int nextPos;
+
+  // mouse position
+  MOUSE_POS pos;
+
+  // enabled flag
+  bool enabled;
+
+  // output log flag
+  const bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   MouseBuffer(int size);
@@ -70,28 +98,6 @@ public:
 
   // get mouse position
   MOUSE_POS getMousePos() const;
-
-private:
-  // buffer
-  MouseInfo *buffer;
-
-  // buffer size
-  int bufferSize;
-
-  // buffer top index
-  int topPos;
-
-  // buffer next index
-  int nextPos;
-
-  // mouse position
-  MOUSE_POS pos;
-
-  // enabled flag
-  bool enabled;
-
-  // output log flag
-  const bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

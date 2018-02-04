@@ -24,6 +24,30 @@ class QtBrynhildr;
 // SoftwareKeyboard
 class SK : public SoftwareKeyboard
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // key buffer
+  KeyBuffer *keyBuffer;
+
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
+
+  // settings
+  Settings *settings;
+
+#if QTB_NEW_DESKTOPWINDOW
+  // graphics view
+  GraphicsView *graphicsView;
+#endif // QTB_NEW_DESKTOPWINDOW
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent);
@@ -55,24 +79,6 @@ protected:
   virtual void mouseReleaseEvent(QMouseEvent *event) override;
   virtual void mouseMoveEvent(QMouseEvent *event) override;
 #endif // QTB_NEW_DESKTOPWINDOW
-
-private:
-  // key buffer
-  KeyBuffer *keyBuffer;
-
-  // qtbrynhildr
-  QtBrynhildr *qtbrynhildr;
-
-  // settings
-  Settings *settings;
-
-#if QTB_NEW_DESKTOPWINDOW
-  // graphics view
-  GraphicsView *graphicsView;
-#endif // QTB_NEW_DESKTOPWINDOW
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

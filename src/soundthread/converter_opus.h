@@ -17,15 +17,9 @@ namespace qtbrynhildr {
 // Converter
 class Converter_CELT : public Converter
 {
-public:
-  // constructor
-  Converter_CELT(int samplerate, int channels);
-  // destructor
-  ~Converter_CELT();
-
-  // convert to PCM
-  int convertToPCM(char *buffer, int size);
-
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 private:
   // frame size
   int frameSize;
@@ -38,6 +32,18 @@ private:
 
   // work buffer
   char *workBuffer;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  Converter_CELT(int samplerate, int channels);
+  // destructor
+  ~Converter_CELT();
+
+  // convert to PCM
+  int convertToPCM(char *buffer, int size);
 };
 
 } // end of namespace qtbrynhildr

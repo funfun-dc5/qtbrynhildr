@@ -20,6 +20,25 @@ class PreferenceDialog : public QDialog, public Ui::PreferenceDialog
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // settings
+  Settings *settings;
+
+  // changed flag
+  bool changed;
+
+  // check result
+  bool resultOfSetToSettings;
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   PreferenceDialog(Settings *settings, QWidget *parent = 0);
@@ -106,7 +125,6 @@ private slots:
 
   void on_checkBox_onGamePadSupport_stateChanged(int state);
 
-
   void on_pushButton_keylayoutPath_clicked();
 
   void on_pushButton_outputPath_clicked();
@@ -114,19 +132,6 @@ private slots:
   void on_pushButton_logFile_clicked();
 
   void on_pushButton_keyboardLogFile_clicked();
-
-private:
-  // settings
-  Settings *settings;
-
-  // changed flag
-  bool changed;
-
-  // check result
-  bool resultOfSetToSettings;
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

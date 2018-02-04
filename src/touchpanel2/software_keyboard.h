@@ -35,6 +35,9 @@ class SoftwareKeyboard : public QWidget
   friend class KeyLayoutFile;
 #endif // USE_KEYLAYOUTFILE
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
 public:
   // keyboard type
   typedef enum {
@@ -46,62 +49,6 @@ public:
   } KEYTOP_TYPE;
 
 #include "keytop.h"
-
-public:
-  // constructor
-  SoftwareKeyboard(QWidget *parent = 0);
-  SoftwareKeyboard(KEYTOP_TYPE type, QWidget *parent = 0);
-#ifdef USE_KEYLAYOUTFILE
-  SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = 0);
-#endif // USE_KEYLAYOUTFILE
-  // destructor
-  virtual ~SoftwareKeyboard();
-
-  // get keytop type
-  KEYTOP_TYPE getKeytopType();
-
-  // get keytop type name
-  QString getKeytopTypeName();
-
-  // set keytop type
-  void setKeytopType(KEYTOP_TYPE type);
-
-#ifdef USE_KEYLAYOUTFILE
-  // set keytop type by key layout file
-  void setKeytopType(KeyLayoutFile *klf);
-#endif // USE_KEYLAYOUTFILE
-
-  // reset size
-  QSize resetSize();
-
-#if 0
-  // minimum size hint
-  QSize minimumSizeHint() const;
-#endif
-
-  // size hint
-  QSize sizeHint() const;
-
-protected:
-  // paint event
-  void paintEvent(QPaintEvent *event);
-
-  // resize event
-  void resizeEvent(QResizeEvent *event);
-
-  // is on button
-  bool isOnButton() const;
-
-  // mouse event
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
-  virtual void mouseMoveEvent(QMouseEvent *event);
-
-  // key down
-  virtual void keyDown(uchar key);
-
-  // key up
-  virtual void keyUp(uchar key);
 
 protected:
   // key id
@@ -186,40 +133,6 @@ protected:
 	ID_KEY_RFn		= ID_KEY_64,
 	ID_KEY_Fn		= ID_KEY_68
   } ID_KEY;
-
-protected:
-  // pressed key
-  virtual void pressedKey(ID_KEY id);
-
-  // released key
-  virtual void releasedKey(ID_KEY id);
-
-private:
-  // calculate layout
-  void calculateLayout(qreal xFactor, qreal yFactor);
-
-  // get ID
-  ID_KEY getID(QPoint pos) const;
-
-  // shift key
-  uchar pressedShiftKey(ID_KEY id);
-
-  // control key
-  uchar pressedControlKey(ID_KEY id);
-
-  // alt key
-  uchar pressedAltKey(ID_KEY id);
-
-  // Fn key
-  uchar pressedFnKey(ID_KEY id);
-
-  // get name of virtual keycode
-  static string getVKCodeByString(uchar vkcode);
-
-#if QTB_DEBUG
-  // print KeyTop
-  static void printKeyTop(KeyTop *keyTop);
-#endif // QTB_DEBUG
 
 private:
   // original size for layout
@@ -536,6 +449,99 @@ private:
 
   // output log flag
   bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
+public:
+  // constructor
+  SoftwareKeyboard(QWidget *parent = 0);
+  SoftwareKeyboard(KEYTOP_TYPE type, QWidget *parent = 0);
+#ifdef USE_KEYLAYOUTFILE
+  SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = 0);
+#endif // USE_KEYLAYOUTFILE
+  // destructor
+  virtual ~SoftwareKeyboard();
+
+  // get keytop type
+  KEYTOP_TYPE getKeytopType();
+
+  // get keytop type name
+  QString getKeytopTypeName();
+
+  // set keytop type
+  void setKeytopType(KEYTOP_TYPE type);
+
+#ifdef USE_KEYLAYOUTFILE
+  // set keytop type by key layout file
+  void setKeytopType(KeyLayoutFile *klf);
+#endif // USE_KEYLAYOUTFILE
+
+  // reset size
+  QSize resetSize();
+
+#if 0
+  // minimum size hint
+  QSize minimumSizeHint() const;
+#endif
+
+  // size hint
+  QSize sizeHint() const;
+
+protected:
+  // paint event
+  void paintEvent(QPaintEvent *event);
+
+  // resize event
+  void resizeEvent(QResizeEvent *event);
+
+  // is on button
+  bool isOnButton() const;
+
+  // mouse event
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseReleaseEvent(QMouseEvent *event);
+  virtual void mouseMoveEvent(QMouseEvent *event);
+
+  // key down
+  virtual void keyDown(uchar key);
+
+  // key up
+  virtual void keyUp(uchar key);
+
+protected:
+  // pressed key
+  virtual void pressedKey(ID_KEY id);
+
+  // released key
+  virtual void releasedKey(ID_KEY id);
+
+private:
+  // calculate layout
+  void calculateLayout(qreal xFactor, qreal yFactor);
+
+  // get ID
+  ID_KEY getID(QPoint pos) const;
+
+  // shift key
+  uchar pressedShiftKey(ID_KEY id);
+
+  // control key
+  uchar pressedControlKey(ID_KEY id);
+
+  // alt key
+  uchar pressedAltKey(ID_KEY id);
+
+  // Fn key
+  uchar pressedFnKey(ID_KEY id);
+
+  // get name of virtual keycode
+  static string getVKCodeByString(uchar vkcode);
+
+#if QTB_DEBUG
+  // print KeyTop
+  static void printKeyTop(KeyTop *keyTop);
+#endif // QTB_DEBUG
 };
 
 } // end of namespace qtbrynhildr

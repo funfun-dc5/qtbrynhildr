@@ -16,6 +16,42 @@ namespace qtbrynhildr {
 // Desktop
 class Desktop
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // desktop informaation
+  QDesktopWidget *desktop;
+
+  // current screen number
+  int currentScreenNumber;
+
+  // current screen
+  QRect currentScreen;
+
+  // max image size
+  unsigned long maxImageDataSize;
+
+#if !QTB_NEW_DESKTOPWINDOW
+  // correct window width
+  int correctWindowWidth;
+
+  // correct window height
+  int correctWindowHeight;
+#endif // !QTB_NEW_DESKTOPWINDOW
+
+  // height of menu bar in hiding
+  int heightOfMenuBarInHiding;
+
+  // height of status bar in hiding
+  int heightOfStatusBarInHiding;
+
+  // output log flag
+  const bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   Desktop();
@@ -68,36 +104,6 @@ public:
   {
 	return heightOfStatusBarInHiding;
   }
-
-private:
-  // desktop informaation
-  QDesktopWidget *desktop;
-
-  // current screen number
-  int currentScreenNumber;
-
-  // current screen
-  QRect currentScreen;
-
-  // max image size
-  unsigned long maxImageDataSize;
-
-#if !QTB_NEW_DESKTOPWINDOW
-  // correct window width
-  int correctWindowWidth;
-
-  // correct window height
-  int correctWindowHeight;
-#endif // !QTB_NEW_DESKTOPWINDOW
-
-  // height of menu bar in hiding
-  int heightOfMenuBarInHiding;
-
-  // height of status bar in hiding
-  int heightOfStatusBarInHiding;
-
-  // output log flag
-  const bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

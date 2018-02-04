@@ -31,6 +31,27 @@ class ConnectToServerDialog : public QDialog, public Ui::ConnectToServerDialog
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // settings
+  Settings *settings;
+
+#if QTB_AUTO_COMPLETE
+  // server name list
+  QStringList *serverNameList;
+
+  // completer
+  QCompleter *completer;
+#endif // QTB_AUTO_COMPLETE
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   ConnectToServerDialog(Settings *settings, QWidget *parent = 0);
@@ -80,21 +101,6 @@ private slots:
 signals:
   // connect to server
   void connectToServer();
-
-private:
-  // settings
-  Settings *settings;
-
-#if QTB_AUTO_COMPLETE
-  // server name list
-  QStringList *serverNameList;
-
-  // completer
-  QCompleter *completer;
-#endif // QTB_AUTO_COMPLETE
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

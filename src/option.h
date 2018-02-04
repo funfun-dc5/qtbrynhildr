@@ -11,6 +11,70 @@ namespace qtbrynhildr {
 // Option
 class Option
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // public mode version
+  int publicModeVersion;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // server name
+  const char *serverName;
+
+  // port no
+  int portNo;
+
+  // password
+  const char *password;
+
+  // host type
+  const char *hostType;
+
+  // ini filename
+  char *iniFileName;
+
+  // init flag
+  bool initFlag;
+
+  // debug
+  const char *debug;
+
+  // full screen flag
+  bool fullScreenFlag;
+
+#if QTB_CELT_SUPPORT
+  // CELT flag
+  bool celtFlag;
+#endif // QTB_CELT_SUPPORT
+
+#if QTB_RECORDER
+  // recording flag
+  bool recordingFlag;
+
+  // recording filename
+  const char *recordingFileName;
+
+  // replaying flag
+  bool replayingFlag;
+
+  // replaying filename
+  const char *replayingFileName;
+#endif // QTB_RECORDER
+
+  // no translation flag
+  bool noTransFlag;
+
+  // bootup flag
+  bool bootupFlag;
+
+  // shutdown flag
+  bool shutdownFlag;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   Option(int argc, char *argv[]);
@@ -149,64 +213,6 @@ private:
 
   // print help messages
   void printHelp() const;
-
-private:
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // public mode version
-  int publicModeVersion;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-  // server name
-  const char *serverName;
-
-  // port no
-  int portNo;
-
-  // password
-  const char *password;
-
-  // host type
-  const char *hostType;
-
-  // ini filename
-  char *iniFileName;
-
-  // init flag
-  bool initFlag;
-
-  // debug
-  const char *debug;
-
-  // full screen flag
-  bool fullScreenFlag;
-
-#if QTB_CELT_SUPPORT
-  // CELT flag
-  bool celtFlag;
-#endif // QTB_CELT_SUPPORT
-
-#if QTB_RECORDER
-  // recording flag
-  bool recordingFlag;
-
-  // recording filename
-  const char *recordingFileName;
-
-  // replaying flag
-  bool replayingFlag;
-
-  // replaying filename
-  const char *replayingFileName;
-#endif // QTB_RECORDER
-
-  // no translation flag
-  bool noTransFlag;
-
-  // bootup flag
-  bool bootupFlag;
-
-  // shutdown flag
-  bool shutdownFlag;
 };
 
 }

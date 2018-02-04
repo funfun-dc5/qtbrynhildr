@@ -15,11 +15,9 @@
 #endif // QTB_RECORDER
 #include "keybuffer.h"
 #include "mousebuffer.h"
-#if QTB_PUBLIC_MODE6_SUPPORT
-#include "parameters.h"
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include "settings.h"
 #if QTB_PUBLIC_MODE6_SUPPORT
+#include "parameters.h"
 #include "windows/ntfs.h"
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -30,6 +28,78 @@ class ControlThread : public NetThread
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  // server version
+  SERVER_VERSION serverVersion;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // current mode
+  PUBLICMODE_VERSION currentMode;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  // keyboard buffer
+  KeyBuffer *keyBuffer;
+
+  // mouse buffer
+  MouseBuffer *mouseBuffer;
+
+#if QTB_RECORDER
+  // recorder
+  Recorder *recorder;
+#endif // QTB_RECORDER
+
+  // mouse position
+  MOUSE_POS prevPos;
+
+  // SHIFT key status
+  KEYDOWN keydownSHIFT;
+  // ALT key status
+  KEYDOWN keydownALT;
+  // CONTROL key status
+  KEYDOWN keydownCONTROL;
+
+  // monitor count
+  MONITOR_COUNT monitorCount;
+
+  // sent mode
+  MODE sentMode;
+
+  // done check password flag
+  bool doneCheckPassword;
+
+#if QTB_PUBLIC_MODE7_SUPPORT
+  // mouse cursor image data (4096 bytes * 2)
+  uchar andMaskImage[4096];
+  uchar xorMaskImage[4096];
+
+#if !defined(Q_OS_WIN)
+  // cursor point color
+  QRgb cursorPointColor;
+#endif // !defined(Q_OS_WIN)
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // local buffer
+  char *buffer;
+
+  // clipboard top address
+  char *clipboardTop;
+
+  // transfer file progress
+  qint64 transferFileProgress;
+  // send file progress unit
+  qint64 transferFileProgressUnit;
+
+  // ntfs utility
+  NTFS *ntfs;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
 #if QTB_RECORDER
@@ -137,42 +207,6 @@ private:
 	*ptr   = (BYTE)(value >> 0)  & 0xFF;
   }
 
-private:
-  // server version
-  SERVER_VERSION serverVersion;
-
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // current mode
-  PUBLICMODE_VERSION currentMode;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-  // keyboard buffer
-  KeyBuffer *keyBuffer;
-
-  // mouse buffer
-  MouseBuffer *mouseBuffer;
-
-#if QTB_RECORDER
-  // recorder
-  Recorder *recorder;
-#endif // QTB_RECORDER
-
-  // mouse position
-  MOUSE_POS prevPos;
-
-  // SHIFT key status
-  KEYDOWN keydownSHIFT;
-  // ALT key status
-  KEYDOWN keydownALT;
-  // CONTROL key status
-  KEYDOWN keydownCONTROL;
-
-  // monitor count
-  MONITOR_COUNT monitorCount;
-
-  // sent mode
-  MODE sentMode;
-
 signals:
   // connected
   void connected();
@@ -195,38 +229,6 @@ signals:
 
   // set progress bar value for transfer file
   void setFileTransferProgressBarValue(int value);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-private:
-  // done check password flag
-  bool doneCheckPassword;
-
-#if QTB_PUBLIC_MODE7_SUPPORT
-  // mouse cursor image data (4096 bytes * 2)
-  uchar andMaskImage[4096];
-  uchar xorMaskImage[4096];
-
-#if !defined(Q_OS_WIN)
-  // cursor point color
-  QRgb cursorPointColor;
-#endif // !defined(Q_OS_WIN)
-#endif // QTB_PUBLIC_MODE7_SUPPORT
-
-#if QTB_PUBLIC_MODE6_SUPPORT
-private:
-  // local buffer
-  char *buffer;
-
-  // clipboard top address
-  char *clipboardTop;
-
-  // transfer file progress
-  qint64 transferFileProgress;
-  // send file progress unit
-  qint64 transferFileProgressUnit;
-
-  // ntfs utility
-  NTFS *ntfs;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 };
 

@@ -40,6 +40,72 @@ class QtBrynhildr;
 // DesktopPanel
 class DesktopPanel
 {
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+protected:
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
+
+  // settings
+  Settings *settings;
+
+  // image
+  QImage image;
+
+  // window size
+  QSize currentSize;
+
+  // previous window size
+  QSize previousSize;
+
+  // real desktop size
+  QSize desktopSize;
+
+  // event converter
+  EventConverter *eventConverter;
+
+  // on shift key
+  bool onShiftKey;
+
+  // keyboard buffer
+  KeyBuffer *keyBuffer;
+
+  // mouse buffer
+  MouseBuffer *mouseBuffer;
+
+  // current mouse position
+  QPoint currentMousePos;
+
+  // full screen flag
+  bool onFullScreen;
+
+  // draw marker counter
+  int drawMarkerCounter;
+
+#if defined(Q_OS_OSX)
+  // previous KEYCODE_FLG
+  KEYCODE_FLG previous_KEYCODE_FLG;
+#endif // defined(Q_OS_OSX)
+
+  // keyboard log file
+  QFile	*keyboardLogFile;
+
+  // keyboard log file stream
+  QTextStream *keyboardLogFileStream;
+
+  // output log flag for keyboard
+  bool outputLogForKeyboard;
+
+  // output log flag for mouse
+  bool outputLogForMouse;
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   DesktopPanel(QtBrynhildr *qtbrynhildr);
@@ -153,66 +219,6 @@ private:
 
   // get desktop scaling factor
   qreal getDesktopScalingFactor(QSize targetSize);
-
-protected:
-  // qtbrynhildr
-  QtBrynhildr *qtbrynhildr;
-
-  // settings
-  Settings *settings;
-
-  // image
-  QImage image;
-
-  // window size
-  QSize currentSize;
-
-  // previous window size
-  QSize previousSize;
-
-  // real desktop size
-  QSize desktopSize;
-
-  // event converter
-  EventConverter *eventConverter;
-
-  // on shift key
-  bool onShiftKey;
-
-  // keyboard buffer
-  KeyBuffer *keyBuffer;
-
-  // mouse buffer
-  MouseBuffer *mouseBuffer;
-
-  // current mouse position
-  QPoint currentMousePos;
-
-  // full screen flag
-  bool onFullScreen;
-
-  // draw marker counter
-  int drawMarkerCounter;
-
-#if defined(Q_OS_OSX)
-  // previous KEYCODE_FLG
-  KEYCODE_FLG previous_KEYCODE_FLG;
-#endif // defined(Q_OS_OSX)
-
-  // keyboard log file
-  QFile	*keyboardLogFile;
-
-  // keyboard log file stream
-  QTextStream *keyboardLogFileStream;
-
-  // output log flag for keyboard
-  bool outputLogForKeyboard;
-
-  // output log flag for mouse
-  bool outputLogForMouse;
-
-  // output log flag
-  bool outputLog;
 };
 
 } // end of namespace qtbrynhildr

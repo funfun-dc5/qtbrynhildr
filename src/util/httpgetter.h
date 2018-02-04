@@ -26,6 +26,23 @@ class HttpGetter : public QObject
 {
   Q_OBJECT
 
+  //-------------------------------------------------------------------------------
+  // Variable
+  //-------------------------------------------------------------------------------
+private:
+  QUrl url;
+  QNetworkAccessManager networkAccessManager;
+  QNetworkReply *reply;
+  QFile *file;
+  QByteArray byteArray;
+  bool httpRequestAborted;
+
+  // output log flag
+  bool outputLog;
+
+  //-------------------------------------------------------------------------------
+  // Function
+  //-------------------------------------------------------------------------------
 public:
   // constructor
   HttpGetter(QObject *parent = 0);
@@ -49,10 +66,6 @@ public:
   // check support OpenSSL
   bool supportsSsl();
 
-signals:
-  //
-  void finished();
-
 private:
   // open file for download
   QFile *openFileForWrite(const QString &fileName);
@@ -66,16 +79,9 @@ private slots:
   void slotAuthenticationRequired(QNetworkReply *reply, QAuthenticator *authenthicator);
   void sslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
 
-private:
-  QUrl url;
-  QNetworkAccessManager networkAccessManager;
-  QNetworkReply *reply;
-  QFile *file;
-  QByteArray byteArray;
-  bool httpRequestAborted;
-
-  // output log flag
-  bool outputLog;
+signals:
+  //
+  void finished();
 };
 
 } // end of namespace qtbrynhildr

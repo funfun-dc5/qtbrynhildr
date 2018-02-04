@@ -972,6 +972,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #define Aligned(n)  __attribute__((aligned(n)))
 #endif // defined(_MSC_VER)
 
+// SSE
+
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
 #if defined(__ARM_NEON__)
 
@@ -1027,7 +1029,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  yv = vaddq_s32(yv, vv);
 
 	  // 7) >> 8
-	  yv = vsraq_n_s32(yv, yv, 8);
+	  yv = vshrq_n_s32(yv, 8);
 
 	  // 8) Y > 255 ? 255 : Y
 	  yv = vminq_s32(yv, constMaxV);
@@ -1076,7 +1078,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  yv = vaddq_s32(yv, vv);
 
 	  // 7) >> 8
-	  yv = vsraq_n_s32(yv, yv, 8);
+	  yv = vshrq_n_s32(yv, 8);
 
 	  // 8) Y > 255 ? 255 : Y
 	  yv = vminq_s32(yv, constMaxV);
@@ -1718,7 +1720,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  yv = vaddq_s32(yv, vv);
 
 	  // 7) >> 8
-	  yv = vsraq_n_s32(yv, yv, 8);
+	  yv = vshrq_n_s32(yv, 8);
 
 	  // 8) Y > 255 ? 255 : Y
 	  yv = vminq_s32(yv, constMaxV);
@@ -1767,7 +1769,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  yv = vaddq_s32(yv, vv);
 
 	  // 7) >> 8
-	  yv = vsraq_n_s32(yv, yv, 8);
+	  yv = vshrq_n_s32(yv, 8);
 
 	  // 8) Y > 255 ? 255 : Y
 	  yv = vminq_s32(yv, constMaxV);

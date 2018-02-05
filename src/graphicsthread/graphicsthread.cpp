@@ -694,6 +694,7 @@ inline bool GraphicsThread::makeYUV420Image()
 	yuv420 = yuv1;
 	yuv420prev = yuv2;
   }
+  qtbrynhildr::yuv420 = yuv420;
   uchar *top = yuv420;
 
   // Y

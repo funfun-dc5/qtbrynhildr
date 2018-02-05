@@ -100,7 +100,11 @@ private:
   int height;
 
   // buffer for yuv420
-  uchar *yuv420;
+  uchar *yuv1; // buffer 1
+  uchar *yuv2; // buffer 2
+
+  uchar *yuv420; // current yuv buffer
+  uchar *yuv420prev; // previous yuv buffer
 
 #if USE_PPM_LOADER_FOR_VP8
   // buffer for ppm
@@ -117,9 +121,12 @@ private:
   int hwidth;
 
   // parameters for convertYUV420toRGB24()
-  uchar *ytopOrg;
-  uchar *utopOrg;
-  uchar *vtopOrg;
+  uchar *y1topOrg;
+  uchar *u1topOrg;
+  uchar *v1topOrg;
+  uchar *y2topOrg;
+  uchar *u2topOrg;
+  uchar *v2topOrg;
 
   int size; // width * height
   int uvNext;

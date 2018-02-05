@@ -64,7 +64,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
 // YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
 // YUV420TORGB24_VERSION 6 : integer (SSE)          158 fps
-// YUV420TORGB24_VERSION 7 : float   (AVX)          xxx fps (SLOW)
+// YUV420TORGB24_VERSION 7 : float   (AVX)          ??? fps (SLOW)
 // =========================================================
 #if QTB_USE_SIMD
 #define YUV420TORGB24_VERSION 6
@@ -74,12 +74,13 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 
 #if QTB_MULTI_THREAD_CONVERTER
 // 1 (2 threads)     - 175 fps
+// 2 (2 threads)     - ??? fps
 // 5 (2 threads)     - 192 fps
-// 6 (2 threads:SSE) - xxx fps
+// 6 (2 threads:SSE) - ??? fps
 #if QTB_USE_SIMD
 #define YUV420TORGB24_MT_VERSION 6
 #else // QTB_USE_SIMD
-#define YUV420TORGB24_MT_VERSION 1
+#define YUV420TORGB24_MT_VERSION 2
 #endif // QTB_USE_SIMD
 #endif // QTB_MULTI_THREAD_CONVERTER
 
@@ -909,6 +910,106 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   return rgb24size;
 }
 #endif // YUV420TORGB24_MT_VERSION == 1
+
+#if YUV420TORGB24_MT_VERSION == 2
+
+// YUV420 convert to RGB macro
+#define GET_R_MT(Y, V)		((Y           + 358 * V) >> 8)
+#define GET_G_MT(Y, U, V)	((Y -  88 * U - 182 * V) >> 8)
+#define GET_B_MT(Y, U)		((Y + 453 * U          ) >> 8)
+
+// qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
+
+  uchar *yptop;
+  uchar *uptop;
+  uchar *vptop;
+  if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+  }
+  else {
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+  }
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 2, uvOffset++){
+	  int r, g, b;
+	  int y, u, v;
+	  int yp, up, vp;
+
+	  // set u/v
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
+
+	  // == xPos ==
+	  y = *ytop++;
+	  yp = *yptop++;
+	  if (y == yp && u == up && v == vp){
+		rgb24top += IMAGE_FORMAT_SIZE;
+	  }
+	  else {
+		y <<= 8; // y * 256
+
+		// R
+		r = qtbrynhildr::clip(GET_R_MT(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = qtbrynhildr::clip(GET_B_MT(y, u));
+		*rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+	  }
+
+	  // == xPos+1 ==
+	  y =  *ytop++;
+	  yp = *yptop++;
+	  if (y == yp && u == up && v == vp){
+		rgb24top += IMAGE_FORMAT_SIZE;
+	  }
+	  else {
+		y <<= 8; // y * 256
+
+		// R
+		r = qtbrynhildr::clip(GET_R_MT(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = qtbrynhildr::clip(GET_B_MT(y, u));
+		*rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+	  }
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += qtbrynhildr::rgb24Next;
+	if (yPos & 0x1){
+	  utop += qtbrynhildr::uvNext;
+	  vtop += qtbrynhildr::uvNext;
+	  uptop += qtbrynhildr::uvNext;
+	  vptop += qtbrynhildr::uvNext;
+	}
+  }
+  return rgb24size;
+}
+#endif // YUV420TORGB24_MT_VERSION == 2
 
 #if YUV420TORGB24_MT_VERSION == 5
 

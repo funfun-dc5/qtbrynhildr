@@ -30,18 +30,18 @@ namespace qtbrynhildr {
 #if QTB_MULTI_THREAD_CONVERTER
 // for qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
 // parameters
-volatile static int width = 0;
-volatile static int uvNext = 0;
-volatile static int rgb24Next = 0;
+int width = 0;
+int uvNext = 0;
+int rgb24Next = 0;
 
-volatile static uchar *yuv420 = 0;
-volatile static uchar *yuv1 = 0;
-volatile static uchar *y1topOrg = 0;
-volatile static uchar *u1topOrg = 0;
-volatile static uchar *v1topOrg = 0;
-volatile static uchar *y2topOrg = 0;
-volatile static uchar *u2topOrg = 0;
-volatile static uchar *v2topOrg = 0;
+uchar *yuv420 = 0;
+uchar *yuv1 = 0;
+uchar *y1topOrg = 0;
+uchar *u1topOrg = 0;
+uchar *v1topOrg = 0;
+uchar *y2topOrg = 0;
+uchar *u2topOrg = 0;
+uchar *v2topOrg = 0;
 
 // qtbrynhhildr::clip() (NOT GraphicsThread::clip())
 // clip
@@ -69,7 +69,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #if QTB_USE_SIMD
 #define YUV420TORGB24_VERSION 6
 #else // QTB_USE_SIMD
-#define YUV420TORGB24_VERSION 3
+#define YUV420TORGB24_VERSION 4
 #endif // QTB_USE_SIMD
 
 #if QTB_MULTI_THREAD_CONVERTER
@@ -828,15 +828,15 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
-  if (yuv420 == yuv1){
-	yptop = (uchar*)qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = (uchar*)qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = (uchar*)qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+  if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
   }
   else {
-	yptop = (uchar*)qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = (uchar*)qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = (uchar*)qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
   }
 
   for (int yPos = 0; yPos < height; yPos++){
@@ -852,7 +852,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vp = (int)(*(vptop + uvOffset) - 128);
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  yp = (int)(*yptop++);
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
@@ -874,7 +874,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  }
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  yp = (int)(*yptop++);
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
@@ -937,7 +937,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -955,7 +955,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -987,7 +987,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1005,7 +1005,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1065,6 +1065,20 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 
   int result[4] Aligned(16);
 
+  uchar *yptop;
+  uchar *uptop;
+  uchar *vptop;
+  if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+  }
+  else {
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+  }
+
   const int yca[4] Aligned(16) = {256,  256, 256, 0};
   const int uca[4] Aligned(16) = {0,    -88, 453, 0};
   const int vca[4] Aligned(16) = {358, -182,   0, 0};
@@ -1085,6 +1099,9 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // set u/v
 	  u = (int)(*(utop + uvOffset) - 128);
 	  v = (int)(*(vtop + uvOffset) - 128);
+	  up = (int)(*(uptop + uvOffset) - 128);
+	  vp = (int)(*(vptop + uvOffset) - 128);
+
 	  // load U, V
 	  uv0 = vdupq_n_s32(u);
 	  vv0 = vdupq_n_s32(v);
@@ -1093,99 +1110,109 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 
 	  // set y
 	  y = (int)(*ytop++);
+	  yp = (int)(*yptop++);
+	  if (y == yp && u == up && v == vp){
+		rgb24top += IMAGE_FORMAT_SIZE;
+	  }
+	  else {
+		// 1) load Y
+		yv = vdupq_n_s32(y);
 
-	  // 1) load Y
-	  yv = vdupq_n_s32(y);
+		// 2) Y * Yc -> Y
+		yv = vmulq_s32(yv, yc);
 
-	  // 3) Y * Yc -> Y
-	  yv = vmulq_s32(yv, yc);
+		// 3) U * Uc -> U
+		uv = vmulq_s32(uv0, uc);
 
-	  // 4) U * Uc -> U
-	  uv = vmulq_s32(uv0, uc);
+		// 4) V * Vc -> V
+		vv = vmulq_s32(vv0, vc);
 
-	  // 5) V * Vc -> V
-	  vv = vmulq_s32(vv0, vc);
+		// 5) Y + U + V -> Y
+		yv = vaddq_s32(yv, uv);
+		yv = vaddq_s32(yv, vv);
 
-	  // 6) Y + U + V -> Y
-	  yv = vaddq_s32(yv, uv);
-	  yv = vaddq_s32(yv, vv);
+		// 6) >> 8
+		yv = vshrq_n_s32(yv, 8);
 
-	  // 7) >> 8
-	  yv = vshrq_n_s32(yv, 8);
+		// 7) Y > 255 ? 255 : Y
+		yv = vminq_s32(yv, constMaxV);
 
-	  // 8) Y > 255 ? 255 : Y
-	  yv = vminq_s32(yv, constMaxV);
+		// 8)  Y < 0 ? 0 : Y
+		yv = vmaxq_s32(yv, constMinV);
 
-	  // 9)  Y < 0 ? 0 : Y
-	  yv = vmaxq_s32(yv, constMinV);
+		// 9) store to result
+		vst1q_s32(result, yv);
 
-	  // 10) store to result
-	  vst1q_s32(result, yv);
+		// set rgba32 from result int * 4
 
-	  // set rgba32 from result int * 4
+		// R
+		*rgb24top++ = (uchar)result[0];
 
-	  // R
-	  *rgb24top++ = (uchar)result[0];
+		// G
+		*rgb24top++ = (uchar)result[1];
 
-	  // G
-	  *rgb24top++ = (uchar)result[1];
-
-	  // B
-	  *rgb24top++ = (uchar)result[2];
+		// B
+		*rgb24top++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+	  }
 
 	  // xPos+1
 
 	  // set y
 	  y = (int)(*ytop++);
+	  yp = (int)(*yptop++);
+	  if (y == yp && u == up && v == vp){
+		rgb24top += IMAGE_FORMAT_SIZE;
+	  }
+	  else {
+		// 1) load Y
+		yv = vdupq_n_s32(y);
 
-	  // 1) load Y
-	  yv = vdupq_n_s32(y);
+		// 2) Y * Yc -> Y
+		yv = vmulq_s32(yv, yc);
 
-	  // 3) Y * Yc -> Y
-	  yv = vmulq_s32(yv, yc);
+		// 3) U * Uc -> U
+		uv = vmulq_s32(uv0, uc);
 
-	  // 4) U * Uc -> U
-	  uv = vmulq_s32(uv0, uc);
+		// 4) V * Vc -> V
+		vv = vmulq_s32(vv0, vc);
 
-	  // 5) V * Vc -> V
-	  vv = vmulq_s32(vv0, vc);
+		// 5) Y + U + V -> Y
+		yv = vaddq_s32(yv, uv);
+		yv = vaddq_s32(yv, vv);
 
-	  // 6) Y + U + V -> Y
-	  yv = vaddq_s32(yv, uv);
-	  yv = vaddq_s32(yv, vv);
+		// 6) >> 8
+		yv = vshrq_n_s32(yv, 8);
 
-	  // 7) >> 8
-	  yv = vshrq_n_s32(yv, 8);
+		// 7) Y > 255 ? 255 : Y
+		yv = vminq_s32(yv, constMaxV);
 
-	  // 8) Y > 255 ? 255 : Y
-	  yv = vminq_s32(yv, constMaxV);
+		// 8)  Y < 0 ? 0 : Y
+		yv = vmaxq_s32(yv, constMinV);
 
-	  // 9)  Y < 0 ? 0 : Y
-	  yv = vmaxq_s32(yv, constMinV);
+		// 9) store to result
+		vst1q_s32(result, yv);
 
-	  // 10) store to result
-	  vst1q_s32(result, yv);
+		// set rgba32 from result int * 4
 
-	  // set rgba32 from result int * 4
+		// R
+		*rgb24top++ = (uchar)result[0];
 
-	  // R
-	  *rgb24top++ = (uchar)result[0];
+		// G
+		*rgb24top++ = (uchar)result[1];
 
-	  // G
-	  *rgb24top++ = (uchar)result[1];
-
-	  // B
-	  *rgb24top++ = (uchar)result[2];
+		// B
+		*rgb24top++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+	  }
 
 	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
@@ -1209,15 +1236,15 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
-  if (yuv420 == yuv1){
-	yptop = (uchar*)qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = (uchar*)qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = (uchar*)qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+  if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
   }
   else {
-	yptop = (uchar*)qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = (uchar*)qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = (uchar*)qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
   }
 
 #if 1 // for TEST
@@ -1285,53 +1312,52 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
 	  else {
+		ya[0] = y;
+		ya[1] = y;
+		ya[2] = y;
 
-	  ya[0] = y;
-	  ya[1] = y;
-	  ya[2] = y;
+		// 1) load Y
+		yv = _mm_load_si128((const __m128i*)ya);
 
-	  // 1) load Y
-	  yv = _mm_load_si128((const __m128i*)ya);
+		// 2) Y * Yc -> Y
+		yv = _mm_mullo_epi32(yv, yc);
 
-	  // 3) Y * Yc -> Y
-	  yv = _mm_mullo_epi32(yv, yc);
+		// 3) U * Uc -> U
+		uv = _mm_mullo_epi32(uv0, uc);
 
-	  // 4) U * Uc -> U
-	  uv = _mm_mullo_epi32(uv0, uc);
+		// 4) V * Vc -> V
+		vv = _mm_mullo_epi32(vv0, vc);
 
-	  // 5) V * Vc -> V
-	  vv = _mm_mullo_epi32(vv0, vc);
+		// 5) Y + U + V -> Y
+		yv = _mm_add_epi32(yv, uv);
+		yv = _mm_add_epi32(yv, vv);
 
-	  // 6) Y + U + V -> Y
-	  yv = _mm_add_epi32(yv, uv);
-	  yv = _mm_add_epi32(yv, vv);
+		// 6) >> 8
+		yv = _mm_srai_epi32(yv, 8);
 
-	  // 7) >> 8
-	  yv = _mm_srai_epi32(yv, 8);
+		// 7) Y > 255 ? 255 : Y
+		yv = _mm_min_epi32(yv, constMaxV);
 
-	  // 8) Y > 255 ? 255 : Y
-	  yv = _mm_min_epi32(yv, constMaxV);
+		// 8)  Y < 0 ? 0 : Y
+		yv = _mm_max_epi32(yv, constMinV);
 
-	  // 9)  Y < 0 ? 0 : Y
-	  yv = _mm_max_epi32(yv, constMinV);
+		// 9) store to result
+		_mm_store_si128((__m128i*)result, yv);
 
-	  // 10) store to result
-	  _mm_store_si128((__m128i*)result, yv);
+		// set rgba32 from result int * 4
 
-	  // set rgba32 from result int * 4
+		// R
+		*rgb24top++ = (uchar)result[0];
 
-	  // R
-	  *rgb24top++ = (uchar)result[0];
+		// G
+		*rgb24top++ = (uchar)result[1];
 
-	  // G
-	  *rgb24top++ = (uchar)result[1];
-
-	  // B
-	  *rgb24top++ = (uchar)result[2];
+		// B
+		*rgb24top++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
 
@@ -1344,53 +1370,52 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
 	  else {
+		ya[0] = y;
+		ya[1] = y;
+		ya[2] = y;
 
-	  ya[0] = y;
-	  ya[1] = y;
-	  ya[2] = y;
+		// 1) load Y
+		yv = _mm_load_si128((const __m128i*)ya);
 
-	  // 1) load Y
-	  yv = _mm_load_si128((const __m128i*)ya);
+		// 2) Y * Yc -> Y
+		yv = _mm_mullo_epi32(yv, yc);
 
-	  // 3) Y * Yc -> Y
-	  yv = _mm_mullo_epi32(yv, yc);
+		// 3) U * Uc -> U
+		uv = _mm_mullo_epi32(uv0, uc);
 
-	  // 4) U * Uc -> U
-	  uv = _mm_mullo_epi32(uv0, uc);
+		// 4) V * Vc -> V
+		vv = _mm_mullo_epi32(vv0, vc);
 
-	  // 5) V * Vc -> V
-	  vv = _mm_mullo_epi32(vv0, vc);
+		// 5) Y + U + V -> Y
+		yv = _mm_add_epi32(yv, uv);
+		yv = _mm_add_epi32(yv, vv);
 
-	  // 6) Y + U + V -> Y
-	  yv = _mm_add_epi32(yv, uv);
-	  yv = _mm_add_epi32(yv, vv);
+		// 6) >> 8
+		yv = _mm_srai_epi32(yv, 8);
 
-	  // 7) >> 8
-	  yv = _mm_srai_epi32(yv, 8);
+		// 7) Y > 255 ? 255 : Y
+		yv = _mm_min_epi32(yv, constMaxV);
 
-	  // 8) Y > 255 ? 255 : Y
-	  yv = _mm_min_epi32(yv, constMaxV);
+		// 8)  Y < 0 ? 0 : Y
+		yv = _mm_max_epi32(yv, constMinV);
 
-	  // 9)  Y < 0 ? 0 : Y
-	  yv = _mm_max_epi32(yv, constMinV);
+		// 9) store to result
+		_mm_store_si128((__m128i*)result, yv);
 
-	  // 10) store to result
-	  _mm_store_si128((__m128i*)result, yv);
+		// set rgba32 from result int * 4
 
-	  // set rgba32 from result int * 4
+		// R
+		*rgb24top++ = (uchar)result[0];
 
-	  // R
-	  *rgb24top++ = (uchar)result[0];
+		// G
+		*rgb24top++ = (uchar)result[1];
 
-	  // G
-	  *rgb24top++ = (uchar)result[1];
-
-	  // B
-	  *rgb24top++ = (uchar)result[2];
+		// B
+		*rgb24top++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
 
@@ -1441,6 +1466,9 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 {
   int rgb24size = 0;
 
+  uchar *yptop;
+  uchar *uptop;
+  uchar *vptop;
   if (yuv420 == yuv1){
 	yptop = y2topOrg + (ytop - yuv420);
 	uptop = u2topOrg + (utop - yuv420);
@@ -1487,7 +1515,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  }
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  yp = (int)(*yptop++);
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
@@ -1561,52 +1589,50 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vp = (int)(*(vptop + uvOffset) - 128);
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  yp = (int)(*yptop++);
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
 	  else {
+		y <<= 8; // y * 256
 
-	  y <<= 8; // y * 256
-
-	  // R
-	  r = clip(GET_R(y, v));
-	  *rgb24top++ = (uchar)r;
-	  // G
-	  g = clip(GET_G(y, u, v));
-	  *rgb24top++ = (uchar)g;
-	  // B
-	  b = clip(GET_B(y, u));
-	  *rgb24top++ = (uchar)b;
+		// R
+		r = clip(GET_R(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = clip(GET_B(y, u));
+		*rgb24top++ = (uchar)b;
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  yp = (int)(*yptop++);
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
 	  else {
+		y <<= 8; // y * 256
 
-	  y <<= 8; // y * 256
-
-	  // R
-	  r = clip(GET_R(y, v));
-	  *rgb24top++ = (uchar)r;
-	  // G
-	  g = clip(GET_G(y, u, v));
-	  *rgb24top++ = (uchar)g;
-	  // B
-	  b = clip(GET_B(y, u));
-	  *rgb24top++ = (uchar)b;
+		// R
+		r = clip(GET_R(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = clip(GET_B(y, u));
+		*rgb24top++ = (uchar)b;
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
 
@@ -1635,6 +1661,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   int rgb24size = 0;
 
   for (int yPos = 0; yPos < height; yPos++){
+	//	cout << "yPos = " << yPos << endl << flush;
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
 	  int y, u, v;
@@ -1650,7 +1677,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1668,7 +1695,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1721,7 +1748,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1739,7 +1766,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1770,7 +1797,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1788,7 +1815,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = *ytop++;
+	  y = (int)*ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -2397,6 +2424,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;
+	  uptop += uvNext;
+	  vptop += uvNext;
 	}
   }
 #endif // defined(__ARM_NEON__)

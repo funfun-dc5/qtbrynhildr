@@ -69,7 +69,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #if QTB_USE_SIMD
 #define YUV420TORGB24_VERSION 6
 #else // QTB_USE_SIMD
-#define YUV420TORGB24_VERSION 4
+#define YUV420TORGB24_VERSION 3
 #endif // QTB_USE_SIMD
 
 #if QTB_MULTI_THREAD_CONVERTER
@@ -847,14 +847,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  int yp, up, vp;
 
 	  // set u/v
-	  u = *(utop + uvOffset) - 128;
-	  v = *(vtop + uvOffset) - 128;
-	  up = (int)(*(uptop + uvOffset) - 128);
-	  vp = (int)(*(vptop + uvOffset) - 128);
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
-	  yp = (int)(*yptop++);
+	  y = *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -875,8 +875,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  }
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -938,7 +938,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -956,7 +956,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -988,7 +988,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1006,7 +1006,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1098,10 +1098,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  int32x4_t uv0, vv0;
 
 	  // set u/v
-	  u = (int)(*(utop + uvOffset) - 128);
-	  v = (int)(*(vtop + uvOffset) - 128);
-	  up = (int)(*(uptop + uvOffset) - 128);
-	  vp = (int)(*(vptop + uvOffset) - 128);
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 
 	  // load U, V
 	  uv0 = vdupq_n_s32(u);
@@ -1110,8 +1110,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // xPos
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1164,8 +1164,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // xPos+1
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1289,10 +1289,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  __m128i uv0, vv0;
 
 	  // set u/v
-	  u = (int)(*(utop + uvOffset) - 128);
-	  v = (int)(*(vtop + uvOffset) - 128);
-	  up = (int)(*(uptop + uvOffset) - 128);
-	  vp = (int)(*(vptop + uvOffset) - 128);
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 	  ua[0] = u;
 	  ua[1] = u;
 	  ua[2] = u;
@@ -1307,8 +1307,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // xPos
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1365,8 +1365,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // xPos+1
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1488,14 +1488,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  int yp, up, vp;
 
 	  // set u/v
-	  u = *(utop + uvOffset) - 128;
-	  v = *(vtop + uvOffset) - 128;
-	  up = (int)(*(uptop + uvOffset) - 128);
-	  vp = (int)(*(vptop + uvOffset) - 128);
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1516,8 +1516,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  }
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1584,14 +1584,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  int yp, up, vp;
 
 	  // set u/v
-	  u = *(utop + uvOffset) - 128;
-	  v = *(vtop + uvOffset) - 128;
-	  up = (int)(*(uptop + uvOffset) - 128);
-	  vp = (int)(*(vptop + uvOffset) - 128);
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1614,8 +1614,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  }
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1662,7 +1662,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   int rgb24size = 0;
 
   for (int yPos = 0; yPos < height; yPos++){
-	//	cout << "yPos = " << yPos << endl << flush;
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
 	  int y, u, v;
@@ -1678,7 +1677,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1696,7 +1695,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1749,7 +1748,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1767,7 +1766,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1798,7 +1797,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  b1 = 453 * u;
 
 	  // == xPos ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1816,7 +1815,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #endif // FORMAT_RGBA8888
 
 	  // == xPos+1 ==
-	  y = (int)*ytop++;
+	  y = *ytop++;
 	  y <<= 8; // y * 256
 
 	  // R
@@ -1909,10 +1908,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  int32x4_t uv0, vv0;
 
 	  // set u/v
-	  u = (int)(*(utop + uvOffset) - 128);
-	  v = (int)(*(vtop + uvOffset) - 128);
-	  up = (int)(*(uptop + uvOffset) - 128);
-	  vp = (int)(*(vptop + uvOffset) - 128);
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 	  // load U, V
 	  uv0 = vdupq_n_s32(u);
 	  vv0 = vdupq_n_s32(v);
@@ -1920,8 +1919,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // xPos
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -1974,8 +1973,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // xPos+1
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -2101,10 +2100,10 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  __m128i uv0, vv0;
 
 	  // set u/v
-	  u = (int)(*(utop + uvOffset) - 128);
-	  v = (int)(*(vtop + uvOffset) - 128);
-	  up = (int)(*(uptop + uvOffset) - 128);
-	  vp = (int)(*(vptop + uvOffset) - 128);
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 	  ua[0] = u;
 	  ua[1] = u;
 	  ua[2] = u;
@@ -2119,8 +2118,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // xPos
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -2177,8 +2176,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // xPos+1
 
 	  // set y
-	  y = (int)(*ytop++);
-	  yp = (int)(*yptop++);
+	  y =  *ytop++;
+	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
 	  }
@@ -2283,20 +2282,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #else // defined(__ARM_NEON__)
 
   int result[8] Aligned(32);
-
-  uchar *yptop;
-  uchar *uptop;
-  uchar *vptop;
-  if (yuv420 == yuv1){
-	yptop = y2topOrg + (ytop - yuv420);
-	uptop = u2topOrg + (utop - yuv420);
-	vptop = v2topOrg + (vtop - yuv420);
-  }
-  else {
-	yptop = y1topOrg + (ytop - yuv420);
-	uptop = u1topOrg + (utop - yuv420);
-	vptop = v1topOrg + (vtop - yuv420);
-  }
 
 #if 1 // for TEST
 

@@ -222,7 +222,8 @@ equals(NEW_FEATURE, ON){
 DEFINES += QTB_USE_SIMD=1
 
 # INTEL (gcc/clang)
-QMAKE_CXXFLAGS += -mavx
+QMAKE_CXXFLAGS += -msse4.1
+#QMAKE_CXXFLAGS += -mavx
 # INTEL (MSVC)
 #QMAKE_CXXFLAGS += /arch:AVX
 # ARM

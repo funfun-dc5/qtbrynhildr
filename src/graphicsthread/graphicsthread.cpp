@@ -629,15 +629,18 @@ void GraphicsThread::shutdownConnection()
 // setup for yuv420, rgb24
 inline bool GraphicsThread::setup()
 {
+  int yuvBufferSize = width * height + width * height / 2;
   // allocate yuv420/rgb24 buffer
   if (yuv1 != 0){
 	delete [] yuv1;
   }
-  yuv1 = new uchar[width * height + width * height / 2];
+  yuv1 = new uchar[yuvBufferSize];
+  memset(yuv1, 0, yuvBufferSize);
   if (yuv2 != 0){
 	delete [] yuv2;
   }
-  yuv2 = new uchar[width * height + width * height / 2];
+  yuv2 = new uchar[yuvBufferSize];
+  memset(yuv2, 0xFF, yuvBufferSize);
 #if USE_PPM_LOADER_FOR_VP8
   if (ppm != 0){
 	delete [] ppm;

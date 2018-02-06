@@ -16,4 +16,11 @@
 define constexpr /* */
 #endif // !_MSC_VER && __cplusplus < 201103L
 
+// for align
+#if defined(_MSC_VER)
+#define Aligned(n)  __declspec(align(n))
+#else // defined(_MSC_VER)
+#define Aligned(n)  __attribute__((aligned(n)))
+#endif // defined(_MSC_VER)
+
 #endif // COMMON_H

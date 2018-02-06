@@ -15,6 +15,18 @@
 #include <fstream>
 #include <iostream>
 
+#if QTB_USE_SIMD
+#if defined(__ARM_NEON__)
+#include <arm_neon.h>
+#else // defined(__ARM_NEON__)
+#if defined(_MSC_VER)
+#include <intrin.h>
+#else // defined(_MSC_VER)
+#include <x86intrin.h>
+#endif // defined(_MSC_VER)
+#endif // defined(__ARM_NEON__)
+#endif // QTB_USE_SIMD
+
 // Qt Header
 #if QTB_MULTI_THREAD_CONVERTER
 #include <QtConcurrent>
@@ -64,10 +76,12 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
 // YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
 // YUV420TORGB24_VERSION 6 : integer (SSE)          158 fps
-// YUV420TORGB24_VERSION 7 : float   (AVX)          ??? fps (SLOW)
+// YUV420TORGB24_VERSION 7 : float   (AVX)          ??? fps (too SLOW)
 // =========================================================
 #if QTB_USE_SIMD
-#if defined(__SSE4_1__) || defined(__ARM_NEON__)
+#if defined(__AVX__)
+#define YUV420TORGB24_VERSION 6 // Now, AVX(7) is NOT available.
+#elif defined(__SSE4_1__) || defined(__ARM_NEON__)
 #define YUV420TORGB24_VERSION 6
 #else // defined(__SSE4_1__) || defined(__ARM_NEON__)
 #define YUV420TORGB24_VERSION 3
@@ -1147,23 +1161,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 
 #if YUV420TORGB24_MT_VERSION == 6
 
-#if defined(__ARM_NEON__)
-#include <arm_neon.h>
-#else // defined(__ARM_NEON__)
-#if defined(_MSC_VER)
-#include <intrin.h>
-#else // defined(_MSC_VER)
-#include <x86intrin.h>
-#endif // defined(_MSC_VER)
-#endif // defined(__ARM_NEON__)
-
-// for align
-#if defined(_MSC_VER)
-#define Aligned(n)  __declspec(align(n))
-#else // defined(_MSC_VER)
-#define Aligned(n)  __attribute__((aligned(n)))
-#endif // defined(_MSC_VER)
-
 // SSE
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
@@ -1173,13 +1170,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 {
   int rgb24size = 0;
 
-  int result[4] Aligned(16);
+  Aligned(16) int result[4];
 
-  const int yca[4] Aligned(16) = {256,  256, 256, 0};
-  const int uca[4] Aligned(16) = {0,    -88, 453, 0};
-  const int vca[4] Aligned(16) = {358, -182,   0, 0};
+  //  Aligned(16) const int yca[4] = {256,  256, 256, 0};
+  Aligned(16) const int uca[4] = {0,    -88, 453, 0};
+  Aligned(16) const int vca[4] = {358, -182,   0, 0};
 
-  int32x4_t yc = vld1q_s32(yca);
+  //  int32x4_t yc = vld1q_s32(yca);
+  int32x4_t yc = vdupq_n_s32(256);
   int32x4_t uc = vld1q_s32(uca);
   int32x4_t vc = vld1q_s32(vca);
 
@@ -1338,13 +1336,15 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   return rgb24size;
 }
 
-#else // defined(__ARM_NEON__)
+#endif // defined(__ARM_NEON__)
+
+#if defined(__SSE4_1__)
 
 int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
 
-  int result[4] Aligned(16);
+  Aligned(16) int result[4];
 
   uchar *yptop;
   uchar *uptop;
@@ -1372,26 +1372,26 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 
 #else // for TEST
 
-  const int constYc[4] Aligned(16) = {256, 256, 256, 0};
-  const int constUc[4] Aligned(16) = {0,   -88, 453, 0};
-  const int constVc[4] Aligned(16) = {358,-182,   0, 0};
+  Aligned(16) const int constYc[4] = {256, 256, 256, 0};
+  Aligned(16) const int constUc[4] = {0,   -88, 453, 0};
+  Aligned(16) const int constVc[4] = {358,-182,   0, 0};
 
   // 2) load Yc, Uc, Vc
   __m128i yc = _mm_load_si128((const __m128i*)constYc);
   __m128i uc = _mm_load_si128((const __m128i*)constUc);
   __m128i vc = _mm_load_si128((const __m128i*)constVc);
 
-  const int constMax[4] Aligned(16) = {255, 255, 255, 255};
-  const int constMin[4] Aligned(16) = {  0,   0,   0,   0};
+  Aligned(16) const int constMax[4] = {255, 255, 255, 255};
+  Aligned(16) const int constMin[4] = {  0,   0,   0,   0};
 
   __m128i constMaxV = _mm_load_si128((const __m128i*)constMax);
   __m128i constMinV = _mm_load_si128((const __m128i*)constMin);
 
 #endif // for TEST
 
-  int ya[4] Aligned(16) = {  0,   0,   0,   0};
-  int ua[4] Aligned(16) = {  0,   0,   0,   0};
-  int va[4] Aligned(16) = {  0,   0,   0,   0};
+  Aligned(16) int ya[4] = {  0,   0,   0,   0};
+  Aligned(16) int ua[4] = {  0,   0,   0,   0};
+  Aligned(16) int va[4] = {  0,   0,   0,   0};
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 2, uvOffset++){
@@ -1545,7 +1545,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   return rgb24size;
 }
 
-#endif // defined(__ARM_NEON__)
+#endif // defined(__SSE4_1__)
 
 #endif // YUV420TORGB24_MT_VERSION == 6
 
@@ -1959,23 +1959,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 
 #if YUV420TORGB24_VERSION == 6
 
-#if defined(__ARM_NEON__)
-#include <arm_neon.h>
-#else // defined(__ARM_NEON__)
-#if defined(_MSC_VER)
-#include <intrin.h>
-#else // defined(_MSC_VER)
-#include <x86intrin.h>
-#endif // defined(_MSC_VER)
-#endif // defined(__ARM_NEON__)
-
-// for align
-#if defined(_MSC_VER)
-#define Aligned(n)  __declspec(align(n))
-#else // defined(_MSC_VER)
-#define Aligned(n)  __attribute__((aligned(n)))
-#endif // defined(_MSC_VER)
-
 // SSE
 
 // convert YUV420 to RGB24
@@ -1985,13 +1968,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 {
   int rgb24size = 0;
 
-  int result[4] Aligned(16);
+  Aligned(16) int result[4];
 
-  const int yca[4] Aligned(16) = {256,  256, 256, 0};
-  const int uca[4] Aligned(16) = {0,    -88, 453, 0};
-  const int vca[4] Aligned(16) = {358, -182,   0, 0};
+  //  const int yca[4] Aligned(16) = {256,  256, 256, 0};
+  Aligned(16) const int uca[4] = {0,    -88, 453, 0};
+  Aligned(16) const int vca[4] = {358, -182,   0, 0};
 
-  int32x4_t yc = vld1q_s32(yca);
+  //  int32x4_t yc = vld1q_s32(yca);
+  int32x4_t yc = vdupq_n_s32(256);;
   int32x4_t uc = vld1q_s32(uca);
   int32x4_t vc = vld1q_s32(vca);
 
@@ -2150,13 +2134,15 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   return rgb24size;
 }
 
-#else // defined(__ARM_NEON__)
+#endif // defined(__ARM_NEON__)
+
+#if defined(__SSE4_1__) || defined(__AVX__)
 
 int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
   int rgb24size = 0;
 
-  int result[4] Aligned(16);
+  Aligned(16) int result[4];
 
   uchar *yptop;
   uchar *uptop;
@@ -2184,26 +2170,26 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 
 #else // for TEST
 
-  const int constYc[4] Aligned(16) = {256, 256, 256, 0};
-  const int constUc[4] Aligned(16) = {0,   -88, 453, 0};
-  const int constVc[4] Aligned(16) = {358,-182,   0, 0};
+  Aligned(16) const int constYc[4] = {256, 256, 256, 0};
+  Aligned(16) const int constUc[4] = {0,   -88, 453, 0};
+  Aligned(16) const int constVc[4] = {358,-182,   0, 0};
 
   // 2) load Yc, Uc, Vc
   __m128i yc = _mm_load_si128((const __m128i*)constYc);
   __m128i uc = _mm_load_si128((const __m128i*)constUc);
   __m128i vc = _mm_load_si128((const __m128i*)constVc);
 
-  const int constMax[4] Aligned(16) = {255, 255, 255, 255};
-  const int constMin[4] Aligned(16) = {  0,   0,   0,   0};
+  Aligned(16) const int constMax[4] = {255, 255, 255, 255};
+  Aligned(16) const int constMin[4] = {  0,   0,   0,   0};
 
   __m128i constMaxV = _mm_load_si128((const __m128i*)constMax);
   __m128i constMinV = _mm_load_si128((const __m128i*)constMin);
 
 #endif // for TEST
 
-  int ya[4] Aligned(16) = {  0,   0,   0,   0};
-  int ua[4] Aligned(16) = {  0,   0,   0,   0};
-  int va[4] Aligned(16) = {  0,   0,   0,   0};
+  Aligned(16) int ya[4] = {  0,   0,   0,   0};
+  Aligned(16) int ua[4] = {  0,   0,   0,   0};
+  Aligned(16) int va[4] = {  0,   0,   0,   0};
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -2357,28 +2343,11 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   return rgb24size;
 }
 
-#endif // defined(__ARM_NEON__)
+#endif // defined(__SSE4_1__) || defined(__AVX__)
 
 #endif // YUV420TORGB24_VERSION == 6
 
 #if YUV420TORGB24_VERSION == 7
-
-#if defined(__ARM_NEON__)
-#include <arm_neon.h>
-#else // defined(__ARM_NEON__)
-#if defined(_MSC_VER)
-#include <intrin.h>
-#else // defined(_MSC_VER)
-#include <x86intrin.h>
-#endif // defined(_MSC_VER)
-#endif // defined(__ARM_NEON__)
-
-// for align
-#if defined(_MSC_VER)
-#define Aligned(n)  __declspec(align(n))
-#else // defined(_MSC_VER)
-#define Aligned(n)  __attribute__((aligned(n)))
-#endif // defined(_MSC_VER)
 
 // AVX
 
@@ -2387,7 +2356,9 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 // Yet
 #error "NOT support AVX for ARM NEON"
 
-#else // defined(__ARM_NEON__)
+#endif // defined(__ARM_NEON__)
+
+#if defined(__AVX__)
 
 #error "Yet: INTEL AVX version (too SLOW)"
 
@@ -2396,7 +2367,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 {
   int rgb24size = 0;
 
-  int result[8] Aligned(32);
+  Aligned(32) int result[8];
 
 #if 1 // for TEST
 
@@ -2410,8 +2381,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 
 #else // for TEST
 
-  const float constUc[8] Aligned(32) = {0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0};
-  const float constVc[8] Aligned(32) = {1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0};
+  Aligned(32) const float constUc[8] = {0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0};
+  Aligned(32) const float constVc[8] = {1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0};
 
   const float constMax = 255.0;
   const float constMin = 0.0;
@@ -2437,7 +2408,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
-	  float y[8] Aligned(32);
+	  Aligned(32) float y[8];
 	  float y1, y2, u, v;
 	  __m256 yv, uv, vv;
 	  __m256i yvi;
@@ -2530,7 +2501,7 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   return rgb24size;
 }
 
-#endif // defined(__ARM_NEON__)
+#endif // defined(__AVX__)
 
 #endif // YUV420TORGB24_VERSION == 7
 

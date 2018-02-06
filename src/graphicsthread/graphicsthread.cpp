@@ -1181,20 +1181,10 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
   }
 
-  const int yca[4] Aligned(16) = {256,  256, 256, 0};
-  const int uca[4] Aligned(16) = {0,    -88, 453, 0};
-  const int vca[4] Aligned(16) = {358, -182,   0, 0};
-
-  int32x4_t yc = vld1q_s32(yca);
-  int32x4_t uc = vld1q_s32(uca);
-  int32x4_t vc = vld1q_s32(vca);
-
-  int32x4_t constMaxV = vdupq_n_s32(255);
-  int32x4_t constMinV = vdupq_n_s32(0);
-
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int y, u, v;
+	  int yp, up, vp;
 	  int32x4_t yv, uv, vv;
 	  int32x4_t uv0, vv0;
 
@@ -1322,6 +1312,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;
+	  uptop += uvNext;
+	  vptop += uvNext;
 	}
   }
   return rgb24size;

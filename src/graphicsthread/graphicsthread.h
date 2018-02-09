@@ -104,7 +104,6 @@ private:
   uchar *yuv2; // buffer 2
 
   uchar *yuv420; // current yuv buffer
-  uchar *yuv420prev; // previous yuv buffer
 
 #if USE_PPM_LOADER_FOR_VP8
   // buffer for ppm

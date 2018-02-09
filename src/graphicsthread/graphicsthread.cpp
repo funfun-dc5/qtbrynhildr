@@ -73,6 +73,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // YUV420TORGB24_VERSION 1 : float                   84 fps
 // YUV420TORGB24_VERSION 2 : integer and shift      129 fps
 // YUV420TORGB24_VERSION 3 : V2 + small improvement 131 fps
+// YUV420TORGB24_VERSION 31: V3 + small improvement 13? fps
 // YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
 // YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
 // YUV420TORGB24_VERSION 6 : integer (SSE)          158 fps
@@ -93,6 +94,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #if QTB_MULTI_THREAD_CONVERTER
 // 1 (2 threads)     - 175 fps
 // 2 (2 threads)     - ??? fps
+// 3 (2 threads)     - ??? fps
 // 5 (2 threads)     - 192 fps
 // 6 (2 threads:SSE) - ??? fps
 #if QTB_USE_SIMD
@@ -105,6 +107,9 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #define YUV420TORGB24_MT_VERSION 2
 #endif // QTB_USE_SIMD
 #endif // QTB_MULTI_THREAD_CONVERTER
+
+// for TEST
+#define PRINT_CALC_RATE 0
 
 //---------------------------------------------------------------------------
 // public
@@ -125,7 +130,6 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   yuv1(0),
   yuv2(0),
   yuv420(0),
-  yuv420prev(0),
 #if USE_PPM_LOADER_FOR_VP8
   ppm(0),
 #endif // USE_PPM_LOADER_FOR_VP8
@@ -479,6 +483,21 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 			file.write((char*)yuv420, width * height + width * height / 2);
 			file.close();
 		  }
+		  // save yuv420prev
+		  if (yuv420 == yuv1){
+			file.open("yuv420prev_1280x800.dat", ios::out | ios::binary | ios::trunc);
+			if (file.is_open()){
+			  file.write((char*)yuv2, width * height + width * height / 2);
+			  file.close();
+			}
+		  }
+		  else {
+			file.open("yuv420prev_1280x800.dat", ios::out | ios::binary | ios::trunc);
+			if (file.is_open()){
+			  file.write((char*)yuv1, width * height + width * height / 2);
+			  file.close();
+			}
+		  }
 		  // save rgb24
 		  file.open("rgb24_1280x800.dat", ios::out | ios::binary | ios::trunc);
 		  if (file.is_open()){
@@ -667,7 +686,6 @@ inline bool GraphicsThread::setup()
   u2topOrg = y2topOrg + size;
   v2topOrg = u2topOrg + size / 4;
   yuv420 = yuv1;
-  yuv420prev = yuv2;
   uvNext = width / 2;
   rgb24Next = - width * IMAGE_FORMAT_SIZE * 2;
 #if QTB_MULTI_THREAD_CONVERTER
@@ -711,16 +729,16 @@ inline bool GraphicsThread::makeYUV420Image()
 	}
   }
 
-  // create yuv420
+  // switch yuv420 buffer
   if (yuv420 == yuv1){
 	yuv420 = yuv2;
-	yuv420prev = yuv1;
   }
   else {
 	yuv420 = yuv1;
-	yuv420prev = yuv2;
   }
   qtbrynhildr::yuv420 = yuv420;
+
+  // create yuv420
   uchar *top = yuv420;
 
   // Y
@@ -856,14 +874,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   uchar *uptop;
   uchar *vptop;
   if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
-	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::y1topOrg);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::u1topOrg);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::v1topOrg);
   }
   else {
-	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::y2topOrg);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::u2topOrg);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::v2topOrg);
   }
 
   for (int yPos = 0; yPos < height; yPos++){
@@ -952,14 +970,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   uchar *uptop;
   uchar *vptop;
   if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
-	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::y1topOrg);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::u1topOrg);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::v1topOrg);
   }
   else {
-	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::y2topOrg);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::u2topOrg);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::v2topOrg);
   }
 
   for (int yPos = 0; yPos < height; yPos++){
@@ -1035,6 +1053,149 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   return rgb24size;
 }
 #endif // YUV420TORGB24_MT_VERSION == 2
+
+#if YUV420TORGB24_MT_VERSION == 3
+
+// YUV420 convert to RGB macro
+#define GET_R_MT(Y, V)		((Y           + 358 * V) >> 8)
+#define GET_G_MT(Y, U, V)	((Y -  88 * U - 182 * V) >> 8)
+#define GET_B_MT(Y, U)		((Y + 453 * U          ) >> 8)
+
+// qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
+int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
+
+  uchar *yptop;
+  uchar *uptop;
+  uchar *vptop;
+  if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::y1topOrg);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::u1topOrg);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::v1topOrg);
+  }
+  else {
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::y2topOrg);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::u2topOrg);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::v2topOrg);
+  }
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 2, uvOffset++){
+	  int r, g, b;
+	  int y, u, v;
+	  int yp, up, vp;
+
+	  // set u/v
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
+
+	  if (u == up && v == vp){
+		// calculate xPos/xPos+1 if y == yp (y, u, v is NOT changed)
+
+		// == xPos ==
+		y = *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  y <<= 8; // y * 256
+
+		  // R
+		  r = qtbrynhildr::clip(GET_R_MT(y, v));
+		  *rgb24top++ = (uchar)r;
+		  // G
+		  g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+		  *rgb24top++ = (uchar)g;
+		  // B
+		  b = qtbrynhildr::clip(GET_B_MT(y, u));
+		  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
+
+		// == xPos+1 ==
+		y =  *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  y <<= 8; // y * 256
+
+		  // R
+		  r = qtbrynhildr::clip(GET_R_MT(y, v));
+		  *rgb24top++ = (uchar)r;
+		  // G
+		  g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+		  *rgb24top++ = (uchar)g;
+		  // B
+		  b = qtbrynhildr::clip(GET_B_MT(y, u));
+		  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
+	  }
+	  else {
+		// always calculate xPos/xPos+1
+		// == xPos ==
+		y = *ytop++;
+		y <<= 8; // y * 256
+
+		// R
+		r = qtbrynhildr::clip(GET_R_MT(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = qtbrynhildr::clip(GET_B_MT(y, u));
+		*rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+		// == xPos+1 ==
+		y =  *ytop++;
+		y <<= 8; // y * 256
+
+		// R
+		r = qtbrynhildr::clip(GET_R_MT(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = qtbrynhildr::clip(GET_G_MT(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = qtbrynhildr::clip(GET_B_MT(y, u));
+		*rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		yptop += 2;
+	  }
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += qtbrynhildr::rgb24Next;
+	if (yPos & 0x1){
+	  utop += qtbrynhildr::uvNext;
+	  vtop += qtbrynhildr::uvNext;
+	  uptop += qtbrynhildr::uvNext;
+	  vptop += qtbrynhildr::uvNext;
+	}
+  }
+  return rgb24size;
+}
+#endif // YUV420TORGB24_MT_VERSION == 3
 
 #if YUV420TORGB24_MT_VERSION == 5
 
@@ -1191,14 +1352,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   uchar *uptop;
   uchar *vptop;
   if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
-	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::y1topOrg);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::u1topOrg);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::v1topOrg);
   }
   else {
-	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::y2topOrg);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::u2topOrg);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::v2topOrg);
   }
 
   for (int yPos = 0; yPos < height; yPos++){
@@ -1353,14 +1514,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
   uchar *uptop;
   uchar *vptop;
   if (qtbrynhildr::yuv420 == qtbrynhildr::yuv1){
-	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y2topOrg + (ytop - qtbrynhildr::y1topOrg);
+	uptop = qtbrynhildr::u2topOrg + (utop - qtbrynhildr::u1topOrg);
+	vptop = qtbrynhildr::v2topOrg + (vtop - qtbrynhildr::v1topOrg);
   }
   else {
-	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::yuv420);
-	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::yuv420);
-	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::yuv420);
+	yptop = qtbrynhildr::y1topOrg + (ytop - qtbrynhildr::y2topOrg);
+	uptop = qtbrynhildr::u1topOrg + (utop - qtbrynhildr::u2topOrg);
+	vptop = qtbrynhildr::v1topOrg + (vtop - qtbrynhildr::v2topOrg);
   }
 
 #if 1 // for TEST
@@ -1586,14 +1747,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   uchar *uptop;
   uchar *vptop;
   if (yuv420 == yuv1){
-	yptop = y2topOrg + (ytop - yuv420);
-	uptop = u2topOrg + (utop - yuv420);
-	vptop = v2topOrg + (vtop - yuv420);
+	yptop = y2topOrg + (ytop - y1topOrg);
+	uptop = u2topOrg + (utop - u1topOrg);
+	vptop = v2topOrg + (vtop - v1topOrg);
   }
   else {
-	yptop = y1topOrg + (ytop - yuv420);
-	uptop = u1topOrg + (utop - yuv420);
-	vptop = v1topOrg + (vtop - yuv420);
+	yptop = y1topOrg + (ytop - y2topOrg);
+	uptop = u1topOrg + (utop - u2topOrg);
+	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
   for (int yPos = 0; yPos < height; yPos++){
@@ -1666,7 +1827,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 }
 #endif // YUV420TORGB24_VERSION == 1 || YUV420TORGB24_VERSION == 2
 
-
 #if YUV420TORGB24_VERSION == 3
 // YUV420 convert to RGB macro
 #define GET_R(Y, V)		((Y           + 358 * V) >> 8)
@@ -1682,15 +1842,25 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   uchar *uptop;
   uchar *vptop;
   if (yuv420 == yuv1){
-	yptop = y2topOrg + (ytop - yuv420);
-	uptop = u2topOrg + (utop - yuv420);
-	vptop = v2topOrg + (vtop - yuv420);
+	yptop = y2topOrg + (ytop - y1topOrg);
+	uptop = u2topOrg + (utop - u1topOrg);
+	vptop = v2topOrg + (vtop - v1topOrg);
   }
   else {
-	yptop = y1topOrg + (ytop - yuv420);
-	uptop = u1topOrg + (utop - yuv420);
-	vptop = v1topOrg + (vtop - yuv420);
+	yptop = y1topOrg + (ytop - y2topOrg);
+	uptop = u1topOrg + (utop - u2topOrg);
+	vptop = v1topOrg + (vtop - v2topOrg);
   }
+
+#if PRINT_CALC_RATE // for TEST
+  // frame counter
+  static int frameCounter = 0;
+  frameCounter++;
+  // skip counter
+  int skipCounter = 0;
+  // calc counter
+  int calcCounter = 0;
+#endif // for TEST
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -1709,6 +1879,9 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
+#if PRINT_CALC_RATE // for TEST
+		skipCounter++;
+#endif // for TEST
 	  }
 	  else {
 		y <<= 8; // y * 256
@@ -1726,6 +1899,9 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+#if PRINT_CALC_RATE // for TEST
+		calcCounter++;
+#endif // for TEST
 	  }
 
 	  // == xPos+1 ==
@@ -1733,6 +1909,9 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;
+#if PRINT_CALC_RATE // for TEST
+		skipCounter++;
+#endif // for TEST
 	  }
 	  else {
 		y <<= 8; // y * 256
@@ -1750,6 +1929,9 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+#if PRINT_CALC_RATE // for TEST
+		calcCounter++;
+#endif // for TEST
 	  }
 
 	  rgb24size += IMAGE_FORMAT_SIZE * 2;
@@ -1762,9 +1944,186 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vptop += uvNext;
 	}
   }
+#if PRINT_CALC_RATE // for TEST
+  cout << "  calc rate : " <<
+	(float)calcCounter/(calcCounter + skipCounter) * 100.0 << " (%) : frame " << frameCounter << endl << flush;
+#endif // for TEST
   return rgb24size;
 }
 #endif // YUV420TORGB24_VERSION == 3
+
+#if YUV420TORGB24_VERSION == 31
+// YUV420 convert to RGB macro
+#define GET_R(Y, V)		((Y           + 358 * V) >> 8)
+#define GET_G(Y, U, V)	((Y -  88 * U - 182 * V) >> 8)
+#define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
+
+// convert YUV420 to RGB24
+int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+{
+  int rgb24size = 0;
+
+  uchar *yptop;
+  uchar *uptop;
+  uchar *vptop;
+  if (yuv420 == yuv1){
+	yptop = y2topOrg + (ytop - y1topOrg);
+	uptop = u2topOrg + (utop - u1topOrg);
+	vptop = v2topOrg + (vtop - v1topOrg);
+  }
+  else {
+	yptop = y1topOrg + (ytop - y2topOrg);
+	uptop = u1topOrg + (utop - u2topOrg);
+	vptop = v1topOrg + (vtop - v2topOrg);
+  }
+
+#if PRINT_CALC_RATE // for TEST
+  // frame counter
+  static int frameCounter = 0;
+  frameCounter++;
+  // skip counter
+  int skipCounter = 0;
+  // calc counter
+  int calcCounter = 0;
+#endif // for TEST
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int r, g, b;
+	  int y, u, v;
+	  int yp, up, vp;
+
+	  // set u/v
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
+
+	  if (u == up && v == vp){
+		// calculate xPos/xPos+1 if y == yp (y, u, v is NOT changed)
+
+		// == xPos ==
+		y =  *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+#if PRINT_CALC_RATE // for TEST
+		  skipCounter++;
+#endif // for TEST
+		}
+		else {
+		  y <<= 8; // y * 256
+
+		  // R
+		  r = clip(GET_R(y, v));
+		  *rgb24top++ = (uchar)r;
+		  // G
+		  g = clip(GET_G(y, u, v));
+		  *rgb24top++ = (uchar)g;
+		  // B
+		  b = clip(GET_B(y, u));
+		  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+#if PRINT_CALC_RATE // for TEST
+		  calcCounter++;
+#endif // for TEST
+		}
+
+		// == xPos+1 ==
+		y =  *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+#if PRINT_CALC_RATE // for TEST
+		  skipCounter++;
+#endif // for TEST
+		}
+		else {
+		  y <<= 8; // y * 256
+
+		  // R
+		  r = clip(GET_R(y, v));
+		  *rgb24top++ = (uchar)r;
+		  // G
+		  g = clip(GET_G(y, u, v));
+		  *rgb24top++ = (uchar)g;
+		  // B
+		  b = clip(GET_B(y, u));
+		  *rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+#if PRINT_CALC_RATE // for TEST
+		  calcCounter++;
+#endif // for TEST
+		}
+	  }
+	  else {
+		// always calculate xPos/xPos+1
+
+		// == xPos ==
+		y =  *ytop++;
+		y <<= 8; // y * 256
+
+		// R
+		r = clip(GET_R(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = clip(GET_B(y, u));
+		*rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+		// == xPos+1 ==
+		y =  *ytop++;
+		y <<= 8; // y * 256
+
+		// R
+		r = clip(GET_R(y, v));
+		*rgb24top++ = (uchar)r;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgb24top++ = (uchar)g;
+		// B
+		b = clip(GET_B(y, u));
+		*rgb24top++ = (uchar)b;
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+
+		yptop += 2;
+#if PRINT_CALC_RATE // for TEST
+		calcCounter += 2;
+#endif // for TEST
+	  }
+
+	  rgb24size += IMAGE_FORMAT_SIZE * 2;
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	  uptop += uvNext;
+	  vptop += uvNext;
+	}
+  }
+#if PRINT_CALC_RATE // for TEST
+  cout << "  calc rate : " <<
+	(float)calcCounter/(calcCounter + skipCounter) * 100.0 << " (%) : frame " << frameCounter << endl << flush;
+#endif // for TEST
+  return rgb24size;
+}
+#endif // YUV420TORGB24_VERSION == 31
 
 #if YUV420TORGB24_VERSION == 4 || YUV420TORGB24_VERSION == 5
 // YUV420 convert to RGB macro
@@ -1989,14 +2348,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   uchar *uptop;
   uchar *vptop;
   if (yuv420 == yuv1){
-	yptop = y2topOrg + (ytop - yuv420);
-	uptop = u2topOrg + (utop - yuv420);
-	vptop = v2topOrg + (vtop - yuv420);
+	yptop = y2topOrg + (ytop - y1topOrg);
+	uptop = u2topOrg + (utop - u1topOrg);
+	vptop = v2topOrg + (vtop - v1topOrg);
   }
   else {
-	yptop = y1topOrg + (ytop - yuv420);
-	uptop = u1topOrg + (utop - yuv420);
-	vptop = v1topOrg + (vtop - yuv420);
+	yptop = y1topOrg + (ytop - y2topOrg);
+	uptop = u1topOrg + (utop - u2topOrg);
+	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
   for (int yPos = 0; yPos < height; yPos++){
@@ -2151,14 +2510,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   uchar *uptop;
   uchar *vptop;
   if (yuv420 == yuv1){
-	yptop = y2topOrg + (ytop - yuv420);
-	uptop = u2topOrg + (utop - yuv420);
-	vptop = v2topOrg + (vtop - yuv420);
+	yptop = y2topOrg + (ytop - y1topOrg);
+	uptop = u2topOrg + (utop - u1topOrg);
+	vptop = v2topOrg + (vtop - v1topOrg);
   }
   else {
-	yptop = y1topOrg + (ytop - yuv420);
-	uptop = u1topOrg + (utop - yuv420);
-	vptop = v1topOrg + (vtop - yuv420);
+	yptop = y1topOrg + (ytop - y2topOrg);
+	uptop = u1topOrg + (utop - u2topOrg);
+	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
 #if 1 // for TEST

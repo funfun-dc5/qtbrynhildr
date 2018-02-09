@@ -387,6 +387,15 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 
   // audio device information
   const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
+  // supported Sample Rates
+  if (settings->getOutputLog()){
+	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
+	cout << "supported Sample Rates : ";
+	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
+	  cout << (int)(*i) << " ";
+	}
+	cout << endl << flush;
+  }
   if (!deviceInfo.isFormatSupported(format)){
 	if (audioOutput != 0){
 	  audioOutput->stop();
@@ -400,15 +409,6 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	  emit outputLogMessage(PHASE_SOUND, msg);
 	}
 	return true; // NOT supported sample rate
-  }
-  // supported Sample Rates
-  if (settings->getOutputLog()){
-	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
-	cout << "supported Sample Rates : ";
-	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
-	  cout << (int)(*i) << " ";
-	}
-	cout << endl << flush;
   }
 
   // clean sound buffer

@@ -51,10 +51,10 @@ case $UNAME in
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
 				;;
 			armv6l)
-				QTROOT=/usr/local/qt5
+				QTROOT=/usr
 				;;
 			armv7l)
-				QTROOT=/usr/local/qt5
+				QTROOT=/usr
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

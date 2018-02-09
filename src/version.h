@@ -5,9 +5,9 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.0.11"
-#define QTB_RCNAME				"-rpi3"
-#define QTB_VERSION_NUMBER		2011
+#define QTB_VERSION				"2.0.12"
+#define QTB_RCNAME				""
+#define QTB_VERSION_NUMBER		2012
 
 // year
 #define QTB_YEAR		"2015-2018"

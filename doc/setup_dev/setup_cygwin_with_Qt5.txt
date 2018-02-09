@@ -10,7 +10,7 @@
 
  $ cd qtbrynhildr/src
  $ ./setup cygwin
- $ qmake-qt5 qtbrynhildr.pro
+ $ /usr/bin/qmake-qt5 qtbrynhildr.pro
 
 3) build
 

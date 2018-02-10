@@ -219,7 +219,8 @@ DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 # for new feature
 NEW_FEATURE = OFF
 equals(NEW_FEATURE, ON){
-DEFINES += QTB_USE_SIMD=1
+
+# SIMD (SSE/NEON/AVX)
 
 # INTEL (gcc/clang)
 QMAKE_CXXFLAGS += -msse4.1
@@ -228,7 +229,17 @@ QMAKE_CXXFLAGS += -msse4.1
 #QMAKE_CXXFLAGS += /arch:AVX
 # ARM
 #QMAKE_CXXFLAGS += -mfpu=neon
+
+SOURCES += graphicsthread/yuv2rgb_sse.cpp
+#SOURCES += graphicsthread/yuv2rgb_neon.cpp
+#SOURCES += graphicsthread/yuv2rgb_avx.cpp
 }
 else {
-DEFINES += QTB_USE_SIMD=0
+
+# NO SIMD
+
+#SOURCES += graphicsthread/yuv2rgbv0.cpp
+#SOURCES += graphicsthread/yuv2rgbv1.cpp
+#SOURCES += graphicsthread/yuv2rgbv2.cpp
+SOURCES += graphicsthread/yuv2rgbv3.cpp
 }

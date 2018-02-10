@@ -56,6 +56,22 @@
 
 namespace qtbrynhildr {
 
+#if QTB_MULTI_THREAD_CONVERTER
+// parameters
+extern int width;
+extern int uvNext;
+extern int rgb24Next;
+
+extern uchar *yuv420;
+extern uchar *yuv1;
+extern uchar *y1topOrg;
+extern uchar *u1topOrg;
+extern uchar *v1topOrg;
+extern uchar *y2topOrg;
+extern uchar *u2topOrg;
+extern uchar *v2topOrg;
+#endif // QTB_MULTI_THREAD_CONVERTER
+
 // GraphicsThread
 class GraphicsThread : public NetThread
 {
@@ -186,6 +202,9 @@ private:
 
   // convert YUV420 to RGB24 (Full Convert)
   void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+
+  // get converter source name
+  const char *getConverterSourceName() const;
 
   // clip
   int clip(int val)

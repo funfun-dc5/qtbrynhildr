@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -13,6 +13,8 @@
 
 // Local Header
 #include "graphicsthread.h"
+
+#if QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {
 
@@ -364,3 +366,5 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 #endif // defined(__ARM_NEON__)
 
 } // end of namespace qtbrynhildr
+
+#endif // QTB_PUBLIC_MODE7_SUPPORT

@@ -11,7 +11,6 @@
  qt5-default
  qtmultimedia5-dev
  libqt5multimedia5-plugins
- libqt5gstreamer
  pulseaudio
  pulseaudio-module-zeroconf
 

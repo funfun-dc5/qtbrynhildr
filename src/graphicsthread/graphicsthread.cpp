@@ -189,6 +189,7 @@ GraphicsThread::~GraphicsThread()
 	delete [] yuv2;
 	yuv2 = 0;
   }
+  yuv420 = 0;
 #if USE_PPM_LOADER_FOR_VP8
   if (ppm != 0){
 	delete [] ppm;

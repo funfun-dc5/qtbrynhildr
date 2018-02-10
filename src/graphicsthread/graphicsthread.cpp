@@ -65,7 +65,7 @@ inline int clip(int val)
 }
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 // yuv420toRGB24 (select one)
@@ -74,6 +74,7 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // YUV420TORGB24_VERSION 2 : integer and shift      129 fps
 // YUV420TORGB24_VERSION 3 : V2 + small improvement 131 fps
 // YUV420TORGB24_VERSION 31: V3 + small improvement 13? fps
+// YUV420TORGB24_VERSION 32: V3 + small improvement 13? fps
 // YUV420TORGB24_VERSION 4 : V3 + small improvement 132 fps
 // YUV420TORGB24_VERSION 5 : V4 + loop unrolling    136 fps
 // YUV420TORGB24_VERSION 6 : integer (SSE)          158 fps
@@ -797,11 +798,12 @@ inline int GraphicsThread::makeRGB24Image()
   // 1 thread version
   if (numOfThread <= 1 || height % 2 != 0){
 	// convert YUV420 to RGB24
-	return convertYUV420toRGB24(ytop, utop, vtop, rgb24top, height);
+	convertYUV420toRGB24(ytop, utop, vtop, rgb24top, height);
+	return size * IMAGE_FORMAT_SIZE;
   }
   else { // numOfThread >= 2
 	// 2 thread or 4 thread version
-	QFuture<int> f1, f2, f3;
+	QFuture<void> f1, f2, f3;
 	int linesOfThread = height / numOfThread;
 
 	// start 1st thread
@@ -848,7 +850,8 @@ inline int GraphicsThread::makeRGB24Image()
   }
 #else // QTB_MULTI_THREAD_CONVERTER
   // convert YUV420 to RGB24
-  return convertYUV420toRGB24(ytop, utop, vtop, rgb24top, height);
+  convertYUV420toRGB24(ytop, utop, vtop, rgb24top, height);
+  return size * IMAGE_FORMAT_SIZE;
 #endif // QTB_MULTI_THREAD_CONVERTER
 }
 
@@ -866,10 +869,8 @@ inline int GraphicsThread::makeRGB24Image()
 #define GET_B_MT(Y, U)		((256 * Y + 453 * U          ) >> 8)
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
@@ -939,8 +940,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
@@ -950,7 +949,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vptop += qtbrynhildr::uvNext;
 	}
   }
-  return rgb24size;
 }
 #endif // YUV420TORGB24_MT_VERSION == 1
 
@@ -962,10 +960,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #define GET_B_MT(Y, U)		((Y + 453 * U          ) >> 8)
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
@@ -1039,8 +1035,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
@@ -1050,7 +1044,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vptop += qtbrynhildr::uvNext;
 	}
   }
-  return rgb24size;
 }
 #endif // YUV420TORGB24_MT_VERSION == 2
 
@@ -1062,10 +1055,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #define GET_B_MT(Y, U)		((Y + 453 * U          ) >> 8)
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
@@ -1182,8 +1173,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // FORMAT_RGBA8888
 		yptop += 2;
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
@@ -1193,7 +1182,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vptop += qtbrynhildr::uvNext;
 	}
   }
-  return rgb24size;
 }
 #endif // YUV420TORGB24_MT_VERSION == 3
 
@@ -1203,10 +1191,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #define GET_VALUE(Y, X)	((Y + X) >> 8)
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < qtbrynhildr::width; xPos += 4, uvOffset += 2){
 	  uchar *utop1 = utop + uvOffset;
@@ -1309,8 +1295,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  // A
 	  *rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 4;
 	}
 	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
@@ -1318,7 +1302,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vtop += qtbrynhildr::uvNext;
 	}
   }
-  return rgb24size;
 }
 
 #endif // YUV420TORGB24_MT_VERSION == 5
@@ -1330,10 +1313,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
 #if defined(__ARM_NEON__)
 
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   Aligned(16) int result[4];
 
   //  Aligned(16) const int yca[4] = {256,  256, 256, 0};
@@ -1486,8 +1467,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -1497,17 +1476,14 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vptop += uvNext;
 	}
   }
-  return rgb24size;
 }
 
 #endif // defined(__ARM_NEON__)
 
 #if defined(__SSE4_1__)
 
-int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   Aligned(16) int result[4];
 
   uchar *yptop;
@@ -1695,8 +1671,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += qtbrynhildr::rgb24Next;
 	if (yPos & 0x1){
@@ -1706,7 +1680,6 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 	  vptop += qtbrynhildr::uvNext;
 	}
   }
-  return rgb24size;
 }
 
 #endif // defined(__SSE4_1__)
@@ -1739,10 +1712,8 @@ int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top,
 #endif // YUV420TORGB24_VERSION == 2
 
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
@@ -1812,8 +1783,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -1823,7 +1792,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vptop += uvNext;
 	}
   }
-  return rgb24size;
 }
 #endif // YUV420TORGB24_VERSION == 1 || YUV420TORGB24_VERSION == 2
 
@@ -1834,10 +1802,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
 
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
@@ -1933,8 +1899,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 		calcCounter++;
 #endif // for TEST
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -1948,7 +1912,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   cout << "  calc rate : " <<
 	(float)calcCounter/(calcCounter + skipCounter) * 100.0 << " (%) : frame " << frameCounter << endl << flush;
 #endif // for TEST
-  return rgb24size;
 }
 #endif // YUV420TORGB24_VERSION == 3
 
@@ -1959,10 +1922,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
 
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
@@ -2106,8 +2067,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 		calcCounter += 2;
 #endif // for TEST
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -2121,7 +2080,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
   cout << "  calc rate : " <<
 	(float)calcCounter/(calcCounter + skipCounter) * 100.0 << " (%) : frame " << frameCounter << endl << flush;
 #endif // for TEST
-  return rgb24size;
 }
 #endif // YUV420TORGB24_VERSION == 31
 
@@ -2131,10 +2089,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 
 #if YUV420TORGB24_VERSION == 4
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
@@ -2185,8 +2141,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // A
 	  *rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -2194,16 +2148,13 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vtop += uvNext;
 	}
   }
-  return rgb24size;
 }
 #endif // YUV420TORGB24_VERSION == 4
 
 #if YUV420TORGB24_VERSION == 5
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 4, uvOffset += 2){
 	  uchar *utop1 = utop + uvOffset;
@@ -2305,8 +2256,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // A
 	  *rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 4;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -2314,7 +2263,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vtop += uvNext;
 	}
   }
-  return rgb24size;
 }
 #endif // YUV420TORGB24_VERSION == 5
 #endif // YUV420TORGB24_VERSION == 4 || YUV420TORGB24_VERSION == 5
@@ -2326,10 +2274,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 // convert YUV420 to RGB24
 #if defined(__ARM_NEON__)
 
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   Aligned(16) int result[4];
 
   //  const int yca[4] Aligned(16) = {256,  256, 256, 0};
@@ -2482,8 +2428,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -2493,17 +2437,14 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vptop += uvNext;
 	}
   }
-  return rgb24size;
 }
 
 #endif // defined(__ARM_NEON__)
 
 #if defined(__SSE4_1__) || defined(__AVX__)
 
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   Aligned(16) int result[4];
 
   uchar *yptop;
@@ -2691,8 +2632,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 	  }
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -2702,7 +2641,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vptop += uvNext;
 	}
   }
-  return rgb24size;
 }
 
 #endif // defined(__SSE4_1__) || defined(__AVX__)
@@ -2725,10 +2663,8 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 #error "Yet: INTEL AVX version (too SLOW)"
 
 // convert YUV420 to RGB24
-int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 {
-  int rgb24size = 0;
-
   Aligned(32) int result[8];
 
 #if 1 // for TEST
@@ -2851,8 +2787,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  // A
 	  *rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
-
-	  rgb24size += IMAGE_FORMAT_SIZE * 2;
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
@@ -2860,7 +2794,6 @@ int GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, 
 	  vtop += uvNext;
 	}
   }
-  return rgb24size;
 }
 
 #endif // defined(__AVX__)

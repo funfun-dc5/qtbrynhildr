@@ -185,7 +185,7 @@ private:
   inline int makeRGB24Image();
 
   // convert YUV420 to RGB24 (Full Convert)
-  int convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+  void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
 
   // clip
   int clip(int val)

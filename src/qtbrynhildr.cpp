@@ -596,15 +596,17 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
   // setup touchpanel interface
   // keroremote
+  int checkHeight = screenHeight * 0.05; // 1/20 of screen height
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareButtonRect =
-	QRect(0, screenHeight - 50, screenWidth/4, 50);
+	QRect(0, screenHeight - checkHeight, screenWidth/4, checkHeight);
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareKeyboardRect =
-	QRect(screenWidth/8 * 3, screenHeight - 50, screenWidth/4, 50);
+	QRect(screenWidth/8 * 3, screenHeight - checkHeight, screenWidth/4, checkHeight);
   // qtbrynhilr
+  int checkWidth = screenWidth * 0.05; // 1/20 of screen width
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareButtonRect =
-	QRect(0, screenHeight/8 * 3, 80, screenHeight/4);
+	QRect(0, screenHeight/8 * 3, checkWidth, screenHeight/4);
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
-	QRect(screenWidth - 80, screenHeight/8 * 3, screenWidth, screenHeight/4);
+	QRect(screenWidth - checkWidth, screenHeight/8 * 3, screenWidth, screenHeight/4);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog

@@ -1,6 +1,13 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2018 FunFun <fu.aba.dc5@gmail.com>
 
+// YUV420 convert to RGB macro
+#if !defined(GET_R)
+#define GET_R(Y, V)		((256 * Y           + 358 * V) >> 8)
+#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
+#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
+#endif // defined(GET_R)
+
 // yuv2rgbv1 function body
 
 {

@@ -21,11 +21,6 @@ const char *GraphicsThread::getConverterSourceName() const
   return "yuv2rgbv1";
 }
 
-// YUV420 convert to RGB macro
-#define GET_R(Y, V)		((256 * Y           + 358 * V) >> 8)
-#define GET_G(Y, U, V)	((256 * Y -  88 * U - 182 * V) >> 8)
-#define GET_B(Y, U)		((256 * Y + 453 * U          ) >> 8)
-
 // convert YUV420 to RGB24
 void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 #include "yuv2rgbv1.h"

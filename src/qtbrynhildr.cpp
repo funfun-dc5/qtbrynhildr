@@ -656,8 +656,8 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #endif // for TEST
 
   // set default opacity
-  softwareKeyboard->setOpacity(0.95);
-  softwareButton->setOpacity(0.95);
+  softwareKeyboard->setOpacity(0.80);
+  softwareButton->setOpacity(0.80);
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 

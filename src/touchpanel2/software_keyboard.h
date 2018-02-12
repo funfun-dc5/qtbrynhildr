@@ -447,6 +447,9 @@ private:
   // pushed Fn key
   ID_KEY pushedFnKey;
 
+  // alpha
+  int alpha;
+
   // output log flag
   bool outputLog;
 
@@ -487,6 +490,14 @@ public:
 
   // size hint
   QSize sizeHint() const;
+
+  // set opacity
+  void setOpacity(qreal opacity)
+  {
+	alpha = 255 * opacity;
+	alpha = (alpha < 0) ? 0 : alpha;
+	alpha = (alpha > 255) ? 255 : alpha;
+  }
 
 protected:
   // paint event

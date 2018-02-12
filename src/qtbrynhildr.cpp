@@ -654,6 +654,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   softwareButton->setGeometry(40,30,1188,450);
   softwareButton->setVisible(true);
 #endif // for TEST
+
+  // set default opacity
+  softwareKeyboard->setOpacity(0.95);
+  softwareButton->setOpacity(0.95);
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 

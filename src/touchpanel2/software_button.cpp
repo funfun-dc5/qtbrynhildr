@@ -39,6 +39,7 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   onShowVideoFPSButton(false),
   currentFrameRate(0.0),
   currentDataRate(0.0),
+  alpha(255),
   // for DEBUG
   outputLog(false)
 {
@@ -97,8 +98,10 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
 
+  // panel color
+  QColor panelColor = QColor::fromRgb(0, 0, 0, alpha);
   // pen color
-  QColor penColor = QColor::fromRgb(61, 124, 250);
+  QColor penColor = QColor::fromRgb(61, 124, 250, alpha);
   QPen pen = QPen(penColor);
   pen.setWidth(5);
 
@@ -118,13 +121,13 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 		painter.setBrush(penColor);
 	  }
 	  else {
-		painter.setBrush(Qt::black);
+		painter.setBrush(panelColor);
 	  }
 	  painter.setPen(pen);
 	  painter.drawRoundRect(rect);
 	  //painter.drawRect(rect);
 	  if (layout[i].pushed){
-		painter.setPen(Qt::black);
+		painter.setPen(panelColor);
 	  }
 	  else {
 		painter.setPen(penColor);

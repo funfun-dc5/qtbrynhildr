@@ -229,6 +229,9 @@ private:
   // current data rate
   double currentDataRate;
 
+  // alpha
+  int alpha;
+
   // output log flag
   bool outputLog;
 
@@ -264,6 +267,14 @@ public:
 	this->currentDataRate = currentDataRate;
   }
 
+  // set opacity
+  void setOpacity(qreal opacity)
+  {
+	alpha = 255 * opacity;
+	alpha = (alpha < 0) ? 0 : alpha;
+	alpha = (alpha > 255) ? 255 : alpha;
+  }
+
 protected:
   // paint event
   void paintEvent(QPaintEvent *event);
@@ -279,7 +290,6 @@ protected:
   virtual void mouseReleaseEvent(QMouseEvent *event);
   virtual void mouseMoveEvent(QMouseEvent *event);
 
-protected:
   // pressed button
   virtual void pressedButton(ID_BUTTON id);
 

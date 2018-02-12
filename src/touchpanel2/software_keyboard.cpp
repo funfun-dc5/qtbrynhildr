@@ -57,6 +57,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   pushedControlKey(ID_KEY_0),
   pushedAltKey(ID_KEY_0),
   pushedFnKey(ID_KEY_0),
+  alpha(255),
   // for DEBUG
   outputLog(false)
 {
@@ -239,10 +240,10 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
   //cout << "paint! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
 
   // panel color
-  QColor panelColor = QColor::fromRgb(15, 31, 64);
-  //QColor panelColor = QColor::fromRgb(30, 30, 30);
-  QColor penColor = QColor::fromRgb(61, 124, 250);
-  //QColor penColor = QColor::fromRgb(192, 192, 192);
+  QColor panelColor = QColor::fromRgb(15, 31, 64, alpha);
+  //QColor panelColor = QColor::fromRgb(30, 30, 30, alpha);
+  QColor penColor = QColor::fromRgb(61, 124, 250, 255);
+  //QColor penColor = QColor::fromRgb(192, 192, 192, alpha);
 
   // painter
   QPainter painter(this);

@@ -33,12 +33,12 @@ void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop,
 {
   Aligned(16) int result[4];
 
-  //  const int yca[4] Aligned(16) = {256,  256, 256, 0};
+  //  Aligned(16) const int yca[4] = {256,  256, 256, 0};
   Aligned(16) const int uca[4] = {0,    -88, 453, 0};
   Aligned(16) const int vca[4] = {358, -182,   0, 0};
 
   //  int32x4_t yc = vld1q_s32(yca);
-  int32x4_t yc = vdupq_n_s32(256);;
+  int32x4_t yc = vdupq_n_s32(256);
   int32x4_t uc = vld1q_s32(uca);
   int32x4_t vc = vld1q_s32(vca);
 

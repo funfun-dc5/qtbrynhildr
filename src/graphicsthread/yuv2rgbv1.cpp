@@ -150,7 +150,7 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 	  vp = *(vptop + uvOffset) - 128;
 
 	  // == xPos ==
-	  y = *ytop++;
+	  y =  *ytop++;
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgb24top += IMAGE_FORMAT_SIZE;

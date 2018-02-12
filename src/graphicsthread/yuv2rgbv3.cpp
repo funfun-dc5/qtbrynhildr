@@ -218,6 +218,16 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
+#if PRINT_CALC_RATE // for TEST
+  // frame counter
+  static int frameCounter = 0;
+  frameCounter++;
+  // skip counter
+  int skipCounter = 0;
+  // calc counter
+  int calcCounter = 0;
+#endif // for TEST
+
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
@@ -234,10 +244,13 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 		// calculate xPos/xPos+1 if y == yp (y, u, v is NOT changed)
 
 		// == xPos ==
-		y = *ytop++;
+		y =  *ytop++;
 		yp = *yptop++;
 		if (y == yp){
 		  rgb24top += IMAGE_FORMAT_SIZE;
+#if PRINT_CALC_RATE // for TEST
+		  skipCounter++;
+#endif // for TEST
 		}
 		else {
 		  y <<= 8; // y * 256
@@ -255,6 +268,9 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 		  // A
 		  *rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+#if PRINT_CALC_RATE // for TEST
+		  calcCounter++;
+#endif // for TEST
 		}
 
 		// == xPos+1 ==
@@ -262,6 +278,9 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 		yp = *yptop++;
 		if (y == yp){
 		  rgb24top += IMAGE_FORMAT_SIZE;
+#if PRINT_CALC_RATE // for TEST
+		  skipCounter++;
+#endif // for TEST
 		}
 		else {
 		  y <<= 8; // y * 256
@@ -279,12 +298,16 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 		  // A
 		  *rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+#if PRINT_CALC_RATE // for TEST
+		  calcCounter++;
+#endif // for TEST
 		}
 	  }
 	  else {
 		// always calculate xPos/xPos+1
+
 		// == xPos ==
-		y = *ytop++;
+		y =  *ytop++;
 		y <<= 8; // y * 256
 
 		// R
@@ -318,7 +341,11 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+
 		yptop += 2;
+#if PRINT_CALC_RATE // for TEST
+		calcCounter += 2;
+#endif // for TEST
 	  }
 	}
 	rgb24top += rgb24Next;
@@ -329,6 +356,10 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 	  vptop += uvNext;
 	}
   }
+#if PRINT_CALC_RATE // for TEST
+  cout << "  calc rate : " <<
+	(float)calcCounter/(calcCounter + skipCounter) * 100.0 << " (%) : frame " << frameCounter << endl << flush;
+#endif // for TEST
 }
 #endif // QTB_MULTI_THREAD_CONVERTER
 

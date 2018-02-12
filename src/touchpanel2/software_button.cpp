@@ -39,6 +39,7 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   onShowVideoFPSButton(false),
   currentFrameRate(0.0),
   currentDataRate(0.0),
+  fontSize(32),
   alpha(255),
   // for DEBUG
   outputLog(false)
@@ -109,7 +110,7 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
   QPainter painter(this);
   // change font size
   QFont font = painter.font();
-  font.setPixelSize(32);
+  font.setPixelSize(fontSize);
   painter.setFont(font);
 
   // draw all buttons

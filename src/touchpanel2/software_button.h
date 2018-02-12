@@ -229,6 +229,9 @@ private:
   // current data rate
   double currentDataRate;
 
+  // font size
+  int fontSize;
+
   // alpha
   int alpha;
 
@@ -265,6 +268,12 @@ public:
   void setCurrentDataRate(double currentDataRate)
   {
 	this->currentDataRate = currentDataRate;
+  }
+
+  // set font size
+  void setFontSize(int fontSize)
+  {
+	this->fontSize = fontSize;
   }
 
   // set opacity

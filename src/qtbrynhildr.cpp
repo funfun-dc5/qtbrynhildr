@@ -655,6 +655,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   softwareButton->setVisible(true);
 #endif // for TEST
 
+  // set default font size
+  softwareKeyboard->setFontSize(32);
+  softwareButton->setFontSize(32);
+
   // set default opacity
   softwareKeyboard->setOpacity(0.80);
   softwareButton->setOpacity(0.80);

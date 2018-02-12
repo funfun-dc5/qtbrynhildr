@@ -447,6 +447,9 @@ private:
   // pushed Fn key
   ID_KEY pushedFnKey;
 
+  // font size
+  int fontSize;
+
   // alpha
   int alpha;
 
@@ -490,6 +493,12 @@ public:
 
   // size hint
   QSize sizeHint() const;
+
+  // set font size
+  void setFontSize(int fontSize)
+  {
+	this->fontSize = fontSize;
+  }
 
   // set opacity
   void setOpacity(qreal opacity)

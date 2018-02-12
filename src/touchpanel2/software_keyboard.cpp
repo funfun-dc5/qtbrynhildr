@@ -57,6 +57,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   pushedControlKey(ID_KEY_0),
   pushedAltKey(ID_KEY_0),
   pushedFnKey(ID_KEY_0),
+  fontSize(32),
   alpha(255),
   // for DEBUG
   outputLog(false)
@@ -253,7 +254,7 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
   // change font size
   QFont font = painter.font();
   font.setFamily("Courier");
-  font.setPixelSize(32);
+  font.setPixelSize(fontSize);
   //font.setStyleStrategy(QFont::NoAntialias);
   //  qDebug() << "family = " << font.family();
   painter.setFont(font);

@@ -21,7 +21,7 @@ namespace qtbrynhildr {
 // get converter name
 const char *GraphicsThread::getConverterSourceName() const
 {
-  return "yuv2rgbv3";
+  return "yuv2rgbv3"; // 136 fps
 }
 
 // convert YUV420 to RGB24

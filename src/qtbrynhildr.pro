@@ -225,8 +225,10 @@ equals(NEW_FEATURE, ON){
 # INTEL (gcc/clang)
 QMAKE_CXXFLAGS += -msse4.1
 #QMAKE_CXXFLAGS += -mavx
+#QMAKE_CXXFLAGS += -mavx2
 # INTEL (MSVC)
 #QMAKE_CXXFLAGS += /arch:AVX
+#QMAKE_CXXFLAGS += /arch:AVX2
 # ARM
 #QMAKE_CXXFLAGS += -mfpu=neon
 

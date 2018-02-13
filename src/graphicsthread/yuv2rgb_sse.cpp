@@ -23,12 +23,16 @@ namespace qtbrynhildr {
 // get converter name
 const char *GraphicsThread::getConverterSourceName() const
 {
-  return "yuv2rgb_sse";
+#if defined(__AVX2__)
+  return "yuv2rgb_sse:avx2"; // 172 fps
+#else // defined(__AVX2__)
+  return "yuv2rgb_sse";		 // 159 fps
+#endif // defined(__AVX2__)
 }
 
 // SSE
 
-#if defined(__SSE4_1__) || defined(__AVX__)
+#if defined(__SSE4_1__) || defined(__AVX__) || defined(__AVX2__)
 
 // GraphicsThread::convert YUV420 to RGB24
 void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
@@ -42,7 +46,7 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 
 #endif // QTB_MULTI_THREAD_CONVERTER
 
-#endif // defined(__SSE4_1__) || defined(__AVX__)
+#endif // defined(__SSE4_1__) || defined(__AVX__) || defined(__AVX2__)
 
 } // end of namespace qtbrynhildr
 

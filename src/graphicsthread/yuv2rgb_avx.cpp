@@ -23,7 +23,7 @@ namespace qtbrynhildr {
 // get converter name
 const char *GraphicsThread::getConverterSourceName() const
 {
-  return "yuv2rgb_avx";
+  return "yuv2rgb_avx"; // 73 fps (;_;)
 }
 
 // AVX

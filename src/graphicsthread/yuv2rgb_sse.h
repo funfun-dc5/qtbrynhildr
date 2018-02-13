@@ -49,6 +49,147 @@
 
 #endif // for TEST
 
+#if defined(__AVX2__)
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
+	  int y, u, v;
+	  int yp, up, vp;
+	  __m128i yv, uv, vv;
+	  __m128i uv0, vv0;
+
+	  // set u/v
+	  u =  *(utop + uvOffset) - 128;
+	  v =  *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
+
+	  // load U, V
+	  uv0 = _mm_set1_epi32(u);
+	  vv0 = _mm_set1_epi32(v);
+	  uv0 = _mm_broadcastd_epi32(uv0); // AVX2
+	  vv0 = _mm_broadcastd_epi32(vv0); // AVX2
+
+	  // xPos
+
+	  // set y
+	  y =  *ytop++;
+	  yp = *yptop++;
+	  if (y == yp && u == up && v == vp){
+		rgb24top += IMAGE_FORMAT_SIZE;
+	  }
+	  else {
+		// 1) load Y
+		yv = _mm_set1_epi32(y);
+		yv = _mm_broadcastd_epi32(yv);	// AVX2
+
+		// 2) Y * Yc -> Y
+		yv = _mm_mullo_epi32(yv, yc);
+
+		// 3) U * Uc -> U
+		uv = _mm_mullo_epi32(uv0, uc);
+
+		// 4) V * Vc -> V
+		vv = _mm_mullo_epi32(vv0, vc);
+
+		// 5) Y + U + V -> Y
+		yv = _mm_add_epi32(yv, uv);
+		yv = _mm_add_epi32(yv, vv);
+
+		// 6) >> 8
+		yv = _mm_srai_epi32(yv, 8);
+
+		// 7) Y > 255 ? 255 : Y
+		yv = _mm_min_epi32(yv, constMaxV);
+
+		// 8)  Y < 0 ? 0 : Y
+		yv = _mm_max_epi32(yv, constMinV);
+
+		// 9) store to result
+		_mm_store_si128((__m128i*)result, yv);
+
+		// set rgba32 from result int * 4
+
+		// R
+		*rgb24top++ = (uchar)result[0];
+
+		// G
+		*rgb24top++ = (uchar)result[1];
+
+		// B
+		*rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+	  }
+
+	  // xPos+1
+
+	  // set y
+	  y =  *ytop++;
+	  yp = *yptop++;
+	  if (y == yp && u == up && v == vp){
+		rgb24top += IMAGE_FORMAT_SIZE;
+	  }
+	  else {
+		// 1) load Y
+		yv = _mm_set1_epi32(y);
+		yv = _mm_broadcastd_epi32(yv);	// AVX2
+
+		// 2) Y * Yc -> Y
+		yv = _mm_mullo_epi32(yv, yc);
+
+		// 3) U * Uc -> U
+		uv = _mm_mullo_epi32(uv0, uc);
+
+		// 4) V * Vc -> V
+		vv = _mm_mullo_epi32(vv0, vc);
+
+		// 5) Y + U + V -> Y
+		yv = _mm_add_epi32(yv, uv);
+		yv = _mm_add_epi32(yv, vv);
+
+		// 6) >> 8
+		yv = _mm_srai_epi32(yv, 8);
+
+		// 7) Y > 255 ? 255 : Y
+		yv = _mm_min_epi32(yv, constMaxV);
+
+		// 8)  Y < 0 ? 0 : Y
+		yv = _mm_max_epi32(yv, constMinV);
+
+		// 9) store to result
+		_mm_store_si128((__m128i*)result, yv);
+
+		// set rgba32 from result int * 4
+
+		// R
+		*rgb24top++ = (uchar)result[0];
+
+		// G
+		*rgb24top++ = (uchar)result[1];
+
+		// B
+		*rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		// A
+		*rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+	  }
+	}
+	rgb24top += rgb24Next;
+	if (yPos & 0x1){
+	  utop += uvNext;
+	  vtop += uvNext;
+	  uptop += uvNext;
+	  vptop += uvNext;
+	}
+  }
+
+#else // defined(__AVX2__)
+
   Aligned(16) int ya[4] = {  0,   0,   0,   0};
   Aligned(16) int ua[4] = {  0,   0,   0,   0};
   Aligned(16) int va[4] = {  0,   0,   0,   0};
@@ -200,4 +341,5 @@
 	  vptop += uvNext;
 	}
   }
+#endif // defined(__AVX2__)
 }

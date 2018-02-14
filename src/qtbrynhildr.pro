@@ -240,8 +240,8 @@ else {
 
 # NO SIMD
 
-#SOURCES += graphicsthread/yuv2rgbv0.cpp
-#SOURCES += graphicsthread/yuv2rgbv1.cpp
-#SOURCES += graphicsthread/yuv2rgbv2.cpp
-SOURCES += graphicsthread/yuv2rgbv3.cpp
+#SOURCES += graphicsthread/yuv2rgb_v0.cpp
+#SOURCES += graphicsthread/yuv2rgb_v1.cpp
+#SOURCES += graphicsthread/yuv2rgb_v2.cpp
+SOURCES += graphicsthread/yuv2rgb_v3.cpp
 }

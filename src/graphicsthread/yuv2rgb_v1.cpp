@@ -11,9 +11,6 @@
 // Local Header
 #include "graphicsthread.h"
 
-// for TEST
-#define PRINT_CALC_RATE 0
-
 #if QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {
@@ -21,12 +18,12 @@ namespace qtbrynhildr {
 // get converter name
 const char *GraphicsThread::getConverterSourceName() const
 {
-  return "yuv2rgbv2"; // 131 fps
+  return "yuv2rgb_v1"; // 129 fps
 }
 
 // convert YUV420 to RGB24
 void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
-#include "yuv2rgbv2.h"
+#include "yuv2rgb_v1.h"
 
 #if QTB_MULTI_THREAD_CONVERTER
 
@@ -41,7 +38,7 @@ inline int clip(int val)
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
 void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
-#include "yuv2rgbv2.h"
+#include "yuv2rgb_v1.h"
 
 #endif // QTB_MULTI_THREAD_CONVERTER
 

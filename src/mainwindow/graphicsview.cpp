@@ -36,7 +36,7 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   scalingFactorForFullScreen(1.0),
 #endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);
@@ -82,12 +82,13 @@ void GraphicsView::setScale(qreal scalingFactor)
   QSize desktopSize = desktopPanel->getDesktopSize();
   QSize currentDesktopSize = desktopSize * scalingFactor;
   QSize diffSize = currentDesktopSize - windowSize;
-  qDebug() << "--- setScale() ---";
-  qDebug() << "windowSize = " << windowSize;
-  qDebug() << "desktopPanel->getDesktopSize() = " << desktopSize;
-  qDebug() << "currentDesktopSize = " << currentDesktopSize;
-  qDebug() << "diffSize = " << diffSize;
-
+  if (outputLog){
+	qDebug() << "--- setScale() ---";
+	qDebug() << "windowSize = " << windowSize;
+	qDebug() << "desktopPanel->getDesktopSize() = " << desktopSize;
+	qDebug() << "currentDesktopSize = " << currentDesktopSize;
+	qDebug() << "diffSize = " << diffSize;
+  }
 #if 0 // for TEST
 #if defined(QTB_DEV_TOUCHPANEL)
 #if 1
@@ -110,12 +111,14 @@ void GraphicsView::setScale(qreal scalingFactor)
   verticalScrollBar()->setValue(0);
   horizontalScrollBar()->setValue(0);
 #endif
-  qDebug() << "verticalScrollBar.minimum   = " << verticalScrollBar()->minimum();
-  qDebug() << "verticalScrollBar.maximum   = " << verticalScrollBar()->maximum();
-  qDebug() << "verticalScrollBar.value     = " << verticalScrollBar()->value();
-  qDebug() << "horizontalScrollBar.minimum = " << horizontalScrollBar()->minimum();
-  qDebug() << "horizontalScrollBar.maximum = " << horizontalScrollBar()->maximum();
-  qDebug() << "horizontalScrollBar.value   = " << horizontalScrollBar()->value();
+  if (outputLog){
+	qDebug() << "verticalScrollBar.minimum   = " << verticalScrollBar()->minimum();
+	qDebug() << "verticalScrollBar.maximum   = " << verticalScrollBar()->maximum();
+	qDebug() << "verticalScrollBar.value     = " << verticalScrollBar()->value();
+	qDebug() << "horizontalScrollBar.minimum = " << horizontalScrollBar()->minimum();
+	qDebug() << "horizontalScrollBar.maximum = " << horizontalScrollBar()->maximum();
+	qDebug() << "horizontalScrollBar.value   = " << horizontalScrollBar()->value();
+  }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #endif
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -165,23 +168,30 @@ bool GraphicsView::viewportEvent(QEvent *event){
   case QEvent::TouchUpdate:
   case QEvent::TouchEnd:
 	{
-	  qDebug() << "event type  = " << event->type();
-
+	  if (outputLog){
+		qDebug() << "event type  = " << event->type();
+	  }
 	  QTouchEvent *touchEvent = (QTouchEvent*)event;
-	  qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+	  if (outputLog){
+		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+	  }
 
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
 	  if (touchPoints.count() == 1){
 		// 1 finger
-		qDebug() << "== 1 Point == ";
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
-		qDebug() << "pos = " << touchPoint.pos();
+		if (outputLog){
+		  qDebug() << "== 1 Point == ";
+		  qDebug() << "pos = " << touchPoint.pos();
+		}
 		//		break; // to QGraphicsView::viewportEvent(event)
 		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
 		  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
 		  if (distance < 20){ // for TEST (Nexus7(2013):1920x1200)
 			// tap
-			qDebug() << "TAP";
+			if (outputLog){
+			  qDebug() << "TAP";
+			}
 			if (!settings->getOnShowSoftwareButton()){
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 													  touchPoint.pos(),
@@ -197,12 +207,12 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  else {
 			QPoint currentPos = touchPoint.pos().toPoint();
 			QPoint startPos = touchPoint.startPos().toPoint();
-#if 1 // for TEST
-			qDebug() << "softwareButtonRect = " << softwareButtonRect;
-			qDebug() << "softwareKeyboardRect = " << softwareKeyboardRect;
-			qDebug() << "currentPos = " << currentPos;
-			qDebug() << "startPos = " << startPos;
-#endif // for TEST
+			if (outputLog){
+			  qDebug() << "softwareButtonRect = " << softwareButtonRect;
+			  qDebug() << "softwareKeyboardRect = " << softwareKeyboardRect;
+			  qDebug() << "currentPos = " << currentPos;
+			  qDebug() << "startPos = " << startPos;
+			}
 			// show software button
 			if (softwareButtonRect.contains(startPos) &&
 				!softwareButtonRect.contains(currentPos, true)){
@@ -216,7 +226,9 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  }
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
-		  qDebug() << "Moved:GraphicsView";
+		  if (outputLog){
+			qDebug() << "Moved:GraphicsView";
+		  }
 		  QPoint startPos = touchPoint.startPos().toPoint();
 		  QPoint currentPos = touchPoint.pos().toPoint();
 		  QPoint lastPos = touchPoint.lastPos().toPoint();
@@ -240,7 +252,9 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			  QPoint currentPos = touchPoint.pos().toPoint();
 			  QPoint lastPos = touchPoint.lastPos().toPoint();
 			  QPoint move = currentPos - lastPos;
-			  qDebug() << "move = " << move;
+			  if (outputLog){
+				qDebug() << "move = " << move;
+			  }
 			  mouseMoveRelatively(move);
 			}
 #else // for TEST
@@ -256,7 +270,9 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  // scroll desktop
 		  else {
 			QPoint move = lastPos - currentPos;
-			qDebug() << "scroll move = " << move;
+			if (outputLog){
+			  qDebug() << "scroll move = " << move;
+			}
 			horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 			verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 		  }
@@ -264,14 +280,18 @@ bool GraphicsView::viewportEvent(QEvent *event){
 	  }
 	  else if (touchPoints.count() == 2){
 		// 2 fingers
-		qDebug() << "== 2 Point == ";
+		if (outputLog){
+		  qDebug() << "== 2 Point == ";
+		}
 		if (!(settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton())){
 		  const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
 		  const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
 		  qreal currentScalingFactor =
 			QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 			QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
-		  qDebug() << "currentScalingFactor = " << currentScalingFactor;
+			if (outputLog){
+			  qDebug() << "currentScalingFactor = " << currentScalingFactor;
+			}
 		  if (currentScalingFactor < 1.0){
 			scalingFactor -= 0.02;
 		  }
@@ -280,13 +300,17 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  }
 		  settings->setDesktopScalingFactor(scalingFactor);
 		  scalingFactor = settings->getDesktopScalingFactor();
-		  qDebug() << "scalingFactor = " << scalingFactor;
+		  if (outputLog){
+			qDebug() << "scalingFactor = " << scalingFactor;
+		  }
 		  setScale(scalingFactor);
 		}
 	  }
 	  else {
 		// others
-		qDebug() << "== many Point == ";
+		if (outputLog){
+		  qDebug() << "== many Point == ";
+		}
 	  }
 	  return true;
 	}

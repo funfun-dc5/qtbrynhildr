@@ -25,6 +25,9 @@
 #include "parameters.h"
 #include "qtbrynhildr.h"
 
+// for TEST
+#define TEST_FRAME_CONTROL 0
+
 namespace qtbrynhildr {
 
 #if QTB_MULTI_THREAD_CONVERTER
@@ -97,7 +100,7 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
-  cout << "converter source name : " << getConverterSourceName() << endl << flush;
+  //  cout << "converter source name : " << getConverterSourceName() << endl << flush;
 }
 
 // destructor
@@ -325,13 +328,13 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	if (drawTime == 0){
 	  startDrawTime = QDateTime::currentDateTime();
 	}
-#if 0 // for TEST
+#if 0 // TEST_FRAME_CONTROL
 	else {
 	  QDateTime currentTime = QDateTime::currentDateTime();
-	  qint64 pastTime = (currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
-	  cout << "[" << name << "] NETWORK : " << pastTime << " (us)" << endl;
+	  qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	  cout << "[" << name << "] NETWORK : " << pastTime << " (ms)" << endl;
 	}
-#endif
+#endif // TEST_FRAME_CONTROL
   }
 
 #if QTB_PUBLIC_MODE7_SUPPORT
@@ -349,7 +352,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
   //return TRANSMIT_SUCCEEDED; // for TEST
 
-#if 0 // for TEST
   // frame skip check
   if (settings->getOnGraphics()){
 	// frame rate control
@@ -357,21 +359,25 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  QDateTime currentTime = QDateTime::currentDateTime();
 	  qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
 						 currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
-	  qint64 threshold = averageDrawFrameTime; // settings->getFrameInterval();
+	  qint64 threshold = averageDrawFrameTime * 2; // settings->getFrameInterval();
 
-	  //cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl << flush;
-	  //cout << "[" << name << "] drawTime  : " << drawTime << " (us)" << endl;
-	  //cout << "[" << name << "] threshold : " << threshold << " (us)" << endl;
+#if 0 // for TEST
+	  cout << "[" << name << "] pastTime  : " << pastTime  << endl;
+	  cout << "[" << name << "] drawTime  : " << drawTime  << endl;
+	  cout << "[" << name << "] threshold : " << threshold  << endl;
+#endif // 0 // for TEST
 	  if (pastTime + drawTime > threshold){
 		// drop this frame
+#if TEST_FRAME_CONTROL
 		cout << "pastTime + drawTime > threshold" << endl;
-		cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl;
-		cout << "[" << name << "] drawTime  : " << drawTime << " (us)" << endl;
-		cout << "[" << name << "] threshold : " << threshold << " (us)" << endl << flush;
+		cout << "[" << name << "] pastTime  : " << pastTime  << endl;
+		cout << "[" << name << "] drawTime  : " << drawTime  << endl;
+		cout << "[" << name << "] threshold : " << threshold << endl << flush;
+#endif // TEST_FRAME_CONTROL
+		return TRANSMIT_SUCCEEDED; // skip this frame
 	  }
 	}
   }
-#endif
 
   // draw a desktop image
   if (settings->getOnGraphics()){
@@ -515,17 +521,19 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  }
 	}
 
-	//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;
-	//cout << "[" << name << "] pastTime  : " << pastTime << " (us)" << endl << flush;
-	//cout << "[" << name << "] interval : " << interval << " (us)" << endl << flush;
+#if 0 // for TEST
+	cout << "[" << name << "] drawTime : " << drawTime << endl;
+	cout << "[" << name << "] pastTime : " << pastTime << endl;
+	cout << "[" << name << "] interval : " << interval << endl;
+#endif // 1 // for TEST
 	if (pastTime < interval){
 	  unsigned long sleepTime = interval - pastTime;
-	  //cout << "[" << name << "] sleepTime : " <<  sleepTime << " (us)" << endl << flush;
+	  //	  cout << "[" << name << "] sleepTime: " <<  sleepTime << endl << flush;
 	  usleep(sleepTime);
 	}
 	else {
 	  // No wait
-	  //cout << "[" << name << "] No Sleep" << endl << flush;
+	  //	  cout << "[" << name << "] sleepTime: 0" << endl << flush;
 	}
   }
 

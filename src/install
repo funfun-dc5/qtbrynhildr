@@ -345,7 +345,7 @@ case $UNAME in
 				echo "NOT Found ${KLFC}"
 				exit 1;
 			fi
-			VERSION=`${APP} -vv`
+			VERSION=`./${APP} -vv`
 			# for cygwin
 			# create directory
 			mkdir -p ${DISTDIR}/bin
@@ -390,7 +390,7 @@ case $UNAME in
 			echo "NOT Found ${KLFC}"
 			exit 1;
 		fi
-		VERSION=`${APP} -vv`
+		VERSION=`./${APP} -vv`
 		# for linux
 		# create directory
 		mkdir -p ${DISTDIR}/bin
@@ -435,7 +435,7 @@ case $UNAME in
 			echo "NOT Found ${KLFC}"
 			exit 1;
 		fi
-		VERSION=`${APP} -vv`
+		VERSION=`./${APP} -vv`
 		# for freebsd
 		# create directory
 		mkdir -p ${DISTDIR}/bin

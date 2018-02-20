@@ -5,11 +5,11 @@
 #include "common/common.h"
 
 // System Header
-#if defined(_MSC_VER)
+#if _MSC_VER
 #include <intrin.h>
-#else // defined(_MSC_VER)
+#else // _MSC_VER
 #include <x86intrin.h>
-#endif // defined(_MSC_VER)
+#endif // _MSC_VER
 
 // Qt Header
 

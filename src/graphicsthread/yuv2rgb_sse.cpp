@@ -20,8 +20,10 @@
 
 namespace qtbrynhildr {
 
+#if QTB_SIMD_SUPPORT
+
 // get converter name
-const char *GraphicsThread::getConverterSourceName() const
+const char *GraphicsThread::getConverterSourceName_SIMD() const
 {
 #if defined(__AVX2__)
   return "yuv2rgb_sse:avx2"; // 172 fps
@@ -35,18 +37,20 @@ const char *GraphicsThread::getConverterSourceName() const
 #if defined(__SSE4_1__) || defined(__AVX__) || defined(__AVX2__)
 
 // GraphicsThread::convert YUV420 to RGB24
-void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 #include "yuv2rgb_sse.h"
 
 #if QTB_MULTI_THREAD_CONVERTER
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 #include "yuv2rgb_sse.h"
 
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 #endif // defined(__SSE4_1__) || defined(__AVX__) || defined(__AVX2__)
+
+#endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr
 

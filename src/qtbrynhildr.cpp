@@ -3345,7 +3345,12 @@ void QtBrynhildr::setupWindowTitle()
 #if QTB_NEW_DESKTOPWINDOW
   setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [NEW DESKTOP]");
 #else // QTB_NEW_DESKTOPWINDOW
-  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+  if (settings->getOnSIMDOperationSupport()){
+	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [SIMD]");
+  }
+  else {
+	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+  }
 #endif // QTB_NEW_DESKTOPWINDOW
 #else // !QTB_PORTABLE_VERSION
   setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" -");

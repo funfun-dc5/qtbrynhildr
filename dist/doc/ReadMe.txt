@@ -713,6 +713,7 @@ onShowPassword=false
 onClipCursor=false
 onShowMouseCursorMarker=false
 onTransferFile=true
+onSIMDOperationSupport=false
 onShowTotalProgressForTransferFile=false
 onTransferFileByDragAndDrop=true
 onTransferClipboard=true
@@ -999,6 +1000,10 @@ Qtのバージョンにより必要なランタイムライブラリパッケー
 Ver.2.1.0 : 2018/02/xx
             [その他変更]
              ・Android版の正式サポート
+
+Ver.2.0.14: 2018/02/xx
+            [その他変更]
+             ・SIMD命令(SSE/NEON)の利用コードの追加(標準では無効)
 
 Ver.2.0.13: 2018/02/17
             [新規機能]

@@ -164,6 +164,8 @@ Settings::Settings(const char *iniFileName)
   setOnTransferClipboardSupport(QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+  setOnSIMDOperationSupport(QTB_ONSIMDOPERATIONSUPPORT_DEFAULT);
+
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
 
@@ -464,6 +466,10 @@ void Settings::readSettings()
 												QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT).toBool());
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+  // load onSIMDOperationSupport
+  setOnSIMDOperationSupport(settings->value(QTB_ONSIMDOPERATIONSUPPORT,
+											QTB_ONSIMDOPERATIONSUPPORT_DEFAULT).toBool());
+
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
 										QTB_GRAPHICSBUFFERSIZE_DEFAULT).toInt());
@@ -709,6 +715,9 @@ void Settings::writeSettings()
   settings->setValue(QTB_ONTRANSFERCLIPBOARDSUPPORT, onTransferClipboardSupport);
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
+  // save onSIMDOperationSupport
+  settings->setValue(QTB_ONSIMDOPERATIONSUPPORT, onSIMDOperationSupport);
+
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
 
@@ -846,6 +855,8 @@ void Settings::printSettings() const
 #endif // QTB_DRAG_AND_DROP_SUPPORT
   qDebug() << "TransferClipboardSupport: " << onTransferClipboardSupport;
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+
+  qDebug() << "SIMDOperationSupport    : " << onSIMDOperationSupport;
 
   qDebug() << "Brynhildr2Support       : " << onBrynhildr2Support;
 

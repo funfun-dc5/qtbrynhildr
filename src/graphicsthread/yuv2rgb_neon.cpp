@@ -18,8 +18,10 @@
 
 namespace qtbrynhildr {
 
+#if QTB_SIMD_SUPPORT
+
 // get converter name
-const char *GraphicsThread::getConverterSourceName() const
+const char *GraphicsThread::getConverterSourceName_SIMD() const
 {
   return "yuv2rgb_neon";
 }
@@ -29,18 +31,20 @@ const char *GraphicsThread::getConverterSourceName() const
 #if defined(__ARM_NEON__)
 
 // convert YUV420 to RGB24
-void GraphicsThread::convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void GraphicsThread::convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 #include "yuv2rgb_neon.h"
 
 #if QTB_MULTI_THREAD_CONVERTER
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
-void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
 #include "yuv2rgb_neon.h"
 
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 #endif // defined(__ARM_NEON__)
+
+#endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr
 

@@ -51,12 +51,20 @@ QMAKE_CXXFLAGS += /wd4819
 QMAKE_LFLAGS += /LTCG
 DEFINES += YY_NO_UNISTD_H
 HEADERS += common/msvc.h
+# SIMD (INTEL:MSVC)
+SOURCES += graphicsthread/yuv2rgb_v3.cpp
+SOURCES += graphicsthread/yuv2rgb_sse.cpp
+QMAKE_CXXFLAGS += /arch:AVX
 }
 
 # for MinGW
 win32-g++ {
 #LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
+# SIMD (INTEL:gcc/clang)
+SOURCES += graphicsthread/yuv2rgb_v3.cpp
+SOURCES += graphicsthread/yuv2rgb_sse.cpp
+QMAKE_CXXFLAGS += -msse4.1
 }
 
 # for Linux/FreeBSD
@@ -66,6 +74,10 @@ DESKTOP = ON
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
+# SIMD (INTEL:gcc/clang)
+SOURCES += graphicsthread/yuv2rgb_v3.cpp
+SOURCES += graphicsthread/yuv2rgb_sse.cpp
+QMAKE_CXXFLAGS += -msse4.1
 }
 
 # for MacOSX
@@ -76,6 +88,10 @@ DESKTOP = ON
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
+# SIMD (INTEL:gcc/clang)
+SOURCES += graphicsthread/yuv2rgb_v3.cpp
+SOURCES += graphicsthread/yuv2rgb_sse.cpp
+QMAKE_CXXFLAGS += -msse4.1
 }
 
 # for Android
@@ -85,6 +101,10 @@ DESKTOP = OFF
 CELT_SUPPORT = ON
 LIBS += -L../libs/vpx -lvpx_android
 LIBS += -L../libs/celt -lcelt0_android
+# SIMD (ARM:gcc)
+SOURCES += graphicsthread/yuv2rgb_v3.cpp
+SOURCES += graphicsthread/yuv2rgb_neon.cpp
+QMAKE_CXXFLAGS += -mfpu=neon
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
@@ -186,7 +206,7 @@ HEADERS += option.h
 HEADERS += logmessage.h
 HEADERS += dialog/connect_to_server_dialog.h dialog/desktop_scaling_dialog.h dialog/confirm_dialog.h dialog/log_view_dialog.h
 HEADERS += settings.h
-HEADERS += util/desktop.h util/debug.h
+HEADERS += util/desktop.h util/debug.h util/cpuinfo.h
 HEADERS += common/netthread.h
 HEADERS += controlthread/controlthread.h
 HEADERS += controlthread/keybuffer.h controlthread/mousebuffer.h
@@ -200,7 +220,7 @@ HEADERS += function/recorder.h
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
 SOURCES += option.cpp
-SOURCES += util/desktop.cpp util/debug.cpp
+SOURCES += util/desktop.cpp util/debug.cpp util/cpuinfo.cpp
 SOURCES += logmessage.cpp
 SOURCES += dialog/connect_to_server_dialog.cpp dialog/desktop_scaling_dialog.cpp dialog/confirm_dialog.cpp dialog/log_view_dialog.cpp
 SOURCES += settings.cpp
@@ -217,31 +237,8 @@ SOURCES += function/recorder.cpp
 DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 
 # for new feature
-NEW_FEATURE = OFF
-equals(NEW_FEATURE, ON){
-
-# SIMD (SSE/NEON/AVX)
-
-# INTEL (gcc/clang)
-QMAKE_CXXFLAGS += -msse4.1
-#QMAKE_CXXFLAGS += -mavx
-#QMAKE_CXXFLAGS += -mavx2
-# INTEL (MSVC)
-#QMAKE_CXXFLAGS += /arch:AVX
-#QMAKE_CXXFLAGS += /arch:AVX2
-# ARM
-#QMAKE_CXXFLAGS += -mfpu=neon
-
-SOURCES += graphicsthread/yuv2rgb_sse.cpp
-#SOURCES += graphicsthread/yuv2rgb_neon.cpp
-#SOURCES += graphicsthread/yuv2rgb_avx.cpp
-}
-else {
-
-# NO SIMD
-
-#SOURCES += graphicsthread/yuv2rgb_v0.cpp
-#SOURCES += graphicsthread/yuv2rgb_v1.cpp
-#SOURCES += graphicsthread/yuv2rgb_v2.cpp
-SOURCES += graphicsthread/yuv2rgb_v3.cpp
-}
+# NEW_FEATURE = OFF
+# equals(NEW_FEATURE, ON){
+# }
+# else {
+# }

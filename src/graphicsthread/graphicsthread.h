@@ -150,6 +150,8 @@ private:
   // codec context
   vpx_codec_ctx_t c_codec;
 
+  // SIMD instruction
+  bool hasSIMDInstruction;
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
   // local buffer
@@ -205,6 +207,17 @@ private:
 
   // get converter source name
   const char *getConverterSourceName() const;
+
+#if QTB_SIMD_SUPPORT
+  // get converter source name for SIMD operation
+  const char *getConverterSourceName_SIMD() const;
+
+  // make RGB24 image by SIMD operation
+  inline int makeRGB24Image_SIMD();
+
+  // convert YUV420 to RGB24 (Full Convert)
+  void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+#endif // QTB_SIMD_SUPPORT
 
   // clip
   int clip(int val)

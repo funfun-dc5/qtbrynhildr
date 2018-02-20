@@ -138,6 +138,9 @@ const bool QTB_IN_TESTING				= true;
 // preference dialog
 //#define QTB_PREFERENCE				1
 
+// SIMD INSTRUCTIONS SUPPORT
+#define QTB_SIMD_SUPPORT			1
+
 // debug
 #define QTB_DEBUG					1
 

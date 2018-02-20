@@ -3,6 +3,11 @@
 
 // yuv2rgb_sse function body
 
+// NOW SSE instruction only
+#ifdef __AVX2__
+#undef __AVX2__
+#endif // __AVX2__
+
 {
   Aligned(16) int result[4];
 

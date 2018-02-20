@@ -24,6 +24,7 @@
 #include "graphicsthread.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
+#include "util/cpuinfo.h"
 
 // for TEST
 #define TEST_FRAME_CONTROL 0
@@ -48,6 +49,10 @@ uchar *v2topOrg = 0;
 
 // qtbrynhhildr::convertYUV420toRGB24() (NOT GraphicsThread::convertYUV420toRGB24())
 void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+#if QTB_SIMD_SUPPORT
+// qtbrynhhildr::convertYUV420toRGB24_SIMD() (NOT GraphicsThread::convertYUV420toRGB24_SIMD())
+void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+#endif // QTB_SIMD_SUPPORT
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 //---------------------------------------------------------------------------
@@ -84,6 +89,9 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   size(0),
   uvNext(0),
   rgb24Next(0),
+#if QTB_SIMD_SUPPORT
+  hasSIMDInstruction(false),
+#endif // QTB_SIMD_SUPPORT
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   buffer(0)
 {
@@ -100,7 +108,15 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
-  //  cout << "converter source name : " << getConverterSourceName() << endl << flush;
+#if QTB_SIMD_SUPPORT
+#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+  hasSIMDInstruction = CPUInfo::SSE41();
+#else // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+  hasSIMDInstruction = CPUInfo::NEON();
+#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+  //cout << "converter source name         : " << getConverterSourceName() << endl;
+  //cout << "converter source name for SIMD: " << getConverterSourceName_SIMD() << endl << flush;
+#endif // QTB_SIMD_SUPPORT
 }
 
 // destructor
@@ -401,7 +417,18 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	  // VP8
 #if USE_PPM_LOADER_FOR_VP8
+#if QTB_SIMD_SUPPORT
+	  int rgb24size;
+	  if (settings->getOnSIMDOperationSupport() && hasSIMDInstruction){
+		// make rgb24 image by using SIMD instruction
+		rgb24size = makeRGB24Image_SIMD();
+	  }
+	  else {
+		rgb24size = makeRGB24Image();
+	  }
+#else // QTB_SIMD_SUPPORT
 	  int rgb24size = makeRGB24Image();
+#endif // QTB_SIMD_SUPPORT
 	  if (rgb24size != 0){
 		// load a PPM data to desktop
 		desktopLoadResult = image->loadFromData((const uchar *)ppm,
@@ -416,7 +443,20 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 		}
 	  }
 #else // USE_PPM_LOADER_FOR_VP8
+#if QTB_SIMD_SUPPORT
+	  int rgb24size;
+	  if (settings->getOnSIMDOperationSupport() && hasSIMDInstruction){
+		// make rgb24 image by using SIMD instruction
+		//cout << "SIMD!" << endl << flush;
+		rgb24size = makeRGB24Image_SIMD();
+	  }
+	  else {
+		//cout << "no SIMD!" << endl << flush;
+		rgb24size = makeRGB24Image();
+	  }
+#else // QTB_SIMD_SUPPORT
 	  int rgb24size = makeRGB24Image();
+#endif // QTB_SIMD_SUPPORT
 #if 0 // for getting test data
 	  {
 		static int frameNo = 1;
@@ -800,6 +840,93 @@ inline int GraphicsThread::makeRGB24Image()
   return size * IMAGE_FORMAT_SIZE;
 #endif // QTB_MULTI_THREAD_CONVERTER
 }
+
+#if QTB_SIMD_SUPPORT
+// make RGB24 image by SIMD operation
+inline int GraphicsThread::makeRGB24Image_SIMD()
+{
+  // make yuv420 image
+  if (!makeYUV420Image()){
+	return 0;
+  }
+
+#if QTB_MULTI_THREAD_CONVERTER
+  // number of thread 1 or 2 or 4
+  int numOfThread = settings->getConvertThreadCount();
+  uchar *rgb24top = rgb24 + width * (height - 1) * IMAGE_FORMAT_SIZE;
+  uchar *ytop;
+  uchar *utop;
+  uchar *vtop;
+  if (yuv420 == yuv1){
+	ytop = y1topOrg;
+	utop = u1topOrg;
+	vtop = v1topOrg;
+  }
+  else {
+	ytop = y2topOrg;
+	utop = u2topOrg;
+	vtop = v2topOrg;
+  }
+  // 1 thread version
+  if (numOfThread <= 1 || height % 2 != 0){
+	// convert YUV420 to RGB24
+	convertYUV420toRGB24_SIMD(ytop, utop, vtop, rgb24top, height);
+	return size * IMAGE_FORMAT_SIZE;
+  }
+  else { // numOfThread >= 2
+	// 2 thread or 4 thread version
+	QFuture<void> f1, f2, f3;
+	int linesOfThread = height / numOfThread;
+
+	// start 1st thread
+	f1 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24_SIMD, ytop, utop, vtop, rgb24top, linesOfThread);
+
+	if (numOfThread > 2){
+	  // for next thread
+	  rgb24top -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
+
+	  // start 2nd thread
+	  f2 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24_SIMD, ytop, utop, vtop, rgb24top, linesOfThread);
+	}
+
+	// for 3rd thread
+	if (numOfThread > 3){
+	  // for next thread
+	  rgb24top -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
+
+	  // start 3rd thread
+	  f3 = QtConcurrent::run(qtbrynhildr::convertYUV420toRGB24_SIMD, ytop, utop, vtop, rgb24top, linesOfThread);
+	}
+
+	// for next thread
+	rgb24top -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	ytop += width * linesOfThread;
+	utop += uvNext * linesOfThread/2;
+	vtop += uvNext * linesOfThread/2;
+
+	// for last thread (GraphicsThread::convertYUV420toRGB24_SIMD())
+	convertYUV420toRGB24_SIMD(ytop, utop, vtop, rgb24top, linesOfThread);
+
+	// wait for all threads finished
+	f1.waitForFinished();
+	f2.waitForFinished();
+	f3.waitForFinished();
+
+	return size * IMAGE_FORMAT_SIZE;
+  }
+#else // QTB_MULTI_THREAD_CONVERTER
+  // convert YUV420 to RGB24
+  convertYUV420toRGB24_SIMD(ytop, utop, vtop, rgb24top, height);
+  return size * IMAGE_FORMAT_SIZE;
+#endif // QTB_MULTI_THREAD_CONVERTER
+}
+#endif // QTB_SIMD_SUPPORT
 
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 

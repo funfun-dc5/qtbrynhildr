@@ -8,6 +8,7 @@
 
 // Qt Header
 #include <QEvent>
+#include <QShowEvent>
 
 // Local Header
 #include "controlthread/mousebuffer.h"
@@ -84,6 +85,9 @@ protected:
   virtual void mouseReleaseEvent(QMouseEvent *event) override;
   virtual void mouseMoveEvent(QMouseEvent *event) override;
 #endif // QTB_NEW_DESKTOPWINDOW
+
+  // window show event
+  void showEvent(QShowEvent *event);
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // hide event

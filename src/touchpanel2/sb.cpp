@@ -38,110 +38,6 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
-
-  // Sound
-  if (settings->getOnSound()){
-	SoftwareButton::pressedButton(ID_BUTTON_5);
-  }
-  else {
-	SoftwareButton::pressedButton(ID_BUTTON_4);
-  }
-
-  // Sound Cache
-  int soundCacheTime = settings->getSoundCacheTime();
-  switch(soundCacheTime){
-  case 100:
-	SoftwareButton::pressedButton(ID_BUTTON_8);
-	break;
-  case 200:
-	SoftwareButton::pressedButton(ID_BUTTON_9);
-	break;
-  case 300:
-	SoftwareButton::pressedButton(ID_BUTTON_10);
-	break;
-  case 400:
-	SoftwareButton::pressedButton(ID_BUTTON_11);
-	break;
-  case 500:
-	SoftwareButton::pressedButton(ID_BUTTON_12);
-	break;
-  default:
-	break;
-  }
-
-  // Sound Quality
-  SOUND_QUALITY soundQuality = settings->getSoundQuality();
-  switch(soundQuality){
-  case SOUND_QUALITY_MINIMUM:
-	SoftwareButton::pressedButton(ID_BUTTON_15);
-	break;
-  case SOUND_QUALITY_LOW:
-	SoftwareButton::pressedButton(ID_BUTTON_16);
-	break;
-  case SOUND_QUALITY_STANDARD:
-	SoftwareButton::pressedButton(ID_BUTTON_17);
-	break;
-  case SOUND_QUALITY_HIGH:
-	SoftwareButton::pressedButton(ID_BUTTON_18);
-	break;
-  case SOUND_QUALITY_MAXIMUM:
-	SoftwareButton::pressedButton(ID_BUTTON_19);
-	break;
-  }
-
-  // Video Quality
-  VIDEO_QUALITY videoQuality = settings->getVideoQuality();
-  switch(videoQuality){
-  case VIDEO_QUALITY_MINIMUM:
-	SoftwareButton::pressedButton(ID_BUTTON_26);
-	break;
-  case VIDEO_QUALITY_LOW:
-	SoftwareButton::pressedButton(ID_BUTTON_27);
-	break;
-  case VIDEO_QUALITY_STANDARD:
-	SoftwareButton::pressedButton(ID_BUTTON_28);
-	break;
-  case VIDEO_QUALITY_HIGH:
-	SoftwareButton::pressedButton(ID_BUTTON_29);
-	break;
-  case VIDEO_QUALITY_MAXIMUM:
-	SoftwareButton::pressedButton(ID_BUTTON_30);
-	break;
-  }
-
-  // Video FPS
-  int frameRate = settings->getFrameRate();
-  switch(frameRate){
-  case 5:
-	SoftwareButton::pressedButton(ID_BUTTON_34);
-	break;
-  case 10:
-	SoftwareButton::pressedButton(ID_BUTTON_35);
-	break;
-  case 30:
-	SoftwareButton::pressedButton(ID_BUTTON_36);
-	break;
-  case 60:
-	SoftwareButton::pressedButton(ID_BUTTON_37);
-	break;
-  case 0:
-	SoftwareButton::pressedButton(ID_BUTTON_38);
-	break;
-  }
-
-  // Public Mode
-  int publicModeVersion = settings->getPublicModeVersion();
-  switch(publicModeVersion){
-  case PUBLICMODE_VERSION5:
-	SoftwareButton::pressedButton(ID_BUTTON_22);
-	break;
-  case PUBLICMODE_VERSION6:
-	SoftwareButton::pressedButton(ID_BUTTON_22);
-	break;
-  case PUBLICMODE_VERSION7:
-	SoftwareButton::pressedButton(ID_BUTTON_23);
-	break;
-  }
 }
 
 //---------------------------------------------------------------------------
@@ -560,6 +456,116 @@ void SB::mouseMoveEvent(QMouseEvent *event)
   }
 }
 #endif // QTB_NEW_DESKTOPWINDOW
+
+
+// window show event
+void SB::showEvent(QShowEvent *event)
+{
+
+  // Sound
+  if (settings->getOnSound()){
+	SoftwareButton::pressedButton(ID_BUTTON_5);
+  }
+  else {
+	SoftwareButton::pressedButton(ID_BUTTON_4);
+  }
+
+  // Sound Cache
+  int soundCacheTime = settings->getSoundCacheTime();
+  switch(soundCacheTime){
+  case 100:
+	SoftwareButton::pressedButton(ID_BUTTON_8);
+	break;
+  case 200:
+	SoftwareButton::pressedButton(ID_BUTTON_9);
+	break;
+  case 300:
+	SoftwareButton::pressedButton(ID_BUTTON_10);
+	break;
+  case 400:
+	SoftwareButton::pressedButton(ID_BUTTON_11);
+	break;
+  case 500:
+	SoftwareButton::pressedButton(ID_BUTTON_12);
+	break;
+  default:
+	break;
+  }
+
+  // Sound Quality
+  SOUND_QUALITY soundQuality = settings->getSoundQuality();
+  switch(soundQuality){
+  case SOUND_QUALITY_MINIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_15);
+	break;
+  case SOUND_QUALITY_LOW:
+	SoftwareButton::pressedButton(ID_BUTTON_16);
+	break;
+  case SOUND_QUALITY_STANDARD:
+	SoftwareButton::pressedButton(ID_BUTTON_17);
+	break;
+  case SOUND_QUALITY_HIGH:
+	SoftwareButton::pressedButton(ID_BUTTON_18);
+	break;
+  case SOUND_QUALITY_MAXIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_19);
+	break;
+  }
+
+  // Video Quality
+  VIDEO_QUALITY videoQuality = settings->getVideoQuality();
+  switch(videoQuality){
+  case VIDEO_QUALITY_MINIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_26);
+	break;
+  case VIDEO_QUALITY_LOW:
+	SoftwareButton::pressedButton(ID_BUTTON_27);
+	break;
+  case VIDEO_QUALITY_STANDARD:
+	SoftwareButton::pressedButton(ID_BUTTON_28);
+	break;
+  case VIDEO_QUALITY_HIGH:
+	SoftwareButton::pressedButton(ID_BUTTON_29);
+	break;
+  case VIDEO_QUALITY_MAXIMUM:
+	SoftwareButton::pressedButton(ID_BUTTON_30);
+	break;
+  }
+
+  // Video FPS
+  int frameRate = settings->getFrameRate();
+  switch(frameRate){
+  case 5:
+	SoftwareButton::pressedButton(ID_BUTTON_34);
+	break;
+  case 10:
+	SoftwareButton::pressedButton(ID_BUTTON_35);
+	break;
+  case 30:
+	SoftwareButton::pressedButton(ID_BUTTON_36);
+	break;
+  case 60:
+	SoftwareButton::pressedButton(ID_BUTTON_37);
+	break;
+  case 0:
+	SoftwareButton::pressedButton(ID_BUTTON_38);
+	break;
+  }
+
+  // Public Mode
+  int publicModeVersion = settings->getPublicModeVersion();
+  switch(publicModeVersion){
+  case PUBLICMODE_VERSION5:
+	SoftwareButton::pressedButton(ID_BUTTON_22);
+	break;
+  case PUBLICMODE_VERSION6:
+	SoftwareButton::pressedButton(ID_BUTTON_22);
+	break;
+  case PUBLICMODE_VERSION7:
+	SoftwareButton::pressedButton(ID_BUTTON_23);
+	break;
+  }
+}
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // hide event

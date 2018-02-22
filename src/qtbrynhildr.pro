@@ -53,8 +53,11 @@ DEFINES += YY_NO_UNISTD_H __SSE4_1__
 HEADERS += common/msvc.h
 # SIMD (INTEL:MSVC)
 SOURCES += graphicsthread/yuv2rgb_v3.cpp
+# SSE4.1
 SOURCES += graphicsthread/yuv2rgb_sse.cpp
-#QMAKE_CXXFLAGS += /arch:AVX2
+# AVX
+#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#QMAKE_CXXFLAGS += /arch:AVX
 }
 
 # for MinGW
@@ -63,8 +66,12 @@ win32-g++ {
 #CELT_SUPPORT = ON
 # SIMD (INTEL:gcc/clang)
 SOURCES += graphicsthread/yuv2rgb_v3.cpp
+# SSE4.1
 SOURCES += graphicsthread/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.1
+# AVX
+#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#QMAKE_CXXFLAGS += -mavx
 }
 
 # for Linux/FreeBSD
@@ -76,8 +83,12 @@ LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
 # SIMD (INTEL:gcc/clang)
 SOURCES += graphicsthread/yuv2rgb_v3.cpp
+# SSE4.1
 SOURCES += graphicsthread/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.1
+# AVX
+#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#QMAKE_CXXFLAGS += -mavx
 }
 
 # for MacOSX
@@ -90,8 +101,12 @@ LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
 # SIMD (INTEL:gcc/clang)
 SOURCES += graphicsthread/yuv2rgb_v3.cpp
+# SSE4.1
 SOURCES += graphicsthread/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.1
+# AVX
+#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#QMAKE_CXXFLAGS += -mavx
 }
 
 # for Android

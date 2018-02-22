@@ -32,6 +32,7 @@
 #include "qtbrynhildr.h"
 #include "parameters.h"
 #include "settings.h"
+#include "util/cpuinfo.h"
 #include "version.h"
 
 #if 0 // for TEST Desktop Image Capture
@@ -248,6 +249,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   keyBuffer(0),
   mouseBuffer(0),
   timer(0),
+  hasSIMDInstruction(false),
   onCheckUpdateInBackground(false),
   // for DEBUG
   outputLog(false)
@@ -287,6 +289,14 @@ QtBrynhildr::QtBrynhildr(Option *option)
 
   // bootTime
   bootTime = QDateTime::currentDateTime();
+
+#if QTB_SIMD_SUPPORT
+#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+  hasSIMDInstruction = CPUInfo::SSE41();
+#else // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+  hasSIMDInstruction = CPUInfo::NEON();
+#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#endif // QTB_SIMD_SUPPORT
 
 #if QTB_CRYPTOGRAM
   // create cipher
@@ -3345,7 +3355,7 @@ void QtBrynhildr::setupWindowTitle()
 #if QTB_NEW_DESKTOPWINDOW
   setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [NEW DESKTOP]");
 #else // QTB_NEW_DESKTOPWINDOW
-  if (settings->getOnSIMDOperationSupport()){
+  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
 	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [SIMD]");
   }
   else {

@@ -48,7 +48,7 @@
 	  vp = *(vptop + uvOffset) - 128;
 
 	  if (u == up && v == vp){
-		// calculate xPos/xPos+1 if y == yp (y, u, v is NOT changed)
+		// calculate xPos/xPos+1 if y != yp
 
 		// == xPos ==
 		y =  *ytop++;

@@ -395,6 +395,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
+#if 0 // for TEST (drop frame)
+  static int dropCounter = 0;
+  dropCounter++;
+  if (dropCounter % 5 != 0){
+	return TRANSMIT_SUCCEEDED; // skip this frame
+  }
+#endif
+
   // draw a desktop image
   if (settings->getOnGraphics()){
 	// clear desktop flag clear

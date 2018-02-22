@@ -32,7 +32,7 @@ const char *GraphicsThread::getConverterSourceName_SIMD() const
 
 #if defined(__AVX__)
 
-#error "Yet: INTEL AVX version (too SLOW)"
+//#error "Yet: INTEL AVX version (too SLOW)"
 
 // convert YUV420 to RGB24
 void GraphicsThread::convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)

@@ -6,6 +6,20 @@
 {
   Aligned(32) int result[8];
 
+  uchar *yptop;
+  uchar *uptop;
+  uchar *vptop;
+  if (yuv420 == yuv1){
+	yptop = y2topOrg + (ytop - y1topOrg);
+	uptop = u2topOrg + (utop - u1topOrg);
+	vptop = v2topOrg + (vtop - v1topOrg);
+  }
+  else {
+	yptop = y1topOrg + (ytop - y2topOrg);
+	uptop = u1topOrg + (utop - u2topOrg);
+	vptop = v1topOrg + (vtop - v2topOrg);
+  }
+
 #if 1 // for TEST
 
   // 4) load Uc
@@ -46,91 +60,112 @@
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  Aligned(32) float y[8];
-	  float y1, y2, u, v;
+	  int y1, y2, u, v;
+	  int y1p, y2p, up, vp;
+	  float yf1, yf2, uf, vf;
 	  __m256 yv, uv, vv;
 	  __m256i yvi;
 
-	  // set y[8]
-	  y1 = (float)(*ytop++);
-	  y2 = (float)(*ytop++);
-	  y[0] = y1;
-	  y[1] = y1;
-	  y[2] = y1;
-	  y[3] = 0.0;
-	  y[4] = y2;
-	  y[5] = y2;
-	  y[6] = y2;
-	  y[7] = 0.0;
+	  // set current YUV and previous YUV
+	  y1 = *ytop++;
+	  y2 = *ytop++;
+	  y1p = *yptop++;
+	  y2p = *yptop++;
+	  u = *(utop + uvOffset) - 128;
+	  v = *(vtop + uvOffset) - 128;
+	  up = *(uptop + uvOffset) - 128;
+	  vp = *(vptop + uvOffset) - 128;
 
-	  // set u/v
-	  u = (float)(*(utop + uvOffset) - 128);
-	  v = (float)(*(vtop + uvOffset) - 128);
+	  if (y1 == y1p && y2 == y2p && u == up && v == vp){
+		// No need to calculate XPos and XPos+1
+		rgb24top += IMAGE_FORMAT_SIZE * 2;
+	  }
+	  else {
 
-	  // ============================================================
-	  // 1) load Y vector
-	  yv = _mm256_load_ps(y);
-	  // 2) load U vector
-	  uv = _mm256_broadcast_ss(&u);
-	  // 3) load V vector
-	  vv = _mm256_broadcast_ss(&v);
+		// set y[8]
+		yf1 = (float)y1;
+		yf2 = (float)y2;
+		y[0] = yf1;
+		y[1] = yf1;
+		y[2] = yf1;
+		y[3] = 0.0;
+		y[4] = yf2;
+		y[5] = yf2;
+		y[6] = yf2;
+		y[7] = 0.0;
 
-	  // 4) U * Uc -> U
-	  uv = _mm256_mul_ps(uv, uc);
-	  // 5) V * Vc -> V
-	  vv = _mm256_mul_ps(vv, vc);
+		// set uf/vf
+		uf = (float)u;
+		vf = (float)v;
 
-	  // 6) Y + U + V -> Y
-	  yv = _mm256_add_ps(yv, uv); // Y + U -> Y
-	  yv = _mm256_add_ps(yv, vv); // Y + V -> Y
+		// ============================================================
+		// 1) load Y vector
+		yv = _mm256_load_ps(y);
+		// 2) load U vector
+		uv = _mm256_broadcast_ss(&uf);
+		// 3) load V vector
+		vv = _mm256_broadcast_ss(&vf);
 
-	  // 7) Y > 255 ? 255 : Y
-	  yv = _mm256_min_ps(yv, constMaxV);
-	  // 8) Y < 0 ? 0 : Y
-	  yv = _mm256_max_ps(yv, constMinV);
+		// 4) U * Uc -> U
+		uv = _mm256_mul_ps(uv, uc);
+		// 5) V * Vc -> V
+		vv = _mm256_mul_ps(vv, vc);
 
-	  // 9) convert float to integer
-	  yvi = _mm256_cvtps_epi32(yv);
+		// 6) Y + U + V -> Y
+		yv = _mm256_add_ps(yv, uv); // Y + U -> Y
+		yv = _mm256_add_ps(yv, vv); // Y + V -> Y
 
-	  // 10) store to result
-	  _mm256_store_si256((__m256i*)result, yvi);
-	  // ============================================================
+		// 7) Y > 255 ? 255 : Y
+		yv = _mm256_min_ps(yv, constMaxV);
+		// 8) Y < 0 ? 0 : Y
+		yv = _mm256_max_ps(yv, constMinV);
 
-	  // set rgba32 * 2 from result int * 8
+		// 9) convert float to integer
+		yvi = _mm256_cvtps_epi32(yv);
 
-	  // xPos
-	  // R
-	  *rgb24top++ = (uchar)result[0];
+		// 10) store to result
+		_mm256_store_si256((__m256i*)result, yvi);
+		// ============================================================
 
-	  // G
-	  *rgb24top++ = (uchar)result[1];
+		// set rgba32 * 2 from result int * 8
 
-	  // B
-	  *rgb24top++ = (uchar)result[2];
+		// xPos
+		// R
+		*rgb24top++ = (uchar)result[0];
+
+		// G
+		*rgb24top++ = (uchar)result[1];
+
+		// B
+		*rgb24top++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 
-	  // xPos+1
-	  // R
-	  *rgb24top++ = (uchar)result[4];
+		// xPos+1
+		// R
+		*rgb24top++ = (uchar)result[4];
 
-	  // G
-	  *rgb24top++ = (uchar)result[5];
+		// G
+		*rgb24top++ = (uchar)result[5];
 
-	  // B
-	  *rgb24top++ = (uchar)result[6];
+		// B
+		*rgb24top++ = (uchar)result[6];
 
 #if FORMAT_RGBA8888
-	  // A
-	  *rgb24top++ = (uchar)255;
+		// A
+		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+	  }
 	}
 	rgb24top += rgb24Next;
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;
+	  uptop += uvNext;
+	  vptop += uvNext;
 	}
   }
 }

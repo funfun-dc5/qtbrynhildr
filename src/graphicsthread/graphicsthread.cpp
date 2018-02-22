@@ -375,7 +375,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  QDateTime currentTime = QDateTime::currentDateTime();
 	  qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
 						 currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
-	  qint64 threshold = averageDrawFrameTime * 2; // settings->getFrameInterval();
+	  qint64 threshold = averageDrawFrameTime * 3; // settings->getFrameInterval();
 
 #if 0 // for TEST
 	  cout << "[" << name << "] pastTime  : " << pastTime  << endl;
@@ -383,13 +383,13 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  cout << "[" << name << "] threshold : " << threshold  << endl;
 #endif // 0 // for TEST
 	  if (pastTime + drawTime > threshold){
-		// drop this frame
 #if TEST_FRAME_CONTROL
 		cout << "pastTime + drawTime > threshold" << endl;
 		cout << "[" << name << "] pastTime  : " << pastTime  << endl;
 		cout << "[" << name << "] drawTime  : " << drawTime  << endl;
 		cout << "[" << name << "] threshold : " << threshold << endl << flush;
 #endif // TEST_FRAME_CONTROL
+		// drop this frame
 		return TRANSMIT_SUCCEEDED; // skip this frame
 	  }
 	}

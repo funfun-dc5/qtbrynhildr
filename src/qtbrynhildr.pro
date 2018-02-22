@@ -49,12 +49,12 @@ win32-msvc2015 {
 #CELT_SUPPORT = ON
 QMAKE_CXXFLAGS += /wd4819
 QMAKE_LFLAGS += /LTCG
-DEFINES += YY_NO_UNISTD_H
+DEFINES += YY_NO_UNISTD_H __SSE4_1__
 HEADERS += common/msvc.h
 # SIMD (INTEL:MSVC)
 SOURCES += graphicsthread/yuv2rgb_v3.cpp
 SOURCES += graphicsthread/yuv2rgb_sse.cpp
-QMAKE_CXXFLAGS += /arch:AVX
+#QMAKE_CXXFLAGS += /arch:AVX2
 }
 
 # for MinGW

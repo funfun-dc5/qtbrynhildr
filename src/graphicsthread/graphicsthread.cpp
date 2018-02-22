@@ -419,7 +419,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if USE_PPM_LOADER_FOR_VP8
 #if QTB_SIMD_SUPPORT
 	  int rgb24size;
-	  if (settings->getOnSIMDOperationSupport() && hasSIMDInstruction){
+	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
 		// make rgb24 image by using SIMD instruction
 		rgb24size = makeRGB24Image_SIMD();
 	  }
@@ -445,7 +445,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #else // USE_PPM_LOADER_FOR_VP8
 #if QTB_SIMD_SUPPORT
 	  int rgb24size;
-	  if (settings->getOnSIMDOperationSupport() && hasSIMDInstruction){
+	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
 		// make rgb24 image by using SIMD instruction
 		//cout << "SIMD!" << endl << flush;
 		rgb24size = makeRGB24Image_SIMD();

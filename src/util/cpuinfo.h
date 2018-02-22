@@ -48,6 +48,11 @@ private:
 	// for ARM CPU
 	bool hasNEON;
 
+  private:
+	// output log flag
+	bool outputLog;
+
+  public:
 	CPUInfo_Internal()
 	  :isIntel(false)
 	  ,isAMD(false)
@@ -56,18 +61,21 @@ private:
 	  ,hasAVX(false)
 	  ,hasAVX2(false)
 	  ,hasNEON(false)
+	  ,outputLog(false)
 	{
+	  memset(vender, 0, sizeof(vender));
+	  memset(brand, 0, sizeof(brand));
+
 #if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
 	  int data[4];
 
 	  // get vender
 	  //	  char vender[0x20];
-	  memset(vender, 0, sizeof(vender));
+	  //	  memset(vender, 0, sizeof(vender));
 	  getCPUID(0, data);
 	  memcpy(&vender[0], &data[1], 4);
 	  memcpy(&vender[4], &data[3], 4);
 	  memcpy(&vender[8], &data[2], 4);
-	  cout << "vender = " << vender << endl << flush;
 	  if (strncmp(vender, "GenuinIntel", 0x20) == 0){
 		isIntel = true;
 	  }
@@ -77,12 +85,11 @@ private:
 
 	  // get brand
 	  //	  char brand[0x40];
-	  memset(brand, 0, sizeof(brand));
+	  //	  memset(brand, 0, sizeof(brand));
 	  for(int i = 0; i < 3; i++){
 		getCPUID(0x80000002 + i, data);
 		memcpy(&brand[16*i],  &data[0], 16);
 	  }
-	  cout << "brand  = " << brand << endl << flush;
 
 	  // for SIMD
 	  getCPUID(1, data);
@@ -93,48 +100,50 @@ private:
 	  getCPUID(7, data);
 	  hasAVX2  = ((data[1] >>  5) & 1) != 0;
 
-#if 1 // for TEST
-	  if (hasSSE41){
-		cout << "SSE4.1 : Supported" << endl;
+	  // for TEST
+	  if (outputLog){
+		cout << "vender = " << vender << endl << flush;
+
+		cout << "brand  = " << brand << endl << flush;
+
+		if (hasSSE41){
+		  cout << "SSE4.1 : Supported" << endl;
+		}
+		else {
+		  cout << "SSE4.1 : NOT Supported" << endl;
+		}
+		if (hasSSE42){
+		  cout << "SSE4.2 : Supported" << endl;
+		}
+		else {
+		  cout << "SSE4.2 : NOT Supported" << endl;
+		}
+		if (hasAVX){
+		  cout << "AVX    : Supported" << endl;
+		}
+		else {
+		  cout << "AVX    : NOT Supported" << endl;
+		}
+		if (hasAVX2){
+		  cout << "AVX2   : Supported" << endl;
+		}
+		else {
+		  cout << "AVX2   : NOT Supported" << endl;
+		}
+		if (hasFMA){
+		  cout << "FMA    : Supported" << endl;
+		}
+		else {
+		  cout << "FMA    : NOT Supported" << endl;
+		}
+		cout << flush;
 	  }
-	  else {
-		cout << "SSE4.1 : NOT Supported" << endl;
-	  }
-	  if (hasSSE42){
-		cout << "SSE4.2 : Supported" << endl;
-	  }
-	  else {
-		cout << "SSE4.2 : NOT Supported" << endl;
-	  }
-	  if (hasAVX){
-		cout << "AVX    : Supported" << endl;
-	  }
-	  else {
-		cout << "AVX    : NOT Supported" << endl;
-	  }
-	  if (hasAVX2){
-		cout << "AVX2   : Supported" << endl;
-	  }
-	  else {
-		cout << "AVX2   : NOT Supported" << endl;
-	  }
-	  if (hasFMA){
-		cout << "FMA    : Supported" << endl;
-	  }
-	  else {
-		cout << "FMA    : NOT Supported" << endl;
-	  }
-	  cout << flush;
-#endif // 0 // for TEST
 #endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
 
 	  // for TEST
 	  hasNEON = true;
 	}
   };
-
-  // output log flag
-  bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function

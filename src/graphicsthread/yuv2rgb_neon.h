@@ -49,15 +49,125 @@
 	  uv0 = vdupq_n_s32(u);
 	  vv0 = vdupq_n_s32(v);
 
-	  // xPos
+	  if (u == up && v == vp){
+		// calculate xPos/xPos+1 if y != yp
 
-	  // set y
-	  y =  *ytop++;
-	  yp = *yptop++;
-	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
+		// xPos
+
+		// set y
+		y =  *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  // 1) load Y
+		  yv = vdupq_n_s32(y);
+
+		  // 2) Y * Yc -> Y
+		  yv = vmulq_s32(yv, yc);
+
+		  // 3) U * Uc -> U
+		  uv = vmulq_s32(uv0, uc);
+
+		  // 4) V * Vc -> V
+		  vv = vmulq_s32(vv0, vc);
+
+		  // 5) Y + U + V -> Y
+		  yv = vaddq_s32(yv, uv);
+		  yv = vaddq_s32(yv, vv);
+
+		  // 6) >> 8
+		  yv = vshrq_n_s32(yv, 8);
+
+		  // 7) Y > 255 ? 255 : Y
+		  yv = vminq_s32(yv, constMaxV);
+
+		  // 8)  Y < 0 ? 0 : Y
+		  yv = vmaxq_s32(yv, constMinV);
+
+		  // 9) store to result
+		  vst1q_s32(result, yv);
+
+		  // set rgba32 from result int * 4
+
+		  // R
+		  *rgb24top++ = (uchar)result[0];
+
+		  // G
+		  *rgb24top++ = (uchar)result[1];
+
+		  // B
+		  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
+
+		// xPos+1
+
+		// set y
+		y =  *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  // 1) load Y
+		  yv = vdupq_n_s32(y);
+
+		  // 2) Y * Yc -> Y
+		  yv = vmulq_s32(yv, yc);
+
+		  // 3) U * Uc -> U
+		  uv = vmulq_s32(uv0, uc);
+
+		  // 4) V * Vc -> V
+		  vv = vmulq_s32(vv0, vc);
+
+		  // 5) Y + U + V -> Y
+		  yv = vaddq_s32(yv, uv);
+		  yv = vaddq_s32(yv, vv);
+
+		  // 6) >> 8
+		  yv = vshrq_n_s32(yv, 8);
+
+		  // 7) Y > 255 ? 255 : Y
+		  yv = vminq_s32(yv, constMaxV);
+
+		  // 8)  Y < 0 ? 0 : Y
+		  yv = vmaxq_s32(yv, constMinV);
+
+		  // 9) store to result
+		  vst1q_s32(result, yv);
+
+		  // set rgba32 from result int * 4
+
+		  // R
+		  *rgb24top++ = (uchar)result[0];
+
+		  // G
+		  *rgb24top++ = (uchar)result[1];
+
+		  // B
+		  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
 	  }
 	  else {
+		// always calculate xPos/xPos+1
+
+		// xPos
+
+		// set y
+		y =  *ytop++;
+
 		// 1) load Y
 		yv = vdupq_n_s32(y);
 
@@ -101,17 +211,12 @@
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
-	  }
 
-	  // xPos+1
+		// xPos+1
 
-	  // set y
-	  y =  *ytop++;
-	  yp = *yptop++;
-	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
-	  }
-	  else {
+		// set y
+		y =  *ytop++;
+
 		// 1) load Y
 		yv = vdupq_n_s32(y);
 
@@ -155,6 +260,8 @@
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+
+		yptop += 2;
 	  }
 	}
 	rgb24top += rgb24Next;

@@ -74,15 +74,127 @@
 	  uv0 = _mm_broadcastd_epi32(uv0); // AVX2
 	  vv0 = _mm_broadcastd_epi32(vv0); // AVX2
 
-	  // xPos
+	  if (u == up && v == vp){
+		// calculate xPos/xPos+1 if y != yp
 
-	  // set y
-	  y =  *ytop++;
-	  yp = *yptop++;
-	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
+		// xPos
+
+		// set y
+		y =  *ytop++;
+		yp = *yptop++;
+		if (v == vp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  // 1) load Y
+		  yv = _mm_set1_epi32(y);
+		  yv = _mm_broadcastd_epi32(yv);	// AVX2
+
+		  // 2) Y * Yc -> Y
+		  yv = _mm_mullo_epi32(yv, yc);
+
+		  // 3) U * Uc -> U
+		  uv = _mm_mullo_epi32(uv0, uc);
+
+		  // 4) V * Vc -> V
+		  vv = _mm_mullo_epi32(vv0, vc);
+
+		  // 5) Y + U + V -> Y
+		  yv = _mm_add_epi32(yv, uv);
+		  yv = _mm_add_epi32(yv, vv);
+
+		  // 6) >> 8
+		  yv = _mm_srai_epi32(yv, 8);
+
+		  // 7) Y > 255 ? 255 : Y
+		  yv = _mm_min_epi32(yv, constMaxV);
+
+		  // 8)  Y < 0 ? 0 : Y
+		  yv = _mm_max_epi32(yv, constMinV);
+
+		  // 9) store to result
+		  _mm_store_si128((__m128i*)result, yv);
+
+		  // set rgba32 from result int * 4
+
+		  // R
+		  *rgb24top++ = (uchar)result[0];
+
+		  // G
+		  *rgb24top++ = (uchar)result[1];
+
+		  // B
+		  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
+
+		// xPos+1
+
+		// set y
+		y =  *ytop++;
+		yp = *yptop++;
+		if (v == vp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  // 1) load Y
+		  yv = _mm_set1_epi32(y);
+		  yv = _mm_broadcastd_epi32(yv);	// AVX2
+
+		  // 2) Y * Yc -> Y
+		  yv = _mm_mullo_epi32(yv, yc);
+
+		  // 3) U * Uc -> U
+		  uv = _mm_mullo_epi32(uv0, uc);
+
+		  // 4) V * Vc -> V
+		  vv = _mm_mullo_epi32(vv0, vc);
+
+		  // 5) Y + U + V -> Y
+		  yv = _mm_add_epi32(yv, uv);
+		  yv = _mm_add_epi32(yv, vv);
+
+		  // 6) >> 8
+		  yv = _mm_srai_epi32(yv, 8);
+
+		  // 7) Y > 255 ? 255 : Y
+		  yv = _mm_min_epi32(yv, constMaxV);
+
+		  // 8)  Y < 0 ? 0 : Y
+		  yv = _mm_max_epi32(yv, constMinV);
+
+		  // 9) store to result
+		  _mm_store_si128((__m128i*)result, yv);
+
+		  // set rgba32 from result int * 4
+
+		  // R
+		  *rgb24top++ = (uchar)result[0];
+
+		  // G
+		  *rgb24top++ = (uchar)result[1];
+
+		  // B
+		  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
 	  }
 	  else {
+		// always calculate xPos/xPos+1
+
+		// xPos
+
+		// set y
+		y =  *ytop++;
+
 		// 1) load Y
 		yv = _mm_set1_epi32(y);
 		yv = _mm_broadcastd_epi32(yv);	// AVX2
@@ -127,17 +239,12 @@
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
-	  }
 
-	  // xPos+1
+		// xPos+1
 
-	  // set y
-	  y =  *ytop++;
-	  yp = *yptop++;
-	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
-	  }
-	  else {
+		// set y
+		y =  *ytop++;
+
 		// 1) load Y
 		yv = _mm_set1_epi32(y);
 		yv = _mm_broadcastd_epi32(yv);	// AVX2
@@ -182,6 +289,8 @@
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+
+		yptop += 2;
 	  }
 	}
 	rgb24top += rgb24Next;
@@ -222,15 +331,132 @@
 	  uv0 = _mm_load_si128((const __m128i*)ua);
 	  vv0 = _mm_load_si128((const __m128i*)va);
 
-	  // xPos
+	  if (u == up && v == vp){
+		// calculate xPos/xPos+1 if y != yp
 
-	  // set y
-	  y =  *ytop++;
-	  yp = *yptop++;
-	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
+		// xPos
+
+		// set y
+		y =  *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  ya[0] = y;
+		  ya[1] = y;
+		  ya[2] = y;
+
+		  // 1) load Y
+		  yv = _mm_load_si128((const __m128i*)ya);
+
+		  // 2) Y * Yc -> Y
+		  yv = _mm_mullo_epi32(yv, yc);
+
+		  // 3) U * Uc -> U
+		  uv = _mm_mullo_epi32(uv0, uc);
+
+		  // 4) V * Vc -> V
+		  vv = _mm_mullo_epi32(vv0, vc);
+
+		  // 5) Y + U + V -> Y
+		  yv = _mm_add_epi32(yv, uv);
+		  yv = _mm_add_epi32(yv, vv);
+
+		  // 6) >> 8
+		  yv = _mm_srai_epi32(yv, 8);
+
+		  // 7) Y > 255 ? 255 : Y
+		  yv = _mm_min_epi32(yv, constMaxV);
+
+		  // 8)  Y < 0 ? 0 : Y
+		  yv = _mm_max_epi32(yv, constMinV);
+
+		  // 9) store to result
+		  _mm_store_si128((__m128i*)result, yv);
+
+		  // set rgba32 from result int * 4
+
+		  // R
+		  *rgb24top++ = (uchar)result[0];
+
+		  // G
+		  *rgb24top++ = (uchar)result[1];
+
+		  // B
+		  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
+
+		// xPos+1
+
+		// set y
+		y =  *ytop++;
+		yp = *yptop++;
+		if (y == yp){
+		  rgb24top += IMAGE_FORMAT_SIZE;
+		}
+		else {
+		  ya[0] = y;
+		  ya[1] = y;
+		  ya[2] = y;
+
+		  // 1) load Y
+		  yv = _mm_load_si128((const __m128i*)ya);
+
+		  // 2) Y * Yc -> Y
+		  yv = _mm_mullo_epi32(yv, yc);
+
+		  // 3) U * Uc -> U
+		  uv = _mm_mullo_epi32(uv0, uc);
+
+		  // 4) V * Vc -> V
+		  vv = _mm_mullo_epi32(vv0, vc);
+
+		  // 5) Y + U + V -> Y
+		  yv = _mm_add_epi32(yv, uv);
+		  yv = _mm_add_epi32(yv, vv);
+
+		  // 6) >> 8
+		  yv = _mm_srai_epi32(yv, 8);
+
+		  // 7) Y > 255 ? 255 : Y
+		  yv = _mm_min_epi32(yv, constMaxV);
+
+		  // 8)  Y < 0 ? 0 : Y
+		  yv = _mm_max_epi32(yv, constMinV);
+
+		  // 9) store to result
+		  _mm_store_si128((__m128i*)result, yv);
+
+		  // set rgba32 from result int * 4
+
+		  // R
+		  *rgb24top++ = (uchar)result[0];
+
+		  // G
+		  *rgb24top++ = (uchar)result[1];
+
+		  // B
+		  *rgb24top++ = (uchar)result[2];
+
+#if FORMAT_RGBA8888
+		  // A
+		  *rgb24top++ = (uchar)255;
+#endif // FORMAT_RGBA8888
+		}
 	  }
 	  else {
+		// always calculate xPos/xPos+1
+
+		// xPos
+
+		// set y
+		y =  *ytop++;
 		ya[0] = y;
 		ya[1] = y;
 		ya[2] = y;
@@ -278,17 +504,11 @@
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
-	  }
 
-	  // xPos+1
+		// xPos+1
 
-	  // set y
-	  y =  *ytop++;
-	  yp = *yptop++;
-	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
-	  }
-	  else {
+		// set y
+		y =  *ytop++;
 		ya[0] = y;
 		ya[1] = y;
 		ya[2] = y;
@@ -336,6 +556,8 @@
 		// A
 		*rgb24top++ = (uchar)255;
 #endif // FORMAT_RGBA8888
+
+		yptop += 2;
 	  }
 	}
 	rgb24top += rgb24Next;

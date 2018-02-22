@@ -14,7 +14,6 @@
 // Local Header
 
 
-#if !defined(__ARM_NEON__)
 
 namespace qtbrynhildr {
 
@@ -180,7 +179,5 @@ private:
 };
 
 } // end of namespace qtbrynhildr
-
-#endif // !defined(__ARM_NEON__)
 
 #endif // CPUINFO_H

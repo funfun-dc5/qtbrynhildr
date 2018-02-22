@@ -18,7 +18,6 @@
 // Local Header
 #include "cpuinfo.h"
 
-#if !defined(__ARM_NEON__)
 
 namespace qtbrynhildr {
 
@@ -57,5 +56,3 @@ void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])
 #endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
   
 } // end of namespace qtbrynhildr
-
-#endif // !defined(__ARM_NEON__)

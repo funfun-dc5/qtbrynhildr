@@ -87,7 +87,7 @@ protected:
 #endif // QTB_NEW_DESKTOPWINDOW
 
   // window show event
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // hide event

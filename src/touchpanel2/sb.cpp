@@ -461,6 +461,7 @@ void SB::mouseMoveEvent(QMouseEvent *event)
 // window show event
 void SB::showEvent(QShowEvent *event)
 {
+  Q_UNUSED(event);
 
   // Sound
   if (settings->getOnSound()){

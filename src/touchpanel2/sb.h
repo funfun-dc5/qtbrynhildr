@@ -76,7 +76,7 @@ protected:
   // for event handling
 #if defined(QTB_DEV_TOUCHPANEL)
   // event
-  bool event(QEvent *event);
+  virtual bool event(QEvent *event) override;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_NEW_DESKTOPWINDOW
@@ -87,7 +87,7 @@ protected:
 #endif // QTB_NEW_DESKTOPWINDOW
 
   // window show event
-  void showEvent(QShowEvent *event) override;
+  virtual void showEvent(QShowEvent *event) override;
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // hide event

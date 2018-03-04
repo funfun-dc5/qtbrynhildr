@@ -247,7 +247,7 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 	break;
   case ID_BUTTON_38:
 	// Video FPS (Maximum)
-	settings->setFrameRate(0);
+	settings->setFrameRate(FRAMERATE_MAXIMUM);
 	break;
   default:
 	// error

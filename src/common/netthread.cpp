@@ -171,8 +171,10 @@ void NetThread::run()
 		if (settings->getOutputLog())
 		  cout << "[" << name << "]" << " Unkown Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
-		emit networkError(true);
-		continue;
+		runThread = false;
+		emit networkError(false);
+		emit outputLogMessage(QTB_MSG_UNKNOWN_ERROR);
+		break;
 	  }
 	}
 

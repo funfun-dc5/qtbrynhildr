@@ -240,6 +240,12 @@ void LogMessage::outputMessage(int msgID)
 					QMessageBox::Ok,
 					QMessageBox::NoButton);
 	break;
+  case QTB_MSG_UNKNOWN_ERROR:
+	criticalMessage(PHASE_QTBRYNHILDR,
+					tr("Unknown Error!"),
+					QMessageBox::Ok,
+					QMessageBox::NoButton);
+	break;
   default:
 	ABORT();
 	break;

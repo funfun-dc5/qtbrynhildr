@@ -460,7 +460,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  break;
 	default:
 	  // unknown error
-	  cout << "Unknown Error...: com_data->mode = " << (int)com_data->mode << endl << flush;
+	  const QString text = QString("Unknown Error...: com_data->mode = ") + QString::number((int)com_data->mode);
+	  emit outputLogMessage(PHASE_CONTROL, text);
 	  return PROCESS_UNKNOWN_ERROR;
 	  break;
 	}

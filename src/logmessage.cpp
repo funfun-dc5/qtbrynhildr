@@ -105,7 +105,7 @@ int LogMessage::criticalMessage(PHASE_ID id,
   int ret;
 
   // output dialog
-  ret = critical(this,
+  ret = critical(parentWidget(),
 				 QTB_APPLICATION,
 				 phaseName[id] + text,
 				 buttons,
@@ -130,7 +130,7 @@ int LogMessage::warningMessage(PHASE_ID id,
   int ret;
 
   // output dialog
-  ret = warning(this,
+  ret = warning(parentWidget(),
 				QTB_APPLICATION,
 				phaseName[id] + text,
 				buttons,
@@ -155,7 +155,7 @@ int LogMessage::informationMessage(PHASE_ID id,
   int ret;
 
   // output dialog
-  ret = information(this,
+  ret = information(parentWidget(),
 					QTB_APPLICATION,
 					phaseName[id] + text,
 					buttons,
@@ -180,7 +180,7 @@ int LogMessage::questionMessage(PHASE_ID id,
   int ret;
 
   // output dialog
-  ret = question(this,
+  ret = question(parentWidget(),
 				 QTB_APPLICATION,
 				 phaseName[id] + text,
 				 buttons,

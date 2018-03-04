@@ -394,7 +394,11 @@ typedef enum {
 
 // for onSIMDOperationSupport
 #define QTB_ONSIMDOPERATIONSUPPORT			"onSIMDOperationSupport"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONSIMDOPERATIONSUPPORT_DEFAULT	true
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSIMDOPERATIONSUPPORT_DEFAULT	false
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"

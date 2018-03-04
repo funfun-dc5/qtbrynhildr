@@ -27,7 +27,8 @@
 #include "util/cpuinfo.h"
 
 // for TEST
-#define TEST_FRAME_CONTROL 0
+#define TEST_NOT_DRAWING	0
+#define TEST_FRAME_CONTROL	0
 
 namespace qtbrynhildr {
 
@@ -243,6 +244,14 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	return PROCESS_NETWORK_ERROR;
   }
 
+#if TEST_FRAME_CONTROL
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	QDateTime currentTime = QDateTime::currentDateTime();
+	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	cout << "================================" << endl << "[" << name << "] NETWORK t1 : " << pastTime << " (ms)" << endl;
+  }
+#endif // TEST_FRAME_CONTROL
+
   // counter up
   if (counter_graphics < 5){
 	counter_graphics++;
@@ -344,14 +353,15 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	if (drawTime == 0){
 	  startDrawTime = QDateTime::currentDateTime();
 	}
-#if 0 // TEST_FRAME_CONTROL
-	else {
-	  QDateTime currentTime = QDateTime::currentDateTime();
-	  qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
-	  cout << "[" << name << "] NETWORK : " << pastTime << " (ms)" << endl;
-	}
-#endif // TEST_FRAME_CONTROL
   }
+
+#if TEST_FRAME_CONTROL
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	QDateTime currentTime = QDateTime::currentDateTime();
+	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	cout << "[" << name << "] NETWORK t2 : " << pastTime << " (ms)" << endl;
+  }
+#endif // TEST_FRAME_CONTROL
 
 #if QTB_PUBLIC_MODE7_SUPPORT
   // decode vp8
@@ -366,7 +376,17 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
-  //return TRANSMIT_SUCCEEDED; // for TEST
+#if TEST_FRAME_CONTROL
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	QDateTime currentTime = QDateTime::currentDateTime();
+	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	cout << "[" << name << "] NETWORK t3 : " << pastTime << " (ms)" << endl;
+  }
+#endif // TEST_FRAME_CONTROL
+
+#if TEST_NOT_DRAWING
+  return TRANSMIT_SUCCEEDED;
+#endif // TEST_NOT_DRAWING
 
   // frame skip check
   if (settings->getOnGraphics()){
@@ -383,7 +403,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  cout << "[" << name << "] threshold : " << threshold  << endl;
 #endif // 0 // for TEST
 	  if (pastTime + drawTime > threshold){
-#if TEST_FRAME_CONTROL
+#if 0 // TEST_FRAME_CONTROL
 		cout << "pastTime + drawTime > threshold" << endl;
 		cout << "[" << name << "] pastTime  : " << pastTime  << endl;
 		cout << "[" << name << "] drawTime  : " << drawTime  << endl;
@@ -526,6 +546,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
+#if TEST_FRAME_CONTROL
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	QDateTime currentTime = QDateTime::currentDateTime();
+	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	cout << "[" << name << "] NETWORK t4 : " << pastTime << " (ms)" << endl;
+  }
+#endif // TEST_FRAME_CONTROL
+
 	if (desktopLoadResult){
 	  // GOOD
 	  // update desktop
@@ -584,6 +612,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  //	  cout << "[" << name << "] sleepTime: 0" << endl << flush;
 	}
   }
+
+#if TEST_FRAME_CONTROL
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	QDateTime currentTime = QDateTime::currentDateTime();
+	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	cout << "[" << name << "] NETWORK t5 : " << pastTime << " (ms)" << endl;
+  }
+#endif // TEST_FRAME_CONTROL
 
   return TRANSMIT_SUCCEEDED;
 }

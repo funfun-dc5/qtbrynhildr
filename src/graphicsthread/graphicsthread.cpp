@@ -559,7 +559,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	if (drawTime == 0){
 	  static int counter = 0;
 	  if (counter == DRAW_TIME_SAMPLING_POINT){
-		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB and RGB)
+		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB)
 		drawTime = (currentTime.toMSecsSinceEpoch() - startDrawTime.toMSecsSinceEpoch())*1000;
 		counter = 0;
 		//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;

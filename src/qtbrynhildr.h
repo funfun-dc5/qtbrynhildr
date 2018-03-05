@@ -527,6 +527,9 @@ private:
   // SIMD instruction
   bool hasSIMDInstruction;
 
+  // pop up Connect To Server Dialog
+  bool onPopUpConnectToServer;
+
   //-------------------------------------------------------------------------------
   // Function
   //-------------------------------------------------------------------------------

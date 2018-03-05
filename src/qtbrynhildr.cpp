@@ -250,6 +250,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   mouseBuffer(0),
   timer(0),
   hasSIMDInstruction(false),
+  onPopUpConnectToServer(false),
   onCheckUpdateInBackground(false),
   // for DEBUG
   outputLog(false)
@@ -1268,7 +1269,11 @@ void QtBrynhildr::onNetworkError(bool doRetry)
 	reconnectToServer();
   }
   else {
+	bool flag = onPopUpConnectToServer;
 	disconnected();
+	if (flag){
+	  popUpConnectToServer();
+	}
   }
 }
 
@@ -2524,6 +2529,9 @@ void QtBrynhildr::disconnected()
 	  exitFullScreen();
 	}
   }
+
+  // reset pop up Connect To Server Dialog flag
+  onPopUpConnectToServer = false;
 }
 
 // set desktop scaling factor
@@ -2736,6 +2744,8 @@ void QtBrynhildr::about()
 // popup connect to server dialog
 void QtBrynhildr::popUpConnectToServer()
 {
+  onPopUpConnectToServer = true;
+
   // pop up connect to server dialog
   connectToServerDialog->show();
 }

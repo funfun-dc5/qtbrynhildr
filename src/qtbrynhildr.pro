@@ -39,6 +39,7 @@ RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
 DESKTOP = ON
 CELT_SUPPORT = ON
+INCLUDEPATH += ../libs/vpx
 LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
@@ -79,7 +80,10 @@ linux-g++-64 | linux-g++ | freebsd-g++ {
 DEFINES += QTB_RECORDER=1 PLATFORM_LINUX
 DESKTOP = ON
 CELT_SUPPORT = ON
+INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx
+#INCLUDEPATH += /usr/include/vpx
+#LIBS += -lvpx
 LIBS += -L../libs/celt -lcelt0
 # SIMD (INTEL:gcc/clang)
 SOURCES += graphicsthread/yuv2rgb_v3.cpp
@@ -100,6 +104,7 @@ DEFINES += QTB_RECORDER=1 PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 DESKTOP = ON
 CELT_SUPPORT = ON
+INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
 # SIMD (INTEL:gcc/clang)
@@ -117,6 +122,7 @@ android-g++ {
 DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
 DESKTOP = OFF
 CELT_SUPPORT = ON
+INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx_android
 LIBS += -L../libs/celt -lcelt0_android
 # SIMD (ARM:gcc)
@@ -198,10 +204,6 @@ DEFINES += USE_KEYLAYOUTFILE YY_NO_UNPUT YY_NO_INPUT
 # for update check
 HEADERS += util/httpgetter.h
 SOURCES += util/httpgetter.cpp
-
-# for vp8
-INCLUDEPATH += ../libs/vpx
-#LIBS += -L../libs/vpx -lvpx
 
 # for preference dialog
 equals(PREFERENCE_DIALOG, ON){

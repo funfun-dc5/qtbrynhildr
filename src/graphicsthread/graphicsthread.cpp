@@ -110,11 +110,11 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
 #if QTB_SIMD_SUPPORT
-#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#if !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::SSE41();
-#else // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#else // !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::NEON();
-#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#endif // !defined(__ARM_NEON__)
   //cout << "converter source name         : " << getConverterSourceName() << endl;
   //cout << "converter source name for SIMD: " << getConverterSourceName_SIMD() << endl << flush;
 #endif // QTB_SIMD_SUPPORT

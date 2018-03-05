@@ -23,7 +23,7 @@ namespace qtbrynhildr {
 
 const CPUInfo::CPUInfo_Internal CPUInfo::CPUInformation;
 
-#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#if !defined(__ARM_NEON__)
 
 #if _MSC_VER
 
@@ -53,6 +53,6 @@ void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])
 
 #endif // defined(__GNUC__)
 
-#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#endif // !defined(__ARM_NEON__)
   
 } // end of namespace qtbrynhildr

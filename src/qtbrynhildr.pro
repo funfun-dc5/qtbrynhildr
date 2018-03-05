@@ -89,6 +89,9 @@ QMAKE_CXXFLAGS += -msse4.1
 # AVX
 #SOURCES += graphicsthread/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
+# NEON (RaspberryPi3)
+#SOURCES += graphicsthread/yuv2rgb_neon.cpp
+#QMAKE_CXXFLAGS += -mfpu=neon
 }
 
 # for MacOSX

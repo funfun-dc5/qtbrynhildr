@@ -292,11 +292,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
   bootTime = QDateTime::currentDateTime();
 
 #if QTB_SIMD_SUPPORT
-#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#if !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::SSE41();
-#else // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#else // !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::NEON();
-#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
 
 #if QTB_CRYPTOGRAM

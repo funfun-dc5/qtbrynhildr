@@ -65,7 +65,7 @@ private:
 	  memset(vender, 0, sizeof(vender));
 	  memset(brand, 0, sizeof(brand));
 
-#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#if !defined(__ARM_NEON__)
 	  int data[4];
 
 	  // get vender
@@ -137,7 +137,7 @@ private:
 		}
 		cout << flush;
 	  }
-#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#endif // !defined(__ARM_NEON__)
 
 	  // for TEST
 	  hasNEON = true;
@@ -154,13 +154,13 @@ public:
   // get brand
   static const char* getBrand() { return CPUInformation.brand; }
 
-#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#if !defined(__ARM_NEON__)
   // for Intel CPU
-  static bool SSE41() { return CPUInformation.hasSSE41; } // for TEST
-#else // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+  static bool SSE41() { return CPUInformation.hasSSE41; }
+#else // !defined(__ARM_NEON__)
   // for ARM CPU
-  static bool NEON() { return CPUInformation.hasNEON; } // for TEST
-#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+  static bool NEON() { return CPUInformation.hasNEON; }
+#endif // !defined(__ARM_NEON__)
 
 private:
   // constructor
@@ -168,14 +168,14 @@ private:
   // destructor
   ~CPUInfo();
 
+#if !defined(__ARM_NEON__)
   // for Intel CPU
-#if !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
   // get cpuid
   static void getCPUID(int function_id, int data[4]);
 
   // get cpuidex
   static void getCPUIDEX(int function_id, int subfunction_id, int data[4]);
-#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
+#endif // !defined(__ARM_NEON__)
 };
 
 } // end of namespace qtbrynhildr

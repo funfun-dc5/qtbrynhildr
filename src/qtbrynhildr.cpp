@@ -2516,6 +2516,14 @@ void QtBrynhildr::disconnected()
   onPluginsDisable_Action->setChecked(false);
   onPluginsDisable_Action->setEnabled(false);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+
+  // normal screen
+  if (QTB_DESKTOP_FULL_SCREEN){
+	if (fullScreenMode){
+	  // to Normal Screen
+	  exitFullScreen();
+	}
+  }
 }
 
 // set desktop scaling factor

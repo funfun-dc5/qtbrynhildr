@@ -65,9 +65,12 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   NetThread("GraphicsThread", settings, desktopPanel),
   image(0),
   frameCounter(0),
+  previousGetFrameRateTime(0),
+  startDrawFrameTime(0),
   averageDrawFrameTime(0),
   totalFrameCounter(0),
   drawTime(0),
+  startDrawTime(0),
   onClearDesktop(false),
 #if QTB_PUBLIC_MODE7_SUPPORT
   width(0),
@@ -169,11 +172,11 @@ double GraphicsThread::getFrameRate()
   if (!settings->getOnGraphics()) return 0.0;
 #endif // 0 // for TEST
 
-  QDateTime currentTime = QDateTime::currentDateTime();
+  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
   double fps = 0.0;
 
-  if (!previousGetFrameRateTime.isNull()){
-	qint64 diffMSeconds = currentTime.toMSecsSinceEpoch() - previousGetFrameRateTime.toMSecsSinceEpoch();
+  if (previousGetFrameRateTime != 0){
+	qint64 diffMSeconds = currentTime - previousGetFrameRateTime;
 	if (diffMSeconds != 0){
 	  fps = frameCounter / ((double)diffMSeconds/1000);
 	  //cout << "frameCounter = " << frameCounter << endl;
@@ -220,11 +223,11 @@ PROCESS_RESULT GraphicsThread::processForHeader()
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	// record start time of draw frame
-	startDrawFrameTime = QDateTime::currentDateTime();
+	startDrawFrameTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 #if 0 // for TEST
-	static QDateTime prevTime;
+	static qint64 prevTime;
 	if (!prevTime.isNull()){
-	  qint64 diffMSeconds = startDrawFrameTime.toMSecsSinceEpoch() - prevTime.toMSecsSinceEpoch();
+	  qint64 diffMSeconds = startDrawFrameTime - prevTime;
 	  if (diffMSeconds != 0){
 		//cout << "[" << name << "] processForHeader() : diffMSeconds = " << diffMSeconds << " (ms)" << endl << flush;
 	  }
@@ -246,8 +249,8 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 
 #if TEST_FRAME_CONTROL
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	QDateTime currentTime = QDateTime::currentDateTime();
-	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startDrawFrameTime;
 	cout << "================================" << endl << "[" << name << "] NETWORK t1 : " << pastTime << " (ms)" << endl;
   }
 #endif // TEST_FRAME_CONTROL
@@ -351,14 +354,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // save current time for draw time check
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	if (drawTime == 0){
-	  startDrawTime = QDateTime::currentDateTime();
+	  startDrawTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	}
   }
 
 #if TEST_FRAME_CONTROL
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	QDateTime currentTime = QDateTime::currentDateTime();
-	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startDrawFrameTime;
 	cout << "[" << name << "] NETWORK t2 : " << pastTime << " (ms)" << endl;
   }
 #endif // TEST_FRAME_CONTROL
@@ -378,8 +381,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if TEST_FRAME_CONTROL
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	QDateTime currentTime = QDateTime::currentDateTime();
-	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startDrawFrameTime;
 	cout << "[" << name << "] NETWORK t3 : " << pastTime << " (ms)" << endl;
   }
 #endif // TEST_FRAME_CONTROL
@@ -392,9 +395,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   if (settings->getOnGraphics()){
 	// frame rate control
 	if (QTB_DESKTOP_FRAMERATE_CONTROL && drawTime != 0){
-	  QDateTime currentTime = QDateTime::currentDateTime();
+	  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	  qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
-						 currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+						 currentTime - startDrawFrameTime)*1000;
 	  qint64 threshold = averageDrawFrameTime * 3; // settings->getFrameInterval();
 
 #if 0 // for TEST
@@ -548,8 +551,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if TEST_FRAME_CONTROL
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	QDateTime currentTime = QDateTime::currentDateTime();
-	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startDrawFrameTime;
 	cout << "[" << name << "] NETWORK t4 : " << pastTime << " (ms)" << endl;
   }
 #endif // TEST_FRAME_CONTROL
@@ -578,9 +581,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	QDateTime currentTime = QDateTime::currentDateTime();
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
-					   currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch())*1000;
+					   currentTime - startDrawFrameTime)*1000;
 	qint64 interval = settings->getFrameInterval();
 
 	// draw time check
@@ -588,7 +591,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  static int counter = 0;
 	  if (counter == DRAW_TIME_SAMPLING_POINT){
 		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB)
-		drawTime = (currentTime.toMSecsSinceEpoch() - startDrawTime.toMSecsSinceEpoch())*1000;
+		drawTime = (currentTime - startDrawTime)*1000;
 		counter = 0;
 		//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;
 	  }
@@ -615,8 +618,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if TEST_FRAME_CONTROL
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	QDateTime currentTime = QDateTime::currentDateTime();
-	qint64 pastTime = currentTime.toMSecsSinceEpoch() - startDrawFrameTime.toMSecsSinceEpoch();
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startDrawFrameTime;
 	cout << "[" << name << "] NETWORK t5 : " << pastTime << " (ms)" << endl;
   }
 #endif // TEST_FRAME_CONTROL
@@ -640,7 +643,7 @@ void GraphicsThread::connectedToServer()
   drawTime = 0;
 
   // reset previous frame time to Null
-  previousGetFrameRateTime = QDateTime();
+  previousGetFrameRateTime = 0;
 
   NetThread::connectedToServer();
 }
@@ -650,7 +653,7 @@ void GraphicsThread::connectedToServer()
 void GraphicsThread::shutdownConnection()
 {
   // reset previous frame time to Null
-  previousGetFrameRateTime = QDateTime();
+  previousGetFrameRateTime = 0;
 
   if (sock_control != INVALID_SOCKET){
 	shutdown(sock_control, SD_BOTH);

@@ -88,10 +88,10 @@ private:
   unsigned int frameCounter;
 
   // previous get frame rate time
-  QDateTime previousGetFrameRateTime;
+  qint64 previousGetFrameRateTime;
 
   // start draw frame time
-  QDateTime startDrawFrameTime;
+  qint64 startDrawFrameTime;
 
   // average draw frame time
   qint64 averageDrawFrameTime;
@@ -103,7 +103,7 @@ private:
   qint64 drawTime;
 
   // start draw time
-  QDateTime startDrawTime;
+  qint64 startDrawTime;
 
   // clearDesktop
   bool onClearDesktop;

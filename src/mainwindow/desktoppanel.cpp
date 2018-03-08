@@ -332,8 +332,10 @@ void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if QTB_PUBLIC_MODE7_SUPPORT
 #if !defined(Q_OS_WIN)
-	// set cursor point color to control thread
-	qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+	if (image.rect().contains(currentMousePos)){
+	  // set cursor point color to control thread
+	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+	}
 #endif // !defined(Q_OS_WIN)
 	// marker for mouse cursor
 	if (settings->getOnShowMouseCursorMarker() && marker){
@@ -356,8 +358,10 @@ void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if QTB_PUBLIC_MODE7_SUPPORT
 #if !defined(Q_OS_WIN)
-	// set cursor point color to control thread
-	qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+	if (image.rect().contains(currentMousePos)){
+	  // set cursor point color to control thread
+	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+	}
 #endif // !defined(Q_OS_WIN)
 	// marker for mouse cursor
 	if (settings->getOnShowMouseCursorMarker() && marker){
@@ -603,8 +607,10 @@ void DesktopPanel::moveMouseCursor(QMouseEvent *event, bool marker)
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if QTB_PUBLIC_MODE7_SUPPORT
 #if !defined(Q_OS_WIN)
-	// set cursor point color to control thread
-	qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+	if (image.rect().contains(currentMousePos)){
+	  // set cursor point color to control thread
+	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
+	}
 #endif // !defined(Q_OS_WIN)
 	// marker for mouse cursor
 	if (settings->getOnShowMouseCursorMarker() && marker){

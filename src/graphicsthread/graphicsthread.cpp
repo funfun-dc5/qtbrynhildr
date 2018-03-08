@@ -64,6 +64,8 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   :
   NetThread("GraphicsThread", settings, desktopPanel),
   image(0),
+  desktopScalingFactor(1.0),
+  checkCounter(0),
   frameCounter(0),
   previousGetFrameRateTime(0),
   startDrawFrameTime(0),
@@ -106,6 +108,9 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
 
   // create image
   image = new QImage();
+
+  // desktop Scaling factor
+  desktopScalingFactor = settings->getDesktopScalingFactor();
 
 #if QTB_PUBLIC_MODE7_SUPPORT
   // foe vpx
@@ -172,6 +177,12 @@ double GraphicsThread::getFrameRate()
   if (!settings->getOnGraphics()) return 0.0;
 #endif // 0 // for TEST
 
+  if (settings->getDesktopScalingFactor() != desktopScalingFactor){
+	// recheck parameters
+	desktopScalingFactor = settings->getDesktopScalingFactor();
+	resetDrawParamaters();
+  }
+
   qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
   double fps = 0.0;
 
@@ -187,6 +198,10 @@ double GraphicsThread::getFrameRate()
   previousGetFrameRateTime = currentTime;
   totalFrameCounter += frameCounter;
   frameCounter = 0;
+
+  //cout << "averageDrawFrameTime = " <<  averageDrawFrameTime << endl;
+  //cout << "drawTime = " << drawTime << endl;
+
   return fps;
 }
 
@@ -588,15 +603,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 	// draw time check
 	if (drawTime == 0){
-	  static int counter = 0;
-	  if (counter == DRAW_TIME_SAMPLING_POINT){
+	  if (checkCounter == DRAW_TIME_SAMPLING_POINT){
 		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB)
-		drawTime = (currentTime - startDrawTime)*1000;
-		counter = 0;
+		drawTime = currentTime != startDrawTime ? (currentTime - startDrawTime)*1000 : 1;
+		checkCounter = 0;
 		//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;
 	  }
 	  else {
-		counter++;
+		checkCounter++;
 	  }
 	}
 
@@ -644,6 +658,9 @@ void GraphicsThread::connectedToServer()
 
   // reset previous frame time to Null
   previousGetFrameRateTime = 0;
+
+  // reset check counter
+  checkCounter = 0;
 
   NetThread::connectedToServer();
 }

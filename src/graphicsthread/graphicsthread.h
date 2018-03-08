@@ -84,6 +84,12 @@ private:
   // image for desktop
   QImage *image;
 
+  // desktop scaling factor
+  qreal desktopScalingFactor;
+
+  // check counter
+  int checkCounter;
+
   // frame counter
   unsigned int frameCounter;
 
@@ -173,6 +179,14 @@ public:
   unsigned int getTotalFrameCounter() const
   {
 	return totalFrameCounter;
+  }
+
+  // reset parameters
+  void resetDrawParamaters()
+  {
+	averageDrawFrameTime = 0;
+	drawTime = 0;
+	checkCounter = 0;
   }
 
 protected:

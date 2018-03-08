@@ -41,9 +41,6 @@ const int QTB_GRAPHICS_SAMPLE_FRAME = 40;
 // local data buffer size for sound (byte)
 const int QTB_SOUND_LOCAL_BUFFER_SIZE = 1024 * 1024;
 
-// sound buffer size for QAudioOutput (byte)
-const int QTB_AUDIOOUTPUT_SOUND_BUFFER_SIZE = 1024 * 64;
-
 //---------------------------------------------------------------------------
 // for GUI
 //---------------------------------------------------------------------------

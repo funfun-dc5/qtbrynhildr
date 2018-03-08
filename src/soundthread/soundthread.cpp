@@ -253,7 +253,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  double cacheRate = 0;
 	  if (soundCacheSizeForLog != 0)
 		cacheRate = (double)(soundBuffer->size())/soundCacheSizeForLog * 100.0;
-	  cout << "[SoundThread] Cache Rate : " << cacheRate << endl << flush;
+	  cout << "[SoundThread] Sound Cache Rate : " << cacheRate << endl << flush;
 	}
 
 	// write into sound buffer
@@ -426,9 +426,6 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 #if defined(DEBUG)
   connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
 #endif // defined(DEBUG)
-
-  // setting for AudioOutput
-  audioOutput->setBufferSize(QTB_AUDIOOUTPUT_SOUND_BUFFER_SIZE);
 
 #if 0 // for TEST
   // start output

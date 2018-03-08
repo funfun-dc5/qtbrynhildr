@@ -91,7 +91,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   recordAndReplaySubMenu(0),
 #endif // QTB_RECORDER
   optionMenu(0),
-  modeSubMenu(0),
 #if defined(QTB_DEV_TOUCHPANEL)
   touchpanelInterfaceTypeSubMenu(0),
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -2038,21 +2037,6 @@ void QtBrynhildr::createMenus()
   if (QTB_DESKTOP_IMAGE_SCALING){
 	videoMenu->addSeparator();
 	videoMenu->addAction(desktopScalingDialog_Action);
-#if QTB_DESKTOP_COMPRESS_MODE
-	// desktop compress mode
-	videoMenu->addSeparator();
-	desktopCompressModeSubMenu = videoMenu->addMenu(tr("Desktop Compress Mode"));
-	desktopCompressModeSubMenu->addAction(desktopCompressMode0_Action);
-	desktopCompressModeSubMenu->addAction(desktopCompressMode2_Action);
-	desktopCompressModeSubMenu->addAction(desktopCompressMode4_Action);
-	desktopCompressModeSubMenu->addAction(desktopCompressMode8_Action);
-	if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION7){
-	  desktopCompressModeSubMenu->setEnabled(true);
-	}
-	else {
-	  desktopCompressModeSubMenu->setEnabled(false);
-	}
-#endif // QTB_DESKTOP_COMPRESS_MODE
   }
 
   // for capture
@@ -2137,9 +2121,24 @@ void QtBrynhildr::createMenus()
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("Option"));
+#if QTB_DESKTOP_COMPRESS_MODE
+  // desktop compress mode
+  desktopCompressModeSubMenu = optionMenu->addMenu(tr("Desktop Compress Mode"));
+  desktopCompressModeSubMenu->addAction(desktopCompressMode0_Action);
+  desktopCompressModeSubMenu->addAction(desktopCompressMode2_Action);
+  desktopCompressModeSubMenu->addAction(desktopCompressMode4_Action);
+  desktopCompressModeSubMenu->addAction(desktopCompressMode8_Action);
+  if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION7){
+	desktopCompressModeSubMenu->setEnabled(true);
+  }
+  else {
+	desktopCompressModeSubMenu->setEnabled(false);
+  }
+  optionMenu->addSeparator();
+#endif // QTB_DESKTOP_COMPRESS_MODE
+
   if (QTB_SCROLL_MODE){
-	modeSubMenu = optionMenu->addMenu(tr("Mode"));
-	modeSubMenu->addAction(onScrollMode_Action);
+	optionMenu->addAction(onScrollMode_Action);
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)

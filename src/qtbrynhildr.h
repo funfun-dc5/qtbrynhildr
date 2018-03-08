@@ -170,9 +170,6 @@ private:
   // Option Menu
   QMenu *optionMenu;
 
-  // Mode Sub Menu
-  QMenu *modeSubMenu;
-
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel Interface Type Sub Menu
   QMenu *touchpanelInterfaceTypeSubMenu;

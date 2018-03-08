@@ -74,7 +74,7 @@ const bool QTB_LOG_VIEW					= true;
 const bool QTB_TRANSLATION				= true;
 
 // in testing
-const bool QTB_IN_TESTING				= true;
+const bool QTB_IN_TESTING				= false;
 
 // recorder
 #if defined(QTB_DEV_DESKTOP)

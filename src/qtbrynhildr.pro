@@ -94,6 +94,7 @@ QMAKE_CXXFLAGS += -msse4.1
 #SOURCES += graphicsthread/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 # NEON (RaspberryPi3)
+#DEFINES += QTB_RPI3
 #SOURCES += graphicsthread/yuv2rgb_neon.cpp
 #QMAKE_CXXFLAGS += -mfpu=neon
 }

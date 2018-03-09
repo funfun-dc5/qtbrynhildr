@@ -71,7 +71,9 @@ SoundThread::~SoundThread()
   // audio output
   if (audioOutput != 0){
 	audioOutput->stop();
+#if !defined(QTB_RPI3) // for Segmentation Fault on rpi3
 	delete audioOutput;
+#endif // !defined(QTB_RPI3) // for Segmentation Fault on rpi3
 	audioOutput = 0;
   }
 

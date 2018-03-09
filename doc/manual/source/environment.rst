@@ -31,6 +31,10 @@
 ^^^^^^^^^^
   * Mac OS X 10.10 (Yosemite)以降
 
-(4) FreeBSD版
-^^^^^^^^^^^^^
-  * FreeBSD 10.2 (x64/x86)
+(4) Android版
+^^^^^^^^^^^^^^
+  * Android 4.1以降
+
+(5) Raspberry Pi 3版
+^^^^^^^^^^^^^^^^^^^^^
+ *  Debian with Raspberry Pi Desktop (2017-11-16)

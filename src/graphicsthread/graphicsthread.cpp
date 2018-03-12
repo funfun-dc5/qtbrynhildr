@@ -64,6 +64,9 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   :
   NetThread("GraphicsThread", settings, desktopPanel),
   image(0),
+#if QTB_NEWFEATURE
+  graphicsBuffer(0),
+#endif // QTB_NEWFEATURE
   desktopScalingFactor(1.0),
   checkCounter(0),
   frameCounter(0),
@@ -108,6 +111,11 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
 
   // create image
   image = new QImage();
+
+#if QTB_NEWFEATURE
+  // create graphic buffer
+  graphicsBuffer = new GraphicsBuffer(1024*1024); // for TEST (1MB)
+#endif // QTB_NEWFEATURE
 
   // desktop Scaling factor
   desktopScalingFactor = settings->getDesktopScalingFactor();
@@ -326,8 +334,19 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
 #if 0 // for TEST
-  cout << "[" << name << "] frame no = " << (int)com_data->frame_no << endl << flush;
+  cout << "[" << name << "] frame no = " << (int)com_data->frame_no << endl;
+  cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush;
 #endif
+
+#if QTB_NEWFEATURE
+  // put to graphics buffer // for TEST
+  graphicsBuffer->putFrame(buffer, receivedDataSize);
+  // get from graphics buffer // for TEST
+  int len = graphicsBuffer->getFrame(buffer);
+  if (len != receivedDataSize){
+	cout << "Graphics Buffer : getFrame() failed!" << endl << flush;
+  }
+#endif // QTB_NEWFEATURE
 
   // received 1 frame
   frameCounter++;

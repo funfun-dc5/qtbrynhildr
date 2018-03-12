@@ -11,6 +11,9 @@
 
 // Local Header
 #include "common/netthread.h"
+#if QTB_NEWFEATURE
+#include "graphicsbuffer.h"
+#endif // QTB_NEWFEATURE
 
 // count for draw time check
 #define DRAW_TIME_SAMPLING_POINT 20
@@ -83,6 +86,11 @@ class GraphicsThread : public NetThread
 private:
   // image for desktop
   QImage *image;
+
+#if QTB_NEWFEATURE
+  // graphics buffer
+  GraphicsBuffer *graphicsBuffer;
+#endif // QTB_NEWFEATURE
 
   // desktop scaling factor
   qreal desktopScalingFactor;

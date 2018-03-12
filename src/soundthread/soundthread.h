@@ -13,13 +13,21 @@
 
 // Local Header
 #include "common/netthread.h"
+#if QTB_NEWFEATURE
+#include "util/ringbuffer.h"
+#else // QTB_NEWFEATURE
 #include "soundbuffer.h"
+#endif // QTB_NEWFEATURE
 
 #if QTB_CELT_SUPPORT
 #include "converter.h"
 #endif //QTB_CELT_SUPPORT
 
 namespace qtbrynhildr {
+
+#if QTB_NEWFEATURE
+using SoundBuffer = RingBuffer;
+#endif // QTB_NEWFEATURE
 
 // SoundThread
 class SoundThread : public NetThread

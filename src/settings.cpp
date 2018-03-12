@@ -281,8 +281,8 @@ void Settings::readSettings()
 							QTB_PORTNO_DEFAULT).toInt());
 
   // load password
-  //  password = settings->value(QTB_PASSWORD,
-  //							 QTB_PASSWORD_DEFAULT).toString();
+  password = settings->value(QTB_PASSWORD,
+							 QTB_PASSWORD_DEFAULT).toString();
 
   // load onControl
   setOnControl(settings->value(QTB_ONCONTROL,

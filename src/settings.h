@@ -140,7 +140,7 @@ typedef int KEYBOARD_TYPE;
 
 // for password
 #define QTB_PASSWORD			"password"
-#define QTB_PASSWORD_DEFAULT	"********"
+#define QTB_PASSWORD_DEFAULT	""
 
 // for onControl
 #define QTB_ONCONTROL			"onControl"

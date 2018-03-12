@@ -86,6 +86,13 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   // port no field
   spinBox_portno->setValue(settings->getPortNo());
 
+  // password field
+  QString password = settings->getPassword();
+  if (password != ""){
+	lineEdit_password->setText(password);
+	checkBox_showPassword->setEnabled(false);
+  }
+
   // public mode field
 #if QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION5 - PUBLICMODE_VERSION5, tr("MODE 5"));
@@ -101,7 +108,12 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // show password field
-  checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
+  if (password != ""){
+	checkBox_showPassword->setCheckState(Qt::Unchecked);
+  }
+  else {
+	checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
+  }
 
   // full screen field
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -239,6 +251,9 @@ void ConnectToServerDialog::on_lineEdit_password_textChanged()
 
   // check
   QString password = lineEdit_password->text();
+  if (!checkBox_showPassword->isEnabled() &&  password.size() == 0){
+	checkBox_showPassword->setEnabled(true);
+  }
   if (password.size() > ENCRYPTION_KEY_LENGTH){
 	// error
 	cout << "password is too long : " << password.size() << endl << flush;

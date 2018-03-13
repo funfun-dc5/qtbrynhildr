@@ -104,6 +104,7 @@ private:
   // previous get frame rate time
   qint64 previousGetFrameRateTime;
 
+#if !QTB_NEWFEATURE
   // start draw frame time
   qint64 startDrawFrameTime;
 
@@ -118,6 +119,10 @@ private:
 
   // start draw time
   qint64 startDrawTime;
+#else // !QTB_NEWFEATURE
+  // total frame counter
+  unsigned int totalFrameCounter;
+#endif // !QTB_NEWFEATURE
 
   // clearDesktop
   bool onClearDesktop;
@@ -189,6 +194,7 @@ public:
 	return totalFrameCounter;
   }
 
+#if !QTB_NEWFEATURE
   // reset parameters
   void resetDrawParamaters()
   {
@@ -196,6 +202,7 @@ public:
 	drawTime = 0;
 	checkCounter = 0;
   }
+#endif // !QTB_NEWFEATURE
 
 protected:
   // connect to server

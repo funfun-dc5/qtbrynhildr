@@ -71,11 +71,15 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   checkCounter(0),
   frameCounter(0),
   previousGetFrameRateTime(0),
+#if !QTB_NEWFEATURE
   startDrawFrameTime(0),
   averageDrawFrameTime(0),
   totalFrameCounter(0),
   drawTime(0),
   startDrawTime(0),
+#else // !QTB_NEWFEATURE
+  totalFrameCounter(0),
+#endif // !QTB_NEWFEATURE
   onClearDesktop(false),
 #if QTB_PUBLIC_MODE7_SUPPORT
   width(0),
@@ -185,11 +189,13 @@ double GraphicsThread::getFrameRate()
   if (!settings->getOnGraphics()) return 0.0;
 #endif // 0 // for TEST
 
+#if !QTB_NEWFEATURE
   if (settings->getDesktopScalingFactor() != desktopScalingFactor){
 	// recheck parameters
 	desktopScalingFactor = settings->getDesktopScalingFactor();
 	resetDrawParamaters();
   }
+#endif // !QTB_NEWFEATURE
 
   qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
   double fps = 0.0;
@@ -200,7 +206,9 @@ double GraphicsThread::getFrameRate()
 	  fps = frameCounter / ((double)diffMSeconds/1000);
 	  //cout << "frameCounter = " << frameCounter << endl;
 	  //cout << "diffMSeconds = " << diffMSeconds << endl << flush;
+#if !QTB_NEWFEATURE
 	  averageDrawFrameTime = (frameCounter != 0) ? diffMSeconds*1000/frameCounter : 0;
+#endif // !QTB_NEWFEATURE
 	}
   }
   previousGetFrameRateTime = currentTime;
@@ -243,6 +251,7 @@ CONNECT_RESULT GraphicsThread::connectToServer()
 // process for header
 PROCESS_RESULT GraphicsThread::processForHeader()
 {
+#if !QTB_NEWFEATURE
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	// record start time of draw frame
@@ -258,6 +267,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	prevTime = startDrawFrameTime;
 #endif
   }
+#endif // !QTB_NEWFEATURE
 
   // receive header
   long dataSize;
@@ -341,11 +351,13 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_NEWFEATURE
   // put to graphics buffer // for TEST
   graphicsBuffer->putFrame(buffer, receivedDataSize);
+#if 1
   // get from graphics buffer // for TEST
   int len = graphicsBuffer->getFrame(buffer);
   if (len != receivedDataSize){
 	cout << "Graphics Buffer : getFrame() failed!" << endl << flush;
   }
+#endif
 #endif // QTB_NEWFEATURE
 
   // received 1 frame
@@ -385,12 +397,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
+#if !QTB_NEWFEATURE
   // save current time for draw time check
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	if (drawTime == 0){
 	  startDrawTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	}
   }
+#endif // !QTB_NEWFEATURE
 
 #if TEST_FRAME_CONTROL
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
@@ -425,6 +439,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   return TRANSMIT_SUCCEEDED;
 #endif // TEST_NOT_DRAWING
 
+#if !QTB_NEWFEATURE
   // frame skip check
   if (settings->getOnGraphics()){
 	// frame rate control
@@ -459,6 +474,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	return TRANSMIT_SUCCEEDED; // skip this frame
   }
 #endif
+#endif // !QTB_NEWFEATURE
 
   // draw a desktop image
   if (settings->getOnGraphics()){
@@ -613,6 +629,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
+#if !QTB_NEWFEATURE
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -656,6 +673,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	cout << "[" << name << "] NETWORK t5 : " << pastTime << " (ms)" << endl;
   }
 #endif // TEST_FRAME_CONTROL
+#endif // !QTB_NEWFEATURE
 
   return TRANSMIT_SUCCEEDED;
 }
@@ -669,11 +687,13 @@ void GraphicsThread::connectedToServer()
   // reset frame counter
   frameCounter = 0;
 
+#if !QTB_NEWFEATURE
   // average draw frame time
   averageDrawFrameTime = 0;
 
   // draw time
   drawTime = 0;
+#endif // !QTB_NEWFEATURE
 
   // reset previous frame time to Null
   previousGetFrameRateTime = 0;

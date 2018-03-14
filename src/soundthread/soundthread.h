@@ -75,6 +75,12 @@ public:
   // destructor
   ~SoundThread();
 
+  // get sound buffer
+  SoundBuffer *getSoundBuffer() const
+  {
+	return soundBuffer;
+  }
+
 protected:
   // connect to server
   CONNECT_RESULT connectToServer();

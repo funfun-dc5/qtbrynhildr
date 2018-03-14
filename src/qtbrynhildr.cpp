@@ -35,7 +35,10 @@
 #include "util/cpuinfo.h"
 #include "version.h"
 
-#if 0 // for TEST Desktop Image Capture
+// for TEST
+#define QTB_TEST_DESKTOP_IMAGE_CAPTURE	0
+
+#if QTB_TEST_DESKTOP_IMAGE_CAPTURE // for TEST Desktop Image Capture
 #include <QPixmap>
 #include <QScreen>
 #include <QWindow>
@@ -254,7 +257,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // for DEBUG
   outputLog(false)
 {
-#if 0 // for TEST Desktop Image Capture
+#if QTB_TEST_DESKTOP_IMAGE_CAPTURE // for TEST Desktop Image Capture
   QScreen *screen = QGuiApplication::primaryScreen();
   if (screen != 0){
 	cout << "primaryScreen(): OK" << endl << flush;

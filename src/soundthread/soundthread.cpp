@@ -35,7 +35,7 @@ SoundThread::SoundThread(Settings *settings, DesktopPanel *desktopPanel)
   samplerate(0),
   audioOutput(0),
   output(0),
-  samplerateChangeCount(0),
+  samplerateChangeCounter(0),
 #if QTB_CELT_SUPPORT
   converter(0),
 #endif //QTB_CELT_SUPPORT
@@ -79,7 +79,7 @@ SoundThread::~SoundThread()
 
   // output wav file
   if (settings->getOutputSoundDataToFile() && settings->getOutputSoundDataToWavFile() &&
-	  samplerateChangeCount == 1){
+	  samplerateChangeCounter == 1){
 	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
 	// create wav file
 	int pcmFileSize = pcmFile.size();
@@ -112,7 +112,7 @@ CONNECT_RESULT SoundThread::connectToServer()
   connectedToServer();
 
   // reset state
-  samplerateChangeCount = 0;
+  samplerateChangeCounter = 0;
 
   return CONNECT_SUCCEEDED;
 }
@@ -434,8 +434,8 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   output = audioOutput->start();
 #endif
 
-  // change count up
-  samplerateChangeCount++;
+  // change counter up
+  samplerateChangeCounter++;
 
 #if QTB_CELT_SUPPORT
   // setup converter

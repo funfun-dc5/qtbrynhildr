@@ -133,14 +133,23 @@ protected:
   // transmit local buffer to global buffer
   virtual TRANSMIT_RESULT transmitBuffer() = 0;
 
-  // shutdown connection
-  virtual void shutdownConnection();
-
   // connected
   virtual void connectedToServer();
 
+  // shutdown connection
+  virtual void shutdownConnection();
+
   // socket to server
   SOCKET socketToServer();
+
+  // send eader
+  long sendHeader(SOCKET sock, const char *buf, long size);
+
+  // send data
+  long sendData(SOCKET sock, const char *buf, long size);
+
+  // receive data
+  long receiveData(SOCKET sock, char *buf, long size);
 
   // print protocol header
   void printHeader();
@@ -150,16 +159,6 @@ protected:
 
   // dump protocol header
   void dumpHeader();
-
-protected:
-  // send eader
-  long sendHeader(SOCKET sock, const char *buf, long size);
-
-  // send data
-  long sendData(SOCKET sock, const char *buf, long size);
-
-  // receive data
-  long receiveData(SOCKET sock, char *buf, long size);
 
 private:
   // set socket option

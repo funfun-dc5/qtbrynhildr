@@ -228,15 +228,6 @@ void NetThread::run()
 	cout << "[" << name << "]" << " stop thread...exit run()" << endl << flush;
 }
 
-// shutdown connection
-#if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
-void NetThread::shutdownConnection()
-{
-  // reset previous time to Null
-  previousTime = QDateTime();
-}
-#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
-
 // connected
 void NetThread::connectedToServer()
 {
@@ -246,6 +237,15 @@ void NetThread::connectedToServer()
   // reset previous time to Null
   previousTime = QDateTime();
 }
+
+// shutdown connection
+#if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
+void NetThread::shutdownConnection()
+{
+  // reset previous time to Null
+  previousTime = QDateTime();
+}
+#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 // socket to server
@@ -434,122 +434,6 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
   return received_size;
 }
 
-// set socket option
-#include <cerrno>
-void NetThread::setSocketOption(SOCKET sock)
-{
-  int val = 1;
-  socklen_t len = sizeof(val);
-#if defined(QTB_NET_WIN)
-  if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char*)&val, len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const void*)&val, len) == -1){
-#endif
-	cout << "[" << name << "] sockopt: SO_KEEPALIVE : setsockopt() error";
-	cout << "errno = " << errno << endl << flush;
-  }
-  else {
-	// Succeeded to set SO_KEEPALIVE
-  }
-}
-
-#if defined(DEBUG)
-// check socket option
-void NetThread::checkSocketOption(SOCKET sock)
-{
-  union {
-	int		i_val;
-	long	l_val;
-	char	c_val[10];
-	struct linger linger_val;
-	struct timeval timeval_val;
-  } val;
-  socklen_t len;
-  len = sizeof(val);
-
-  // SO_KEEPALIVE
-#if defined(QTB_NET_WIN)
-  if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char*)&val, &len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (void*)&val, &len) == -1){
-#endif
-	cout << "[" << name << "] sockopt: SO_KEEPALIVE : getsockopt() error";
-  }
-  else {
-	cout << "[" << name << "] sockopt: SO_KEEPALIVE : ";
-	if (val.i_val == 0){
-	  cout << "off";
-	}
-	else {
-	  cout << "on";
-	}
-  }
-  // flush
-  cout << endl << flush;
-}
-#endif // defined(DEBUG)
-
-// connect with retry
-#define MAXSLEEP 128
-#if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
-int NetThread::connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen)
-{
-  for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
-	int fd = socket(domain, type, protocol);
-	if (fd < 0){
-	  break;
-	}
-	if (::connect(fd, addr, addrlen) == 0){
-	  return fd;
-	}
-	closesocket(fd);
-
-	// check exit
-	if (!runThread){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
-	  return INVALID_SOCKET;
-	}
-
-	// sleep for next try
-	if (numsec <= MAXSLEEP/2){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
-	  QThread::sleep(numsec);
-	}
-  }
-
-  return INVALID_SOCKET;
-}
-#else
-int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
-{
-  for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
-	if (::connect(sockfd, addr, addrlen) == 0){
-	  return 0;
-	}
-
-	// check exit
-	if (!runThread){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
-	  return SOCKET_ERROR;
-	}
-
-	// sleep for next try
-	if (numsec <= MAXSLEEP/2){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
-	  QThread::sleep(numsec);
-	}
-  }
-
-  return SOCKET_ERROR;
-}
-#endif
-
-#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
-
 // print protocol header
 void NetThread::printHeader()
 {
@@ -669,5 +553,121 @@ void NetThread::dumpHeader()
   }
   cout << endl << endl << setiosflags(flags) << setfill(fill) << flush;
 }
+
+// set socket option
+#include <cerrno>
+void NetThread::setSocketOption(SOCKET sock)
+{
+  int val = 1;
+  socklen_t len = sizeof(val);
+#if defined(QTB_NET_WIN)
+  if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char*)&val, len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const void*)&val, len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_KEEPALIVE : setsockopt() error";
+	cout << "errno = " << errno << endl << flush;
+  }
+  else {
+	// Succeeded to set SO_KEEPALIVE
+  }
+}
+
+#if defined(DEBUG)
+// check socket option
+void NetThread::checkSocketOption(SOCKET sock)
+{
+  union {
+	int		i_val;
+	long	l_val;
+	char	c_val[10];
+	struct linger linger_val;
+	struct timeval timeval_val;
+  } val;
+  socklen_t len;
+  len = sizeof(val);
+
+  // SO_KEEPALIVE
+#if defined(QTB_NET_WIN)
+  if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char*)&val, &len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (void*)&val, &len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_KEEPALIVE : getsockopt() error";
+  }
+  else {
+	cout << "[" << name << "] sockopt: SO_KEEPALIVE : ";
+	if (val.i_val == 0){
+	  cout << "off";
+	}
+	else {
+	  cout << "on";
+	}
+  }
+  // flush
+  cout << endl << flush;
+}
+#endif // defined(DEBUG)
+
+// connect with retry
+#define MAXSLEEP 128
+#if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
+int NetThread::connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen)
+{
+  for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
+	int fd = socket(domain, type, protocol);
+	if (fd < 0){
+	  break;
+	}
+	if (::connect(fd, addr, addrlen) == 0){
+	  return fd;
+	}
+	closesocket(fd);
+
+	// check exit
+	if (!runThread){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
+	  return INVALID_SOCKET;
+	}
+
+	// sleep for next try
+	if (numsec <= MAXSLEEP/2){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
+	  QThread::sleep(numsec);
+	}
+  }
+
+  return INVALID_SOCKET;
+}
+#else
+int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+  for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
+	if (::connect(sockfd, addr, addrlen) == 0){
+	  return 0;
+	}
+
+	// check exit
+	if (!runThread){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
+	  return SOCKET_ERROR;
+	}
+
+	// sleep for next try
+	if (numsec <= MAXSLEEP/2){
+	  if (settings->getOutputLog())
+		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
+	  QThread::sleep(numsec);
+	}
+  }
+
+  return SOCKET_ERROR;
+}
+#endif
+
+#endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 } // end of namespace qtbrynhildr

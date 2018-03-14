@@ -59,8 +59,8 @@ private:
   // IO device
   QIODevice *output;
 
-  // samplerate change count
-  int samplerateChangeCount;
+  // samplerate change counter
+  int samplerateChangeCounter;
 
 #if QTB_CELT_SUPPORT
   // converter

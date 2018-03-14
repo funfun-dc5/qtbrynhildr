@@ -40,7 +40,8 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel, Rec
 ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
 #endif // QTB_RECORDER
   :
-  NetThread("ControlThread", settings, desktopPanel),
+  NetThread("ControlThread", settings),
+  desktopPanel(desktopPanel),
   serverVersion(SERVER_VERSION_BRYNHILDR2),
   currentMode(0),
   keyBuffer(0),

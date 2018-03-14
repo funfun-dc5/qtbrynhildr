@@ -27,9 +27,8 @@ namespace qtbrynhildr {
 // public
 //---------------------------------------------------------------------------
 // constructor
-NetThread::NetThread(const char *name, Settings *settings, DesktopPanel *desktopPanel)
+NetThread::NetThread(const char *name, Settings *settings)
   :
-  desktopPanel(desktopPanel),
   name(name),
   settings(settings),
   com_data(new COM_DATA),

@@ -26,15 +26,17 @@
 namespace qtbrynhildr {
 
 // constructor
-SoundThread::SoundThread(Settings *settings, DesktopPanel *desktopPanel)
+SoundThread::SoundThread(Settings *settings)
   :
-  NetThread("SoundThread", settings, desktopPanel),
+  NetThread("SoundThread", settings),
   soundBuffer(0),
   soundBufferSize(0),
   soundCacheTime(-1),
   samplerate(0),
+#if !QTB_NEWFEATURE
   audioOutput(0),
   output(0),
+#endif // !QTB_NEWFEATURE
   samplerateChangeCounter(0),
 #if QTB_CELT_SUPPORT
   converter(0),
@@ -68,6 +70,7 @@ SoundThread::~SoundThread()
 	buffer = 0;
   }
 
+#if !QTB_NEWFEATURE
   // audio output
   if (audioOutput != 0){
 	audioOutput->stop();
@@ -76,6 +79,7 @@ SoundThread::~SoundThread()
 #endif // !defined(QTB_RPI3) // for Segmentation Fault on rpi3
 	audioOutput = 0;
   }
+#endif // !QTB_NEWFEATURE
 
   // output wav file
   if (settings->getOutputSoundDataToFile() && settings->getOutputSoundDataToWavFile() &&
@@ -220,6 +224,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
   }
 
+#if !QTB_NEWFEATURE
   // put PCM data into sound buffer
   if (settings->getOnSound()){
 	// for cache
@@ -231,6 +236,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  // NOT supported sample rate
 	  return TRANSMIT_SUCCEEDED;
 	}
+#endif // !QTB_NEWFEATURE
 
 	// put into soundBuffer
 	int putSize = soundBuffer->put(buffer, receivedDataSize);
@@ -240,6 +246,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
 
+	cout << "sound buffer size :" << soundBuffer->size() << endl << flush; // for TEST
+
+#if !QTB_NEWFEATURE
 	// check sound cache time
 	if (soundCacheTime != settings->getSoundCacheTime()){
 	  // update cacheSize
@@ -331,6 +340,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	count++;
 #endif
   }
+#endif // !QTB_NEWFEATURE
 
   return TRANSMIT_SUCCEEDED;
 }
@@ -360,10 +370,12 @@ void SoundThread::shutdownConnection()
 	sock_sound = INVALID_SOCKET;
   }
 
+#if !QTB_NEWFEATURE
   // stop audiouOutput
   if (audioOutput != 0){
 	audioOutput->stop();
   }
+#endif // !QTB_NEWFEATURE
 
   NetThread::shutdownConnection();
 }
@@ -379,6 +391,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << endl << flush;
   }
 
+#if !QTB_NEWFEATURE
   // setting for sound format
   format.setSampleRate((int)samplerate);
   format.setChannelCount(2); // channel
@@ -433,6 +446,10 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // start output
   output = audioOutput->start();
 #endif
+#else // !QTB_NEWFEATURE
+  // clean sound buffer
+  soundBuffer->clear();
+#endif // !QTB_NEWFEATURE
 
   // change counter up
   samplerateChangeCounter++;

@@ -84,6 +84,9 @@ class GraphicsThread : public NetThread
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
   // image for desktop
   QImage *image;
 

@@ -81,9 +81,6 @@ class NetThread : public QThread
   // Variable
   //-------------------------------------------------------------------------------
 protected:
-  // desktop panel
-  DesktopPanel *desktopPanel;
-
   // thread name
   const char *name;
 
@@ -110,7 +107,7 @@ protected:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  NetThread(const char *name, Settings *settings, DesktopPanel *desktopPanel);
+  NetThread(const char *name, Settings *settings);
   // destructor
   virtual ~NetThread();
 

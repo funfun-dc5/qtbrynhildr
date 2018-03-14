@@ -7,9 +7,11 @@
 #include "common/common.h"
 
 // Qt Header
+#if !QTB_NEWFEATURE
 #include <QAudioFormat>
 #include <QAudioOutput>
 #include <QIODevice>
+#endif // !QTB_NEWFEATURE
 
 // Local Header
 #include "common/netthread.h"
@@ -50,6 +52,7 @@ private:
   // sample rate
   SAMPLERATE samplerate;
 
+#if !QTB_NEWFEATURE
   // audio format
   QAudioFormat format;
 
@@ -58,6 +61,7 @@ private:
 
   // IO device
   QIODevice *output;
+#endif // !QTB_NEWFEATURE
 
   // samplerate change counter
   int samplerateChangeCounter;
@@ -75,7 +79,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  SoundThread(Settings *settings, DesktopPanel *desktopPanel = 0);
+  SoundThread(Settings *settings);
   // destructor
   ~SoundThread();
 
@@ -102,11 +106,13 @@ private:
   // create .wav file
   void createWavFile(int dataSize);
 
+#if !QTB_NEWFEATURE
 #if defined(DEBUG)
 private slots:
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif // defined(DEBUG)
+#endif // !QTB_NEWFEATURE
 };
 
 } // end of namespace qtbrynhildr

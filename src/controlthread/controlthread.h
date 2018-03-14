@@ -32,6 +32,9 @@ class ControlThread : public NetThread
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
   // server version
   SERVER_VERSION serverVersion;
 

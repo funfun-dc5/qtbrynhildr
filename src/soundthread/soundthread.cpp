@@ -188,9 +188,6 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	return TRANSMIT_DATASIZE_ERROR;
   }
 
-  // buffer[]         : PCM Data
-  // receivedDataSize : Size of PCM Data
-
 #if QTB_CELT_SUPPORT
   if (converter != 0){
 	// for DEBUG : save CELT Data (append mode)
@@ -212,6 +209,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
   }
 #endif // QTB_CELT_SUPPORT
+
+  // buffer[]         : PCM Data
+  // receivedDataSize : Size of PCM Data
 
   // for DEBUG : save PCM Data (append)
   if (settings->getOutputSoundDataToFile()){

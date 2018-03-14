@@ -7,33 +7,20 @@
 #include "common/common.h"
 
 // Qt Header
+#include <QIODevice>
+
+// Local Header
+#include "util/ringbuffer.h"
 
 namespace qtbrynhildr {
 
 // SoundBuffer
-class SoundBuffer
+class SoundBuffer : public RingBuffer, public QIODevice
 {
   //-------------------------------------------------------------------------------
   // Variable
   //-------------------------------------------------------------------------------
 private:
-  // local buffer
-  char *buffer;
-
-  // local buffer for copying 2 region
-  char *pairBuffer;
-
-  // buffer size
-  int bufferSize;
-
-  // buffer top index
-  int topPos;
-
-  // buffer next index
-  int nextPos;
-
-  // output log flag
-  bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function
@@ -44,20 +31,14 @@ public:
   // destructor
   ~SoundBuffer();
 
-  // put data to ring buffer
-  int put(const char *buf, int len);
+protected:
+  // QIODevice interface
+  qint64 readData(char *data, qint64 maxlen);
+  qint64 writeData(const char *data, qint64 len);
+  qint64 bytesAvailable() const;
 
-  // get data from ring buffer
-  const char *get(int len);
+private:
 
-  // clear buffer
-  void clear();
-
-  // get available data size
-  long size() const;
-
-  // get available data size (max size = len)
-  long size(int len) const;
 };
 
 } // end of namespace qtbrynhildr

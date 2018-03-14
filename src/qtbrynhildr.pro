@@ -263,6 +263,8 @@ HEADERS += util/ringbuffer.h
 SOURCES += util/ringbuffer.cpp
 HEADERS += graphicsthread/graphicsbuffer.h
 SOURCES += graphicsthread/graphicsbuffer.cpp
+HEADERS += soundthread/soundbuffer.h
+SOURCES += soundthread/soundbuffer.cpp
 }
 else {
 DEFINES += QTB_NEWFEATURE_GB=0 QTB_NEWFEATURE_SB=0

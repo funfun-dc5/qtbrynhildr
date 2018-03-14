@@ -178,7 +178,7 @@ void RingBuffer::clear()
 }
 
 // get available data size
-long RingBuffer::size() const
+long RingBuffer::getSize() const
 {
   int len = 0;
 
@@ -201,9 +201,9 @@ long RingBuffer::size() const
 }
 
 // get available data size (max size = len)
-long RingBuffer::size(int len) const
+long RingBuffer::getSize(int len) const
 {
-  int bufferLen = size();
+  int bufferLen = getSize();
 
   if (len <= bufferLen){
 	return len;

@@ -54,10 +54,10 @@ public:
   void clear();
 
   // get available data size
-  long size() const;
+  long getSize() const;
 
   // get available data size (max size = len)
-  long size(int len) const;
+  long getSize(int len) const;
 };
 
 } // end of namespace qtbrynhildr

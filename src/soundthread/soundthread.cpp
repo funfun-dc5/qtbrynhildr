@@ -246,7 +246,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
 
-	//cout << "sound buffer size :" << soundBuffer->size() << endl << flush; // for TEST
+	//cout << "sound buffer size : " << soundBuffer->getSize() << endl << flush; // for TEST
 
 #if !QTB_NEWFEATURE_SB
 	// check sound cache time
@@ -263,19 +263,19 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	if (settings->getOutputLog()){
 	  double cacheRate = 0;
 	  if (soundCacheSizeForLog != 0)
-		cacheRate = (double)(soundBuffer->size())/soundCacheSizeForLog * 100.0;
+		cacheRate = (double)(soundBuffer->getSize())/soundCacheSizeForLog * 100.0;
 	  cout << "[SoundThread] Sound Cache Rate : " << cacheRate << endl << flush;
 	}
 
 	// write into sound buffer
-	if (soundBuffer->size() > soundCacheSize){
+	if (soundBuffer->getSize() > soundCacheSize){
 	  if (audioOutput->state() != QAudio::StoppedState){
 		//	  soundCacheSize = 0;
 
 		int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 		while(chunks){
-		  qint64 len = soundBuffer->size(audioOutput->periodSize());
+		  qint64 len = soundBuffer->getSize(audioOutput->periodSize());
 
 		  // write PCM data
 		  if (len != 0){
@@ -305,7 +305,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	static int count = 0;
 	if (count % 500 == 0){
 	  cout << "[SoundThread] receivedDataSize = " << receivedDataSize << endl;
-	  cout << "[SoundThread] size = " << soundBuffer->size() << ", count = " << count << endl;
+	  cout << "[SoundThread] size = " << soundBuffer->getSize() << ", count = " << count << endl;
 	  cout << "[SoundThread] bytesFree() =  " << audioOutput->bytesFree() << endl << flush;
 	}
 	count++;

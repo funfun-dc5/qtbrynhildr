@@ -7,19 +7,19 @@
 #include "common/common.h"
 
 // Qt Header
-#if !QTB_NEWFEATURE
+#if !QTB_NEWFEATURE_SB
 #include <QAudioFormat>
 #include <QAudioOutput>
 #include <QIODevice>
-#endif // !QTB_NEWFEATURE
+#endif // !QTB_NEWFEATURE_SB
 
 // Local Header
 #include "common/netthread.h"
-#if QTB_NEWFEATURE
+#if QTB_NEWFEATURE_GB || QTB_NEWFEATURE_SB
 #include "util/ringbuffer.h"
-#else // QTB_NEWFEATURE
+#else // QTB_NEWFEATURE_GB || QTB_NEWFEATURE_SB
 #include "soundbuffer.h"
-#endif // QTB_NEWFEATURE
+#endif // QTB_NEWFEATURE_GB || QTB_NEWFEATURE_SB
 
 #if QTB_CELT_SUPPORT
 #include "converter.h"
@@ -27,9 +27,9 @@
 
 namespace qtbrynhildr {
 
-#if QTB_NEWFEATURE
+#if QTB_NEWFEATURE_GB || QTB_NEWFEATURE_SB
 using SoundBuffer = RingBuffer;
-#endif // QTB_NEWFEATURE
+#endif // QTB_NEWFEATURE_GB || QTB_NEWFEATURE_SB
 
 // SoundThread
 class SoundThread : public NetThread
@@ -52,7 +52,7 @@ private:
   // sample rate
   SAMPLERATE samplerate;
 
-#if !QTB_NEWFEATURE
+#if !QTB_NEWFEATURE_SB
   // audio format
   QAudioFormat format;
 
@@ -61,7 +61,7 @@ private:
 
   // IO device
   QIODevice *output;
-#endif // !QTB_NEWFEATURE
+#endif // !QTB_NEWFEATURE_SB
 
   // samplerate change counter
   int samplerateChangeCounter;
@@ -106,13 +106,13 @@ private:
   // create .wav file
   void createWavFile(int dataSize);
 
-#if !QTB_NEWFEATURE
+#if !QTB_NEWFEATURE_SB
 #if defined(DEBUG)
 private slots:
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif // defined(DEBUG)
-#endif // !QTB_NEWFEATURE
+#endif // !QTB_NEWFEATURE_SB
 };
 
 } // end of namespace qtbrynhildr

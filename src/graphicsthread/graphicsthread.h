@@ -11,9 +11,9 @@
 
 // Local Header
 #include "common/netthread.h"
-#if QTB_NEWFEATURE
+#if QTB_NEWFEATURE_GB
 #include "graphicsbuffer.h"
-#endif // QTB_NEWFEATURE
+#endif // QTB_NEWFEATURE_GB
 
 // count for draw time check
 #define DRAW_TIME_SAMPLING_POINT 20
@@ -90,10 +90,10 @@ private:
   // image for desktop
   QImage *image;
 
-#if QTB_NEWFEATURE
+#if QTB_NEWFEATURE_GB
   // graphics buffer
   GraphicsBuffer *graphicsBuffer;
-#endif // QTB_NEWFEATURE
+#endif // QTB_NEWFEATURE_GB
 
   // desktop scaling factor
   qreal desktopScalingFactor;
@@ -107,7 +107,7 @@ private:
   // previous get frame rate time
   qint64 previousGetFrameRateTime;
 
-#if !QTB_NEWFEATURE
+#if !QTB_NEWFEATURE_GB
   // start draw frame time
   qint64 startDrawFrameTime;
 
@@ -122,10 +122,10 @@ private:
 
   // start draw time
   qint64 startDrawTime;
-#else // !QTB_NEWFEATURE
+#else // !QTB_NEWFEATURE_GB
   // total frame counter
   unsigned int totalFrameCounter;
-#endif // !QTB_NEWFEATURE
+#endif // !QTB_NEWFEATURE_GB
 
   // clearDesktop
   bool onClearDesktop;
@@ -197,7 +197,7 @@ public:
 	return totalFrameCounter;
   }
 
-#if !QTB_NEWFEATURE
+#if !QTB_NEWFEATURE_GB
   // reset parameters
   void resetDrawParamaters()
   {
@@ -205,7 +205,7 @@ public:
 	drawTime = 0;
 	checkCounter = 0;
   }
-#endif // !QTB_NEWFEATURE
+#endif // !QTB_NEWFEATURE_GB
 
 protected:
   // connect to server

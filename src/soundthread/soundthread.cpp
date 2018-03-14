@@ -246,7 +246,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
 
-	//	cout << "sound buffer size :" << soundBuffer->size() << endl << flush; // for TEST
+	//cout << "sound buffer size :" << soundBuffer->size() << endl << flush; // for TEST
 
 #if !QTB_NEWFEATURE_SB
 	// check sound cache time

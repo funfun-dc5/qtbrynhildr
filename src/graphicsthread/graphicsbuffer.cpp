@@ -85,7 +85,7 @@ bool GraphicsBuffer::putFrame(const char *buf, int len)
   // current frame count++
   frameCount++;
 
-  //  cout << "ring buffer size = " << ringBuffer->size() << endl << flush; // for TEST
+  //cout << "ring buffer size = " << ringBuffer->getSize() << endl << flush; // for TEST
 
   return true;
 }

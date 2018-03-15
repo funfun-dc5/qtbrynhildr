@@ -92,7 +92,6 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   ppm(0),
 #endif // USE_PPM_LOADER_FOR_VP8
   rgb24(0),
-  doneVpxInit(false),
   hwidth(0),
   y1topOrg(0),
   u1topOrg(0),
@@ -126,8 +125,9 @@ GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
   desktopScalingFactor = settings->getDesktopScalingFactor();
 
 #if QTB_PUBLIC_MODE7_SUPPORT
-  // foe vpx
+  // initialize libvpx
   memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
+  vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
 #if QTB_SIMD_SUPPORT
@@ -352,7 +352,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_NEWFEATURE_GB
   // put to graphics buffer // for TEST
   graphicsBuffer->putFrame(buffer, receivedDataSize);
-#if 0
+#if 1
   // get from graphics buffer // for TEST
   int len = graphicsBuffer->getFrame(buffer);
   if (len != receivedDataSize){
@@ -418,12 +418,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_PUBLIC_MODE7_SUPPORT
   // decode vp8
   if (com_data->video_mode == VIDEO_MODE_COMPRESS){
-	// initialize libvpx
-	if (!doneVpxInit){
-	  memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
-	  vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
-	  doneVpxInit = true;
-	}
 	vpx_codec_decode(&c_codec, (uint8_t*)buffer, receivedDataSize, 0, 0);
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT

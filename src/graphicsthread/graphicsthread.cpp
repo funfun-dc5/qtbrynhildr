@@ -26,9 +26,11 @@
 #include "qtbrynhildr.h"
 #include "util/cpuinfo.h"
 
+#if !QTB_NEWFEATURE_GB
 // for TEST
 #define TEST_NOT_DRAWING	0
 #define TEST_FRAME_CONTROL	0
+#endif // !QTB_NEWFEATURE_GB
 
 namespace qtbrynhildr {
 
@@ -81,6 +83,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   totalFrameCounter(0),
 #endif // !QTB_NEWFEATURE_GB
   onClearDesktop(false),
+#if !QTB_NEWFEATURE_GB
 #if QTB_PUBLIC_MODE7_SUPPORT
   width(0),
   height(0),
@@ -105,6 +108,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   hasSIMDInstruction(false),
 #endif // QTB_SIMD_SUPPORT
 #endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // !QTB_NEWFEATURE_GB
   buffer(0)
 {
   outputLog = false; // for DEBUG
@@ -123,6 +127,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   // desktop Scaling factor
   desktopScalingFactor = settings->getDesktopScalingFactor();
 
+#if !QTB_NEWFEATURE_GB
 #if QTB_PUBLIC_MODE7_SUPPORT
   // initialize libvpx
   memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
@@ -138,6 +143,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   //cout << "converter source name         : " << getConverterSourceName() << endl;
   //cout << "converter source name for SIMD: " << getConverterSourceName_SIMD() << endl << flush;
 #endif // QTB_SIMD_SUPPORT
+#endif // !QTB_NEWFEATURE_GB
 }
 
 // destructor
@@ -156,6 +162,7 @@ GraphicsThread::~GraphicsThread()
 	image = 0;
   }
 
+#if !QTB_NEWFEATURE_GB
 #if QTB_PUBLIC_MODE7_SUPPORT
   // buffer for yuv420/rgb24
   if (yuv1 != 0){
@@ -180,6 +187,7 @@ GraphicsThread::~GraphicsThread()
   }
 #endif // USE_PPM_LOADER_FOR_VP8
 #endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // !QTB_NEWFEATURE_GB
 }
 
 // get frame rate
@@ -351,7 +359,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_NEWFEATURE_GB
   // put to graphics buffer // for TEST
   graphicsBuffer->putFrame(buffer, receivedDataSize);
-#if 1
+#if 0
   // get from graphics buffer // for TEST
   int len = graphicsBuffer->getFrame(buffer);
   if (len != receivedDataSize){
@@ -404,7 +412,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  startDrawTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	}
   }
-#endif // !QTB_NEWFEATURE_GB
 
 #if TEST_FRAME_CONTROL
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
@@ -433,7 +440,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   return TRANSMIT_SUCCEEDED;
 #endif // TEST_NOT_DRAWING
 
-#if !QTB_NEWFEATURE_GB
   // frame skip check
   if (settings->getOnGraphics()){
 	// frame rate control
@@ -468,7 +474,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	return TRANSMIT_SUCCEEDED; // skip this frame
   }
 #endif
-#endif // !QTB_NEWFEATURE_GB
 
   // draw a desktop image
   if (settings->getOnGraphics()){
@@ -623,7 +628,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
-#if !QTB_NEWFEATURE_GB
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -728,6 +732,7 @@ void GraphicsThread::shutdownConnection()
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
+#if !QTB_NEWFEATURE_GB
 #if QTB_PUBLIC_MODE7_SUPPORT
 // setup for yuv420, rgb24
 inline bool GraphicsThread::setup()
@@ -1026,5 +1031,6 @@ inline int GraphicsThread::makeRGB24Image_SIMD()
 #endif // QTB_SIMD_SUPPORT
 
 #endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // !QTB_NEWFEATURE_GB
 
 } // end of namespace qtbrynhildr

@@ -66,10 +66,10 @@ win32-g++ {
 #LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
 # SIMD (INTEL:gcc/clang)
-SOURCES += graphicsthread/yuv2rgb_v3.cpp
+#SOURCES += graphicsthread/yuv2rgb_v3.cpp
 # SSE4.1
-SOURCES += graphicsthread/yuv2rgb_sse.cpp
-QMAKE_CXXFLAGS += -msse4.1
+#SOURCES += graphicsthread/yuv2rgb_sse.cpp
+#QMAKE_CXXFLAGS += -msse4.1
 # AVX
 #SOURCES += graphicsthread/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx

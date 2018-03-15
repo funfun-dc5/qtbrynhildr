@@ -36,13 +36,20 @@
 #include "version.h"
 
 // for TEST
-#define QTB_TEST_DESKTOP_IMAGE_CAPTURE	0
+#define QTB_TEST_DESKTOP_IMAGE_CAPTURE1	0
+#define QTB_TEST_DESKTOP_IMAGE_CAPTURE2	0
 
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE // for TEST Desktop Image Capture
+#if QTB_TEST_DESKTOP_IMAGE_CAPTURE1 // for TEST Desktop Image Capture
 #include <QPixmap>
 #include <QScreen>
 #include <QWindow>
 #include <QWidget>
+#endif // for TEST
+
+#if QTB_TEST_DESKTOP_IMAGE_CAPTURE2 // for TEST Desktop Image Capture
+// for Desktop Duplication API
+#include <d3d11.h>
+#include <dxgi1_2.h>
 #endif // for TEST
 
 namespace qtbrynhildr {
@@ -257,7 +264,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // for DEBUG
   outputLog(false)
 {
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE // for TEST Desktop Image Capture
+#if QTB_TEST_DESKTOP_IMAGE_CAPTURE1 // for TEST Desktop Image Capture
   QScreen *screen = QGuiApplication::primaryScreen();
   if (screen != 0){
 	cout << "primaryScreen(): OK" << endl << flush;
@@ -280,14 +287,27 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	cout << "capture: OK" << endl << flush;
 	QDateTime beginTime = QDateTime::currentDateTime();
 	QPixmap pixmap;
+	QImage image;
 	for (int i = 0 ; i < 1000; i++){
-	  pixmap = screen->grabWindow(0);
+	  pixmap = screen->grabWindow(0);	// 33 (ms)
+	  //	  image = pixmap.toImage();
+	  //	  image.convertToFormat(QImage::Format_RGB888); // 17 (ms)
 	}
 	QDateTime endTime = QDateTime::currentDateTime();
 	qint64 diffSeconds = endTime.toMSecsSinceEpoch() - beginTime.toMSecsSinceEpoch();
 	cout << "diff time = " << diffSeconds << " msecs." << endl << flush;
 	pixmap.save("jpg/desktop.jpg", "jpg", 75);
   }
+#endif // for TEST
+
+#if QTB_TEST_DESKTOP_IMAGE_CAPTURE2 // for TEST Desktop Image Capture
+#if _MSC_VER
+  // Desktop Duplication API
+  IDXGIResource *DesktopResource = 0;
+  DXGI_OUTDUPL_FRAME_INFO FrameInfo;
+#else // _MSC_VER
+#error "MSVC Only"
+#endif // _MSC_VER
 #endif // for TEST
 
   // bootTime

@@ -262,7 +262,7 @@ DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 # for new feature
 NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
-DEFINES += QTB_NEWFEATURE_GB=1 QTB_NEWFEATURE_SB=1
+DEFINES += QTB_NEWFEATURE_GB=1 QTB_NEWFEATURE_SB=0
 HEADERS += graphicsthread/graphicsbuffer.h
 SOURCES += graphicsthread/graphicsbuffer.cpp
 }

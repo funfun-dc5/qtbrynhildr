@@ -352,7 +352,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if QTB_NEWFEATURE_GB
   // put to graphics buffer // for TEST
   graphicsBuffer->putFrame(buffer, receivedDataSize);
-#if 1
+#if 0
   // get from graphics buffer // for TEST
   int len = graphicsBuffer->getFrame(buffer);
   if (len != receivedDataSize){

@@ -66,6 +66,10 @@
 #include "graphicsthread/graphicsthread.h"
 #include "soundthread/soundthread.h"
 
+#if QTB_NEWFEATURE_GB
+#include "graphicsthread/graphicsbuffer.h"
+#endif // QTB_NEWFEATURE_GB
+
 #ifdef USE_KEYLAYOUTFILE
 // key layout
 #include "keylayout/keylayoutfilemanager.h"
@@ -521,11 +525,25 @@ private:
   // timer for main thread
   QTimer *timer;
 
+#if QTB_NEWFEATURE_GB
+  // graphics buffer
+  GraphicsBuffer *graphicsBuffer;
+
+  // timer for graphics
+  QTimer *timerForGraphics;
+#endif // QTB_NEWFEATURE_GB
+
   // SIMD instruction
   bool hasSIMDInstruction;
 
   // pop up Connect To Server Dialog
   bool onPopUpConnectToServer;
+
+  // check update in background mode
+  bool onCheckUpdateInBackground;
+
+  // output log flag
+  bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function
@@ -936,18 +954,15 @@ private:
   // shutdown platform
   bool shutdownPlatform();
 
-private:
-  // check update in background mode
-  bool onCheckUpdateInBackground;
-
-  // output log flag
-  bool outputLog;
-
 private slots:
   // finished download
   void finishedDownload();
 
   void timerExpired();
+
+#if QTB_NEWFEATURE_GB
+  void timerForGraphicsExpired();
+#endif // QTB_NEWFEATURE_GB
 };
 
 } // end of namespace qtbrynhildr

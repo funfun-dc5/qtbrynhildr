@@ -116,4 +116,10 @@ int GraphicsBuffer::getFrame(char *buf)
   return len;
 }
 
+// get size
+int GraphicsBuffer::getSize() const
+{
+  return ringBuffer->getSize();
+}
+
 } // end of namespace qtbrynhildr

@@ -258,6 +258,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   keyBuffer(0),
   mouseBuffer(0),
   timer(0),
+#if QTB_NEWFEATURE_GB
+  graphicsBuffer(0),
+  timerForGraphics(0),
+#endif // QTB_NEWFEATURE_GB
   hasSIMDInstruction(false),
   onPopUpConnectToServer(false),
   onCheckUpdateInBackground(false),
@@ -753,6 +757,11 @@ QtBrynhildr::QtBrynhildr(Option *option)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
+#if QTB_NEWFEATURE_GB
+  // get graphics buffer
+  graphicsBuffer = graphicsThread->getGraphicsBuffer();
+#endif // QTB_NEWFEATURE_GB
+
   // connect
   // all thread
   connect(controlThread,
@@ -857,6 +866,13 @@ QtBrynhildr::QtBrynhildr(Option *option)
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(100); // 0.1 second tick timer
 
+#if QTB_NEWFEATURE_GB
+  // initialize timer for graphics
+  timerForGraphics = new QTimer(this);
+  connect(timerForGraphics, SIGNAL(timeout()), SLOT(timerForGraphicsExpired()));
+  timerForGraphics->start(1000); // for TEST
+#endif // QTB_NEWFEATURE_GB
+
 #if 0 // for TEST
   // initialize mouse cursor
   if (settings->getOnDisplayMouseCursor()){
@@ -885,6 +901,13 @@ QtBrynhildr::~QtBrynhildr()
 	delete timer;
 	timer = 0;
   }
+#if QTB_NEWFEATURE_GB
+  if (timerForGraphics != 0){
+	timerForGraphics->stop();
+	delete timerForGraphics;
+	timerForGraphics = 0;
+  }
+#endif // QTB_NEWFEATURE_GB
 
   if (settings != 0){
 	// disconnect to server
@@ -4489,5 +4512,16 @@ void QtBrynhildr::timerExpired()
 	refreshCounter++;
   }
 }
+
+#if QTB_NEWFEATURE_GB
+void QtBrynhildr::timerForGraphicsExpired()
+{
+  //  QDateTime currentTime = QDateTime::currentDateTime();
+  cout << "timerForGraphicsExpired()" << endl << flush;
+  if (graphicsBuffer != 0){
+	cout << "graphicsBuffer->getSize() = " << graphicsBuffer->getSize() << endl << flush;
+  }
+}
+#endif // QTB_NEWFEATURE_GB
 
 } // end of namespace qtbrynhildr

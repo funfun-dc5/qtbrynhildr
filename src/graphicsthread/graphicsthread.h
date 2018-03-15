@@ -207,6 +207,14 @@ public:
   }
 #endif // !QTB_NEWFEATURE_GB
 
+#if QTB_NEWFEATURE_GB
+  // get graphics buffer
+  GraphicsBuffer *getGraphicsBuffer() const
+  {
+	return graphicsBuffer;
+  }
+#endif // QTB_NEWFEATURE_GB
+
 protected:
   // connect to server
   CONNECT_RESULT connectToServer();

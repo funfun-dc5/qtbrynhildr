@@ -71,6 +71,9 @@ public:
 
   // get frame
   int getFrame(char *buf);
+
+  // get size
+  int getSize() const;
 };
 
 } // end of namespace qtbrynhildr

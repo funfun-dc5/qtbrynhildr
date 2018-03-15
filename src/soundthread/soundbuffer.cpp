@@ -23,6 +23,7 @@ SoundBuffer::~SoundBuffer()
 {
 }
 
+#if QTB_NEWFEATURE_SB
 // QIODevice interface
 qint64 SoundBuffer::readData(char *data, qint64 maxlen)
 {
@@ -41,5 +42,6 @@ qint64 SoundBuffer::bytesAvailable() const
 {
   return 0; // for TEST
 }
+#endif // QTB_NEWFEATURE_SB
 
 } // end of namespace qtbrynhildr

@@ -234,7 +234,6 @@ HEADERS += controlthread/controlthread.h
 HEADERS += controlthread/keybuffer.h controlthread/mousebuffer.h
 HEADERS += graphicsthread/graphicsthread.h
 HEADERS += soundthread/soundthread.h
-HEADERS += soundthread/soundbuffer.h
 HEADERS += soundthread/wave.h
 HEADERS += windows/eventconverter.h windows/ntfs.h windows/keycodes.h windows/keyevent.h
 HEADERS += function/recorder.h
@@ -252,7 +251,6 @@ SOURCES += controlthread/controlthread.cpp
 SOURCES += controlthread/keybuffer.cpp controlthread/mousebuffer.cpp
 SOURCES += graphicsthread/graphicsthread.cpp
 SOURCES += soundthread/soundthread.cpp
-SOURCES += soundthread/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
 
@@ -265,6 +263,8 @@ equals(NEW_FEATURE, ON){
 DEFINES += QTB_NEWFEATURE_GB=1 QTB_NEWFEATURE_SB=1
 HEADERS += graphicsthread/graphicsbuffer.h
 SOURCES += graphicsthread/graphicsbuffer.cpp
+HEADERS += soundthread/soundbuffer.h
+SOURCES += soundthread/soundbuffer.cpp
 }
 else {
 DEFINES += QTB_NEWFEATURE_GB=0 QTB_NEWFEATURE_SB=0

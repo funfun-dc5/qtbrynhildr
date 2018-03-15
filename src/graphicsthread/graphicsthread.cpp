@@ -60,10 +60,9 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 // public
 //---------------------------------------------------------------------------
 // constructor
-GraphicsThread::GraphicsThread(Settings *settings, DesktopPanel *desktopPanel)
+GraphicsThread::GraphicsThread(Settings *settings)
   :
   NetThread("GraphicsThread", settings),
-  desktopPanel(desktopPanel),
   image(0),
 #if QTB_NEWFEATURE_GB
   graphicsBuffer(0),

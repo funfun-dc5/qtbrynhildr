@@ -84,9 +84,6 @@ class GraphicsThread : public NetThread
   // Variable
   //-------------------------------------------------------------------------------
 private:
-  // desktop panel
-  DesktopPanel *desktopPanel;
-
   // image for desktop
   QImage *image;
 
@@ -181,7 +178,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  GraphicsThread(Settings *settings, DesktopPanel *desktopPanel = 0);
+  GraphicsThread(Settings *settings);
   // destructor
   ~GraphicsThread();
 

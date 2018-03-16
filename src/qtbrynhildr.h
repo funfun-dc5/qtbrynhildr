@@ -418,7 +418,7 @@ private:
   unsigned int totalFrameCounter;
 
   // current frame rate
-  double currentFrameRate;
+  int currentFrameRate;
 
   // current data rate
   double currentDataRate;

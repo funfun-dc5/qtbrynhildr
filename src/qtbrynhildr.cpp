@@ -2313,11 +2313,9 @@ void QtBrynhildr::updateFrameRate()
 	  currentFrameRate = 0;
 	  currentDataRate = 0;
 	}
-	//currentFrameRate = settings->getFrameInterval(); // for TEST
-	//currentFrameRate = settings->getFrameDrawTime(); // for TEST
 	if (settings->getOnShowFrameRate()){ // Status Bar
-	  QString str = QString(tr("Frame Rate : ")+"%1 [%2 Mbps]").
-		arg(currentFrameRate, 4, 'f', 1, ' ').
+	  QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps]").
+		arg(currentFrameRate, 3).
 		arg(currentDataRate, 4, 'f', 1, ' ');
 	  frameRateLabel->setText(str);
 	}
@@ -2340,10 +2338,8 @@ void QtBrynhildr::updateFrameRate()
 	  currentFrameRate = 0;
 	  currentDataRate = 0;
 	}
-	//currentFrameRate = settings->getFrameInterval(); // for TEST
-	//currentFrameRate = settings->getFrameDrawTime(); // for TEST
-	QString str = QString(tr("Frame Rate : ")+"%1 [%2 Mbps]").
-	  arg(currentFrameRate, 4, 'f', 1, ' ').
+	QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps]").
+	  arg(currentFrameRate, 3).
 	  arg(currentDataRate, 4, 'f', 1, ' ');
 	frameRateLabel->setText(str);
   }

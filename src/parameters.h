@@ -47,14 +47,14 @@ const int QTB_SOUND_LOCAL_BUFFER_SIZE = 1024 * 1024;
 // window opacity in floating
 const double QTB_WINDOW_OPACITY = 0.95;
 
+// window update duration (ms)
+const double QTB_WINDOW_UPDATE_DURATION = 2000;
+
 //---------------------------------------------------------------------------
 // for others
 //---------------------------------------------------------------------------
 // max path length
 const int QTB_MAXPATHLEN = 2048;
-
-// status refresh count
-const int QTB_STATUS_REFRESH_COUNT = 10;
 
 } // end of namespace qtbrynhildr
 

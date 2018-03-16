@@ -864,7 +864,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // initialize timer for main thread
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
-  timer->start(100); // 0.1 second tick timer
+  timer->start(QTB_WINDOW_UPDATE_DURATION);
 
 #if QTB_NEWFEATURE_GB
   // initialize timer for graphics
@@ -4492,20 +4492,15 @@ void QtBrynhildr::timerExpired()
 #else // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   if (settings->getOnShowFrameRate()){
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-	static int refreshCounter = 1;
-	if (refreshCounter > QTB_STATUS_REFRESH_COUNT){
-	  // frame rate
-	  currentFrameRate = graphicsThread->getFrameRate();
-	  // data rate
-	  long controlDataRate = controlThread->getDataRate();
-	  long graphicsDataRate = graphicsThread->getDataRate();
-	  long soundDataRate = soundThread->getDataRate();
-	  // Mbps
-	  currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
-	  updateFrameRate();
-	  refreshCounter = 1;
-	}
-	refreshCounter++;
+	// frame rate
+	currentFrameRate = graphicsThread->getFrameRate();
+	// data rate
+	long controlDataRate = controlThread->getDataRate();
+	long graphicsDataRate = graphicsThread->getDataRate();
+	long soundDataRate = soundThread->getDataRate();
+	// Mbps
+	currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
+	updateFrameRate();
   }
 }
 

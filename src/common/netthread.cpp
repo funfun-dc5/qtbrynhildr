@@ -17,9 +17,6 @@
 #include "netthread.h"
 #include "parameters.h"
 
-#if 0 // for TEST
-#include <fstream>
-#endif
 
 namespace qtbrynhildr {
 
@@ -486,8 +483,11 @@ void NetThread::printHeader()
   cout << "com_data->mouse_wheel    :"  << (int)com_data->mouse_wheel << endl;
   cout << "com_data->keycode        :"  << (int)com_data->keycode << endl;
   cout << "com_data->keycode_flg    :"  << (int)com_data->keycode_flg << endl;
+  cout << "com_data->cursor_hotspot_x :"  << (int)com_data->cursor_hotspot_x << endl;
+  cout << "com_data->cursor_hotspot_y :"  << (int)com_data->cursor_hotspot_y << endl;
   cout << "com_data->monitor_no     :"	<< (int)com_data->monitor_no << endl;
   cout << "com_data->monitor_count  :"	<< (int)com_data->monitor_count << endl;
+  cout << "com_data->max_fps        :"	<< (int)com_data->max_fps << endl;
   cout << "com_data->sound_capture  :"	<< (int)com_data->sound_capture << endl;
   cout << "com_data->keydown        :"	<< com_data->keydown << endl;
   cout << "com_data->video_quality  :"	<< (int)com_data->video_quality << endl;
@@ -503,6 +503,7 @@ void NetThread::printHeader()
   cout << "com_data->zoom           :"  << com_data->zoom << endl;
   cout << "com_data->mode           :"	<< (int)com_data->mode << endl;
   cout << "com_data->sound_quality  :"	<< (int)com_data->sound_quality << endl;
+  cout << "com_data->frame_no       :"	<< (int)com_data->frame_no << endl;
   cout << "com_data->gamepad5       :"	<< com_data->gamepad5 << endl;
   cout << "com_data->gamepad6       :"	<< com_data->gamepad6 << endl;
   cout << "com_data->gamepad7       :"	<< com_data->gamepad7 << endl;

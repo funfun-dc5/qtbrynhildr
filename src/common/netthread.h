@@ -96,11 +96,11 @@ protected:
   // received data counter
   long receivedDataCounter;
 
+  // previous time
+  qint64 previousTime;
+
   // output log flag
   bool outputLog;
-
-  // previous time
-  QDateTime previousTime;
 
   //-------------------------------------------------------------------------------
   // Function

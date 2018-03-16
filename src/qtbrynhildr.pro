@@ -66,10 +66,10 @@ win32-g++ {
 #LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
 # SIMD (INTEL:gcc/clang)
-#SOURCES += graphicsthread/yuv2rgb_v3.cpp
+SOURCES += graphicsthread/yuv2rgb_v3.cpp
 # SSE4.1
-#SOURCES += graphicsthread/yuv2rgb_sse.cpp
-#QMAKE_CXXFLAGS += -msse4.1
+SOURCES += graphicsthread/yuv2rgb_sse.cpp
+QMAKE_CXXFLAGS += -msse4.1
 # AVX
 #SOURCES += graphicsthread/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
@@ -258,7 +258,7 @@ SOURCES += function/recorder.cpp
 DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 
 # for new feature
-NEW_FEATURE = ON
+NEW_FEATURE = OFF
 equals(NEW_FEATURE, ON){
 DEFINES += QTB_NEWFEATURE_GB=1 QTB_NEWFEATURE_SB=0
 HEADERS += graphicsthread/graphicsbuffer.h

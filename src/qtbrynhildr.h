@@ -66,10 +66,6 @@
 #include "graphicsthread/graphicsthread.h"
 #include "soundthread/soundthread.h"
 
-#if QTB_NEWFEATURE_GB
-#include "graphicsthread/graphicsbuffer.h"
-#endif // QTB_NEWFEATURE_GB
-
 #ifdef USE_KEYLAYOUTFILE
 // key layout
 #include "keylayout/keylayoutfilemanager.h"
@@ -522,16 +518,8 @@ private:
   // mouse buffer
   MouseBuffer *mouseBuffer;
 
-  // timer for main thread
+  // timer for GUI
   QTimer *timer;
-
-#if QTB_NEWFEATURE_GB
-  // graphics buffer
-  GraphicsBuffer *graphicsBuffer;
-
-  // timer for graphics
-  QTimer *timerForGraphics;
-#endif // QTB_NEWFEATURE_GB
 
   // SIMD instruction
   bool hasSIMDInstruction;
@@ -959,10 +947,6 @@ private slots:
   void finishedDownload();
 
   void timerExpired();
-
-#if QTB_NEWFEATURE_GB
-  void timerForGraphicsExpired();
-#endif // QTB_NEWFEATURE_GB
 };
 
 } // end of namespace qtbrynhildr

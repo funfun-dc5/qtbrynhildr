@@ -7,19 +7,13 @@
 #include "common/common.h"
 
 // Qt Header
-#if !QTB_NEWFEATURE_SB
 #include <QAudioFormat>
 #include <QAudioOutput>
 #include <QIODevice>
-#endif // !QTB_NEWFEATURE_SB
 
 // Local Header
 #include "common/netthread.h"
-#if QTB_NEWFEATURE_SB
 #include "soundbuffer.h"
-#else // QTB_NEWFEATURE_SB
-#include "util/ringbuffer.h"
-#endif // QTB_NEWFEATURE_SB
 
 #if QTB_CELT_SUPPORT
 #include "converter.h"
@@ -31,10 +25,6 @@ namespace qtbrynhildr {
 class SoundThread : public NetThread
 {
   Q_OBJECT
-
-#if !QTB_NEWFEATURE_SB
-using SoundBuffer = RingBuffer;
-#endif // !QTB_NEWFEATURE_SB
 
   //-------------------------------------------------------------------------------
   // Variable
@@ -52,7 +42,6 @@ private:
   // sample rate
   SAMPLERATE samplerate;
 
-#if !QTB_NEWFEATURE_SB
   // audio format
   QAudioFormat format;
 
@@ -61,7 +50,6 @@ private:
 
   // IO device
   QIODevice *output;
-#endif // !QTB_NEWFEATURE_SB
 
   // samplerate change counter
   int samplerateChangeCounter;
@@ -112,13 +100,11 @@ private:
   // create .wav file
   void createWavFile(int dataSize);
 
-#if !QTB_NEWFEATURE_SB
 #if defined(DEBUG)
 private slots:
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif // defined(DEBUG)
-#endif // !QTB_NEWFEATURE_SB
 };
 
 } // end of namespace qtbrynhildr

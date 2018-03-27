@@ -258,10 +258,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   keyBuffer(0),
   mouseBuffer(0),
   timer(0),
-#if QTB_NEWFEATURE_GB
-  graphicsBuffer(0),
-  timerForGraphics(0),
-#endif // QTB_NEWFEATURE_GB
   hasSIMDInstruction(false),
   onPopUpConnectToServer(false),
   onCheckUpdateInBackground(false),
@@ -757,11 +753,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
-#if QTB_NEWFEATURE_GB
-  // get graphics buffer
-  graphicsBuffer = graphicsThread->getGraphicsBuffer();
-#endif // QTB_NEWFEATURE_GB
-
   // connect
   // all thread
   connect(controlThread,
@@ -866,13 +857,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(QTB_WINDOW_UPDATE_DURATION);
 
-#if QTB_NEWFEATURE_GB
-  // initialize timer for graphics
-  timerForGraphics = new QTimer(this);
-  connect(timerForGraphics, SIGNAL(timeout()), SLOT(timerForGraphicsExpired()));
-  timerForGraphics->start(1000); // for TEST
-#endif // QTB_NEWFEATURE_GB
-
 #if 0 // for TEST
   // initialize mouse cursor
   if (settings->getOnDisplayMouseCursor()){
@@ -901,14 +885,6 @@ QtBrynhildr::~QtBrynhildr()
 	delete timer;
 	timer = 0;
   }
-#if QTB_NEWFEATURE_GB
-  if (timerForGraphics != 0){
-	timerForGraphics->stop();
-	delete timerForGraphics;
-	timerForGraphics = 0;
-  }
-#endif // QTB_NEWFEATURE_GB
-
   if (settings != 0){
 	// disconnect to server
 	disconnectToServer();
@@ -4231,9 +4207,7 @@ void QtBrynhildr::desktopCompressMode0()
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(false);
 
-#if !QTB_NEWFEATURE_GB
   graphicsThread->resetDrawParamaters();
-#endif // !QTB_NEWFEATURE_GB
 }
 void QtBrynhildr::desktopCompressMode2()
 {
@@ -4244,9 +4218,7 @@ void QtBrynhildr::desktopCompressMode2()
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(false);
 
-#if !QTB_NEWFEATURE_GB
   graphicsThread->resetDrawParamaters();
-#endif // !QTB_NEWFEATURE_GB
 }
 void QtBrynhildr::desktopCompressMode4()
 {
@@ -4257,9 +4229,7 @@ void QtBrynhildr::desktopCompressMode4()
   desktopCompressMode4_Action->setChecked(true);
   desktopCompressMode8_Action->setChecked(false);
 
-#if !QTB_NEWFEATURE_GB
   graphicsThread->resetDrawParamaters();
-#endif // !QTB_NEWFEATURE_GB
 }
 void QtBrynhildr::desktopCompressMode8()
 {
@@ -4270,9 +4240,7 @@ void QtBrynhildr::desktopCompressMode8()
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(true);
 
-#if !QTB_NEWFEATURE_GB
   graphicsThread->resetDrawParamaters();
-#endif // !QTB_NEWFEATURE_GB
 }
 #endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 
@@ -4503,16 +4471,5 @@ void QtBrynhildr::timerExpired()
 	updateFrameRate();
   }
 }
-
-#if QTB_NEWFEATURE_GB
-void QtBrynhildr::timerForGraphicsExpired()
-{
-  //  QDateTime currentTime = QDateTime::currentDateTime();
-  cout << "timerForGraphicsExpired()" << endl << flush;
-  if (graphicsBuffer != 0){
-	cout << "graphicsBuffer->getSize() = " << graphicsBuffer->getSize() << endl << flush;
-  }
-}
-#endif // QTB_NEWFEATURE_GB
 
 } // end of namespace qtbrynhildr

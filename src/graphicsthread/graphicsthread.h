@@ -11,11 +11,8 @@
 
 // Local Header
 #include "common/netthread.h"
-#if QTB_NEWFEATURE_GB
 #include "graphicsbuffer.h"
-#endif // QTB_NEWFEATURE_GB
 
-#if !QTB_NEWFEATURE_GB
 // count for draw time check
 #define DRAW_TIME_SAMPLING_POINT 20
 
@@ -57,11 +54,9 @@
 #endif // FORMAT_RGBA8888
 
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // !QTB_NEWFEATURE_GB
 
 namespace qtbrynhildr {
 
-#if !QTB_NEWFEATURE_GB
 #if QTB_MULTI_THREAD_CONVERTER
 // parameters
 extern int width;
@@ -77,7 +72,6 @@ extern uchar *y2topOrg;
 extern uchar *u2topOrg;
 extern uchar *v2topOrg;
 #endif // QTB_MULTI_THREAD_CONVERTER
-#endif // !QTB_NEWFEATURE_GB
 
 // GraphicsThread
 class GraphicsThread : public NetThread
@@ -91,10 +85,8 @@ private:
   // image for desktop
   QImage *image;
 
-#if QTB_NEWFEATURE_GB
   // graphics buffer
   GraphicsBuffer *graphicsBuffer;
-#endif // QTB_NEWFEATURE_GB
 
   // desktop scaling factor
   qreal desktopScalingFactor;
@@ -108,7 +100,6 @@ private:
   // previous get frame rate time
   qint64 previousGetFrameRateTime;
 
-#if !QTB_NEWFEATURE_GB
   // start draw frame time
   qint64 startDrawFrameTime;
 
@@ -123,15 +114,10 @@ private:
 
   // start draw time
   qint64 startDrawTime;
-#else // !QTB_NEWFEATURE_GB
-  // total frame counter
-  unsigned int totalFrameCounter;
-#endif // !QTB_NEWFEATURE_GB
 
   // clearDesktop
   bool onClearDesktop;
 
-#if !QTB_NEWFEATURE_GB
 #if QTB_PUBLIC_MODE7_SUPPORT
   // width of image
   int width;
@@ -174,7 +160,6 @@ private:
   // SIMD instruction
   bool hasSIMDInstruction;
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // !QTB_NEWFEATURE_GB
 
   // local buffer
   char *buffer;
@@ -197,7 +182,6 @@ public:
 	return totalFrameCounter;
   }
 
-#if !QTB_NEWFEATURE_GB
   // reset parameters
   void resetDrawParamaters()
   {
@@ -205,15 +189,6 @@ public:
 	drawTime = 0;
 	checkCounter = 0;
   }
-#endif // !QTB_NEWFEATURE_GB
-
-#if QTB_NEWFEATURE_GB
-  // get graphics buffer
-  GraphicsBuffer *getGraphicsBuffer() const
-  {
-	return graphicsBuffer;
-  }
-#endif // QTB_NEWFEATURE_GB
 
 protected:
   // connect to server
@@ -231,7 +206,6 @@ protected:
   // shutdown connection
   void shutdownConnection();
 
-#if !QTB_NEWFEATURE_GB
 #if QTB_PUBLIC_MODE7_SUPPORT
 private:
   // setup for yuv420, rgb24
@@ -268,7 +242,6 @@ private:
 	return val;
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // !QTB_NEWFEATURE_GB
 
 signals:
   // desktop Changed

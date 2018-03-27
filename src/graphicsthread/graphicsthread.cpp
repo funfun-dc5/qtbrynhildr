@@ -28,7 +28,6 @@
 
 // for TEST
 #define TEST_NOT_DRAWING	0
-#define TEST_FRAME_CONTROL	0
 
 namespace qtbrynhildr {
 
@@ -65,14 +64,8 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,image(0)
   ,graphicsBuffer(0)
   ,desktopScalingFactor(1.0)
-  ,checkCounter(0)
   ,frameCounter(0)
-  ,previousGetFrameRateTime(0)
-  ,startDrawFrameTime(0)
-  ,averageDrawFrameTime(0)
   ,totalFrameCounter(0)
-  ,drawTime(0)
-  ,startDrawTime(0)
   ,onClearDesktop(false)
 #if QTB_PUBLIC_MODE7_SUPPORT
   ,width(0)
@@ -180,12 +173,6 @@ double GraphicsThread::getFrameRate()
   if (!settings->getOnGraphics()) return 0.0;
 #endif // 0 // for TEST
 
-  if (settings->getDesktopScalingFactor() != desktopScalingFactor){
-	// recheck parameters
-	desktopScalingFactor = settings->getDesktopScalingFactor();
-	resetDrawParamaters();
-  }
-
   qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
   double fps = 0.0;
 
@@ -195,7 +182,6 @@ double GraphicsThread::getFrameRate()
 	  fps = frameCounter / ((double)diffMSeconds/1000);
 	  //cout << "frameCounter = " << frameCounter << endl;
 	  //cout << "diffMSeconds = " << diffMSeconds << endl << flush;
-	  averageDrawFrameTime = (frameCounter != 0) ? diffMSeconds*1000/frameCounter : 0;
 	}
   }
   previousGetFrameRateTime = currentTime;
@@ -238,22 +224,6 @@ CONNECT_RESULT GraphicsThread::connectToServer()
 // process for header
 PROCESS_RESULT GraphicsThread::processForHeader()
 {
-  // frame rate control
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	// record start time of draw frame
-	startDrawFrameTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-#if 0 // for TEST
-	static qint64 prevTime;
-	if (!prevTime.isNull()){
-	  qint64 diffMSeconds = startDrawFrameTime - prevTime;
-	  if (diffMSeconds != 0){
-		//cout << "[" << name << "] processForHeader() : diffMSeconds = " << diffMSeconds << " (ms)" << endl << flush;
-	  }
-	}
-	prevTime = startDrawFrameTime;
-#endif
-  }
-
   // receive header
   long dataSize;
   dataSize = receiveData(sock_graphics, (char *)com_data, sizeof(COM_DATA));
@@ -264,14 +234,6 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
-
-#if TEST_FRAME_CONTROL
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "================================" << endl << "[" << name << "] NETWORK t1 : " << pastTime << " (ms)" << endl;
-  }
-#endif // TEST_FRAME_CONTROL
 
   // counter up
   if (counter_graphics < 5){
@@ -380,21 +342,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
-  // save current time for draw time check
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	if (drawTime == 0){
-	  startDrawTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	}
-  }
-
-#if TEST_FRAME_CONTROL
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t2 : " << pastTime << " (ms)" << endl;
-  }
-#endif // TEST_FRAME_CONTROL
-
 #if QTB_PUBLIC_MODE7_SUPPORT
   // decode vp8
   if (com_data->video_mode == VIDEO_MODE_COMPRESS){
@@ -402,44 +349,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
-#if TEST_FRAME_CONTROL
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t3 : " << pastTime << " (ms)" << endl;
-  }
-#endif // TEST_FRAME_CONTROL
-
 #if TEST_NOT_DRAWING
   return TRANSMIT_SUCCEEDED;
 #endif // TEST_NOT_DRAWING
-
-  // frame skip check
-  if (settings->getOnGraphics()){
-	// frame rate control
-	if (QTB_DESKTOP_FRAMERATE_CONTROL && drawTime != 0){
-	  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	  qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
-						 currentTime - startDrawFrameTime)*1000;
-	  qint64 threshold = averageDrawFrameTime * 3; // settings->getFrameInterval();
-
-#if 0 // for TEST
-	  cout << "[" << name << "] pastTime  : " << pastTime  << endl;
-	  cout << "[" << name << "] drawTime  : " << drawTime  << endl;
-	  cout << "[" << name << "] threshold : " << threshold  << endl;
-#endif // 0 // for TEST
-	  if (pastTime + drawTime > threshold){
-#if 0 // TEST_FRAME_CONTROL
-		cout << "pastTime + drawTime > threshold" << endl;
-		cout << "[" << name << "] pastTime  : " << pastTime  << endl;
-		cout << "[" << name << "] drawTime  : " << drawTime  << endl;
-		cout << "[" << name << "] threshold : " << threshold << endl << flush;
-#endif // TEST_FRAME_CONTROL
-		// drop this frame
-		return TRANSMIT_SUCCEEDED; // skip this frame
-	  }
-	}
-  }
 
 #if 0 // for TEST (drop frame)
   static int dropCounter = 0;
@@ -602,50 +514,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
-  // frame rate control
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = (QTB_THREAD_SLEEP_TIME +
-					   currentTime - startDrawFrameTime)*1000;
-	qint64 interval = settings->getFrameInterval();
-
-	// draw time check
-	if (drawTime == 0){
-	  if (checkCounter == DRAW_TIME_SAMPLING_POINT){
-		// save draw time (MODE5/6: JPEG, MODE7: YUV->RGB)
-		drawTime = currentTime != startDrawTime ? (currentTime - startDrawTime)*1000 : 1;
-		checkCounter = 0;
-		//cout << "[" << name << "] drawTime : " << drawTime << " (us)" << endl;
-	  }
-	  else {
-		checkCounter++;
-	  }
-	}
-
-#if 0 // for TEST
-	cout << "[" << name << "] drawTime : " << drawTime << endl;
-	cout << "[" << name << "] pastTime : " << pastTime << endl;
-	cout << "[" << name << "] interval : " << interval << endl;
-#endif // 1 // for TEST
-	if (pastTime < interval){
-	  unsigned long sleepTime = interval - pastTime;
-	  //	  cout << "[" << name << "] sleepTime: " <<  sleepTime << endl << flush;
-	  usleep(sleepTime);
-	}
-	else {
-	  // No wait
-	  //	  cout << "[" << name << "] sleepTime: 0" << endl << flush;
-	}
-  }
-
-#if TEST_FRAME_CONTROL
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t5 : " << pastTime << " (ms)" << endl;
-  }
-#endif // TEST_FRAME_CONTROL
-
   return TRANSMIT_SUCCEEDED;
 }
 
@@ -658,17 +526,8 @@ void GraphicsThread::connectedToServer()
   // reset frame counter
   frameCounter = 0;
 
-  // average draw frame time
-  averageDrawFrameTime = 0;
-
-  // draw time
-  drawTime = 0;
-
-  // reset previous frame time to Null
+  // reset previous frame time
   previousGetFrameRateTime = 0;
-
-  // reset check counter
-  checkCounter = 0;
 
   NetThread::connectedToServer();
 }

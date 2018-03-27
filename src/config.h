@@ -55,7 +55,7 @@ const bool QTB_DESKTOP_SCALE_FIXED		= true;
 const bool QTB_WINDOW_SIZE_FIXED		= true;
 
 // desktop frame rate control
-const bool QTB_DESKTOP_FRAMERATE_CONTROL= true;
+const bool QTB_DESKTOP_FRAMERATE_CONTROL= false;
 
 // software keyboard and button
 //#define QTB_SOFTWARE_KEYBOARD_AND_BUTTON	1

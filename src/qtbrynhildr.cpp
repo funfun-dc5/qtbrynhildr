@@ -4205,8 +4205,6 @@ void QtBrynhildr::desktopCompressMode0()
   desktopCompressMode2_Action->setChecked(false);
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(false);
-
-  graphicsThread->resetDrawParamaters();
 }
 void QtBrynhildr::desktopCompressMode2()
 {
@@ -4216,8 +4214,6 @@ void QtBrynhildr::desktopCompressMode2()
   desktopCompressMode2_Action->setChecked(true);
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(false);
-
-  graphicsThread->resetDrawParamaters();
 }
 void QtBrynhildr::desktopCompressMode4()
 {
@@ -4227,8 +4223,6 @@ void QtBrynhildr::desktopCompressMode4()
   desktopCompressMode2_Action->setChecked(false);
   desktopCompressMode4_Action->setChecked(true);
   desktopCompressMode8_Action->setChecked(false);
-
-  graphicsThread->resetDrawParamaters();
 }
 void QtBrynhildr::desktopCompressMode8()
 {
@@ -4238,8 +4232,6 @@ void QtBrynhildr::desktopCompressMode8()
   desktopCompressMode2_Action->setChecked(false);
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(true);
-
-  graphicsThread->resetDrawParamaters();
 }
 #endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
 

@@ -13,9 +13,6 @@
 #include "common/netthread.h"
 #include "graphicsbuffer.h"
 
-// count for draw time check
-#define DRAW_TIME_SAMPLING_POINT 20
-
 #if QTB_PUBLIC_MODE7_SUPPORT
 // libvxp Header
 #include "vpx_decoder.h"
@@ -91,29 +88,14 @@ private:
   // desktop scaling factor
   qreal desktopScalingFactor;
 
-  // check counter
-  int checkCounter;
-
   // frame counter
   unsigned int frameCounter;
 
   // previous get frame rate time
   qint64 previousGetFrameRateTime;
 
-  // start draw frame time
-  qint64 startDrawFrameTime;
-
-  // average draw frame time
-  qint64 averageDrawFrameTime;
-
   // total frame counter
   unsigned int totalFrameCounter;
-
-  // draw time (MODE5/6: JPEG, MODE7: YUV->RGB and RGB888)
-  qint64 drawTime;
-
-  // start draw time
-  qint64 startDrawTime;
 
   // clearDesktop
   bool onClearDesktop;
@@ -180,14 +162,6 @@ public:
   unsigned int getTotalFrameCounter() const
   {
 	return totalFrameCounter;
-  }
-
-  // reset parameters
-  void resetDrawParamaters()
-  {
-	averageDrawFrameTime = 0;
-	drawTime = 0;
-	checkCounter = 0;
   }
 
 protected:

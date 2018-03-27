@@ -24,35 +24,34 @@ Settings::Settings(const char *iniFileName, Cipher *cipher)
 #else // QTB_CRYPTGRAM
 Settings::Settings(const char *iniFileName)
 #endif // QTB_CRYPTGRAM
-  :
-  desktop(new Desktop()),
-  bootupFlag(false),
-  shutdownFlag(false),
+  :desktop(new Desktop())
+  ,bootupFlag(false)
+  ,shutdownFlag(false)
 #if QTB_CRYPTOGRAM
-  cipher(cipher),
+  ,cipher(cipher)
 #endif // QTB_CRYPTGRAM
 #if QTB_AUTO_COMPLETE
-  serverNameListSize(QTB_SERVERNAMELISTSIZE_DEFAULT),
-  serverNameList(new QStringList),
+  ,serverNameListSize(QTB_SERVERNAMELISTSIZE_DEFAULT)
+  ,serverNameList(new QStringList)
 #endif // QTB_AUTO_COMPLETE
-  connected(false),
+  ,connected(false)
 #if QTB_PUBLIC_MODE6_SUPPORT
-  onSendClipboard(false),
-  sendFileCount(0),
+  ,onSendClipboard(false)
+  ,sendFileCount(0)
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  onGamePadSupport(false),
-  onBrynhildr2Support(true),
-  monitorCount(0),
-  onShowSoftwareKeyboard(false),
-  onShowSoftwareButton(false),
+  ,onGamePadSupport(false)
+  ,onBrynhildr2Support(true)
+  ,monitorCount(0)
+  ,onShowSoftwareKeyboard(false)
+  ,onShowSoftwareButton(false)
 #if QTB_RECORDER
-  onRecordingControl(false),
-  recordingControlFileName(0),
-  onReplayingControl(false),
-  replayingControlFileName(0),
+  ,onRecordingControl(false)
+  ,recordingControlFileName(0)
+  ,onReplayingControl(false)
+  ,replayingControlFileName(0)
 #endif // QTB_RECORDER
-  onDesktopCapture(false),
-  onScrollMode(false)
+  ,onDesktopCapture(false)
+  ,onScrollMode(false)
 {
   if (iniFileName != 0){
 	settings = new QSettings(iniFileName, QSettings::IniFormat);

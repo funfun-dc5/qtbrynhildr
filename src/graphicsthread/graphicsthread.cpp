@@ -61,45 +61,44 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 //---------------------------------------------------------------------------
 // constructor
 GraphicsThread::GraphicsThread(Settings *settings)
-  :
-  NetThread("GraphicsThread", settings),
-  image(0),
-  graphicsBuffer(0),
-  desktopScalingFactor(1.0),
-  checkCounter(0),
-  frameCounter(0),
-  previousGetFrameRateTime(0),
-  startDrawFrameTime(0),
-  averageDrawFrameTime(0),
-  totalFrameCounter(0),
-  drawTime(0),
-  startDrawTime(0),
-  onClearDesktop(false),
+  :NetThread("GraphicsThread", settings)
+  ,image(0)
+  ,graphicsBuffer(0)
+  ,desktopScalingFactor(1.0)
+  ,checkCounter(0)
+  ,frameCounter(0)
+  ,previousGetFrameRateTime(0)
+  ,startDrawFrameTime(0)
+  ,averageDrawFrameTime(0)
+  ,totalFrameCounter(0)
+  ,drawTime(0)
+  ,startDrawTime(0)
+  ,onClearDesktop(false)
 #if QTB_PUBLIC_MODE7_SUPPORT
-  width(0),
-  height(0),
-  yuv1(0),
-  yuv2(0),
-  yuv420(0),
+  ,width(0)
+  ,height(0)
+  ,yuv1(0)
+  ,yuv2(0)
+  ,yuv420(0)
 #if USE_PPM_LOADER_FOR_VP8
-  ppm(0),
+  ,ppm(0)
 #endif // USE_PPM_LOADER_FOR_VP8
-  rgb24(0),
-  hwidth(0),
-  y1topOrg(0),
-  u1topOrg(0),
-  v1topOrg(0),
-  y2topOrg(0),
-  u2topOrg(0),
-  v2topOrg(0),
-  size(0),
-  uvNext(0),
-  rgb24Next(0),
+  ,rgb24(0)
+  ,hwidth(0)
+  ,y1topOrg(0)
+  ,u1topOrg(0)
+  ,v1topOrg(0)
+  ,y2topOrg(0)
+  ,u2topOrg(0)
+  ,v2topOrg(0)
+  ,size(0)
+  ,uvNext(0)
+  ,rgb24Next(0)
 #if QTB_SIMD_SUPPORT
-  hasSIMDInstruction(false),
+  ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-  buffer(0)
+  ,buffer(0)
 {
   outputLog = false; // for DEBUG
 

@@ -22,12 +22,10 @@ namespace qtbrynhildr {
 // constructor
 DesktopScalingDialog::DesktopScalingDialog(Settings *settings,
 										   QWidget *parent)
-  :
-  //  QDialog(parent),
-  QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
-  settings(settings),
+  :QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
+  ,settings(settings)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   setupUi(this);
 

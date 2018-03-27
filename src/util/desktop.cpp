@@ -18,10 +18,9 @@ namespace qtbrynhildr {
 
 // constructor
 Desktop::Desktop()
-  :
-  maxImageDataSize(0),
+  :maxImageDataSize(0)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   desktop = QApplication::desktop();
 

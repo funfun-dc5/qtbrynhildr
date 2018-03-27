@@ -15,8 +15,7 @@ namespace qtbrynhildr {
 
 // constructor
 KeyLayoutFile::KeyLayoutFile(const char *keyLayoutFileImage)
-  :
-  klfImage(keyLayoutFileImage)
+  :klfImage(keyLayoutFileImage)
 {
   KLFHeader *header = (KLFHeader*)keyLayoutFileImage;
 

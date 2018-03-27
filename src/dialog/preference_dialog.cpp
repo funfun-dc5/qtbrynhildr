@@ -24,14 +24,12 @@ namespace qtbrynhildr {
 // constructor
 PreferenceDialog::PreferenceDialog(Settings *settings,
 								   QWidget *parent)
-  :
-  //  QDialog(parent),
-  QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
-  settings(settings),
-  changed(false),
-  resultOfSetToSettings(false),
+  :QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
+  ,settings(settings)
+  ,changed(false)
+  ,resultOfSetToSettings(false)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   setupUi(this);
 

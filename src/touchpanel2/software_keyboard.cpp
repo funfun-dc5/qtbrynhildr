@@ -38,29 +38,28 @@ SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
 
 // constructor
 SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *parent)
-  :
-  QWidget(parent),
-  keyTopTable(0),
+  :QWidget(parent)
+  ,keyTopTable(0)
 #if 0 // for TEST
-  tempKeyTopTable(0),
+  ,tempKeyTopTable(0)
 #endif // for TEST
 #ifdef USE_KEYLAYOUTFILE
-  klf(0),
+  ,klf(0)
 #endif // USE_KEYLAYOUTFILE
-  type(KEYTOP_TYPE_UNKNOWN),
-  onButton(false),
-  onShiftKey(false),
-  onControlKey(false),
-  onAltKey(false),
-  onFnKey(false),
-  pushedShiftKey(ID_KEY_0),
-  pushedControlKey(ID_KEY_0),
-  pushedAltKey(ID_KEY_0),
-  pushedFnKey(ID_KEY_0),
-  fontSize(32),
-  alpha(255),
+  ,type(KEYTOP_TYPE_UNKNOWN)
+  ,onButton(false)
+  ,onShiftKey(false)
+  ,onControlKey(false)
+  ,onAltKey(false)
+  ,onFnKey(false)
+  ,pushedShiftKey(ID_KEY_0)
+  ,pushedControlKey(ID_KEY_0)
+  ,pushedAltKey(ID_KEY_0)
+  ,pushedFnKey(ID_KEY_0)
+  ,fontSize(32)
+  ,alpha(255)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   // set widget attributes
   setAttribute(Qt::WA_NoSystemBackground, true); // NOT fill background

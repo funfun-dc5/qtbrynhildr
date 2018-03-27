@@ -106,6 +106,9 @@ class QtBrynhildr : public QMainWindow
   //-------------------------------------------------------------------------------
 private:
   // GUI
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
 #if QTB_NEW_DESKTOPWINDOW
   // view
   GraphicsView *graphicsView;
@@ -119,9 +122,6 @@ private:
   // desktop window
   DesktopWindow *desktopWindow;
 #endif // QTB_NEW_DESKTOPWINDOW
-
-  // desktop panel
-  DesktopPanel *desktopPanel;
 
   // connection label
   QLabel *connectionLabel;

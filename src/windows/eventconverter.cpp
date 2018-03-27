@@ -23,8 +23,7 @@ namespace qtbrynhildr {
 
 // constructor
 EventConverter::EventConverter()
-  :
-  EventConverter(KEYTOP_TYPE_JP)
+  :EventConverter(KEYTOP_TYPE_JP)
 {
 }
 

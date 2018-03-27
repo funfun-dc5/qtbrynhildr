@@ -37,10 +37,9 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
 // constructor
 LogMessage::LogMessage(QWidget *parent)
-  :
-  QMessageBox(parent),
-  logFile(0),
-  logFileStream(0)
+  :QMessageBox(parent)
+  ,logFile(0)
+  ,logFileStream(0)
 {
 }
 

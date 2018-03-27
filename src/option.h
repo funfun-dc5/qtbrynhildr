@@ -15,11 +15,6 @@ class Option
   // Variable
   //-------------------------------------------------------------------------------
 private:
-#if QTB_PUBLIC_MODE6_SUPPORT
-  // public mode version
-  int publicModeVersion;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
   // server name
   const char *serverName;
 
@@ -31,6 +26,11 @@ private:
 
   // host type
   const char *hostType;
+
+#if QTB_PUBLIC_MODE6_SUPPORT
+  // public mode version
+  int publicModeVersion;
+#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // ini filename
   char *iniFileName;

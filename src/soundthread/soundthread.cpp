@@ -27,19 +27,18 @@ namespace qtbrynhildr {
 
 // constructor
 SoundThread::SoundThread(Settings *settings)
-  :
-  NetThread("SoundThread", settings),
-  soundBuffer(0),
-  soundBufferSize(0),
-  soundCacheTime(-1),
-  samplerate(0),
-  audioOutput(0),
-  output(0),
-  samplerateChangeCounter(0),
+  :NetThread("SoundThread", settings)
+  ,soundBuffer(0)
+  ,soundBufferSize(0)
+  ,soundCacheTime(-1)
+  ,samplerate(0)
+  ,audioOutput(0)
+  ,output(0)
+  ,samplerateChangeCounter(0)
 #if QTB_CELT_SUPPORT
-  converter(0),
+  ,converter(0)
 #endif //QTB_CELT_SUPPORT
-  buffer(0)
+  ,buffer(0)
 {
   outputLog = false; // for DEBUG
 

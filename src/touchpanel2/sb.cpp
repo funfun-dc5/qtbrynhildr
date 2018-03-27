@@ -21,19 +21,18 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
-  :
-  SoftwareButton(parent),
-  mouseBuffer(mouseBuffer),
-  qtbrynhildr(qtbrynhildr),
-  settings(qtbrynhildr->getSettings()),
-  previousClick(TYPE_MOUSE_INVALID),
-  previousClickTime(QDateTime::currentDateTime()),
-  pressedMouseLeftButton(false),
+  :SoftwareButton(parent)
+  ,mouseBuffer(mouseBuffer)
+  ,qtbrynhildr(qtbrynhildr)
+  ,settings(qtbrynhildr->getSettings())
+  ,previousClick(TYPE_MOUSE_INVALID)
+  ,previousClickTime(QDateTime::currentDateTime())
+  ,pressedMouseLeftButton(false)
 #if QTB_NEW_DESKTOPWINDOW
-  graphicsView(qtbrynhildr->getGraphicsView()),
+  ,graphicsView(qtbrynhildr->getGraphicsView())
 #endif // QTB_NEW_DESKTOPWINDOW
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);

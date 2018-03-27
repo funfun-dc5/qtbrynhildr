@@ -23,12 +23,10 @@ namespace qtbrynhildr {
 // constructor
 LogViewDialog::LogViewDialog(Settings *settings,
 							 QWidget *parent)
-  :
-  //  QDialog(parent),
-  QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
-  topPos(0),
-  lastPos(0),
-  settings(settings)
+  :QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
+  ,settings(settings)
+  ,topPos(0)
+  ,lastPos(0)
 {
   setupUi(this);
 

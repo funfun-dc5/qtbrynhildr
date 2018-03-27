@@ -14,11 +14,10 @@ namespace qtbrynhildr {
 
 // constructor
 RingBuffer::RingBuffer(int size)
-  :
-  topPos(0),
-  nextPos(0),
+  :topPos(0)
+  ,nextPos(0)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   // allocate buffer
   buffer = new char[size];

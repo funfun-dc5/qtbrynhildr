@@ -25,15 +25,14 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 NetThread::NetThread(const char *name, Settings *settings)
-  :
-  name(name),
-  settings(settings),
-  com_data(new COM_DATA),
-  runThread(true),
-  receivedDataCounter(0),
-  previousTime(0),
+  :name(name)
+  ,settings(settings)
+  ,com_data(new COM_DATA)
+  ,runThread(true)
+  ,receivedDataCounter(0)
+  ,previousTime(0)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
 }
 

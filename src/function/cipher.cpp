@@ -17,8 +17,7 @@ namespace qtbrynhildr {
 
 // constructor
 Cipher::Cipher(const char *key)
-  :
-  outputLog(false)
+  :outputLog(false)
 {
   byte cryptkey[DES::DEFAULT_KEYLENGTH];
 

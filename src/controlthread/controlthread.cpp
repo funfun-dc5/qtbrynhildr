@@ -39,18 +39,17 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel, Rec
 #else  // QTB_RECORDER
 ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
 #endif // QTB_RECORDER
-  :
-  NetThread("ControlThread", settings),
-  desktopPanel(desktopPanel),
-  serverVersion(SERVER_VERSION_BRYNHILDR2),
-  currentMode(0),
-  keyBuffer(0),
-  mouseBuffer(0),
+  :NetThread("ControlThread", settings)
+  ,desktopPanel(desktopPanel)
+  ,serverVersion(SERVER_VERSION_BRYNHILDR2)
+  ,currentMode(0)
+  ,keyBuffer(0)
+  ,mouseBuffer(0)
 #if QTB_RECORDER
-  recorder(recorder),
+  ,recorder(recorder)
 #endif // QTB_RECORDER
-  monitorCount(0),
-  sentMode(0)
+  ,monitorCount(0)
+  ,sentMode(0)
 {
   outputLog = false; // for DEBUG
 

@@ -26,23 +26,22 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 SoftwareButton::SoftwareButton(QWidget *parent)
-  :
-  QWidget(parent),
-  onButton(false),
-  onOptionButton(false),
-  onShowMonitorButton(false),
-  onShowSoundQualityButton(false),
-  onShowVideoQualityButton(false),
-  onShowSoundButton(false),
-  onShowSoundCacheButton(false),
-  onShowPublicModeButton(false),
-  onShowVideoFPSButton(false),
-  currentFrameRate(0.0),
-  currentDataRate(0.0),
-  fontSize(32),
-  alpha(255),
+  :QWidget(parent)
+  ,onButton(false)
+  ,onOptionButton(false)
+  ,onShowMonitorButton(false)
+  ,onShowSoundQualityButton(false)
+  ,onShowVideoQualityButton(false)
+  ,onShowSoundButton(false)
+  ,onShowSoundCacheButton(false)
+  ,onShowPublicModeButton(false)
+  ,onShowVideoFPSButton(false)
+  ,currentFrameRate(0.0)
+  ,currentDataRate(0.0)
+  ,fontSize(32)
+  ,alpha(255)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   // set widget attributes
   setAttribute(Qt::WA_NoSystemBackground, true); // NOT fill background

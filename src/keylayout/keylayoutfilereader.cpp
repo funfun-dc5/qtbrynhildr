@@ -22,10 +22,9 @@ namespace qtbrynhildr {
 
 // constructor
 KeyLayoutFileReader::KeyLayoutFileReader(const char *layoutfilepath)
-  :
-  path(layoutfilepath),
+  :path(layoutfilepath)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   if (outputLog)
 	cout << "Created KeyLayoutFileReader! layoutfilepath = " << layoutfilepath << endl << flush;

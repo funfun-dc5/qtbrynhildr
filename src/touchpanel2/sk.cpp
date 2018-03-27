@@ -21,16 +21,15 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
-  :
-  SoftwareKeyboard(parent),
-  keyBuffer(keyBuffer),
-  qtbrynhildr(qtbrynhildr),
-  settings(qtbrynhildr->getSettings()),
+  :SoftwareKeyboard(parent)
+  ,keyBuffer(keyBuffer)
+  ,qtbrynhildr(qtbrynhildr)
+  ,settings(qtbrynhildr->getSettings())
 #if QTB_NEW_DESKTOPWINDOW
-  graphicsView(qtbrynhildr->getGraphicsView()),
+  ,graphicsView(qtbrynhildr->getGraphicsView())
 #endif // QTB_NEW_DESKTOPWINDOW
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);

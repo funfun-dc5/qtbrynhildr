@@ -16,9 +16,8 @@ namespace qtbrynhildr {
 
 // constructor
 Converter_CELT::Converter_CELT(int samplerate, int channels)
-  :
-  Converter(samplerate, channels),
-  mode(0)
+  :Converter(samplerate, channels)
+  ,mode(0)
 {
   int error;
 

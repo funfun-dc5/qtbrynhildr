@@ -25,18 +25,17 @@ namespace qtbrynhildr {
 
 // constructor
 GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWidget *parent)
-  :
-  QGraphicsView(scene, parent),
-  qtbrynhildr(qtbrynhildr),
-  settings(qtbrynhildr->getSettings()),
-  desktopPanel(qtbrynhildr->getDesktopPanel()),
-  keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer()),
+  :QGraphicsView(scene, parent)
+  ,qtbrynhildr(qtbrynhildr)
+  ,settings(qtbrynhildr->getSettings())
+  ,desktopPanel(qtbrynhildr->getDesktopPanel())
+  ,keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer())
 #if defined(QTB_DEV_TOUCHPANEL)
-  scalingFactor(1.0),
-  scalingFactorForFullScreen(1.0),
+  ,scalingFactor(1.0)
+  ,scalingFactorForFullScreen(1.0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);

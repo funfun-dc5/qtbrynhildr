@@ -13,10 +13,9 @@ namespace qtbrynhildr {
 
 // constructor
 Converter::Converter(int samplerate, int channels)
-  :
-  samplerate(samplerate),
-  channels(channels),
-  outputLog(false)
+  :samplerate(samplerate)
+  ,channels(channels)
+  ,outputLog(false)
 {
 }
 

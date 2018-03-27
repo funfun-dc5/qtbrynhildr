@@ -25,14 +25,13 @@ namespace qtbrynhildr {
 
 // constructor
 Recorder::Recorder(Settings *settings)
-  :
-  settings(settings),
-  header(new FileHeader),
-  counter(0),
-  dataSize(0),
-  checkSum(0),
+  :settings(settings)
+  ,header(new FileHeader)
+  ,counter(0)
+  ,dataSize(0)
+  ,checkSum(0)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   // initialization
   bodyEntry.counter = 0;

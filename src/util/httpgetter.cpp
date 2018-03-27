@@ -20,13 +20,12 @@ namespace qtbrynhildr {
 
 // constructor
 HttpGetter::HttpGetter(QObject *parent)
-  :
-  QObject(parent),
-  reply(Q_NULLPTR),
-  file(Q_NULLPTR),
-  httpRequestAborted(false),
+  :QObject(parent)
+  ,reply(Q_NULLPTR)
+  ,file(Q_NULLPTR)
+  ,httpRequestAborted(false)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   connect(&networkAccessManager, &QNetworkAccessManager::authenticationRequired,
 		  this, &HttpGetter::slotAuthenticationRequired);

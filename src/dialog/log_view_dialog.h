@@ -23,14 +23,14 @@ class LogViewDialog : public QDialog, public Ui::LogViewDialog
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // settings
+  Settings *settings;
+
   // top position of log
   qint64 topPos;
 
   // last position of log
   qint64 lastPos;
-
-  // settings
-  Settings *settings;
 
   //-------------------------------------------------------------------------------
   // Function

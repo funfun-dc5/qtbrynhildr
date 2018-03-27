@@ -39,22 +39,21 @@ namespace qtbrynhildr {
 
 // constructor
 DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
-  :
-  qtbrynhildr(qtbrynhildr),
-  settings(qtbrynhildr->getSettings()),
-  eventConverter(0),
-  onShiftKey(false),
-  onFullScreen(false),
-  drawMarkerCounter(0),
+  :qtbrynhildr(qtbrynhildr)
+  ,settings(qtbrynhildr->getSettings())
+  ,eventConverter(0)
+  ,onShiftKey(false)
+  ,onFullScreen(false)
+  ,drawMarkerCounter(0)
 #if defined(Q_OS_OSX)
-  previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP),
+  ,previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP)
 #endif // defined(Q_OS_OSX)
-  keyboardLogFile(0),
-  keyboardLogFileStream(0),
+  ,keyboardLogFile(0)
+  ,keyboardLogFileStream(0)
   // for DEBUG
-  outputLogForKeyboard(false),
-  outputLogForMouse(false),
-  outputLog(false)
+  ,outputLogForKeyboard(false)
+  ,outputLogForMouse(false)
+  ,outputLog(false)
 {
   // create keyboard buffer
   keyBuffer = new KeyBuffer(QTB_KEYBOARD_BUFFER_SIZE);

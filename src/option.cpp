@@ -19,30 +19,29 @@ namespace qtbrynhildr {
 
 // constructor
 Option::Option(int argc, char *argv[])
-  :
+  :serverName(0)
+  ,portNo(0)
+  ,password(0)
+  ,hostType(0)
 #if QTB_PUBLIC_MODE6_SUPPORT
-  publicModeVersion(0),
+  ,publicModeVersion(0)
 #endif // QTB_PUBLIC_MODE6_SUPPORT
-  serverName(0),
-  portNo(0),
-  password(0),
-  hostType(0),
-  iniFileName(0),
-  initFlag(false),
-  debug(0),
-  fullScreenFlag(false),
+  ,iniFileName(0)
+  ,initFlag(false)
+  ,debug(0)
+  ,fullScreenFlag(false)
 #if QTB_CELT_SUPPORT
-  celtFlag(false),
+  ,celtFlag(false)
 #endif // QTB_CELT_SUPPORT
 #if QTB_RECORDER
-  recordingFlag(false),
-  recordingFileName(0),
-  replayingFlag(false),
-  replayingFileName(0),
+  ,recordingFlag(false)
+  ,recordingFileName(0)
+  ,replayingFlag(false)
+  ,replayingFileName(0)
 #endif // QTB_RECORDER
-  noTransFlag(false),
-  bootupFlag(false),
-  shutdownFlag(false)
+  ,noTransFlag(false)
+  ,bootupFlag(false)
+  ,shutdownFlag(false)
 {
   // analysis options
   if (analyzeOptions(argc, argv)){

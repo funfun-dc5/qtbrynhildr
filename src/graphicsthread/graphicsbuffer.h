@@ -67,7 +67,7 @@ public:
   void clear();
 
   // put frame
-  bool putFrame(const char *buf, int len);
+  int putFrame(const char *buf, int len);
 
   // get frame
   int getFrame(char *buf);

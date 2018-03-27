@@ -17,12 +17,11 @@ namespace qtbrynhildr {
 
 // constructor
 KeyBuffer::KeyBuffer(int size)
-  :
-  topPos(0),
-  nextPos(0),
-  enabled(true),
+  :topPos(0)
+  ,nextPos(0)
+  ,enabled(true)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   // allocate buffer
   buffer = new KeyInfo[size];

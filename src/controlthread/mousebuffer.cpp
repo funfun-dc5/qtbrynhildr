@@ -15,12 +15,11 @@ namespace qtbrynhildr {
 
 // constructor
 MouseBuffer::MouseBuffer(int size)
-  :
-  topPos(0),
-  nextPos(0),
-  enabled(true),
+  :topPos(0)
+  ,nextPos(0)
+  ,enabled(true)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
   // allocate buffer
   buffer = new MouseInfo[size];

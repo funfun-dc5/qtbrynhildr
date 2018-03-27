@@ -59,17 +59,17 @@ void GraphicsBuffer::clear()
 }
 
 // put frame
-bool GraphicsBuffer::putFrame(const char *buf, int len)
+int GraphicsBuffer::putFrame(const char *buf, int len)
 {
   // check table
   if (frameCount >= FRAME_TABLE_NUM){
-	return false;
+	return 0;
   }
 
   // copy to ring buffer from buf
   int result = ringBuffer->put(buf, len);
   if (result != len){
-	return false;
+	return result;
   }
 
 #if QTB_REC
@@ -87,7 +87,7 @@ bool GraphicsBuffer::putFrame(const char *buf, int len)
 
   //cout << "ring buffer size = " << ringBuffer->getSize() << endl << flush; // for TEST
 
-  return true;
+  return result;
 }
 
 // get frame

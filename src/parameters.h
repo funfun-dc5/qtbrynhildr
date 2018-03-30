@@ -10,7 +10,7 @@ namespace qtbrynhildr {
 // for threads(control/graphics/sound)
 //---------------------------------------------------------------------------
 // sleep time (milli seconds)
-const unsigned long QTB_THREAD_SLEEP_TIME = 0;
+const unsigned long QTB_THREAD_SLEEP_TIME = 5;
 
 //---------------------------------------------------------------------------
 // for control

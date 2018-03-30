@@ -264,6 +264,17 @@ PROCESS_RESULT GraphicsThread::processForHeader()
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	// record start time of draw frame
 	startDrawFrameTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+#if TEST_FRAME_CONTROL
+	{
+	  static qint64 previousTime = 0;
+	  qint64 duration = 0;
+	  if (previousTime != 0){
+		duration = startDrawFrameTime - previousTime;
+	  }
+	  previousTime = startDrawFrameTime;
+	  cout << "================================   " << duration << endl;
+	}
+#endif // TEST_FRAME_CONTROL
 #if 0 // for TEST
 	static qint64 prevTime;
 	if (!prevTime.isNull()){
@@ -292,7 +303,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "================================" << endl << "[" << name << "] NETWORK t1 : " << pastTime << " (ms)" << endl;
+	cout << "[" << name << "] got header      : " << pastTime << endl;
   }
 #endif // TEST_FRAME_CONTROL
 
@@ -417,7 +428,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t2 : " << pastTime << " (ms)" << endl;
+	cout << "[" << name << "] got data        : " << pastTime << endl;
   }
 #endif // TEST_FRAME_CONTROL
 
@@ -432,7 +443,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t3 : " << pastTime << " (ms)" << endl;
+	cout << "[" << name << "] decoded VP8     : " << pastTime << endl;
   }
 #endif // TEST_FRAME_CONTROL
 
@@ -440,6 +451,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   return TRANSMIT_SUCCEEDED;
 #endif // TEST_NOT_DRAWING
 
+#if !TEST_FRAME_CONTROL
   // frame skip check
   if (settings->getOnGraphics()){
 	// frame rate control
@@ -461,11 +473,12 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 		cout << "[" << name << "] drawTime  : " << drawTime  << endl;
 		cout << "[" << name << "] threshold : " << threshold << endl << flush;
 #endif // TEST_FRAME_CONTROL
-		// drop this frame
-		return TRANSMIT_SUCCEEDED; // skip this frame
+		// skip this frame
+		return TRANSMIT_SUCCEEDED;
 	  }
 	}
   }
+#endif // !TEST_FRAME_CONTROL
 
 #if 0 // for TEST (drop frame)
   static int dropCounter = 0;
@@ -602,7 +615,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t4 : " << pastTime << " (ms)" << endl;
+	cout << "[" << name << "] emit draw       : " << pastTime << endl;
   }
 #endif // TEST_FRAME_CONTROL
 
@@ -668,7 +681,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t5 : " << pastTime << " (ms)" << endl;
+	cout << "[" << name << "] frame controled : " << pastTime << endl;
   }
 #endif // TEST_FRAME_CONTROL
 #endif // !QTB_NEWFEATURE_GB

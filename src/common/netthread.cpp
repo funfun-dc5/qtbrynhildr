@@ -86,9 +86,7 @@ void NetThread::run()
 
   // main loop
   while(runThread){
-	if (QTB_THREAD_SLEEP_TIME != 0){
-	  QThread::msleep(QTB_THREAD_SLEEP_TIME); // QTB_THREAD_SLEEP_TIME milli seconds sleep
-	}
+	QThread::msleep(QTB_THREAD_SLEEP_TIME); // QTB_THREAD_SLEEP_TIME milli seconds sleep
 
 	CONNECT_RESULT result_connect = connectToServer();
 	if (result_connect != CONNECT_SUCCEEDED){

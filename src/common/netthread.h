@@ -96,8 +96,8 @@ protected:
   // received data counter
   long receivedDataCounter;
 
-  // previous time
-  qint64 previousTime;
+  // previous get data rate time
+  qint64 previousGetDataRateTime;
 
   // output log flag
   bool outputLog;

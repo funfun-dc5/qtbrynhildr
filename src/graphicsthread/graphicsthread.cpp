@@ -188,9 +188,6 @@ double GraphicsThread::getFrameRate()
   totalFrameCounter += frameCounter;
   frameCounter = 0;
 
-  //cout << "averageDrawFrameTime = " <<  averageDrawFrameTime << endl;
-  //cout << "drawTime = " << drawTime << endl;
-
   return fps;
 }
 

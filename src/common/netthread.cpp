@@ -30,7 +30,7 @@ NetThread::NetThread(const char *name, Settings *settings)
   ,com_data(new COM_DATA)
   ,runThread(true)
   ,receivedDataCounter(0)
-  ,previousTime(0)
+  ,previousGetDataRateTime(0)
   // for DEBUG
   ,outputLog(false)
 {
@@ -60,13 +60,13 @@ long NetThread::getDataRate()
   qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
   long bps = 0;
 
-  if (previousTime != 0){
-	qint64 diffMSeconds = currentTime - previousTime;
+  if (previousGetDataRateTime != 0){
+	qint64 diffMSeconds = currentTime - previousGetDataRateTime;
 	if (diffMSeconds != 0){
 	  bps = (long)(receivedDataCounter / ((double)diffMSeconds/1000));
 	}
   }
-  previousTime = currentTime;
+  previousGetDataRateTime = currentTime;
   receivedDataCounter = 0;
   return bps;
 }
@@ -228,16 +228,16 @@ void NetThread::connectedToServer()
   // reset counter
   receivedDataCounter = 0;
 
-  // reset previous time
-  previousTime = 0;
+  // reset previous get data rate time
+  previousGetDataRateTime = 0;
 }
 
 // shutdown connection
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 void NetThread::shutdownConnection()
 {
-  // reset previous time
-  previousTime = 0;
+  // reset previous get data rate time
+  previousGetDataRateTime = 0;
 }
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 

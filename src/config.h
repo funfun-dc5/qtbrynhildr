@@ -6,6 +6,9 @@
 
 namespace qtbrynhildr {
 
+// IPv6 support
+#define QTB_NET_IPV6 1
+
 // network type
 #if defined(Q_OS_WIN)
 // windows socket (WinSock)

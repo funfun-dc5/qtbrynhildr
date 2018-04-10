@@ -243,6 +243,7 @@ void NetThread::shutdownConnection()
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
+#if QTB_NET_IPV6
 // socket to server
 SOCKET NetThread::socketToServer()
 {
@@ -343,6 +344,71 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
+#else // QTB_NET_IPV6
+#error "Yet: for TEST"
+// socket to server
+SOCKET NetThread::socketToServer()
+{
+  SOCKET sock = INVALID_SOCKET;
+  struct sockaddr_in addr;
+
+  memset(&addr, 0, sizeof(addr));
+  addr.sin_family = AF_INET;
+
+  char server[512];
+  HOSTENT *host;
+  unsigned int address;
+  int result;
+  // server name
+  result = snprintf(server, 256, "%s", qPrintable(settings->getServerName()));
+  if (result <= 0 || result > 255){
+	if (settings->getOutputLog()){
+	  const QString text = QString("socketToServer() : snprintf() error! for server");
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+	return INVALID_SOCKET;
+  }
+  host = gethostbyname(server);
+  if (host == 0){
+	address = inet_addr(server);
+	host = gethostbyaddr((char*)&address, 4, AF_INET);
+  }
+  if (host == 0){
+	return INVALID_SOCKET;
+  }
+
+  addr.sin_port = htons(settings->getPortNo());
+  addr.sin_addr.s_addr = *((u_long*)host->h_addr);
+
+  sock = socket(AF_INET, SOCK_STREAM, 0);
+
+  result = ::connect(sock, (struct sockaddr *)&addr, sizeof(addr));
+  if (result == SOCKET_ERROR){
+	sock = INVALID_SOCKET;
+  }
+
+  // for socket option
+  if (sock != INVALID_SOCKET){
+	// set socket option
+#if 1 // defined(QTB_NET_UNIX)
+	setSocketOption(sock);
+#endif // defined(QTB_NET_UNIX)
+#if defined(DEBUG)
+	// check socket option
+	checkSocketOption(sock);
+#endif // defined(DEBUG)
+  }
+  else {
+	// INVALID_SOCKET
+	if (settings->getOutputLog()){
+	  const QString text = "socketToServer() : sock = INVALID_SOCKET";
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+  }
+
+  return sock;
+}
+#endif // QTB_NET_IPV6
 
 // send header
 long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
@@ -629,7 +695,7 @@ void NetThread::setSocketOption(SOCKET sock)
 	// Succeeded to set TCP_NODELAY
   }
 
-  val = 640*1024; // 640KB
+  val = 640*1024; // BDP(640KB)
 #if defined(QTB_NET_WIN)
   if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const char*)&val, len) == -1){
 #elif defined(QTB_NET_UNIX)

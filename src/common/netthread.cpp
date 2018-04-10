@@ -85,9 +85,7 @@ void NetThread::run()
 
   // main loop
   while(runThread){
-	if (QTB_THREAD_SLEEP_TIME != 0){
-	  QThread::msleep(QTB_THREAD_SLEEP_TIME); // QTB_THREAD_SLEEP_TIME milli seconds sleep
-	}
+	QThread::msleep(QTB_THREAD_SLEEP_TIME); // QTB_THREAD_SLEEP_TIME milli seconds sleep
 
 	CONNECT_RESULT result_connect = connectToServer();
 	if (result_connect != CONNECT_SUCCEEDED){
@@ -244,6 +242,7 @@ void NetThread::shutdownConnection()
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
+#if QTB_NET_IPV6
 // socket to server
 SOCKET NetThread::socketToServer()
 {
@@ -326,13 +325,10 @@ SOCKET NetThread::socketToServer()
   // for socket option
   if (sock != INVALID_SOCKET){
 	// set socket option
-#if defined(QTB_NET_UNIX)
 	setSocketOption(sock);
-#endif // defined(QTB_NET_UNIX)
-#if defined(DEBUG)
 	// check socket option
-	checkSocketOption(sock);
-#endif // defined(DEBUG)
+	if (outputLog)
+	  checkSocketOption(sock);
   }
   else {
 	// INVALID_SOCKET
@@ -344,6 +340,68 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
+#else // QTB_NET_IPV6
+#error "Yet: for TEST"
+// socket to server
+SOCKET NetThread::socketToServer()
+{
+  SOCKET sock = INVALID_SOCKET;
+  struct sockaddr_in addr;
+
+  memset(&addr, 0, sizeof(addr));
+  addr.sin_family = AF_INET;
+
+  char server[512];
+  HOSTENT *host;
+  unsigned int address;
+  int result;
+  // server name
+  result = snprintf(server, 256, "%s", qPrintable(settings->getServerName()));
+  if (result <= 0 || result > 255){
+	if (settings->getOutputLog()){
+	  const QString text = QString("socketToServer() : snprintf() error! for server");
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+	return INVALID_SOCKET;
+  }
+  host = gethostbyname(server);
+  if (host == 0){
+	address = inet_addr(server);
+	host = gethostbyaddr((char*)&address, 4, AF_INET);
+  }
+  if (host == 0){
+	return INVALID_SOCKET;
+  }
+
+  addr.sin_port = htons(settings->getPortNo());
+  addr.sin_addr.s_addr = *((u_long*)host->h_addr);
+
+  sock = socket(AF_INET, SOCK_STREAM, 0);
+
+  result = ::connect(sock, (struct sockaddr *)&addr, sizeof(addr));
+  if (result == SOCKET_ERROR){
+	sock = INVALID_SOCKET;
+  }
+
+  // for socket option
+  if (sock != INVALID_SOCKET){
+	// set socket option
+	setSocketOption(sock);
+	// check socket option
+	if (outputLog)
+	  checkSocketOption(sock);
+  }
+  else {
+	// INVALID_SOCKET
+	if (settings->getOutputLog()){
+	  const QString text = "socketToServer() : sock = INVALID_SOCKET";
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+  }
+
+  return sock;
+}
+#endif // QTB_NET_IPV6
 
 // send header
 long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
@@ -410,25 +468,64 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
 #endif // for TEST
 }
 
+#if 0 // for TEST
+// receive data
+long NetThread::receiveData(SOCKET sock, char *buf, long size)
+{
+  long received_size = 0;
+  const int READ_BLOCK_SIZE = 1024;
+
+  while(received_size < size){
+	int read_size = ((size - received_size) >= READ_BLOCK_SIZE) ? READ_BLOCK_SIZE : size - received_size;
+	long ret = recv(sock, buf + received_size, read_size, 0);
+	if (ret > 0){
+	  received_size += ret;
+	}
+	else {
+	  return -1;
+	}
+  }
+
+  receivedDataCounter += received_size;
+
+  return received_size;
+}
+#else // 1 // for TEST
 // receive data
 long NetThread::receiveData(SOCKET sock, char *buf, long size)
 {
   long received_size = 0;
 
+#if 0 // for TEST
+  int i = 0;
   while(received_size < size){
 	long ret = recv(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
 	  received_size += ret;
-	  receivedDataCounter += ret;
+	  cout << "[" << name << "] ret (" << i << ") = " << ret << endl << flush;
 	}
 	else {
-	  received_size = -1;
-	  break;
+	  return -1;
+	}
+	i++;
+  }
+#else // 1 // for TEST
+  while(received_size < size){
+	long ret = recv(sock, buf + received_size, size - received_size, 0);
+	if (ret > 0){
+	  received_size += ret;
+	}
+	else {
+	  return -1;
 	}
   }
+#endif // 1 // for TEST
+
+  receivedDataCounter += received_size;
 
   return received_size;
 }
+#endif // 1 // for TEST
 
 // print protocol header
 void NetThread::printHeader()
@@ -556,10 +653,34 @@ void NetThread::dumpHeader()
 
 // set socket option
 #include <cerrno>
+#if defined(QTB_NET_UNIX)
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+#endif // defined(QTB_NET_UNIX)
 void NetThread::setSocketOption(SOCKET sock)
 {
-  int val = 1;
+  int val;
   socklen_t len = sizeof(val);
+
+  // TCP_NODELAY
+  val = 1;
+#if defined(QTB_NET_WIN)
+  if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const char*)&val, len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const void*)&val, len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt() error";
+	cout << "errno = " << errno << endl << flush;
+  }
+  else {
+	// Succeeded to set TCP_NODELAY
+	if (outputLog)
+	  cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt()" << endl;
+  }
+
+  // SO_KEEPALIVE
+  val = 0;
 #if defined(QTB_NET_WIN)
   if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char*)&val, len) == -1){
 #elif defined(QTB_NET_UNIX)
@@ -570,10 +691,45 @@ void NetThread::setSocketOption(SOCKET sock)
   }
   else {
 	// Succeeded to set SO_KEEPALIVE
+	if (outputLog)
+	  cout << "[" << name << "] sockopt: SO_KEEPALIVE : setsockopt()" << endl;
   }
+
+#if 0 // for TEST
+  // SO_RCVBUF
+  val = 640*1024; // BDP(640KB)
+#if defined(QTB_NET_WIN)
+  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const char*)&val, len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const void*)&val, len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error";
+	cout << "errno = " << errno << endl << flush;
+  }
+  else {
+	// Succeeded to set SO_RCVBUF
+	if (outputLog)
+	  cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt()" << endl;
+  }
+
+  // SO_SNDBUF
+  val = 640*1024; // BDP(640KB)
+#if defined(QTB_NET_WIN)
+  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const char*)&val, len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const void*)&val, len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error";
+	cout << "errno = " << errno << endl << flush;
+  }
+  else {
+	// Succeeded to set SO_SNDBUF
+	if (outputLog)
+	  cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt()" << endl;
+  }
+#endif // 0 // for TEST
 }
 
-#if defined(DEBUG)
 // check socket option
 void NetThread::checkSocketOption(SOCKET sock)
 {
@@ -586,6 +742,26 @@ void NetThread::checkSocketOption(SOCKET sock)
   } val;
   socklen_t len;
   len = sizeof(val);
+
+  // TCP_NODELAY
+#if defined(QTB_NET_WIN)
+  if (getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char*)&val, &len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (void*)&val, &len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: TCP_NODELAY : getsockopt() error";
+  }
+  else {
+	cout << "[" << name << "] sockopt: TCP_NODELAY : ";
+	if (val.i_val == 0){
+	  cout << "off";
+	}
+	else {
+	  cout << "on";
+	}
+  }
+
+  cout << endl;
 
   // SO_KEEPALIVE
 #if defined(QTB_NET_WIN)
@@ -604,10 +780,42 @@ void NetThread::checkSocketOption(SOCKET sock)
 	  cout << "on";
 	}
   }
+
+  cout << endl;
+
+#if 0 // for TEST
+  // SO_RCVBUF
+#if defined(QTB_NET_WIN)
+  if (getsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char*)&val, &len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (getsockopt(sock, SOL_SOCKET, SO_RCVBUF, (void*)&val, &len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_RCVBUF : getsockopt() error";
+  }
+  else {
+	cout << "[" << name << "] sockopt: SO_RCVBUF : " << val.i_val;
+  }
+
+  cout << endl;
+
+  // SO_SNDBUF
+#if defined(QTB_NET_WIN)
+  if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char*)&val, &len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (void*)&val, &len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_SNDBUF : getsockopt() error";
+  }
+  else {
+	cout << "[" << name << "] sockopt: SO_SNDBUF : " << val.i_val;
+  }
+
+  cout << endl;
+#endif // 0 // for TEST
+
   // flush
-  cout << endl << flush;
+  cout << flush;
 }
-#endif // defined(DEBUG)
 
 // connect with retry
 #define MAXSLEEP 128
@@ -641,7 +849,7 @@ int NetThread::connect_retry(int domain, int type, int protocol, const struct so
 
   return INVALID_SOCKET;
 }
-#else
+#else // !defined(Q_OS_WIN)
 int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
   for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
@@ -666,7 +874,7 @@ int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t 
 
   return SOCKET_ERROR;
 }
-#endif
+#endif // !defined(Q_OS_WIN)
 
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 

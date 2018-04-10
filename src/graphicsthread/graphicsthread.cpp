@@ -484,14 +484,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 
-#if TEST_FRAME_CONTROL
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startDrawFrameTime;
-	cout << "[" << name << "] NETWORK t4 : " << pastTime << " (ms)" << endl;
-  }
-#endif // TEST_FRAME_CONTROL
-
 	if (desktopLoadResult){
 	  // GOOD
 	  // update desktop

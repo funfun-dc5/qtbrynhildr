@@ -160,10 +160,8 @@ protected:
 private:
   // set socket option
   void setSocketOption(SOCKET sock);
-#if defined(DEBUG)
   // check socket option
   void checkSocketOption(SOCKET sock);
-#endif // defined(DEBUG)
 
   // connect with retry
 #if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)

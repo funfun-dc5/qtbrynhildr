@@ -325,7 +325,7 @@ SOCKET NetThread::socketToServer()
   // for socket option
   if (sock != INVALID_SOCKET){
 	// set socket option
-#if defined(QTB_NET_UNIX)
+#if 1 // defined(QTB_NET_UNIX)
 	setSocketOption(sock);
 #endif // defined(QTB_NET_UNIX)
 #if defined(DEBUG)
@@ -594,10 +594,17 @@ void NetThread::dumpHeader()
 
 // set socket option
 #include <cerrno>
+#if defined(QTB_NET_UNIX)
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+#endif // defined(QTB_NET_UNIX)
 void NetThread::setSocketOption(SOCKET sock)
 {
-  int val = 1;
+  int val;
   socklen_t len = sizeof(val);
+
+  val = 1;
 #if defined(QTB_NET_WIN)
   if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char*)&val, len) == -1){
 #elif defined(QTB_NET_UNIX)
@@ -609,6 +616,44 @@ void NetThread::setSocketOption(SOCKET sock)
   else {
 	// Succeeded to set SO_KEEPALIVE
   }
+
+#if defined(QTB_NET_WIN)
+  if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const char*)&val, len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const void*)&val, len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt() error";
+	cout << "errno = " << errno << endl << flush;
+  }
+  else {
+	// Succeeded to set TCP_NODELAY
+  }
+
+  val = 640*1024; // 640KB
+#if defined(QTB_NET_WIN)
+  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const char*)&val, len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const void*)&val, len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error";
+	cout << "errno = " << errno << endl << flush;
+  }
+  else {
+	// Succeeded to set SO_RCVBUF
+  }
+#if 0
+#if defined(QTB_NET_WIN)
+  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const char*)&val, len) == -1){
+#elif defined(QTB_NET_UNIX)
+  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const void*)&val, len) == -1){
+#endif
+	cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error";
+	cout << "errno = " << errno << endl << flush;
+  }
+  else {
+	// Succeeded to set SO_SNDBUF
+  }
+#endif
 }
 
 #if defined(DEBUG)

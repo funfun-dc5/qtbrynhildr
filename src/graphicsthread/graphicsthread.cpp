@@ -27,6 +27,7 @@
 #include "util/cpuinfo.h"
 
 // for TEST
+#define TEST_THREAD			0
 #define TEST_NOT_DRAWING	0
 
 namespace qtbrynhildr {
@@ -218,9 +219,26 @@ CONNECT_RESULT GraphicsThread::connectToServer()
   return CONNECT_SUCCEEDED;
 }
 
+#if TEST_THREAD
+  qint64 startTime;
+#endif // TEST_THREAD
+
 // process for header
 PROCESS_RESULT GraphicsThread::processForHeader()
 {
+#if TEST_THREAD
+  startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+  {
+	static qint64 previousTime = 0;
+	qint64 duration = 0;
+	if (previousTime != 0){
+	  duration = startTime - previousTime;
+	}
+	previousTime = startTime;
+	cout << "================================   " << duration << endl;
+  }
+#endif // TEST_THREAD
+
   // receive header
   long dataSize;
   dataSize = receiveData(sock_graphics, (char *)com_data, sizeof(COM_DATA));
@@ -231,6 +249,14 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
+
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] got header      : " << pastTime << endl;
+  }
+#endif // TEST_THREAD
 
   // counter up
   if (counter_graphics < 5){
@@ -339,12 +365,29 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] got data        : " << pastTime
+		 << " (size = " << receivedDataSize << ")" << endl;
+  }
+#endif // TEST_THREAD
+
 #if QTB_PUBLIC_MODE7_SUPPORT
   // decode vp8
   if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	vpx_codec_decode(&c_codec, (uint8_t*)buffer, receivedDataSize, 0, 0);
   }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
+
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] decoded VP8     : " << pastTime << endl;
+  }
+#endif // TEST_THREAD
 
 #if TEST_NOT_DRAWING
   return TRANSMIT_SUCCEEDED;
@@ -480,6 +523,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  // desktopLoadResult = false;
 	}
 #endif // QTB_PUBLIC_MODE7_SUPPORT
+
+#if TEST_THREAD
+	{
+	  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	  qint64 pastTime = currentTime - startTime;
+	  cout << "[" << name << "] emit draw       : " << pastTime << endl;
+	}
+#endif // TEST_THREAD
 
 	if (desktopLoadResult){
 	  // GOOD

@@ -23,6 +23,9 @@
 #include "converter_celt.h"
 #endif //QTB_CELT_SUPPORT
 
+// for TEST
+#define TEST_THREAD		0
+
 namespace qtbrynhildr {
 
 // constructor
@@ -116,9 +119,26 @@ CONNECT_RESULT SoundThread::connectToServer()
   return CONNECT_SUCCEEDED;
 }
 
+#if TEST_THREAD
+  qint64 startTime;
+#endif // TEST_THREAD
+
 // process for header
 PROCESS_RESULT SoundThread::processForHeader()
 {
+#if TEST_THREAD
+  startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+  {
+	static qint64 previousTime = 0;
+	qint64 duration = 0;
+	if (previousTime != 0){
+	  duration = startTime - previousTime;
+	}
+	previousTime = startTime;
+	cout << "================================   " << duration << endl;
+  }
+#endif // TEST_THREAD
+
   // receive header
   long dataSize;
   dataSize = receiveData(sock_sound, (char *)com_data, sizeof(COM_DATA));
@@ -129,6 +149,14 @@ PROCESS_RESULT SoundThread::processForHeader()
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
+
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] got header      : " << pastTime << endl;
+  }
+#endif // TEST_THREAD
 
   // print received header
   if (outputLog){
@@ -183,6 +211,15 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	return TRANSMIT_DATASIZE_ERROR;
   }
 
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] got data        : " << pastTime
+		 << " (size = " << receivedDataSize << ")" << endl;
+  }
+#endif // TEST_THREAD
+
 #if QTB_CELT_SUPPORT
   if (converter != 0){
 	// for DEBUG : save CELT Data (append mode)
@@ -202,6 +239,14 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  // Yet: error
 	  return TRANSMIT_SUCCEEDED;
 	}
+#if TEST_THREAD
+	{
+	  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	  qint64 pastTime = currentTime - startTime;
+	  cout << "[" << name << "] decoded CELT    : " << pastTime
+		   << " (size = " << receivedDataSize << ")" << endl;
+	}
+#endif // TEST_THREAD
   }
 #endif // QTB_CELT_SUPPORT
 
@@ -303,6 +348,14 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	count++;
 #endif
   }
+
+#if TEST_THREAD
+	{
+	  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	  qint64 pastTime = currentTime - startTime;
+	  cout << "[" << name << "] transfered      : " << pastTime << endl;
+	}
+#endif // TEST_THREAD
 
   return TRANSMIT_SUCCEEDED;
 }

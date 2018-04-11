@@ -23,10 +23,12 @@
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 #include <QSize>
 
-
 // Local Header
 #include "controlthread.h"
 #include "qtbrynhildr.h"
+
+// for TEST
+#define TEST_THREAD			0
 
 namespace qtbrynhildr {
 
@@ -155,9 +157,26 @@ CONNECT_RESULT ControlThread::connectToServer()
   return CONNECT_SUCCEEDED;
 }
 
+#if TEST_THREAD
+  qint64 startTime;
+#endif // TEST_THREAD
+
 // process for header
 PROCESS_RESULT ControlThread::processForHeader()
 {
+#if TEST_THREAD
+  startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+  {
+	static qint64 previousTime = 0;
+	qint64 duration = 0;
+	if (previousTime != 0){
+	  duration = startTime - previousTime;
+	}
+	previousTime = startTime;
+	cout << "================================   " << duration << endl;
+  }
+#endif // TEST_THREAD
+
   // initialize header(com_data)
   initHeader();
 
@@ -166,163 +185,12 @@ PROCESS_RESULT ControlThread::processForHeader()
 	//-------------------------------------------
 	// 1) Mouse Control
 	//-------------------------------------------
-	// mouse info (button, wheel)
-	MouseInfo *mouseInfo = mouseBuffer->get();
-	if (mouseInfo != 0){
-	  switch(mouseInfo->type){
-	  case TYPE_MOUSE_RIGHT_BUTTON:
-		com_data->mouse_right = mouseInfo->value.button;
-		break;
-	  case TYPE_MOUSE_LEFT_BUTTON:
-		com_data->mouse_left = mouseInfo->value.button;
-		break;
-#if QTB_EXTRA_BUTTON_SUPPORT
-	  case TYPE_MOUSE_MIDDLE_BUTTON:
-		if (settings->getOnExtraButtonSupport()){
-		  com_data->mouse_middle = mouseInfo->value.button;
-		}
-		break;
-	  case TYPE_MOUSE_BACK_BUTTON:
-		if (settings->getOnExtraButtonSupport()){
-		  com_data->mouse_x1 = mouseInfo->value.button;
-		}
-		break;
-	  case TYPE_MOUSE_FORWARD_BUTTON:
-		if (settings->getOnExtraButtonSupport()){
-		  com_data->mouse_x2 = mouseInfo->value.button;
-		}
-		break;
-#endif // QTB_EXTRA_BUTTON_SUPPORT
-	  case TYPE_MOUSE_WHEEL:
-		com_data->mouse_wheel = mouseInfo->value.wheel;
-		break;
-	  case TYPE_MOUSE_FILEDROP:
-		com_data->mouse_left = mouseInfo->value.button;
-		com_data->filedrop = FILEDROP_ON;
-		break;
-	  default:
-		// unknown type
-		ABORT();
-		break;
-	  } // end of switch
-	}
-	// mouse position
-	MOUSE_POS pos = mouseBuffer->getMousePos();
-	// if mouse cursor is moved.
-	if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
-	  // set information
-	  com_data->mouse_move = MOUSE_MOVE_ON;
-	  if (QTB_DESKTOP_IMAGE_SCALING){
-		QSize windowSize = desktopPanel->getSize();
-		QSize desktopSize = desktopPanel->getDesktopSize();
-		if (!(windowSize.isValid() && desktopSize.isValid())){
-		  // Nothing to do
-		  com_data->mouse_move = MOUSE_MOVE_OFF;
-		}
-		else {
-		  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-			qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
-			if (scalingFactor > 1.0){
-			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor
-								+ settings->getDesktopOffsetX();
-			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor
-								+ settings->getDesktopOffsetY();
-			}
-			else {
-			  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-				+ settings->getDesktopOffsetX();
-			  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-				+ settings->getDesktopOffsetY();
-			}
-		  }
-		  else {
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-			  + settings->getDesktopOffsetX();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-			  + settings->getDesktopOffsetY();
-		  }
-		}
-	  }
-	  else {
-		com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
-		com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
-	  }
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
-	  // desktop compress mode
-	  int desktopCompressMode = settings->getDesktopCompressMode();
-	  if (desktopCompressMode > 1){
-		com_data->mouse_x *= desktopCompressMode;
-		com_data->mouse_y *= desktopCompressMode;
-	  }
-#endif // for TEST
-
-	  // save prevPos
-	  prevPos = pos;
-	}
+	setMouseControl();
 
 	//-------------------------------------------
 	// 2) Keyboard Control
 	//-------------------------------------------
-	KeyInfo *keyInfo = keyBuffer->get();
-	if (keyInfo != 0){
-	  // check shift/alt/control status
-#if 1 // for TEST
-	  switch((int)keyInfo->keycode){
-	  case VK_SHIFT:
-	  case VK_RSHIFT:
-	  case VK_LSHIFT:
-		// toggle status
-		keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-		break;
-	  case VK_MENU:
-	  case VK_RMENU:
-	  case VK_LMENU:
-		// toggle status
-		keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-		break;
-	  case VK_CONTROL:
-	  case VK_RCONTROL:
-	  case VK_LCONTROL:
-		// toggle status
-		keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-		break;
-	  }
-#else // for TEST
-	  if (keyInfo->keycode == VK_SHIFT	||
-		  keyInfo->keycode == VK_RSHIFT	||
-		  keyInfo->keycode == VK_LSHIFT){
-		// toggle status
-		keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-	  }
-	  else
-	  if (keyInfo->keycode == VK_MENU  ||
-		  keyInfo->keycode == VK_RMENU ||
-		  keyInfo->keycode == VK_LMENU){
-		// toggle status
-		keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-	  }
-	  else
-	  if (keyInfo->keycode == VK_CONTROL ||
-		  keyInfo->keycode == VK_RCONTROL||
-		  keyInfo->keycode == VK_LCONTROL){
-		// toggle status
-		keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-	  }
-#endif // for TEST
-
-	  // set keydown
-	  com_data->keydown = KEYDOWN_ON;
-
-	  // set key information
-	  com_data->keycode = keyInfo->keycode;
-	  com_data->keycode_flg = keyInfo->keycode_flg;
-	}
-
-	// shift/alt/control
-	if (keydownSHIFT || keydownALT || keydownCONTROL){
-	  // set keydown
-	  com_data->keydown = KEYDOWN_ON;
-	}
+	setKeyboardControl();
   }
   else {
 	// NOT under control
@@ -388,6 +256,14 @@ PROCESS_RESULT ControlThread::processForHeader()
 	return PROCESS_NETWORK_ERROR;
   }
 
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] sent header     : " << pastTime << endl;
+  }
+#endif // TEST_THREAD
+
 #if QTB_PUBLIC_MODE6_SUPPORT
   // send clilpboard/file
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
@@ -428,6 +304,14 @@ PROCESS_RESULT ControlThread::processForHeader()
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
+
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] got header      : " << pastTime << endl;
+  }
+#endif // TEST_THREAD
 
 #if 0 // for DEBUG
   static bool twoFlag = true;
@@ -764,6 +648,169 @@ void ControlThread::initHeader()
 #endif // QTB_CELT_SUPPORT
   com_data->sound_capture	= settings->getSoundCapture();
   com_data->sound_quality	= settings->getSoundQuality();
+}
+
+// set mouse control
+void ControlThread::setMouseControl()
+{
+  // mouse info (button, wheel)
+  MouseInfo *mouseInfo = mouseBuffer->get();
+  if (mouseInfo != 0){
+	switch(mouseInfo->type){
+	case TYPE_MOUSE_RIGHT_BUTTON:
+	  com_data->mouse_right = mouseInfo->value.button;
+	  break;
+	case TYPE_MOUSE_LEFT_BUTTON:
+	  com_data->mouse_left = mouseInfo->value.button;
+	  break;
+#if QTB_EXTRA_BUTTON_SUPPORT
+	case TYPE_MOUSE_MIDDLE_BUTTON:
+	  if (settings->getOnExtraButtonSupport()){
+		com_data->mouse_middle = mouseInfo->value.button;
+	  }
+	  break;
+	case TYPE_MOUSE_BACK_BUTTON:
+	  if (settings->getOnExtraButtonSupport()){
+		com_data->mouse_x1 = mouseInfo->value.button;
+	  }
+	  break;
+	case TYPE_MOUSE_FORWARD_BUTTON:
+	  if (settings->getOnExtraButtonSupport()){
+		com_data->mouse_x2 = mouseInfo->value.button;
+	  }
+	  break;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+	case TYPE_MOUSE_WHEEL:
+	  com_data->mouse_wheel = mouseInfo->value.wheel;
+	  break;
+	case TYPE_MOUSE_FILEDROP:
+	  com_data->mouse_left = mouseInfo->value.button;
+	  com_data->filedrop = FILEDROP_ON;
+	  break;
+	default:
+	  // unknown type
+	  ABORT();
+	  break;
+	} // end of switch
+  }
+  // mouse position
+  MOUSE_POS pos = mouseBuffer->getMousePos();
+  // if mouse cursor is moved.
+  if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
+	// set information
+	com_data->mouse_move = MOUSE_MOVE_ON;
+	if (QTB_DESKTOP_IMAGE_SCALING){
+	  QSize windowSize = desktopPanel->getSize();
+	  QSize desktopSize = desktopPanel->getDesktopSize();
+	  if (!(windowSize.isValid() && desktopSize.isValid())){
+		// Nothing to do
+		com_data->mouse_move = MOUSE_MOVE_OFF;
+	  }
+	  else {
+		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+		  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
+		  if (scalingFactor > 1.0){
+			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor
+			  + settings->getDesktopOffsetX();
+			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor
+			  + settings->getDesktopOffsetY();
+		  }
+		  else {
+			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
+			  + settings->getDesktopOffsetX();
+			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
+			  + settings->getDesktopOffsetY();
+		  }
+		}
+		else {
+		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
+			+ settings->getDesktopOffsetX();
+		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
+			+ settings->getDesktopOffsetY();
+		}
+	  }
+	}
+	else {
+	  com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
+	  com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
+	}
+#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+	// desktop compress mode
+	int desktopCompressMode = settings->getDesktopCompressMode();
+	if (desktopCompressMode > 1){
+	  com_data->mouse_x *= desktopCompressMode;
+	  com_data->mouse_y *= desktopCompressMode;
+	}
+#endif // for TEST
+
+	// save prevPos
+	prevPos = pos;
+  }
+}
+
+// set keyboard control
+void ControlThread::setKeyboardControl()
+{
+  KeyInfo *keyInfo = keyBuffer->get();
+  if (keyInfo != 0){
+	// check shift/alt/control status
+#if 1 // for TEST
+	switch((int)keyInfo->keycode){
+	case VK_SHIFT:
+	case VK_RSHIFT:
+	case VK_LSHIFT:
+	  // toggle status
+	  keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+	  break;
+	case VK_MENU:
+	case VK_RMENU:
+	case VK_LMENU:
+	  // toggle status
+	  keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+	  break;
+	case VK_CONTROL:
+	case VK_RCONTROL:
+	case VK_LCONTROL:
+	  // toggle status
+	  keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+	  break;
+	}
+#else // for TEST
+	if (keyInfo->keycode == VK_SHIFT	||
+		keyInfo->keycode == VK_RSHIFT	||
+		keyInfo->keycode == VK_LSHIFT){
+	  // toggle status
+	  keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+	}
+	else
+	  if (keyInfo->keycode == VK_MENU  ||
+		  keyInfo->keycode == VK_RMENU ||
+		  keyInfo->keycode == VK_LMENU){
+		// toggle status
+		keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+	  }
+	  else
+		if (keyInfo->keycode == VK_CONTROL ||
+			keyInfo->keycode == VK_RCONTROL||
+			keyInfo->keycode == VK_LCONTROL){
+		  // toggle status
+		  keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
+		}
+#endif // for TEST
+
+	// set keydown
+	com_data->keydown = KEYDOWN_ON;
+
+	// set key information
+	com_data->keycode = keyInfo->keycode;
+	com_data->keycode_flg = keyInfo->keycode_flg;
+  }
+
+  // shift/alt/control
+  if (keydownSHIFT || keydownALT || keydownCONTROL){
+	// set keydown
+	com_data->keydown = KEYDOWN_ON;
+  }
 }
 
 // set gamepad control info.

@@ -138,6 +138,12 @@ private:
   // initialize protocol header
   void initHeader();
 
+  // set mouse control
+  void setMouseControl();
+
+  // set keyboard control
+  void setKeyboardControl();
+
   // set gamepad control
   void setGamePadControl();
 

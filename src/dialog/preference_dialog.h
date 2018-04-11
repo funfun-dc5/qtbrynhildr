@@ -27,6 +27,9 @@ private:
   // settings
   Settings *settings;
 
+  // apply button
+  QPushButton *applyButton;
+
   // changed flag
   bool changed;
 
@@ -62,6 +65,15 @@ private:
 
   // resettings for dialog
   void resetting();
+
+  // changed settings
+  void changedSettings()
+  {
+	// enable apply button
+	applyButton->setEnabled(true);
+
+	changed = true;
+  }
 
 private slots:
   // accept button

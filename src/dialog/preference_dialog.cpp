@@ -26,6 +26,7 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
 								   QWidget *parent)
   :QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
   ,settings(settings)
+  ,applyButton(0)
   ,changed(false)
   ,resultOfSetToSettings(false)
   // for DEBUG
@@ -38,6 +39,9 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
 
   // fix size
   setFixedSize(size());
+
+  // get Apply Button
+  applyButton = buttonBox->button(QDialogButtonBox::Apply);
 
   // publicModeVersion
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -347,6 +351,10 @@ void PreferenceDialog::showEvent(QShowEvent *event)
   getFromSettings();
 
   resultOfSetToSettings = true;
+
+  changed = false;
+
+  applyButton->setEnabled(false);
 }
 
 //---------------------------------------------------------------------------
@@ -399,6 +407,8 @@ void PreferenceDialog::clicked(QAbstractButton *button)
 
   // reset changed flag
   changed = false;
+
+  applyButton->setEnabled(false);
 }
 
 void PreferenceDialog::publicModeVersionChanged(int version)
@@ -432,75 +442,75 @@ void PreferenceDialog::on_comboBox_publicModeVersion_currentIndexChanged(int ind
 
   publicModeVersionChanged(index + MODE_PUBLIC5);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_checkBox_onOpenConnectToServerDialogAtBootup_stateChanged(int state)
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_checkBox_onConfirmAtExit_stateChanged(int state)
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_checkBox_onCheckUpdateAtBootup_stateChanged(int state)
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_checkBox_desktopScalingType_stateChanged(int state)
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_spinBox_serverNameListSize_valueChanged(int i)
 {
   Q_UNUSED(i);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_comboBox_convertThreadCount_currentIndexChanged(int index)
 {
   Q_UNUSED(index);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_lineEdit_keylayoutPath_textChanged()
 {
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_checkBox_onHoldMouseControl_stateChanged(int state)
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_checkBox_onShowMouseCursorMarker_stateChanged(int state)
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_spinBox_doubleClickThreshold_valueChanged(int i)
 {
   Q_UNUSED(i);
 
-  changed = true;
+  changedSettings();
 }
 
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -510,7 +520,7 @@ void PreferenceDialog::on_checkBox_onTransferFileSupport_stateChanged(int state)
   checkBox_onTransferFileSupportByDragAndDrop->setEnabled(state == Qt::Checked);
   checkBox_onShowTotalProgressForTransferFile->setEnabled(state == Qt::Checked);
 
-  changed = true;
+  changedSettings();
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -519,7 +529,7 @@ void PreferenceDialog::on_checkBox_onTransferFileSupportByDragAndDrop_stateChang
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
@@ -528,7 +538,7 @@ void PreferenceDialog::on_checkBox_onShowTotalProgressForTransferFile_stateChang
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
@@ -537,7 +547,7 @@ void PreferenceDialog::on_checkBox_onTransferClipboardSupport_stateChanged(int s
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 
@@ -545,36 +555,36 @@ void PreferenceDialog::on_spinBox_graphicsBufferSize_valueChanged(int i)
 {
   Q_UNUSED(i);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_spinBox_soundBufferSize_valueChanged(int i)
 {
   Q_UNUSED(i);
 
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_lineEdit_outputPath_textChanged()
 {
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_lineEdit_logFile_textChanged()
 {
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_lineEdit_keyboardLogFile_textChanged()
 {
-  changed = true;
+  changedSettings();
 }
 
 void PreferenceDialog::on_checkBox_onGamePadSupport_stateChanged(int state)
 {
   Q_UNUSED(state);
 
-  changed = true;
+  changedSettings();
 }
 
 
@@ -597,7 +607,7 @@ void PreferenceDialog::on_pushButton_keylayoutPath_clicked()
   // keylayoutPath
   dir = QDir::toNativeSeparators(dir);
   lineEdit_keylayoutPath->setText(dir);
-  changed = true;
+  changedSettings();
 
   if (outputLog)
 	cout << "Open Directory : " << qPrintable(dir) << endl << flush;
@@ -622,7 +632,7 @@ void PreferenceDialog::on_pushButton_outputPath_clicked()
   // outputPath
   dir = QDir::toNativeSeparators(dir);
   lineEdit_outputPath->setText(dir);
-  changed = true;
+  changedSettings();
 
   if (outputLog)
 	cout << "Open Directory : " << qPrintable(dir) << endl << flush;
@@ -647,7 +657,7 @@ void PreferenceDialog::on_pushButton_logFile_clicked()
   // logFile
   fileName = QDir::toNativeSeparators(fileName);
   lineEdit_logFile->setText(fileName);
-  changed = true;
+  changedSettings();
 
   if (outputLog)
 	cout << "Open File : " << qPrintable(fileName) << endl << flush;
@@ -672,7 +682,7 @@ void PreferenceDialog::on_pushButton_keyboardLogFile_clicked()
   // keyboardLogFile
   fileName = QDir::toNativeSeparators(fileName);
   lineEdit_keyboardLogFile->setText(fileName);
-  changed = true;
+  changedSettings();
 
   if (outputLog)
 	cout << "Open File : " << qPrintable(fileName) << endl << flush;

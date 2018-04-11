@@ -3388,17 +3388,27 @@ void QtBrynhildr::setupWindowTitle()
 {
 #if !QTB_PORTABLE_VERSION
 #if QTB_NEW_DESKTOPWINDOW
-  setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [NEW DESKTOP]");
-#else // QTB_NEW_DESKTOPWINDOW
-  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [SIMD]");
+  if (settings->getOnSIMDOperationSupport()){
+	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [NEW DESKTOP]");
   }
   else {
+	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [NEW DESKTOP NO SIMD]");
+  }
+#else // QTB_NEW_DESKTOPWINDOW
+  if (settings->getOnSIMDOperationSupport()){
 	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
+  }
+  else {
+	setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [NO SIMD]");
   }
 #endif // QTB_NEW_DESKTOPWINDOW
 #else // !QTB_PORTABLE_VERSION
-  setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" -");
+  if (settings->getOnSIMDOperationSupport()){
+	setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" -");
+  }
+  else {
+	setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" - [NO SIMD]");
+  }
 #endif // !QTB_PORTABLE_VERSION
 }
 

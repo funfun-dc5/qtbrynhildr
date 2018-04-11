@@ -40,7 +40,8 @@ RC_FILE = resource/qtbrynhildr.rc
 DESKTOP = ON
 CELT_SUPPORT = ON
 INCLUDEPATH += ../libs/vpx
-LIBS += -lwsock32 -lws2_32 -limm32 -limagehlp -lwinmm
+#LIBS += -lwsock32 -limm32 -limagehlp -lwinmm # for WinSock
+LIBS += -lws2_32 -limm32 -limagehlp -lwinmm # for WinSock2
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
 }

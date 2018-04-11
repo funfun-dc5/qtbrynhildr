@@ -244,7 +244,6 @@ void NetThread::shutdownConnection()
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
-#if QTB_NET_IPV6
 // socket to server
 SOCKET NetThread::socketToServer()
 {
@@ -342,8 +341,8 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
-#else // QTB_NET_IPV6
-#error "Yet: for TEST"
+
+#if 0 // for WinSock 1.1
 // socket to server
 SOCKET NetThread::socketToServer()
 {
@@ -403,7 +402,7 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
-#endif // QTB_NET_IPV6
+#endif // 0 // for WinSock 1.1
 
 // send header
 long NetThread::sendHeader(SOCKET sock, const char *buf, long size)

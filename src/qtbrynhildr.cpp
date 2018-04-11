@@ -4309,11 +4309,10 @@ bool QtBrynhildr::initPlatform()
   // initialize WinSock
   WSADATA wsaData;
   int wsaResult;
-#if QTB_NET_IPV6
   wsaResult = WSAStartup(MAKEWORD(2,2), &wsaData);
-#else // QTB_NET_IPV6
+#if 0 // for WinSock 1.1
   wsaResult = WSAStartup(MAKEWORD(1,1), &wsaData);
-#endif // QTB_NET_IPV6
+#endif // 0 // for WinSock 1.1
   if (wsaResult != 0){
 	// error
 	return false;

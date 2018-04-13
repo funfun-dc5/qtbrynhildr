@@ -28,18 +28,18 @@ inline int clip(int val)
   return val;
 }
 
-// YUV420 convert to RGB macro
+// YUV convert to RGB macro
 #define GET_R(Y, V)		((Y           + 358 * V) >> 8)
 #define GET_G(Y, U, V)	((Y -  88 * U - 182 * V) >> 8)
 #define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
 
-// YUV420 convert to RGB24 (qtbrynhildr::convertYUV420toRGB24())
-void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+// YUV convert to RGB (qtbrynhildr::convertYUVtoRGB())
+void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
-  if (yuv420 == yuv1){
+  if (yuv == yuv1){
 	yptop = y2topOrg + (ytop - y1topOrg);
 	uptop = u2topOrg + (utop - u1topOrg);
 	vptop = v2topOrg + (vtop - v1topOrg);
@@ -76,7 +76,7 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 	  y =  *ytop++;
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
+		rgbtop += IMAGE_FORMAT_SIZE;
 #if PRINT_CALC_RATE // for TEST
 		skipCounter++;
 #endif // for TEST
@@ -86,16 +86,16 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 
 		// R
 		r = clip(GET_R(y, v));
-		*rgb24top++ = (uchar)r;
+		*rgbtop++ = (uchar)r;
 		// G
 		g = clip(GET_G(y, u, v));
-		*rgb24top++ = (uchar)g;
+		*rgbtop++ = (uchar)g;
 		// B
 		b = clip(GET_B(y, u));
-		*rgb24top++ = (uchar)b;
+		*rgbtop++ = (uchar)b;
 #if FORMAT_RGBA8888
 		// A
-		*rgb24top++ = (uchar)255;
+		*rgbtop++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 #if PRINT_CALC_RATE // for TEST
 		calcCounter++;
@@ -106,7 +106,7 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 	  y =  *ytop++;
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
-		rgb24top += IMAGE_FORMAT_SIZE;
+		rgbtop += IMAGE_FORMAT_SIZE;
 #if PRINT_CALC_RATE // for TEST
 		skipCounter++;
 #endif // for TEST
@@ -116,23 +116,23 @@ void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top
 
 		// R
 		r = clip(GET_R(y, v));
-		*rgb24top++ = (uchar)r;
+		*rgbtop++ = (uchar)r;
 		// G
 		g = clip(GET_G(y, u, v));
-		*rgb24top++ = (uchar)g;
+		*rgbtop++ = (uchar)g;
 		// B
 		b = clip(GET_B(y, u));
-		*rgb24top++ = (uchar)b;
+		*rgbtop++ = (uchar)b;
 #if FORMAT_RGBA8888
 		// A
-		*rgb24top++ = (uchar)255;
+		*rgbtop++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 #if PRINT_CALC_RATE // for TEST
 		calcCounter++;
 #endif // for TEST
 	  }
 	}
-	rgb24top += rgb24Next;
+	rgbtop += rgbNext;
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;

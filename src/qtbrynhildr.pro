@@ -270,4 +270,6 @@ HEADERS += graphicsthread/graphicsbuffer.h
 SOURCES += graphicsthread/graphicsbuffer.cpp
 HEADERS += soundthread/soundbuffer.h
 SOURCES += soundthread/soundbuffer.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
+SOURCES += yuv2rgb/yuv2rgb.cpp
 }

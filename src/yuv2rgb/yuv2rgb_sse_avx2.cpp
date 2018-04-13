@@ -29,15 +29,15 @@ namespace qtbrynhildr {
 
 #if QTB_MULTI_THREAD_CONVERTER
 
-// YUV420 convert to RGB24 (SIMD version)
-void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height)
+// YUV convert to RGB (SIMD version)
+void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
   Aligned(16) int result[4];
 
   uchar *yptop;
   uchar *uptop;
   uchar *vptop;
-  if (yuv420 == yuv1){
+  if (yuv == yuv1){
 	yptop = y2topOrg + (ytop - y1topOrg);
 	uptop = u2topOrg + (utop - u1topOrg);
 	vptop = v2topOrg + (vtop - v1topOrg);
@@ -105,7 +105,7 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		y =  *ytop++;
 		yp = *yptop++;
 		if (v == vp){
-		  rgb24top += IMAGE_FORMAT_SIZE;
+		  rgbtop += IMAGE_FORMAT_SIZE;
 		}
 		else {
 		  // 1) load Y
@@ -140,17 +140,17 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  // set rgba32 from result int * 4
 
 		  // R
-		  *rgb24top++ = (uchar)result[0];
+		  *rgbtop++ = (uchar)result[0];
 
 		  // G
-		  *rgb24top++ = (uchar)result[1];
+		  *rgbtop++ = (uchar)result[1];
 
 		  // B
-		  *rgb24top++ = (uchar)result[2];
+		  *rgbtop++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
 		  // A
-		  *rgb24top++ = (uchar)255;
+		  *rgbtop++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 		}
 
@@ -160,7 +160,7 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		y =  *ytop++;
 		yp = *yptop++;
 		if (v == vp){
-		  rgb24top += IMAGE_FORMAT_SIZE;
+		  rgbtop += IMAGE_FORMAT_SIZE;
 		}
 		else {
 		  // 1) load Y
@@ -195,17 +195,17 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  // set rgba32 from result int * 4
 
 		  // R
-		  *rgb24top++ = (uchar)result[0];
+		  *rgbtop++ = (uchar)result[0];
 
 		  // G
-		  *rgb24top++ = (uchar)result[1];
+		  *rgbtop++ = (uchar)result[1];
 
 		  // B
-		  *rgb24top++ = (uchar)result[2];
+		  *rgbtop++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
 		  // A
-		  *rgb24top++ = (uchar)255;
+		  *rgbtop++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 		}
 	  }
@@ -249,17 +249,17 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		// set rgba32 from result int * 4
 
 		// R
-		*rgb24top++ = (uchar)result[0];
+		*rgbtop++ = (uchar)result[0];
 
 		// G
-		*rgb24top++ = (uchar)result[1];
+		*rgbtop++ = (uchar)result[1];
 
 		// B
-		*rgb24top++ = (uchar)result[2];
+		*rgbtop++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
 		// A
-		*rgb24top++ = (uchar)255;
+		*rgbtop++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 
 		// xPos+1
@@ -299,23 +299,23 @@ void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		// set rgba32 from result int * 4
 
 		// R
-		*rgb24top++ = (uchar)result[0];
+		*rgbtop++ = (uchar)result[0];
 
 		// G
-		*rgb24top++ = (uchar)result[1];
+		*rgbtop++ = (uchar)result[1];
 
 		// B
-		*rgb24top++ = (uchar)result[2];
+		*rgbtop++ = (uchar)result[2];
 
 #if FORMAT_RGBA8888
 		// A
-		*rgb24top++ = (uchar)255;
+		*rgbtop++ = (uchar)255;
 #endif // FORMAT_RGBA8888
 
 		yptop += 2;
 	  }
 	}
-	rgb24top += rgb24Next;
+	rgbtop += rgbNext;
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;

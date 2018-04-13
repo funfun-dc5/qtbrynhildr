@@ -13,6 +13,24 @@
 // Local Header
 
 
+#if QTB_PUBLIC_MODE7_SUPPORT
+// libvxp Header
+#include "vpx_decoder.h"
+#include "vp8dx.h"
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+
+// use loadFromData() instead of new QImage()
+#define USE_PPM_LOADER_FOR_VP8	0
+
+#if USE_PPM_LOADER_FOR_VP8
+// for PPM Header
+#define PPM_HEADER_SIZE_MAX 32
+// "P6\n"            : PPM binary
+// "wwww hhhh\n"     : width height
+// "255\n"           : max value (255)
+#define PPM_HEADER_FORMAT "P6\n%d %d\n255\n"
+#endif // USE_PPM_LOADER_FOR_VP8
+
 // RGB image format
 #if USE_PPM_LOADER_FOR_VP8
 #define FORMAT_RGB888 1 // fixed
@@ -39,11 +57,14 @@ namespace qtbrynhildr {
 
 // parameters
 extern int width;
+extern int height;
+extern int imageSize;
 extern int uvNext;
-extern int rgb24Next;
+extern int rgbNext;
 
-extern uchar *yuv420;
+extern uchar *yuv;
 extern uchar *yuv1;
+extern uchar *yuv2;
 extern uchar *y1topOrg;
 extern uchar *u1topOrg;
 extern uchar *v1topOrg;
@@ -51,12 +72,37 @@ extern uchar *y2topOrg;
 extern uchar *u2topOrg;
 extern uchar *v2topOrg;
 
-// YUV420 convert to RGB24
-extern void convertYUV420toRGB24(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+extern uchar *rgb;
+
+// codec context
+extern vpx_codec_ctx_t c_codec;
+
+// initialize for yuv
+extern void initVPX();
+
+// decode VP8
+extern void decodeVPX(uchar *buffer, int size);
+
+// setup for yuv, rgb
+extern bool setup();
+
+// make YUV image
+extern bool makeYUVImage();
+
+// make RGB image
+extern int makeRGBImage(int numOfThread);
 
 #if QTB_SIMD_SUPPORT
-// YUV420 convert to RGB24 (SIMD version)
-extern void convertYUV420toRGB24_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb24top, int height);
+// make RGB image by SIMD operation
+extern int makeRGBImage_SIMD(int numOfThread);
+#endif // QTB_SIMD_SUPPORT
+
+// YUV convert to RGB
+extern void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
+
+#if QTB_SIMD_SUPPORT
+// YUV convert to RGB (SIMD version)
+extern void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 #endif // QTB_SIMD_SUPPORT
 
 #endif // QTB_MULTI_THREAD_CONVERTER

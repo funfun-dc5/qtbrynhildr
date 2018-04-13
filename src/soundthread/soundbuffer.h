@@ -15,7 +15,11 @@
 namespace qtbrynhildr {
 
 // SoundBuffer
+#if 1 // for TEST
+class SoundBuffer : public RingBuffer
+#else // 1 // for TEST
 class SoundBuffer : public RingBuffer, public QIODevice
+#endif // 1 // for TEST
 {
   //-------------------------------------------------------------------------------
   // Variable
@@ -31,11 +35,13 @@ public:
   // destructor
   ~SoundBuffer();
 
+#if 0 // for TEST
 protected:
   // QIODevice interface
   qint64 readData(char *data, qint64 maxlen);
   qint64 writeData(const char *data, qint64 len);
   qint64 bytesAvailable() const;
+#endif // 0 // for TEST
 
 private:
 

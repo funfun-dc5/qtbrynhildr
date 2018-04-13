@@ -54,11 +54,12 @@ QMAKE_LFLAGS += /LTCG
 DEFINES += YY_NO_UNISTD_H __SSE4_1__
 HEADERS += common/msvc.h
 # SIMD (INTEL:MSVC)
-SOURCES += graphicsthread/yuv2rgb_v3.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
+SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
-SOURCES += graphicsthread/yuv2rgb_sse.cpp
+SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 # AVX
-#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += /arch:AVX
 }
 
@@ -67,12 +68,13 @@ win32-g++ {
 #LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
 # SIMD (INTEL:gcc/clang)
-SOURCES += graphicsthread/yuv2rgb_v3.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
+SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
-SOURCES += graphicsthread/yuv2rgb_sse.cpp
+SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.1
 # AVX
-#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 }
 
@@ -87,16 +89,17 @@ LIBS += -L../libs/vpx -lvpx
 #LIBS += -lvpx
 LIBS += -L../libs/celt -lcelt0
 # SIMD (INTEL:gcc/clang)
-SOURCES += graphicsthread/yuv2rgb_v3.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
+SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
-SOURCES += graphicsthread/yuv2rgb_sse.cpp
+SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.1
 # AVX
-#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 # NEON (RaspberryPi3)
 #DEFINES += QTB_RPI3
-#SOURCES += graphicsthread/yuv2rgb_neon.cpp
+#SOURCES += yuv2rgb/yuv2rgb_neon.cpp
 #QMAKE_CXXFLAGS += -mfpu=neon
 }
 
@@ -110,12 +113,13 @@ INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
 # SIMD (INTEL:gcc/clang)
-SOURCES += graphicsthread/yuv2rgb_v3.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
+SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
-SOURCES += graphicsthread/yuv2rgb_sse.cpp
+SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.1
 # AVX
-#SOURCES += graphicsthread/yuv2rgb_avx.cpp
+#SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 }
 
@@ -128,8 +132,9 @@ INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx_android
 LIBS += -L../libs/celt -lcelt0_android
 # SIMD (ARM:gcc)
-SOURCES += graphicsthread/yuv2rgb_v3.cpp
-SOURCES += graphicsthread/yuv2rgb_neon.cpp
+HEADERS += yuv2rgb/yuv2rgb.h
+SOURCES += yuv2rgb/yuv2rgb_v3.cpp
+SOURCES += yuv2rgb/yuv2rgb_neon.cpp
 QMAKE_CXXFLAGS += -mfpu=neon
 # for Android APK
 DISTFILES += \

@@ -318,7 +318,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush;
 #endif
 
-#if 1 // for TEST
+#if 0 // for TEST
   // put to graphics buffer
   graphicsBuffer->putFrame(buffer, receivedDataSize);
   // get from graphics buffer

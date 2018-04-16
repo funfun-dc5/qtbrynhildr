@@ -257,6 +257,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,keyBuffer(0)
   ,mouseBuffer(0)
   ,timer(0)
+  ,timer_Graphics(0)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
   ,onCheckUpdateInBackground(false)
@@ -814,6 +815,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 		  SIGNAL(changeMouseCursor(const QCursor &)),
 		  SLOT(changeMouseCursor(const QCursor &)));
 
+#if 0 // for TEST
   // graphics thread
   connect(graphicsThread,
 		  SIGNAL(desktopChanged(QImage)),
@@ -821,6 +823,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   connect(graphicsThread,
 		  SIGNAL(desktopClear()),
 		  SLOT(onDesktopClear()));
+#endif // 0 // for TEST
 
   // bootTime
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Bootup."));
@@ -851,10 +854,15 @@ QtBrynhildr::QtBrynhildr(Option *option)
 	popUpConnectToServer();
   }
 
-  // initialize timer for main thread
+  // initialize timer for GUI
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(QTB_WINDOW_UPDATE_DURATION);
+
+  // initialize timer for Graphics
+  timer_Graphics = new QTimer(this);
+  connect(timer_Graphics, SIGNAL(timeout()), SLOT(timerExpired_Graphics()));
+  timer_Graphics->start(1000); // for TEST
 
 #if 0 // for TEST
   // initialize mouse cursor
@@ -883,6 +891,11 @@ QtBrynhildr::~QtBrynhildr()
 	timer->stop();
 	delete timer;
 	timer = 0;
+  }
+  if (timer_Graphics != 0){
+	timer_Graphics->stop();
+	delete timer_Graphics;
+	timer_Graphics = 0;
   }
   if (settings != 0){
 	// disconnect to server
@@ -4455,7 +4468,7 @@ void QtBrynhildr::finishedDownload()
 
 void QtBrynhildr::timerExpired()
 {
-  //  cout << "timerExpired!" << endl << flush;
+  //  cout << "timerExpired()!" << endl << flush;
 
   // update current frame rate
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -4474,6 +4487,11 @@ void QtBrynhildr::timerExpired()
 	currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
 	updateFrameRate();
   }
+}
+
+void QtBrynhildr::timerExpired_Graphics()
+{
+  cout << "timerExpired_Graphics()!" << endl << flush;
 }
 
 } // end of namespace qtbrynhildr

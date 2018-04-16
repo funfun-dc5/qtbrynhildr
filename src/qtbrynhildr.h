@@ -521,6 +521,9 @@ private:
   // timer for GUI
   QTimer *timer;
 
+  // timer for Graphics
+  QTimer *timer_Graphics;
+
   // SIMD instruction
   bool hasSIMDInstruction;
 
@@ -947,6 +950,8 @@ private slots:
   void finishedDownload();
 
   void timerExpired();
+
+  void timerExpired_Graphics();
 };
 
 } // end of namespace qtbrynhildr

@@ -659,6 +659,11 @@ void NetThread::dumpHeader()
 #include <sys/socket.h>
 #include <netinet/tcp.h>
 #endif // defined(QTB_NET_UNIX)
+#if defined(QTB_NET_WIN)
+#define VAL_TYPE char
+#elif defined(QTB_NET_UNIX)
+#define VAL_TYPE void
+#endif
 void NetThread::setSocketOption(SOCKET sock)
 {
   int val;
@@ -666,11 +671,7 @@ void NetThread::setSocketOption(SOCKET sock)
 
   // TCP_NODELAY
   val = 1;
-#if defined(QTB_NET_WIN)
-  if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const char*)&val, len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const void*)&val, len) == -1){
-#endif
+  if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const VAL_TYPE*)&val, len) == -1){
 	cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt() error";
 	cout << "errno = " << errno << endl << flush;
   }
@@ -680,30 +681,9 @@ void NetThread::setSocketOption(SOCKET sock)
 	  cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt()" << endl;
   }
 
-  // SO_KEEPALIVE
-  val = 0;
-#if defined(QTB_NET_WIN)
-  if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const char*)&val, len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (const void*)&val, len) == -1){
-#endif
-	cout << "[" << name << "] sockopt: SO_KEEPALIVE : setsockopt() error";
-	cout << "errno = " << errno << endl << flush;
-  }
-  else {
-	// Succeeded to set SO_KEEPALIVE
-	if (outputLog)
-	  cout << "[" << name << "] sockopt: SO_KEEPALIVE : setsockopt()" << endl;
-  }
-
-#if 0 // for TEST
   // SO_RCVBUF
   val = 640*1024; // BDP(640KB)
-#if defined(QTB_NET_WIN)
-  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const char*)&val, len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const void*)&val, len) == -1){
-#endif
+  if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const VAL_TYPE*)&val, len) == -1){
 	cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error";
 	cout << "errno = " << errno << endl << flush;
   }
@@ -715,11 +695,7 @@ void NetThread::setSocketOption(SOCKET sock)
 
   // SO_SNDBUF
   val = 640*1024; // BDP(640KB)
-#if defined(QTB_NET_WIN)
-  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const char*)&val, len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const void*)&val, len) == -1){
-#endif
+  if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const VAL_TYPE*)&val, len) == -1){
 	cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error";
 	cout << "errno = " << errno << endl << flush;
   }
@@ -728,7 +704,6 @@ void NetThread::setSocketOption(SOCKET sock)
 	if (outputLog)
 	  cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt()" << endl;
   }
-#endif // 0 // for TEST
 }
 
 // check socket option
@@ -745,11 +720,7 @@ void NetThread::checkSocketOption(SOCKET sock)
   len = sizeof(val);
 
   // TCP_NODELAY
-#if defined(QTB_NET_WIN)
-  if (getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char*)&val, &len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (void*)&val, &len) == -1){
-#endif
+  if (getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (VAL_TYPE*)&val, &len) == -1){
 	cout << "[" << name << "] sockopt: TCP_NODELAY : getsockopt() error";
   }
   else {
@@ -764,33 +735,8 @@ void NetThread::checkSocketOption(SOCKET sock)
 
   cout << endl;
 
-  // SO_KEEPALIVE
-#if defined(QTB_NET_WIN)
-  if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char*)&val, &len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (getsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (void*)&val, &len) == -1){
-#endif
-	cout << "[" << name << "] sockopt: SO_KEEPALIVE : getsockopt() error";
-  }
-  else {
-	cout << "[" << name << "] sockopt: SO_KEEPALIVE : ";
-	if (val.i_val == 0){
-	  cout << "off";
-	}
-	else {
-	  cout << "on";
-	}
-  }
-
-  cout << endl;
-
-#if 0 // for TEST
   // SO_RCVBUF
-#if defined(QTB_NET_WIN)
-  if (getsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char*)&val, &len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (getsockopt(sock, SOL_SOCKET, SO_RCVBUF, (void*)&val, &len) == -1){
-#endif
+  if (getsockopt(sock, SOL_SOCKET, SO_RCVBUF, (VAL_TYPE*)&val, &len) == -1){
 	cout << "[" << name << "] sockopt: SO_RCVBUF : getsockopt() error";
   }
   else {
@@ -800,11 +746,7 @@ void NetThread::checkSocketOption(SOCKET sock)
   cout << endl;
 
   // SO_SNDBUF
-#if defined(QTB_NET_WIN)
-  if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char*)&val, &len) == -1){
-#elif defined(QTB_NET_UNIX)
-  if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (void*)&val, &len) == -1){
-#endif
+  if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (VAL_TYPE*)&val, &len) == -1){
 	cout << "[" << name << "] sockopt: SO_SNDBUF : getsockopt() error";
   }
   else {
@@ -812,7 +754,6 @@ void NetThread::checkSocketOption(SOCKET sock)
   }
 
   cout << endl;
-#endif // 0 // for TEST
 
   // flush
   cout << flush;

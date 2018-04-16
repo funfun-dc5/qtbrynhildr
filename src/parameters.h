@@ -48,7 +48,7 @@ const int QTB_SOUND_LOCAL_BUFFER_SIZE = 1024 * 1024;
 const double QTB_WINDOW_OPACITY = 0.95;
 
 // window update duration (ms)
-const double QTB_WINDOW_UPDATE_DURATION = 2000;
+const double QTB_WINDOW_UPDATE_DURATION = 1000;
 
 //---------------------------------------------------------------------------
 // for others

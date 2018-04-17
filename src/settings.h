@@ -2251,6 +2251,7 @@ private:
 // for DEBUG
 #define QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX	"graphics_output"
 #define QTB_SOUND_OUTPUT_FILENAME			"sound_output.pcm"
+#define QTB_SOUND_OUTPUT_RAW_FILENAME		"sound_output.raw"
 #define QTB_SOUND_OUTPUT_WAV_FILENAME		"sound_output.wav"
 
 #endif // SETTINGS_H

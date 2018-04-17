@@ -267,6 +267,162 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 #endif
 
+#if 0 // for TEST
+  // draw a desktop image
+  if (settings->getOnGraphics()){
+	// clear desktop flag clear
+	onClearDesktop = false;
+
+	bool desktopLoadResult = false;
+	// ------------------------------------------------------------------------------
+	// Motion JPEG (Mode 5/6)
+	// ------------------------------------------------------------------------------
+	if (com_data->video_mode == VIDEO_MODE_MJPEG){
+	  // load a JPEG data to desktop
+	  desktopLoadResult = image->loadFromData((const uchar *)buffer,
+											  (uint)receivedDataSize,
+											  "JPEG");
+	}
+
+#if QTB_PUBLIC_MODE7_SUPPORT
+	// ------------------------------------------------------------------------------
+	// VP8 (Mode 7)
+	// ------------------------------------------------------------------------------
+	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
+	  // VP8
+#if USE_PPM_LOADER_FOR_VP8
+#if QTB_SIMD_SUPPORT
+	  int rgbImageSize;
+	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
+		// make rgb image by using SIMD instruction
+		rgbImageSize = makeRGBImage_SIMD();
+	  }
+	  else {
+		rgbImageSize = makeRGBImage();
+	  }
+#else // QTB_SIMD_SUPPORT
+	  int rgbImageSize = makeRGBImage();
+#endif // QTB_SIMD_SUPPORT
+	  if (rgbImageSize != 0){
+		// load a PPM data to desktop
+		desktopLoadResult = image->loadFromData((const uchar *)ppm,
+												(uint)rgbImageSize + PPM_HEADER_SIZE_MAX,
+												"PPM");
+	  }
+	  else {
+		if (image->isNull()){
+		  delete image;
+		  image = new QImage(width, height, IMAGE_FORMAT);
+		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
+		}
+	  }
+#else // USE_PPM_LOADER_FOR_VP8
+#if QTB_SIMD_SUPPORT
+	  int rgbImageSize;
+	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
+		// make rgb image by using SIMD instruction
+		//cout << "SIMD!" << endl << flush;
+		rgbImageSize = makeRGBImage_SIMD();
+	  }
+	  else {
+		//cout << "no SIMD!" << endl << flush;
+		rgbImageSize = makeRGBImage();
+	  }
+#else // QTB_SIMD_SUPPORT
+	  int rgbImageSize = makeRGBImage();
+#endif // QTB_SIMD_SUPPORT
+#if 0 // for getting test data
+	  {
+		static int frameNo = 1;
+		if (frameNo == 40){ // sampling at 40th frame
+		  fstream file;
+		  // save yuv420
+		  file.open("yuv420_1280x800.dat", ios::out | ios::binary | ios::trunc);
+		  if (file.is_open()){
+			file.write((char*)yuv420, width * height + width * height / 2);
+			file.close();
+		  }
+		  // save yuv420prev
+		  if (yuv420 == yuv1){
+			file.open("yuv420prev_1280x800.dat", ios::out | ios::binary | ios::trunc);
+			if (file.is_open()){
+			  file.write((char*)yuv2, width * height + width * height / 2);
+			  file.close();
+			}
+		  }
+		  else {
+			file.open("yuv420prev_1280x800.dat", ios::out | ios::binary | ios::trunc);
+			if (file.is_open()){
+			  file.write((char*)yuv1, width * height + width * height / 2);
+			  file.close();
+			}
+		  }
+		  // save rgb24
+		  file.open("rgb24_1280x800.dat", ios::out | ios::binary | ios::trunc);
+		  if (file.is_open()){
+			file.write((char*)rgb, width * height * IMAGE_FORMAT_SIZE);
+			file.close();
+		  }
+		}
+		frameNo++;
+	  }
+#endif // for getting test data
+	  if (rgbImageSize != 0){
+		// create QImage from RGB
+		delete image;
+		//		cout << "rgbImageSize = " << rgbImageSize << endl << flush;
+		image = new QImage(rgb, width, height, IMAGE_FORMAT);
+	  }
+	  else {
+		if (image->isNull()){
+		  delete image;
+		  image = new QImage(width, height, IMAGE_FORMAT);
+		  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
+		}
+	  }
+
+	  desktopLoadResult = true;
+#endif // USE_PPM_LOADER_FOR_VP8
+	}
+	else {
+	  // ------------------------------------------------------------------------------
+	  // unknown VIDEO_MODE
+	  // ------------------------------------------------------------------------------
+	  // desktopLoadResult = false;
+	}
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+
+#if TEST_FRAME_CONTROL
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startDrawFrameTime;
+	cout << "[" << name << "] emit draw       : " << pastTime << endl;
+  }
+#endif // TEST_FRAME_CONTROL
+
+	if (desktopLoadResult){
+	  // GOOD
+	  // update desktop
+	  emit desktopChanged(*image);
+	}
+	else {
+	  // NG
+	  if (outputLog){
+		cout << "[GraphicsThread:debug] Received Image Data Size = " << receivedDataSize << endl << flush;
+	  }
+	  // Failed to load JPEG image
+	  return TRANSMIT_FAILED_IMAGE_DRAW;
+	}
+  }
+  else {
+	// clear desktop only at once
+	if (!onClearDesktop){
+	  onClearDesktop = true;
+	  emit desktopClear();
+	}
+  }
+#endif // 0 // for TEST
+
   return TRANSMIT_SUCCEEDED;
 }
 

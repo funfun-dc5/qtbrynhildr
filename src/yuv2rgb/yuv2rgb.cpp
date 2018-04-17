@@ -197,7 +197,6 @@ int makeRGBImage(int numOfThread)
 	return 0;
   }
 
-#if QTB_MULTI_THREAD_CONVERTER
   // number of thread 1 or 2 or 4
   uchar *rgbtop = rgb + width * (height - 1) * IMAGE_FORMAT_SIZE;
   uchar *ytop;
@@ -213,21 +212,21 @@ int makeRGBImage(int numOfThread)
 	utop = u2topOrg;
 	vtop = v2topOrg;
   }
-  // 1 thread version
+#if QTB_MULTI_THREAD_CONVERTER
+
+  QFuture<void> f1, f2, f3, f4;
+
   if (numOfThread <= 1 || height % 2 != 0){
-	// convert YUV to RGB
-	qtbrynhildr::convertYUVtoRGB(ytop, utop, vtop, rgbtop, height);
-	return rgbImageSize;
+	// start 1st thread
+	f1 = QtConcurrent::run(convertYUVtoRGB, ytop, utop, vtop, rgbtop, height);
   }
   else { // numOfThread >= 2
-	// 2 thread or 4 thread version
-	QFuture<void> f1, f2, f3;
 	int linesOfThread = height / numOfThread;
 
 	// start 1st thread
-	f1 = QtConcurrent::run(qtbrynhildr::convertYUVtoRGB, ytop, utop, vtop, rgbtop, linesOfThread);
+	f1 = QtConcurrent::run(convertYUVtoRGB, ytop, utop, vtop, rgbtop, linesOfThread);
 
-	if (numOfThread > 2){
+	if (numOfThread >= 2){
 	  // for next thread
 	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	  ytop += width * linesOfThread;
@@ -235,11 +234,9 @@ int makeRGBImage(int numOfThread)
 	  vtop += uvNext * linesOfThread/2;
 
 	  // start 2nd thread
-	  f2 = QtConcurrent::run(qtbrynhildr::convertYUVtoRGB, ytop, utop, vtop, rgbtop, linesOfThread);
+	  f2 = QtConcurrent::run(convertYUVtoRGB, ytop, utop, vtop, rgbtop, linesOfThread);
 	}
-
-	// for 3rd thread
-	if (numOfThread > 3){
+	if (numOfThread >= 3){
 	  // for next thread
 	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	  ytop += width * linesOfThread;
@@ -247,29 +244,34 @@ int makeRGBImage(int numOfThread)
 	  vtop += uvNext * linesOfThread/2;
 
 	  // start 3rd thread
-	  f3 = QtConcurrent::run(qtbrynhildr::convertYUVtoRGB, ytop, utop, vtop, rgbtop, linesOfThread);
+	  f3 = QtConcurrent::run(convertYUVtoRGB, ytop, utop, vtop, rgbtop, linesOfThread);
 	}
+	if (numOfThread >= 4){
+	  // for next thread
+	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
 
-	// for next thread
-	rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
-	ytop += width * linesOfThread;
-	utop += uvNext * linesOfThread/2;
-	vtop += uvNext * linesOfThread/2;
-
-	// for last thread
-	qtbrynhildr::convertYUVtoRGB(ytop, utop, vtop, rgbtop, linesOfThread);
-
-	// wait for all threads finished
-	f1.waitForFinished();
-	f2.waitForFinished();
-	f3.waitForFinished();
-
-	return rgbImageSize;
+	  // start 4th thread
+	  f4 = QtConcurrent::run(convertYUVtoRGB, ytop, utop, vtop, rgbtop, linesOfThread);
+	}
   }
-#else // QTB_MULTI_THREAD_CONVERTER
-  // convert YUV to RGB
-  qtbrynhildr::convertYUVtoRGB(ytop, utop, vtop, rgbtop, height);
+
+  // wait for all threads finished
+  f1.waitForFinished();
+  f2.waitForFinished();
+  f3.waitForFinished();
+  f4.waitForFinished();
+
   return rgbImageSize;
+
+#else // QTB_MULTI_THREAD_CONVERTER
+
+  // convert YUV to RGB
+  convertYUVtoRGB(ytop, utop, vtop, rgbtop, height);
+  return rgbImageSize;
+
 #endif // QTB_MULTI_THREAD_CONVERTER
 }
 
@@ -282,7 +284,6 @@ int makeRGBImage_SIMD(int numOfThread)
 	return 0;
   }
 
-#if QTB_MULTI_THREAD_CONVERTER
   // number of thread 1 or 2 or 4
   uchar *rgbtop = rgb + width * (height - 1) * IMAGE_FORMAT_SIZE;
   uchar *ytop;
@@ -298,21 +299,21 @@ int makeRGBImage_SIMD(int numOfThread)
 	utop = u2topOrg;
 	vtop = v2topOrg;
   }
-  // 1 thread version
+#if QTB_MULTI_THREAD_CONVERTER
+
+  QFuture<void> f1, f2, f3, f4;
+
   if (numOfThread <= 1 || height % 2 != 0){
-	// convert YUV to RGB
-	qtbrynhildr::convertYUVtoRGB_SIMD(ytop, utop, vtop, rgbtop, height);
-	return rgbImageSize;
+	// start 1st thread
+	f1 = QtConcurrent::run(convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, height);
   }
   else { // numOfThread >= 2
-	// 2 thread or 4 thread version
-	QFuture<void> f1, f2, f3;
 	int linesOfThread = height / numOfThread;
 
 	// start 1st thread
-	f1 = QtConcurrent::run(qtbrynhildr::convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, linesOfThread);
+	f1 = QtConcurrent::run(convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, linesOfThread);
 
-	if (numOfThread > 2){
+	if (numOfThread >= 2){
 	  // for next thread
 	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	  ytop += width * linesOfThread;
@@ -320,11 +321,9 @@ int makeRGBImage_SIMD(int numOfThread)
 	  vtop += uvNext * linesOfThread/2;
 
 	  // start 2nd thread
-	  f2 = QtConcurrent::run(qtbrynhildr::convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, linesOfThread);
+	  f2 = QtConcurrent::run(convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, linesOfThread);
 	}
-
-	// for 3rd thread
-	if (numOfThread > 3){
+	if (numOfThread >= 3){
 	  // for next thread
 	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	  ytop += width * linesOfThread;
@@ -332,29 +331,34 @@ int makeRGBImage_SIMD(int numOfThread)
 	  vtop += uvNext * linesOfThread/2;
 
 	  // start 3rd thread
-	  f3 = QtConcurrent::run(qtbrynhildr::convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, linesOfThread);
+	  f3 = QtConcurrent::run(convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, linesOfThread);
 	}
+	if (numOfThread >= 4){
+	  // for next thread
+	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	  ytop += width * linesOfThread;
+	  utop += uvNext * linesOfThread/2;
+	  vtop += uvNext * linesOfThread/2;
 
-	// for next thread
-	rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
-	ytop += width * linesOfThread;
-	utop += uvNext * linesOfThread/2;
-	vtop += uvNext * linesOfThread/2;
-
-	// for last thread
-	qtbrynhildr::convertYUVtoRGB_SIMD(ytop, utop, vtop, rgbtop, linesOfThread);
-
-	// wait for all threads finished
-	f1.waitForFinished();
-	f2.waitForFinished();
-	f3.waitForFinished();
-
-	return rgbImageSize;
+	  // start 4th thread
+	  f4 = QtConcurrent::run(convertYUVtoRGB_SIMD, ytop, utop, vtop, rgbtop, linesOfThread);
+	}
   }
-#else // QTB_MULTI_THREAD_CONVERTER
-  // convert YUV to RGB
-  qtbrynhildr::convertYUVtoRGB_SIMD(ytop, utop, vtop, rgbtop, height);
+
+  // wait for all threads finished
+  f1.waitForFinished();
+  f2.waitForFinished();
+  f3.waitForFinished();
+  f4.waitForFinished();
+
   return rgbImageSize;
+
+#else // QTB_MULTI_THREAD_CONVERTER
+
+  // convert YUV to RGB
+  convertYUVtoRGB_SIMD(ytop, utop, vtop, rgbtop, height);
+  return rgbImageSize;
+
 #endif // QTB_MULTI_THREAD_CONVERTER
 }
 #endif // QTB_SIMD_SUPPORT

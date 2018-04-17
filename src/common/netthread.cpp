@@ -503,7 +503,8 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 	long ret = recv(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
 	  received_size += ret;
-	  cout << "[" << name << "] ret (" << i << ") = " << ret << endl << flush;
+	  if (strcmp(name, "GraphicsThread") == 0) // for Graphics
+		cout << "[" << name << "] ret (" << i << ") = " << ret << endl << flush;
 	}
 	else {
 	  return -1;

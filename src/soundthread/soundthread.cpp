@@ -17,6 +17,7 @@
 #include "soundthread.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
+
 #include "wave.h"
 
 #if QTB_CELT_SUPPORT
@@ -28,16 +29,16 @@
 
 namespace qtbrynhildr {
 
+//---------------------------------------------------------------------------
+// public
+//---------------------------------------------------------------------------
 // constructor
 SoundThread::SoundThread(Settings *settings)
   :NetThread("SoundThread", settings)
   ,soundBuffer(0)
-  ,soundBufferSize(0)
-  ,soundCacheTime(-1)
   ,samplerate(0)
   ,audioOutput(0)
   ,output(0)
-  ,samplerateChangeCounter(0)
 #if QTB_CELT_SUPPORT
   ,converter(0)
 #endif //QTB_CELT_SUPPORT
@@ -46,11 +47,18 @@ SoundThread::SoundThread(Settings *settings)
   outputLog = false; // for DEBUG
 
   // sound buffer
-  soundBufferSize = settings->getSoundBufferSize();
-  soundBuffer = new SoundBuffer(soundBufferSize);
+  soundBuffer = new SoundBuffer(settings->getSoundBufferSize());
 
   // local buffer
   buffer = new char [QTB_SOUND_LOCAL_BUFFER_SIZE];
+
+  // delete files
+  if (settings->getOutputSoundDataToFile()){
+	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
+	pcmFile.remove();
+	QFile rawFile("pcm/" QTB_SOUND_OUTPUT_RAW_FILENAME);
+	rawFile.remove();
+  }
 }
 
 // destructor
@@ -62,7 +70,6 @@ SoundThread::~SoundThread()
 	delete soundBuffer;
 	soundBuffer = 0;
   }
-  soundBufferSize = 0;
 
   // local buffer
   if (buffer != 0){
@@ -80,8 +87,7 @@ SoundThread::~SoundThread()
   }
 
   // output wav file
-  if (settings->getOutputSoundDataToFile() && settings->getOutputSoundDataToWavFile() &&
-	  samplerateChangeCounter == 1){
+  if (settings->getOutputSoundDataToFile() && settings->getOutputSoundDataToWavFile()){
 	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
 	// create wav file
 	int pcmFileSize = pcmFile.size();
@@ -112,9 +118,6 @@ CONNECT_RESULT SoundThread::connectToServer()
 
   // connected
   connectedToServer();
-
-  // reset state
-  samplerateChangeCounter = 0;
 
   return CONNECT_SUCCEEDED;
 }
@@ -158,12 +161,8 @@ PROCESS_RESULT SoundThread::processForHeader()
   }
 #endif // TEST_THREAD
 
-  // print received header
-  if (outputLog){
-	printHeader();
-  }
-
   // Nothing to do for sound
+
   return PROCESS_SUCCEEDED;
 }
 
@@ -184,9 +183,10 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
   }
 
-  // check
   // received data size
   long receivedDataSize = com_data->data_size;
+
+  // check
   // size check
   if (receivedDataSize < 0){
 	// error
@@ -198,16 +198,16 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   }
   if (receivedDataSize > QTB_SOUND_LOCAL_BUFFER_SIZE){
 	if (outputLog){
-	  cout << "[SoundThread] receivedDataSize = " << receivedDataSize << endl << flush; // error
+	  cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush; // error
 	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
 
-  // receive PCM raw Data
+  // receive data for sound
   receivedDataSize = receiveData(sock_sound, buffer, receivedDataSize);
-  // no data
+  // size check
   if (receivedDataSize <= 0){
-	// Nothing to do
+	// error
 	return TRANSMIT_DATASIZE_ERROR;
   }
 
@@ -219,6 +219,13 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 		 << " (size = " << receivedDataSize << ")" << endl;
   }
 #endif // TEST_THREAD
+
+  // SOUND_TYPE_PCM
+  // buffer[]         : PCM Data
+  // receivedDataSize : Size of PCM Data
+  // SOUND_TYPE_CELT
+  // buffer[]         : CELT Data
+  // receivedDataSize : Size of CELT Data
 
 #if QTB_CELT_SUPPORT
   if (converter != 0){
@@ -266,16 +273,6 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 
   // put PCM data into sound buffer
   if (settings->getOnSound()){
-	// for cache
-	static long soundCacheSize = 0;
-	static long soundCacheSizeForLog = 0;
-
-	// check audio output
-	if (audioOutput == 0){
-	  // NOT supported sample rate
-	  return TRANSMIT_SUCCEEDED;
-	}
-
 	// put into soundBuffer
 	int putSize = soundBuffer->put(buffer, receivedDataSize);
 	if (putSize != receivedDataSize){
@@ -283,70 +280,14 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  // Failed to put into sound buffer
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
+  }
 
-	//cout << "sound buffer size : " << soundBuffer->getSize() << endl << flush; // for TEST
-
-	// check sound cache time
-	if (soundCacheTime != settings->getSoundCacheTime()){
-	  // update cacheSize
-	  soundCacheTime = settings->getSoundCacheTime();
-	  soundCacheSize = (long)(samplerate * 2 * 2 * (qreal)soundCacheTime/1000);
-	  soundCacheSizeForLog = soundCacheSize;
-	  if (settings->getOutputLog()){
-		cout << "soundCacheSize = " << soundCacheSize << endl << flush;
-	  }
+  // put PCM data into sound device
+  if (settings->getOnSound()){
+	TRANSMIT_RESULT result = putPCMDataIntoSoundDevice();
+	if (result != TRANSMIT_SUCCEEDED){
+	  return result;
 	}
-
-	if (settings->getOutputLog()){
-	  double cacheRate = 0;
-	  if (soundCacheSizeForLog != 0)
-		cacheRate = (double)(soundBuffer->getSize())/soundCacheSizeForLog * 100.0;
-	  cout << "[SoundThread] Sound Cache Rate : " << cacheRate << endl << flush;
-	}
-
-	// write into sound buffer
-	if (soundBuffer->getSize() > soundCacheSize){
-	  if (audioOutput->state() != QAudio::StoppedState){
-		//	  soundCacheSize = 0;
-
-		int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
-
-		while(chunks){
-		  qint64 len = soundBuffer->getSize(audioOutput->periodSize());
-
-		  // write PCM data
-		  if (len != 0){
-			qint64 result = output->write(soundBuffer->get(len), len);
-			if (result != len){
-			  // Failed to write
-			  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
-			}
-		  }
-		  else {
-			break;
-		  }
-
-		  // if (len != audioOutput->periodSize())
-		  //   break;
-
-		  --chunks;
-		}
-	  }
-	  else {
-		// start output
-		output = audioOutput->start();
-	  }
-	}
-
-#if 0 // for DEBUG
-	static int count = 0;
-	if (count % 500 == 0){
-	  cout << "[SoundThread] receivedDataSize = " << receivedDataSize << endl;
-	  cout << "[SoundThread] size = " << soundBuffer->getSize() << ", count = " << count << endl;
-	  cout << "[SoundThread] bytesFree() =  " << audioOutput->bytesFree() << endl << flush;
-	}
-	count++;
-#endif
   }
 
 #if TEST_THREAD
@@ -365,12 +306,6 @@ void SoundThread::connectedToServer()
 {
   // reset samplerate
   samplerate = 0;
-
-  // delete files
-  if (settings->getOutputSoundDataToFile()){
-	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
-	pcmFile.remove();
-  }
 
   NetThread::connectedToServer();
 }
@@ -397,12 +332,84 @@ void SoundThread::shutdownConnection()
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
+// put PCM data into sound device
+TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
+{
+  // for cache
+  static long soundCacheSize = 0;
+  static long soundCacheSizeForLog = 0;
+  static int soundCacheTime = -1;
+
+  // check audio output
+  if (audioOutput == 0){
+	// NOT supported sample rate
+	return TRANSMIT_SUCCEEDED;
+  }
+
+  // check sound cache time
+  if (soundCacheTime != settings->getSoundCacheTime()){
+	// update cacheSize
+	soundCacheTime = settings->getSoundCacheTime();
+	soundCacheSize = (long)(samplerate * 2 * 2 * (qreal)soundCacheTime/1000);
+	soundCacheSizeForLog = soundCacheSize;
+	if (settings->getOutputLog()){
+	  cout << "soundCacheSize = " << soundCacheSize << endl << flush;
+	}
+  }
+
+  if (settings->getOutputLog()){
+	double cacheRate = 0;
+	if (soundCacheSizeForLog != 0)
+	  cacheRate = (double)(soundBuffer->getSize())/soundCacheSizeForLog * 100.0;
+	cout << "[SoundThread] Sound Cache Rate : " << cacheRate << endl << flush;
+  }
+
+  // write into sound buffer
+  if (soundBuffer->getSize() > soundCacheSize){
+	if (audioOutput->state() != QAudio::StoppedState){
+	  //	  soundCacheSize = 0;
+
+	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
+
+	  while(chunks){
+		qint64 len = soundBuffer->getSize(audioOutput->periodSize());
+
+		// write PCM data
+		if (len != 0){
+		  qint64 result = output->write(soundBuffer->get(len), len);
+		  if (result != len){
+			// Failed to write
+			return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
+		  }
+		}
+		else {
+		  break;
+		}
+
+		// if (len != audioOutput->periodSize())
+		//   break;
+
+		--chunks;
+	  }
+	}
+	else {
+	  // start output
+	  output = audioOutput->start();
+	}
+  }
+
+  return TRANSMIT_SUCCEEDED;
+}
+
 // change samplerate
 bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 {
   if (settings->getOutputLog()){
 	cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << endl << flush;
   }
+
+  // audio format
+  QAudioFormat format;
 
   // setting for sound format
   format.setSampleRate((int)samplerate);
@@ -454,9 +461,6 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
 #endif // defined(DEBUG)
 
-  // change counter up
-  samplerateChangeCounter++;
-
 #if QTB_CELT_SUPPORT
   // setup converter
   if (converter != 0){
@@ -467,6 +471,12 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	converter = new Converter_CELT(samplerate, 2);
   }
 #endif // QTB_CELT_SUPPORT
+
+  // delete files
+  if (settings->getOutputSoundDataToFile()){
+	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
+	pcmFile.remove();
+  }
 
   return true;
 }

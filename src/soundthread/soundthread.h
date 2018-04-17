@@ -33,26 +33,14 @@ private:
   // sound buffer
   SoundBuffer *soundBuffer;
 
-  // sound buffer size
-  int soundBufferSize;
-
-  // sound cache time (ms)
-  int soundCacheTime;
-
   // sample rate
   SAMPLERATE samplerate;
-
-  // audio format
-  QAudioFormat format;
 
   // audio output
   QAudioOutput *audioOutput;
 
   // IO device
   QIODevice *output;
-
-  // samplerate change counter
-  int samplerateChangeCounter;
 
 #if QTB_CELT_SUPPORT
   // converter
@@ -94,6 +82,9 @@ protected:
   void shutdownConnection();
 
 private:
+  // put PCM data into sound device
+  TRANSMIT_RESULT putPCMDataIntoSoundDevice();
+
   // change samplerate
   bool changeSamplerate(SAMPLERATE samplerate);
 

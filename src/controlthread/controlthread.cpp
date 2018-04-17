@@ -134,23 +134,6 @@ CONNECT_RESULT ControlThread::connectToServer()
 	return CONNECT_FAILED;
   }
 
-#if 0 // for TEST
-  int ret,flag;
-  flag = 1;
-  ret = setsockopt(sock_control, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(flag) );
-  if (ret == -1){
-	cout << "Couldn't setsockopt(TCP_NODELAY)" << endl << flush;
-  }
-#endif // for TEST
-#if 0 // for TEST
-  int ret,sock_buf_size;
-  sock_buf_size = 0;
-  ret = setsockopt(sock_control, SOL_SOCKET, SO_SNDBUF, (char *)&sock_buf_size, sizeof(sock_buf_size));
-  if (ret == -1){
-	cout << "Failed: setsockopt()" << endl << flush;
-  }
-#endif // for TEST
-
   // connected
   connectedToServer();
 
@@ -734,14 +717,14 @@ void ControlThread::setMouseControl()
 	  com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
 	  com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
 	}
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode
 	int desktopCompressMode = settings->getDesktopCompressMode();
 	if (desktopCompressMode > 1){
 	  com_data->mouse_x *= desktopCompressMode;
 	  com_data->mouse_y *= desktopCompressMode;
 	}
-#endif // for TEST
+#endif
 
 	// save prevPos
 	prevPos = pos;
@@ -754,7 +737,6 @@ void ControlThread::setKeyboardControl()
   KeyInfo *keyInfo = keyBuffer->get();
   if (keyInfo != 0){
 	// check shift/alt/control status
-#if 1 // for TEST
 	switch((int)keyInfo->keycode){
 	case VK_SHIFT:
 	case VK_RSHIFT:
@@ -775,28 +757,6 @@ void ControlThread::setKeyboardControl()
 	  keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
 	  break;
 	}
-#else // for TEST
-	if (keyInfo->keycode == VK_SHIFT	||
-		keyInfo->keycode == VK_RSHIFT	||
-		keyInfo->keycode == VK_LSHIFT){
-	  // toggle status
-	  keydownSHIFT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-	}
-	else
-	  if (keyInfo->keycode == VK_MENU  ||
-		  keyInfo->keycode == VK_RMENU ||
-		  keyInfo->keycode == VK_LMENU){
-		// toggle status
-		keydownALT = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-	  }
-	  else
-		if (keyInfo->keycode == VK_CONTROL ||
-			keyInfo->keycode == VK_RCONTROL||
-			keyInfo->keycode == VK_LCONTROL){
-		  // toggle status
-		  keydownCONTROL = keyInfo->keycode_flg == KEYCODE_FLG_KEYDOWN;
-		}
-#endif // for TEST
 
 	// set keydown
 	com_data->keydown = KEYDOWN_ON;
@@ -813,7 +773,7 @@ void ControlThread::setKeyboardControl()
   }
 }
 
-// set gamepad control info.
+// set gamepad control
 #if defined(Q_OS_WIN)
 void ControlThread::setGamePadControl()
 {

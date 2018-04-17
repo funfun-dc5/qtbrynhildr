@@ -694,6 +694,7 @@ void NetThread::setSocketOption(SOCKET sock)
 	  cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt()" << endl;
   }
 
+#if 0 // for TEST
   // SO_SNDBUF
   val = 640*1024; // BDP(640KB)
   if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const VAL_TYPE*)&val, len) == -1){
@@ -705,6 +706,7 @@ void NetThread::setSocketOption(SOCKET sock)
 	if (outputLog)
 	  cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt()" << endl;
   }
+#endif // 0 // for TEST
 }
 
 // check socket option
@@ -746,6 +748,7 @@ void NetThread::checkSocketOption(SOCKET sock)
 
   cout << endl;
 
+#if 0 // for TEST
   // SO_SNDBUF
   if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (VAL_TYPE*)&val, &len) == -1){
 	cout << "[" << name << "] sockopt: SO_SNDBUF : getsockopt() error";
@@ -755,6 +758,7 @@ void NetThread::checkSocketOption(SOCKET sock)
   }
 
   cout << endl;
+#endif // 0 // for TEST
 
   // flush
   cout << flush;

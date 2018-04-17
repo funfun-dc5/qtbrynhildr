@@ -34,17 +34,23 @@ GraphicsThread::GraphicsThread(Settings *settings)
 {
   outputLog = false; // for DEBUG
 
+  // graphics buffer
+  graphicsBuffer = new GraphicsBuffer(1024*1024); // for TEST (1MB)
+
   // local buffer
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
-
-  // create graphic buffer
-  graphicsBuffer = new GraphicsBuffer(1024*1024); // for TEST (1MB)
 }
 
 // destructor
 GraphicsThread::~GraphicsThread()
 {
   // delete objects
+  // graphics buffer
+  if (graphicsBuffer != 0){
+	delete graphicsBuffer;
+	graphicsBuffer = 0;
+  }
+
   // local buffer
   if (buffer != 0){
 	delete [] buffer;
@@ -96,8 +102,6 @@ CONNECT_RESULT GraphicsThread::connectToServer()
 	return CONNECT_FAILED;
   }
 
-  // create objects
-
   // connected
   connectedToServer();
 
@@ -148,15 +152,6 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 	counter_graphics++;
   }
 
-#if 0 // for TEST
-  static bool run1Time = true;
-  if (run1Time && counter_graphics == 5){
-	run1Time = false;
-	printHeader();
-	saveHeader("receivedHeader.dat");
-  }
-#endif // for TEST
-
   // check received video_mode
 #if QTB_PUBLIC_MODE7_SUPPORT
   if (com_data->video_mode != VIDEO_MODE_MJPEG &&
@@ -194,27 +189,23 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   receivedDataSize = receiveData(sock_graphics, buffer, receivedDataSize);
   // size check
   if (receivedDataSize <= 0){
-	// Nothing to do
+	// error
 	return TRANSMIT_NETWORK_ERROR;
   }
+
+#if TEST_THREAD
+  {
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	qint64 pastTime = currentTime - startTime;
+	cout << "[" << name << "] got data        : " << pastTime
+		 << " (size = " << receivedDataSize << ")" << endl;
+  }
+#endif // TEST_THREAD
 
 #if 0 // for TEST
   cout << "[" << name << "] frame no = " << (int)com_data->frame_no << endl;
   cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush;
 #endif
-
-#if 0 // for TEST
-  // put to graphics buffer
-  graphicsBuffer->putFrame(buffer, receivedDataSize);
-  // get from graphics buffer
-  int len = graphicsBuffer->getFrame(buffer);
-  if (len != receivedDataSize){
-	cout << "Graphics Buffer : getFrame() failed!" << endl << flush;
-  }
-#endif // 1 // for TEST
-
-  // received 1 frame
-  frameCounter++;
 
   // == VIDEO_MODE_MJPEG ==
   // buffer[]         : JPEG File
@@ -250,22 +241,26 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
-#if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] got data        : " << pastTime
-		 << " (size = " << receivedDataSize << ")" << endl;
+#if 0 // for TEST
+  // put data into graphics buffer
+  if (settings->getOnGraphics()){
+	// put into graphics buffer
+	int putSize = graphicsBuffer->putFrame(buffer, receivedDataSize);
+	if (putSize != receivedDataSize){
+	  // error for put()
+	  // Failed to put into graphics buffer
+	  return TRANSMIT_FAILED_PUT_BUFFER;
+	}
+	// get from graphics buffer
+	int len = graphicsBuffer->getFrame(buffer);
+	if (len != receivedDataSize){
+	  cout << "Graphics Buffer : getFrame() failed!" << endl << flush;
+	}
   }
-#endif // TEST_THREAD
+#endif // 1 // for TEST
 
-#if 0 // for TEST (drop frame)
-  static int dropCounter = 0;
-  dropCounter++;
-  if (dropCounter % 5 != 0){
-	return TRANSMIT_SUCCEEDED; // skip this frame
-  }
-#endif
+  // received 1 frame
+  frameCounter++;
 
 #if 0 // for TEST
   // draw a desktop image

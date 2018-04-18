@@ -174,6 +174,13 @@ PROCESS_RESULT ControlThread::processForHeader()
 	// 2) Keyboard Control
 	//-------------------------------------------
 	setKeyboardControl();
+
+	//-------------------------------------------
+	// 3) GamePad Control
+	//-------------------------------------------
+	if (settings->getOnGamePadSupport()){
+	  setGamePadControl();
+	}
   }
   else {
 	// NOT under control
@@ -187,11 +194,6 @@ PROCESS_RESULT ControlThread::processForHeader()
   cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
   cout.flags(flags);
 #endif
-
-  // for GamePad
-  if (settings->getOnGamePadSupport()){
-	setGamePadControl();
-  }
 
 #if 0 // for DEBUG
   static bool oneFlag = true;

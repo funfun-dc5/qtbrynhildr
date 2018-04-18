@@ -679,11 +679,11 @@ void NetThread::setSocketOption(SOCKET sock)
   else {
 	// Succeeded to set TCP_NODELAY
 	if (outputLog)
-	  cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt()" << endl;
+	  cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt("<< val << ") O.K." << endl;
   }
 
   // SO_RCVBUF
-  val = 640*1024; // BDP(640KB)
+  val = 512*1024; // BDP(512KB) for TEST
   if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const VAL_TYPE*)&val, len) == -1){
 	cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error";
 	cout << "errno = " << errno << endl << flush;
@@ -691,12 +691,11 @@ void NetThread::setSocketOption(SOCKET sock)
   else {
 	// Succeeded to set SO_RCVBUF
 	if (outputLog)
-	  cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt()" << endl;
+	  cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt("<< val << ") O.K." << endl;
   }
 
-#if 0 // for TEST
   // SO_SNDBUF
-  val = 640*1024; // BDP(640KB)
+  val = 512*1024; // BDP(512KB) for TEST
   if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const VAL_TYPE*)&val, len) == -1){
 	cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error";
 	cout << "errno = " << errno << endl << flush;
@@ -704,14 +703,14 @@ void NetThread::setSocketOption(SOCKET sock)
   else {
 	// Succeeded to set SO_SNDBUF
 	if (outputLog)
-	  cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt()" << endl;
+	  cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt("<< val << ") O.K." << endl;
   }
-#endif // 0 // for TEST
 }
 
 // check socket option
 void NetThread::checkSocketOption(SOCKET sock)
 {
+  // return value
   union {
 	int		i_val;
 	long	l_val;
@@ -720,14 +719,14 @@ void NetThread::checkSocketOption(SOCKET sock)
 	struct timeval timeval_val;
   } val;
   socklen_t len;
-  len = sizeof(val);
 
   // TCP_NODELAY
+  len = sizeof(val);
   if (getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (VAL_TYPE*)&val, &len) == -1){
 	cout << "[" << name << "] sockopt: TCP_NODELAY : getsockopt() error";
   }
   else {
-	cout << "[" << name << "] sockopt: TCP_NODELAY : ";
+	cout << "[" << name << "] sockopt: TCP_NODELAY : " << val.i_val << " : ";
 	if (val.i_val == 0){
 	  cout << "off";
 	}
@@ -739,26 +738,26 @@ void NetThread::checkSocketOption(SOCKET sock)
   cout << endl;
 
   // SO_RCVBUF
+  len = sizeof(val);
   if (getsockopt(sock, SOL_SOCKET, SO_RCVBUF, (VAL_TYPE*)&val, &len) == -1){
 	cout << "[" << name << "] sockopt: SO_RCVBUF : getsockopt() error";
   }
   else {
-	cout << "[" << name << "] sockopt: SO_RCVBUF : " << val.i_val;
+	cout << "[" << name << "] sockopt: SO_RCVBUF : " << val.i_val << " bytes";
   }
 
   cout << endl;
 
-#if 0 // for TEST
   // SO_SNDBUF
+  len = sizeof(val);
   if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (VAL_TYPE*)&val, &len) == -1){
 	cout << "[" << name << "] sockopt: SO_SNDBUF : getsockopt() error";
   }
   else {
-	cout << "[" << name << "] sockopt: SO_SNDBUF : " << val.i_val;
+	cout << "[" << name << "] sockopt: SO_SNDBUF : " << val.i_val << " bytes";
   }
 
   cout << endl;
-#endif // 0 // for TEST
 
   // flush
   cout << flush;

@@ -243,22 +243,21 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
   // put data into graphics buffer
-  if (settings->getOnGraphics()){
-	GraphicsBuffer::FrameType type;
-	// put into graphics buffer
-	switch(com_data->video_mode){
-	case VIDEO_MODE_MJPEG:
-	  type = GraphicsBuffer::TYPE_JPEG;
-	  break;
-	case VIDEO_MODE_COMPRESS:
-	  type = GraphicsBuffer::TYPE_VP8;
-	  break;
-	default:
-	  // internal error
-	  ABORT();
-	  break;
-	}
-
+  GraphicsBuffer::FrameType type;
+  // put into graphics buffer
+  switch(com_data->video_mode){
+  case VIDEO_MODE_MJPEG:
+	type = GraphicsBuffer::TYPE_JPEG;
+	break;
+  case VIDEO_MODE_COMPRESS:
+	type = GraphicsBuffer::TYPE_VP8;
+	break;
+  default:
+	// internal error
+	ABORT();
+	break;
+  }
+  if (settings->getOnGraphics() || type == GraphicsBuffer::TYPE_VP8){
 	// block
 	while (graphicsBuffer->getFrameCount() >= GraphicsBuffer::FRAME_TABLE_NUM ||
 		   graphicsBuffer->getSize() + receivedDataSize > graphicsBufferSize){

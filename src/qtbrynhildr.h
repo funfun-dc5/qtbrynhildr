@@ -528,6 +528,9 @@ private:
   // timer for Graphics
   QTimer *timer_Graphics;
 
+  // clear desktop flag
+  bool onClearDesktop;
+
   // SIMD instruction
   bool hasSIMDInstruction;
 
@@ -616,11 +619,11 @@ public slots:
   // refresh menu
   void refreshMenu();
 
-  // desktop Changed
-  void onDesktopChanged(QImage image);
+  // draw desktop
+  void drawDesktop(QImage image);
 
-  // Desktop clear
-  void onDesktopClear();
+  // clear desktop
+  void clearDesktop();
 
   // change mouse cursor
   void changeMouseCursor(const QCursor &cursor);

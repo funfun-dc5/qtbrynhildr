@@ -260,6 +260,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,mouseBuffer(0)
   ,timer(0)
   ,timer_Graphics(0)
+  ,onClearDesktop(false)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
   ,onCheckUpdateInBackground(false)
@@ -820,16 +821,6 @@ QtBrynhildr::QtBrynhildr(Option *option)
 		  SIGNAL(changeMouseCursor(const QCursor &)),
 		  SLOT(changeMouseCursor(const QCursor &)));
 
-#if 0 // for TEST
-  // graphics thread
-  connect(graphicsThread,
-		  SIGNAL(desktopChanged(QImage)),
-		  SLOT(onDesktopChanged(QImage)));
-  connect(graphicsThread,
-		  SIGNAL(desktopClear()),
-		  SLOT(onDesktopClear()));
-#endif // 0 // for TEST
-
   // bootTime
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Bootup."));
   if (settings->getOutputLog())
@@ -1262,8 +1253,8 @@ bool QtBrynhildr::getShutdownFlag() const
   return option->getShutdownFlag();
 }
 
-// desktop Changed
-void QtBrynhildr::onDesktopChanged(QImage image)
+// draw desktop
+void QtBrynhildr::drawDesktop(QImage image)
 {
   if (!settings->getConnected())
 	return;
@@ -1290,8 +1281,8 @@ void QtBrynhildr::onDesktopChanged(QImage image)
   }
 }
 
-// desktop clear
-void QtBrynhildr::onDesktopClear()
+// clear desktop
+void QtBrynhildr::clearDesktop()
 {
   desktopPanel->clearDesktop();
   refreshWindow();
@@ -3001,8 +2992,8 @@ void QtBrynhildr::disconnectToServer()
   // disconnect
   settings->setConnected(false);
 
-  // desktop clear
-  onDesktopClear();
+  // clear desktop
+  clearDesktop();
 }
 
 // finished thread
@@ -4511,11 +4502,6 @@ void QtBrynhildr::timerExpired_Graphics()
 	return;
   }
 
-  if (!settings->getOnGraphics()){
-	// Nothing to do
-	return;
-  }
-
   // draw a desktop image
   draw_Graphics();
 }
@@ -4544,7 +4530,8 @@ void QtBrynhildr::init_Graphics()
 void QtBrynhildr::draw_Graphics()
 {
   // draw a desktop image
-  char buffer[1024*1024];
+  const int bufferSize = 512 * 1024; // 512KB for TEST
+  char buffer[bufferSize];
   GraphicsBuffer::FrameType type;
   unsigned int rate;
 
@@ -4614,33 +4601,52 @@ void QtBrynhildr::draw_Graphics()
 	  startTimer_Graphics(settings->getFrameRate());
 	}
 
-	// make RGB image
-	int rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
-	//	int rgbImageSize = makeRGBImage_SIMD(settings->getConvertThreadCount());
-	//  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
-
-	if (rgbImageSize == 0){
-	  return;
-	}
-	QImage image(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-	//  image.save("jpg/desktop.jpg", "jpg", 75);
-	onDesktopChanged(image);
-  }
-  else if (type == GraphicsBuffer::TYPE_JPEG){
-	if (rate != settings->getFrameRate()){
-	  while (rate != settings->getFrameRate()){
-		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-		if (getSize == 0){
-		  return;
-		}
+	// draw desktop
+	if (settings->getOnGraphics()){
+	  // make RGB image
+#if QTB_SIMD_SUPPORT
+	  int rgbImageSize;
+	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
+		rgbImageSize = makeRGBImage_SIMD(settings->getConvertThreadCount());
 	  }
-	  // change interval
-	  startTimer_Graphics(settings->getFrameRate());
+	  else {
+		rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
+	  }
+#else // QTB_SIMD_SUPPORT
+	  int rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
+#endif // QTB_SIMD_SUPPORT
+	  //  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
+
+	  if (rgbImageSize == 0){
+		return;
+	  }
+
+	  // create QImage and draw
+	  static QImage *image = 0;
+	  if (image != 0){
+		delete image;
+	  }
+	  image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
+	  //  image->save("jpg/desktop.jpg", "jpg", 75);
+	  drawDesktop(*image);
+
+	  // clear desktop flag clear
+	  onClearDesktop = false;
 	}
-	QImage image;
-	image.loadFromData((const uchar *)buffer, (uint)getSize, "JPEG");
-	//  image->save("jpg/desktop.jpg", "jpg", 75);
-	onDesktopChanged(image);
+  }
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+  else {
+	// internal error : unknown type
+	ABORT();
+  }
+
+  // clear desktop
+  if (!settings->getOnGraphics()){
+	// clear desktop only at once
+	if (!onClearDesktop){
+	  onClearDesktop = true;
+	  clearDesktop();
+	}
   }
 }
 

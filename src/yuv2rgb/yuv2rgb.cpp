@@ -57,22 +57,16 @@ vpx_codec_ctx_t c_codec;
 // initialize for yuv
 void initVPX()
 {
-#if QTB_PUBLIC_MODE7_SUPPORT
   // initialize libvpx
   memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
   vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
 // decode VP8
 void decodeVPX(uchar *buffer, int size)
 {
-#if QTB_PUBLIC_MODE7_SUPPORT
   // decode vp8
-  //  if (com_data->video_mode == VIDEO_MODE_COMPRESS){
   vpx_codec_decode(&c_codec, (uint8_t*)buffer, size, 0, 0);
-  //  }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
 // setup for yuv, rgb
@@ -212,6 +206,7 @@ int makeRGBImage(int numOfThread)
 	utop = u2topOrg;
 	vtop = v2topOrg;
   }
+
 #if QTB_MULTI_THREAD_CONVERTER
 
   QFuture<void> f1, f2, f3, f4;
@@ -299,6 +294,7 @@ int makeRGBImage_SIMD(int numOfThread)
 	utop = u2topOrg;
 	vtop = v2topOrg;
   }
+
 #if QTB_MULTI_THREAD_CONVERTER
 
   QFuture<void> f1, f2, f3, f4;

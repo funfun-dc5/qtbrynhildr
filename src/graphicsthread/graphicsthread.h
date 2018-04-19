@@ -26,6 +26,9 @@ private:
   // graphics buffer
   GraphicsBuffer *graphicsBuffer;
 
+  // graphics buffer size
+  int graphicsBufferSize;
+
   // frame counter
   unsigned int frameCounter;
 
@@ -54,6 +57,12 @@ public:
   unsigned int getTotalFrameCounter() const
   {
 	return totalFrameCounter;
+  }
+
+  // get graphics buffer
+  GraphicsBuffer *getGraphicsBuffer() const
+  {
+	return graphicsBuffer;
   }
 
 protected:

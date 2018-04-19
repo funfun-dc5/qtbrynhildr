@@ -34,6 +34,7 @@
 #include "settings.h"
 #include "util/cpuinfo.h"
 #include "version.h"
+#include "yuv2rgb/yuv2rgb.h"
 
 // for TEST
 #define QTB_TEST_DESKTOP_IMAGE_CAPTURE1	0
@@ -230,6 +231,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,logMessage(new LogMessage(this))
   ,controlThread(0)
   ,graphicsThread(0)
+  ,graphicsBuffer(0)
   ,soundThread(0)
 #ifdef USE_KEYLAYOUTFILE
   ,keyLayoutFileManager(0)
@@ -753,6 +755,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
+  // get buffers
+  graphicsBuffer = graphicsThread->getGraphicsBuffer();
+
   // connect
   // all thread
   connect(controlThread,
@@ -862,7 +867,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   // initialize timer for Graphics
   timer_Graphics = new QTimer(this);
   connect(timer_Graphics, SIGNAL(timeout()), SLOT(timerExpired_Graphics()));
-  timer_Graphics->start(1000); // for TEST
+  startTimer_Graphics(settings->getFrameRate());
+
+  init_Graphics();
 
 #if 0 // for TEST
   // initialize mouse cursor
@@ -915,6 +922,7 @@ QtBrynhildr::~QtBrynhildr()
 	// delete
 	delete graphicsThread;
 	graphicsThread = 0;
+	graphicsBuffer = 0;
   }
   if (soundThread != 0){
 	// delete
@@ -4491,7 +4499,113 @@ void QtBrynhildr::timerExpired()
 
 void QtBrynhildr::timerExpired_Graphics()
 {
-  cout << "timerExpired_Graphics()!" << endl << flush;
+  //  cout << "timerExpired_Graphics()!" << endl << flush;
+
+  if (graphicsBuffer == 0){
+	// Nothing to do
+	return;
+  }
+
+  if (!settings->getConnected()){
+	// Nothing to do
+	return;
+  }
+
+  if (!settings->getOnGraphics()){
+	// Nothing to do
+	return;
+  }
+
+  // draw a desktop image
+  draw_Graphics();
+}
+
+// restart timer graphics
+void QtBrynhildr::startTimer_Graphics(int frameRate)
+{
+  if (frameRate == 0) // MAXIMUM
+	frameRate = 100;
+
+  frameRate *= 1.1;
+  timer_Graphics->stop();
+  timer_Graphics->start(1000/frameRate);
+  //  cout << "interval = " << 1000/frameRate << " (ms)" << endl << flush;
+}
+
+// initialize graphics
+void QtBrynhildr::init_Graphics()
+{
+#if QTB_PUBLIC_MODE7_SUPPORT
+  initVPX();
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+}
+
+// draw graphics
+void QtBrynhildr::draw_Graphics()
+{
+  // draw a desktop image
+  char buffer[1024*1024];
+  GraphicsBuffer::FrameType type;
+  unsigned int rate;
+
+  int getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
+  //  cout << "getSize = " << getSize << endl << flush;
+  //  cout << "type = " << type << endl << flush;
+  if (getSize == 0){
+	// Nothing to do
+	return;
+  }
+
+  if (type == GraphicsBuffer::TYPE_VP8){
+	// decode VP8
+	decodeVPX((uchar*)buffer, getSize);
+
+	//	cout << "rate = " << rate <<
+	//	  ", settings->getFrameRate() = " << settings->getFrameRate() << endl << flush;
+
+	if (rate != settings->getFrameRate()){
+	  while (rate != settings->getFrameRate()){
+		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
+		if (getSize == 0){
+		  return;
+		}
+		decodeVPX((uchar*)buffer, getSize);
+		//	  cout << "skip frame : " << rate << endl << flush;
+		//	  cout << "rate = " << rate <<
+		//		", settings->getFrameRate() = " << settings->getFrameRate() << endl << flush;
+	  }
+	  // change interval
+	  startTimer_Graphics(settings->getFrameRate());
+	}
+
+	// make RGB image
+	int rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
+	//	int rgbImageSize = makeRGBImage_SIMD(settings->getConvertThreadCount());
+	//  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
+
+	if (rgbImageSize == 0){
+	  return;
+	}
+	QImage image(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
+	//  image.save("jpg/desktop.jpg", "jpg", 75);
+	onDesktopChanged(image);
+  }
+  else if (type == GraphicsBuffer::TYPE_JPEG){
+	if (rate != settings->getFrameRate()){
+	  while (rate != settings->getFrameRate()){
+		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
+		if (getSize == 0){
+		  return;
+		}
+	  }
+	  // change interval
+	  startTimer_Graphics(settings->getFrameRate());
+	}
+	QImage image;
+	image.loadFromData((const uchar *)buffer, (uint)getSize, "JPEG");
+	//  image->save("jpg/desktop.jpg", "jpg", 75);
+	onDesktopChanged(image);
+  }
 }
 
 } // end of namespace qtbrynhildr

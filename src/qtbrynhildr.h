@@ -13,6 +13,7 @@
 #endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QDateTime>
 #include <QHideEvent>
+#include <QImage>
 #include <QLabel>
 #include <QMainWindow>
 #include <QMenu>
@@ -60,10 +61,12 @@
 #include "settings.h"
 #include "touchpanel2/sk.h"
 #include "touchpanel2/sb.h"
+#include "util/httpgetter.h"
 
 // thread
 #include "controlthread/controlthread.h"
 #include "graphicsthread/graphicsthread.h"
+#include "graphicsthread/graphicsbuffer.h"
 #include "soundthread/soundthread.h"
 
 #ifdef USE_KEYLAYOUTFILE
@@ -74,8 +77,6 @@
 
 // event converter
 #include "windows/eventconverter.h"
-
-#include "util/httpgetter.h"
 
 namespace qtbrynhildr {
 
@@ -455,6 +456,9 @@ private:
 
   // thread for graphics
   GraphicsThread *graphicsThread;
+
+  // graphics buffer
+  GraphicsBuffer *graphicsBuffer;
 
   // thread for sound
   SoundThread *soundThread;
@@ -944,6 +948,15 @@ private:
 
   // shutdown platform
   bool shutdownPlatform();
+
+  // start timer graphics
+  void startTimer_Graphics(int frameRate);
+
+  // initialize graphics
+  void init_Graphics();
+
+  // draw graphics
+  void draw_Graphics();
 
 private slots:
   // finished download

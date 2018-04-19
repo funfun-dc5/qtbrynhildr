@@ -28,6 +28,7 @@ namespace qtbrynhildr {
 GraphicsThread::GraphicsThread(Settings *settings)
   :NetThread("GraphicsThread", settings)
   ,graphicsBuffer(0)
+  ,graphicsBufferSize(settings->getGraphicsBufferSize())
   ,frameCounter(0)
   ,totalFrameCounter(0)
   ,buffer(0)
@@ -35,7 +36,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   outputLog = false; // for DEBUG
 
   // graphics buffer
-  graphicsBuffer = new GraphicsBuffer(1024*1024); // for TEST (1MB)
+  graphicsBuffer = new GraphicsBuffer(settings->getGraphicsBufferSize());
 
   // local buffer
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
@@ -241,23 +242,45 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 
-#if 0 // for TEST
   // put data into graphics buffer
   if (settings->getOnGraphics()){
+	GraphicsBuffer::FrameType type;
 	// put into graphics buffer
-	int putSize = graphicsBuffer->putFrame(buffer, receivedDataSize);
+	switch(com_data->video_mode){
+	case VIDEO_MODE_MJPEG:
+	  type = GraphicsBuffer::TYPE_JPEG;
+	  break;
+	case VIDEO_MODE_COMPRESS:
+	  type = GraphicsBuffer::TYPE_VP8;
+	  break;
+	default:
+	  // internal error
+	  ABORT();
+	  break;
+	}
+
+	// block
+	while (graphicsBuffer->getFrameCount() >= GraphicsBuffer::FRAME_TABLE_NUM ||
+		   graphicsBuffer->getSize() + receivedDataSize > graphicsBufferSize){
+	  QThread::msleep(5); // 5 milli seconds sleep
+	}
+
+	unsigned int rate = settings->getFrameRate();
+	int putSize = graphicsBuffer->putFrame(buffer, receivedDataSize, type, rate);
 	if (putSize != receivedDataSize){
 	  // error for put()
 	  // Failed to put into graphics buffer
+	  cout << "Failed to put into graphics buffer" << endl << flush;
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
+#if 0 // for TEST
 	// get from graphics buffer
-	int len = graphicsBuffer->getFrame(buffer);
-	if (len != receivedDataSize){
+	int getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
+	if (getSize != receivedDataSize){
 	  cout << "Graphics Buffer : getFrame() failed!" << endl << flush;
 	}
+#endif // 0 // for TEST
   }
-#endif // 1 // for TEST
 
   // received 1 frame
   frameCounter++;

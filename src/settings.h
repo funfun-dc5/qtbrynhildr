@@ -2064,6 +2064,10 @@ public:
   // set convert thread count
   void setConvertThreadCount(int convertThreadCount)
   {
+#if QTB_VERSION_NUMBER > 2017
+	if (convertThreadCount == 0) // for compatibility
+	  convertThreadCount = 1;
+#endif // QTB_VERSION_NUMBER > 2017
 	this->convertThreadCount = convertThreadCount;
   }
 

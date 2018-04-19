@@ -17,20 +17,28 @@
 
 namespace qtbrynhildr {
 
-// frame entry
-typedef struct {
-  int	size;	// data size for this frame
-} FrameEntry;
-
 // GraphicsBuffer
 class GraphicsBuffer
 {
   //-------------------------------------------------------------------------------
   // Variable
   //-------------------------------------------------------------------------------
-private:
+public:
+  typedef enum {
+	TYPE_JPEG,
+	TYPE_VP8
+  } FrameType;
+
   // frame table size
   static const int FRAME_TABLE_NUM = 256;
+
+private:
+  // frame entry
+  typedef struct {
+	FrameType type;	// data type for this frame
+	unsigned int rate;	// data frame rate for this frame
+	int	size;		// data size for this frame
+  } FrameEntry;
 
   // ring buffer
   RingBuffer *ringBuffer;
@@ -67,10 +75,16 @@ public:
   void clear();
 
   // put frame
-  int putFrame(const char *buf, int len);
+  int putFrame(const char *buf, int len, FrameType type, unsigned int rate);
 
   // get frame
-  int getFrame(char *buf);
+  int getFrame(char *buf, FrameType *type, unsigned int *rate);
+
+  // get frame count
+  int getFrameCount() const
+  {
+	return frameCount;
+  }
 
   // get size
   int getSize() const;

@@ -56,15 +56,22 @@ void GraphicsBuffer::clear()
 	frameTable[i].size = 0;
   }
   ringBuffer->clear();
+
+  currentFrameNo = 0;
+  nextFrameNo = 0;
+  frameCount = 0;
 }
 
 // put frame
-int GraphicsBuffer::putFrame(const char *buf, int len)
+int GraphicsBuffer::putFrame(const char *buf, int len, FrameType type, unsigned int rate)
 {
   // check table
   if (frameCount >= FRAME_TABLE_NUM){
 	return 0;
   }
+
+  // set to frame table
+  frameTable[nextFrameNo].size = 0;
 
   // copy to ring buffer from buf
   int result = ringBuffer->put(buf, len);
@@ -79,6 +86,8 @@ int GraphicsBuffer::putFrame(const char *buf, int len)
 #endif // QTB_REC
 
   // set to frame table
+  frameTable[nextFrameNo].type = type;
+  frameTable[nextFrameNo].rate = rate;
   frameTable[nextFrameNo].size = len;
   nextFrameNo = (nextFrameNo >= FRAME_TABLE_NUM - 1) ? 0 : nextFrameNo + 1;
 
@@ -91,7 +100,7 @@ int GraphicsBuffer::putFrame(const char *buf, int len)
 }
 
 // get frame
-int GraphicsBuffer::getFrame(char *buf)
+int GraphicsBuffer::getFrame(char *buf, FrameType *type, unsigned int *rate)
 {
   // check table
   if (frameCount <= 0){
@@ -100,6 +109,9 @@ int GraphicsBuffer::getFrame(char *buf)
 
   // copy to buf from ring buffer
   int len = frameTable[currentFrameNo].size;
+  if (len == 0){
+	return 0;
+  }
   const char *result = ringBuffer->get(len);
   if (result == 0){
 	return 0;
@@ -108,6 +120,8 @@ int GraphicsBuffer::getFrame(char *buf)
 
   // clear frame table entry
   frameTable[currentFrameNo].size = 0;
+  *type = frameTable[currentFrameNo].type;
+  *rate = frameTable[currentFrameNo].rate;
   currentFrameNo = (currentFrameNo >= FRAME_TABLE_NUM - 1) ? 0 : currentFrameNo + 1;
 
   // current frame count--

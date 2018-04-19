@@ -58,7 +58,7 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   spinBox_serverNameListSize->setRange(5, 100);	// for TEST
 
   // convertThreadCount
-  comboBox_convertThreadCount->insertItem(0, tr("none"));
+  comboBox_convertThreadCount->insertItem(0, tr("1 thread"));
   comboBox_convertThreadCount->insertItem(1, tr("2 threads"));
   comboBox_convertThreadCount->insertItem(2, tr("4 threads"));
   //  comboBox_convertThreadCount->insertItem(3, tr("8 threads"));
@@ -143,7 +143,19 @@ void PreferenceDialog::getFromSettings()
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());
 
   // convertThreadCount
-  comboBox_convertThreadCount->setCurrentIndex(settings->getConvertThreadCount()/2);
+  int convertThreadCount = settings->getConvertThreadCount();
+  switch (convertThreadCount){
+  case 1:
+	convertThreadCount = 0;
+	break;
+  case 2:
+	convertThreadCount = 1;
+	break;
+  case 4:
+	convertThreadCount = 2;
+	break;
+  }
+  comboBox_convertThreadCount->setCurrentIndex(convertThreadCount);
 
   // keylayoutPath
   lineEdit_keylayoutPath->setText(settings->getKeylayoutPath());
@@ -243,8 +255,19 @@ bool PreferenceDialog::setToSettings()
 	setServerNameListSize(spinBox_serverNameListSize->value());
 
   // convertThreadCount
-  settings->
-	setConvertThreadCount(comboBox_convertThreadCount->currentIndex()*2);
+  int convertThreadCount = comboBox_convertThreadCount->currentIndex();
+  switch (convertThreadCount){
+  case 0:
+	convertThreadCount = 1;
+	break;
+  case 1:
+	convertThreadCount = 2;
+	break;
+  case 2:
+	convertThreadCount = 4;
+	break;
+  }
+  settings->setConvertThreadCount(convertThreadCount);
 
   // keylayoutPath
   settings->

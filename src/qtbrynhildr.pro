@@ -240,9 +240,12 @@ HEADERS += controlthread/controlthread.h
 HEADERS += controlthread/keybuffer.h controlthread/mousebuffer.h
 HEADERS += graphicsthread/graphicsthread.h
 HEADERS += soundthread/soundthread.h
+HEADERS += graphicsthread/graphicsbuffer.h
+HEADERS += soundthread/soundbuffer.h
 HEADERS += soundthread/wave.h
 HEADERS += windows/eventconverter.h windows/ntfs.h windows/keycodes.h windows/keyevent.h
 HEADERS += function/recorder.h
+HEADERS += yuv2rgb/yuv2rgb.h
 
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
@@ -257,19 +260,16 @@ SOURCES += controlthread/controlthread.cpp
 SOURCES += controlthread/keybuffer.cpp controlthread/mousebuffer.cpp
 SOURCES += graphicsthread/graphicsthread.cpp
 SOURCES += soundthread/soundthread.cpp
+SOURCES += graphicsthread/graphicsbuffer.cpp
+SOURCES += soundthread/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
+SOURCES += yuv2rgb/yuv2rgb.cpp
 
 # for TEST (QTB_TEST_xxxx)
 DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 
 # for new feature
-NEW_FEATURE = ON
-equals(NEW_FEATURE, ON){
-HEADERS += graphicsthread/graphicsbuffer.h
-SOURCES += graphicsthread/graphicsbuffer.cpp
-HEADERS += soundthread/soundbuffer.h
-SOURCES += soundthread/soundbuffer.cpp
-HEADERS += yuv2rgb/yuv2rgb.h
-SOURCES += yuv2rgb/yuv2rgb.cpp
-}
+#NEW_FEATURE = ON
+#equals(NEW_FEATURE, ON){
+#}

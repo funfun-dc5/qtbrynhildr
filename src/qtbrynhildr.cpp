@@ -4555,8 +4555,44 @@ void QtBrynhildr::draw_Graphics()
 	// Nothing to do
 	return;
   }
+  if (getSize > bufferSize){
+	// internal error
+	ABORT();
+  }
 
-  if (type == GraphicsBuffer::TYPE_VP8){
+  // MODE 5/6 (MJPEG)
+  if (type == GraphicsBuffer::TYPE_JPEG){
+	if (rate != settings->getFrameRate()){
+	  while (rate != settings->getFrameRate()){
+		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
+		if (getSize == 0){
+		  return;
+		}
+	  }
+	  // change interval
+	  startTimer_Graphics(settings->getFrameRate());
+	}
+
+	// draw desktop
+	if (settings->getOnGraphics()){
+	  QImage image;
+	  bool result = image.loadFromData((const uchar *)buffer, (uint)getSize, "JPEG");
+	  if (result){
+		//  image.save("jpg/desktop.jpg", "jpg", 75);
+		drawDesktop(image);
+
+		// clear desktop flag clear
+		onClearDesktop = false;
+	  }
+	  else {
+		// Failed to loadFromData()
+		cout << "Failed to loadFromData()" << endl << flush;
+	  }
+	}
+  }
+#if QTB_PUBLIC_MODE7_SUPPORT
+  // MODE 7 (VP8)
+  else if (type == GraphicsBuffer::TYPE_VP8){
 	// decode VP8
 	decodeVPX((uchar*)buffer, getSize);
 

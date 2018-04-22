@@ -470,29 +470,6 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
 #endif // for TEST
 }
 
-#if 0 // for TEST
-// receive data
-long NetThread::receiveData(SOCKET sock, char *buf, long size)
-{
-  long received_size = 0;
-  const int READ_BLOCK_SIZE = 1024;
-
-  while(received_size < size){
-	int read_size = ((size - received_size) >= READ_BLOCK_SIZE) ? READ_BLOCK_SIZE : size - received_size;
-	long ret = recv(sock, buf + received_size, read_size, 0);
-	if (ret > 0){
-	  received_size += ret;
-	}
-	else {
-	  return -1;
-	}
-  }
-
-  receivedDataCounter += received_size;
-
-  return received_size;
-}
-#else // 1 // for TEST
 // receive data
 long NetThread::receiveData(SOCKET sock, char *buf, long size)
 {
@@ -528,7 +505,6 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 
   return received_size;
 }
-#endif // 1 // for TEST
 
 // print protocol header
 void NetThread::printHeader()

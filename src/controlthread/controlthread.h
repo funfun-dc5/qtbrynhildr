@@ -74,9 +74,14 @@ private:
   bool doneCheckPassword;
 
 #if QTB_PUBLIC_MODE7_SUPPORT
+#define QTB_ICON_WIDTH		32
+#define QTB_ICON_HEIGHT		32
+#define QTB_ICON_SIZE		(QTB_ICON_WIDTH*QTB_ICON_HEIGHT)
+#define QTB_ICON_IMAGE_SIZE	(QTB_ICON_SIZE*4)
+
   // mouse cursor image data (4096 bytes * 2)
-  uchar andMaskImage[4096];
-  uchar xorMaskImage[4096];
+  uchar andMaskImage[QTB_ICON_IMAGE_SIZE];
+  uchar xorMaskImage[QTB_ICON_IMAGE_SIZE];
 
 #if !defined(Q_OS_WIN)
   // cursor point color
@@ -166,55 +171,17 @@ private:
   bool receiveMouseCursorImage();
 
   // check color mouse cursor image
-  bool isColorMouseCursorImage(uchar *image, uchar *mask, int size);
+  bool isColorMouseCursorImage(uchar *image, int size);
 
   // change mouse cursor
   void changeMouseCursor();
 
   // create color mouse cursor
-  QCursor createColorMouseCursor(uchar *image);
+  QCursor createColorMouseCursor(uchar *image, uchar *mask);
 
   // create monochrome mouse cursor
   QCursor createMonochromeMouseCursor(uchar *image, uchar *mask);
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-
-  //  convert Big Endian 2 bytes
-  void convertBE2bytes(BYTE *ptr)
-  {
-	qint16 value;
-
-	value = *((unsigned short*)ptr);
-	*ptr++ = (BYTE)(value >> 8) & 0xFF;
-	*ptr   = (BYTE)(value >> 0) & 0xFF;
-  }
-
-  //  convert Big Endian 4 bytes
-  void convertBE4bytes(BYTE *ptr)
-  {
-	qint32 value;
-
-	value = *((unsigned int*)ptr);
-	*ptr++ = (BYTE)(value >> 24) & 0xFF;
-	*ptr++ = (BYTE)(value >> 16) & 0xFF;
-	*ptr++ = (BYTE)(value >> 8)  & 0xFF;
-	*ptr   = (BYTE)(value >> 0)  & 0xFF;
-  }
-
-  //  convert Big Endian 8 bytes
-  void convertBE8bytes(BYTE *ptr)
-  {
-	qint64 value;
-
-	value = *((unsigned int*)ptr);
-	*ptr++ = (BYTE)(value >> 56) & 0xFF;
-	*ptr++ = (BYTE)(value >> 48) & 0xFF;
-	*ptr++ = (BYTE)(value >> 40) & 0xFF;
-	*ptr++ = (BYTE)(value >> 32) & 0xFF;
-	*ptr++ = (BYTE)(value >> 24) & 0xFF;
-	*ptr++ = (BYTE)(value >> 16) & 0xFF;
-	*ptr++ = (BYTE)(value >> 8)  & 0xFF;
-	*ptr   = (BYTE)(value >> 0)  & 0xFF;
-  }
 
 signals:
   // connected

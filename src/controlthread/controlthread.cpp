@@ -9,6 +9,9 @@
 #include <fstream>
 #include <iostream>
 #endif // QTB_PUBLIC_MODE6_SUPPORT
+#if QTB_PUBLIC_MODE7_SUPPORT
+#include <iomanip>
+#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 // Qt Header
 #if QTB_PUBLIC_MODE6_SUPPORT
@@ -1145,8 +1148,8 @@ bool ControlThread::receiveMouseCursorImage()
   qint64 receivedDataSize = 0;
 
   // get AND Mask Cursor
-  receivedDataSize = receiveData(sock_control, (char*)andMaskImage, 4096);
-  if (receivedDataSize != 4096){
+  receivedDataSize = receiveData(sock_control, (char*)andMaskImage, QTB_ICON_IMAGE_SIZE);
+  if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }
 #if 0 // for TEST
@@ -1157,15 +1160,15 @@ bool ControlThread::receiveMouseCursorImage()
 	  file.write((char*)andMaskImage, receivedDataSize);
 	  file.close();
 	}
-	QImage image(andMaskImage, 32, 32, QImage::Format_RGBA8888);
+	QImage image(andMaskImage, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGBA8888);
 	image = image.mirrored(false, true);
 	image.save("jpg/andMaskImage.bmp", "BMP");
   }
 #endif // for TEST
 
   // get XOR Mask Cursor
-  receivedDataSize = receiveData(sock_control, (char*)xorMaskImage, 4096);
-  if (receivedDataSize != 4096){
+  receivedDataSize = receiveData(sock_control, (char*)xorMaskImage, QTB_ICON_IMAGE_SIZE);
+  if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }
 #if 0 // for TEST
@@ -1176,7 +1179,7 @@ bool ControlThread::receiveMouseCursorImage()
 	  file.write((char*)xorMaskImage, receivedDataSize);
 	  file.close();
 	}
-	QImage image(xorMaskImage, 32, 32, QImage::Format_RGBA8888);
+	QImage image(xorMaskImage, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGBA8888);
 	image = image.mirrored(false, true);
 	image.save("jpg/xorMaskImage.bmp", "BMP");
   }
@@ -1184,7 +1187,7 @@ bool ControlThread::receiveMouseCursorImage()
 
   if (!settings->getOnDisplayMouseCursor()){
 	// BGRA -> RGBA
-	for(int i = 0; i < 4096; i += 4){
+	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i += 4){
 	  uchar r, g, b;
 	  // and
 	  b = andMaskImage[i];
@@ -1216,8 +1219,8 @@ void ControlThread::changeMouseCursor()
 	return;
 
   QCursor newCursor;
-  if (isColorMouseCursorImage(xorMaskImage, andMaskImage, 4096)){
-	newCursor = createColorMouseCursor(xorMaskImage);
+  if (isColorMouseCursorImage(xorMaskImage, QTB_ICON_IMAGE_SIZE)){
+	newCursor = createColorMouseCursor(xorMaskImage, andMaskImage);
   }
   else {
 	newCursor = createMonochromeMouseCursor(xorMaskImage, andMaskImage);
@@ -1227,37 +1230,95 @@ void ControlThread::changeMouseCursor()
 }
 
 // check color mouse cursor image
-bool ControlThread::isColorMouseCursorImage(uchar *image, uchar *mask, int size)
+bool ControlThread::isColorMouseCursorImage(uchar *image, int size)
 {
-  bool maskAllZero = true;
-
   for(int i = 0; i < size; i += 4){
 	if ((image[i]   != 0 && image[i]   != 0xFF) || // R
 		(image[i+1] != 0 && image[i+1] != 0xFF) || // G
 		(image[i+2] != 0 && image[i+2] != 0xFF) || // B
 		 image[i+3] != 0 ){ // A
-	  //	  cout << "Found Color Mouse Cursor!" << endl << flush;
+	  //cout << "Found Color Mouse Cursor!" << endl << flush;
 	  return true;
 	}
-	if (mask[i] != 0 || mask[i+1] != 0 || mask[i+2] != 0)
-	  maskAllZero = false;
   }
 
-  if (maskAllZero){
-	//	cout << "Found Color Mouse Cursor! (mask = 0)" << endl << flush;
-	return true;
-  }
-  else {
-	//	cout << "Found Monochrome Mouse Cursor!" << endl << flush;
-	return false;
-  }
+  //cout << "Found Monochrome Mouse Cursor!" << endl << flush;
+  return false;
 }
 
 // create color mouse cursor
-QCursor ControlThread::createColorMouseCursor(uchar *image)
+QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 {
+#if 0 // for TEST
+  cout << hex << uppercase << setfill('0');
+  cout << endl << "======= image - R" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)image[i+0];
+  }
+  cout << endl << "======= image - G" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)image[i+1];
+  }
+  cout << endl << "======= image - B" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+2];
+  }
+  cout << endl << "======= image - A" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)image[i+3];
+  }
+  cout << endl << "======= mask - R" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+0];
+  }
+  cout << endl << "======= mask - G" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+1];
+  }
+  cout << endl << "======= mask - B" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+2];
+  }
+  cout << endl << "======= mask - A" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+3];
+  }
+  cout << endl << flush;
+#endif // 0 // for TEST
+
+  bool flag24bit = true;
+  // check A
+  for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i += 4){
+	if (image[i+3] != 0){
+	  flag24bit = false;
+	  break;
+	}
+  }
+  // set mask to A (RGBA)
+  if (flag24bit){
+	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i += 4){
+	  image[i+3] = ~mask[i];
+	}
+  }
+
   // Cursor Image
-  QImage cursorImage(image, 32, 32, QImage::Format_RGBA8888);
+  QImage cursorImage(image, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGBA8888);
   cursorImage = cursorImage.mirrored(false, true);
   // cursorImage.save("jpg/cursorImage.bmp", "BMP");
   QPixmap cursor = QPixmap::fromImage(cursorImage, Qt::NoFormatConversion);
@@ -1272,8 +1333,61 @@ QCursor ControlThread::createColorMouseCursor(uchar *image)
 // create monochrome mouse cursor
 QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 {
-  uchar bitmapImage[32*32*3];
-  uchar maskImage[32*32*3];
+#if 0 // for TEST
+  cout << hex << uppercase << setfill('0');
+  cout << endl << "======= image - R" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)image[i+0];
+  }
+  cout << endl << "======= image - G" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)image[i+1];
+  }
+  cout << endl << "======= image - B" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+2];
+  }
+  cout << endl << "======= image - A" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)image[i+3];
+  }
+  cout << endl << "======= mask - R" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+0];
+  }
+  cout << endl << "======= mask - G" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+1];
+  }
+  cout << endl << "======= mask - B" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+2];
+  }
+  cout << endl << "======= mask - A" << endl;
+  for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
+	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
+	  cout << endl;
+	cout << setw(2) << (int)mask[i+3];
+  }
+  cout << endl << flush;
+#endif // 0 // for TEST
+
+  uchar bitmapImage[QTB_ICON_SIZE*3];
+  uchar maskImage[QTB_ICON_SIZE*3];
   uchar *bitmaptop = bitmapImage;
   uchar *masktop = maskImage;
 
@@ -1289,7 +1403,7 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
   // B=1 and M=0 -> white
   // B=1 and M=1 -> transparent
   // B=0 and M=1 -> XOR'd result under Windows.
-  for (int i = 0; i < 4096; i++){
+  for (int i = 0; i < QTB_ICON_IMAGE_SIZE; i++){
 	if ((i+1) % 4 != 0){
 	  if (image[i] == 0 && mask[i] == 0xFF){
 		// transparent
@@ -1329,10 +1443,10 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
   }
 #endif // !defined(Q_OS_WIN)
 
-  QImage bitmapQImage(bitmapImage, 32, 32, QImage::Format_RGB888);
+  QImage bitmapQImage(bitmapImage, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGB888);
   bitmapQImage = bitmapQImage.mirrored(false, true);
   QBitmap bitmap = QBitmap::fromImage(bitmapQImage);
-  QImage maskQImage(maskImage, 32, 32, QImage::Format_RGB888);
+  QImage maskQImage(maskImage, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGB888);
   maskQImage = maskQImage.mirrored(false, true);
   QBitmap maskBitmap = QBitmap::fromImage(maskQImage);
   int hotX = (int)com_data->cursor_hotspot_x;

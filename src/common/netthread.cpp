@@ -244,6 +244,7 @@ void NetThread::shutdownConnection()
 #endif // defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
+#if !QTB_NET_WINSOCK1
 // socket to server
 SOCKET NetThread::socketToServer()
 {
@@ -341,9 +342,9 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
-
-#if 0 // for WinSock 1.1
+#else // !QTB_NET_WINSOCK1
 // socket to server
+// for WinSock 1
 SOCKET NetThread::socketToServer()
 {
   SOCKET sock = INVALID_SOCKET;
@@ -402,7 +403,7 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
-#endif // 0 // for WinSock 1.1
+#endif // !QTB_NET_WINSOCK1
 
 // send header
 long NetThread::sendHeader(SOCKET sock, const char *buf, long size)

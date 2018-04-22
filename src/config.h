@@ -17,6 +17,9 @@ namespace qtbrynhildr {
 #error "Not support Q_OS for QTB_NET_*"
 #endif
 
+// for WinSock1 (TEST)
+#define QTB_NET_WINSOCK1 0
+
 // for device type
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #define QTB_DEV_TOUCHPANEL

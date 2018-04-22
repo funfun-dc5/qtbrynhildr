@@ -660,6 +660,9 @@ void NetThread::dumpHeader()
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/tcp.h>
+#if defined(Q_OS_ANDROID)
+#include <netinet/in.h>
+#endif // defined(Q_OS_ANDROID)
 #endif // defined(QTB_NET_UNIX)
 #if defined(QTB_NET_WIN)
 #define VAL_TYPE char

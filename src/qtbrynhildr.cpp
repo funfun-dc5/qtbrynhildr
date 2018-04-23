@@ -4570,11 +4570,10 @@ void QtBrynhildr::draw_Graphics()
 
 	// draw desktop
 	if (settings->getOnGraphics()){
-	  QImage image;
-	  bool result = image.loadFromData((const uchar *)buffer, (uint)getSize, "JPEG");
+	  bool result = image->loadFromData((const uchar *)buffer, (uint)getSize, "JPEG");
 	  if (result){
-		//  image.save("jpg/desktop.jpg", "jpg", 75);
-		drawDesktop(image);
+		//  image->save("jpg/desktop.jpg", "jpg", 75);
+		drawDesktop(*image);
 
 		// clear desktop flag clear
 		onClearDesktop = false;

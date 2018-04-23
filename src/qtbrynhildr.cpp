@@ -260,6 +260,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,mouseBuffer(0)
   ,timer(0)
   ,timer_Graphics(0)
+  ,image(new QImage)
   ,onClearDesktop(false)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
@@ -894,6 +895,10 @@ QtBrynhildr::~QtBrynhildr()
 	timer_Graphics->stop();
 	delete timer_Graphics;
 	timer_Graphics = 0;
+  }
+  if (image != 0){
+	delete image;
+	image = 0;
   }
   if (settings != 0){
 	// disconnect to server
@@ -4624,14 +4629,26 @@ void QtBrynhildr::draw_Graphics()
 		return;
 	  }
 
-	  // create QImage and draw
-	  static QImage *image = 0;
+#if !USE_PPM_LOADER_FOR_VP8
+	  // create QImage
 	  if (image != 0){
 		delete image;
 	  }
 	  image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-	  //  image->save("jpg/desktop.jpg", "jpg", 75);
+#else // !USE_PPM_LOADER_FOR_VP8
+	  // load QImage
+	  bool result = image->loadFromData((const uchar *)qtbrynhildr::ppm,
+										(uint)rgbImageSize + PPM_HEADER_SIZE_MAX,
+										"PPM");
+	  if (!result){
+		// internal error (illigal ppm file image)
+		ABORT();
+	  }
+#endif // !USE_PPM_LOADER_FOR_VP8
+
+	  // draw image
 	  drawDesktop(*image);
+	  //  image->save("jpg/desktop.jpg", "jpg", 75);
 
 	  // clear desktop flag clear
 	  onClearDesktop = false;

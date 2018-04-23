@@ -48,6 +48,9 @@ uchar *u2topOrg = 0;
 uchar *v2topOrg = 0;
 
 uchar *rgb = 0;
+#if USE_PPM_LOADER_FOR_VP8
+uchar *ppm = 0;
+#endif // USE_PPM_LOADER_FOR_VP8
 
 // codec context
 vpx_codec_ctx_t c_codec;

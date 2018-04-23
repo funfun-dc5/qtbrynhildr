@@ -528,6 +528,9 @@ private:
   // timer for Graphics
   QTimer *timer_Graphics;
 
+  // image
+  QImage *image;
+
   // clear desktop flag
   bool onClearDesktop;
 

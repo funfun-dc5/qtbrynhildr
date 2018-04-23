@@ -73,6 +73,9 @@ extern uchar *u2topOrg;
 extern uchar *v2topOrg;
 
 extern uchar *rgb;
+#if USE_PPM_LOADER_FOR_VP8
+extern uchar *ppm;
+#endif // USE_PPM_LOADER_FOR_VP8
 
 // codec context
 extern vpx_codec_ctx_t c_codec;

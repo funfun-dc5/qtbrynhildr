@@ -1312,11 +1312,11 @@ public:
 	  frameInterval = 0;
 	}
 	else {
-	  frameInterval = (unsigned long)1000000/frameRate; // micro second = 1000000 (1 second)
+	  frameInterval = (unsigned long)1000/frameRate; // milli second = 1000 (1 second)
 	}
   }
 
-  // get frame interval (micro seconds)
+  // get frame interval (milli seconds)
   unsigned long getFrameInterval()
   {
 	return frameInterval;

@@ -58,7 +58,7 @@ const bool QTB_DESKTOP_SCALE_FIXED		= true;
 const bool QTB_WINDOW_SIZE_FIXED		= true;
 
 // desktop frame rate control
-const bool QTB_DESKTOP_FRAMERATE_CONTROL= false;
+const bool QTB_DESKTOP_FRAMERATE_CONTROL= true;
 
 // software keyboard and button
 //#define QTB_SOFTWARE_KEYBOARD_AND_BUTTON	1
@@ -143,6 +143,9 @@ const bool QTB_IN_TESTING				= false;
 
 // SIMD INSTRUCTIONS SUPPORT
 #define QTB_SIMD_SUPPORT			1
+
+// TEST CODE
+#define QTB_TEST_CODE				0
 
 // debug
 #define QTB_DEBUG					1

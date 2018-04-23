@@ -10,7 +10,9 @@
 
 // Local Header
 #include "common/netthread.h"
+#if QTB_TEST_CODE
 #include "graphicsbuffer.h"
+#endif // QTB_TEST_CODE
 
 namespace qtbrynhildr {
 
@@ -23,11 +25,13 @@ class GraphicsThread : public NetThread
   // Variable
   //-------------------------------------------------------------------------------
 private:
+#if QTB_TEST_CODE
   // graphics buffer
   GraphicsBuffer *graphicsBuffer;
 
   // graphics buffer size
   int graphicsBufferSize;
+#endif // QTB_TEST_CODE
 
   // frame counter
   unsigned int frameCounter;
@@ -37,6 +41,21 @@ private:
 
   // total frame counter
   unsigned int totalFrameCounter;
+
+#if !QTB_TEST_CODE
+  // image for drawing desktop
+  QImage *image;
+
+  // clear desktop flag
+  bool onClearDesktop;
+
+#if QTB_PUBLIC_MODE7_SUPPORT
+#if QTB_SIMD_SUPPORT
+  // has SIMD instruction
+  bool hasSIMDInstruction;
+#endif // QTB_SIMD_SUPPORT
+#endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // !QTB_TEST_CODE
 
   // local buffer
   char *buffer;
@@ -59,11 +78,13 @@ public:
 	return totalFrameCounter;
   }
 
+#if QTB_TEST_CODE
   // get graphics buffer
   GraphicsBuffer *getGraphicsBuffer() const
   {
 	return graphicsBuffer;
   }
+#endif // QTB_TEST_CODE
 
 protected:
   // connect to server
@@ -80,6 +101,22 @@ protected:
 
   // shutdown connection
   void shutdownConnection();
+
+private:
+
+#if !QTB_TEST_CODE
+  // draw graphics
+  void draw_Graphics(int size);
+#endif // !QTB_TEST_CODE
+
+#if !QTB_TEST_CODE
+signals:
+  // draw desktop
+  void drawDesktop(QImage image);
+
+  // clear desktop
+  void clearDesktop();
+#endif // !QTB_TEST_CODE
 };
 
 } // end of namespace qtbrynhildr

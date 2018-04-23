@@ -34,7 +34,9 @@
 #include "settings.h"
 #include "util/cpuinfo.h"
 #include "version.h"
+#if QTB_TEST_CODE
 #include "yuv2rgb/yuv2rgb.h"
+#endif // QTB_TEST_CODE
 
 // for TEST
 #define QTB_TEST_DESKTOP_IMAGE_CAPTURE1	0
@@ -231,7 +233,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,logMessage(new LogMessage(this))
   ,controlThread(0)
   ,graphicsThread(0)
+#if QTB_TEST_CODE
   ,graphicsBuffer(0)
+#endif // QTB_TEST_CODE
   ,soundThread(0)
 #ifdef USE_KEYLAYOUTFILE
   ,keyLayoutFileManager(0)
@@ -259,8 +263,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,keyBuffer(0)
   ,mouseBuffer(0)
   ,timer(0)
+#if QTB_TEST_CODE
   ,timer_Graphics(0)
   ,image(new QImage)
+#endif // QTB_TEST_CODE
   ,onClearDesktop(false)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
@@ -757,8 +763,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
+#if QTB_TEST_CODE
   // get buffers
   graphicsBuffer = graphicsThread->getGraphicsBuffer();
+#endif // QTB_TEST_CODE
 
   // connect
   // all thread
@@ -822,6 +830,14 @@ QtBrynhildr::QtBrynhildr(Option *option)
 		  SIGNAL(changeMouseCursor(const QCursor &)),
 		  SLOT(changeMouseCursor(const QCursor &)));
 
+  // graphics thread
+  connect(graphicsThread,
+		  SIGNAL(drawDesktop(QImage)),
+		  SLOT(drawDesktop(QImage)));
+  connect(graphicsThread,
+		  SIGNAL(clearDesktop()),
+		  SLOT(clearDesktop()));
+
   // bootTime
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Bootup."));
   if (settings->getOutputLog())
@@ -856,12 +872,14 @@ QtBrynhildr::QtBrynhildr(Option *option)
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(QTB_WINDOW_UPDATE_DURATION);
 
+#if QTB_TEST_CODE
   // initialize timer for Graphics
   timer_Graphics = new QTimer(this);
   connect(timer_Graphics, SIGNAL(timeout()), SLOT(timerExpired_Graphics()));
   startTimer_Graphics(settings->getFrameRate());
 
   init_Graphics();
+#endif // QTB_TEST_CODE
 
 #if 0 // for TEST
   // initialize mouse cursor
@@ -891,6 +909,7 @@ QtBrynhildr::~QtBrynhildr()
 	delete timer;
 	timer = 0;
   }
+#if QTB_TEST_CODE
   if (timer_Graphics != 0){
 	timer_Graphics->stop();
 	delete timer_Graphics;
@@ -900,6 +919,7 @@ QtBrynhildr::~QtBrynhildr()
 	delete image;
 	image = 0;
   }
+#endif // QTB_TEST_CODE
   if (settings != 0){
 	// disconnect to server
 	disconnectToServer();
@@ -918,7 +938,9 @@ QtBrynhildr::~QtBrynhildr()
 	// delete
 	delete graphicsThread;
 	graphicsThread = 0;
+#if QTB_TEST_CODE
 	graphicsBuffer = 0;
+#endif // QTB_TEST_CODE
   }
   if (soundThread != 0){
 	// delete
@@ -4481,6 +4503,7 @@ void QtBrynhildr::timerExpired()
   }
 }
 
+#if QTB_TEST_CODE
 void QtBrynhildr::timerExpired_Graphics()
 {
   //  cout << "timerExpired_Graphics()!" << endl << flush;
@@ -4653,5 +4676,6 @@ void QtBrynhildr::draw_Graphics()
 	}
   }
 }
+#endif // QTB_TEST_CODE
 
 } // end of namespace qtbrynhildr

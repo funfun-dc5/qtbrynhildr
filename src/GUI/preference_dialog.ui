@@ -75,7 +75,7 @@
      <property name="geometry">
       <rect>
        <x>31</x>
-       <y>91</y>
+       <y>80</y>
        <width>451</width>
        <height>16</height>
       </rect>
@@ -88,7 +88,7 @@
      <property name="geometry">
       <rect>
        <x>31</x>
-       <y>140</y>
+       <y>120</y>
        <width>451</width>
        <height>16</height>
       </rect>
@@ -101,7 +101,7 @@
      <property name="geometry">
       <rect>
        <x>31</x>
-       <y>190</y>
+       <y>160</y>
        <width>451</width>
        <height>16</height>
       </rect>
@@ -162,13 +162,26 @@
      <property name="geometry">
       <rect>
        <x>30</x>
+       <y>200</y>
+       <width>451</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scale Desktop on Server</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_onSIMDOperationSupport">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
        <y>240</y>
        <width>451</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Scale Desktop at Server</string>
+      <string>SIMD Operation (SSE/NEON) Support</string>
      </property>
     </widget>
    </widget>

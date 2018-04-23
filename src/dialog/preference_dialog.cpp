@@ -139,6 +139,10 @@ void PreferenceDialog::getFromSettings()
 	checkBox_desktopScalingType->setEnabled(true);
   }
 
+  // onSIMDOperationSupport
+  checkBox_onSIMDOperationSupport->
+	setCheckState(settings->getOnSIMDOperationSupport() ? Qt::Checked : Qt::Unchecked);
+
   // serverNameListSize
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());
 
@@ -249,6 +253,10 @@ bool PreferenceDialog::setToSettings()
   settings->
 	setDesktopScalingType(checkBox_desktopScalingType->checkState() == Qt::Checked ?
 						  DESKTOPSCALING_TYPE_ON_SERVER : DESKTOPSCALING_TYPE_ON_CLIENT);
+
+  // onSIMDOperationSupport
+  settings->
+	setOnSIMDOperationSupport(checkBox_onSIMDOperationSupport->checkState() == Qt::Checked);
 
   // serverNameListSize
   settings->
@@ -490,6 +498,13 @@ void PreferenceDialog::on_checkBox_onCheckUpdateAtBootup_stateChanged(int state)
 }
 
 void PreferenceDialog::on_checkBox_desktopScalingType_stateChanged(int state)
+{
+  Q_UNUSED(state);
+
+  changedSettings();
+}
+
+void PreferenceDialog::on_checkBox_onSIMDOperationSupport_stateChanged(int state)
 {
   Q_UNUSED(state);
 

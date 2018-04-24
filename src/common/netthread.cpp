@@ -63,7 +63,7 @@ long NetThread::getDataRate()
   if (previousGetDataRateTime != 0){
 	qint64 diffMSeconds = currentTime - previousGetDataRateTime;
 	if (diffMSeconds != 0){
-	  bps = (long)(receivedDataCounter / ((double)diffMSeconds/1000));
+	  bps = (long)(receivedDataCounter / ((double)diffMSeconds)*1000);
 	}
   }
   previousGetDataRateTime = currentTime;

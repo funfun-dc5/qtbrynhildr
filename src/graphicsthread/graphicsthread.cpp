@@ -106,7 +106,7 @@ double GraphicsThread::getFrameRate()
   if (previousGetFrameRateTime != 0){
 	qint64 diffMSeconds = currentTime - previousGetFrameRateTime;
 	if (diffMSeconds != 0){
-	  fps = frameCounter / ((double)diffMSeconds/1000);
+	  fps = frameCounter / ((double)diffMSeconds)*1000;
 	  //cout << "frameCounter = " << frameCounter << endl;
 	  //cout << "diffMSeconds = " << diffMSeconds << endl << flush;
 	}

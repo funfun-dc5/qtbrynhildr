@@ -60,6 +60,9 @@ private:
   // local buffer
   char *buffer;
 
+  // drawing flag
+  bool onDrawing;
+
   //-------------------------------------------------------------------------------
   // Function
   //-------------------------------------------------------------------------------
@@ -85,6 +88,18 @@ public:
 	return graphicsBuffer;
   }
 #endif // QTB_TEST_CODE
+
+  // set drawing flag
+  void setOnDrawing(bool onDrawing)
+  {
+	this->onDrawing = onDrawing;
+  }
+
+  // get drawing flag
+  bool getOnDrawing() const
+  {
+	return onDrawing;
+  }
 
 protected:
   // connect to server

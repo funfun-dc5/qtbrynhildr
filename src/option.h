@@ -72,6 +72,9 @@ private:
   // shutdown flag
   bool shutdownFlag;
 
+  // test mode flag
+  bool testModeFlag;
+
   //-------------------------------------------------------------------------------
   // Function
   //-------------------------------------------------------------------------------
@@ -150,6 +153,12 @@ public:
   bool getShutdownFlag() const
   {
 	return shutdownFlag;
+  }
+
+  // get test mode flag
+  bool getTestModeFlag() const
+  {
+	return testModeFlag;
   }
 
   // get debug

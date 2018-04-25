@@ -22,7 +22,6 @@
 
 // for TEST
 #define TEST_THREAD			0
-#define TEST_NO_DRAW		0
 
 namespace qtbrynhildr {
 
@@ -48,6 +47,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_PUBLIC_MODE7_SUPPORT
 #endif // !QTB_TEST_CODE
   ,buffer(0)
+  ,onDrawing(true)
 {
   outputLog = false; // for DEBUG
 
@@ -304,9 +304,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	// clear desktop flag clear
 	onClearDesktop = false;
 
-#if !TEST_NO_DRAW
-	draw_Graphics(receivedDataSize);
-#endif // !TEST_NO_DRAW
+    if (onDrawing){
+	  draw_Graphics(receivedDataSize);
+	}
   }
   else {
 	// clear desktop only at once
@@ -325,7 +325,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #endif // TEST_THREAD
 
   // frame rate control
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
+  if (QTB_DESKTOP_FRAMERATE_CONTROL && onDrawing){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = QTB_THREAD_SLEEP_TIME + currentTime - startTime;
 	qint64 interval = settings->getFrameInterval();

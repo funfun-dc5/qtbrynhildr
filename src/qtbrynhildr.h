@@ -382,6 +382,9 @@ private:
   QAction *preferences_Action;
 #endif // QTB_PREFERENCE
 
+  // disable drawing
+  QAction *disableDrawing_Action;
+
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;
 
@@ -880,13 +883,16 @@ private slots:
   void visibilityChangedSoftwareButton(bool visible);
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   // desktop compress mode
   void desktopCompressMode0();
   void desktopCompressMode2();
   void desktopCompressMode4();
   void desktopCompressMode8();
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
+
+  // disable drawing
+  void disableDrawing();
 
 private:
   // build GUI

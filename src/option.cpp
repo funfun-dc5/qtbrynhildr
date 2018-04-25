@@ -264,6 +264,9 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		printHelp();
 		shutdownFlag = true;
 	  }
+	  else if (strncmp("testmode", optionName, sizeof("testmode")) == 0){
+		testModeFlag = true;
+	  }
 	  else {
 		cout << "unknown option : " << argv[1] << endl << flush;
 		shutdownFlag = true;

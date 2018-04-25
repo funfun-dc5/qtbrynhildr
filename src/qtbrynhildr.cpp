@@ -206,6 +206,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
 #if QTB_PREFERENCE
   ,preferences_Action(0)
 #endif // QTB_PREFERENCE
+  ,disableDrawing_Action(0)
   ,connectToServerDialog(0)
   ,desktopScalingDialog(0)
   ,logViewDialog(0)
@@ -1994,6 +1995,13 @@ void QtBrynhildr::createActions()
   preferences_Action->setEnabled(true);
   connect(preferences_Action, SIGNAL(triggered()), this, SLOT(preferences()));
 #endif // QTB_PREFERENCE
+
+  // disable drawing
+  disableDrawing_Action = new QAction(tr("Disable Drawing"), this);
+  disableDrawing_Action->setStatusTip(tr("Disable Drawing"));
+  disableDrawing_Action->setEnabled(true);
+  disableDrawing_Action->setCheckable(true);
+  connect(disableDrawing_Action, SIGNAL(triggered()), this, SLOT(disableDrawing()));
 }
 
 // create Menus
@@ -2233,6 +2241,13 @@ void QtBrynhildr::createMenus()
   helpMenu->addSeparator();
 #endif // QTB_UPDATECHECK
   helpMenu->addAction(about_Action);
+
+  // test mode menu
+  if (option->getTestModeFlag()){
+	// disable drawing
+	helpMenu->addSeparator();
+	helpMenu->addAction(disableDrawing_Action);
+  }
 }
 
 // create Context Menu
@@ -2454,7 +2469,7 @@ void QtBrynhildr::connected()
   onPluginsDisable_Action->setEnabled(true);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   // desktop compress mode
   if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION7){
 	desktopCompressModeSubMenu->setEnabled(true);
@@ -2462,7 +2477,7 @@ void QtBrynhildr::connected()
   else {
 	desktopCompressModeSubMenu->setEnabled(false);
   }
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
   // reset total frame counter
   totalFrameCounter = 0;
@@ -4229,7 +4244,7 @@ void QtBrynhildr::visibilityChangedSoftwareButton(bool visible)
 }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
 // desktop compress
 void QtBrynhildr::desktopCompressMode0()
 {
@@ -4267,7 +4282,15 @@ void QtBrynhildr::desktopCompressMode8()
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(true);
 }
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
+
+// disable drawing
+void QtBrynhildr::disableDrawing()
+{
+  bool flag = graphicsThread->getOnDrawing();
+  graphicsThread->setOnDrawing(!flag);
+  disableDrawing_Action->setChecked(flag);
+}
 
 // toggle outputKeyboardLog
 void QtBrynhildr::toggleOutputKeyboardLog()

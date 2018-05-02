@@ -13,11 +13,9 @@
 // Local Header
 
 
-#if QTB_PUBLIC_MODE7_SUPPORT
 // libvxp Header
 #include "vpx_decoder.h"
 #include "vp8dx.h"
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 // use loadFromData() instead of new QImage()
 #define USE_PPM_LOADER_FOR_VP8	0

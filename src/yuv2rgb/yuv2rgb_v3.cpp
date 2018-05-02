@@ -11,11 +11,8 @@
 // Local Header
 #include "yuv2rgb.h"
 
-
 // for TEST
 #define PRINT_CALC_RATE 0
-
-#if QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {
 
@@ -198,5 +195,3 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 } // end of namespace qtbrynhildr
-
-#endif // QTB_PUBLIC_MODE7_SUPPORT

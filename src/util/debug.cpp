@@ -122,20 +122,6 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-#if !QTB_PUBLIC_MODE7_SUPPORT
-  offset = (char*)&(com_data.dummy5[0]) - (char*)&com_data;
-  if (outputLog)
-	cout << "dummy5 offset = " << offset;
-  if (offset == 82){
-	if (outputLog)
-	  cout << " : ok" << endl;
-  }
-  else {
-	if (outputLog)
-	  cout << " : ng" << endl;
-	result = false;
-  }
-#endif // !QTB_PUBLIC_MODE7_SUPPORT
   offset = (char*)&(com_data.dummy6[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy6 offset = " << offset;

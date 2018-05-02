@@ -177,10 +177,10 @@ private:
   // In Testing Sub Menu
   QMenu *inTestingSubMenu;
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   // Desktop Compress Mode Sub Menu
   QMenu *desktopCompressModeSubMenu;
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
   // Help Menu
   QMenu *helpMenu;
@@ -363,13 +363,13 @@ private:
   // cancel file transferring
   QAction *cancelFileTransferring_Action;
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   // desktop compress mode
   QAction *desktopCompressMode0_Action;
   QAction *desktopCompressMode2_Action;
   QAction *desktopCompressMode4_Action;
   QAction *desktopCompressMode8_Action;
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
 #if QTB_PREFERENCE
   // preferences
@@ -586,10 +586,10 @@ public:
   // get height of status bar
   int getHeightOfStatusBar();
 
-#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
   // set cursor point color
   void setCursorPointColor(QRgb cursorPointColor);
-#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // move top of software keyboard
@@ -747,9 +747,7 @@ private slots:
   // select public mode version
   void selectPublicModeVersion5();
   void selectPublicModeVersion6();
-#if QTB_PUBLIC_MODE7_SUPPORT
   void selectPublicModeVersion7();
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 #if QTB_RECORDER
   // record and replay

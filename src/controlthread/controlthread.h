@@ -16,10 +16,8 @@
 #include "keybuffer.h"
 #include "mousebuffer.h"
 #include "settings.h"
-#if QTB_PUBLIC_MODE6_SUPPORT
 #include "parameters.h"
 #include "windows/ntfs.h"
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 namespace qtbrynhildr {
 
@@ -38,10 +36,8 @@ private:
   // server version
   SERVER_VERSION serverVersion;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // current mode
   PUBLICMODE_VERSION currentMode;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // keyboard buffer
   KeyBuffer *keyBuffer;
@@ -73,7 +69,6 @@ private:
   // done check password flag
   bool doneCheckPassword;
 
-#if QTB_PUBLIC_MODE7_SUPPORT
 #define QTB_ICON_WIDTH		32
 #define QTB_ICON_HEIGHT		32
 #define QTB_ICON_SIZE		(QTB_ICON_WIDTH*QTB_ICON_HEIGHT)
@@ -83,13 +78,11 @@ private:
   uchar andMaskImage[QTB_ICON_IMAGE_SIZE];
   uchar xorMaskImage[QTB_ICON_IMAGE_SIZE];
 
-#if !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
   // cursor point color
   QRgb cursorPointColor;
-#endif // !defined(Q_OS_WIN)
-#endif // QTB_PUBLIC_MODE7_SUPPORT
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   char *buffer;
 
@@ -103,7 +96,6 @@ private:
 
   // ntfs utility
   NTFS *ntfs;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   //-------------------------------------------------------------------------------
   // Function
@@ -118,10 +110,10 @@ ControlThread(Settings *settings, DesktopPanel *desktopPanel);
   // destructor
   ~ControlThread();
 
-#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
   // set cursor point color
   void setCursorPointColor(QRgb cursorPointColor);
-#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
 protected:
   // connect to server
@@ -152,7 +144,6 @@ private:
   // set gamepad control
   void setGamePadControl();
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // send clipboard
   bool sendClipboard();
 
@@ -164,9 +155,7 @@ private:
 
   // sreceive file
   bool receiveFile();
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
-#if QTB_PUBLIC_MODE7_SUPPORT
   // receive mouse cursor image
   bool receiveMouseCursorImage();
 
@@ -181,7 +170,6 @@ private:
 
   // create monochrome mouse cursor
   QCursor createMonochromeMouseCursor(uchar *image, uchar *mask);
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 signals:
   // connected
@@ -199,13 +187,11 @@ signals:
   // exit application
   void exitApplication();
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // set clipboard
   void setClipboard(QString clipboardString);
 
   // set progress bar value for transfer file
   void setFileTransferProgressBarValue(int value);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 };
 
 } // end of namespace qtbrynhildr

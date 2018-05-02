@@ -94,9 +94,7 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   // public mode field
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION5 - PUBLICMODE_VERSION5, tr("MODE 5"));
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION6 - PUBLICMODE_VERSION5, tr("MODE 6"));
-#if QTB_PUBLIC_MODE7_SUPPORT
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION7 - PUBLICMODE_VERSION5, tr("MODE 7"));
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicmode->setCurrentIndex(settings->getPublicModeVersion() - PUBLICMODE_VERSION5);
 
   // show password field

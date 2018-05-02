@@ -16,9 +16,6 @@
 // Local Header
 #include "yuv2rgb.h"
 
-
-#if QTB_PUBLIC_MODE7_SUPPORT
-
 namespace qtbrynhildr {
 
 #if QTB_SIMD_SUPPORT
@@ -350,5 +347,3 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 #endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr
-
-#endif // QTB_PUBLIC_MODE7_SUPPORT

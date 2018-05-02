@@ -6,12 +6,10 @@
 
 // System Header
 #include <cmath>
-#if QTB_PUBLIC_MODE7_SUPPORT
 #if USE_PPM_LOADER_FOR_VP8
 #include <cstdio>
 #endif // USE_PPM_LOADER_FOR_VP8
 #include <cstring>
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 #include <fstream>
 #include <iostream>
 
@@ -22,8 +20,6 @@
 
 // Local Header
 #include "yuv2rgb.h"
-
-#if QTB_PUBLIC_MODE7_SUPPORT
 
 namespace qtbrynhildr {
 
@@ -363,5 +359,3 @@ int makeRGBImage_SIMD(int numOfThread)
 #endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr
-
-#endif // QTB_PUBLIC_MODE7_SUPPORT

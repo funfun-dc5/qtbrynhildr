@@ -103,9 +103,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,touchpanelInterfaceTypeSubMenu(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,inTestingSubMenu(0)
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   ,desktopCompressModeSubMenu(0)
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
   ,helpMenu(0)
   ,connectToServer_Action(0)
   ,disconnectToServer_Action(0)
@@ -191,12 +191,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,sendClipboard_Action(0)
   ,sendFile_Action(0)
   ,cancelFileTransferring_Action(0)
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   ,desktopCompressMode0_Action(0)
   ,desktopCompressMode2_Action(0)
   ,desktopCompressMode4_Action(0)
   ,desktopCompressMode8_Action(0)
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 #if QTB_PREFERENCE
   ,preferences_Action(0)
 #endif // QTB_PREFERENCE
@@ -1934,7 +1934,7 @@ void QtBrynhildr::createActions()
   cancelFileTransferring_Action->setStatusTip(tr("Cancel File Transferring"));
   connect(cancelFileTransferring_Action, SIGNAL(triggered()), this, SLOT(cancelFileTransferring()));
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   // desktop compress mode
   desktopCompressMode0_Action = new QAction(tr("None"), this);
   desktopCompressMode0_Action->setEnabled(true);
@@ -1960,7 +1960,7 @@ void QtBrynhildr::createActions()
   desktopCompressMode8_Action->setChecked(settings->getDesktopCompressMode() == 8);
   desktopCompressMode8_Action->setStatusTip(tr("Desktop Compress Mode : 1/8"));
   connect(desktopCompressMode8_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode8()));
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
 #if QTB_PREFERENCE
   // preferences
@@ -3413,9 +3413,7 @@ void QtBrynhildr::refreshPublicMode()
 {
   selectPublicModeVersion5_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION5);
   selectPublicModeVersion6_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION6);
-#if QTB_PUBLIC_MODE7_SUPPORT
   selectPublicModeVersion7_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION7);
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   // menus, drag and drop
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
@@ -3476,14 +3474,12 @@ void QtBrynhildr::selectPublicModeVersion6()
 
   refreshPublicMode();
 }
-#if QTB_PUBLIC_MODE7_SUPPORT
 void QtBrynhildr::selectPublicModeVersion7()
 {
   settings->setPublicModeVersion(PUBLICMODE_VERSION7);
 
   refreshPublicMode();
 }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
 void QtBrynhildr::setOnPluginsDisable()
@@ -4516,9 +4512,7 @@ void QtBrynhildr::startTimer_Graphics(int frameRate)
 // initialize graphics
 void QtBrynhildr::init_Graphics()
 {
-#if QTB_PUBLIC_MODE7_SUPPORT
   initVPX();
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 }
 
 // draw graphics
@@ -4571,7 +4565,6 @@ void QtBrynhildr::draw_Graphics()
 	  }
 	}
   }
-#if QTB_PUBLIC_MODE7_SUPPORT
   // MODE 7 (VP8)
   else if (type == GraphicsBuffer::TYPE_VP8){
 	// decode VP8
@@ -4640,7 +4633,6 @@ void QtBrynhildr::draw_Graphics()
 	  onClearDesktop = false;
 	}
   }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   else {
 	// internal error : unknown type
 	ABORT();

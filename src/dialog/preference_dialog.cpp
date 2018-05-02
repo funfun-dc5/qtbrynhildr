@@ -46,9 +46,7 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   // publicModeVersion
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "MODE 5");
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC6 - MODE_PUBLIC5, "MODE 6");
-#if QTB_PUBLIC_MODE7_SUPPORT
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC7 - MODE_PUBLIC5, "MODE 7");
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   // serverNameListSize
   spinBox_serverNameListSize->setRange(5, 100);	// for TEST

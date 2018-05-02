@@ -5,25 +5,17 @@
 #include "common/common.h"
 
 // System Header
-#if QTB_PUBLIC_MODE6_SUPPORT
 #include <fstream>
 #include <iostream>
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-#if QTB_PUBLIC_MODE7_SUPPORT
 #include <iomanip>
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 // Qt Header
-#if QTB_PUBLIC_MODE6_SUPPORT
 #include <QByteArray>
 #include <QDir>
 #include <QFileInfo>
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-#if QTB_PUBLIC_MODE7_SUPPORT
 #include <QBitmap>
 #include <QCursor>
 #include <QImage>
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 #include <QSize>
 
 // Local Header
@@ -74,12 +66,11 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   // done check password flag
   doneCheckPassword = false;
 
-#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
   // cursor point color
   cursorPointColor = 0xFFFFFFFF;
-#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   buffer = new char [QTB_CONTROL_LOCAL_BUFFER_SIZE+2];
 
@@ -93,24 +84,21 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
 
   // NTFS utility
   ntfs = new NTFS();
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
 // destructor
 ControlThread::~ControlThread()
 {
   // delete objects
-#if QTB_PUBLIC_MODE6_SUPPORT
   // local buffer
   if (buffer != 0){
 	delete [] buffer;
 	buffer = 0;
 	clipboardTop = 0;
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
-#if QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 // set cursor point color
 void ControlThread::setCursorPointColor(QRgb cursorPointColor)
 {
@@ -120,7 +108,7 @@ void ControlThread::setCursorPointColor(QRgb cursorPointColor)
 	changeMouseCursor();
   }
 }
-#endif // QTB_PUBLIC_MODE7_SUPPORT && !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
 //---------------------------------------------------------------------------
 // protected
@@ -252,7 +240,6 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 #endif // TEST_THREAD
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // send clilpboard/file
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// cliboard
@@ -281,7 +268,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  }
 	}
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // receive header
   dataSize = receiveData(sock_control, (char *)com_data, sizeof(COM_DATA));
@@ -386,7 +372,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 	counter_control++;
   }
 
-#if QTB_PUBLIC_MODE7_SUPPORT
   if (currentMode == 0){
 	// save current mode
 	currentMode = settings->getPublicModeVersion();
@@ -409,7 +394,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 	// refresh menu
 	emit refreshMenu();
   }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   return PROCESS_SUCCEEDED;
 }
@@ -417,7 +401,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 // transmit local buffer to global buffer
 TRANSMIT_RESULT ControlThread::transmitBuffer()
 {
-#if QTB_PUBLIC_MODE6_SUPPORT
   // receive clilpboard/file
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// cliboard
@@ -445,7 +428,6 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 		return TRANSMIT_RESTART;
 	  }
 	}
-#if QTB_PUBLIC_MODE7_SUPPORT
 	// mouse cursor image
 	else if (com_data->data_type == DATA_TYPE_DATA){
 	  // receive mouse cursor image
@@ -456,13 +438,8 @@ TRANSMIT_RESULT ControlThread::transmitBuffer()
 		return TRANSMIT_RESTART;
 	  }
 	}
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   }
   return TRANSMIT_SUCCEEDED;
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  // Nothing to do
-  return TRANSMIT_SUCCEEDED;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 }
 
 // connected
@@ -595,7 +572,7 @@ void ControlThread::initHeader()
 	  }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 	}
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode
 	if (settings->getDesktopCompressMode() > 1)
 	  com_data->zoom *= settings->getDesktopCompressMode();
@@ -843,9 +820,6 @@ void ControlThread::setGamePadControl()
   // Yet
 }
 #endif // defined(Q_OS_WIN)
-
-
-#if QTB_PUBLIC_MODE6_SUPPORT
 
 // send clipboard
 bool ControlThread::sendClipboard()
@@ -1133,9 +1107,6 @@ bool ControlThread::receiveFile()
   }
 }
 
-#endif // QTB_PUBLIC_MODE6_SUPPORT
-
-#if QTB_PUBLIC_MODE7_SUPPORT
 // receive mouse cursor image
 bool ControlThread::receiveMouseCursorImage()
 {
@@ -1452,6 +1423,5 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 
   return QCursor(bitmap, maskBitmap, hotX, hotY);
 }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 } // end of namespace qtbrynhildr

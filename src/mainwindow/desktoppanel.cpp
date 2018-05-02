@@ -186,14 +186,6 @@ void DesktopPanel::refreshDesktop(QImage image)
 #endif // defined(QTB_DEV_DESKTOP)
   }
 
-#if 0 // QTB_DESKTOP_COMPRESS_MODE // for TEST
-  // desktop compress mode
-  if (settings->getDesktopCompressMode() > 1){
-	currentSize = currentSize * settings->getDesktopCompressMode();
-	image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-  }
-#endif // QTB_DESKTOP_COMPRESS_MODE
-
   // capture desktop image
   if (QTB_DESKTOP_IMAGE_CAPTURE){
 	if (settings->getOnDesktopCapture()){
@@ -327,18 +319,16 @@ void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 	pos.y = currentMousePos.y();
 	mouseBuffer->setMousePos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
-#if QTB_PUBLIC_MODE7_SUPPORT
-#if !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
 	  // set cursor point color to control thread
 	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
 	}
-#endif // !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	// marker for mouse cursor
 	if (settings->getOnShowMouseCursorMarker() && marker){
 	  setDrawMarkerCounter(10);
 	}
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   }
 }
 
@@ -353,18 +343,16 @@ void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
 	pos.y = currentMousePos.y();
 	mouseBuffer->setMousePos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
-#if QTB_PUBLIC_MODE7_SUPPORT
-#if !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
 	  // set cursor point color to control thread
 	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
 	}
-#endif // !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	// marker for mouse cursor
 	if (settings->getOnShowMouseCursorMarker() && marker){
 	  setDrawMarkerCounter(10);
 	}
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   }
 }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -602,18 +590,16 @@ void DesktopPanel::moveMouseCursor(QMouseEvent *event, bool marker)
 	pos.y = currentMousePos.y();
 	mouseBuffer->setMousePos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
-#if QTB_PUBLIC_MODE7_SUPPORT
-#if !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
 	  // set cursor point color to control thread
 	  qtbrynhildr->setCursorPointColor(image.pixel(currentMousePos));
 	}
-#endif // !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	// marker for mouse cursor
 	if (settings->getOnShowMouseCursorMarker() && marker){
 	  setDrawMarkerCounter(10);
 	}
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   }
 }
 

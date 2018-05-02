@@ -73,11 +73,7 @@
 
 // for publicModeVersion
 #define QTB_PUBLICMODEVERSION	"publicModeVersion"
-#if QTB_PUBLIC_MODE7_SUPPORT
 #define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION7
-#else // QTB_PUBLIC_MODE7_SUPPORT
-#define QTB_PUBLICMODEVERSION_DEFAULT	PUBLICMODE_VERSION6
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 typedef int PUBLICMODE_VERSION;
 #define PUBLICMODE_VERSION5		5
 #define PUBLICMODE_VERSION6		6
@@ -246,12 +242,12 @@ typedef int SCALING_TYPE;
 #define DESKTOPSCALING_TYPE_ON_CLIENT	0
 #define DESKTOPSCALING_TYPE_ON_SERVER	1
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
 // for desktopCompressMode
 typedef int COMPRESS_MODE;
 #define QTB_DESKTOPCOMPRESSMODE			"desktopCompressMode"
 #define QTB_DESKTOPCOMPRESSMODE_DEFAULT	1
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
 // for onCutDesktopBlankArea
 #define QTB_ONCUTDESKTOPBLANKAREA				"onCutDesktopBlankArea"
@@ -568,10 +564,10 @@ private:
   // scaling type
   volatile SCALING_TYPE desktopScalingType;
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   // compress mode
   volatile COMPRESS_MODE desktopCompressMode;
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
   // cut desktop blank area flag
   volatile bool onCutDesktopBlankArea;
@@ -1245,16 +1241,12 @@ public:
   // get display mouse cursor flag
   bool getOnDisplayMouseCursor()
   {
-#if QTB_PUBLIC_MODE7_SUPPORT
 	if (getPublicModeVersion() >= PUBLICMODE_VERSION7){
 	  return QTB_ONDISPLAYMOUSECURSOR_DEFAULT;
 	}
 	else { // MODE5/6
 	  return true;
 	}
-#else // QTB_PUBLIC_MODE7_SUPPORT
-	return true;
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   }
 
   // get gamepad support flag
@@ -1496,7 +1488,7 @@ public:
 	}
   }
 
-#if QTB_DESKTOP_COMPRESS_MODE // for TEST
+#if QTB_DESKTOP_COMPRESS_MODE
   // get desktop compress mode
   COMPRESS_MODE getDesktopCompressMode() const
   {
@@ -1508,7 +1500,7 @@ public:
   {
 	this->desktopCompressMode = desktopCompressMode;
   }
-#endif // QTB_DESKTOP_COMPRESS_MODE // for TEST
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
   // get cut desktop blank area flag
   bool getOnCutDesktopBlankArea() const

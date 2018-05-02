@@ -228,12 +228,10 @@ bool Option::analyzeOptions(int argc, char *argv[])
 			   strncmp("mjpeg", optionName, sizeof("mjpeg")) == 0){
 		publicModeVersion = 6;
 	  }
-#if QTB_PUBLIC_MODE7_SUPPORT
 	  else if (strncmp("mode7", optionName, sizeof("mode7")) == 0 ||
 			   strncmp("compress", optionName, sizeof("compress")) == 0){
 		publicModeVersion = 7;
 	  }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 	  else if (strncmp("fullscreen", optionName, sizeof("fullscreen")) == 0){
 		fullScreenFlag = true;
 	  }
@@ -320,9 +318,7 @@ void Option::printSpec() const
 
   cout << " MODE6";
 
-#if QTB_PUBLIC_MODE7_SUPPORT
   cout << " MODE7";
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 #if QTB_CELT_SUPPORT
   cout << " CELT";
@@ -347,13 +343,8 @@ void Option::printHelp() const
   cout << QTB_APPLICATION << " [options] <.ini file>" << endl;
   cout << "-------------------------------------------------------" << endl;
 
-#if QTB_PUBLIC_MODE7_SUPPORT
   cout << "-mode5/mode6(mjpeg)/mode7(compress)" << endl;
   cout << "        " << "support public mode 5/6/7." << endl;
-#else // QTB_PUBLIC_MODE7_SUPPORT
-  cout << "-mode5/mode6" << endl;
-  cout << "        " << "support public mode 5/6." << endl;
-#endif // QTB_PUBLIC_MODE7_SUPPORT
   cout << endl;
 
   // -server <server name|IP address>:<password>[:<port no>[:<host type>]]

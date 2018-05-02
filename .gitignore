@@ -33,6 +33,7 @@ src/qrc_*.cpp
 Makefile
 *.Release
 *.Debug
+*.org
 *.bak
 *.log
 *~

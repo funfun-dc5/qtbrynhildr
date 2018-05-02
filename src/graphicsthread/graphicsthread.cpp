@@ -40,11 +40,9 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #if !QTB_TEST_CODE
   ,image(new QImage)
   ,onClearDesktop(false)
-#if QTB_PUBLIC_MODE7_SUPPORT
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 #endif // !QTB_TEST_CODE
   ,buffer(0)
   ,onDrawing(true)
@@ -60,7 +58,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
 
 #if !QTB_TEST_CODE
-#if QTB_PUBLIC_MODE7_SUPPORT
   initVPX();
 
 #if QTB_SIMD_SUPPORT
@@ -70,7 +67,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
   hasSIMDInstruction = CPUInfo::NEON();
 #endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 #endif // !QTB_TEST_CODE
 }
 
@@ -191,16 +187,10 @@ PROCESS_RESULT GraphicsThread::processForHeader()
   }
 
   // check received video_mode
-#if QTB_PUBLIC_MODE7_SUPPORT
   if (com_data->video_mode != VIDEO_MODE_MJPEG &&
 	  com_data->video_mode != VIDEO_MODE_COMPRESS ){
 	return PROCESS_VIDEO_MODE_ERROR;
   }
-#else // QTB_PUBLIC_MODE7_SUPPORT
-  if (com_data->video_mode != VIDEO_MODE_MJPEG){
-	return PROCESS_VIDEO_MODE_ERROR;
-  }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   return PROCESS_SUCCEEDED;
 }
@@ -284,12 +274,10 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if !QTB_TEST_CODE
 
-#if QTB_PUBLIC_MODE7_SUPPORT
   // decode VP8
   if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	decodeVPX((uchar*)buffer, receivedDataSize);
   }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
 #if TEST_THREAD
   {
@@ -459,7 +447,6 @@ void GraphicsThread::draw_Graphics(int size)
 	  ABORT();
 	}
   }
-#if QTB_PUBLIC_MODE7_SUPPORT
   // MODE 7 (VP8)
   else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
 	// make RGB image
@@ -503,7 +490,6 @@ void GraphicsThread::draw_Graphics(int size)
 	  }
 	}
   }
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 
   // draw desktop
   if (result){

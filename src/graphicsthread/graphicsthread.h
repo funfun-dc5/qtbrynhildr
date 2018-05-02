@@ -49,12 +49,10 @@ private:
   // clear desktop flag
   bool onClearDesktop;
 
-#if QTB_PUBLIC_MODE7_SUPPORT
 #if QTB_SIMD_SUPPORT
   // has SIMD instruction
   bool hasSIMDInstruction;
 #endif // QTB_SIMD_SUPPORT
-#endif // QTB_PUBLIC_MODE7_SUPPORT
 #endif // !QTB_TEST_CODE
 
   // local buffer

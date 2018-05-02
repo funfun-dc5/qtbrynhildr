@@ -13,7 +13,9 @@
 
 // Local Header
 
-
+#if defined(__ARM_NEON__)
+#include "util/android-ndk/cpu-features.h"
+#endif // defined(__ARM_NEON__)
 
 namespace qtbrynhildr {
 
@@ -137,10 +139,13 @@ private:
 		}
 		cout << flush;
 	  }
+#else // !defined(__ARM_NEON__)
+	  // check NEON
+	  if (android_getCpuFamily() == ANDROID_CPU_FAMILY_ARM &&
+		  (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_NEON) != 0){
+		hasNEON = true;
+	  }
 #endif // !defined(__ARM_NEON__)
-
-	  // for TEST
-	  hasNEON = true;
 	}
   };
 

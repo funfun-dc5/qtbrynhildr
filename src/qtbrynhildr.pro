@@ -131,6 +131,9 @@ CELT_SUPPORT = ON
 INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx_android
 LIBS += -L../libs/celt -lcelt0_android
+# cpufeatures library from android-ndk
+HEADERS += util/android-ndk/cpu-features.h
+SOURCES += util/android-ndk/cpu-features.c
 # SIMD (ARM:gcc)
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp

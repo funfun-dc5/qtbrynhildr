@@ -44,15 +44,11 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   applyButton = buttonBox->button(QDialogButtonBox::Apply);
 
   // publicModeVersion
-#if QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC5 - MODE_PUBLIC5, "MODE 5");
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC6 - MODE_PUBLIC5, "MODE 6");
 #if QTB_PUBLIC_MODE7_SUPPORT
   comboBox_publicModeVersion->insertItem(MODE_PUBLIC7 - MODE_PUBLIC5, "MODE 7");
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  comboBox_publicModeVersion->insertItem(0, "MODE 5");
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // serverNameListSize
   spinBox_serverNameListSize->setRange(5, 100);	// for TEST
@@ -109,13 +105,8 @@ void PreferenceDialog::setKeylayoutList(const QStringList keylayoutList)
 void PreferenceDialog::getFromSettings()
 {
   // publicModeVersion
-#if QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicModeVersion->setCurrentIndex(settings->getPublicModeVersion() - MODE_PUBLIC5);
   publicModeVersionChanged(settings->getPublicModeVersion());
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  comboBox_publicModeVersion->setCurrentIndex(0);
-  publicModeVersionChanged(MODE_PUBLIC5);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // onOpenConnectToServerDialogAtBootup
   checkBox_onOpenConnectToServerDialogAtBootup->
@@ -180,10 +171,8 @@ void PreferenceDialog::getFromSettings()
   spinBox_doubleClickThreshold->setValue(settings->getDoubleClickThreshold());
 
   // onTransferFileSupport
-#if QTB_PUBLIC_MODE6_SUPPORT
   checkBox_onTransferFileSupport->
 	setCheckState(settings->getOnTransferFileSupport() ? Qt::Checked : Qt::Unchecked);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // onTransferFileSupportByDragAndDrop
 #if QTB_DRAG_AND_DROP_SUPPORT
@@ -198,10 +187,8 @@ void PreferenceDialog::getFromSettings()
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
   // onTransferClipboardSupport
-#if QTB_PUBLIC_MODE6_SUPPORT
   checkBox_onTransferClipboardSupport->
 	setCheckState(settings->getOnTransferClipboardSupport() ? Qt::Checked : Qt::Unchecked);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // graphicsBufferSize
   spinBox_graphicsBufferSize->setValue(settings->getGraphicsBufferSize()/1024);
@@ -232,10 +219,8 @@ bool PreferenceDialog::setToSettings()
   bool result = true;
 
   // publicModeVersion
-#if QTB_PUBLIC_MODE6_SUPPORT
   settings->
 	setPublicModeVersion(comboBox_publicModeVersion->currentIndex() + MODE_PUBLIC5);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // onOpenConnectToServerDialogAtBootup
   settings->
@@ -298,10 +283,8 @@ bool PreferenceDialog::setToSettings()
 	setDoubleClickThreshold(spinBox_doubleClickThreshold->value());
 
   // onTransferFileSupport
-#if QTB_PUBLIC_MODE6_SUPPORT
   settings->
 	setOnTransferFileSupport(checkBox_onTransferFileSupport->checkState() == Qt::Checked);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // onTransferFileSupportByDragAndDrop
 #if QTB_DRAG_AND_DROP_SUPPORT
@@ -316,10 +299,8 @@ bool PreferenceDialog::setToSettings()
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
   // onTransferClipboardSupport
-#if QTB_PUBLIC_MODE6_SUPPORT
   settings->
 	setOnTransferClipboardSupport(checkBox_onTransferClipboardSupport->checkState() == Qt::Checked);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // graphicsBufferSize
   settings->
@@ -551,7 +532,6 @@ void PreferenceDialog::on_spinBox_doubleClickThreshold_valueChanged(int i)
   changedSettings();
 }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 void PreferenceDialog::on_checkBox_onTransferFileSupport_stateChanged(int state)
 {
 
@@ -560,7 +540,6 @@ void PreferenceDialog::on_checkBox_onTransferFileSupport_stateChanged(int state)
 
   changedSettings();
 }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_DRAG_AND_DROP_SUPPORT
 void PreferenceDialog::on_checkBox_onTransferFileSupportByDragAndDrop_stateChanged(int state)
@@ -580,14 +559,12 @@ void PreferenceDialog::on_checkBox_onShowTotalProgressForTransferFile_stateChang
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 void PreferenceDialog::on_checkBox_onTransferClipboardSupport_stateChanged(int state)
 {
   Q_UNUSED(state);
 
   changedSettings();
 }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 void PreferenceDialog::on_spinBox_graphicsBufferSize_valueChanged(int i)
 {

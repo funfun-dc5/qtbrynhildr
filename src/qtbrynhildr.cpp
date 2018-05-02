@@ -19,9 +19,9 @@
 #include <QCloseEvent>
 #include <QDir>
 #include <QDesktopServices>
-#if QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
+#if QTB_RECORDER
 #include <QFileDialog>
-#endif // QTB_RECORDER || QTB_PUBLIC_MODE6_SUPPORT
+#endif // QTB_RECORDER
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -75,11 +75,7 @@ int counter_graphics = 0;
 const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
 // constructor
-#if QTB_PUBLIC_MODE6_SUPPORT
 QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
-#else // QTB_PUBLIC_MODE6_SUPPORT
-QtBrynhildr::QtBrynhildr(Option *option)
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   :desktopPanel(0)
 #if QTB_NEW_DESKTOPWINDOW
   ,graphicsView(0)
@@ -192,11 +188,9 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,touchpanelInterfaceTypeKeroRemote_Action(0)
   ,touchpanelInterfaceTypeQtBrynhildr_Action(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
-#if QTB_PUBLIC_MODE6_SUPPORT
   ,sendClipboard_Action(0)
   ,sendFile_Action(0)
   ,cancelFileTransferring_Action(0)
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
   ,desktopCompressMode0_Action(0)
   ,desktopCompressMode2_Action(0)
@@ -243,16 +237,12 @@ QtBrynhildr::QtBrynhildr(Option *option)
   ,keyLayoutFileReader(0)
 #endif // USE_KEYLAYOUTFILE
   ,eventConverter(0)
-#if QTB_PUBLIC_MODE6_SUPPORT
   ,clipboard(clipboard)
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   ,fullScreenMode(false)
   ,onSetDesktopScalingFactorForFullScreen(false)
   ,onShowMenuBar(false)
   ,onShowStatusBar(false)
-#if QTB_PUBLIC_MODE6_SUPPORT
   ,progressBar(0)
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   ,heightOfTitleBar(0)
   ,heightOfMenuBarInHiding(0)
   ,heightOfStatusBarInHiding(0)
@@ -382,12 +372,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   }
 
   // set option to settings
-#if QTB_PUBLIC_MODE6_SUPPORT
   if (option->getPublicModeVersion() > 0){
 	writeSettingsAtExit = false;
 	settings->setPublicModeVersion(option->getPublicModeVersion());
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   if (option->getServerName() != 0){
 	writeSettingsAtExit = false;
 	settings->setServerName(option->getServerName());
@@ -590,11 +578,7 @@ QtBrynhildr::QtBrynhildr(Option *option)
   //  setWindowIcon(QIcon(QTB_ICON_FILENAME));
 
   // set window title
-#if QTB_PUBLIC_MODE6_SUPPORT
   setupWindowTitle();
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  setWindowTitle(tr(QTB_APPLICATION));
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // set window flags
   Qt::WindowFlags flags = windowFlags();
@@ -746,12 +730,10 @@ QtBrynhildr::QtBrynhildr(Option *option)
   eventConverter = new EventConverter();
   desktopPanel->setEventConverter(eventConverter);
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard dataChanged
   if (settings->getOnTransferClipboardSupport()){
 	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   //------------------------------------------------------------
   // create threads
@@ -819,14 +801,12 @@ QtBrynhildr::QtBrynhildr(Option *option)
   connect(controlThread,
 		  SIGNAL(exitApplication()),
 		  SLOT(exitApplication()));
-#if QTB_PUBLIC_MODE6_SUPPORT
   connect(controlThread,
 		  SIGNAL(setClipboard(QString)),
 		  SLOT(setClipboard(QString)));
   connect(controlThread,
 		  SIGNAL(setFileTransferProgressBarValue(int)),
 		  SLOT(setFileTransferProgressBarValue(int)));
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   connect(controlThread,
 		  SIGNAL(changeMouseCursor(const QCursor &)),
 		  SLOT(changeMouseCursor(const QCursor &)));
@@ -1343,7 +1323,6 @@ void QtBrynhildr::exitApplication()
   exit();
 }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 // set clipboard
 void QtBrynhildr::setClipboard(QString clipboardString)
 {
@@ -1380,7 +1359,6 @@ void QtBrynhildr::setFileTransferProgressBarValue(int value)
 	  cancelFileTransferring_Action->setEnabled(true);
   }
 }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // output Log Message
 void QtBrynhildr::outputLogMessage(int msgID)
@@ -1811,7 +1789,6 @@ void QtBrynhildr::createActions()
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // select public mode version Action
   selectPublicModeVersion5_Action = new QAction(tr("MODE 5"), this);
   //  selectPublicModeVersion5_Action->setEnabled(false);
@@ -1833,7 +1810,6 @@ void QtBrynhildr::createActions()
   selectPublicModeVersion7_Action->setChecked(settings->getPublicModeVersion() == PUBLICMODE_VERSION7);
   selectPublicModeVersion7_Action->setStatusTip(tr("Public Mode 7"));
   connect(selectPublicModeVersion7_Action, SIGNAL(triggered()), this, SLOT(selectPublicModeVersion7()));
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_RECORDER
   // start recording control
@@ -1940,7 +1916,6 @@ void QtBrynhildr::createActions()
 		  SLOT(touchpanelInterfaceTypeQtBrynhildr()));
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // send clipboard
   sendClipboard_Action = new QAction(tr("Send Clipboard"), this);
   sendClipboard_Action->setEnabled(false);
@@ -1958,7 +1933,6 @@ void QtBrynhildr::createActions()
   cancelFileTransferring_Action->setEnabled(false);
   cancelFileTransferring_Action->setStatusTip(tr("Cancel File Transferring"));
   connect(cancelFileTransferring_Action, SIGNAL(triggered()), this, SLOT(cancelFileTransferring()));
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
   // desktop compress mode
@@ -2011,7 +1985,6 @@ void QtBrynhildr::createMenus()
   fileMenu = menuBar()->addMenu(tr("File"));
   fileMenu->addAction(connectToServer_Action);
   fileMenu->addAction(disconnectToServer_Action);
-#if QTB_PUBLIC_MODE6_SUPPORT
   if (settings->getOnTransferFileSupport() || settings->getOnTransferClipboardSupport()){
 	fileMenu->addSeparator();
   }
@@ -2023,7 +1996,6 @@ void QtBrynhildr::createMenus()
 	fileMenu->addAction(sendFile_Action);
 	fileMenu->addAction(cancelFileTransferring_Action);
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_PREFERENCE
   fileMenu->addSeparator();
   fileMenu->addAction(preferences_Action);
@@ -2161,14 +2133,12 @@ void QtBrynhildr::createMenus()
   controlMenu->addAction(onGraphics_Action);
   controlMenu->addAction(onSound_Action);
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // for select publicmode version
   controlMenu->addSeparator();
   selectPublicModeVersionSubMenu = controlMenu->addMenu(tr("Select Public Mode Version"));
   selectPublicModeVersionSubMenu->addAction(selectPublicModeVersion5_Action);
   selectPublicModeVersionSubMenu->addAction(selectPublicModeVersion6_Action);
   selectPublicModeVersionSubMenu->addAction(selectPublicModeVersion7_Action);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_RECORDER
   // for record and replay
@@ -2276,7 +2246,6 @@ void QtBrynhildr::createStatusBar()
   frameRateLabel->setAlignment(Qt::AlignRight);
   frameRateLabel->setText(" "); // dummy text
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // progress bar for transfer file
   progressBar = new QProgressBar(this);
   progressBar->setFixedWidth(this->width()/4);
@@ -2286,7 +2255,6 @@ void QtBrynhildr::createStatusBar()
   progressBar->setTextVisible(true);
   progressBar->setVisible(false);
   statusBar()->addPermanentWidget(progressBar);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   statusBar()->addWidget(connectionLabel);
   statusBar()->addPermanentWidget(frameRateLabel);
@@ -2444,7 +2412,6 @@ void QtBrynhildr::connected()
 	desktopScaleFixed_Action->setEnabled(true);
   }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// send clipboard
 	sendClipboard_Action->setEnabled(true);
@@ -2462,7 +2429,6 @@ void QtBrynhildr::connected()
 	desktopWindow->setAcceptDrops(true);
 #endif // QTB_NEW_DESKTOPWINDOW
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
   // plugins disable
@@ -2488,10 +2454,8 @@ void QtBrynhildr::connected()
 	changeMouseCursor(Qt::CrossCursor);
   }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // set window title
   setupWindowTitle();
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // refresh menu
   refreshMenu();
@@ -2566,7 +2530,6 @@ void QtBrynhildr::disconnected()
 	desktopScaleFixed_Action->setEnabled(false);
   }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
 	// send clipboard
 	sendClipboard_Action->setEnabled(false);
@@ -2584,7 +2547,6 @@ void QtBrynhildr::disconnected()
 	desktopWindow->setAcceptDrops(false);
 #endif // QTB_NEW_DESKTOPWINDOW
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
   // plugins disable
@@ -2887,11 +2849,9 @@ void QtBrynhildr::connectToServer()
 	break;
   }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // mode
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "MODE : " +
 							   QString::number(settings->getPublicModeVersion()));
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // keyboard type
   if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){ // Native Keyboard
@@ -3133,7 +3093,6 @@ void QtBrynhildr::exit()
   qApp->quit();
 }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 // send clipboard
 void QtBrynhildr::sendClipboard()
 {
@@ -3171,7 +3130,6 @@ void QtBrynhildr::cancelFileTransferring()
   // cancel file transferring
   controlThread->exitThread();
 }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_PREFERENCE
 // preferences
@@ -3436,7 +3394,6 @@ void QtBrynhildr::toggleOnSound()
   }
 }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 // setup window title
 void QtBrynhildr::setupWindowTitle()
 {
@@ -3527,7 +3484,6 @@ void QtBrynhildr::selectPublicModeVersion7()
   refreshPublicMode();
 }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
 void QtBrynhildr::setOnPluginsDisable()

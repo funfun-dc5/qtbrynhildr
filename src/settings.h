@@ -71,7 +71,6 @@
 #define QTB_INFOPRODUCTVERSION			"infoProductVersion"
 #define QTB_INFOBUILDABI				"infoBuildAbi"
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 // for publicModeVersion
 #define QTB_PUBLICMODEVERSION	"publicModeVersion"
 #if QTB_PUBLIC_MODE7_SUPPORT
@@ -83,7 +82,6 @@ typedef int PUBLICMODE_VERSION;
 #define PUBLICMODE_VERSION5		5
 #define PUBLICMODE_VERSION6		6
 #define PUBLICMODE_VERSION7		7
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for serverName
 #define QTB_SERVERNAME			"serverName"
@@ -368,7 +366,6 @@ typedef enum {
 #define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	false
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 // for onTransferFileSupport
 #define QTB_ONTRANSFERFILESUPPORT			"onTransferFileSupport"
 #define QTB_ONTRANSFERFILESUPPORT_DEFAULT	true
@@ -386,7 +383,6 @@ typedef enum {
 // for onTransferClipboardSupport
 #define QTB_ONTRANSFERCLIPBOARDSUPPORT			"onTransferClipboardSupport"
 #define QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT	true
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // for onSIMDOperationSupport
 #define QTB_ONSIMDOPERATIONSUPPORT			"onSIMDOperationSupport"
@@ -491,10 +487,8 @@ private:
   // current version
   volatile int currentVersion;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // public mode version
   volatile PUBLICMODE_VERSION publicModeVersion;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // server name
   QString serverName;
@@ -533,7 +527,6 @@ private:
   volatile bool onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onControlOffWithGraphicsOff;
-#if QTB_PUBLIC_MODE6_SUPPORT
   // send clipboard
   volatile bool onSendClipboard;
   // send clipboard string
@@ -542,7 +535,6 @@ private:
   volatile int sendFileCount;
   // send file name
   QStringList sendFileNames;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // Graphics
   volatile bool onGraphics;
@@ -678,7 +670,6 @@ private:
   // show marker
   volatile bool onShowMouseCursorMarker;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // send/receive file support
   volatile bool onTransferFileSupport;
 
@@ -690,7 +681,6 @@ private:
 
   // send/receive clipboard support
   volatile bool onTransferClipboardSupport;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // SIMD opeation support
   volatile bool onSIMDOperationSupport;
@@ -794,7 +784,6 @@ public:
 	this->currentVersion = currentVersion;
   }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // get public mode version
   PUBLICMODE_VERSION getPublicModeVersion() const
   {
@@ -856,7 +845,6 @@ public:
 
 	return "UNKNOWN PUBLICMODE_VERSION";
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get server name
   QString getServerName() const
@@ -1147,7 +1135,6 @@ public:
 	return true;
   }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // get send clipboard flag
   bool getOnSendClipboard() const
   {
@@ -1196,7 +1183,6 @@ public:
   {
 	this->sendFileNames = sendFileNames;
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get graphics flag
   bool getOnGraphics() const
@@ -1931,7 +1917,6 @@ public:
 	this->onShowMouseCursorMarker = onShowMouseCursorMarker;
   }
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // get  transfer file support flag
   bool getOnTransferFileSupport() const
   {
@@ -1981,7 +1966,6 @@ public:
   {
 	this->onTransferClipboardSupport = onTransferClipboardSupport;
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get SIMD operation support flag
   bool getOnSIMDOperationSupport() const

@@ -111,9 +111,7 @@ private slots:
 
   void on_spinBox_doubleClickThreshold_valueChanged(int i);
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   void on_checkBox_onTransferFileSupport_stateChanged(int state);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_DRAG_AND_DROP_SUPPORT
   void on_checkBox_onTransferFileSupportByDragAndDrop_stateChanged(int state);
@@ -123,9 +121,7 @@ private slots:
   void on_checkBox_onShowTotalProgressForTransferFile_stateChanged(int state);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   void on_checkBox_onTransferClipboardSupport_stateChanged(int state);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   void on_spinBox_graphicsBufferSize_valueChanged(int i);
 

@@ -23,9 +23,7 @@ Option::Option(int argc, char *argv[])
   ,portNo(0)
   ,password(0)
   ,hostType(0)
-#if QTB_PUBLIC_MODE6_SUPPORT
   ,publicModeVersion(0)
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   ,iniFileName(0)
   ,initFlag(false)
   ,debug(0)
@@ -223,7 +221,6 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		}
 	  }
 #endif // QTB_RECORDER
-#if QTB_PUBLIC_MODE6_SUPPORT
 	  else if (strncmp("mode5", optionName, sizeof("mode5")) == 0){
 		publicModeVersion = 5;
 	  }
@@ -237,7 +234,6 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		publicModeVersion = 7;
 	  }
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 	  else if (strncmp("fullscreen", optionName, sizeof("fullscreen")) == 0){
 		fullScreenFlag = true;
 	  }
@@ -322,9 +318,7 @@ void Option::printSpec() const
   cout << " RECORDER";
 #endif // QTB_RECORDER
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   cout << " MODE6";
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_PUBLIC_MODE7_SUPPORT
   cout << " MODE7";
@@ -353,7 +347,6 @@ void Option::printHelp() const
   cout << QTB_APPLICATION << " [options] <.ini file>" << endl;
   cout << "-------------------------------------------------------" << endl;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 #if QTB_PUBLIC_MODE7_SUPPORT
   cout << "-mode5/mode6(mjpeg)/mode7(compress)" << endl;
   cout << "        " << "support public mode 5/6/7." << endl;
@@ -362,7 +355,6 @@ void Option::printHelp() const
   cout << "        " << "support public mode 5/6." << endl;
 #endif // QTB_PUBLIC_MODE7_SUPPORT
   cout << endl;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // -server <server name|IP address>:<password>[:<port no>[:<host type>]]
   cout << "-server <server name|IP address>:<password>[:<port no>[:<host type>]]" << endl;

@@ -35,10 +35,8 @@ Settings::Settings(const char *iniFileName)
   ,serverNameList(new QStringList)
 #endif // QTB_AUTO_COMPLETE
   ,connected(false)
-#if QTB_PUBLIC_MODE6_SUPPORT
   ,onSendClipboard(false)
   ,sendFileCount(0)
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   ,onGamePadSupport(false)
   ,onBrynhildr2Support(true)
   ,monitorCount(0)
@@ -71,9 +69,7 @@ Settings::Settings(const char *iniFileName)
   setCurrentVersion(QTB_CURRENTVERSION_DEFAULT);
 
   // set default
-#if QTB_PUBLIC_MODE6_SUPPORT
   setPublicModeVersion(QTB_PUBLICMODEVERSION_DEFAULT);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   setServerName(QTB_SERVERNAME_DEFAULT);
   setServerType(QTB_SERVERTYPE_DEFAULT);
   setKeyboardType(getDefaultKeyboardType());
@@ -154,14 +150,12 @@ Settings::Settings(const char *iniFileName)
 
   setOnShowMouseCursorMarker(QTB_ONSHOWMOUSECURSORMARKER_DEFAULT);
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   setOnTransferFileSupport(QTB_ONTRANSFERFILESUPPORT_DEFAULT);
   setOnShowTotalProgressForTransferFile(QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE_DEFAULT);
 #if QTB_DRAG_AND_DROP_SUPPORT
   setOnTransferFileSupportByDragAndDrop(QTB_ONTRANSFERFILESUPPORTBYDRAGANDDROP_DEFAULT);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
   setOnTransferClipboardSupport(QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   setOnSIMDOperationSupport(QTB_ONSIMDOPERATIONSUPPORT_DEFAULT);
 
@@ -254,11 +248,9 @@ void Settings::readSettings()
   setGeneratedVersion(settings->value(QTB_GENERATEDVERSION,
 									  (qint32)QTB_GENERATEDVERSION_DEFAULT).toInt());
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // load publicModeVersion
   setPublicModeVersion(settings->value(QTB_PUBLICMODEVERSION,
 									   (qint32)QTB_PUBLICMODEVERSION_DEFAULT).toInt());
-#endif //QTB_PUBLIC_MODE6_SUPPORT
 
   // load serverName
   setServerName(settings->value(QTB_SERVERNAME,
@@ -447,7 +439,6 @@ void Settings::readSettings()
   setOnShowMouseCursorMarker(settings->value(QTB_ONSHOWMOUSECURSORMARKER,
 											 QTB_ONSHOWMOUSECURSORMARKER_DEFAULT).toBool());
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // load onTansferFile
   setOnTransferFileSupport(settings->value(QTB_ONTRANSFERFILESUPPORT,
 									QTB_ONTRANSFERFILESUPPORT_DEFAULT).toBool());
@@ -463,7 +454,6 @@ void Settings::readSettings()
   // load onTansferClipboardSupport
   setOnTransferClipboardSupport(settings->value(QTB_ONTRANSFERCLIPBOARDSUPPORT,
 												QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT).toBool());
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // load onSIMDOperationSupport
   setOnSIMDOperationSupport(settings->value(QTB_ONSIMDOPERATIONSUPPORT,
@@ -553,10 +543,8 @@ void Settings::writeSettings()
   settings->setValue(QTB_GENERATEDVERSION, (qint32)generatedVersion);
   settings->setValue(QTB_CURRENTVERSION, (qint32)currentVersion);
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // save publicModeVersion
   settings->setValue(QTB_PUBLICMODEVERSION, (qint32)publicModeVersion);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // save serverName
   settings->setValue(QTB_SERVERNAME, serverName);
@@ -701,7 +689,6 @@ void Settings::writeSettings()
   // save onShowMouseCursorMarker
   settings->setValue(QTB_ONSHOWMOUSECURSORMARKER, onShowMouseCursorMarker);
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // save onTransferFileSupport
   settings->setValue(QTB_ONTRANSFERFILESUPPORT, onTransferFileSupport);
   // save onShowTotalProgressForTransferFile
@@ -712,7 +699,6 @@ void Settings::writeSettings()
 #endif // QTB_DRAG_AND_DROP_SUPPORT
   // save onTransferClipboardSupport
   settings->setValue(QTB_ONTRANSFERCLIPBOARDSUPPORT, onTransferClipboardSupport);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // save onSIMDOperationSupport
   settings->setValue(QTB_ONSIMDOPERATIONSUPPORT, onSIMDOperationSupport);
@@ -781,9 +767,7 @@ void Settings::printSettings() const
   qDebug() << "---------------- Settings ----------------";
   qDebug() << "Generated Version : " << generatedVersion;
   qDebug() << "Current Version   : " << currentVersion;
-#if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "Public Mode Version: " << getPublicModeVersionByString();
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "------------------------------------------";
   qDebug() << "Server Name   : " << serverName;
   qDebug() << "Server Type   : " << getServerTypeByString();
@@ -800,10 +784,8 @@ void Settings::printSettings() const
   qDebug() << "  ExtraButtonSupport : " << onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
-#if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "  SendClipboard : " << onSendClipboard;
   qDebug() << "  SendFileCount : " << sendFileCount;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "Graphics      : " << onGraphics;
   qDebug() << "    QUALITY   : " << getVideoQualityByString();
   qDebug() << "    FrameRate : " << frameRate;
@@ -846,14 +828,12 @@ void Settings::printSettings() const
   qDebug() << "ShowPassword            : " << onShowPassword;
   qDebug() << "ClipCursor              : " << onClipCursor;
   qDebug() << "ShowMouseCursorMarker   : " << onShowMouseCursorMarker;
-#if QTB_PUBLIC_MODE6_SUPPORT
   qDebug() << "TransferFileSupport     : " << onTransferFileSupport;
   qDebug() << "ShowTotalProgressForTransferFile : " << onShowTotalProgressForTransferFile;
 #if QTB_DRAG_AND_DROP_SUPPORT
   qDebug() << "TransferFileSupportByDragAndDrop : " << onTransferFileSupportByDragAndDrop;
 #endif // QTB_DRAG_AND_DROP_SUPPORT
   qDebug() << "TransferClipboardSupport: " << onTransferClipboardSupport;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   qDebug() << "SIMDOperationSupport    : " << onSIMDOperationSupport;
 

@@ -92,18 +92,12 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   }
 
   // public mode field
-#if QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION5 - PUBLICMODE_VERSION5, tr("MODE 5"));
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION6 - PUBLICMODE_VERSION5, tr("MODE 6"));
 #if QTB_PUBLIC_MODE7_SUPPORT
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION7 - PUBLICMODE_VERSION5, tr("MODE 7"));
 #endif // QTB_PUBLIC_MODE6_SUPPORT
   comboBox_publicmode->setCurrentIndex(settings->getPublicModeVersion() - PUBLICMODE_VERSION5);
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  comboBox_publicmode->insertItem(0, tr("MODE 5"));
-  comboBox_publicmode->setCurrentIndex(0);
-  comboBox_publicmode->setEnabled(false);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // show password field
   if (password != ""){
@@ -342,10 +336,8 @@ void ConnectToServerDialog::accept()
   // password
   settings->setPassword(lineEdit_password->text());
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // public mode
   settings->setPublicModeVersion(comboBox_publicmode->currentIndex() + PUBLICMODE_VERSION5);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // show password field
   settings->setOnShowPassword(checkBox_showPassword->checkState() == Qt::Checked);

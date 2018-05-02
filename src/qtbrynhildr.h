@@ -8,9 +8,7 @@
 
 // Qt Header
 #include <QAction>
-#if QTB_PUBLIC_MODE6_SUPPORT
 #include <QClipboard>
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QDateTime>
 #include <QHideEvent>
 #include <QImage>
@@ -19,9 +17,7 @@
 #include <QMenu>
 #include <QObject>
 #include <QPalette>
-#if QTB_PUBLIC_MODE6_SUPPORT
 #include <QProgressBar>
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QRect>
 #if QTB_NEW_DESKTOPWINDOW
 #include <QGraphicsScene>
@@ -358,7 +354,6 @@ private:
   QAction *touchpanelInterfaceTypeQtBrynhildr_Action;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // send clipboard
   QAction *sendClipboard_Action;
 
@@ -367,7 +362,6 @@ private:
 
   // cancel file transferring
   QAction *cancelFileTransferring_Action;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_DESKTOP_COMPRESS_MODE // for TEST
   // desktop compress mode
@@ -481,10 +475,8 @@ private:
   // event converter
   EventConverter *eventConverter;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard
   QClipboard *clipboard;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // full screen
   bool fullScreenMode;
@@ -494,10 +486,8 @@ private:
   bool onShowMenuBar;
   bool onShowStatusBar;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // progress bar
   QProgressBar	*progressBar;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // height of title bar
   int heightOfTitleBar;
@@ -560,11 +550,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-#if QTB_PUBLIC_MODE6_SUPPORT
   QtBrynhildr(Option *option, QClipboard *clipboard);
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  QtBrynhildr(Option *option);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   // destructor
   ~QtBrynhildr();
 
@@ -646,13 +632,11 @@ public slots:
   // exit applilcation
   void exitApplication();
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // set clipboard
   void setClipboard(QString clipboardString);
 
   // set progress bar value for transfer file
   void setFileTransferProgressBarValue(int value);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // output Log Message
   void outputLogMessage(int msgID);
@@ -712,7 +696,6 @@ private slots:
   // exit from QtBynhildr
   void exit();
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // send clipboard
   void sendClipboard();
 
@@ -721,7 +704,6 @@ private slots:
 
   // cancel file transferring
   void cancelFileTransferring();
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_PREFERENCE
   // preferences
@@ -755,7 +737,6 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
-#if QTB_PUBLIC_MODE6_SUPPORT
 private:
   // setup window title
   void setupWindowTitle();
@@ -769,7 +750,6 @@ private slots:
 #if QTB_PUBLIC_MODE7_SUPPORT
   void selectPublicModeVersion7();
 #endif // QTB_PUBLIC_MODE7_SUPPORT
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 #if QTB_RECORDER
   // record and replay

@@ -9,9 +9,7 @@
 
 // Qt Header
 #include <QApplication>
-#if QTB_PUBLIC_MODE6_SUPPORT
 #include <QClipboard>
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #include <QLocale>
 #include <QThread>
 #include <QTranslator>
@@ -88,13 +86,9 @@ int main(int argc, char *argv[])
   }
 
   // construct QtBrynhildr
-#if QTB_PUBLIC_MODE6_SUPPORT
   // clipboard
   QClipboard *clipboard = QApplication::clipboard();
   qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(option, clipboard);
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  qtbrynhildr::QtBrynhildr *qtbrynhildr = new qtbrynhildr::QtBrynhildr(option);
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   if (qtbrynhildr->getShutdownFlag()){
 	// shutdown now
 	return EXIT_SUCCESS;

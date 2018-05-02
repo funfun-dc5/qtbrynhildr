@@ -18,10 +18,8 @@
 #if defined(QTB_DEV_TOUCHPANEL)
 #include <QTouchEvent>
 #endif // defined(QTB_DEV_TOUCHPANEL)
-#if QTB_PUBLIC_MODE6_SUPPORT
 #include <QList>
 #include <QUrl>
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 #if 1 // for qDebug()
 #include <QtCore>
 #endif

@@ -534,7 +534,6 @@ void ControlThread::initHeader()
 
   // common
   com_data->data_type	= DATA_TYPE_DATA;
-#if QTB_PUBLIC_MODE6_SUPPORT
   int sendFileCount = settings->getSendFileCount();
   if (settings->getOnSendClipboard()){
 	com_data->data_type	= DATA_TYPE_CLIPBOARD;
@@ -548,13 +547,8 @@ void ControlThread::initHeader()
 	qint64 fileSize = fileInfo.size();
 	com_data->data_size = (SIZE64)fileSize;
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->thread		= THREAD_CONTROL;
-#if QTB_PUBLIC_MODE6_SUPPORT
   com_data->mode		= settings->getPublicModeVersion();
-#else // QTB_PUBLIC_MODE6_SUPPORT
-  com_data->mode		= MODE_PUBLIC5;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
   com_data->monitor_no	= settings->getMonitorNo();
   if (serverVersion == SERVER_VERSION_BRYNHILDR2){
 	com_data->mouse_cursor = settings->getOnDisplayMouseCursor() ? MOUSE_CURSOR_ON : MOUSE_CURSOR_OFF;

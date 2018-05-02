@@ -19,10 +19,8 @@ typedef long	SERVER_VERSION;
 // data type
 typedef char	DATA_TYPE;
 #define DATA_TYPE_DATA		1	// data
-#if QTB_PUBLIC_MODE6_SUPPORT
 #define DATA_TYPE_CLIPBOARD	2	// clipboard
 #define DATA_TYPE_FILE		3	// file
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
 // thread
 typedef char	THREAD;

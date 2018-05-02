@@ -27,10 +27,8 @@ private:
   // host type
   const char *hostType;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // public mode version
   int publicModeVersion;
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // ini filename
   char *iniFileName;
@@ -87,13 +85,11 @@ public:
   // get version string
   const char *getVersionString() const;
 
-#if QTB_PUBLIC_MODE6_SUPPORT
   // get public mode version
   int getPublicModeVersion() const
   {
 	return publicModeVersion;
   }
-#endif // QTB_PUBLIC_MODE6_SUPPORT
 
   // get server name
   const char *getServerName() const

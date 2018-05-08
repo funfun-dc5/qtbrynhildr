@@ -540,10 +540,10 @@ void NetThread::printHeader()
   cout << "com_data->server_cx      :"  << com_data->server_cx << endl;
   cout << "com_data->server_cy      :"  << com_data->server_cy << endl;
   cout << "com_data->control        :"	<< (int)com_data->control << endl;
-  cout << "com_data->filedrop       :"	<< (int)com_data->filedrop << endl;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   cout << "com_data->plugins_disable:"	<< (int)com_data->plugins_disable << endl;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  cout << "com_data->filedrop       :"	<< (int)com_data->filedrop << endl;
   cout << "com_data->mouse_move     :"	<< (int)com_data->mouse_move << endl;
 #if QTB_EXTRA_BUTTON_SUPPORT
   cout << "com_data->mouse_x1       :"  << (int)com_data->mouse_x1 << endl;

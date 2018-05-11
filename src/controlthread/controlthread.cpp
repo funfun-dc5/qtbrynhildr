@@ -47,6 +47,12 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
 #endif // QTB_RECORDER
   ,monitorCount(0)
   ,sentMode(0)
+  ,doneCheckPassword(false)
+  ,buffer(0)
+  ,clipboardTop(0)
+  ,transferFileProgress(0)
+  ,transferFileProgressUnit(0)
+  ,ntfs(0)
 {
   outputLog = false; // for DEBUG
 
@@ -131,91 +137,18 @@ CONNECT_RESULT ControlThread::connectToServer()
   return CONNECT_SUCCEEDED;
 }
 
-#if TEST_THREAD
-  qint64 startTime;
-#endif // TEST_THREAD
-
 // process for header
 PROCESS_RESULT ControlThread::processForHeader()
 {
 #if TEST_THREAD
-  startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-  {
-	static qint64 previousTime = 0;
-	qint64 duration = 0;
-	if (previousTime != 0){
-	  duration = startTime - previousTime;
-	}
-	previousTime = startTime;
-	cout << "================================   " << duration << endl;
-  }
+  startTimeInfo();
 #endif // TEST_THREAD
 
-  // initialize header(com_data)
-  initHeader();
-
-  // for control
-  if (settings->getOnControl()){
-	//-------------------------------------------
-	// 1) Mouse Control
-	//-------------------------------------------
-	setMouseControl();
-
-	//-------------------------------------------
-	// 2) Keyboard Control
-	//-------------------------------------------
-	setKeyboardControl();
-
-	//-------------------------------------------
-	// 3) GamePad Control
-	//-------------------------------------------
-	if (settings->getOnGamePadSupport()){
-	  setGamePadControl();
-	}
-  }
-  else {
-	// NOT under control
-	// Nothing to do
-  }
-
-#if 0 // for DEBUG
-  ios::fmtflags flags = cout.flags();
-  cout << "keycode     = " << hex << (int)com_data->keycode << endl;
-  cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
-  cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
-  cout.flags(flags);
-#endif
-
-#if 0 // for DEBUG
-  static bool oneFlag = true;
-  if (oneFlag){
-	oneFlag = false;
-	printHeader();
-  }
-#endif
+  // setup header
+  setupHeader();
 
 #if QTB_RECORDER
-  // replaying
-  if (settings->getOnReplayingControl()){
-	// replay
-	COM_DATA *recordedCOM_DATA = recorder->getCOM_DATA();
-	if (recordedCOM_DATA != 0){
-	  // override com_data
-	  memcpy(com_data, recordedCOM_DATA, sizeof(COM_DATA));
-	}
-	else {
-	  // stop replaying
-	  if (settings->getOnExitAfterReplay()){
-		emit exitApplication();
-	  }
-	  // refresh menu
-	  emit refreshMenu();
-	}
-  }
-  // recording
-  else if (settings->getOnRecordingControl()){
-	recorder->putCOM_DATA(com_data);
-  }
+  recordAndReplayHeader();
 #endif // QTB_RECORDER
 
   // save mode
@@ -223,7 +156,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 
   // send header for next communication
   long dataSize;
-  dataSize = sendHeader(sock_control, (char *)com_data, sizeof(COM_DATA));
+  dataSize = sendHeader((char *)com_data, sizeof(COM_DATA));
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
@@ -233,44 +166,15 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] sent header     : " << pastTime << endl;
-  }
+  printTimeInfo("got header");
 #endif // TEST_THREAD
 
   // send clilpboard/file
-  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
-	// cliboard
-	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
-		settings->getOnTransferClipboardSupport()){
-	  // send clipboard
-	  if (!sendClipboard()){
-		// failed to send clipboard
-		//		cout << "Failed to send clipboard!" << endl << flush;
-		return PROCESS_RESTART;
-	  }
-	}
-	// file
-	else if (com_data->data_type == DATA_TYPE_FILE &&
-			 settings->getOnTransferFileSupport()){
-	  // send file
-	  keyBuffer->setEnabled(false); // disabled keyboard
-	  mouseBuffer->setEnabled(false); // disabled mouse
-	  bool result = sendFile();
-	  keyBuffer->setEnabled(true);
-	  mouseBuffer->setEnabled(true);
-	  if (!result){
-		// failed to send file
-		//		cout << "Failed to send file!" << endl << flush;
-		return PROCESS_RESTART;
-	  }
-	}
-  }
+  if (!sendToServer())
+	return PROCESS_RESTART;
 
   // receive header
-  dataSize = receiveData(sock_control, (char *)com_data, sizeof(COM_DATA));
+  dataSize = receiveData((char *)com_data, sizeof(COM_DATA));
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
@@ -280,11 +184,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] got header      : " << pastTime << endl;
-  }
+  printTimeInfo("got header");
 #endif // TEST_THREAD
 
 #if 0 // for DEBUG
@@ -338,25 +238,9 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  // same as Brynhildr (<= 1.1.5)
 	  com_data->server_version = SERVER_VERSION_BRYNHILDR;
 	}
-	// save server version
-	if (serverVersion != com_data->server_version){
-	  serverVersion = com_data->server_version;
-	  if (serverVersion == SERVER_VERSION_BRYNHILDR){
-		// change to Qt::CrossCursor for Brynhildr (<= 1.1.5)
-		// change mouse cursor
-		emit changeMouseCursor(Qt::CrossCursor);
-	  }
-	  else if (serverVersion == SERVER_VERSION_BRYNHILDR2){
-		// change to Qt::ArrowCursor for Brynhildr (>= 2.0.0)
-		// change mouse cursor
-		if (settings->getOnDisplayMouseCursor()){
-		  emit changeMouseCursor(Qt::CrossCursor);
-		}
-		else {
-		  emit changeMouseCursor(Qt::ArrowCursor);
-		}
-	  }
-	}
+
+	// check server version
+	checkServerVersion();
   }
 
   // check monitor no
@@ -372,28 +256,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	counter_control++;
   }
 
-  if (currentMode == 0){
-	// save current mode
-	currentMode = settings->getPublicModeVersion();
-  }
-  else if (currentMode != settings->getPublicModeVersion()){
-	// save current mode
-	currentMode = settings->getPublicModeVersion();
-	if (currentMode == PUBLICMODE_VERSION7){
-		if (settings->getOnDisplayMouseCursor()){
-		  emit changeMouseCursor(Qt::CrossCursor);
-		}
-		else {
-		  emit changeMouseCursor(Qt::ArrowCursor);
-		}
-	}
-	else {
-	  // to Cross Cursor
-	  emit changeMouseCursor(Qt::CrossCursor);
-	}
-	// refresh menu
-	emit refreshMenu();
-  }
+  // check mode
+  checkMode();
 
   return PROCESS_SUCCEEDED;
 }
@@ -402,43 +266,9 @@ PROCESS_RESULT ControlThread::processForHeader()
 TRANSMIT_RESULT ControlThread::transmitBuffer()
 {
   // receive clilpboard/file
-  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
-	// cliboard
-	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
-		settings->getOnTransferClipboardSupport()){
-	  // receive clipboard
-	  if (!receiveClipboard()){
-		// failed to transfer clipboard
-		//		cout << "Failed to receive clipboard!" << endl << flush;
-		return TRANSMIT_RESTART;
-	  }
-	}
-	// file
-	else if (com_data->data_type == DATA_TYPE_FILE &&
-			 settings->getOnTransferFileSupport()){
-	  // receive file
-	  keyBuffer->setEnabled(false); // disabled keyboard
-	  mouseBuffer->setEnabled(false); // disabled mouse
-	  bool result = receiveFile();
-	  keyBuffer->setEnabled(true);
-	  mouseBuffer->setEnabled(true);
-	  if (!result){
-		// failed to receive file
-		//		cout << "Failed to receive file!" << endl << flush;
-		return TRANSMIT_RESTART;
-	  }
-	}
-	// mouse cursor image
-	else if (com_data->data_type == DATA_TYPE_DATA){
-	  // receive mouse cursor image
-	  bool result = receiveMouseCursorImage();
-	  if (!result){
-		// failed to receive mouse cursor image
-		//		cout << "Failed to receive mouse cursor image!" << endl << flush;
-		return TRANSMIT_RESTART;
-	  }
-	}
-  }
+  if (!receiveFromServer())
+	return TRANSMIT_RESTART;
+
   return TRANSMIT_SUCCEEDED;
 }
 
@@ -499,6 +329,63 @@ void ControlThread::shutdownConnection()
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
+// send eader
+long ControlThread::sendHeader(const char *buf, long size)
+{
+  return NetThread::sendHeader(sock_control, buf, size);
+}
+
+// send data
+long ControlThread::sendData(const char *buf, long size)
+{
+  return NetThread::sendData(sock_control, buf, size);
+}
+
+// receive data
+long ControlThread::receiveData(char *buf, long size)
+{
+  return NetThread::receiveData(sock_control, buf, size);
+}
+
+// setup header
+void ControlThread::setupHeader()
+{
+  // initialize header(com_data)
+  initHeader();
+
+  // for control
+  if (settings->getOnControl()){
+	//-------------------------------------------
+	// 1) Mouse Control
+	//-------------------------------------------
+	setMouseControl();
+
+	//-------------------------------------------
+	// 2) Keyboard Control
+	//-------------------------------------------
+	setKeyboardControl();
+
+	//-------------------------------------------
+	// 3) GamePad Control
+	//-------------------------------------------
+	if (settings->getOnGamePadSupport()){
+	  setGamePadControl();
+	}
+  }
+  else {
+	// NOT under control
+	// Nothing to do
+  }
+
+#if 0 // for DEBUG
+  ios::fmtflags flags = cout.flags();
+  cout << "keycode     = " << hex << (int)com_data->keycode << endl;
+  cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
+  cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
+  cout.flags(flags);
+#endif
+}
+
 // init protocol header
 void ControlThread::initHeader()
 {
@@ -821,6 +708,144 @@ void ControlThread::setGamePadControl()
 }
 #endif // defined(Q_OS_WIN)
 
+// check server version
+void ControlThread::checkServerVersion()
+{
+  // save server version
+  if (serverVersion != com_data->server_version){
+	serverVersion = com_data->server_version;
+	if (serverVersion == SERVER_VERSION_BRYNHILDR){
+	  // change to Qt::CrossCursor for Brynhildr (<= 1.1.5)
+	  // change mouse cursor
+	  emit changeMouseCursor(Qt::CrossCursor);
+	}
+	else if (serverVersion == SERVER_VERSION_BRYNHILDR2){
+	  // change to Qt::ArrowCursor for Brynhildr (>= 2.0.0)
+	  // change mouse cursor
+	  if (settings->getOnDisplayMouseCursor()){
+		emit changeMouseCursor(Qt::CrossCursor);
+	  }
+	  else {
+		emit changeMouseCursor(Qt::ArrowCursor);
+	  }
+	}
+  }
+}
+
+// check mode
+void ControlThread::checkMode()
+{
+  // save current mode
+  if (currentMode == 0){
+	currentMode = settings->getPublicModeVersion();
+  }
+  else if (currentMode != settings->getPublicModeVersion()){
+	currentMode = settings->getPublicModeVersion();
+	// change mouse cursor
+	if (currentMode == PUBLICMODE_VERSION7){
+		if (settings->getOnDisplayMouseCursor()){
+		  emit changeMouseCursor(Qt::CrossCursor);
+		}
+		else {
+		  emit changeMouseCursor(Qt::ArrowCursor);
+		}
+	}
+	else {
+	  // to Cross Cursor
+	  emit changeMouseCursor(Qt::CrossCursor);
+	}
+	// refresh menu
+	emit refreshMenu();
+  }
+}
+
+#if QTB_RECORDER
+// recorder function
+void ControlThread::recordAndReplayHeader()
+{
+  // replaying
+  if (settings->getOnReplayingControl()){
+	// replay
+	COM_DATA *recordedCOM_DATA = recorder->getCOM_DATA();
+	if (recordedCOM_DATA != 0){
+	  // override com_data
+	  memcpy(com_data, recordedCOM_DATA, sizeof(COM_DATA));
+	}
+	else {
+	  // stop replaying
+	  if (settings->getOnExitAfterReplay()){
+		emit exitApplication();
+	  }
+	  // refresh menu
+	  emit refreshMenu();
+	}
+  }
+  // recording
+  else if (settings->getOnRecordingControl()){
+	recorder->putCOM_DATA(com_data);
+  }
+}
+#endif // QTB_RECORDER
+
+// send to server
+bool ControlThread::sendToServer()
+{
+  bool result = true;
+
+ if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// cliboard
+	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
+		settings->getOnTransferClipboardSupport()){
+	  // send clipboard
+	  result = sendClipboard();
+	}
+	// file
+	else if (com_data->data_type == DATA_TYPE_FILE &&
+			 settings->getOnTransferFileSupport()){
+	  // send file
+	  keyBuffer->setEnabled(false); // disabled keyboard
+	  mouseBuffer->setEnabled(false); // disabled mouse
+	  result = sendFile();
+	  keyBuffer->setEnabled(true);
+	  mouseBuffer->setEnabled(true);
+	}
+  }
+
+  return result;
+}
+
+// receive from server
+bool ControlThread::receiveFromServer()
+{
+  bool result = true;
+
+  if (settings->getPublicModeVersion() >= PUBLICMODE_VERSION6){
+	// cliboard
+	if (com_data->data_type == DATA_TYPE_CLIPBOARD &&
+		settings->getOnTransferClipboardSupport()){
+	  // receive clipboard
+	  result = receiveClipboard();
+	}
+	// file
+	else if (com_data->data_type == DATA_TYPE_FILE &&
+			 settings->getOnTransferFileSupport()){
+	  // receive file
+	  keyBuffer->setEnabled(false); // disabled keyboard
+	  mouseBuffer->setEnabled(false); // disabled mouse
+	  result = receiveFile();
+	  keyBuffer->setEnabled(true);
+	  mouseBuffer->setEnabled(true);
+	}
+	// mouse cursor image
+	else if (com_data->data_type == DATA_TYPE_DATA){
+	  // receive mouse cursor image
+	  result = receiveMouseCursorImage();
+	}
+  }
+
+  return result;
+}
+
 // send clipboard
 bool ControlThread::sendClipboard()
 {
@@ -845,7 +870,7 @@ bool ControlThread::sendClipboard()
   // copy to local buffer and send to server
   memset(localBuffer, 0, stringSize + 16 + 2);
   memcpy(&localBuffer[16], clipboardString.unicode(), stringSize);
-  sentDataSize = sendData(sock_control, localBuffer, stringSize + 16);
+  sentDataSize = sendData(localBuffer, stringSize + 16);
   stringSize -= sentDataSize - 16;
 
   // flag clear
@@ -873,11 +898,11 @@ bool ControlThread::receiveClipboard()
 
   // get cliboard
   while(clipboardSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
-	receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	receivedDataSize = receiveData(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	clipboardSize -= receivedDataSize;
   }
   if (clipboardSize > 0){
-	receivedDataSize = receiveData(sock_control, buffer, clipboardSize);
+	receivedDataSize = receiveData(buffer, clipboardSize);
 	clipboardSize -= receivedDataSize;
 	buffer[receivedDataSize] = '\0';
 	buffer[receivedDataSize+1] = '\0';
@@ -923,7 +948,7 @@ bool ControlThread::sendFile()
   QString fileName = settings->getSendFileNames().at(sendFileCount);
   QFileInfo fileInfo(fileName);
   strncpy(filename, qPrintable(fileInfo.fileName()), 260);
-  sentDataSize = sendData(sock_control, filename, 260);
+  sentDataSize = sendData(filename, 260);
 
   // send time stamp
   qint64 CreationTime = ntfs->toFILETIME(fileInfo.created()); // UTC
@@ -953,7 +978,7 @@ bool ControlThread::sendFile()
   fileTimeStamp[21] = (LastWriteTime >> 40) & 0xFF;
   fileTimeStamp[22] = (LastWriteTime >> 48) & 0xFF;
   fileTimeStamp[23] = (LastWriteTime >> 56) & 0xFF;
-  sentDataSize = sendData(sock_control, fileTimeStamp, 24);
+  sentDataSize = sendData(fileTimeStamp, 24);
 
   // send file image
   fstream file;
@@ -963,7 +988,7 @@ bool ControlThread::sendFile()
 	  // read to buffer
 	  file.read(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	  // send to server
-	  sentDataSize = sendData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  sentDataSize = sendData(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	  sentDataSizeTotal += sentDataSize;
 	  fileSize -= sentDataSize;
 	  // check for cancel file transferring
@@ -987,7 +1012,7 @@ bool ControlThread::sendFile()
 	  // read to buffer
 	  file.read(buffer, fileSize);
 	  // send to server
-	  sentDataSize = sendData(sock_control, buffer, fileSize + paddingSize);
+	  sentDataSize = sendData(buffer, fileSize + paddingSize);
 	  sentDataSize -= paddingSize;
 	  sentDataSizeTotal += sentDataSize;
 	  fileSize -= sentDataSize;
@@ -1049,10 +1074,10 @@ bool ControlThread::receiveFile()
   }
 
   // get filename
-  receivedDataSize = receiveData(sock_control, filename, 260);
+  receivedDataSize = receiveData(filename, 260);
 
   // get file time stamp
-  receivedDataSize = receiveData(sock_control, fileTimeStamp, 24);
+  receivedDataSize = receiveData(fileTimeStamp, 24);
 
   // get file image
   fstream file;
@@ -1060,7 +1085,7 @@ bool ControlThread::receiveFile()
   file.open(qPrintable(localFilename), ios::out | ios::binary);
   if (file.is_open()){
 	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
-	  receivedDataSize = receiveData(sock_control, buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
+	  receivedDataSize = receiveData(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	  if (receivedDataSize > 0){
 		file.write(buffer, receivedDataSize);
 		receivedDataSizeTotal += receivedDataSize;
@@ -1081,7 +1106,7 @@ bool ControlThread::receiveFile()
 	  }
 	}
 	if (fileSize > 0){
-	  receivedDataSize = receiveData(sock_control, buffer, fileSize);
+	  receivedDataSize = receiveData(buffer, fileSize);
 	  if (receivedDataSize > 0){
 		file.write(buffer, receivedDataSize);
 		receivedDataSizeTotal += receivedDataSize;
@@ -1113,7 +1138,7 @@ bool ControlThread::receiveMouseCursorImage()
   qint64 receivedDataSize = 0;
 
   // get AND Mask Cursor
-  receivedDataSize = receiveData(sock_control, (char*)andMaskImage, QTB_ICON_IMAGE_SIZE);
+  receivedDataSize = receiveData((char*)andMaskImage, QTB_ICON_IMAGE_SIZE);
   if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }
@@ -1132,7 +1157,7 @@ bool ControlThread::receiveMouseCursorImage()
 #endif // for TEST
 
   // get XOR Mask Cursor
-  receivedDataSize = receiveData(sock_control, (char*)xorMaskImage, QTB_ICON_IMAGE_SIZE);
+  receivedDataSize = receiveData((char*)xorMaskImage, QTB_ICON_IMAGE_SIZE);
   if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }

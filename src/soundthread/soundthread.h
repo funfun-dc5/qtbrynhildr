@@ -82,17 +82,23 @@ protected:
   void shutdownConnection();
 
 private:
+  // receive data
+  inline long receiveData(char *buf, long size);
+
   // put PCM data into sound device
   TRANSMIT_RESULT putPCMDataIntoSoundDevice();
 
   // change samplerate
   bool changeSamplerate(SAMPLERATE samplerate);
 
+  // output received data
+  void outputReceivedData(long receivedDataSize, const char *filename);
+
   // create .wav file
   void createWavFile(int dataSize);
 
-#if defined(DEBUG)
 private slots:
+#if defined(DEBUG)
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif // defined(DEBUG)

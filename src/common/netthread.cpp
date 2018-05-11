@@ -31,6 +31,7 @@ NetThread::NetThread(const char *name, Settings *settings)
   ,runThread(true)
   ,receivedDataCounter(0)
   ,previousGetDataRateTime(0)
+  ,startTime(0)
   // for DEBUG
   ,outputLog(false)
 {
@@ -85,6 +86,9 @@ void NetThread::run()
 
   // main loop
   while(runThread){
+	// set start time of main loop
+	startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+
 	//QThread::msleep(5); // 5 milli seconds sleep
 	QThread::msleep(QTB_THREAD_SLEEP_TIME); // QTB_THREAD_SLEEP_TIME milli seconds sleep
 
@@ -507,12 +511,8 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 }
 
 // print protocol header
-void NetThread::printHeader()
+void NetThread::printHeader(COM_DATA *com_data)
 {
-  // check
-  if (com_data == 0)
-	return;
-
   cout << "============================== HEADER ==============================" << endl;
   cout << "com_data->data_type      :" << (int)com_data->data_type << endl;
   cout << "com_data->thread         :" << (int)com_data->thread << endl;
@@ -589,7 +589,7 @@ void NetThread::printHeader()
 }
 
 // save protocol header
-void NetThread::saveHeader(const char* filename)
+void NetThread::saveHeader(COM_DATA *com_data, const char* filename)
 {
   fstream file;
   file.open(filename, ios::out | ios::binary | ios::trunc);
@@ -603,7 +603,7 @@ void NetThread::saveHeader(const char* filename)
 }
 
 // dump protocol header
-void NetThread::dumpHeader()
+void NetThread::dumpHeader(COM_DATA *com_data)
 {
   // check
   if (com_data == 0)
@@ -628,6 +628,26 @@ void NetThread::dumpHeader()
 	ptr++;
   }
   cout << endl << endl << setiosflags(flags) << setfill(fill) << flush;
+}
+
+// start information
+void NetThread::startTimeInfo()
+{
+  static qint64 previousTime = 0;
+  qint64 duration = 0;
+  if (previousTime != 0){
+	duration = startTime - previousTime;
+  }
+  previousTime = startTime;
+  cout << "================================   " << duration << endl;
+}
+
+// print time information
+void NetThread::printTimeInfo(const char *str)
+{
+  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+  qint64 pastTime = currentTime - startTime;
+  cout << "[" << name << "] " << left << setw(20) << str << ": " << pastTime << endl;
 }
 
 // set socket option

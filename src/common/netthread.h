@@ -99,6 +99,9 @@ protected:
   // previous get data rate time
   qint64 previousGetDataRateTime;
 
+  // start time of main thread loop
+  qint64 startTime;
+
   // output log flag
   bool outputLog;
 
@@ -149,13 +152,19 @@ protected:
   long receiveData(SOCKET sock, char *buf, long size);
 
   // print protocol header
-  void printHeader();
+  void printHeader(COM_DATA *com_data);
 
   // save protocol header
-  void saveHeader(const char* filename);
+  void saveHeader(COM_DATA *com_data, const char* filename);
 
   // dump protocol header
-  void dumpHeader();
+  void dumpHeader(COM_DATA *com_data);
+
+  // start information
+  void startTimeInfo();
+
+  // print information
+  void printTimeInfo(const char *str);
 
 private:
   // set socket option
@@ -166,9 +175,9 @@ private:
   // connect with retry
 #if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
   int connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen);
-#else
+#else // !defined(Q_OS_WIN)
   int connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
-#endif
+#endif // !defined(Q_OS_WIN)
 
 signals:
   // output Log Message

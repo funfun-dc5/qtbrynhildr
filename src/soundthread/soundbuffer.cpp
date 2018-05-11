@@ -23,11 +23,15 @@ SoundBuffer::~SoundBuffer()
 {
 }
 
-#if 0 // for TEST
+#if HAS_QIODEVICE
 // QIODevice interface
 qint64 SoundBuffer::readData(char *data, qint64 maxlen)
 {
-  return 0; // for TEST
+  qint64 len = getSize(maxlen);
+
+  memcpy(data, get(len), len);
+
+  return len;
 }
 
 qint64 SoundBuffer::writeData(const char *data, qint64 len)
@@ -40,8 +44,8 @@ qint64 SoundBuffer::writeData(const char *data, qint64 len)
 
 qint64 SoundBuffer::bytesAvailable() const
 {
-  return 0; // for TEST
+  return getSize();
 }
-#endif // 0 // for TEST
+#endif // HAS_QIODEVICE
 
 } // end of namespace qtbrynhildr

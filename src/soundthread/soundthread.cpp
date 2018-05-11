@@ -122,29 +122,16 @@ CONNECT_RESULT SoundThread::connectToServer()
   return CONNECT_SUCCEEDED;
 }
 
-#if TEST_THREAD
-  qint64 startTime;
-#endif // TEST_THREAD
-
 // process for header
 PROCESS_RESULT SoundThread::processForHeader()
 {
 #if TEST_THREAD
-  startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-  {
-	static qint64 previousTime = 0;
-	qint64 duration = 0;
-	if (previousTime != 0){
-	  duration = startTime - previousTime;
-	}
-	previousTime = startTime;
-	cout << "================================   " << duration << endl;
-  }
+  startTimeInfo();
 #endif // TEST_THREAD
 
   // receive header
   long dataSize;
-  dataSize = receiveData(sock_sound, (char *)com_data, sizeof(COM_DATA));
+  dataSize = receiveData((char *)com_data, sizeof(COM_DATA));
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
@@ -154,21 +141,9 @@ PROCESS_RESULT SoundThread::processForHeader()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] got header      : " << pastTime << endl;
-  }
+  printTimeInfo("got header");
 #endif // TEST_THREAD
 
-  // Nothing to do for sound
-
-  return PROCESS_SUCCEEDED;
-}
-
-// transmit local buffer to global buffer
-TRANSMIT_RESULT SoundThread::transmitBuffer()
-{
   // check samplerate
   if (com_data->samplerate != 0 && com_data->samplerate != samplerate){
 	bool result = changeSamplerate(com_data->samplerate);
@@ -178,11 +153,16 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  //	  cout << "samplerate: " << samplerate << endl << flush;
 	}
 	else {
-	  // error
-	  // Nothing to do
+	  // Yet: error
 	}
   }
 
+  return PROCESS_SUCCEEDED;
+}
+
+// transmit local buffer to global buffer
+TRANSMIT_RESULT SoundThread::transmitBuffer()
+{
   // received data size
   long receivedDataSize = com_data->data_size;
 
@@ -204,7 +184,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   }
 
   // receive data for sound
-  receivedDataSize = receiveData(sock_sound, buffer, receivedDataSize);
+  receivedDataSize = receiveData(buffer, receivedDataSize);
   // size check
   if (receivedDataSize <= 0){
 	// error
@@ -212,12 +192,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] got data        : " << pastTime
-		 << " (size = " << receivedDataSize << ")" << endl;
-  }
+  printTimeInfo("got data");
 #endif // TEST_THREAD
 
   // SOUND_TYPE_PCM
@@ -229,15 +204,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 
 #if QTB_CELT_SUPPORT
   if (converter != 0){
-	// for DEBUG : save CELT Data (append mode)
+	// for TEST : save CELT Data (append mode)
 	if (settings->getOutputSoundDataToFile()){
-	  fstream file;
-	  char filename[] = "pcm/sound_output.raw";
-	  file.open(filename, ios::out | ios::binary | ios::app);
-	  if (file.is_open()){
-		file.write(buffer, receivedDataSize);
-		file.close();
-	  }
+	  outputReceivedData(receivedDataSize, "pcm/sound_output.raw");
 	}
 	// convert to PCM
 	receivedDataSize = converter->convertToPCM(buffer, receivedDataSize);
@@ -247,12 +216,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  return TRANSMIT_SUCCEEDED;
 	}
 #if TEST_THREAD
-	{
-	  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	  qint64 pastTime = currentTime - startTime;
-	  cout << "[" << name << "] decoded CELT    : " << pastTime
-		   << " (size = " << receivedDataSize << ")" << endl;
-	}
+	printTimeInfo("decoded CELT");
 #endif // TEST_THREAD
   }
 #endif // QTB_CELT_SUPPORT
@@ -260,15 +224,9 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   // buffer[]         : PCM Data
   // receivedDataSize : Size of PCM Data
 
-  // for DEBUG : save PCM Data (append)
+  // for TEST : save PCM Data (append)
   if (settings->getOutputSoundDataToFile()){
-	fstream file;
-	char filename[] = "pcm/" QTB_SOUND_OUTPUT_FILENAME;
-	file.open(filename, ios::out | ios::binary | ios::app);
-	if (file.is_open()){
-	  file.write(buffer, receivedDataSize);
-	  file.close();
-	}
+	outputReceivedData(receivedDataSize, "pcm/" QTB_SOUND_OUTPUT_FILENAME);
   }
 
   // put PCM data into sound buffer
@@ -291,11 +249,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   }
 
 #if TEST_THREAD
-	{
-	  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	  qint64 pastTime = currentTime - startTime;
-	  cout << "[" << name << "] transfered      : " << pastTime << endl;
-	}
+	printTimeInfo("transfered PCM");
 #endif // TEST_THREAD
 
   return TRANSMIT_SUCCEEDED;
@@ -332,6 +286,12 @@ void SoundThread::shutdownConnection()
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
+// receive data
+long SoundThread::receiveData(char *buf, long size)
+{
+  return NetThread::receiveData(sock_sound, buf, size);
+}
+
 // put PCM data into sound device
 TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 {
@@ -479,6 +439,17 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   }
 
   return true;
+}
+
+// output received data
+void SoundThread::outputReceivedData(long receivedDataSize, const char *filename)
+{
+  fstream file;
+  file.open(filename, ios::out | ios::binary | ios::app);
+  if (file.is_open()){
+	file.write(buffer, receivedDataSize);
+	file.close();
+  }
 }
 
 // create .wav file

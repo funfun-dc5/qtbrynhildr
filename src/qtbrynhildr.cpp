@@ -903,7 +903,8 @@ QtBrynhildr::~QtBrynhildr()
 #endif // QTB_TEST_CODE
   if (settings != 0){
 	// disconnect to server
-	disconnectToServer();
+	if (settings->getConnected())
+	  disconnectToServer();
 
 	// disconnect signal slots
 	disconnect();

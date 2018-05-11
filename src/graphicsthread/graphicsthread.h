@@ -42,6 +42,9 @@ private:
   // total frame counter
   unsigned int totalFrameCounter;
 
+  // drawing flag
+  bool onDrawing;
+
 #if !QTB_TEST_CODE
   // image for drawing desktop
   QImage *image;
@@ -57,9 +60,6 @@ private:
 
   // local buffer
   char *buffer;
-
-  // drawing flag
-  bool onDrawing;
 
   //-------------------------------------------------------------------------------
   // Function
@@ -116,11 +116,16 @@ protected:
   void shutdownConnection();
 
 private:
+  // receive data
+  inline long receiveData(char *buf, long size);
 
 #if !QTB_TEST_CODE
   // draw graphics
   void draw_Graphics(int size);
 #endif // !QTB_TEST_CODE
+
+  // output received data
+  void outputReceivedData(long receivedDataSize);
 
 #if !QTB_TEST_CODE
 signals:

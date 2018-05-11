@@ -91,6 +91,7 @@ private:
 
   // transfer file progress
   qint64 transferFileProgress;
+
   // send file progress unit
   qint64 transferFileProgressUnit;
 
@@ -132,6 +133,18 @@ protected:
   void shutdownConnection();
 
 private:
+  // send eader
+  inline long sendHeader(const char *buf, long size);
+
+  // send data
+  inline long sendData(const char *buf, long size);
+
+  // receive data
+  inline long receiveData(char *buf, long size);
+
+  // setup header
+  void setupHeader();
+
   // initialize protocol header
   void initHeader();
 
@@ -143,6 +156,23 @@ private:
 
   // set gamepad control
   void setGamePadControl();
+
+  // check server version
+  void checkServerVersion();
+
+  // check mode
+  void checkMode();
+
+#if QTB_RECORDER
+  // recorder function
+  void recordAndReplayHeader();
+#endif // QTB_RECORDER
+
+  // send to server
+  bool sendToServer();
+
+  // receive from server
+  bool receiveFromServer();
 
   // send clipboard
   bool sendClipboard();

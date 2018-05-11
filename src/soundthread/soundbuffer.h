@@ -3,11 +3,17 @@
 
 #ifndef SOUNDBUFFER_H
 #define SOUNDBUFFER_H
+
+// for TEST
+#define HAS_QIODEVICE 0
+
 // Common Header
 #include "common/common.h"
 
 // Qt Header
+#if HAS_QIODEVICE
 #include <QIODevice>
+#endif // HAS_QIODEVICE
 
 // Local Header
 #include "util/ringbuffer.h"
@@ -15,11 +21,11 @@
 namespace qtbrynhildr {
 
 // SoundBuffer
-#if 1 // for TEST
-class SoundBuffer : public RingBuffer
-#else // 1 // for TEST
+#if HAS_QIODEVICE
 class SoundBuffer : public RingBuffer, public QIODevice
-#endif // 1 // for TEST
+#else // HAS_QIODEVICE
+class SoundBuffer : public RingBuffer
+#endif // HAS_QIODEVICE
 {
   //-------------------------------------------------------------------------------
   // Variable
@@ -35,13 +41,13 @@ public:
   // destructor
   ~SoundBuffer();
 
-#if 0 // for TEST
+#if HAS_QIODEVICE
 protected:
   // QIODevice interface
   qint64 readData(char *data, qint64 maxlen);
   qint64 writeData(const char *data, qint64 len);
   qint64 bytesAvailable() const;
-#endif // 0 // for TEST
+#endif // HAS_QIODEVICE
 
 private:
 

@@ -8,6 +8,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 // Qt Header
 
@@ -37,6 +38,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_TEST_CODE
   ,frameCounter(0)
   ,totalFrameCounter(0)
+  ,onDrawing(true)
 #if !QTB_TEST_CODE
   ,image(new QImage)
   ,onClearDesktop(false)
@@ -45,7 +47,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_SIMD_SUPPORT
 #endif // !QTB_TEST_CODE
   ,buffer(0)
-  ,onDrawing(true)
 {
   outputLog = false; // for DEBUG
 
@@ -139,32 +140,17 @@ CONNECT_RESULT GraphicsThread::connectToServer()
   return CONNECT_SUCCEEDED;
 }
 
-#if TEST_THREAD || !QTB_TEST_CODE
-static qint64 startTime = 0;
-#endif // TEST_THREAD || !QTB_TEST_CODE
-
 // process for header
 PROCESS_RESULT GraphicsThread::processForHeader()
 {
   // set start time of drawing a frame
-  startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-
 #if TEST_THREAD
-  startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-  {
-	static qint64 previousTime = 0;
-	qint64 duration = 0;
-	if (previousTime != 0){
-	  duration = startTime - previousTime;
-	}
-	previousTime = startTime;
-	cout << "================================   " << duration << endl;
-  }
+  startTimeInfo();
 #endif // TEST_THREAD
 
   // receive header
   long dataSize;
-  dataSize = receiveData(sock_graphics, (char *)com_data, sizeof(COM_DATA));
+  dataSize = receiveData((char *)com_data, sizeof(COM_DATA));
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
@@ -174,11 +160,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] got header      : " << pastTime << endl;
-  }
+  printTimeInfo("got header");
 #endif // TEST_THREAD
 
   // counter up
@@ -214,7 +196,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
   // receive data for image
-  receivedDataSize = receiveData(sock_graphics, buffer, receivedDataSize);
+  receivedDataSize = receiveData(buffer, receivedDataSize);
   // size check
   if (receivedDataSize <= 0){
 	// error
@@ -222,12 +204,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] got data        : " << pastTime
-		 << " (size = " << receivedDataSize << ")" << endl;
-  }
+  printTimeInfo("got data");
 #endif // TEST_THREAD
 
 #if 0 // for TEST
@@ -242,31 +219,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // buffer[]         : VP8 Data
   // receivedDataSize : Size of VP8 Data
 
-  // for DEBUG : save received data
+  // for TEST : save received data
   if (settings->getOutputGraphicsDataToFile()){
-  //  if (true){
-	fstream file;
-	char filename[QTB_MAXPATHLEN+1];
-	int result;
-	if (com_data->video_mode == VIDEO_MODE_MJPEG){
-	  result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg", QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
-	}
-	else { // binary
-	  result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.bin", QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
-	}
-	if (result > 0 && result <= QTB_MAXPATHLEN){
-	  file.open(filename, ios::out | ios::binary | ios::trunc);
-	  if (file.is_open()){
-		file.write(buffer, receivedDataSize);
-		file.close();
-	  }
-	}
-	else {
-	  // snprintf() error
-	  if (settings->getOutputLog()){
-		cout << "[GraphicsThread] snprintf() error!" << endl << flush;
-	  }
-	}
+	outputReceivedData(receivedDataSize);
   }
 
   // received 1 frame
@@ -280,11 +235,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] decoded VP8     : " << pastTime << endl;
-  }
+  printTimeInfo("decoded VP8");
 #endif // TEST_THREAD
 
   // draw graphics
@@ -305,11 +256,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] emit draw       : " << pastTime << endl;
-  }
+  printTimeInfo("emit draw");
 #endif // TEST_THREAD
 
   // frame rate control
@@ -330,11 +277,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
 #if TEST_THREAD
-  {
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = currentTime - startTime;
-	cout << "[" << name << "] frame controled : " << pastTime << endl;
-  }
+  printTimeInfo("frame controled");
 #endif // TEST_THREAD
 
 #else // !QTB_TEST_CODE
@@ -428,6 +371,12 @@ void GraphicsThread::shutdownConnection()
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
+// receive data
+long GraphicsThread::receiveData(char *buf, long size)
+{
+  return NetThread::receiveData(sock_graphics, buf, size);
+}
+
 #if !QTB_TEST_CODE
 
 // draw graphics
@@ -499,5 +448,34 @@ void GraphicsThread::draw_Graphics(int size)
 }
 
 #endif // !QTB_TEST_CODE
+
+// output received data
+void GraphicsThread::outputReceivedData(long receivedDataSize)
+{
+  fstream file;
+  char filename[QTB_MAXPATHLEN+1];
+  int result;
+  if (com_data->video_mode == VIDEO_MODE_MJPEG){
+	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg",
+					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+  }
+  else { // binary
+	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.bin",
+					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+  }
+  if (result > 0 && result <= QTB_MAXPATHLEN){
+	file.open(filename, ios::out | ios::binary | ios::trunc);
+	if (file.is_open()){
+	  file.write(buffer, receivedDataSize);
+	  file.close();
+	}
+  }
+  else {
+	// snprintf() error
+	if (settings->getOutputLog()){
+	  cout << "[GraphicsThread] snprintf() error!" << endl << flush;
+	}
+  }
+}
 
 } // end of namespace qtbrynhildr

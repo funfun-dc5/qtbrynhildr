@@ -21,6 +21,17 @@
 
 namespace qtbrynhildr {
 
+// filename image size
+#define QTB_FILENAME_IMAGE_SIZE 260
+// timestamp image size
+#define QTB_TIMESTAMP_IMAGE_SIZE 24
+
+// icon information
+#define QTB_ICON_WIDTH		32
+#define QTB_ICON_HEIGHT		32
+#define QTB_ICON_SIZE		(QTB_ICON_WIDTH*QTB_ICON_HEIGHT)
+#define QTB_ICON_IMAGE_SIZE	(QTB_ICON_SIZE*4)
+
 // ControlThread
 class ControlThread : public NetThread
 {
@@ -55,8 +66,10 @@ private:
 
   // SHIFT key status
   KEYDOWN keydownSHIFT;
+
   // ALT key status
   KEYDOWN keydownALT;
+
   // CONTROL key status
   KEYDOWN keydownCONTROL;
 
@@ -68,11 +81,6 @@ private:
 
   // done check password flag
   bool doneCheckPassword;
-
-#define QTB_ICON_WIDTH		32
-#define QTB_ICON_HEIGHT		32
-#define QTB_ICON_SIZE		(QTB_ICON_WIDTH*QTB_ICON_HEIGHT)
-#define QTB_ICON_IMAGE_SIZE	(QTB_ICON_SIZE*4)
 
   // mouse cursor image data (4096 bytes * 2)
   uchar andMaskImage[QTB_ICON_IMAGE_SIZE];

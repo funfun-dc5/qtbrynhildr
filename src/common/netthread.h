@@ -81,6 +81,10 @@ class NetThread : public QThread
   // Variable
   //-------------------------------------------------------------------------------
 protected:
+  // next connect count
+  static const int NEXT_CONNECT_COUNT = 5;
+
+protected:
   // thread name
   const char *name;
 

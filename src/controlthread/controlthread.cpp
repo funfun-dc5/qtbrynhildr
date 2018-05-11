@@ -252,7 +252,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   }
 
   // counter up
-  if (counter_control < 5){
+  if (counter_control < NEXT_CONNECT_COUNT){
 	counter_control++;
   }
 
@@ -922,8 +922,8 @@ bool ControlThread::receiveClipboard()
 // send file
 bool ControlThread::sendFile()
 {
-  char filename[260+1] = {0};
-  char fileTimeStamp[24+1] = {0};
+  char filename[QTB_FILENAME_IMAGE_SIZE+1] = {0};
+  char fileTimeStamp[QTB_TIMESTAMP_IMAGE_SIZE+1] = {0};
   static int previousProgress = -1;
 
   qint64 fileSize = (qint64)com_data->data_size;
@@ -947,8 +947,8 @@ bool ControlThread::sendFile()
   int sendFileCount = settings->getSendFileCount() - 1;
   QString fileName = settings->getSendFileNames().at(sendFileCount);
   QFileInfo fileInfo(fileName);
-  strncpy(filename, qPrintable(fileInfo.fileName()), 260);
-  sentDataSize = sendData(filename, 260);
+  strncpy(filename, qPrintable(fileInfo.fileName()), QTB_FILENAME_IMAGE_SIZE);
+  sentDataSize = sendData(filename, QTB_FILENAME_IMAGE_SIZE);
 
   // send time stamp
   qint64 CreationTime = ntfs->toFILETIME(fileInfo.created()); // UTC
@@ -978,7 +978,7 @@ bool ControlThread::sendFile()
   fileTimeStamp[21] = (LastWriteTime >> 40) & 0xFF;
   fileTimeStamp[22] = (LastWriteTime >> 48) & 0xFF;
   fileTimeStamp[23] = (LastWriteTime >> 56) & 0xFF;
-  sentDataSize = sendData(fileTimeStamp, 24);
+  sentDataSize = sendData(fileTimeStamp, QTB_TIMESTAMP_IMAGE_SIZE);
 
   // send file image
   fstream file;
@@ -1058,8 +1058,8 @@ bool ControlThread::sendFile()
 // receive file
 bool ControlThread::receiveFile()
 {
-  char filename[260+1];
-  char fileTimeStamp[24+1]; // dummy read
+  char filename[QTB_FILENAME_IMAGE_SIZE+1];
+  char fileTimeStamp[QTB_TIMESTAMP_IMAGE_SIZE+1]; // dummy read
   static int previousProgress = -1;
 
   qint64 fileSize = (qint64)com_data->data_size;
@@ -1074,10 +1074,10 @@ bool ControlThread::receiveFile()
   }
 
   // get filename
-  receivedDataSize = receiveData(filename, 260);
+  receivedDataSize = receiveData(filename, QTB_FILENAME_IMAGE_SIZE);
 
   // get file time stamp
-  receivedDataSize = receiveData(fileTimeStamp, 24);
+  receivedDataSize = receiveData(fileTimeStamp, QTB_TIMESTAMP_IMAGE_SIZE);
 
   // get file image
   fstream file;

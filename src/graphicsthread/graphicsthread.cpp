@@ -124,7 +124,7 @@ CONNECT_RESULT GraphicsThread::connectToServer()
   if (sock_graphics != INVALID_SOCKET)
 	return CONNECT_SUCCEEDED;
 
-  if (counter_control < 5){
+  if (counter_control < NEXT_CONNECT_COUNT){
 	return CONNECT_WAITED_COUNT;
   }
 
@@ -164,7 +164,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 #endif // TEST_THREAD
 
   // counter up
-  if (counter_graphics < 5){
+  if (counter_graphics < NEXT_CONNECT_COUNT){
 	counter_graphics++;
   }
 

@@ -106,7 +106,7 @@ CONNECT_RESULT SoundThread::connectToServer()
   if (sock_sound != INVALID_SOCKET)
 	return CONNECT_SUCCEEDED;
 
-  if (counter_graphics < 5){
+  if (counter_graphics < NEXT_CONNECT_COUNT){
 	return CONNECT_WAITED_COUNT;
   }
 

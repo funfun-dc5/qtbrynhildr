@@ -157,6 +157,44 @@ Desktop::Desktop()
   heightOfStatusBarInHiding = 0;
 #endif
 
+  // environment variables
+  char *envval = 0;
+  envval = getenv("TESTMODE");
+  if (envval != 0){
+	// display current parameters
+	cout << "== DESKTOP TESTMODE ==" << endl;
+	cout << "correctWindowWidth        : " << correctWindowWidth << endl;
+	cout << "correctWindowHeight       : " << correctWindowHeight << endl;
+	cout << "heightOfMenuBarInHiding   : " << heightOfMenuBarInHiding << endl;
+	cout << "heightOfStatusBarInHiding : " << heightOfStatusBarInHiding << endl << endl << flush;
+  }
+
+  // set parameters
+  envval = getenv("CORRECT_WINDOW_WIDTH");
+  if (envval != 0){
+	cout << "correctWindowWidth (" << correctWindowWidth << ") -> ";
+	correctWindowWidth = strtol(envval, 0, 10);
+	cout << correctWindowWidth << endl << flush;
+  }
+  envval = getenv("CORRECT_WINDOW_HEIGHT");
+  if (envval != 0){
+	cout << "correctWindowHeight (" << correctWindowHeight << ") -> ";
+	correctWindowHeight = strtol(envval, 0, 10);
+	cout << correctWindowHeight << endl << flush;
+  }
+  envval = getenv("HEIGHT_OF_MENU_BAR_IN_HIDING");
+  if (envval != 0){
+	cout << "heightOfMenuBarInHiding (" << heightOfMenuBarInHiding << ") -> ";
+	heightOfMenuBarInHiding = strtol(envval, 0, 10);
+	cout << heightOfMenuBarInHiding << endl << flush;
+  }
+  envval = getenv("HEIGHT_OF_STATUS_BAR_IN_HIDING");
+  if (envval != 0){
+	cout << "heightOfStatusBarInHiding (" << heightOfStatusBarInHiding << ") -> ";
+	heightOfStatusBarInHiding = strtol(envval, 0, 10);
+	cout << heightOfStatusBarInHiding << endl << flush;
+  }
+
   // log flush
   if (outputLog){
 	cout << flush;

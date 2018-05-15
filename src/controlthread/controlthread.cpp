@@ -1415,7 +1415,7 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 	}
   }
 
-#if !defined(Q_OS_WIN) // for XOR'd all platforms
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP) // for XOR'd all platforms
   uchar bitmapValue;
   if (((cursorPointColor & 0x00FF0000) >> 16) < 5 &&
 	  ((cursorPointColor & 0x0000FF00) >> 8)  < 5 &&
@@ -1434,7 +1434,7 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 	  maskImage[i] = 0x00;
 	}
   }
-#endif // !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
   QImage bitmapQImage(bitmapImage, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGB888);
   bitmapQImage = bitmapQImage.mirrored(false, true);

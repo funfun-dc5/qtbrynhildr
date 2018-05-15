@@ -19,9 +19,7 @@
 #include <QCloseEvent>
 #include <QDir>
 #include <QDesktopServices>
-#if QTB_RECORDER
 #include <QFileDialog>
-#endif // QTB_RECORDER
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -1046,13 +1044,13 @@ int QtBrynhildr::getHeightOfStatusBar()
   }
 }
 
-#if !defined(Q_OS_WIN)
+#if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 // set cursor point color
 void QtBrynhildr::setCursorPointColor(QRgb cursorPointColor)
 {
   controlThread->setCursorPointColor(cursorPointColor);
 }
-#endif // !defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
 // refresh window
 void QtBrynhildr::refreshWindow()

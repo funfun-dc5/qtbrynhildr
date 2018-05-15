@@ -403,13 +403,13 @@ void GraphicsThread::draw_Graphics(int size)
 	int rgbImageSize;
 #if QTB_SIMD_SUPPORT
 	if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-	  rgbImageSize = makeRGBImage_SIMD(settings->getConvertThreadCount());
+	  rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD, settings->getConvertThreadCount());
 	}
 	else {
-	  rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
+	  rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
 	}
 #else // QTB_SIMD_SUPPORT
-	rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
+	rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
 #endif // QTB_SIMD_SUPPORT
 	//  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
 	if (rgbImageSize != 0){

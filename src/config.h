@@ -124,7 +124,7 @@ const bool QTB_IN_TESTING				= false;
 // preference dialog
 //#define QTB_PREFERENCE				1
 
-// SIMD INSTRUCTIONS SUPPORT
+// SIMD instruction support
 #define QTB_SIMD_SUPPORT			1
 
 // TEST CODE

@@ -91,12 +91,7 @@ extern bool setup();
 extern bool makeYUVImage();
 
 // make RGB image
-extern int makeRGBImage(int numOfThread);
-
-#if QTB_SIMD_SUPPORT
-// make RGB image by SIMD operation
-extern int makeRGBImage_SIMD(int numOfThread);
-#endif // QTB_SIMD_SUPPORT
+extern int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height), int numOfThread);
 
 // YUV convert to RGB
 extern void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);

@@ -84,6 +84,10 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   pushButton_keyboardLogFile->setEnabled(false);
 #endif // QTB_PORTABLE_VERSION
 
+#if !QTB_SIMD_SUPPORT
+  checkBox_onSIMDOperationSupport->setEnabled(false);
+#endif // !QTB_SIMD_SUPPORT
+
   connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 }
 

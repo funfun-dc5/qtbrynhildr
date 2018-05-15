@@ -102,6 +102,13 @@ private slots:
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif // defined(DEBUG)
+
+signals:
+  // connected
+  void connected();
+
+  // refresh window
+  void refreshWindow();
 };
 
 } // end of namespace qtbrynhildr

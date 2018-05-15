@@ -210,12 +210,6 @@ private:
   QCursor createMonochromeMouseCursor(uchar *image, uchar *mask);
 
 signals:
-  // connected
-  void connected();
-
-  // refresh window
-  void refreshWindow();
-
   // refresh menu
   void refreshMenu();
 

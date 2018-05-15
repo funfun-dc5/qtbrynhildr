@@ -291,13 +291,6 @@ void ControlThread::connectedToServer()
   keydownCONTROL= KEYDOWN_OFF;
 
   NetThread::connectedToServer();
-
-  // succeeded to connect
-  settings->setConnected(true);
-  // connected
-  emit connected();
-  // refresh window
-  emit refreshWindow();
 }
 
 // shutdown connection

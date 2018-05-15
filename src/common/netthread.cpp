@@ -385,7 +385,7 @@ SOCKET NetThread::socketToServer()
 
   sock = socket(AF_INET, SOCK_STREAM, 0);
 
-  result = ::connect(sock, (struct sockaddr *)&addr, sizeof(addr));
+  result = connect_int(sock, (struct sockaddr *)&addr, sizeof(addr));
   if (result == SOCKET_ERROR){
 	sock = INVALID_SOCKET;
   }
@@ -446,7 +446,7 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 #endif
 
   // send
-  return ::send(sock, buf, size, 0);
+  return send_int(sock, buf, size, 0);
 }
 
 // send data
@@ -456,7 +456,7 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
   long sent_size = 0;
 
   while(sent_size < size){
-	long ret = ::send(sock, buf + sent_size, size - sent_size, 0);
+	long ret = send_int(sock, buf + sent_size, size - sent_size, 0);
 #if 0 // for TEST
 	if (ret < 0)
 	  cout << "errno = " << errno << endl << flush;
@@ -471,7 +471,7 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
   return sent_size;
 #else // for TEST
   // send
-  return ::send(sock, buf, size, 0);
+  return send_int(sock, buf, size, 0);
 #endif // for TEST
 }
 
@@ -484,7 +484,7 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
   while(received_size < size){
 	int remain_size = size - received_size;
 	int request_size = remain_size > BLOCK_SIZE ? BLOCK_SIZE : remain_size;
-	long ret = ::recv(sock, buf + received_size, request_size, 0);
+	long ret = recv_int(sock, buf + received_size, request_size, 0);
 	if (ret > 0){
 	  received_size += ret;
 	}
@@ -498,7 +498,7 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 #if 0 // for TEST
   int i = 0;
   while(received_size < size){
-	long ret = ::recv(sock, buf + received_size, size - received_size, 0);
+	long ret = recv_int(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
 	  received_size += ret;
 	  if (strcmp(name, "GraphicsThread") == 0) // for Graphics
@@ -511,7 +511,7 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
   }
 #else // 1 // for TEST
   while(received_size < size){
-	long ret = ::recv(sock, buf + received_size, size - received_size, 0);
+	long ret = recv_int(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
 	  received_size += ret;
 	}
@@ -671,6 +671,7 @@ void NetThread::printTimeInfo(const char *str)
 // set socket option
 #include <cerrno>
 #if defined(QTB_NET_UNIX)
+#include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/tcp.h>
@@ -688,10 +689,11 @@ void NetThread::setSocketOption(SOCKET sock)
   int val;
   socklen_t len = sizeof(val);
 
+#if 0 // for TEST
   // TCP_NODELAY
   val = 1;
   if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const VAL_TYPE*)&val, len) == -1){
-	cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt() error";
+	cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt() error" << endl;
 	cout << "errno = " << errno << endl << flush;
   }
   else {
@@ -699,11 +701,12 @@ void NetThread::setSocketOption(SOCKET sock)
 	if (outputLog)
 	  cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt("<< val << ") O.K." << endl;
   }
+#endif // 0 // for TEST
 
   // SO_RCVBUF
   val = 512*1024; // BDP(512KB) for TEST
   if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const VAL_TYPE*)&val, len) == -1){
-	cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error";
+	cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error" << endl;
 	cout << "errno = " << errno << endl << flush;
   }
   else {
@@ -715,7 +718,7 @@ void NetThread::setSocketOption(SOCKET sock)
   // SO_SNDBUF
   val = 512*1024; // BDP(512KB) for TEST
   if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const VAL_TYPE*)&val, len) == -1){
-	cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error";
+	cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error" << endl;
 	cout << "errno = " << errno << endl << flush;
   }
   else {
@@ -801,17 +804,16 @@ long NetThread::send_int(SOCKET sockfd, const char *buf, long size, int flags)
   struct timeval timeout;
   fd_set writefds;
 
-  // setup bitmap
-  FD_ZERO(&writefds);
-  FD_SET(sockfd, &writefds);
-
-  // set timeout
-  timeout.tv_sec = 0;
-  timeout.tv_usec = 0;
-
   while(true){ // polling
+	// setup bitmap
+	FD_ZERO(&writefds);
+	FD_SET(sockfd, &writefds);
 
-	ret = select(sockfd+1, 0, &writefds, 0, &timeout);
+	// set timeout
+	timeout.tv_sec = 1;
+	timeout.tv_usec = 0;
+
+	ret = ::select(sockfd+1, 0, &writefds, 0, &timeout);
 
 	if (!runThread){
 	  ret = 0;
@@ -836,17 +838,17 @@ long NetThread::recv_int(SOCKET sockfd, char *buf, long size, int flags)
   struct timeval timeout;
   fd_set readfds;
 
-  // setup bitmap
-  FD_ZERO(&readfds);
-  FD_SET(sockfd, &readfds);
-
-  // set timeout
-  timeout.tv_sec = 0;
-  timeout.tv_usec = 0;
-
   while(true){ // polling
 
-	ret = select(sockfd+1, &readfds, 0, 0, &timeout);
+	// setup bitmap
+	FD_ZERO(&readfds);
+	FD_SET(sockfd, &readfds);
+
+	// set timeout
+	timeout.tv_sec = 1;
+	timeout.tv_usec = 0;
+
+	ret = ::select(sockfd+1, &readfds, 0, 0, &timeout);
 
 	if (!runThread){
 	  ret = 0;
@@ -867,40 +869,13 @@ long NetThread::recv_int(SOCKET sockfd, char *buf, long size, int flags)
 // interruptable version connect
 int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-  int ret;
-  struct timeval timeout;
-  fd_set readfds;
-
-  // setup bitmap
-  FD_ZERO(&readfds);
-  FD_SET(sockfd, &readfds);
-
-  // set timeout
-  timeout.tv_sec = 0;
-  timeout.tv_usec = 0;
+  // set attribute
+  setupInterruptable(sockfd);
 
   // start connect
-  ret = ::connect(sockfd, addr, addrlen);
+  ::connect(sockfd, addr, addrlen);
 
-  while(true){ // polling
-
-	ret = select(sockfd+1, &readfds, 0, 0, &timeout);
-
-	if (!runThread){
-	  ret = 0;
-	  break;
-	}
-
-	if (ret != 0){
-	  if (FD_ISSET(sockfd, &readfds)){
-		char buf[16];
-		ret = ::recv(sockfd, buf, 0, 0);
-		break;
-	  }
-	}
-  }
-
-  return ret;
+  return 0;
 }
 
 // connect with retry
@@ -913,7 +888,7 @@ int NetThread::connect_retry(int domain, int type, int protocol, const struct so
 	if (fd < 0){
 	  break;
 	}
-	if (::connect(fd, addr, addrlen) == 0){
+	if (connect_int(fd, addr, addrlen) == 0){
 	  return fd;
 	}
 	closesocket(fd);
@@ -939,7 +914,7 @@ int NetThread::connect_retry(int domain, int type, int protocol, const struct so
 int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
   for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
-	if (::connect(sockfd, addr, addrlen) == 0){
+	if (connect_int(sockfd, addr, addrlen) == 0){
 	  return 0;
 	}
 

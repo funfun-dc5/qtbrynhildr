@@ -780,6 +780,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 		  SLOT(onNetworkError(bool)));
 
   // control thread
+#if 0 // for TEST
   connect(controlThread,
 		  SIGNAL(connected()),
 		  SLOT(connected()));
@@ -787,6 +788,15 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   connect(controlThread,
 		  SIGNAL(refreshWindow()),
 		  SLOT(refreshWindow()));
+#else // 0 // for TEST
+  connect(soundThread,
+		  SIGNAL(connected()),
+		  SLOT(connected()));
+
+  connect(soundThread,
+		  SIGNAL(refreshWindow()),
+		  SLOT(refreshWindow()));
+#endif // 0 // for TEST
 
   connect(controlThread,
 		  SIGNAL(refreshMenu()),

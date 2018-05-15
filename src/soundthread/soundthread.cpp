@@ -264,6 +264,13 @@ void SoundThread::connectedToServer()
   // reset samplerate
   samplerate = 0;
 
+  // succeeded to connect
+  settings->setConnected(true);
+  // connected
+  emit connected();
+  // refresh window
+  emit refreshWindow();
+
   NetThread::connectedToServer();
 }
 

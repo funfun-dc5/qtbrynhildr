@@ -22,7 +22,7 @@
 #endif // !QTB_TEST_CODE
 
 // for TEST
-#define TEST_THREAD			0
+#define TEST_THREAD		0
 
 namespace qtbrynhildr {
 
@@ -48,7 +48,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // !QTB_TEST_CODE
   ,buffer(0)
 {
-  outputLog = false; // for DEBUG
+  //outputLog = true; // for DEBUG
 
 #if QTB_TEST_CODE
   // graphics buffer
@@ -262,8 +262,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL && onDrawing){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = QTB_THREAD_SLEEP_TIME + currentTime - startTime;
+	qint64 pastTime = threadSleepTime + currentTime - startTime;
 	qint64 interval = settings->getFrameInterval();
+	//cout << "interval = " << interval << ", pastTime = " << pastTime << endl << flush;
 
 	if (pastTime < interval){
 	  qint64 sleepTime = interval - pastTime;

@@ -94,6 +94,9 @@ protected:
   // protocol header
   COM_DATA *com_data;
 
+  // thread sleep time
+  unsigned long threadSleepTime;
+
   // run thread flag
   bool runThread;
 

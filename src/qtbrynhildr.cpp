@@ -2923,9 +2923,16 @@ void QtBrynhildr::connectToServer()
   counter_graphics = 0;
 
   // start all thread
+#if 1 // for TEST
   controlThread->start();
   graphicsThread->start();
   soundThread->start();
+#else // 1 // for TEST
+  controlThread->start(QThread::NormalPriority);
+  graphicsThread->start(QThread::HighestPriority);
+  //graphicsThread->start(QThread::TimeCriticalPriority);
+  soundThread->start(QThread::NormalPriority);
+#endif // 1 // for TEST
 }
 
 // reconnect to server
@@ -2977,12 +2984,18 @@ void QtBrynhildr::disconnectToServer()
   graphicsThread->exitThread();
   soundThread->exitThread();
 
+#if 0 // no event loop
   controlThread->exit();
   controlThread->wait();
   graphicsThread->exit();
   graphicsThread->wait();
   soundThread->exit();
   soundThread->wait();
+#else
+  controlThread->wait();
+  graphicsThread->wait();
+  soundThread->wait();
+#endif
 
 #if 0 // for TEST
   // close socket

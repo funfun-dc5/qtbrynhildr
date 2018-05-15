@@ -44,7 +44,10 @@ SoundThread::SoundThread(Settings *settings)
 #endif //QTB_CELT_SUPPORT
   ,buffer(0)
 {
-  outputLog = false; // for DEBUG
+  //outputLog = true; // for DEBUG
+
+  // change thread sleep time
+  //threadSleepTime = 10;
 
   // sound buffer
   soundBuffer = new SoundBuffer(settings->getSoundBufferSize());

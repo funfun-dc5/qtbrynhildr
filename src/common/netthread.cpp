@@ -28,6 +28,7 @@ NetThread::NetThread(const char *name, Settings *settings)
   :name(name)
   ,settings(settings)
   ,com_data(new COM_DATA)
+  ,threadSleepTime(QTB_THREAD_SLEEP_TIME)
   ,runThread(true)
   ,receivedDataCounter(0)
   ,previousGetDataRateTime(0)
@@ -89,8 +90,8 @@ void NetThread::run()
 	// set start time of main loop
 	startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 
-	//QThread::msleep(5); // 5 milli seconds sleep
-	QThread::msleep(QTB_THREAD_SLEEP_TIME); // QTB_THREAD_SLEEP_TIME milli seconds sleep
+	//QThread::msleep(5); // 5 (ms) sleep
+	QThread::msleep(threadSleepTime); // threadSleepTime (ms) sleep
 
 	CONNECT_RESULT result_connect = connectToServer();
 	if (result_connect != CONNECT_SUCCEEDED){
@@ -478,6 +479,21 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
 long NetThread::receiveData(SOCKET sock, char *buf, long size)
 {
   long received_size = 0;
+#if 0 // from Brynhildr (small block size)
+#define BLOCK_SIZE 1024
+  while(received_size < size){
+	int remain_size = size - received_size;
+	int request_size = remain_size > BLOCK_SIZE ? BLOCK_SIZE : remain_size;
+	long ret = recv(sock, buf + received_size, request_size, 0);
+	if (ret > 0){
+	  received_size += ret;
+	}
+	else {
+	  return -1;
+	}
+  }
+
+#else // for Brynhildr
 
 #if 0 // for TEST
   int i = 0;
@@ -504,6 +520,8 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 	}
   }
 #endif // 1 // for TEST
+
+#endif // 1 // for Brynhildr
 
   receivedDataCounter += received_size;
 

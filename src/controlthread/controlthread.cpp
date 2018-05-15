@@ -23,7 +23,7 @@
 #include "qtbrynhildr.h"
 
 // for TEST
-#define TEST_THREAD			0
+#define TEST_THREAD		0
 
 namespace qtbrynhildr {
 
@@ -54,7 +54,10 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   ,transferFileProgressUnit(0)
   ,ntfs(0)
 {
-  outputLog = false; // for DEBUG
+  //outputLog = true; // for DEBUG
+
+  // change thread sleep time
+  //threadSleepTime = 10;
 
   // keyboard buffer
   keyBuffer = desktopPanel->getKeyBuffer();

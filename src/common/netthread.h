@@ -179,6 +179,18 @@ private:
   // check socket option
   void checkSocketOption(SOCKET sock);
 
+  // setup interruptable version
+  void setupInterruptable(SOCKET sock);
+
+  // interruptable version send
+  long send_int(SOCKET sock, const char *buf, long size, int flags);
+
+  // interruptable version receive
+  long recv_int(SOCKET sock, char *buf, long size, int flags);
+
+  // interruptable version connect
+  int connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+
   // connect with retry
 #if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
   int connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen);

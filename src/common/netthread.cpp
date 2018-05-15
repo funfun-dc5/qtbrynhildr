@@ -446,7 +446,7 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 #endif
 
   // send
-  return send(sock, buf, size, 0);
+  return ::send(sock, buf, size, 0);
 }
 
 // send data
@@ -456,7 +456,7 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
   long sent_size = 0;
 
   while(sent_size < size){
-	long ret = send(sock, buf + sent_size, size - sent_size, 0);
+	long ret = ::send(sock, buf + sent_size, size - sent_size, 0);
 #if 0 // for TEST
 	if (ret < 0)
 	  cout << "errno = " << errno << endl << flush;
@@ -471,7 +471,7 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
   return sent_size;
 #else // for TEST
   // send
-  return send(sock, buf, size, 0);
+  return ::send(sock, buf, size, 0);
 #endif // for TEST
 }
 
@@ -484,7 +484,7 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
   while(received_size < size){
 	int remain_size = size - received_size;
 	int request_size = remain_size > BLOCK_SIZE ? BLOCK_SIZE : remain_size;
-	long ret = recv(sock, buf + received_size, request_size, 0);
+	long ret = ::recv(sock, buf + received_size, request_size, 0);
 	if (ret > 0){
 	  received_size += ret;
 	}
@@ -498,7 +498,7 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 #if 0 // for TEST
   int i = 0;
   while(received_size < size){
-	long ret = recv(sock, buf + received_size, size - received_size, 0);
+	long ret = ::recv(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
 	  received_size += ret;
 	  if (strcmp(name, "GraphicsThread") == 0) // for Graphics
@@ -511,7 +511,7 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
   }
 #else // 1 // for TEST
   while(received_size < size){
-	long ret = recv(sock, buf + received_size, size - received_size, 0);
+	long ret = ::recv(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
 	  received_size += ret;
 	}
@@ -779,6 +779,128 @@ void NetThread::checkSocketOption(SOCKET sock)
 
   // flush
   cout << flush;
+}
+
+// setup interruptable
+void NetThread::setupInterruptable(SOCKET sockfd)
+{
+  // non blocking mode
+#if defined(Q_OS_WIN)
+  u_long val = 1L;
+  ioctlsocket(sockfd, FIONBIO, &val);
+#else // defined(Q_OS_WIN)
+  int val = 1;
+  ioctl(sockfd, FIONBIO, &val);
+#endif // defined(Q_OS_WIN)
+}
+
+// interruptable version send
+long NetThread::send_int(SOCKET sockfd, const char *buf, long size, int flags)
+{
+  long ret = 0;
+  struct timeval timeout;
+  fd_set writefds;
+
+  // setup bitmap
+  FD_ZERO(&writefds);
+  FD_SET(sockfd, &writefds);
+
+  // set timeout
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 0;
+
+  while(true){ // polling
+
+	ret = select(sockfd+1, 0, &writefds, 0, &timeout);
+
+	if (!runThread){
+	  ret = 0;
+	  break;
+	}
+
+	if (ret != 0){
+	  if (FD_ISSET(sockfd, &writefds)){
+		ret = ::send(sockfd, buf, size, flags);
+		break;
+	  }
+	}
+  }
+
+  return ret;
+}
+
+// interruptable version recv
+long NetThread::recv_int(SOCKET sockfd, char *buf, long size, int flags)
+{
+  long ret = 0;
+  struct timeval timeout;
+  fd_set readfds;
+
+  // setup bitmap
+  FD_ZERO(&readfds);
+  FD_SET(sockfd, &readfds);
+
+  // set timeout
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 0;
+
+  while(true){ // polling
+
+	ret = select(sockfd+1, &readfds, 0, 0, &timeout);
+
+	if (!runThread){
+	  ret = 0;
+	  break;
+	}
+
+	if (ret != 0){
+	  if (FD_ISSET(sockfd, &readfds)){
+		ret = ::recv(sockfd, buf, size, flags);
+		break;
+	  }
+	}
+  }
+
+  return ret;
+}
+
+// interruptable version connect
+int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+  int ret;
+  struct timeval timeout;
+  fd_set readfds;
+
+  // setup bitmap
+  FD_ZERO(&readfds);
+  FD_SET(sockfd, &readfds);
+
+  // set timeout
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 0;
+
+  // start connect
+  ret = ::connect(sockfd, addr, addrlen);
+
+  while(true){ // polling
+
+	ret = select(sockfd+1, &readfds, 0, 0, &timeout);
+
+	if (!runThread){
+	  ret = 0;
+	  break;
+	}
+
+	if (ret != 0){
+	  if (FD_ISSET(sockfd, &readfds)){
+		char buf[16];
+		ret = ::recv(sockfd, buf, 0, 0);
+		break;
+	  }
+	}
+  }
+
+  return ret;
 }
 
 // connect with retry

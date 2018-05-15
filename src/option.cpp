@@ -40,6 +40,7 @@ Option::Option(int argc, char *argv[])
   ,noTransFlag(false)
   ,bootupFlag(false)
   ,shutdownFlag(false)
+  ,testModeFlag(false)
 {
   // analysis options
   if (analyzeOptions(argc, argv)){

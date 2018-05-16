@@ -742,6 +742,8 @@ private:
   void setupWindowTitle();
   // refresh public mode
   void refreshPublicMode();
+  // refresh other menu
+  void refreshOtherMenu();
 
 private slots:
   // select public mode version

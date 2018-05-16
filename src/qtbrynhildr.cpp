@@ -1103,6 +1103,9 @@ void QtBrynhildr::refreshMenu()
 
   // public mode
   refreshPublicMode();
+
+  // other menu
+  refreshOtherMenu();
 }
 
 // refresh video quality menu
@@ -3360,60 +3363,75 @@ void QtBrynhildr::setSoundCache_5()
 // toggle onControl
 void QtBrynhildr::toggleOnControl()
 {
-  if (settings->getOnControl()){
-	settings->setOnControl(false);
-	onControl = false;
-	onControl_Action->setChecked(false);
+  bool flag = !settings->getOnControl();
+
+  if (flag){ // Off -> On
+	// onGraphics On
+	if (!settings->getOnGraphics()){
+	  toggleOnGraphics();
+	}
+  }
+  else { // On -> Off
 	// clear device buffer
 	keyBuffer->clear();
 	mouseBuffer->clear();
   }
-  else {
-	settings->setOnControl(true);
-	onControl = true;
-	onControl_Action->setChecked(true);
-	// onGraphics On
-	settings->setOnGraphics(true);
-	onGraphics = true;
-	onGraphics_Action->setChecked(true);
-  }
+
+  settings->setOnControl(flag);
+  onControl = flag;
+  onControl_Action->setChecked(flag);
+
+  // refresh menu
+  refreshOtherMenu();
 }
 
 // toggle onGraphics
 void QtBrynhildr::toggleOnGraphics()
 {
-  if (settings->getOnGraphics()){
-	settings->setOnGraphics(false);
-	onGraphics = false;
-	onGraphics_Action->setChecked(false);
+  static unsigned int currentFrameRate;
+  bool flag = !settings->getOnGraphics();
 
+  if (flag){ // Off -> On
+	// restore framerate
+	settings->setFrameRate(currentFrameRate);
+  }
+  else { // On -> Off
 	// onControl Off
 	if (settings->getOnControlOffWithGraphicsOff()){
 	  settings->setOnControl(false);
 	  onControl = false;
 	  onControl_Action->setChecked(false);
 	}
+
+	// change framerate to 5
+	currentFrameRate = settings->getFrameRate();
+	settings->setFrameRate(5);
   }
-  else {
-	settings->setOnGraphics(true);
-	onGraphics = true;
-	onGraphics_Action->setChecked(true);
-  }
+
+  settings->setOnGraphics(flag);
+  onGraphics = flag;
+  onGraphics_Action->setChecked(flag);
+
+  // refresh menu
+  refreshOtherMenu();
 }
 
 // toggle onSound
 void QtBrynhildr::toggleOnSound()
 {
-  if (settings->getOnSound()){
-	settings->setOnSound(false);
-	onSound = false;
-	onSound_Action->setChecked(false);
+  bool flag = !settings->getOnSound();
+
+  if (flag){ // Off -> On
   }
-  else {
-	settings->setOnSound(true);
-	onSound = true;
-	onSound_Action->setChecked(true);
+  else { // On -> Off
   }
+
+  settings->setOnSound(flag);
+  onSound = flag;
+  onSound_Action->setChecked(flag);
+
+  // refresh menu
+  refreshOtherMenu();
 }
 
 // setup window title
@@ -3501,6 +3519,31 @@ void QtBrynhildr::selectPublicModeVersion7()
   settings->setPublicModeVersion(PUBLICMODE_VERSION7);
 
   refreshPublicMode();
+}
+
+// refresh other menu
+void QtBrynhildr::refreshOtherMenu()
+{
+  bool flag;
+
+  // enable/disable menu for control
+  flag = settings->getOnControl();
+  sendKeySubMenu->setEnabled(flag);
+  selectMonitorNoSubMenu->setEnabled(flag);
+  selectPublicModeVersionSubMenu->setEnabled(flag);
+#if QTB_RECORDER
+  recordAndReplaySubMenu->setEnabled(flag);
+#endif // QTB_RECORDER
+
+  // enable/disable menu for graphics
+  flag = settings->getOnGraphics();
+  videoMenu->setEnabled(flag);
+  desktopCompressModeSubMenu->setEnabled(flag);
+  onScrollMode_Action->setEnabled(flag);
+
+  // enable/disable menu for sound
+  flag = settings->getOnSound();
+  soundMenu->setEnabled(flag);
 }
 
 #if QTB_PLUGINS_DISABLE_SUPPORT

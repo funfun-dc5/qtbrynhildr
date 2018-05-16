@@ -325,7 +325,7 @@ void ControlThread::shutdownConnection()
 //---------------------------------------------------------------------------
 // private
 //---------------------------------------------------------------------------
-// send eader
+// send header
 long ControlThread::sendHeader(const char *buf, long size)
 {
   return NetThread::sendHeader(sock_control, buf, size);

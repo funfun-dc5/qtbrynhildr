@@ -163,13 +163,16 @@ Desktop::Desktop()
   if (envval != 0){
 	// display current parameters
 	cout << "== DESKTOP TESTMODE ==" << endl;
+#if !QTB_NEW_DESKTOPWINDOW
 	cout << "correctWindowWidth        : " << correctWindowWidth << endl;
 	cout << "correctWindowHeight       : " << correctWindowHeight << endl;
+#endif // !QTB_NEW_DESKTOPWINDOW
 	cout << "heightOfMenuBarInHiding   : " << heightOfMenuBarInHiding << endl;
 	cout << "heightOfStatusBarInHiding : " << heightOfStatusBarInHiding << endl << endl << flush;
   }
 
   // set parameters
+#if !QTB_NEW_DESKTOPWINDOW
   envval = getenv("CORRECT_WINDOW_WIDTH");
   if (envval != 0){
 	cout << "correctWindowWidth (" << correctWindowWidth << ") -> ";
@@ -182,6 +185,7 @@ Desktop::Desktop()
 	correctWindowHeight = strtol(envval, 0, 10);
 	cout << correctWindowHeight << endl << flush;
   }
+#endif // !QTB_NEW_DESKTOPWINDOW
   envval = getenv("HEIGHT_OF_MENU_BAR_IN_HIDING");
   if (envval != 0){
 	cout << "heightOfMenuBarInHiding (" << heightOfMenuBarInHiding << ") -> ";

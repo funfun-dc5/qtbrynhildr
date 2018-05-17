@@ -6,7 +6,7 @@
 
 // version
 #define QTB_VERSION				"2.0.19"
-#define QTB_RCNAME				""
+#define QTB_RCNAME				"-android2"
 #define QTB_VERSION_NUMBER		2019
 
 // year

@@ -780,24 +780,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 		  SLOT(onNetworkError(bool)));
 
   // control thread
-#if 0 // for TEST
-  connect(controlThread,
-		  SIGNAL(connected()),
-		  SLOT(connected()));
-
-  connect(controlThread,
-		  SIGNAL(refreshWindow()),
-		  SLOT(refreshWindow()));
-#else // 0 // for TEST
-  connect(soundThread,
-		  SIGNAL(connected()),
-		  SLOT(connected()));
-
-  connect(soundThread,
-		  SIGNAL(refreshWindow()),
-		  SLOT(refreshWindow()));
-#endif // 0 // for TEST
-
   connect(controlThread,
 		  SIGNAL(refreshMenu()),
 		  SLOT(refreshMenu()));
@@ -826,6 +808,15 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   connect(graphicsThread,
 		  SIGNAL(clearDesktop()),
 		  SLOT(clearDesktop()));
+
+  // sound thread
+  connect(soundThread,
+		  SIGNAL(connected()),
+		  SLOT(connected()));
+
+  connect(soundThread,
+		  SIGNAL(refreshWindow()),
+		  SLOT(refreshWindow()));
 
   // bootTime
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Bootup."));
@@ -2995,18 +2986,18 @@ void QtBrynhildr::disconnectToServer()
   graphicsThread->exitThread();
   soundThread->exitThread();
 
-#if 0 // no event loop
+#if 1 // no event loop
+  controlThread->wait();
+  graphicsThread->wait();
+  soundThread->wait();
+#else // 1 // no event loop
   controlThread->exit();
   controlThread->wait();
   graphicsThread->exit();
   graphicsThread->wait();
   soundThread->exit();
   soundThread->wait();
-#else
-  controlThread->wait();
-  graphicsThread->wait();
-  soundThread->wait();
-#endif
+#endif// 1 // no event loop
 
 #if 0 // for TEST
   // close socket

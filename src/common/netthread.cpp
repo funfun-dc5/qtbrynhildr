@@ -99,14 +99,10 @@ void NetThread::run()
 		continue;
 	  }
 	  if (result_connect == CONNECT_FAILED){
-#if 0 // for TEST
-		cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
-#endif // for TEST
+		//cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
 		shutdownConnection();
 		emit networkError(true);
-#if 0 // for TEST
-		emit outputLogMessage(QTB_MSG_CONNECT_ERROR);
-#endif // for TEST
+		//emit outputLogMessage(QTB_MSG_CONNECT_ERROR);
 		continue;
 	  }
 	  if (result_connect == CONNECT_FAILED_RETRY){
@@ -130,9 +126,8 @@ void NetThread::run()
 
 	  if (result_process == PROCESS_NETWORK_ERROR){
 		// error
-#if 0 // for TEST
-		cout << "[" << name << "]" << " Network Error: processForHeader()" << endl << flush; // error
-#endif // for TEST
+		if (settings->getOutputLog())
+		  cout << "[" << name << "]" << " Network Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		emit networkError(true);
 		continue;
@@ -441,9 +436,7 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 	com_data->check_digit_enc[i] = key_char;
   }
 
-#if 0 // for TEST
-  saveHeader("sentHeader.dat");
-#endif
+  //saveHeader("sentHeader.dat");
 
   // send
   return send_int(sock, buf, size, 0);

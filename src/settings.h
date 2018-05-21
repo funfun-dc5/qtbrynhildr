@@ -1301,7 +1301,7 @@ public:
   }
 
 #if 0 // for TEST
-  // set frame interval (micro seconds)
+  // set frame interval (milli seconds)
   void setFrameInterval(unsigned long frameInterval)
   {
 	this->frameInterval = frameInterval;

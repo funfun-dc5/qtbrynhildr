@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -472,8 +472,11 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
 long NetThread::receiveData(SOCKET sock, char *buf, long size)
 {
   long received_size = 0;
+
 #if 0 // from Brynhildr (small block size)
+
 #define BLOCK_SIZE 1024
+
   while(received_size < size){
 	int remain_size = size - received_size;
 	int request_size = remain_size > BLOCK_SIZE ? BLOCK_SIZE : remain_size;

@@ -435,9 +435,12 @@ void ControlThread::initHeader()
   com_data->video_quality	= settings->getVideoQuality();
   // scaling
   if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-	if (settings->getDesktopScalingFactor() <= 1.0){
+	if (settings->getDesktopScalingFactor() < 1.0){
 	  // scale down
 	  com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
+
+	  com_data->image_cx *= settings->getDesktopScalingFactor();
+	  com_data->image_cy *= settings->getDesktopScalingFactor();
 	}
   }
 #if QTB_DESKTOP_COMPRESS_MODE

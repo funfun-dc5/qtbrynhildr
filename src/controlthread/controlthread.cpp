@@ -426,7 +426,6 @@ void ControlThread::initHeader()
 
   // for graphics
   com_data->zoom			= (ZOOM)1.0;
-#if 1 // for TEST
   // Graphics ON
   com_data->image_cx		= (SIZE)settings->getDesktopWidth();
   com_data->image_cy		= (SIZE)settings->getDesktopHeight();
@@ -448,45 +447,6 @@ void ControlThread::initHeader()
   if (settings->getDesktopCompressMode() > 1)
 	com_data->zoom *= settings->getDesktopCompressMode();
 #endif // QTB_DESKTOP_COMPRESS_MODE
-#else // 1 // for TEST
-  if (settings->getOnGraphics()){
-	// Graphics ON
-	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
-	com_data->image_cy			= (SIZE)settings->getDesktopHeight();
-	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
-	com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
-	com_data->video_quality		= settings->getVideoQuality();
-	// scaling
-	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-	  if (settings->getDesktopScalingFactor() <= 1.0){
-		// scale down
-		com_data->zoom	= (ZOOM)settings->getDesktopScalingFactorForZoom();
-	  }
-#if 0 // defined(QTB_DEV_TOUCHPANEL) // 0 for TEST
-	  else {
-		// scale up
-		com_data->image_cx *= settings->getDesktopScalingFactorForZoom();
-		com_data->image_cy *= settings->getDesktopScalingFactorForZoom();
-	  }
-#endif // defined(QTB_DEV_TOUCHPANEL)
-	}
-#if QTB_DESKTOP_COMPRESS_MODE
-	// desktop compress mode
-	if (settings->getDesktopCompressMode() > 1)
-	  com_data->zoom *= settings->getDesktopCompressMode();
-#endif // QTB_DESKTOP_COMPRESS_MODE
-  }
-  else {
-	// Graphics OFF
-	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
-	com_data->image_cy			= (SIZE)settings->getDesktopHeight();
-	//	com_data->image_cx			= (SIZE)8;
-	//	com_data->image_cy			= (SIZE)8;
-	com_data->client_scroll_x	= 0;
-	com_data->client_scroll_y	= 0;
-	com_data->video_quality		= VIDEO_QUALITY_MINIMUM;
-  }
-#endif // 1 // for TEST
   // max fps
   com_data->max_fps = (char)settings->getFrameRate();
 

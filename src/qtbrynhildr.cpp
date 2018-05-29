@@ -3539,7 +3539,9 @@ void QtBrynhildr::refreshOtherMenu()
   flag = settings->getOnGraphics();
   videoMenu->setEnabled(flag);
   desktopCompressModeSubMenu->setEnabled(flag);
-  onScrollMode_Action->setEnabled(flag);
+  if (QTB_SCROLL_MODE){
+	onScrollMode_Action->setEnabled(flag);
+  }
 
   // enable/disable menu for sound
   flag = settings->getOnSound();

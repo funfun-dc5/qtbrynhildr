@@ -32,6 +32,7 @@ private:
   // max image size
   unsigned long maxImageDataSize;
 
+#if 0 // for TEST
 #if !QTB_NEW_DESKTOPWINDOW
   // correct window width
   int correctWindowWidth;
@@ -45,6 +46,7 @@ private:
 
   // height of status bar in hiding
   int heightOfStatusBarInHiding;
+#endif // 0 // for TEST
 
   // output log flag
   const bool outputLog;
@@ -79,6 +81,7 @@ public:
 	return maxImageDataSize;
   }
 
+#if 0 // for TEST
 #if !QTB_NEW_DESKTOPWINDOW
   // get correct widow width
   int getCorrectWindowWidth() const
@@ -104,6 +107,7 @@ public:
   {
 	return heightOfStatusBarInHiding;
   }
+#endif // 0 // for TEST
 };
 
 } // end of namespace qtbrynhildr

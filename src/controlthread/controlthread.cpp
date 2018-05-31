@@ -53,7 +53,7 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   ,transferFileProgress(0)
   ,transferFileProgressUnit(0)
   ,ntfs(0)
-  ,onMaxfps(false)
+  ,onMaxfps(true)
 {
   //outputLog = true; // for DEBUG
 

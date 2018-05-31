@@ -379,6 +379,9 @@ private:
   // disable drawing
   QAction *disableDrawing_Action;
 
+  // disable maxfps
+  QAction *disableMaxfps_Action;
+
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;
 
@@ -873,6 +876,9 @@ private slots:
 
   // disable drawing
   void disableDrawing();
+
+  // disable maxfps
+  void disableMaxfps();
 
 private:
   // build GUI

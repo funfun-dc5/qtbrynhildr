@@ -271,7 +271,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 	if (pastTime < interval){
 	  qint64 sleepTime = interval - pastTime;
-	  sleepTime *= 0.9;
 	  //cout << "sleepTime = " << sleepTime << endl << flush;
 	  QThread::msleep(sleepTime);
 	}

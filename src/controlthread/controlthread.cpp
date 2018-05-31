@@ -53,6 +53,7 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   ,transferFileProgress(0)
   ,transferFileProgressUnit(0)
   ,ntfs(0)
+  ,onMaxfps(false)
 {
   //outputLog = true; // for DEBUG
 
@@ -448,7 +449,9 @@ void ControlThread::initHeader()
 	com_data->zoom *= settings->getDesktopCompressMode();
 #endif // QTB_DESKTOP_COMPRESS_MODE
   // max fps
-  com_data->max_fps = (char)settings->getFrameRate();
+  if (onMaxfps){
+	com_data->max_fps = (char)settings->getFrameRate();
+  }
 
   // for sound
 #if QTB_CELT_SUPPORT

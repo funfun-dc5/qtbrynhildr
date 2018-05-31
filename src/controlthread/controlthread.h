@@ -106,6 +106,9 @@ private:
   // ntfs utility
   NTFS *ntfs;
 
+  // maxfps flag
+  bool onMaxfps;
+
   //-------------------------------------------------------------------------------
   // Function
   //-------------------------------------------------------------------------------
@@ -123,6 +126,18 @@ ControlThread(Settings *settings, DesktopPanel *desktopPanel);
   // set cursor point color
   void setCursorPointColor(QRgb cursorPointColor);
 #endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
+
+  // set maxfps flag
+  void setOnMaxfps(bool onMaxfps)
+  {
+	this->onMaxfps = onMaxfps;
+  }
+
+  // get maxfps flag
+  bool getOnMaxfps() const
+  {
+	return onMaxfps;
+  }
 
 protected:
   // connect to server

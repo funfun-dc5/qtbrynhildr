@@ -199,6 +199,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,preferences_Action(0)
 #endif // QTB_PREFERENCE
   ,disableDrawing_Action(0)
+  ,disableMaxfps_Action(0)
   ,connectToServerDialog(0)
   ,desktopScalingDialog(0)
   ,logViewDialog(0)
@@ -878,6 +879,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	onCheckUpdateInBackground = true;
 	checkUpdate();
   }
+
+  // for test mode
+  disableDrawing_Action->setChecked(!graphicsThread->getOnDrawing());
+  disableMaxfps_Action->setChecked(!controlThread->getOnMaxfps());
 }
 
 // destructor
@@ -1979,6 +1984,13 @@ void QtBrynhildr::createActions()
   disableDrawing_Action->setEnabled(true);
   disableDrawing_Action->setCheckable(true);
   connect(disableDrawing_Action, SIGNAL(triggered()), this, SLOT(disableDrawing()));
+
+  // disable maxfps
+  disableMaxfps_Action = new QAction(tr("Disable Maxfps"), this);
+  disableMaxfps_Action->setStatusTip(tr("Disable Maxfps"));
+  disableMaxfps_Action->setEnabled(true);
+  disableMaxfps_Action->setCheckable(true);
+  connect(disableMaxfps_Action, SIGNAL(triggered()), this, SLOT(disableMaxfps()));
 }
 
 // create Menus
@@ -2217,9 +2229,11 @@ void QtBrynhildr::createMenus()
 
   // test mode menu
   if (option->getTestModeFlag()){
-	// disable drawing
 	helpMenu->addSeparator();
+	// disable drawing
 	helpMenu->addAction(disableDrawing_Action);
+	// disable maxfps
+	helpMenu->addAction(disableMaxfps_Action);
   }
 }
 
@@ -4300,6 +4314,14 @@ void QtBrynhildr::disableDrawing()
   bool flag = graphicsThread->getOnDrawing();
   graphicsThread->setOnDrawing(!flag);
   disableDrawing_Action->setChecked(flag);
+}
+
+// disable maxfps
+void QtBrynhildr::disableMaxfps()
+{
+  bool flag = controlThread->getOnMaxfps();
+  controlThread->setOnMaxfps(!flag);
+  disableMaxfps_Action->setChecked(flag);
 }
 
 // toggle outputKeyboardLog

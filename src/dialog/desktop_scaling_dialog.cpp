@@ -99,7 +99,10 @@ void DesktopScalingDialog::resetting()
 // show Event
 void DesktopScalingDialog::showEvent(QShowEvent *event)
 {
-  Q_UNUSED(event)
+  Q_UNUSED(event);
+
+  // set enable/disable
+  horizontalSlider->setEnabled(!settings->getOnDesktopScaleFixed());
 
   // for cancel
   originalFactor = settings->getDesktopScalingFactor();

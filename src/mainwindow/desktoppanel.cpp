@@ -317,7 +317,7 @@ void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
 	pos.y = currentMousePos.y();
-	mouseBuffer->setMousePos(pos);
+	mouseBuffer->setPos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
@@ -341,7 +341,7 @@ void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
 	pos.y = currentMousePos.y();
-	mouseBuffer->setMousePos(pos);
+	mouseBuffer->setPos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
@@ -426,24 +426,24 @@ void DesktopPanel::printMouseButtonEvent(QMouseEvent *event)
 }
 
 // set mouse button event
-void DesktopPanel::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
+void DesktopPanel::setMouseButtonEvent(QMouseEvent *event, MOUSE_BUTTON value)
 {
   switch (event->button()){
   case Qt::LeftButton:
-	mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_LEFT, value);
 	break;
   case Qt::RightButton:
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_RIGHT, value);
 	break;
 #if QTB_EXTRA_BUTTON_SUPPORT
   case Qt::MiddleButton:
-	mouseBuffer->put(TYPE_MOUSE_MIDDLE_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MIDDLE, value);
 	break;
   case Qt::ForwardButton:
-	mouseBuffer->put(TYPE_MOUSE_FORWARD_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_FORWARD, value);
 	break;
   case Qt::BackButton:
-	mouseBuffer->put(TYPE_MOUSE_BACK_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_BACK, value);
 	break;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   default:
@@ -463,17 +463,9 @@ void DesktopPanel::mousePressEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.button = MOUSE_BUTTON_DOWN;
-	  setMouseButtonEvent(event, value);
+	  setMouseButtonEvent(event, MOUSE_BUTTON_DOWN);
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_DOWN;
-	setMouseButtonEvent(event, value);
-#endif // for TEST
   }
 }
 
@@ -494,24 +486,14 @@ void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 	  QRect window = QRect(0, 0, currentSize.width(), currentSize.height());
 	  if (!window.contains(event->pos(), false)){
 		//		cout << "FileDrop!" << endl << flush;
-		MouseInfoValue value;
-		value.button = MOUSE_BUTTON_UP;
-		mouseBuffer->put(TYPE_MOUSE_FILEDROP, value);
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_FILEDROP, MOUSE_BUTTON_UP);
 		return;
 	  }
 	}
 
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.button = MOUSE_BUTTON_UP;
-	  setMouseButtonEvent(event, value);
+	  setMouseButtonEvent(event, MOUSE_BUTTON_UP);
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_UP;
-	setMouseButtonEvent(event, value);
-#endif // for TEST
   }
 }
 
@@ -526,17 +508,9 @@ void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.button = MOUSE_BUTTON_DBLCLK;
-	  setMouseButtonEvent(event, value);
+	  setMouseButtonEvent(event, MOUSE_BUTTON_DBLCLK);
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_DBLCLK;
-	setMouseButtonEvent(event, value);
-#endif // for TEST
   }
 }
 
@@ -552,17 +526,9 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.wheel = degrees;
-	  mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
+	  mouseBuffer->putWheel(degrees);
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.wheel = degrees;
-	mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
-#endif // for TEST
   }
 }
 
@@ -588,7 +554,7 @@ void DesktopPanel::moveMouseCursor(QMouseEvent *event, bool marker)
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
 	pos.y = currentMousePos.y();
-	mouseBuffer->setMousePos(pos);
+	mouseBuffer->setPos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
@@ -620,11 +586,8 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
   Qt::Key key = (Qt::Key)event->key();
   if (key == Qt::Key_Menu){
 	// right button down and up
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_DOWN;
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
-	value.button = MOUSE_BUTTON_UP;
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_DOWN);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_UP);
 	return;
   }
 

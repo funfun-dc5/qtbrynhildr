@@ -15,15 +15,18 @@ namespace qtbrynhildr {
 
 // constructor
 MouseBuffer::MouseBuffer(int size)
-  :topPos(0)
-  ,nextPos(0)
+  :wheel(0)
   ,enabled(true)
   // for DEBUG
   ,outputLog(false)
 {
-  // allocate buffer
-  buffer = new MouseInfo[size];
-  bufferSize = size;
+  // initialize button queues
+  for (int i = 0; i < MOUSE_BUTTON_NUM; i++){
+	buttons[i] = new MouseButton(size);
+  }
+
+  // initialize wheel queue
+  wheel = new MouseWheel(size);
 
   // initialize mouse position
   pos.x = 0;
@@ -33,103 +36,88 @@ MouseBuffer::MouseBuffer(int size)
 // destructor
 MouseBuffer::~MouseBuffer()
 {
-  if (buffer != 0){
-	delete [] buffer;
-	buffer = 0;
-  }
-}
-
-// put data to ring buffer
-int MouseBuffer::put(MouseInfoType type, MouseInfoValue value)
-{
-  if (!enabled){ // NOT enabled
-	return 0;
-  }
-  if (size() == bufferSize){ // Full
-	return -1;
-  }
-  // for DEBUG
-  if (outputLog){
-	switch(type){
-	case TYPE_MOUSE_RIGHT_BUTTON:
-	  cout << "[MouseBuffer] : RIGHT_BUTTON : value = " << (int)value.button << " : size() = " << size() << endl << flush;
-	  break;
-	case TYPE_MOUSE_LEFT_BUTTON:
-	  cout << "[MouseBuffer] : LEFT_BUTTON  : value = " << (int)value.button << " : size() = " << size() << endl << flush;
-	  break;
-	case TYPE_MOUSE_WHEEL:
-	  cout << "[MouseBuffer] : WHEEL        : value = " << (int)value.wheel << " : size() = " << size() <<  endl << flush;
-	  break;
-	default:
-	  ABORT();
-	  break;
+  // delete objects
+  // button queues
+  for (int i = 0; i < MOUSE_BUTTON_NUM; i++){
+	if (buttons[i] != 0){
+	  delete buttons[i];
+	  buttons[i] = 0;
 	}
   }
-
-  // set informations
-  buffer[nextPos].type = type;
-  buffer[nextPos].value = value;
-  nextPos++;
-  if (nextPos == bufferSize){
-	nextPos = 0;
+  // wheel queue
+  if (wheel != 0){
+	delete wheel;
+	wheel = 0;
   }
-
-  return 1;
-}
-
-// get data from ring buffer
-MouseInfo *MouseBuffer::get()
-{
-  MouseInfo *ret = 0;
-  if (enabled && size() != 0){
-	ret = &buffer[topPos];
-	topPos++;
-	if (topPos == bufferSize){
-	  topPos = 0;
-	}
-  }
-  return ret;
 }
 
 // clear buffer
 void MouseBuffer::clear()
 {
   // reset
-  topPos = 0;
-  nextPos = 0;
+  for (int i = 0; i < MOUSE_BUTTON_NUM; i++){
+	buttons[i]->clear();
+  }
+  wheel->clear();
 }
 
-// get available data size
-int MouseBuffer::size() const
+// for button queue
+int MouseBuffer::putButton(MOUSE_BUTTON_ID button, MOUSE_BUTTON value)
 {
-  int len = 0;
-
-  if (topPos < nextPos){
-	// ----------------------------
-	// |   |----------------|     |
-	// ----------------------------
-	//    topPos            nextPos
-	len = nextPos - topPos;
-  }
-  else if (topPos > nextPos){
-	// ----------------------------
-	// |----|               |-----|
-	// ----------------------------
-	//       nextPos         topPos
-	len = bufferSize - topPos + nextPos;
+  if (!enabled){
+	// Nothig to do
+	return 0;
   }
 
-  return len;
+  MouseButton *mouseButton = buttons[button];
+  return mouseButton->putButton(value);
+}
+
+MOUSE_BUTTON MouseBuffer::getButton(MOUSE_BUTTON_ID button)
+{
+  if (!enabled){
+	// Nothig to do
+	return 0;
+  }
+
+  MouseButton *mouseButton = buttons[button];
+  return mouseButton->getButton();
+}
+
+// for wheel queue
+int MouseBuffer::putWheel(MOUSE_WHEEL value)
+{
+  if (!enabled){
+	// Nothig to do
+	return 0;
+  }
+
+  return wheel->putWheel(value);
+}
+
+MOUSE_WHEEL MouseBuffer::getWheel()
+{
+  if (!enabled){
+	// Nothig to do
+	return 0;
+  }
+
+  return wheel->getWheel();
 }
 
 // set mouse position
-void MouseBuffer::setMousePos(MOUSE_POS curPos)
+void MouseBuffer::setPos(MOUSE_POS pos)
 {
-  pos = curPos;
+  if (!enabled){
+	// Nothig to do
+	return;
+  }
+
+  this->pos = pos;
 }
 
 // get mouse position
-MOUSE_POS MouseBuffer::getMousePos() const
+MOUSE_POS MouseBuffer::getPos() const
 {
   return pos;
 }

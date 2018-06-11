@@ -1128,6 +1128,22 @@ bool ControlThread::receiveMouseCursorImage()
 #endif // for TEST
 
   if (!settings->getOnDisplayMouseCursor()){
+	// check null cursor image
+	bool nullFlag = true;
+	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i++){
+	  if (andMaskImage[i] != 0 || xorMaskImage[i] != 0){
+		nullFlag = false;
+		break;
+	  }
+	}
+	if (nullFlag){ // found null cursor image
+	  // change mouse cursor
+	  const QCursor nullCursor;
+	  emit changeMouseCursor(nullCursor);
+
+	  return true;
+	}
+
 	// BGRA -> RGBA
 	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i += 4){
 	  uchar r, g, b;

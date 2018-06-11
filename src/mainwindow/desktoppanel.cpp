@@ -509,7 +509,11 @@ void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
   if (settings->getConnected() &&
 	  settings->getOnControl()){
 	if (!settings->getOnShowSoftwareButton()){
-	  setMouseButtonEvent(event, MOUSE_BUTTON_DBLCLK);
+#if defined(QTB_DEV_DESKTOP)
+  setMouseButtonEvent(event, MOUSE_BUTTON_DOWN);
+#else // defined(QTB_DEV_DESKTOP)
+  setMouseButtonEvent(event, MOUSE_BUTTON_DBLCLK);
+#endif // defined(QTB_DEV_DESKTOP)
 	}
   }
 }

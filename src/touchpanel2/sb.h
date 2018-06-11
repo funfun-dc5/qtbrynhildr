@@ -41,7 +41,7 @@ private:
   Settings *settings;
 
   // previous click button
-  MouseInfoType previousClick;
+  MouseBuffer::MOUSE_BUTTON_ID previousClickButton;
 
   // previous click time
   QDateTime previousClickTime;

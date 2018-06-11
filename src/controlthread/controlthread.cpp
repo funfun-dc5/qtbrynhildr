@@ -474,48 +474,25 @@ void ControlThread::initHeader()
 // set mouse control
 void ControlThread::setMouseControl()
 {
-  // mouse info (button, wheel)
-  MouseInfo *mouseInfo = mouseBuffer->get();
-  if (mouseInfo != 0){
-	switch(mouseInfo->type){
-	case TYPE_MOUSE_RIGHT_BUTTON:
-	  com_data->mouse_right = mouseInfo->value.button;
-	  break;
-	case TYPE_MOUSE_LEFT_BUTTON:
-	  com_data->mouse_left = mouseInfo->value.button;
-	  break;
-#if QTB_EXTRA_BUTTON_SUPPORT
-	case TYPE_MOUSE_MIDDLE_BUTTON:
-	  if (settings->getOnExtraButtonSupport()){
-		com_data->mouse_middle = mouseInfo->value.button;
-	  }
-	  break;
-	case TYPE_MOUSE_BACK_BUTTON:
-	  if (settings->getOnExtraButtonSupport()){
-		com_data->mouse_x1 = mouseInfo->value.button;
-	  }
-	  break;
-	case TYPE_MOUSE_FORWARD_BUTTON:
-	  if (settings->getOnExtraButtonSupport()){
-		com_data->mouse_x2 = mouseInfo->value.button;
-	  }
-	  break;
-#endif // QTB_EXTRA_BUTTON_SUPPORT
-	case TYPE_MOUSE_WHEEL:
-	  com_data->mouse_wheel = mouseInfo->value.wheel;
-	  break;
-	case TYPE_MOUSE_FILEDROP:
-	  com_data->mouse_left = mouseInfo->value.button;
-	  com_data->filedrop = FILEDROP_ON;
-	  break;
-	default:
-	  // unknown type
-	  ABORT();
-	  break;
-	} // end of switch
+  // filedrop
+  if (mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_FILEDROP) == MOUSE_BUTTON_UP){
+	com_data->mouse_left = MOUSE_BUTTON_UP;
+	com_data->filedrop = FILEDROP_ON;
   }
-  // mouse position
-  MOUSE_POS pos = mouseBuffer->getMousePos();
+  else { // setup mouse buttons
+	com_data->mouse_right = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_RIGHT);
+	com_data->mouse_left = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_LEFT);
+#if QTB_EXTRA_BUTTON_SUPPORT
+	com_data->mouse_middle = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_MIDDLE);
+	com_data->mouse_x1 = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_BACK);
+	com_data->mouse_x2 = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_FORWARD);
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+	// setup mouse wheel
+	com_data->mouse_wheel = mouseBuffer->getWheel();
+  }
+
+  // setup mouse position
+  MOUSE_POS pos = mouseBuffer->getPos();
   // if mouse cursor is moved.
   if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	// set information
@@ -562,7 +539,7 @@ void ControlThread::setMouseControl()
 	  com_data->mouse_x *= desktopCompressMode;
 	  com_data->mouse_y *= desktopCompressMode;
 	}
-#endif
+#endif // QTB_DESKTOP_COMPRESS_MODE
 
 	// save prevPos
 	prevPos = pos;
@@ -1151,6 +1128,22 @@ bool ControlThread::receiveMouseCursorImage()
 #endif // for TEST
 
   if (!settings->getOnDisplayMouseCursor()){
+	// check null cursor image
+	bool nullFlag = true;
+	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i++){
+	  if (andMaskImage[i] != 0 || xorMaskImage[i] != 0){
+		nullFlag = false;
+		break;
+	  }
+	}
+	if (nullFlag){ // found null cursor image
+	  // change mouse cursor
+	  const QCursor nullCursor;
+	  emit changeMouseCursor(nullCursor);
+
+	  return true;
+	}
+
 	// BGRA -> RGBA
 	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i += 4){
 	  uchar r, g, b;

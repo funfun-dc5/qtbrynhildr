@@ -212,7 +212,7 @@ private:
   void printMouseButtonEvent(QMouseEvent *event);
 
   // set mouse button event
-  void setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value);
+  void setMouseButtonEvent(QMouseEvent *event, MOUSE_BUTTON value);
 
   // scroll area
   bool scrollArea(uchar VK_Code, bool onKeyPress);

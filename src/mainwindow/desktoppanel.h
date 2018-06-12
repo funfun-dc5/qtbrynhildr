@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef DESKTOPPANEL_H
 #define DESKTOPPANEL_H
@@ -88,6 +88,10 @@ protected:
   KEYCODE_FLG previous_KEYCODE_FLG;
 #endif // defined(Q_OS_OSX)
 
+  // margins
+  int widthMargin;
+  int heightMargin;
+
   // keyboard log file
   QFile	*keyboardLogFile;
 
@@ -135,6 +139,13 @@ public:
 
   // get desktop size
   QSize getDesktopSize() const;
+
+  // set margins
+  void setMargins(int widthMargin, int heightMargin)
+  {
+	this->widthMargin = widthMargin;
+	this->heightMargin = heightMargin;
+  }
 
   // set full screen flag
   void setOnFullScreen(bool onFullScreen);

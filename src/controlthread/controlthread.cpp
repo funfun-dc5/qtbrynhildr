@@ -10,11 +10,11 @@
 #include <iomanip>
 
 // Qt Header
+#include <QBitmap>
 #include <QByteArray>
+#include <QCursor>
 #include <QDir>
 #include <QFileInfo>
-#include <QBitmap>
-#include <QCursor>
 #include <QImage>
 #include <QSize>
 
@@ -427,7 +427,6 @@ void ControlThread::initHeader()
 
   // for graphics
   com_data->zoom			= (ZOOM)1.0;
-  // Graphics ON
   com_data->image_cx		= (SIZE)settings->getDesktopWidth();
   com_data->image_cy		= (SIZE)settings->getDesktopHeight();
   com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();

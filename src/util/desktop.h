@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef DESKTOP_H
 #define DESKTOP_H
@@ -31,22 +31,6 @@ private:
 
   // max image size
   unsigned long maxImageDataSize;
-
-#if 0 // for TEST
-#if !QTB_NEW_DESKTOPWINDOW
-  // correct window width
-  int correctWindowWidth;
-
-  // correct window height
-  int correctWindowHeight;
-#endif // !QTB_NEW_DESKTOPWINDOW
-
-  // height of menu bar in hiding
-  int heightOfMenuBarInHiding;
-
-  // height of status bar in hiding
-  int heightOfStatusBarInHiding;
-#endif // 0 // for TEST
 
   // output log flag
   const bool outputLog;
@@ -80,34 +64,6 @@ public:
   {
 	return maxImageDataSize;
   }
-
-#if 0 // for TEST
-#if !QTB_NEW_DESKTOPWINDOW
-  // get correct widow width
-  int getCorrectWindowWidth() const
-  {
-	return correctWindowWidth;
-  }
-
-  // get correct widow height
-  int getCorrectWindowHeight() const
-  {
-	return correctWindowHeight;
-  }
-#endif // !QTB_NEW_DESKTOPWINDOW
-
-  // get height of menu bar in hiding
-  int getHeightOfMenuBarInHiding() const
-  {
-	return heightOfMenuBarInHiding;
-  }
-
-  // get height of status bar in hiding
-  int getHeightOfStatusBarInHiding() const
-  {
-	return heightOfStatusBarInHiding;
-  }
-#endif // 0 // for TEST
 };
 
 } // end of namespace qtbrynhildr

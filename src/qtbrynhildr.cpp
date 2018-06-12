@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -243,10 +243,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onShowStatusBar(false)
   ,progressBar(0)
   ,heightOfTitleBar(0)
-  ,heightOfMenuBarInHiding(0)
-  ,heightOfStatusBarInHiding(0)
   ,heightOfMenuBar(0)
   ,heightOfStatusBar(0)
+  ,widthMargin(0)
+  ,heightMargin(0)
   ,onControl(true)
   ,onGraphics(true)
   ,onSound(true)
@@ -511,6 +511,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // create window
   //------------------------------------------------------------
 #if QTB_NEW_DESKTOPWINDOW
+
   // Desktop Panel Object
   desktopPanelObject = new DesktopPanelObject(this);
   desktopPanel = desktopPanelObject;
@@ -526,13 +527,15 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // set Widget
   setCentralWidget(graphicsView);
   // initialize palette
-  originalPalette = fullScreenPalette = graphicsView->palette();
-  // for original
-  originalPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
-  graphicsView->setPalette(originalPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
+  backgroundPalette = fullScreenBackgroundPalette = graphicsView->palette();
+  // for background of desktop
+  backgroundPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
+  graphicsView->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
-  fullScreenPalette.setColor(QPalette::Window, Qt::black);
+  fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
+
 #else // QTB_NEW_DESKTOPWINDOW
+
   // Desktop Window Widget
   desktopWindow = new DesktopWindow(this);
   desktopPanel = desktopWindow;
@@ -541,19 +544,29 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  //  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  //  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  //scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  //scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   // set Widget
   scrollArea->setWidget(desktopWindow);
   scrollArea->setFocusProxy(desktopWindow);
   setCentralWidget(scrollArea);
+
+  // set margin
+  int left, top, right, bottom;
+  scrollArea->getContentsMargins(&left, &top, &right, &bottom);
+  setMargins(left+right, top+bottom);
+  desktopPanel->setMargins(left+right, top+bottom);
+
   // initialize palette
-  originalPalette = fullScreenPalette = scrollArea->palette();
-  // for original
-  originalPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
-  scrollArea->setPalette(originalPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
+  backgroundPalette = fullScreenBackgroundPalette = scrollArea->palette();
+  // for background of desktop
+  backgroundPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
+  scrollArea->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
-  fullScreenPalette.setColor(QPalette::Window, Qt::black);
+  fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
+
 #endif // QTB_NEW_DESKTOPWINDOW
 
   // set key/mouse buffer
@@ -609,8 +622,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "statusBar height = " + QString::number(heightOfStatusBar));
   }
-  heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
-  heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set window information
@@ -835,19 +846,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								   LogMessage::NoButton);
   }
 
-  // boot up
-  if (option->getBootupFlag()){
-	// connect to server now
-	connectToServer();
-	// clear boot flag
-	option->setBootupFlag(false);
-  }
-  else if (settings->getOnOpenConnectToServerDialogAtBootup()){
-	// pop up connect to server dialog
-	this->show();
-	popUpConnectToServer();
-  }
-
   // initialize timer for GUI
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
@@ -872,6 +870,19 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	changeMouseCursor(Qt::ArrowCursor);
   }
 #endif // for TEST
+
+  // boot up
+  if (option->getBootupFlag()){
+	// connect to server now
+	connectToServer();
+	// clear boot flag
+	option->setBootupFlag(false);
+  }
+  else if (settings->getOnOpenConnectToServerDialogAtBootup()){
+	// pop up connect to server dialog
+	this->show();
+	popUpConnectToServer();
+  }
 
   // check update
   if (settings->getOnCheckUpdateAtBootup()){
@@ -1035,7 +1046,7 @@ int QtBrynhildr::getHeightOfMenuBar()
 	return heightOfMenuBar;
   }
   else {
-	return heightOfMenuBarInHiding;
+	return 0;
   }
 }
 
@@ -1046,7 +1057,7 @@ int QtBrynhildr::getHeightOfStatusBar()
 	return heightOfStatusBar;
   }
   else {
-	return heightOfStatusBarInHiding;
+	return 0;
   }
 }
 
@@ -2587,7 +2598,7 @@ void QtBrynhildr::disconnected()
 // set desktop scaling factor
 void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 {
-  if (settings->getOnDesktopScaleFixed() || !settings->getOnKeepOriginalDesktopSize()){
+  if (settings->getOnDesktopScaleFixed()){
 	// NOT change scaling
 	return;
   }
@@ -2600,8 +2611,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar();
 #if !QTB_NEW_DESKTOPWINDOW
   // correct
-  width  -= settings->getDesktop()->getCorrectWindowWidth();
-  height -= settings->getDesktop()->getCorrectWindowHeight();
+  width  -= widthMargin;
+  height -= heightMargin;
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
@@ -2653,15 +2664,23 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
   //  cout << "resizeEvent()" << endl << flush;
 
 #if !QTB_NEW_DESKTOPWINDOW
+#if 1 // for TEST
   // rescaling desktop
-  if (settings->getOnKeepOriginalDesktopSize() &&
-	  settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
 #if 0 // for TEST
 	cout << "resizeEvent() : Rescaling for (width, height) = ("
 		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
 #endif // for TEST
 	setDesktopScalingFactor(event->size());
   }
+#else // 0 // for TEST
+  // rescaling desktop
+#if 1 // for TEST
+  cout << "resizeEvent() : Rescaling for (width, height) = ("
+	   << event->size().width() << "," << event->size().height() << ")" << endl << flush;
+#endif // for TEST
+  setDesktopScalingFactor(event->size());
+#endif // 0 // for TEST
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // resize software keyboard/button
@@ -3809,10 +3828,13 @@ void QtBrynhildr::fullScreen()
 #if !QTB_NEW_DESKTOPWINDOW
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	scrollArea->setPalette(fullScreenPalette); // change QPalette::Window to black
+	scrollArea->setPalette(fullScreenBackgroundPalette); // change QPalette::Window to black
 #endif // !QTB_NEW_DESKTOPWINDOW
 	desktopPanel->setOnFullScreen(true);
 	showFullScreen();
+	//cout << "size(width, height) = ("
+	//	 << size().width() << "," << size().height() << ")" << endl << flush;
+	setDesktopScalingFactor(size());
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -3823,21 +3845,20 @@ void QtBrynhildr::fullScreen()
 	  statusBar()->setVisible(settings->getOnShowStatusBar());
 	}
 #if !QTB_NEW_DESKTOPWINDOW
-	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	scrollArea->setPalette(originalPalette); // restore original QPalette::Window
+	//scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	//scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	scrollArea->setPalette(backgroundPalette); // restore original QPalette::Window
 #endif // !QTB_NEW_DESKTOPWINDOW
 	desktopPanel->setOnFullScreen(false);
 	showNormal();
+	//cout << "size(width, height) = ("
+	//	 << size().width() << "," << size().height() << ")" << endl << flush;
+	setDesktopScalingFactor(size());
   }
   // set checked flag
 #if defined(QTB_DEV_DESKTOP)
   fullScreen_Action->setChecked(fullScreenMode);
 #endif // defined(QTB_DEV_DESKTOP)
-#if 0 // for TEST
-  // menu control
-  desktopScalingDialog_Action->setEnabled(!fullScreenMode);
-#endif
 }
 
 // toggle stays on top
@@ -3991,9 +4012,15 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   QSize size = softwareKeyboard->resetSize();
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
 #if !QTB_NEW_DESKTOPWINDOW
+#if 0 // for TEST
   // correct
   windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
   windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
+#else // 0 // for TEST
+  // correct
+  windowSize.setWidth(windowSize.width() - widthMargin);
+  windowSize.setHeight(windowSize.height() - heightMargin);
+#endif // 0 // for TEST
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size
@@ -4021,8 +4048,8 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
 #if !QTB_NEW_DESKTOPWINDOW
   // correct
-  windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
-  windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
+  windowSize.setWidth(windowSize.width() - widthMargin);
+  windowSize.setHeight(windowSize.height() - heightMargin);
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size

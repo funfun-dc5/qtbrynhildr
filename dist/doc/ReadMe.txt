@@ -692,7 +692,6 @@ onSound=true
 soundType=1
 soundQuality=3
 soundCacheTime=100
-onKeepOriginalDesktopSize=true
 desktopScalingFactor=1
 desktopScalingQuality=1
 desktopScalingType=0

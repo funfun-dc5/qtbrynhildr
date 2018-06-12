@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef QTBRYNHILDR_H
 #define QTBRYNHILDR_H
@@ -495,21 +495,19 @@ private:
   // height of title bar
   int heightOfTitleBar;
 
-  // height of menu bar in hiding
-  int heightOfMenuBarInHiding;
-
-  // height of status bar in hiding
-  int heightOfStatusBarInHiding;
-
   // height of menu bar
   int heightOfMenuBar;
 
   // height of status bar
   int heightOfStatusBar;
 
+  // margins
+  int widthMargin;
+  int heightMargin;
+
   // palettes
-  QPalette originalPalette;
-  QPalette fullScreenPalette;
+  QPalette backgroundPalette;
+  QPalette fullScreenBackgroundPalette;
 
   // current onControl/onGraphics/onSound
   bool onControl;
@@ -952,6 +950,13 @@ private:
 
   // shutdown platform
   bool shutdownPlatform();
+
+  // set margins
+  void setMargins(int widthMargin, int heightMargin)
+  {
+	this->widthMargin = widthMargin;
+	this->heightMargin = heightMargin;
+  }
 
 #if QTB_TEST_CODE
   // start timer graphics

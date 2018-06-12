@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -97,7 +97,6 @@ Settings::Settings(const char *iniFileName)
   setSoundQuality(QTB_SOUNDQUALITY_DEFAULT);
   setSoundCacheTime(QTB_SOUNDCACHETIME_DEFAULT);
 
-  setOnKeepOriginalDesktopSize(QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT);
   setDesktopScalingFactor(QTB_DESKTOPSCALINGFACTOR_DEFAULT);
   setDesktopScalingFactorLimit(QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT);
   setDesktopScalingQuality(QTB_DESKTOPSCALINGQUALITY_DEFAULT);
@@ -334,9 +333,6 @@ void Settings::readSettings()
   setSoundCacheTime(settings->value(QTB_SOUNDCACHETIME,
 									(qint32)QTB_SOUNDCACHETIME_DEFAULT).toInt());
 
-  // load onKeepOriginalDesktopSize
-  setOnKeepOriginalDesktopSize(settings->value(QTB_ONKEEPORIGINALDESKTOPSIZE,
-											   QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT).toBool());
   // load desctopScalingFactor
   setDesktopScalingFactor(settings->value(QTB_DESKTOPSCALINGFACTOR,
 										  (qreal)QTB_DESKTOPSCALINGFACTOR_DEFAULT).toFloat());
@@ -609,9 +605,6 @@ void Settings::writeSettings()
   // save soundCapture
   //  settings->setValue(QTB_SOUNDCAPTURE, (qint32)soundCapture);
 
-  // save onKeepOriginalDesktopSize
-  settings->setValue(QTB_ONKEEPORIGINALDESKTOPSIZE, onKeepOriginalDesktopSize);
-
   //  save desktopScalingFactor
   settings->setValue(QTB_DESKTOPSCALINGFACTOR, (qreal)desktopScalingFactor);
 
@@ -797,7 +790,6 @@ void Settings::printSettings() const
   qDebug() << "    CAPTURE   : " << getSoundCaptureByString();
   qDebug() << "    CacheTime : " << getSoundCacheTime();
 
-  qDebug() << "KeepOriginalDesktopSize : " << onKeepOriginalDesktopSize;
   qDebug() << "DesktopScalingFactor    : " << desktopScalingFactor;
   qDebug() << "DesktopScalingQuality   : " << desktopScalingQuality;
   qDebug() << "DesktopScalingType      : " << desktopScalingType;

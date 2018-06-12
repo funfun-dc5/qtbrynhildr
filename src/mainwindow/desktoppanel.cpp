@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -46,6 +46,8 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
 #if defined(Q_OS_OSX)
   ,previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP)
 #endif // defined(Q_OS_OSX)
+  ,widthMargin(0)
+  ,heightMargin(0)
   ,keyboardLogFile(0)
   ,keyboardLogFileStream(0)
   // for DEBUG
@@ -243,13 +245,13 @@ void DesktopPanel::resizeWindow()
   // resize if NOT full screen
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
-	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
+	  if (!(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
 		int width = currentSize.width();
 		int height = currentSize.height() + qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar();
 #if !QTB_NEW_DESKTOPWINDOW
 		// correct
-		width  += settings->getDesktop()->getCorrectWindowWidth();
-		height += settings->getDesktop()->getCorrectWindowHeight();
+		width  += widthMargin;
+		height += heightMargin;
 #endif // !QTB_NEW_DESKTOPWINDOW
 
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();

@@ -78,10 +78,7 @@ private:
 private slots:
   // accept button
   void accept();
-#if 0
-  // reject button
-  void reject();
-#endif
+
   // clicked button
   void clicked(QAbstractButton *button);
 

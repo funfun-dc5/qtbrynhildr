@@ -72,12 +72,6 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   lineEdit_logFile->setReadOnly(true);
   lineEdit_keyboardLogFile->setReadOnly(true);
 #if QTB_PORTABLE_VERSION
-#if 0
-  lineEdit_keylayoutPath->setEnabled(false);
-  lineEdit_outputPath->setEnabled(false);
-  lineEdit_logFile->setEnabled(false);
-  lineEdit_keyboardLogFile->setEnabled(false);
-#endif
   pushButton_keylayoutPath->setEnabled(false);
   pushButton_outputPath->setEnabled(false);
   pushButton_logFile->setEnabled(false);
@@ -382,16 +376,6 @@ void PreferenceDialog::accept()
   if (resultOfSetToSettings)
 	hide();
 }
-
-#if 0
-// reject button
-void PreferenceDialog::reject()
-{
-  if (outputLog)
-	cout << "reject()." << endl << flush; // for DEBUG
-  hide();
-}
-#endif
 
 // clicked button
 void PreferenceDialog::clicked(QAbstractButton *button)

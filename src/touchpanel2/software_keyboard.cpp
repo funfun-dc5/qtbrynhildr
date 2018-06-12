@@ -212,15 +212,6 @@ QSize SoftwareKeyboard::resetSize()
   return size;
 }
 
-#if 0
-// minimum size hint
-QSize SoftwareKeyboard::minimumSizeHint() const
-{
-  QSize size = keyboardSize + QSize(1, 1);
-  return size;
-}
-#endif
-
 // size hint
 QSize SoftwareKeyboard::sizeHint() const
 {

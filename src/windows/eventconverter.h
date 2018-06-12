@@ -351,11 +351,6 @@ private:
 	{Qt::Key_BraceRight,			VK_OEM_6,		SHIFTKEY_NEED},		// '}'
 	{Qt::Key_AsciiTilde,			VK_OEM_3,		SHIFTKEY_NONEED},	// '~'
 	{Qt::Key_AsciiCircum,			VK_6,			SHIFTKEY_NEED},		// '^'
-#if 0 // for TEST
-	{Qt::Key_unknown,				VK_NONE_00,		SHIFTKEY_THROUGH},	// Convert
-	{Qt::Key_unknown,				VK_NONE_00,		SHIFTKEY_THROUGH},	// NonConvert
-	{Qt::Key_unknown,				VK_NONE_00,		SHIFTKEY_THROUGH},	// Zenkaku_Hankaku
-#endif // for TEST
 	{Qt::Key_Back,					VK_BROWSER_BACK,		SHIFTKEY_THROUGH},
 	{Qt::Key_Forward,				VK_BROWSER_FORWARD,		SHIFTKEY_THROUGH},
 	{Qt::Key_Refresh,				VK_BROWSER_REFRESH,		SHIFTKEY_THROUGH},

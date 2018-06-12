@@ -23,7 +23,10 @@
 #include "qtbrynhildr.h"
 
 // for TEST
-#define TEST_THREAD		0
+#define TEST_THREAD							0
+#define SAVE_MOUSE_CURSOR_IMAGE				0
+#define SAVE_MOUSE_CURSOR_IMAGE_BINARY		0
+#define HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY	0
 
 namespace qtbrynhildr {
 
@@ -48,12 +51,12 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   ,monitorCount(0)
   ,sentMode(0)
   ,doneCheckPassword(false)
-  ,buffer(0)
-  ,clipboardTop(0)
   ,transferFileProgress(0)
   ,transferFileProgressUnit(0)
   ,ntfs(0)
   ,onMaxfps(true)
+  ,clipboardTop(0)
+  ,buffer(0)
 {
   //outputLog = true; // for DEBUG
 
@@ -105,6 +108,12 @@ ControlThread::~ControlThread()
 	delete [] buffer;
 	buffer = 0;
 	clipboardTop = 0;
+  }
+
+  // NTFS utility
+  if (ntfs != 0){
+	delete ntfs;
+	ntfs = 0;
   }
 }
 
@@ -214,7 +223,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  break;
 	default:
 	  // unknown error
-	  const QString text = QString("Unknown Error...: com_data->mode = ") + QString::number((int)com_data->mode);
+	  const QString text = QString("Unknown Error...: com_data->mode = ") +
+		QString::number((int)com_data->mode);
 	  emit outputLogMessage(PHASE_CONTROL, text);
 	  return PROCESS_UNKNOWN_ERROR;
 	  break;
@@ -252,7 +262,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	counter_control++;
   }
 
-  // check mode
+  // check result (mode)
   checkMode();
 
   return PROCESS_SUCCEEDED;
@@ -385,7 +395,19 @@ void ControlThread::initHeader()
   memcpy(com_data->ver,
 		 PROTOCOL_VERSION_STRING, PROTOCOL_VERSION_STRING_LENGTH);
 
-  // common
+  initHeaderForCommon();
+
+  initHeaderForControl();
+
+  initHeaderForGraphics();
+
+  initHeaderForSound();
+}
+
+// initialize protocol header for common
+void ControlThread::initHeaderForCommon()
+{
+ // common
   com_data->data_type	= DATA_TYPE_DATA;
   int sendFileCount = settings->getSendFileCount();
   if (settings->getOnSendClipboard()){
@@ -408,7 +430,11 @@ void ControlThread::initHeader()
 	if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton())
 	  com_data->mouse_cursor = MOUSE_CURSOR_ON;
   }
+}
 
+// initialize protocol header for control
+void ControlThread::initHeaderForControl()
+{
   // for control
   com_data->control		= settings->getOnControl() ? CONTROL_ON : CONTROL_OFF;
 #if QTB_PLUGINS_DISABLE_SUPPORT
@@ -424,7 +450,11 @@ void ControlThread::initHeader()
   com_data->keycode		= (char)VK_NONE_00;
   com_data->keycode_flg	= KEYCODE_FLG_KEYUP;
   com_data->keydown		= KEYDOWN_OFF;
+}
 
+// initialize protocol header for graphics
+void ControlThread::initHeaderForGraphics()
+{
   // for graphics
   com_data->zoom			= (ZOOM)1.0;
   com_data->image_cx		= (SIZE)settings->getDesktopWidth();
@@ -451,7 +481,11 @@ void ControlThread::initHeader()
   if (onMaxfps){
 	com_data->max_fps = (char)settings->getFrameRate();
   }
+}
 
+// initialize protocol header for sound
+void ControlThread::initHeaderForSound()
+{
   // for sound
 #if QTB_CELT_SUPPORT
   if (!settings->getOnBrynhildr2Support() ||
@@ -507,27 +541,25 @@ void ControlThread::setMouseControl()
 		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
 		  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
 		  if (scalingFactor > 1.0){
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor
-			  + settings->getDesktopOffsetX();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor
-			  + settings->getDesktopOffsetY();
+			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor;
+			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor;
 		  }
 		  else {
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-			  + settings->getDesktopOffsetX();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-			  + settings->getDesktopOffsetY();
+			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width();
+			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height();
 		  }
 		}
 		else {
-		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-			+ settings->getDesktopOffsetX();
-		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-			+ settings->getDesktopOffsetY();
+		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width();
+		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height();
 		}
+		// set offset
+		com_data->mouse_x += settings->getDesktopOffsetX();
+		com_data->mouse_y += settings->getDesktopOffsetY();
 	  }
 	}
 	else {
+	  // set offset
 	  com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
 	  com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
 	}
@@ -1093,7 +1125,7 @@ bool ControlThread::receiveMouseCursorImage()
   if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }
-#if 0 // for TEST
+#if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
 	fstream file;
 	file.open("jpg/andMaskImage.bin", ios::out | ios::binary | ios::trunc);
@@ -1112,7 +1144,7 @@ bool ControlThread::receiveMouseCursorImage()
   if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }
-#if 0 // for TEST
+#if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
 	fstream file;
 	file.open("jpg/xorMaskImage.bin", ios::out | ios::binary | ios::trunc);
@@ -1206,7 +1238,7 @@ bool ControlThread::isColorMouseCursorImage(uchar *image, int size)
 // create color mouse cursor
 QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 {
-#if 0 // for TEST
+#if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   cout << hex << uppercase << setfill('0');
   cout << endl << "======= image - R" << endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
@@ -1257,7 +1289,7 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 	cout << setw(2) << (int)mask[i+3];
   }
   cout << endl << flush;
-#endif // 0 // for TEST
+#endif // HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
 
   bool flag24bit = true;
   // check A
@@ -1277,11 +1309,15 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
   // Cursor Image
   QImage cursorImage(image, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGBA8888);
   cursorImage = cursorImage.mirrored(false, true);
-  // cursorImage.save("jpg/cursorImage.bmp", "BMP");
+#if SAVE_MOUSE_CURSOR_IMAGE
+  cursorImage.save("jpg/cursorImage.bmp", "BMP");
+#endif // SAVE_MOUSE_CURSOR_IMAGE
   QPixmap cursor = QPixmap::fromImage(cursorImage, Qt::NoFormatConversion);
 
   // change mouse cursor image
-  //  cursor.save("jpg/ZCursor_pixmap.bmp", "BMP");
+#if SAVE_MOUSE_CURSOR_IMAGE // for TEST
+  cursor.save("jpg/ZCursor_pixmap.bmp", "BMP");
+#endif // SAVE_MOUSE_CURSOR_IMAGE // for TEST
   int hotX = (int)com_data->cursor_hotspot_x;
   int hotY = (int)com_data->cursor_hotspot_y;
   return QCursor(cursor, hotX, hotY);
@@ -1290,7 +1326,7 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 // create monochrome mouse cursor
 QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 {
-#if 0 // for TEST
+#if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   cout << hex << uppercase << setfill('0');
   cout << endl << "======= image - R" << endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
@@ -1341,7 +1377,7 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 	cout << setw(2) << (int)mask[i+3];
   }
   cout << endl << flush;
-#endif // 0 // for TEST
+#endif // HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
 
   uchar bitmapImage[QTB_ICON_SIZE*3];
   uchar maskImage[QTB_ICON_SIZE*3];
@@ -1408,10 +1444,10 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
   QBitmap maskBitmap = QBitmap::fromImage(maskQImage);
   int hotX = (int)com_data->cursor_hotspot_x;
   int hotY = (int)com_data->cursor_hotspot_y;
-#if 0 // for TEST
+#if SAVE_MOUSE_CURSOR_IMAGE // for TEST
   bitmap.save("jpg/ZCursor_bitmap.bmp", "BMP");
   maskBitmap.save("jpg/ZCursor_mask.bmp", "BMP");
-#endif // for TEST
+#endif // SAVE_MOUSE_CURSOR_IMAGE // for TEST
 
   return QCursor(bitmap, maskBitmap, hotX, hotY);
 }

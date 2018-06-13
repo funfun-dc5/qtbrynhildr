@@ -1,12 +1,12 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015-2016 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef VERSION_H
 #define VERSION_H
 
 // version
 #define QTB_VERSION				"2.0.19"
-#define QTB_RCNAME				"-android2"
+#define QTB_RCNAME				"-android2-newdesktop"
 #define QTB_VERSION_NUMBER		2019
 
 // year

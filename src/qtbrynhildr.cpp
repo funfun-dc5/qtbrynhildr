@@ -599,11 +599,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   flags |= Qt::WindowSystemMenuHint;
   flags |= Qt::WindowCloseButtonHint;
   flags |= Qt::WindowMinimizeButtonHint;
-#if 1 // for TEST
-  flags |= Qt::WindowMaximizeButtonHint;
-#else// for TEST
-  flags &= ~Qt::WindowMaximizeButtonHint; // disable Maximize Button
-#endif // for TEST
   if (settings->getOnFrameLessWindow()){
 	flags |= Qt::FramelessWindowHint;
   }
@@ -1513,6 +1508,7 @@ void QtBrynhildr::createActions()
 	windowSizeFixed_Action->setCheckable(true);
 	windowSizeFixed_Action->setChecked(settings->getOnWindowSizeFixed());
 	connect(windowSizeFixed_Action, SIGNAL(triggered()), this, SLOT(toggleWindowSizeFixed()));
+	toggleWindowSizeFixed();
   }
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -3933,10 +3929,12 @@ void QtBrynhildr::toggleWindowSizeFixed()
 #endif // !QTB_NEW_DESKTOPWINDOW
 	  // disable maximum button
 #if defined(Q_OS_WIN)
+	  bool visible = isVisible();
 	  Qt::WindowFlags flags = windowFlags();
 	  flags &= ~Qt::WindowMaximizeButtonHint;
 	  setWindowFlags(flags);
-	  setVisible(true);
+	  if (visible)
+		setVisible(true);
 #endif // defined(Q_OS_WIN)
 	}
 	else {
@@ -3949,10 +3947,12 @@ void QtBrynhildr::toggleWindowSizeFixed()
 #endif // !QTB_NEW_DESKTOPWINDOW
 	  // restore window flags
 #if defined(Q_OS_WIN)
+	  bool visible = isVisible();
 	  Qt::WindowFlags flags = windowFlags();
 	  flags |= Qt::WindowMaximizeButtonHint;
 	  setWindowFlags(flags);
-	  setVisible(true);
+	  if (visible)
+		setVisible(true);
 #endif // defined(Q_OS_WIN)
 	}
   }

@@ -3516,8 +3516,14 @@ void QtBrynhildr::refreshPublicMode()
 
   // mouse cursor
   if (settings->getPublicModeVersion() != PUBLICMODE_VERSION7){
-	// change mouse cursor
+	// change mouse cursor to cross cursor
 	changeMouseCursor(Qt::CrossCursor);
+	// change mouse cursor on menus to cross cursor
+	menuBar()->setCursor(Qt::CrossCursor);
+  }
+  else {
+	// change mouse cursor on menus to arrow cursor
+	menuBar()->setCursor(Qt::ArrowCursor);
   }
 }
 

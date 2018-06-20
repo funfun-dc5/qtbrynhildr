@@ -1,6 +1,8 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
+#define QTB_NEW 1
+
 // Common Header
 #include "common/common.h"
 
@@ -399,7 +401,11 @@ void ControlThread::initHeader()
 
   initHeaderForControl();
 
+#if QTB_NEW
   initHeaderForGraphics_new();
+#else // QTB_NEW
+  initHeaderForGraphics();
+#endif // QTB_NEW
 
   initHeaderForSound();
 }

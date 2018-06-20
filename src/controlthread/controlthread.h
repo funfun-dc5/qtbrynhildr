@@ -172,25 +172,42 @@ private:
   void initHeader();
 
   // initialize protocol header for common
-  void initHeaderForCommon();
+  inline void initHeaderForCommon();
 
   // initialize protocol header for control
-  void initHeaderForControl();
+  inline void initHeaderForControl();
 
   // initialize protocol header for graphics
-  void initHeaderForGraphics();
+  inline void initHeaderForGraphics();
+
+  // initialize protocol header for graphics
+  inline void initHeaderForGraphics_new();
+
+  // initialize protocol header for graphics
+  inline void initHeaderForGraphics_test();
+
+  // get size for current MODE
+  SIZE getSizeForCurrentMode(SIZE size)
+  {
+	if (currentMode == PUBLICMODE_VERSION7){
+	  return (size + 3) & ~3;
+	}
+	else {
+	  return size;
+	}
+  }
 
   // initialize protocol header for sound
-  void initHeaderForSound();
+  inline void initHeaderForSound();
 
   // set mouse control
-  void setMouseControl();
+  inline void setMouseControl();
 
   // set keyboard control
-  void setKeyboardControl();
+  inline void setKeyboardControl();
 
   // set gamepad control
-  void setGamePadControl();
+  inline void setGamePadControl();
 
   // check server version
   void checkServerVersion();

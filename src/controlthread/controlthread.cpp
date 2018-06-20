@@ -399,7 +399,7 @@ void ControlThread::initHeader()
 
   initHeaderForControl();
 
-  initHeaderForGraphics();
+  initHeaderForGraphics_new();
 
   initHeaderForSound();
 }
@@ -481,6 +481,108 @@ void ControlThread::initHeaderForGraphics()
   if (onMaxfps){
 	com_data->max_fps = (char)settings->getFrameRate();
   }
+}
+
+// initialize protocol header for graphics
+void ControlThread::initHeaderForGraphics_new()
+{
+  // for graphics
+  // video quality
+  com_data->video_quality	= settings->getVideoQuality();
+  // max fps
+  if (onMaxfps){
+	com_data->max_fps		= (char)settings->getFrameRate();
+  }
+  // zoom
+  com_data->zoom			= (ZOOM)1.0;
+
+  // scroll x, y
+  POS client_scroll_x	= (POS)settings->getDesktopOffsetX();
+  POS client_scroll_y	= (POS)settings->getDesktopOffsetY();
+  com_data->client_scroll_x	= client_scroll_x;
+  com_data->client_scroll_y	= client_scroll_y;
+
+  // set initial image size
+  SIZE imageWidth = settings->getDesktopWidth() - client_scroll_x;
+  SIZE imageHeight = settings->getDesktopHeight() - client_scroll_y;
+
+  // setup image size
+  qreal scalingFactor = settings->getDesktopScalingFactor();
+  QSize windowSize = desktopPanel->getWindowSize();
+  bool onWindowSizeFixed = settings->getOnWindowSizeFixed();
+
+  if (scalingFactor == 1.0){ // original size
+	// windowSizeFixed
+	if (onWindowSizeFixed){
+	  if (windowSize.isValid()){
+		if (windowSize.width() < imageWidth ||
+			windowSize.height() < imageHeight){
+		  imageWidth = getSizeForCurrentMode(windowSize.width());
+		  imageHeight = getSizeForCurrentMode(windowSize.height());
+		}
+	  }
+	}
+  }
+  else { // NOT original size
+	if (scalingFactor < 1.0){ // scale down
+	  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+		// scale down on server
+		com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
+
+		imageWidth = getSizeForCurrentMode(imageWidth*scalingFactor);
+		imageHeight = getSizeForCurrentMode(imageHeight*scalingFactor);
+
+		onWindowSizeFixed = false;
+	  }
+	}
+	// windowSizeFixed
+	if (onWindowSizeFixed){
+	  if (windowSize.isValid()){
+		if (windowSize.width() < imageWidth*scalingFactor ||
+			windowSize.height() < imageHeight*scalingFactor){
+		  imageWidth = getSizeForCurrentMode(windowSize.width()/scalingFactor);
+		  imageHeight = getSizeForCurrentMode(windowSize.height()/scalingFactor);
+		}
+	  }
+	}
+  }
+
+#if QTB_DESKTOP_COMPRESS_MODE
+  // desktop compress mode
+  if (settings->getDesktopCompressMode() > 1){
+	ZOOM compressZoom = settings->getDesktopCompressMode();
+	com_data->zoom *= compressZoom;
+	imageWidth = getSizeForCurrentMode(imageWidth/compressZoom);
+	imageHeight = getSizeForCurrentMode(imageHeight/compressZoom);
+  }
+#endif // QTB_DESKTOP_COMPRESS_MODE
+
+  com_data->image_cx = imageWidth;
+  com_data->image_cy = imageHeight;
+
+  //cout << "scaling Factor = " << scalingFactor << endl << flush;
+  //cout << "(imageWidth, imageHeight) = (" << imageWidth << ", " << imageHeight << ")" << endl << flush;
+  //cout << "windowSize = (" << windowSize.width() << ", " << windowSize.height() << ")" << endl << flush;
+}
+
+// initialize protocol header for graphics
+void ControlThread::initHeaderForGraphics_test()
+{
+  // for graphics
+  // video quality
+  com_data->video_quality	= settings->getVideoQuality();
+  // max fps
+  if (onMaxfps){
+	com_data->max_fps = (char)settings->getFrameRate();
+  }
+  // zoom
+  com_data->zoom = (ZOOM)2.0;
+
+  com_data->client_scroll_x	= 0;
+  com_data->client_scroll_y	= 0;
+  com_data->image_cx = 640;
+  com_data->image_cy = 400;
+  settings->setDesktopScalingFactor(1/com_data->zoom);
 }
 
 // initialize protocol header for sound
@@ -571,6 +673,9 @@ void ControlThread::setMouseControl()
 	  com_data->mouse_y *= desktopCompressMode;
 	}
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+	//cout << "com_data->mouse_x = " << com_data->mouse_x << endl;
+	//cout << "com_data->mouse_y = " << com_data->mouse_y << endl;
 
 	// save prevPos
 	prevPos = pos;

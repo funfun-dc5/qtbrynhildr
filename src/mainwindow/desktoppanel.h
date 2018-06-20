@@ -134,11 +134,14 @@ public:
   // clear desktop window
   void clearDesktop();
 
-  // get window size
+  // get size
   QSize getSize() const;
 
   // get desktop size
   QSize getDesktopSize() const;
+
+  // get window size
+  QSize getWindowSize() const;
 
   // set margins
   void setMargins(int widthMargin, int heightMargin)

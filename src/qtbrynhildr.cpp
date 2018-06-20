@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QRect>
 #include <QStatusBar>
+#include <QSysInfo>
 
 // Local Header
 #include "qtbrynhildr.h"
@@ -543,7 +544,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  //scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  scrollArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
   //scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   //scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -553,11 +555,56 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   scrollArea->setFocusProxy(desktopWindow);
   setCentralWidget(scrollArea);
 
+#if !QTB_NEW_DESKTOPWINDOW
   // set margin
   int left, top, right, bottom;
+  scrollArea->setContentsMargins(0,0,0,0);
   scrollArea->getContentsMargins(&left, &top, &right, &bottom);
-  setMargins(left+right, top+bottom);
-  desktopPanel->setMargins(left+right, top+bottom);
+  QString kernelVersion = QSysInfo::kernelVersion();
+  int vspace;
+
+#if defined(Q_OS_WIN)
+  if (kernelVersion.startsWith("10.")){			// Windows 10
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.2")){	// Windows 8
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.1")){	// Windows 7
+	vspace = 4;
+  }
+  else {
+	// NOT supported Version
+	vspace = 3;
+  }
+#elif defined(Q_OS_LINUX)
+  // Linux base
+
+#if defined(Q_OS_ANDROID)
+  // Android
+  vspace = 4;
+#else // defined(Q_OS_ANDROID)
+  // Linux Desktop
+  vspace = 2;
+#endif // defined(Q_OS_ANDROID)
+
+#elif defined(Q_OS_CYGWIN)
+  // Cygwin
+  vspace = 2;
+#elif defined(Q_OS_FREEBSD)
+  // FreeBSD
+  vspace = 0;
+#elif defined(Q_OS_OSX)
+  // Darwin
+  vspace = 0;
+#endif // defined(Q_OS_OSX)
+
+  setMargins(left+right, top+bottom+vspace);
+  desktopPanel->setMargins(left+right, top+bottom+vspace);
+#endif // !QTB_NEW_DESKTOPWINDOW
 
   // initialize palette
   backgroundPalette = fullScreenBackgroundPalette = scrollArea->palette();
@@ -889,6 +936,16 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // for test mode
   disableDrawing_Action->setChecked(!graphicsThread->getOnDrawing());
   disableMaxfps_Action->setChecked(!controlThread->getOnMaxfps());
+
+  cout << "heightOfTitleBar = " <<  heightOfTitleBar << endl;
+  cout << "heightOfMenuBar = " << heightOfMenuBar << endl;
+  cout << "heightOfStatusBar = " << heightOfStatusBar << endl;
+  cout << "widthMargin = " << widthMargin << endl;
+  cout << "heightMargin = " << heightMargin << endl;
+
+  QSize currentSize = size();
+  cout << "(width, height) = (" <<
+	currentSize.width() << ", " << currentSize.height() << ")" << endl << flush;
 }
 
 // destructor
@@ -2657,7 +2714,7 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
   QMainWindow::resizeEvent(event);
 
-  //  cout << "resizeEvent()" << endl << flush;
+  //cout << "resizeEvent()" << endl << flush;
 
 #if !QTB_NEW_DESKTOPWINDOW
 #if 1 // for TEST

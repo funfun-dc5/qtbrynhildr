@@ -242,6 +242,11 @@ void DesktopPanel::resizeWindow()
 	return;
   }
 
+  if (settings->getOnWindowSizeFixed()){
+	// Nothing to do
+	return;
+  }
+
   // resize if NOT full screen
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
@@ -289,7 +294,7 @@ void DesktopPanel::clearDesktop()
   }
 }
 
-// get window size
+// get size
 QSize DesktopPanel::getSize() const
 {
   return currentSize;
@@ -299,6 +304,19 @@ QSize DesktopPanel::getSize() const
 QSize DesktopPanel::getDesktopSize() const
 {
   return desktopSize;
+}
+
+// get window size
+QSize DesktopPanel::getWindowSize() const
+{
+  QSize windowSize = qtbrynhildr->size();
+  QSize diffSize =
+	QSize(widthMargin,
+		  qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar() + heightMargin);
+
+  windowSize -= diffSize;
+
+  return windowSize;
 }
 
 // set full screen flag

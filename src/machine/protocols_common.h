@@ -83,7 +83,9 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   POS				client_scroll_x;
   POS				client_scroll_y;
   VIDEO_MODE		video_mode;
-  BYTE				dummy11[19];		// padding 19 bytes
+  BYTE				dummy11[3];			// padding 3 bytes
+  char				scroll;				// scroll enable flag (public mode 7 only)
+  BYTE				dummy17[15];		// padding 15 bytes
   SERVER_VERSION	server_version;		// version of server
   ZOOM				zoom;
   BYTE				dummy12[4];			// padding 4 bytes

@@ -206,6 +206,18 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
+  offset = (char*)&(com_data.dummy17[0]) - (char*)&com_data;
+  if (outputLog)
+	cout << "dummy17 offset = " << offset;
+  if (offset == 197){
+	if (outputLog)
+	  cout << " : ok" << endl;
+  }
+  else {
+	if (outputLog)
+	  cout << " : ng" << endl;
+	result = false;
+  }
   offset = (char*)&(com_data.dummy12[0]) - (char*)&com_data;
   if (outputLog)
 	cout << "dummy12 offset = " << offset;

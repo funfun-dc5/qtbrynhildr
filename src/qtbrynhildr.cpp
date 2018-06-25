@@ -4017,6 +4017,8 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	  if (visible)
 		setVisible(true);
 #endif // defined(Q_OS_WIN)
+	  // update window
+	  refreshWindow();
 	}
   }
 }

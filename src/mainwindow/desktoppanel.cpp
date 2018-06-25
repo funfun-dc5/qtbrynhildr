@@ -962,7 +962,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   // change offset
   if (VK_Code == VK_UP){
 	POS offsetY = settings->getDesktopOffsetY();
-	offsetY -= 100;
+	offsetY += 100;
 	if (offsetY < 0) offsetY = 0;
 	settings->setDesktopOffsetY(offsetY);
 	//	cout << "Scroll Up : " << settings->getDesktopOffsetY() << endl << flush;
@@ -970,7 +970,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   }
   else if (VK_Code == VK_DOWN){
 	POS offsetY = settings->getDesktopOffsetY();
-	offsetY += 100;
+	offsetY -= 100;
 	if (offsetY > settings->getDesktopHeight()){
 	  offsetY = settings->getDesktopHeight();
 	}
@@ -980,7 +980,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   }
   else if (VK_Code == VK_LEFT){
 	POS offsetX = settings->getDesktopOffsetX();
-	offsetX -= 100;
+	offsetX += 100;
 	if (offsetX < 0) offsetX = 0;
 	settings->setDesktopOffsetX(offsetX);
 	//	cout << "Scroll Left : " << settings->getDesktopOffsetX() << endl << flush;
@@ -988,7 +988,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   }
   else if (VK_Code == VK_RIGHT){
 	POS offsetX = settings->getDesktopOffsetX();
-	offsetX += 100;
+	offsetX -= 100;
 	if (offsetX > settings->getDesktopWidth()){
 	  offsetX = settings->getDesktopWidth();
 	}

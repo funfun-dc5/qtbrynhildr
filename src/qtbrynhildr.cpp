@@ -546,10 +546,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   scrollArea->setWidgetResizable(true);
   //scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
   scrollArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-  //scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  //scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  if (settings->getOnDesktopScaleFixed()){
+	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  }
+  else {
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  }
   // set Widget
   scrollArea->setWidget(desktopWindow);
   scrollArea->setFocusProxy(desktopWindow);
@@ -558,42 +562,41 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if !QTB_NEW_DESKTOPWINDOW
   // set margin
   int left, top, right, bottom;
-  scrollArea->setContentsMargins(0,0,0,0);
   scrollArea->getContentsMargins(&left, &top, &right, &bottom);
   QString kernelVersion = QSysInfo::kernelVersion();
   int vspace;
 
 #if defined(Q_OS_WIN)
   if (kernelVersion.startsWith("10.")){			// Windows 10
-	vspace = 3;
+	vspace = 1;
   }
   else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
-	vspace = 3;
+	vspace = 1;
   }
   else if (kernelVersion.startsWith("6.2")){	// Windows 8
-	vspace = 3;
+	vspace = 1;
   }
   else if (kernelVersion.startsWith("6.1")){	// Windows 7
-	vspace = 4;
+	vspace = 2;
   }
   else {
 	// NOT supported Version
-	vspace = 3;
+	vspace = 1;
   }
 #elif defined(Q_OS_LINUX)
   // Linux base
 
 #if defined(Q_OS_ANDROID)
   // Android
-  vspace = 4;
+  vspace = 2;
 #else // defined(Q_OS_ANDROID)
   // Linux Desktop
-  vspace = 2;
+  vspace = 0;
 #endif // defined(Q_OS_ANDROID)
 
 #elif defined(Q_OS_CYGWIN)
   // Cygwin
-  vspace = 2;
+  vspace = 0;
 #elif defined(Q_OS_FREEBSD)
   // FreeBSD
   vspace = 0;
@@ -3965,6 +3968,18 @@ void QtBrynhildr::toggleDesktopScaleFixed()
 	  desktopScalingDialog_Action->setEnabled(!checked);
 	  //	  desktopScalingDialog->hide();
 	}
+
+#if !QTB_NEW_DESKTOPWINDOW
+	if (checked){
+	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	}
+	else {
+	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	}
+#endif // !QTB_NEW_DESKTOPWINDOW
+
   }
 }
 

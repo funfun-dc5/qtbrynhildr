@@ -1,6 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
+#define QTB_TEST 0
 #define QTB_NEW 1
 
 // Common Header
@@ -401,7 +402,9 @@ void ControlThread::initHeader()
 
   initHeaderForControl();
 
-#if QTB_NEW
+#if QTB_TEST
+  initHeaderForGraphics_test();
+#elif QTB_NEW
   initHeaderForGraphics_new();
 #else // QTB_NEW
   initHeaderForGraphics();
@@ -507,6 +510,7 @@ void ControlThread::initHeaderForGraphics_new()
   POS client_scroll_y	= (POS)settings->getDesktopOffsetY();
   com_data->client_scroll_x	= client_scroll_x;
   com_data->client_scroll_y	= client_scroll_y;
+  com_data->scroll = 1; // enable scroll (public mode 7)
 
   // set initial image size
   SIZE imageWidth = settings->getDesktopWidth() - client_scroll_x;
@@ -582,13 +586,15 @@ void ControlThread::initHeaderForGraphics_test()
 	com_data->max_fps = (char)settings->getFrameRate();
   }
   // zoom
-  com_data->zoom = (ZOOM)2.0;
+  com_data->zoom = (ZOOM)1.0;
+  settings->setDesktopScalingFactor(1/com_data->zoom);
+
+  com_data->scroll = 1;
 
   com_data->client_scroll_x	= 0;
   com_data->client_scroll_y	= 0;
-  com_data->image_cx = 640;
-  com_data->image_cy = 400;
-  settings->setDesktopScalingFactor(1/com_data->zoom);
+  com_data->image_cx = 1280;
+  com_data->image_cy = 800;
 }
 
 // initialize protocol header for sound

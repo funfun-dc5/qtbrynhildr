@@ -65,7 +65,7 @@ const bool QTB_DESKTOP_FRAMERATE_CONTROL= true;
 
 // scroll mode
 #if defined(QTB_DEV_DESKTOP)
-const bool QTB_SCROLL_MODE				= true;
+const bool QTB_SCROLL_MODE				= false;
 #else // defined(QTB_DEV_DESKTOP)
 const bool QTB_SCROLL_MODE				= false;
 #endif // defined(QTB_DEV_DESKTOP)

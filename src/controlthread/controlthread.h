@@ -181,21 +181,7 @@ private:
   inline void initHeaderForGraphics();
 
   // initialize protocol header for graphics
-  inline void initHeaderForGraphics_new();
-
-  // initialize protocol header for graphics
   inline void initHeaderForGraphics_test();
-
-  // get size for current MODE
-  SIZE getSizeForCurrentMode(SIZE size)
-  {
-	if (currentMode == PUBLICMODE_VERSION7){
-	  return (size + 3) & ~3;
-	}
-	else {
-	  return size;
-	}
-  }
 
   // initialize protocol header for sound
   inline void initHeaderForSound();

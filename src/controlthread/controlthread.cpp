@@ -2,7 +2,6 @@
 // Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #define QTB_TEST 0
-#define QTB_NEW 1
 
 // Common Header
 #include "common/common.h"
@@ -404,11 +403,9 @@ void ControlThread::initHeader()
 
 #if QTB_TEST
   initHeaderForGraphics_test();
-#elif QTB_NEW
-  initHeaderForGraphics_new();
-#else // QTB_NEW
+#else // QTB_TEST
   initHeaderForGraphics();
-#endif // QTB_NEW
+#endif // QTB_TEST
 
   initHeaderForSound();
 }
@@ -461,39 +458,9 @@ void ControlThread::initHeaderForControl()
   com_data->keydown		= KEYDOWN_OFF;
 }
 
-// initialize protocol header for graphics
+#if defined(QTB_DEV_DESKTOP)
+// initialize protocol header for graphics for desktop
 void ControlThread::initHeaderForGraphics()
-{
-  // for graphics
-  com_data->zoom			= (ZOOM)1.0;
-  com_data->image_cx		= (SIZE)settings->getDesktopWidth();
-  com_data->image_cy		= (SIZE)settings->getDesktopHeight();
-  com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
-  com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
-  com_data->video_quality	= settings->getVideoQuality();
-  // scaling
-  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-	if (settings->getDesktopScalingFactor() < 1.0){
-	  // scale down
-	  com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
-
-	  com_data->image_cx *= settings->getDesktopScalingFactor();
-	  com_data->image_cy *= settings->getDesktopScalingFactor();
-	}
-  }
-#if QTB_DESKTOP_COMPRESS_MODE
-  // desktop compress mode
-  if (settings->getDesktopCompressMode() > 1)
-	com_data->zoom *= settings->getDesktopCompressMode();
-#endif // QTB_DESKTOP_COMPRESS_MODE
-  // max fps
-  if (onMaxfps){
-	com_data->max_fps = (char)settings->getFrameRate();
-  }
-}
-
-// initialize protocol header for graphics
-void ControlThread::initHeaderForGraphics_new()
 {
   // for graphics
   // video quality
@@ -503,77 +470,102 @@ void ControlThread::initHeaderForGraphics_new()
 	com_data->max_fps		= (char)settings->getFrameRate();
   }
   // zoom
-  com_data->zoom			= (ZOOM)1.0;
-
-  // scroll x, y
-  POS client_scroll_x	= (POS)settings->getDesktopOffsetX();
-  POS client_scroll_y	= (POS)settings->getDesktopOffsetY();
-  com_data->client_scroll_x	= client_scroll_x;
-  com_data->client_scroll_y	= client_scroll_y;
-  com_data->scroll = 1; // enable scroll (public mode 7)
-
-  // set initial image size
-  SIZE imageWidth = settings->getDesktopWidth() - client_scroll_x;
-  SIZE imageHeight = settings->getDesktopHeight() - client_scroll_y;
-
-  // setup image size
-  qreal scalingFactor = settings->getDesktopScalingFactor();
-  QSize windowSize = desktopPanel->getWindowSize();
-  bool onWindowSizeFixed = settings->getOnWindowSizeFixed();
-
-  if (scalingFactor == 1.0){ // original size
-	// windowSizeFixed
-	if (onWindowSizeFixed){
-	  if (windowSize.isValid()){
-		if (windowSize.width() < imageWidth ||
-			windowSize.height() < imageHeight){
-		  imageWidth = getSizeForCurrentMode(windowSize.width());
-		  imageHeight = getSizeForCurrentMode(windowSize.height());
-		}
-	  }
-	}
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
+	  settings->getDesktopScalingFactor() < 1.0){
+	// scale down on server : zoom > 1.0
+	com_data->zoom			= (ZOOM)settings->getDesktopScalingFactorForZoom();
   }
-  else { // NOT original size
-	if (scalingFactor < 1.0){ // scale down
-	  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-		// scale down on server
-		com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
-
-		imageWidth = getSizeForCurrentMode(imageWidth*scalingFactor);
-		imageHeight = getSizeForCurrentMode(imageHeight*scalingFactor);
-
-		onWindowSizeFixed = false;
-	  }
-	}
-	// windowSizeFixed
-	if (onWindowSizeFixed){
-	  if (windowSize.isValid()){
-		if (windowSize.width() < imageWidth*scalingFactor ||
-			windowSize.height() < imageHeight*scalingFactor){
-		  imageWidth = getSizeForCurrentMode(windowSize.width()/scalingFactor);
-		  imageHeight = getSizeForCurrentMode(windowSize.height()/scalingFactor);
-		}
-	  }
-	}
+  else {
+	com_data->zoom			= (ZOOM)1.0;
   }
+
+  // client scroll
+  // com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
+  // com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
+  // com_data->scroll = 1; // enable scroll (public mode 7)
+
+  // image size
+  com_data->image_cx		= (SIZE)settings->getDesktopWidth();
+  com_data->image_cy		= (SIZE)settings->getDesktopHeight();
 
 #if QTB_DESKTOP_COMPRESS_MODE
   // desktop compress mode
   if (settings->getDesktopCompressMode() > 1){
 	ZOOM compressZoom = settings->getDesktopCompressMode();
 	com_data->zoom *= compressZoom;
-	imageWidth = getSizeForCurrentMode(imageWidth/compressZoom);
-	imageHeight = getSizeForCurrentMode(imageHeight/compressZoom);
+	// com_data->image_cx = com_data->image_cx/compressZoom;
+	// com_data->image_cy = com_data->image_cy/compressZoom;
   }
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+  //cout << "(image_cx, image_cy) = (" << com_data->image_cx << ", " << com_data->image_cy << ")" << endl << flush;
+}
+#else // defined(QTB_DEV_DESKTOP)
+// initialize protocol header for graphics for touchpanel
+void ControlThread::initHeaderForGraphics()
+{
+  // for graphics
+  // video quality
+  com_data->video_quality	= settings->getVideoQuality();
+  // max fps
+  if (onMaxfps){
+	com_data->max_fps		= (char)settings->getFrameRate();
+  }
+
+  // image size and zoom
+  SIZE imageWidth = settings->getDesktopWidth();
+  SIZE imageHeight = settings->getDesktopHeight();
+
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
+	  settings->getDesktopScalingFactor() < 1.0){
+	// scale down on server : zoom > 1.0
+	com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
+	// com_data->client_scroll_x	= 0;
+	// com_data->client_scroll_y	= 0;
+  }
+  else {
+	// zoom = 1.0 (original size)
+	com_data->zoom			= (ZOOM)1.0;
+
+	// offset x,y
+	POS client_scroll_x	= (POS)settings->getDesktopOffsetX();
+	POS client_scroll_y	= (POS)settings->getDesktopOffsetY();
+	com_data->client_scroll_x	= client_scroll_x;
+	com_data->client_scroll_y	= client_scroll_y;
+	com_data->scroll = 1; // enable scroll (public mode 7)
+
+    // set initial image size
+	imageWidth -= client_scroll_x;
+	imageHeight -= client_scroll_y;
+
+	// setup image size
+	if (settings->getOnWindowSizeFixed()){
+	  qreal scalingFactor = settings->getDesktopScalingFactor();
+	  QSize windowSize = desktopPanel->getWindowSize();
+	  //QSize windowSize = QSize(640, 400); // for TEST
+
+	  if (windowSize.isValid()){
+		if (windowSize.width() < imageWidth*scalingFactor ||
+			windowSize.height() < imageHeight*scalingFactor){
+		  imageWidth = windowSize.width()/scalingFactor;
+		  imageHeight = windowSize.height()/scalingFactor;
+		}
+
+		//cout << "scaling Factor = " << scalingFactor << endl;
+		//cout << "windowSize = (" << windowSize.width() << ", " << windowSize.height() << ")" << endl;
+		//cout << "(scroll_x, scroll_y) = (" << client_scroll_x << ", " << client_scroll_y << ")" << endl;
+		//cout << "(imageWidth, imageHeight) = (" << imageWidth << ", " << imageHeight << ")" << endl;
+		//cout << flush;
+	  }
+	}
+  }
 
   com_data->image_cx = imageWidth;
   com_data->image_cy = imageHeight;
 
-  //cout << "scaling Factor = " << scalingFactor << endl << flush;
   //cout << "(imageWidth, imageHeight) = (" << imageWidth << ", " << imageHeight << ")" << endl << flush;
-  //cout << "windowSize = (" << windowSize.width() << ", " << windowSize.height() << ")" << endl << flush;
 }
+#endif // defined(QTB_DEV_DESKTOP)
 
 // initialize protocol header for graphics
 void ControlThread::initHeaderForGraphics_test()

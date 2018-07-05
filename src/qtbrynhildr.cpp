@@ -948,6 +948,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   disableDrawing_Action->setChecked(!graphicsThread->getOnDrawing());
   disableMaxfps_Action->setChecked(!controlThread->getOnMaxfps());
 
+#if 0 // for TEST
   cout << "heightOfTitleBar = " <<  heightOfTitleBar << endl;
   cout << "heightOfMenuBar = " << heightOfMenuBar << endl;
   cout << "heightOfStatusBar = " << heightOfStatusBar << endl;
@@ -957,6 +958,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   QSize currentSize = size();
   cout << "(width, height) = (" <<
 	currentSize.width() << ", " << currentSize.height() << ")" << endl << flush;
+#endif // for TEST
 }
 
 // destructor

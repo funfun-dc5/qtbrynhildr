@@ -165,7 +165,7 @@ void DesktopPanel::refreshDesktop(QImage image)
 	  }
 	  if (scalingFactor != 1.0){
 		// scale
-		currentSize = currentSize * scalingFactor;
+		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
 #if !QTB_NEW_DESKTOPWINDOW
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
@@ -180,10 +180,27 @@ void DesktopPanel::refreshDesktop(QImage image)
 #if defined(QTB_DEV_DESKTOP)
 	else { // DESKTOPSCALING_TYPE_ON_SERVER
 	  if (settings->getDesktopScalingFactor() > 1.0){
-		// scale
-		currentSize = currentSize * settings->getDesktopScalingFactor();
+		// scale up
+		currentSize = getSizeForCurrentMode(currentSize * settings->getDesktopScalingFactor());
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 	  }
+#if 0 // for TEST
+	  else if (settings->getOnWindowSizeFixed() &&
+			   settings->getDesktopScalingFactor() < 1.0){
+		QSize windowSize = getWindowSize();
+		//QSize windowSize = QSize(640,400); // for TEST
+		if (image.width() > windowSize.width() ||
+			image.height() > windowSize.height()){
+		  qreal scalingFactor = settings->getDesktopScalingFactor();
+		  int x = getWidthForCurrentMode(settings->getDesktopOffsetX() * scalingFactor);
+		  int y = getHeightForCurrentMode(settings->getDesktopOffsetY() * scalingFactor);
+		  int width = windowSize.width();
+		  int height = windowSize.height();
+		  // cut image
+		  image = image.copy(x, y, width, height);
+		}
+	  }
+#endif // 0 // for TEST
 	}
 #endif // defined(QTB_DEV_DESKTOP)
   }
@@ -1032,7 +1049,7 @@ qreal DesktopPanel::getDesktopScalingFactor(QSize size)
 	  unsigned long pageSizeMask = (unsigned long)getpagesize()-1;
 	  qreal unitFactor = 1.0/DesktopScalingDialog::SLIDER_FACTOR;
 	  while(true){ // for checking scaling factor
-		QSize targetSize = size * scalingFactor;
+		QSize targetSize = getSizeForCurrentMode(size * scalingFactor);
 		unsigned long imageDataSize = targetSize.width() * targetSize.height() * 4;
 		imageDataSize = (imageDataSize + pageSizeMask) & ~pageSizeMask;
 		if (imageDataSize <= maxImageDataSize){

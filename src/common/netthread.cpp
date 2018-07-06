@@ -535,14 +535,15 @@ void NetThread::printHeader(COM_DATA *com_data)
   cout << "com_data->data_size      :" << com_data->data_size << endl;
 
   ios::fmtflags flags = cout.flags();
-  char fill = cout.fill();
+
   cout << "com_data->check_digit_enc:" << hex << uppercase << setfill('0');
   for (int i = 0; i < ENCRYPTION_KEY_LENGTH; i++){
 	cout << setw(2) << (int)(com_data->check_digit_enc[i] & 0xff);
   }
   cout << endl;
   cout << "com_data->check_digit    :"	<< (int)(com_data->check_digit & 0xffff) << endl;
-  cout << setiosflags(flags) << setfill(fill);
+
+  cout.setf(flags);
 
   cout << "com_data->ver            :\"" << com_data->ver[0]
 										 << com_data->ver[1]
@@ -626,7 +627,7 @@ void NetThread::dumpHeader(COM_DATA *com_data)
   cout << "========================== HEADER DUMP ==========================" << endl;
 
   ios::fmtflags flags = cout.flags();
-  char fill = cout.fill();
+
   cout << hex << uppercase << setfill('0');
 
   unsigned char *ptr = (unsigned char *)com_data;
@@ -641,7 +642,9 @@ void NetThread::dumpHeader(COM_DATA *com_data)
 	cout << setw(2) << (unsigned int)*ptr;
 	ptr++;
   }
-  cout << endl << endl << setiosflags(flags) << setfill(fill) << flush;
+  cout << endl << endl << flush;
+
+  cout.setf(flags);
 }
 
 // start information
@@ -661,7 +664,12 @@ void NetThread::printTimeInfo(const char *str)
 {
   qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
   qint64 pastTime = currentTime - startTime;
+
+  ios::fmtflags flags = cout.flags();
+
   cout << "[" << name << "] " << left << setw(20) << str << ": " << pastTime << endl;
+
+  cout.setf(flags);
 }
 
 // set socket option
@@ -869,7 +877,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
   setupInterruptable(sockfd);
 
   // start connect
-  ::connect(sockfd, addr, addrlen);
+  (void)::connect(sockfd, addr, addrlen);
 
   return 0;
 }

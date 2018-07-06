@@ -37,6 +37,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,graphicsBufferSize(settings->getGraphicsBufferSize())
 #endif // QTB_TEST_CODE
   ,frameCounter(0)
+  ,previousGetFrameRateTime(0)
   ,totalFrameCounter(0)
   ,onDrawing(true)
 #if !QTB_TEST_CODE

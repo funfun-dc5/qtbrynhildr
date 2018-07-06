@@ -68,6 +68,7 @@ Desktop::Desktop()
   //  cout << "[Desktop] maxImageDataSize = " << maxImageDataSize << endl << flush;
 #endif
 
+#if 0 // for TEST
   // set correct window width and height
 #if defined(Q_OS_WIN)
   // OS Version
@@ -198,6 +199,7 @@ Desktop::Desktop()
 	heightOfStatusBarInHiding = strtol(envval, 0, 10);
 	cout << heightOfStatusBarInHiding << endl << flush;
   }
+#endif // 0 // for TEST
 
   // log flush
   if (outputLog){

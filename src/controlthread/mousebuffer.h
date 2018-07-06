@@ -1,36 +1,14 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef MOUSEBUFFER_H
 #define MOUSEBUFFER_H
 // Local Header
 #include "common/protocols.h"
+#include "mousebutton.h"
+#include "mousewheel.h"
 
 namespace qtbrynhildr {
-
-// type of mouse information
-typedef enum {
-  TYPE_MOUSE_INVALID,
-  TYPE_MOUSE_RIGHT_BUTTON,
-  TYPE_MOUSE_LEFT_BUTTON,
-  TYPE_MOUSE_MIDDLE_BUTTON,
-  TYPE_MOUSE_BACK_BUTTON,
-  TYPE_MOUSE_FORWARD_BUTTON,
-  TYPE_MOUSE_WHEEL,
-  TYPE_MOUSE_FILEDROP
-} MouseInfoType;
-
-// value of mouse information
-typedef union {
-  MOUSE_BUTTON button;
-  MOUSE_WHEEL wheel;
-} MouseInfoValue;
-
-// mouse information
-struct MouseInfo {
-  MouseInfoType type;
-  MouseInfoValue value;
-};
 
 // mouse position (NOTE: class)
 typedef struct {
@@ -44,18 +22,25 @@ class MouseBuffer
   //-------------------------------------------------------------------------------
   // Variable
   //-------------------------------------------------------------------------------
+public:
+  // type of mouse information
+  typedef enum {
+	MOUSE_BUTTON_RIGHT,
+	MOUSE_BUTTON_LEFT,
+	MOUSE_BUTTON_MIDDLE,
+	MOUSE_BUTTON_BACK,
+	MOUSE_BUTTON_FORWARD,
+	MOUSE_BUTTON_FILEDROP,
+	MOUSE_BUTTON_NUM,
+	MOUSE_BUTTON_INVALID = MOUSE_BUTTON_NUM
+  } MOUSE_BUTTON_ID;
+
 private:
-  // buffer
-  MouseInfo *buffer;
+  // button queues
+  MouseButton *buttons[MOUSE_BUTTON_NUM];
 
-  // buffer size
-  int bufferSize;
-
-  // buffer top index
-  int topPos;
-
-  // buffer next index
-  int nextPos;
+  // wheel queue
+  MouseWheel *wheel;
 
   // mouse position
   MOUSE_POS pos;
@@ -75,17 +60,8 @@ public:
   // destructor
   ~MouseBuffer();
 
-  // put data to ring buffer
-  int put(MouseInfoType type, MouseInfoValue value);
-
-  // get data from ring buffer
-  MouseInfo *get();
-
   // clear buffer
   void clear();
-
-  // get available data size
-  int size() const;
 
   // set enabled flag
   void setEnabled(bool enabled)
@@ -93,11 +69,19 @@ public:
 	this->enabled = enabled;
   }
 
+  // for button queue
+  int putButton(MOUSE_BUTTON_ID button, MOUSE_BUTTON value);
+  MOUSE_BUTTON getButton(MOUSE_BUTTON_ID button);
+
+  // for wheel queue
+  int putWheel(MOUSE_WHEEL value);
+  MOUSE_WHEEL getWheel();
+
   // set mouse position
-  void setMousePos(MOUSE_POS curPos);
+  void setPos(MOUSE_POS pos);
 
   // get mouse position
-  MOUSE_POS getMousePos() const;
+  MOUSE_POS getPos() const;
 };
 
 } // end of namespace qtbrynhildr

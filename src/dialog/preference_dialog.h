@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2017-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef PREFERENCE_DIALOG_H
 #define PREFERENCE_DIALOG_H
@@ -78,10 +78,7 @@ private:
 private slots:
   // accept button
   void accept();
-#if 0
-  // reject button
-  void reject();
-#endif
+
   // clicked button
   void clicked(QAbstractButton *button);
 

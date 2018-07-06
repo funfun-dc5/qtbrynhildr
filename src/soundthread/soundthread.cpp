@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -167,29 +167,29 @@ PROCESS_RESULT SoundThread::processForHeader()
 TRANSMIT_RESULT SoundThread::transmitBuffer()
 {
   // received data size
-  long receivedDataSize = com_data->data_size;
+  long dataSize = com_data->data_size;
 
   // check
   // size check
-  if (receivedDataSize < 0){
+  if (dataSize < 0){
 	// error
 	return TRANSMIT_DATASIZE_ERROR;
   }
-  if (receivedDataSize == 0){
+  if (dataSize == 0){
 	// Nothing to do
 	return TRANSMIT_SUCCEEDED;
   }
-  if (receivedDataSize > QTB_SOUND_LOCAL_BUFFER_SIZE){
+  if (dataSize > QTB_SOUND_LOCAL_BUFFER_SIZE){
 	if (outputLog){
-	  cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush; // error
+	  cout << "[" << name << "] dataSize = " << dataSize << endl << flush; // error
 	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
 
   // receive data for sound
-  receivedDataSize = receiveData(buffer, receivedDataSize);
+  long receivedDataSize = receiveData(buffer, dataSize);
   // size check
-  if (receivedDataSize <= 0){
+  if (receivedDataSize != dataSize){
 	// error
 	return TRANSMIT_DATASIZE_ERROR;
   }
@@ -201,6 +201,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   // SOUND_TYPE_PCM
   // buffer[]         : PCM Data
   // receivedDataSize : Size of PCM Data
+
   // SOUND_TYPE_CELT
   // buffer[]         : CELT Data
   // receivedDataSize : Size of CELT Data

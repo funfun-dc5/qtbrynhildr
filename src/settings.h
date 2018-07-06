@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef SETTINGS_H
 #define SETTINGS_H
@@ -211,10 +211,6 @@ typedef int KEYBOARD_TYPE;
 // for soundCacheTime (ms)
 #define QTB_SOUNDCACHETIME			"soundCacheTime"
 #define QTB_SOUNDCACHETIME_DEFAULT	100
-
-// for onKeepOriginalDesktopSize
-#define QTB_ONKEEPORIGINALDESKTOPSIZE "onKeepOriginalDesktopSize"
-#define QTB_ONKEEPORIGINALDESKTOPSIZE_DEFAULT true
 
 // for desktopScalingFactor
 #define QTB_DESKTOPSCALINGFACTOR	"desktopScalingFactor"
@@ -549,9 +545,6 @@ private:
   volatile SOUND_QUALITY soundQuality;
   volatile SOUND_CAPTURE soundCapture;
   volatile int soundCacheTime;
-
-  // keep original desktop size flag
-  volatile bool onKeepOriginalDesktopSize;
 
   // scaling factor
   volatile qreal desktopScalingFactor;
@@ -1300,14 +1293,6 @@ public:
 	return frameInterval;
   }
 
-#if 0 // for TEST
-  // set frame interval (micro seconds)
-  void setFrameInterval(unsigned long frameInterval)
-  {
-	this->frameInterval = frameInterval;
-  }
-#endif // for TEST
-
 #if QTB_CELT_SUPPORT
   // get sound type
   SOUND_TYPE getSoundType() const
@@ -1413,18 +1398,6 @@ public:
 	  return "UNKNOWN_CAPTURE";
 	  break;
 	}
-  }
-
-  // get keep original desktop size flag
-  bool getOnKeepOriginalDesktopSize() const
-  {
-	return onKeepOriginalDesktopSize;
-  }
-
-  // set keep original desktop size flag
-  void setOnKeepOriginalDesktopSize(bool onKeepOriginalDesktopSize)
-  {
-	this->onKeepOriginalDesktopSize = onKeepOriginalDesktopSize;
   }
 
   // get desktop scaling factor

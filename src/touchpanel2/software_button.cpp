@@ -73,15 +73,6 @@ QSize SoftwareButton::resetSize()
   return buttonSize;
 }
 
-#if 0
-// minimum size hint
-QSize SoftwareButton::minimumSizeHint() const
-{
-  QSize size = buttonSize + QSize(1, 1);
-  return size;
-}
-#endif
-
 // size hint
 QSize SoftwareButton::sizeHint() const
 {

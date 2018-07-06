@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -65,7 +65,7 @@ const bool QTB_DESKTOP_FRAMERATE_CONTROL= true;
 
 // scroll mode
 #if defined(QTB_DEV_DESKTOP)
-const bool QTB_SCROLL_MODE				= true;
+const bool QTB_SCROLL_MODE				= false;
 #else // defined(QTB_DEV_DESKTOP)
 const bool QTB_SCROLL_MODE				= false;
 #endif // defined(QTB_DEV_DESKTOP)

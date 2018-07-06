@@ -486,11 +486,6 @@ public:
   // reset size
   QSize resetSize();
 
-#if 0
-  // minimum size hint
-  QSize minimumSizeHint() const;
-#endif
-
   // size hint
   QSize sizeHint() const;
 

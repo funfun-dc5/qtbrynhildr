@@ -212,15 +212,6 @@ QSize SoftwareKeyboard::resetSize()
   return size;
 }
 
-#if 0
-// minimum size hint
-QSize SoftwareKeyboard::minimumSizeHint() const
-{
-  QSize size = keyboardSize + QSize(1, 1);
-  return size;
-}
-#endif
-
 // size hint
 QSize SoftwareKeyboard::sizeHint() const
 {
@@ -426,14 +417,14 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 {
   if (outputLog){
 	cout << "Pressed Key! id = " << id << endl << flush;
-#if 0
+#if 0 // for TEST
 	if (onShiftKey)
 	  cout << "Pressed : " << keyTop[id].keyTop.keyTopWithShift << endl << flush;
 	else if (onFnKey)
 	  cout << "Pressed : " << keyTop[id].keyTopWithFn.keyTop << endl << flush;
 	else
 	  cout << "Pressed : " << keyTop[id].keyTop.keyTop << endl << flush;
-#endif
+#endif // for TEST
   }
 
   // pushed key
@@ -492,14 +483,14 @@ void SoftwareKeyboard::releasedKey(ID_KEY id)
 {
   if (outputLog){
 	cout << "Released Key! id = " << id << endl << flush;
-#if 0
+#if 0 // for TEST
 	if (onShiftKey)
 	  cout << "Released : " << keyTopTable[id].keyTop.keyTopWithShift << endl << flush;
 	else if (onFnKey)
 	  cout << "Released : " << keyTopTable[id].keyTopWithFn.keyTop << endl << flush;
 	else
 	  cout << "Released : " << keyTopTable[id].keyTop.keyTop << endl << flush;
-#endif
+#endif // for TEST
   }
 
   // released key

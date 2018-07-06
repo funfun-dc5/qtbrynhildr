@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QRect>
 #include <QStatusBar>
+#include <QSysInfo>
 
 // Local Header
 #include "qtbrynhildr.h"
@@ -199,6 +200,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,preferences_Action(0)
 #endif // QTB_PREFERENCE
   ,disableDrawing_Action(0)
+  ,disableMaxfps_Action(0)
   ,connectToServerDialog(0)
   ,desktopScalingDialog(0)
   ,logViewDialog(0)
@@ -242,10 +244,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onShowStatusBar(false)
   ,progressBar(0)
   ,heightOfTitleBar(0)
-  ,heightOfMenuBarInHiding(0)
-  ,heightOfStatusBarInHiding(0)
   ,heightOfMenuBar(0)
   ,heightOfStatusBar(0)
+  ,widthMargin(0)
+  ,heightMargin(0)
   ,onControl(true)
   ,onGraphics(true)
   ,onSound(true)
@@ -510,6 +512,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // create window
   //------------------------------------------------------------
 #if QTB_NEW_DESKTOPWINDOW
+
   // Desktop Panel Object
   desktopPanelObject = new DesktopPanelObject(this);
   desktopPanel = desktopPanelObject;
@@ -525,13 +528,15 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // set Widget
   setCentralWidget(graphicsView);
   // initialize palette
-  originalPalette = fullScreenPalette = graphicsView->palette();
-  // for original
-  originalPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
-  graphicsView->setPalette(originalPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
+  backgroundPalette = fullScreenBackgroundPalette = graphicsView->palette();
+  // for background of desktop
+  backgroundPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
+  graphicsView->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
-  fullScreenPalette.setColor(QPalette::Window, Qt::black);
+  fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
+
 #else // QTB_NEW_DESKTOPWINDOW
+
   // Desktop Window Widget
   desktopWindow = new DesktopWindow(this);
   desktopPanel = desktopWindow;
@@ -539,20 +544,87 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  //  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  //  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  //scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  scrollArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  if (settings->getOnDesktopScaleFixed()){
+	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  }
+  else {
+	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  }
   // set Widget
   scrollArea->setWidget(desktopWindow);
   scrollArea->setFocusProxy(desktopWindow);
   setCentralWidget(scrollArea);
+
+#if !QTB_NEW_DESKTOPWINDOW
+  // set margin
+  QString kernelVersion = QSysInfo::kernelVersion();
+  int hspace = 0;
+  int vspace = 0;
+
+#if defined(Q_OS_WIN)
+  if (kernelVersion.startsWith("10.")){			// Windows 10
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.2")){	// Windows 8
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.1")){	// Windows 7
+	hspace = 2;
+	vspace = 4;
+  }
+  else {
+	// NOT supported Version
+	hspace = 2;
+	vspace = 3;
+  }
+#elif defined(Q_OS_LINUX)
+  // Linux base
+#if defined(Q_OS_ANDROID)
+  // Android
+  hspace = 2;
+  vspace = 4;
+#else // defined(Q_OS_ANDROID)
+  // Linux Desktop
+  hspace = 2;
+  vspace = 2;
+#endif // defined(Q_OS_ANDROID)
+
+#elif defined(Q_OS_CYGWIN)
+  // Cygwin
+  hspace = 2;
+  vspace = 2;
+#elif defined(Q_OS_FREEBSD)
+  // FreeBSD
+  hspace = 0;
+  vspace = 0;
+#elif defined(Q_OS_OSX)
+  // Darwin
+  hspace = 0;
+  vspace = 0;
+#endif // defined(Q_OS_OSX)
+
+  setMargins(hspace, vspace);
+  desktopPanel->setMargins(hspace, vspace);
+#endif // !QTB_NEW_DESKTOPWINDOW
+
   // initialize palette
-  originalPalette = fullScreenPalette = scrollArea->palette();
-  // for original
-  originalPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
-  scrollArea->setPalette(originalPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
+  backgroundPalette = fullScreenBackgroundPalette = scrollArea->palette();
+  // for background of desktop
+  backgroundPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
+  scrollArea->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
-  fullScreenPalette.setColor(QPalette::Window, Qt::black);
+  fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
+
 #endif // QTB_NEW_DESKTOPWINDOW
 
   // set key/mouse buffer
@@ -585,11 +657,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   flags |= Qt::WindowSystemMenuHint;
   flags |= Qt::WindowCloseButtonHint;
   flags |= Qt::WindowMinimizeButtonHint;
-#if 1 // for TEST
-  flags |= Qt::WindowMaximizeButtonHint;
-#else// for TEST
-  flags &= ~Qt::WindowMaximizeButtonHint; // disable Maximize Button
-#endif // for TEST
   if (settings->getOnFrameLessWindow()){
 	flags |= Qt::FramelessWindowHint;
   }
@@ -608,8 +675,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "statusBar height = " + QString::number(heightOfStatusBar));
   }
-  heightOfMenuBarInHiding = settings->getDesktop()->getHeightOfMenuBarInHiding();
-  heightOfStatusBarInHiding = settings->getDesktop()->getHeightOfStatusBarInHiding();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set window information
@@ -780,24 +845,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 		  SLOT(onNetworkError(bool)));
 
   // control thread
-#if 0 // for TEST
-  connect(controlThread,
-		  SIGNAL(connected()),
-		  SLOT(connected()));
-
-  connect(controlThread,
-		  SIGNAL(refreshWindow()),
-		  SLOT(refreshWindow()));
-#else // 0 // for TEST
-  connect(soundThread,
-		  SIGNAL(connected()),
-		  SLOT(connected()));
-
-  connect(soundThread,
-		  SIGNAL(refreshWindow()),
-		  SLOT(refreshWindow()));
-#endif // 0 // for TEST
-
   connect(controlThread,
 		  SIGNAL(refreshMenu()),
 		  SLOT(refreshMenu()));
@@ -827,6 +874,15 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 		  SIGNAL(clearDesktop()),
 		  SLOT(clearDesktop()));
 
+  // sound thread
+  connect(soundThread,
+		  SIGNAL(connected()),
+		  SLOT(connected()));
+
+  connect(soundThread,
+		  SIGNAL(refreshWindow()),
+		  SLOT(refreshWindow()));
+
   // bootTime
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("Bootup."));
   if (settings->getOutputLog())
@@ -841,19 +897,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								   tr("You are in Debug Logging mode."),
 								   LogMessage::Ok,
 								   LogMessage::NoButton);
-  }
-
-  // boot up
-  if (option->getBootupFlag()){
-	// connect to server now
-	connectToServer();
-	// clear boot flag
-	option->setBootupFlag(false);
-  }
-  else if (settings->getOnOpenConnectToServerDialogAtBootup()){
-	// pop up connect to server dialog
-	this->show();
-	popUpConnectToServer();
   }
 
   // initialize timer for GUI
@@ -881,12 +924,41 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 #endif // for TEST
 
+  // boot up
+  if (option->getBootupFlag()){
+	// connect to server now
+	connectToServer();
+	// clear boot flag
+	option->setBootupFlag(false);
+  }
+  else if (settings->getOnOpenConnectToServerDialogAtBootup()){
+	// pop up connect to server dialog
+	this->show();
+	popUpConnectToServer();
+  }
+
   // check update
   if (settings->getOnCheckUpdateAtBootup()){
 	// check update
 	onCheckUpdateInBackground = true;
 	checkUpdate();
   }
+
+  // for test mode
+  disableDrawing_Action->setChecked(!graphicsThread->getOnDrawing());
+  disableMaxfps_Action->setChecked(!controlThread->getOnMaxfps());
+
+#if 0 // for TEST
+  cout << "heightOfTitleBar = " <<  heightOfTitleBar << endl;
+  cout << "heightOfMenuBar = " << heightOfMenuBar << endl;
+  cout << "heightOfStatusBar = " << heightOfStatusBar << endl;
+  cout << "widthMargin = " << widthMargin << endl;
+  cout << "heightMargin = " << heightMargin << endl;
+
+  QSize currentSize = size();
+  cout << "(width, height) = (" <<
+	currentSize.width() << ", " << currentSize.height() << ")" << endl << flush;
+#endif // for TEST
 }
 
 // destructor
@@ -1039,7 +1111,7 @@ int QtBrynhildr::getHeightOfMenuBar()
 	return heightOfMenuBar;
   }
   else {
-	return heightOfMenuBarInHiding;
+	return 0;
   }
 }
 
@@ -1050,7 +1122,7 @@ int QtBrynhildr::getHeightOfStatusBar()
 	return heightOfStatusBar;
   }
   else {
-	return heightOfStatusBarInHiding;
+	return 0;
   }
 }
 
@@ -1506,6 +1578,7 @@ void QtBrynhildr::createActions()
 	windowSizeFixed_Action->setCheckable(true);
 	windowSizeFixed_Action->setChecked(settings->getOnWindowSizeFixed());
 	connect(windowSizeFixed_Action, SIGNAL(triggered()), this, SLOT(toggleWindowSizeFixed()));
+	toggleWindowSizeFixed();
   }
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -1988,6 +2061,13 @@ void QtBrynhildr::createActions()
   disableDrawing_Action->setEnabled(true);
   disableDrawing_Action->setCheckable(true);
   connect(disableDrawing_Action, SIGNAL(triggered()), this, SLOT(disableDrawing()));
+
+  // disable maxfps
+  disableMaxfps_Action = new QAction(tr("Disable Maxfps"), this);
+  disableMaxfps_Action->setStatusTip(tr("Disable Maxfps"));
+  disableMaxfps_Action->setEnabled(true);
+  disableMaxfps_Action->setCheckable(true);
+  connect(disableMaxfps_Action, SIGNAL(triggered()), this, SLOT(disableMaxfps()));
 }
 
 // create Menus
@@ -2226,9 +2306,11 @@ void QtBrynhildr::createMenus()
 
   // test mode menu
   if (option->getTestModeFlag()){
-	// disable drawing
 	helpMenu->addSeparator();
+	// disable drawing
 	helpMenu->addAction(disableDrawing_Action);
+	// disable maxfps
+	helpMenu->addAction(disableMaxfps_Action);
   }
 }
 
@@ -2582,7 +2664,7 @@ void QtBrynhildr::disconnected()
 // set desktop scaling factor
 void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 {
-  if (settings->getOnDesktopScaleFixed() || !settings->getOnKeepOriginalDesktopSize()){
+  if (settings->getOnDesktopScaleFixed()){
 	// NOT change scaling
 	return;
   }
@@ -2595,8 +2677,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar();
 #if !QTB_NEW_DESKTOPWINDOW
   // correct
-  width  -= settings->getDesktop()->getCorrectWindowWidth();
-  height -= settings->getDesktop()->getCorrectWindowHeight();
+  width  -= widthMargin;
+  height -= heightMargin;
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
@@ -2645,18 +2727,26 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
   QMainWindow::resizeEvent(event);
 
-  //  cout << "resizeEvent()" << endl << flush;
+  //cout << "resizeEvent()" << endl << flush;
 
 #if !QTB_NEW_DESKTOPWINDOW
+#if 1 // for TEST
   // rescaling desktop
-  if (settings->getOnKeepOriginalDesktopSize() &&
-	  settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
 #if 0 // for TEST
 	cout << "resizeEvent() : Rescaling for (width, height) = ("
 		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
 #endif // for TEST
 	setDesktopScalingFactor(event->size());
   }
+#else // 0 // for TEST
+  // rescaling desktop
+#if 1 // for TEST
+  cout << "resizeEvent() : Rescaling for (width, height) = ("
+	   << event->size().width() << "," << event->size().height() << ")" << endl << flush;
+#endif // for TEST
+  setDesktopScalingFactor(event->size());
+#endif // 0 // for TEST
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // resize software keyboard/button
@@ -2995,18 +3085,18 @@ void QtBrynhildr::disconnectToServer()
   graphicsThread->exitThread();
   soundThread->exitThread();
 
-#if 0 // no event loop
+#if 1 // no event loop
+  controlThread->wait();
+  graphicsThread->wait();
+  soundThread->wait();
+#else // 1 // no event loop
   controlThread->exit();
   controlThread->wait();
   graphicsThread->exit();
   graphicsThread->wait();
   soundThread->exit();
   soundThread->wait();
-#else
-  controlThread->wait();
-  graphicsThread->wait();
-  soundThread->wait();
-#endif
+#endif// 1 // no event loop
 
 #if 0 // for TEST
   // close socket
@@ -3496,8 +3586,14 @@ void QtBrynhildr::refreshPublicMode()
 
   // mouse cursor
   if (settings->getPublicModeVersion() != PUBLICMODE_VERSION7){
-	// change mouse cursor
+	// change mouse cursor to cross cursor
 	changeMouseCursor(Qt::CrossCursor);
+	// change mouse cursor on menus to cross cursor
+	menuBar()->setCursor(Qt::CrossCursor);
+  }
+  else {
+	// change mouse cursor on menus to arrow cursor
+	menuBar()->setCursor(Qt::ArrowCursor);
   }
 }
 
@@ -3804,10 +3900,13 @@ void QtBrynhildr::fullScreen()
 #if !QTB_NEW_DESKTOPWINDOW
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	scrollArea->setPalette(fullScreenPalette); // change QPalette::Window to black
+	scrollArea->setPalette(fullScreenBackgroundPalette); // change QPalette::Window to black
 #endif // !QTB_NEW_DESKTOPWINDOW
 	desktopPanel->setOnFullScreen(true);
 	showFullScreen();
+	//cout << "size(width, height) = ("
+	//	 << size().width() << "," << size().height() << ")" << endl << flush;
+	setDesktopScalingFactor(size());
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -3818,21 +3917,20 @@ void QtBrynhildr::fullScreen()
 	  statusBar()->setVisible(settings->getOnShowStatusBar());
 	}
 #if !QTB_NEW_DESKTOPWINDOW
-	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	scrollArea->setPalette(originalPalette); // restore original QPalette::Window
+	//scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	//scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	scrollArea->setPalette(backgroundPalette); // restore original QPalette::Window
 #endif // !QTB_NEW_DESKTOPWINDOW
 	desktopPanel->setOnFullScreen(false);
 	showNormal();
+	//cout << "size(width, height) = ("
+	//	 << size().width() << "," << size().height() << ")" << endl << flush;
+	setDesktopScalingFactor(size());
   }
   // set checked flag
 #if defined(QTB_DEV_DESKTOP)
   fullScreen_Action->setChecked(fullScreenMode);
 #endif // defined(QTB_DEV_DESKTOP)
-#if 0 // for TEST
-  // menu control
-  desktopScalingDialog_Action->setEnabled(!fullScreenMode);
-#endif
 }
 
 // toggle stays on top
@@ -3880,6 +3978,18 @@ void QtBrynhildr::toggleDesktopScaleFixed()
 	  desktopScalingDialog_Action->setEnabled(!checked);
 	  //	  desktopScalingDialog->hide();
 	}
+
+#if !QTB_NEW_DESKTOPWINDOW
+	if (checked){
+	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	}
+	else {
+	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	}
+#endif // !QTB_NEW_DESKTOPWINDOW
+
   }
 }
 
@@ -3907,10 +4017,12 @@ void QtBrynhildr::toggleWindowSizeFixed()
 #endif // !QTB_NEW_DESKTOPWINDOW
 	  // disable maximum button
 #if defined(Q_OS_WIN)
+	  bool visible = isVisible();
 	  Qt::WindowFlags flags = windowFlags();
 	  flags &= ~Qt::WindowMaximizeButtonHint;
 	  setWindowFlags(flags);
-	  setVisible(true);
+	  if (visible)
+		setVisible(true);
 #endif // defined(Q_OS_WIN)
 	}
 	else {
@@ -3923,11 +4035,15 @@ void QtBrynhildr::toggleWindowSizeFixed()
 #endif // !QTB_NEW_DESKTOPWINDOW
 	  // restore window flags
 #if defined(Q_OS_WIN)
+	  bool visible = isVisible();
 	  Qt::WindowFlags flags = windowFlags();
 	  flags |= Qt::WindowMaximizeButtonHint;
 	  setWindowFlags(flags);
-	  setVisible(true);
+	  if (visible)
+		setVisible(true);
 #endif // defined(Q_OS_WIN)
+	  // update window
+	  refreshWindow();
 	}
   }
 }
@@ -3986,9 +4102,15 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   QSize size = softwareKeyboard->resetSize();
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
 #if !QTB_NEW_DESKTOPWINDOW
+#if 0 // for TEST
   // correct
   windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
   windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
+#else // 0 // for TEST
+  // correct
+  windowSize.setWidth(windowSize.width() - widthMargin);
+  windowSize.setHeight(windowSize.height() - heightMargin);
+#endif // 0 // for TEST
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size
@@ -4016,8 +4138,8 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
 #if !QTB_NEW_DESKTOPWINDOW
   // correct
-  windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
-  windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
+  windowSize.setWidth(windowSize.width() - widthMargin);
+  windowSize.setHeight(windowSize.height() - heightMargin);
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size
@@ -4309,6 +4431,14 @@ void QtBrynhildr::disableDrawing()
   bool flag = graphicsThread->getOnDrawing();
   graphicsThread->setOnDrawing(!flag);
   disableDrawing_Action->setChecked(flag);
+}
+
+// disable maxfps
+void QtBrynhildr::disableMaxfps()
+{
+  bool flag = controlThread->getOnMaxfps();
+  controlThread->setOnMaxfps(!flag);
+  disableMaxfps_Action->setChecked(flag);
 }
 
 // toggle outputKeyboardLog

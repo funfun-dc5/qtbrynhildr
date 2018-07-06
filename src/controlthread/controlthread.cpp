@@ -1,5 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
+
+#define QTB_TEST 0
 
 // Common Header
 #include "common/common.h"
@@ -10,11 +12,11 @@
 #include <iomanip>
 
 // Qt Header
+#include <QBitmap>
 #include <QByteArray>
+#include <QCursor>
 #include <QDir>
 #include <QFileInfo>
-#include <QBitmap>
-#include <QCursor>
 #include <QImage>
 #include <QSize>
 
@@ -23,7 +25,10 @@
 #include "qtbrynhildr.h"
 
 // for TEST
-#define TEST_THREAD		0
+#define TEST_THREAD							0
+#define SAVE_MOUSE_CURSOR_IMAGE				0
+#define SAVE_MOUSE_CURSOR_IMAGE_BINARY		0
+#define HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY	0
 
 namespace qtbrynhildr {
 
@@ -48,11 +53,12 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   ,monitorCount(0)
   ,sentMode(0)
   ,doneCheckPassword(false)
-  ,buffer(0)
-  ,clipboardTop(0)
   ,transferFileProgress(0)
   ,transferFileProgressUnit(0)
   ,ntfs(0)
+  ,onMaxfps(true)
+  ,clipboardTop(0)
+  ,buffer(0)
 {
   //outputLog = true; // for DEBUG
 
@@ -104,6 +110,12 @@ ControlThread::~ControlThread()
 	delete [] buffer;
 	buffer = 0;
 	clipboardTop = 0;
+  }
+
+  // NTFS utility
+  if (ntfs != 0){
+	delete ntfs;
+	ntfs = 0;
   }
 }
 
@@ -190,14 +202,6 @@ PROCESS_RESULT ControlThread::processForHeader()
   printTimeInfo("got header");
 #endif // TEST_THREAD
 
-#if 0 // for DEBUG
-  static bool twoFlag = true;
-  if (twoFlag){
-	twoFlag = false;
-	printHeader();
-  }
-#endif
-
   // check result
   if (com_data->mode != sentMode){
     switch((int)com_data->mode){
@@ -221,7 +225,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  break;
 	default:
 	  // unknown error
-	  const QString text = QString("Unknown Error...: com_data->mode = ") + QString::number((int)com_data->mode);
+	  const QString text = QString("Unknown Error...: com_data->mode = ") +
+		QString::number((int)com_data->mode);
 	  emit outputLogMessage(PHASE_CONTROL, text);
 	  return PROCESS_UNKNOWN_ERROR;
 	  break;
@@ -259,7 +264,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	counter_control++;
   }
 
-  // check mode
+  // check result (mode)
   checkMode();
 
   return PROCESS_SUCCEEDED;
@@ -392,7 +397,23 @@ void ControlThread::initHeader()
   memcpy(com_data->ver,
 		 PROTOCOL_VERSION_STRING, PROTOCOL_VERSION_STRING_LENGTH);
 
-  // common
+  initHeaderForCommon();
+
+  initHeaderForControl();
+
+#if QTB_TEST
+  initHeaderForGraphics_test();
+#else // QTB_TEST
+  initHeaderForGraphics();
+#endif // QTB_TEST
+
+  initHeaderForSound();
+}
+
+// initialize protocol header for common
+void ControlThread::initHeaderForCommon()
+{
+ // common
   com_data->data_type	= DATA_TYPE_DATA;
   int sendFileCount = settings->getSendFileCount();
   if (settings->getOnSendClipboard()){
@@ -415,7 +436,11 @@ void ControlThread::initHeader()
 	if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton())
 	  com_data->mouse_cursor = MOUSE_CURSOR_ON;
   }
+}
 
+// initialize protocol header for control
+void ControlThread::initHeaderForControl()
+{
   // for control
   com_data->control		= settings->getOnControl() ? CONTROL_ON : CONTROL_OFF;
 #if QTB_PLUGINS_DISABLE_SUPPORT
@@ -431,70 +456,142 @@ void ControlThread::initHeader()
   com_data->keycode		= (char)VK_NONE_00;
   com_data->keycode_flg	= KEYCODE_FLG_KEYUP;
   com_data->keydown		= KEYDOWN_OFF;
+}
 
+#if defined(QTB_DEV_DESKTOP)
+// initialize protocol header for graphics for desktop
+void ControlThread::initHeaderForGraphics()
+{
   // for graphics
-  com_data->zoom			= (ZOOM)1.0;
-#if 1 // for TEST
-  // Graphics ON
-  com_data->image_cx		= (SIZE)settings->getDesktopWidth();
-  com_data->image_cy		= (SIZE)settings->getDesktopHeight();
-  com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
-  com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
+  // video quality
   com_data->video_quality	= settings->getVideoQuality();
-  // scaling
-  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-	if (settings->getDesktopScalingFactor() <= 1.0){
-	  // scale down
-	  com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
-	}
+  // max fps
+  if (onMaxfps){
+	com_data->max_fps		= (char)settings->getFrameRate();
   }
-#if QTB_DESKTOP_COMPRESS_MODE
-  // desktop compress mode
-  if (settings->getDesktopCompressMode() > 1)
-	com_data->zoom *= settings->getDesktopCompressMode();
-#endif // QTB_DESKTOP_COMPRESS_MODE
-#else // 1 // for TEST
-  if (settings->getOnGraphics()){
-	// Graphics ON
-	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
-	com_data->image_cy			= (SIZE)settings->getDesktopHeight();
-	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
-	com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
-	com_data->video_quality		= settings->getVideoQuality();
-	// scaling
-	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-	  if (settings->getDesktopScalingFactor() <= 1.0){
-		// scale down
-		com_data->zoom	= (ZOOM)settings->getDesktopScalingFactorForZoom();
-	  }
-#if 0 // defined(QTB_DEV_TOUCHPANEL) // 0 for TEST
-	  else {
-		// scale up
-		com_data->image_cx *= settings->getDesktopScalingFactorForZoom();
-		com_data->image_cy *= settings->getDesktopScalingFactorForZoom();
-	  }
-#endif // defined(QTB_DEV_TOUCHPANEL)
-	}
-#if QTB_DESKTOP_COMPRESS_MODE
-	// desktop compress mode
-	if (settings->getDesktopCompressMode() > 1)
-	  com_data->zoom *= settings->getDesktopCompressMode();
-#endif // QTB_DESKTOP_COMPRESS_MODE
+  // zoom
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
+	  settings->getDesktopScalingFactor() < 1.0){
+	// scale down on server : zoom > 1.0
+	com_data->zoom			= (ZOOM)settings->getDesktopScalingFactorForZoom();
   }
   else {
-	// Graphics OFF
-	com_data->image_cx			= (SIZE)settings->getDesktopWidth();
-	com_data->image_cy			= (SIZE)settings->getDesktopHeight();
-	//	com_data->image_cx			= (SIZE)8;
-	//	com_data->image_cy			= (SIZE)8;
-	com_data->client_scroll_x	= 0;
-	com_data->client_scroll_y	= 0;
-	com_data->video_quality		= VIDEO_QUALITY_MINIMUM;
+	com_data->zoom			= (ZOOM)1.0;
   }
-#endif // 1 // for TEST
-  // max fps
-  com_data->max_fps = (char)settings->getFrameRate();
 
+  // client scroll
+  // com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
+  // com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
+  // com_data->scroll = 1; // enable scroll (public mode 7)
+
+  // image size
+  com_data->image_cx		= (SIZE)settings->getDesktopWidth();
+  com_data->image_cy		= (SIZE)settings->getDesktopHeight();
+
+#if QTB_DESKTOP_COMPRESS_MODE
+  // desktop compress mode
+  if (settings->getDesktopCompressMode() > 1){
+	ZOOM compressZoom = settings->getDesktopCompressMode();
+	com_data->zoom *= compressZoom;
+	// com_data->image_cx = com_data->image_cx/compressZoom;
+	// com_data->image_cy = com_data->image_cy/compressZoom;
+  }
+#endif // QTB_DESKTOP_COMPRESS_MODE
+
+  //cout << "(image_cx, image_cy) = (" << com_data->image_cx << ", " << com_data->image_cy << ")" << endl << flush;
+}
+#else // defined(QTB_DEV_DESKTOP)
+// initialize protocol header for graphics for touchpanel
+void ControlThread::initHeaderForGraphics()
+{
+  // for graphics
+  // video quality
+  com_data->video_quality	= settings->getVideoQuality();
+  // max fps
+  if (onMaxfps){
+	com_data->max_fps		= (char)settings->getFrameRate();
+  }
+
+  // image size and zoom
+  SIZE imageWidth = settings->getDesktopWidth();
+  SIZE imageHeight = settings->getDesktopHeight();
+
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
+	  settings->getDesktopScalingFactor() < 1.0){
+	// scale down on server : zoom > 1.0
+	com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
+	// com_data->client_scroll_x	= 0;
+	// com_data->client_scroll_y	= 0;
+  }
+  else {
+	// zoom = 1.0 (original size)
+	com_data->zoom			= (ZOOM)1.0;
+
+	// offset x,y
+	POS client_scroll_x	= (POS)settings->getDesktopOffsetX();
+	POS client_scroll_y	= (POS)settings->getDesktopOffsetY();
+	com_data->client_scroll_x	= client_scroll_x;
+	com_data->client_scroll_y	= client_scroll_y;
+	com_data->scroll = 1; // enable scroll (public mode 7)
+
+    // set initial image size
+	imageWidth -= client_scroll_x;
+	imageHeight -= client_scroll_y;
+
+	// setup image size
+	if (settings->getOnWindowSizeFixed()){
+	  qreal scalingFactor = settings->getDesktopScalingFactor();
+	  QSize windowSize = desktopPanel->getWindowSize();
+	  //QSize windowSize = QSize(640, 400); // for TEST
+
+	  if (windowSize.isValid()){
+		if (windowSize.width() < imageWidth*scalingFactor ||
+			windowSize.height() < imageHeight*scalingFactor){
+		  imageWidth = windowSize.width()/scalingFactor;
+		  imageHeight = windowSize.height()/scalingFactor;
+		}
+
+		//cout << "scaling Factor = " << scalingFactor << endl;
+		//cout << "windowSize = (" << windowSize.width() << ", " << windowSize.height() << ")" << endl;
+		//cout << "(scroll_x, scroll_y) = (" << client_scroll_x << ", " << client_scroll_y << ")" << endl;
+		//cout << "(imageWidth, imageHeight) = (" << imageWidth << ", " << imageHeight << ")" << endl;
+		//cout << flush;
+	  }
+	}
+  }
+
+  com_data->image_cx = imageWidth;
+  com_data->image_cy = imageHeight;
+
+  //cout << "(imageWidth, imageHeight) = (" << imageWidth << ", " << imageHeight << ")" << endl << flush;
+}
+#endif // defined(QTB_DEV_DESKTOP)
+
+// initialize protocol header for graphics
+void ControlThread::initHeaderForGraphics_test()
+{
+  // for graphics
+  // video quality
+  com_data->video_quality	= settings->getVideoQuality();
+  // max fps
+  if (onMaxfps){
+	com_data->max_fps = (char)settings->getFrameRate();
+  }
+  // zoom
+  com_data->zoom = (ZOOM)1.0;
+  settings->setDesktopScalingFactor(1/com_data->zoom);
+
+  com_data->scroll = 1;
+
+  com_data->client_scroll_x	= 0;
+  com_data->client_scroll_y	= 0;
+  com_data->image_cx = 1280;
+  com_data->image_cy = 800;
+}
+
+// initialize protocol header for sound
+void ControlThread::initHeaderForSound()
+{
   // for sound
 #if QTB_CELT_SUPPORT
   if (!settings->getOnBrynhildr2Support() ||
@@ -516,48 +613,25 @@ void ControlThread::initHeader()
 // set mouse control
 void ControlThread::setMouseControl()
 {
-  // mouse info (button, wheel)
-  MouseInfo *mouseInfo = mouseBuffer->get();
-  if (mouseInfo != 0){
-	switch(mouseInfo->type){
-	case TYPE_MOUSE_RIGHT_BUTTON:
-	  com_data->mouse_right = mouseInfo->value.button;
-	  break;
-	case TYPE_MOUSE_LEFT_BUTTON:
-	  com_data->mouse_left = mouseInfo->value.button;
-	  break;
-#if QTB_EXTRA_BUTTON_SUPPORT
-	case TYPE_MOUSE_MIDDLE_BUTTON:
-	  if (settings->getOnExtraButtonSupport()){
-		com_data->mouse_middle = mouseInfo->value.button;
-	  }
-	  break;
-	case TYPE_MOUSE_BACK_BUTTON:
-	  if (settings->getOnExtraButtonSupport()){
-		com_data->mouse_x1 = mouseInfo->value.button;
-	  }
-	  break;
-	case TYPE_MOUSE_FORWARD_BUTTON:
-	  if (settings->getOnExtraButtonSupport()){
-		com_data->mouse_x2 = mouseInfo->value.button;
-	  }
-	  break;
-#endif // QTB_EXTRA_BUTTON_SUPPORT
-	case TYPE_MOUSE_WHEEL:
-	  com_data->mouse_wheel = mouseInfo->value.wheel;
-	  break;
-	case TYPE_MOUSE_FILEDROP:
-	  com_data->mouse_left = mouseInfo->value.button;
-	  com_data->filedrop = FILEDROP_ON;
-	  break;
-	default:
-	  // unknown type
-	  ABORT();
-	  break;
-	} // end of switch
+  // filedrop
+  if (mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_FILEDROP) == MOUSE_BUTTON_UP){
+	com_data->mouse_left = MOUSE_BUTTON_UP;
+	com_data->filedrop = FILEDROP_ON;
   }
-  // mouse position
-  MOUSE_POS pos = mouseBuffer->getMousePos();
+  else { // setup mouse buttons
+	com_data->mouse_right = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_RIGHT);
+	com_data->mouse_left = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_LEFT);
+#if QTB_EXTRA_BUTTON_SUPPORT
+	com_data->mouse_middle = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_MIDDLE);
+	com_data->mouse_x1 = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_BACK);
+	com_data->mouse_x2 = mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_FORWARD);
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+	// setup mouse wheel
+	com_data->mouse_wheel = mouseBuffer->getWheel();
+  }
+
+  // setup mouse position
+  MOUSE_POS pos = mouseBuffer->getPos();
   // if mouse cursor is moved.
   if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	// set information
@@ -573,27 +647,25 @@ void ControlThread::setMouseControl()
 		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
 		  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
 		  if (scalingFactor > 1.0){
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor
-			  + settings->getDesktopOffsetX();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor
-			  + settings->getDesktopOffsetY();
+			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor;
+			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor;
 		  }
 		  else {
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-			  + settings->getDesktopOffsetX();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-			  + settings->getDesktopOffsetY();
+			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width();
+			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height();
 		  }
 		}
 		else {
-		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width()
-			+ settings->getDesktopOffsetX();
-		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height()
-			+ settings->getDesktopOffsetY();
+		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width();
+		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height();
 		}
+		// set offset
+		com_data->mouse_x += settings->getDesktopOffsetX();
+		com_data->mouse_y += settings->getDesktopOffsetY();
 	  }
 	}
 	else {
+	  // set offset
 	  com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
 	  com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
 	}
@@ -604,7 +676,10 @@ void ControlThread::setMouseControl()
 	  com_data->mouse_x *= desktopCompressMode;
 	  com_data->mouse_y *= desktopCompressMode;
 	}
-#endif
+#endif // QTB_DESKTOP_COMPRESS_MODE
+
+	//cout << "com_data->mouse_x = " << com_data->mouse_x << endl;
+	//cout << "com_data->mouse_y = " << com_data->mouse_y << endl;
 
 	// save prevPos
 	prevPos = pos;
@@ -1159,7 +1234,7 @@ bool ControlThread::receiveMouseCursorImage()
   if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }
-#if 0 // for TEST
+#if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
 	fstream file;
 	file.open("jpg/andMaskImage.bin", ios::out | ios::binary | ios::trunc);
@@ -1178,7 +1253,7 @@ bool ControlThread::receiveMouseCursorImage()
   if (receivedDataSize != QTB_ICON_IMAGE_SIZE){
 	return false;
   }
-#if 0 // for TEST
+#if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
 	fstream file;
 	file.open("jpg/xorMaskImage.bin", ios::out | ios::binary | ios::trunc);
@@ -1193,6 +1268,22 @@ bool ControlThread::receiveMouseCursorImage()
 #endif // for TEST
 
   if (!settings->getOnDisplayMouseCursor()){
+	// check null cursor image
+	bool nullFlag = true;
+	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i++){
+	  if (andMaskImage[i] != 0 || xorMaskImage[i] != 0){
+		nullFlag = false;
+		break;
+	  }
+	}
+	if (nullFlag){ // found null cursor image
+	  // change mouse cursor
+	  const QCursor nullCursor;
+	  emit changeMouseCursor(nullCursor);
+
+	  return true;
+	}
+
 	// BGRA -> RGBA
 	for(int i = 0; i < QTB_ICON_IMAGE_SIZE; i += 4){
 	  uchar r, g, b;
@@ -1256,7 +1347,7 @@ bool ControlThread::isColorMouseCursorImage(uchar *image, int size)
 // create color mouse cursor
 QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 {
-#if 0 // for TEST
+#if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   cout << hex << uppercase << setfill('0');
   cout << endl << "======= image - R" << endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
@@ -1307,7 +1398,7 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 	cout << setw(2) << (int)mask[i+3];
   }
   cout << endl << flush;
-#endif // 0 // for TEST
+#endif // HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
 
   bool flag24bit = true;
   // check A
@@ -1327,11 +1418,15 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
   // Cursor Image
   QImage cursorImage(image, QTB_ICON_WIDTH, QTB_ICON_HEIGHT, QImage::Format_RGBA8888);
   cursorImage = cursorImage.mirrored(false, true);
-  // cursorImage.save("jpg/cursorImage.bmp", "BMP");
+#if SAVE_MOUSE_CURSOR_IMAGE
+  cursorImage.save("jpg/cursorImage.bmp", "BMP");
+#endif // SAVE_MOUSE_CURSOR_IMAGE
   QPixmap cursor = QPixmap::fromImage(cursorImage, Qt::NoFormatConversion);
 
   // change mouse cursor image
-  //  cursor.save("jpg/ZCursor_pixmap.bmp", "BMP");
+#if SAVE_MOUSE_CURSOR_IMAGE // for TEST
+  cursor.save("jpg/ZCursor_pixmap.bmp", "BMP");
+#endif // SAVE_MOUSE_CURSOR_IMAGE // for TEST
   int hotX = (int)com_data->cursor_hotspot_x;
   int hotY = (int)com_data->cursor_hotspot_y;
   return QCursor(cursor, hotX, hotY);
@@ -1340,7 +1435,7 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 // create monochrome mouse cursor
 QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 {
-#if 0 // for TEST
+#if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   cout << hex << uppercase << setfill('0');
   cout << endl << "======= image - R" << endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
@@ -1391,7 +1486,7 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 	cout << setw(2) << (int)mask[i+3];
   }
   cout << endl << flush;
-#endif // 0 // for TEST
+#endif // HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
 
   uchar bitmapImage[QTB_ICON_SIZE*3];
   uchar maskImage[QTB_ICON_SIZE*3];
@@ -1458,10 +1553,10 @@ QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
   QBitmap maskBitmap = QBitmap::fromImage(maskQImage);
   int hotX = (int)com_data->cursor_hotspot_x;
   int hotY = (int)com_data->cursor_hotspot_y;
-#if 0 // for TEST
+#if SAVE_MOUSE_CURSOR_IMAGE // for TEST
   bitmap.save("jpg/ZCursor_bitmap.bmp", "BMP");
   maskBitmap.save("jpg/ZCursor_mask.bmp", "BMP");
-#endif // for TEST
+#endif // SAVE_MOUSE_CURSOR_IMAGE // for TEST
 
   return QCursor(bitmap, maskBitmap, hotX, hotY);
 }

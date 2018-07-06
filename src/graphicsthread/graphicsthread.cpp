@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -180,25 +180,25 @@ PROCESS_RESULT GraphicsThread::processForHeader()
 // transmit local buffer to global buffer
 TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 {
-  // receivedDataSize for image
-  long receivedDataSize = com_data->data_size;
+  // data size for image
+  long dataSize = com_data->data_size;
 
   // check
-  if (receivedDataSize <= 0){
+  if (dataSize <= 0){
 	// Nothing to do
 	return TRANSMIT_DATASIZE_ERROR;
   }
-  if (receivedDataSize > QTB_GRAPHICS_LOCAL_BUFFER_SIZE){
+  if (dataSize > QTB_GRAPHICS_LOCAL_BUFFER_SIZE){
 	if (outputLog){
-	  cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush; // error
+	  cout << "[" << name << "] dataSize = " << dataSize << endl << flush; // error
 	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
 
   // receive data for image
-  receivedDataSize = receiveData(buffer, receivedDataSize);
+  long receivedDataSize = receiveData(buffer, dataSize);
   // size check
-  if (receivedDataSize <= 0){
+  if (receivedDataSize != dataSize){
 	// error
 	return TRANSMIT_NETWORK_ERROR;
   }
@@ -215,6 +215,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // == VIDEO_MODE_MJPEG ==
   // buffer[]         : JPEG File
   // receivedDataSize : Size of JPEG File
+
   // == VIDEO_MODE_COMPRESS ==
   // buffer[]         : VP8 Data
   // receivedDataSize : Size of VP8 Data
@@ -226,6 +227,10 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
   // received 1 frame
   frameCounter++;
+
+  // for network test
+  if (!onDrawing)
+	return TRANSMIT_SUCCEEDED;
 
 #if !QTB_TEST_CODE
 
@@ -243,9 +248,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	// clear desktop flag clear
 	onClearDesktop = false;
 
-    if (onDrawing){
-	  draw_Graphics(receivedDataSize);
-	}
+	draw_Graphics(receivedDataSize);
   }
   else {
 	// clear desktop only at once
@@ -260,7 +263,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #endif // TEST_THREAD
 
   // frame rate control
-  if (QTB_DESKTOP_FRAMERATE_CONTROL && onDrawing){
+  if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	qint64 pastTime = threadSleepTime + currentTime - startTime;
 	qint64 interval = settings->getFrameInterval();
@@ -268,7 +271,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 	if (pastTime < interval){
 	  qint64 sleepTime = interval - pastTime;
-	  sleepTime *= 0.9;
 	  //cout << "sleepTime = " << sleepTime << endl << flush;
 	  QThread::msleep(sleepTime);
 	}

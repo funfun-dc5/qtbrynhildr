@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -46,6 +46,8 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
 #if defined(Q_OS_OSX)
   ,previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP)
 #endif // defined(Q_OS_OSX)
+  ,widthMargin(0)
+  ,heightMargin(0)
   ,keyboardLogFile(0)
   ,keyboardLogFileStream(0)
   // for DEBUG
@@ -163,7 +165,7 @@ void DesktopPanel::refreshDesktop(QImage image)
 	  }
 	  if (scalingFactor != 1.0){
 		// scale
-		currentSize = currentSize * scalingFactor;
+		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
 #if !QTB_NEW_DESKTOPWINDOW
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
@@ -178,10 +180,27 @@ void DesktopPanel::refreshDesktop(QImage image)
 #if defined(QTB_DEV_DESKTOP)
 	else { // DESKTOPSCALING_TYPE_ON_SERVER
 	  if (settings->getDesktopScalingFactor() > 1.0){
-		// scale
-		currentSize = currentSize * settings->getDesktopScalingFactor();
+		// scale up
+		currentSize = getSizeForCurrentMode(currentSize * settings->getDesktopScalingFactor());
 		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 	  }
+#if 0 // for TEST
+	  else if (settings->getOnWindowSizeFixed() &&
+			   settings->getDesktopScalingFactor() < 1.0){
+		QSize windowSize = getWindowSize();
+		//QSize windowSize = QSize(640,400); // for TEST
+		if (image.width() > windowSize.width() ||
+			image.height() > windowSize.height()){
+		  qreal scalingFactor = settings->getDesktopScalingFactor();
+		  int x = getWidthForCurrentMode(settings->getDesktopOffsetX() * scalingFactor);
+		  int y = getHeightForCurrentMode(settings->getDesktopOffsetY() * scalingFactor);
+		  int width = windowSize.width();
+		  int height = windowSize.height();
+		  // cut image
+		  image = image.copy(x, y, width, height);
+		}
+	  }
+#endif // 0 // for TEST
 	}
 #endif // defined(QTB_DEV_DESKTOP)
   }
@@ -240,16 +259,21 @@ void DesktopPanel::resizeWindow()
 	return;
   }
 
+  if (settings->getOnWindowSizeFixed()){
+	// Nothing to do
+	return;
+  }
+
   // resize if NOT full screen
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
-	  if (settings->getOnKeepOriginalDesktopSize() && !(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
+	  if (!(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
 		int width = currentSize.width();
 		int height = currentSize.height() + qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar();
 #if !QTB_NEW_DESKTOPWINDOW
 		// correct
-		width  += settings->getDesktop()->getCorrectWindowWidth();
-		height += settings->getDesktop()->getCorrectWindowHeight();
+		width  += widthMargin;
+		height += heightMargin;
 #endif // !QTB_NEW_DESKTOPWINDOW
 
 		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
@@ -287,7 +311,7 @@ void DesktopPanel::clearDesktop()
   }
 }
 
-// get window size
+// get size
 QSize DesktopPanel::getSize() const
 {
   return currentSize;
@@ -297,6 +321,19 @@ QSize DesktopPanel::getSize() const
 QSize DesktopPanel::getDesktopSize() const
 {
   return desktopSize;
+}
+
+// get window size
+QSize DesktopPanel::getWindowSize() const
+{
+  QSize windowSize = qtbrynhildr->size();
+  QSize diffSize =
+	QSize(widthMargin,
+		  qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar() + heightMargin);
+
+  windowSize -= diffSize;
+
+  return windowSize;
 }
 
 // set full screen flag
@@ -317,7 +354,7 @@ void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
 	pos.y = currentMousePos.y();
-	mouseBuffer->setMousePos(pos);
+	mouseBuffer->setPos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
@@ -341,7 +378,7 @@ void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
 	pos.y = currentMousePos.y();
-	mouseBuffer->setMousePos(pos);
+	mouseBuffer->setPos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
@@ -426,24 +463,24 @@ void DesktopPanel::printMouseButtonEvent(QMouseEvent *event)
 }
 
 // set mouse button event
-void DesktopPanel::setMouseButtonEvent(QMouseEvent *event, MouseInfoValue value)
+void DesktopPanel::setMouseButtonEvent(QMouseEvent *event, MOUSE_BUTTON value)
 {
   switch (event->button()){
   case Qt::LeftButton:
-	mouseBuffer->put(TYPE_MOUSE_LEFT_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_LEFT, value);
 	break;
   case Qt::RightButton:
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_RIGHT, value);
 	break;
 #if QTB_EXTRA_BUTTON_SUPPORT
   case Qt::MiddleButton:
-	mouseBuffer->put(TYPE_MOUSE_MIDDLE_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MIDDLE, value);
 	break;
   case Qt::ForwardButton:
-	mouseBuffer->put(TYPE_MOUSE_FORWARD_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_FORWARD, value);
 	break;
   case Qt::BackButton:
-	mouseBuffer->put(TYPE_MOUSE_BACK_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_BACK, value);
 	break;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   default:
@@ -463,17 +500,9 @@ void DesktopPanel::mousePressEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.button = MOUSE_BUTTON_DOWN;
-	  setMouseButtonEvent(event, value);
+	  setMouseButtonEvent(event, MOUSE_BUTTON_DOWN);
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_DOWN;
-	setMouseButtonEvent(event, value);
-#endif // for TEST
   }
 }
 
@@ -494,24 +523,14 @@ void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 	  QRect window = QRect(0, 0, currentSize.width(), currentSize.height());
 	  if (!window.contains(event->pos(), false)){
 		//		cout << "FileDrop!" << endl << flush;
-		MouseInfoValue value;
-		value.button = MOUSE_BUTTON_UP;
-		mouseBuffer->put(TYPE_MOUSE_FILEDROP, value);
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_FILEDROP, MOUSE_BUTTON_UP);
 		return;
 	  }
 	}
 
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.button = MOUSE_BUTTON_UP;
-	  setMouseButtonEvent(event, value);
+	  setMouseButtonEvent(event, MOUSE_BUTTON_UP);
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_UP;
-	setMouseButtonEvent(event, value);
-#endif // for TEST
   }
 }
 
@@ -526,17 +545,13 @@ void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.button = MOUSE_BUTTON_DBLCLK;
-	  setMouseButtonEvent(event, value);
+#if defined(QTB_DEV_DESKTOP)
+  setMouseButtonEvent(event, MOUSE_BUTTON_DOWN);
+#else // defined(QTB_DEV_DESKTOP)
+  setMouseButtonEvent(event, MOUSE_BUTTON_DBLCLK);
+#endif // defined(QTB_DEV_DESKTOP)
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_DBLCLK;
-	setMouseButtonEvent(event, value);
-#endif // for TEST
   }
 }
 
@@ -552,17 +567,9 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if 1 // for TEST
 	if (!settings->getOnShowSoftwareButton()){
-	  MouseInfoValue value;
-	  value.wheel = degrees;
-	  mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
+	  mouseBuffer->putWheel(degrees);
 	}
-#else // for TEST
-	MouseInfoValue value;
-	value.wheel = degrees;
-	mouseBuffer->put(TYPE_MOUSE_WHEEL, value);
-#endif // for TEST
   }
 }
 
@@ -588,7 +595,7 @@ void DesktopPanel::moveMouseCursor(QMouseEvent *event, bool marker)
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
 	pos.y = currentMousePos.y();
-	mouseBuffer->setMousePos(pos);
+	mouseBuffer->setPos(pos);
 	//qtbrynhildr->moveTopOfSoftwareKeyboard(pos.y); // for TEST
 #if !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 	if (image.rect().contains(currentMousePos)){
@@ -620,11 +627,8 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
   Qt::Key key = (Qt::Key)event->key();
   if (key == Qt::Key_Menu){
 	// right button down and up
-	MouseInfoValue value;
-	value.button = MOUSE_BUTTON_DOWN;
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
-	value.button = MOUSE_BUTTON_UP;
-	mouseBuffer->put(TYPE_MOUSE_RIGHT_BUTTON, value);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_DOWN);
+	mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_UP);
 	return;
   }
 
@@ -975,7 +979,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   // change offset
   if (VK_Code == VK_UP){
 	POS offsetY = settings->getDesktopOffsetY();
-	offsetY -= 100;
+	offsetY += 100;
 	if (offsetY < 0) offsetY = 0;
 	settings->setDesktopOffsetY(offsetY);
 	//	cout << "Scroll Up : " << settings->getDesktopOffsetY() << endl << flush;
@@ -983,7 +987,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   }
   else if (VK_Code == VK_DOWN){
 	POS offsetY = settings->getDesktopOffsetY();
-	offsetY += 100;
+	offsetY -= 100;
 	if (offsetY > settings->getDesktopHeight()){
 	  offsetY = settings->getDesktopHeight();
 	}
@@ -993,7 +997,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   }
   else if (VK_Code == VK_LEFT){
 	POS offsetX = settings->getDesktopOffsetX();
-	offsetX -= 100;
+	offsetX += 100;
 	if (offsetX < 0) offsetX = 0;
 	settings->setDesktopOffsetX(offsetX);
 	//	cout << "Scroll Left : " << settings->getDesktopOffsetX() << endl << flush;
@@ -1001,7 +1005,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   }
   else if (VK_Code == VK_RIGHT){
 	POS offsetX = settings->getDesktopOffsetX();
-	offsetX += 100;
+	offsetX -= 100;
 	if (offsetX > settings->getDesktopWidth()){
 	  offsetX = settings->getDesktopWidth();
 	}
@@ -1045,7 +1049,7 @@ qreal DesktopPanel::getDesktopScalingFactor(QSize size)
 	  unsigned long pageSizeMask = (unsigned long)getpagesize()-1;
 	  qreal unitFactor = 1.0/DesktopScalingDialog::SLIDER_FACTOR;
 	  while(true){ // for checking scaling factor
-		QSize targetSize = size * scalingFactor;
+		QSize targetSize = getSizeForCurrentMode(size * scalingFactor);
 		unsigned long imageDataSize = targetSize.width() * targetSize.height() * 4;
 		imageDataSize = (imageDataSize + pageSizeMask) & ~pageSizeMask;
 		if (imageDataSize <= maxImageDataSize){

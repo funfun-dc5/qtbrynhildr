@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef CONTROLTHREAD_H
 #define CONTROLTHREAD_H
@@ -91,12 +91,6 @@ private:
   QRgb cursorPointColor;
 #endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
 
-  // local buffer
-  char *buffer;
-
-  // clipboard top address
-  char *clipboardTop;
-
   // transfer file progress
   qint64 transferFileProgress;
 
@@ -106,15 +100,24 @@ private:
   // ntfs utility
   NTFS *ntfs;
 
+  // maxfps flag
+  bool onMaxfps;
+
+  // clipboard top address
+  char *clipboardTop;
+
+  // local buffer
+  char *buffer;
+
   //-------------------------------------------------------------------------------
   // Function
   //-------------------------------------------------------------------------------
 public:
   // constructor
 #if QTB_RECORDER
-ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder);
+  ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder);
 #else  // QTB_RECORDER
-ControlThread(Settings *settings, DesktopPanel *desktopPanel);
+  ControlThread(Settings *settings, DesktopPanel *desktopPanel);
 #endif // QTB_RECORDER
   // destructor
   ~ControlThread();
@@ -123,6 +126,18 @@ ControlThread(Settings *settings, DesktopPanel *desktopPanel);
   // set cursor point color
   void setCursorPointColor(QRgb cursorPointColor);
 #endif // !defined(Q_OS_WIN) && defined(QTB_DEV_DESKTOP)
+
+  // set maxfps flag
+  void setOnMaxfps(bool onMaxfps)
+  {
+	this->onMaxfps = onMaxfps;
+  }
+
+  // get maxfps flag
+  bool getOnMaxfps() const
+  {
+	return onMaxfps;
+  }
 
 protected:
   // connect to server
@@ -156,14 +171,29 @@ private:
   // initialize protocol header
   void initHeader();
 
+  // initialize protocol header for common
+  inline void initHeaderForCommon();
+
+  // initialize protocol header for control
+  inline void initHeaderForControl();
+
+  // initialize protocol header for graphics
+  inline void initHeaderForGraphics();
+
+  // initialize protocol header for graphics
+  inline void initHeaderForGraphics_test();
+
+  // initialize protocol header for sound
+  inline void initHeaderForSound();
+
   // set mouse control
-  void setMouseControl();
+  inline void setMouseControl();
 
   // set keyboard control
-  void setKeyboardControl();
+  inline void setKeyboardControl();
 
   // set gamepad control
-  void setGamePadControl();
+  inline void setGamePadControl();
 
   // check server version
   void checkServerVersion();

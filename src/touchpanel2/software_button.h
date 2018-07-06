@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2017-2018 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef SOFTWARE_BUTTON_H
 #define SOFTWARE_BUTTON_H
@@ -249,11 +249,6 @@ public:
 
   // reset size
   QSize resetSize();
-
-#if 0
-  // minimum size hint
-  QSize minimumSizeHint() const;
-#endif
 
   // size hint
   QSize sizeHint() const;

@@ -9,6 +9,12 @@
 #define QTB_RCNAME				""
 #define QTB_VERSION_NUMBER		2021
 
+#if __x86_64__ || __LP64__
+#define QTB_ARCHNAME			" (64bit)"
+#else // __x86_64__ || __LP64__
+#define QTB_ARCHNAME			" (32bit)"
+#endif // __x86_64__ || __LP64__
+
 // year
 #define QTB_YEAR		"2015-2018"
 

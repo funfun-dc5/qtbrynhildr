@@ -34,11 +34,7 @@
 #define QTB_ORGANIZATION		"mcz-xoxo"
 
 // application
-#if !_WIN64
 #define QTB_APPLICATION			"Qt Brynhildr"
-#else // !_WIN64
-#define QTB_APPLICATION			"Qt Brynhildr 64"
-#endif // !_WIN64
 
 // translation file path
 #define QTB_TRANSLATION_FILE_PATH	":/translations/"
@@ -2189,18 +2185,10 @@ private:
 #define QTB_SPLASH_SCREEN_FILENAME	":/images/3Bjunior.jpg"
 
 // for log file
-#if !_WIN64
 #define QTB_LOG_FILENAME	"qtbrynhildr.log"
-#else // !_WIN64
-#define QTB_LOG_FILENAME	"qtbrynhildr64.log"
-#endif // !_WIN64
 
 // for keyboard log file
-#if !_WIN64
 #define QTB_KEYBOARDLOG_FILENAME	"keyboard.log"
-#else // !_WIN64
-#define QTB_KEYBOARDLOG_FILENAME	"keyboard64.log"
-#endif // !_WIN64
 
 // date format for log
 #define QTB_LOG_DATE_FORMAT "yyyy.MM.dd HH:mm:ss.zzz"

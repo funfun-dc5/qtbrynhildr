@@ -1,7 +1,8 @@
 ;----------------------------------------------------------------------
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
-#define Name "%NAME%"
+#define Name "Qt Brynhildr"
+#define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "2.0.21"
 #define RCName ""
@@ -11,10 +12,10 @@
 #define ShortName StringChange(Name, " ", "")
 
 [Setup]
-AppName={#Name}
+AppName={#Name} ({#ArchName})
 AppVersion={#AppVer}
-AppVerName={#Name} Ver.{#AppVer}
-DefaultGroupName={#Name}
+AppVerName={#Name} Ver.{#AppVer} ({#ArchName})
+DefaultGroupName={#Name} ({#ArchName})
 ;OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}-{#AppDateString}
 OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}
 DefaultDirName={pf}\{#ShortName}

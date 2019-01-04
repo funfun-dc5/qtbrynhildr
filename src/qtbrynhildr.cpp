@@ -449,7 +449,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
 
   // version
-  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION QTB_RCNAME);
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION QTB_RCNAME QTB_ARCHNAME);
   // kernel type
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "OS Type    : " + QSysInfo::kernelType());
   // kernel version
@@ -2862,7 +2862,7 @@ void QtBrynhildr::about()
 					 "<h2>"
 					 QTB_APPLICATION
 					 " Ver. "
-					 QTB_VERSION QTB_RCNAME
+					 QTB_VERSION QTB_RCNAME QTB_ARCHNAME
 					 "</h2>"
 					 "<p>Copyright &copy;"
 					 " "

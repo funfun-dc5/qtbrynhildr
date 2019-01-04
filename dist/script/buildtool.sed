@@ -1,3 +1,3 @@
-s/%NAME%/Qt Brynhildr/g
+s/%ARCHNAME%//g
 s/%BUILDTOOL%//g
 s/%EXTOPTION%//g

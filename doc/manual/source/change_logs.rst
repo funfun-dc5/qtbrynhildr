@@ -15,7 +15,9 @@ Ver.2.0.22 : 2018/12/xx
 
  1. Windows版に同梱しているOpenSSL DLLを1.0.2qへ更新
 
- 2. Windows 64bit版のログファイルのデフォルトファイル名変更
+ 2. Qt Brynhildr 64を Qt Brynhildr (64bit) へ変更
+
+  パッケージ名、Aboutメッセージを変更、ログファイル名初期値をqtbrynhildr.log/keyboard.logに統一
 
 Ver.2.0.21 : 2018/10/10
 -----------------------

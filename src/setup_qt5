@@ -20,9 +20,11 @@ case $UNAME in
 					# ignore
 					;;
 				msvc)
+#					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2017"
 					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015"
 					;;
 				msvc64)
+#					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2017_64"
 					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015_64"
 					;;
 				*)
@@ -31,7 +33,10 @@ case $UNAME in
 					;;
 			esac
 		else
-			# Qt5.9
+			# Qt5.12 -
+#			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw73_64"
+#			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw730_64"
+			# Qt5.9 - 5.11
 			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
 			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw530_32"
 			# Qt5.6 for XP/Vista

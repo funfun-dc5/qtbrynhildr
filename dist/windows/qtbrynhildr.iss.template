@@ -4,7 +4,7 @@
 #define Name "Qt Brynhildr"
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
-#define AppVer "2.0.21"
+#define AppVer "2.0.22"
 #define RCName ""
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
@@ -36,7 +36,7 @@ TouchTime=03:15
 ;----------------------------------------------------------------------
 VersionInfoVersion={#AppVer}
 VersionInfoDescription={#Name}をセットアップするプログラム
-AppCopyright=Copyright(C) 2018 FunFun @ mcz-xoxo, All rights reserved.
+AppCopyright=Copyright(C) 2019 FunFun @ mcz-xoxo, All rights reserved.
 SetupIconFile=..\..\src\images\qtbrynhildr48.ico
 ;ウィザードページに表示されるグラフィック（*.bmp: 164 x 314）
 ;WizardImageFile=bmp\installer_pic.bmp

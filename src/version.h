@@ -5,9 +5,9 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.0.21"
+#define QTB_VERSION				"2.0.22"
 #define QTB_RCNAME				""
-#define QTB_VERSION_NUMBER		2021
+#define QTB_VERSION_NUMBER		2022
 
 #if __x86_64__ || __LP64__
 #define QTB_ARCHNAME			" (64bit)"
@@ -16,7 +16,7 @@
 #endif // __x86_64__ || __LP64__
 
 // year
-#define QTB_YEAR		"2015-2018"
+#define QTB_YEAR		"2015-2019"
 
 // URL of blog
 #define QTB_BLOG		"<a href=\"http://mcz-xoxo.cocolog-nifty.com/blog/\">http://mcz-xoxo.cocolog-nifty.com/blog/</a>"

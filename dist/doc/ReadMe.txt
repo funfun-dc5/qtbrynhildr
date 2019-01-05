@@ -1002,6 +1002,7 @@ Ver.2.1.0 : 2019/xx/xx
 Ver.2.0.22: 2018/12/xx
             [その他変更]
              ・Windows版に同梱しているOpenSSL DLLを1.0.2qへ更新
+             ・Qt5.11.3でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
              ・Qt Brynhildr 64を Qt Brynhildr (64bit) へ変更
 
                パッケージ名、Aboutメッセージを変更

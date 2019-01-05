@@ -88,15 +88,6 @@
  インストーラを実行してインストールしてください。設定はデフォルトのままを
  お勧めします。
 
- Windows版として以下の3つがあります。見た目変わりありませんが、主にMinGW版で
- 動作確認などを行っています。
-
-  1. Qt Brynhidlr    [MinGW版] : 64/32ビット Windowsで動作
-
-  2. Qt Brynhidlr    [MSVC版]  : 64/32ビット Windowsで動作
-
-  3. Qt Brynhildr 64 [MSVC版]  : 64ビット Windowsのみで動作
-
 ==============================
 [アンインストール]
 ==============================
@@ -664,6 +655,11 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 
 ------------------- ここから -------------------
 [General]
+infoKernelType=winnt
+infoKernelVersion=10.0.17763
+infoProductType=windows
+infoProductVersion=10
+infoBuildAbi=i386-little_endian-ilp32
 generatedVersion=168
 currentVersion=168
 publicModeVersion=6

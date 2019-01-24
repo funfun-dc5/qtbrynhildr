@@ -202,9 +202,6 @@ private:
   // option button status flag
   bool onOptionButton;
 
-  // show monitor button flag
-  bool onShowMonitorButton;
-
   // show sound quality button flag
   bool onShowSoundQualityButton;
 

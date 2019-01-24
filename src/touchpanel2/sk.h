@@ -70,7 +70,7 @@ protected:
   // for event handling
 #if defined(QTB_DEV_TOUCHPANEL)
   // event
-  bool event(QEvent *event);
+  bool event(QEvent *event) override;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_NEW_DESKTOPWINDOW

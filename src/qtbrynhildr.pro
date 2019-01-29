@@ -46,8 +46,8 @@ LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt0
 }
 
-# for MSVC 2015
-win32-msvc2015 {
+# for MSVC
+win32-msvc {
 #CELT_SUPPORT = ON
 QMAKE_CXXFLAGS += /wd4819
 QMAKE_LFLAGS += /LTCG
@@ -124,7 +124,7 @@ QMAKE_CXXFLAGS += -msse4.1
 }
 
 # for Android
-android-g++ {
+android-g++ | android-clang {
 DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
 DESKTOP = OFF
 CELT_SUPPORT = ON

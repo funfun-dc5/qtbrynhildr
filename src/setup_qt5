@@ -45,6 +45,8 @@ case $UNAME in
 #			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw492_32"
 			# MinGW
 			PATHLIST=${MINGWROOT}/bin
+			# Coverity Scan
+			PATHLIST=/c/Tools/develop/cov-analysis-win64-2017.07/bin:${PATHLIST}
 		fi
 	;;
 	Linux)

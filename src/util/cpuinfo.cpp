@@ -5,6 +5,7 @@
 #include "common/common.h"
 
 // System Header
+#if !defined(__aarch64__)
 #if !defined(__ARM_NEON__)
 #if _MSC_VER
 #include <intrin.h>
@@ -12,6 +13,7 @@
 #include <cpuid.h>
 #endif // _MSC_VER
 #endif // !defined(__ARM_NEON__)
+#endif // !defined(__aarch64__)
 
 // Qt Header
 
@@ -22,6 +24,8 @@
 namespace qtbrynhildr {
 
 const CPUInfo::CPUInfo_Internal CPUInfo::CPUInformation;
+
+#if !defined(__aarch64__)
 
 #if !defined(__ARM_NEON__)
 
@@ -54,5 +58,7 @@ void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])
 #endif // defined(__GNUC__)
 
 #endif // !defined(__ARM_NEON__)
-  
+
+#endif // !defined(__aarch64__)
+
 } // end of namespace qtbrynhildr

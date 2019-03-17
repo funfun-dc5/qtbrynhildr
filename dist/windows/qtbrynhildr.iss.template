@@ -4,7 +4,7 @@
 #define Name "Qt Brynhildr"
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
-#define AppVer "2.0.22"
+#define AppVer "2.0.23"
 #define RCName ""
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
@@ -14,7 +14,7 @@
 [Setup]
 AppName={#Name} ({#ArchName})
 AppVersion={#AppVer}
-AppVerName={#Name} Ver.{#AppVer} ({#ArchName})
+AppVerName={#Name} {#AppVer} ({#ArchName})
 DefaultGroupName={#Name} ({#ArchName})
 ;OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}-{#AppDateString}
 OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}

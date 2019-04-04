@@ -25,6 +25,11 @@ CONFIG += c++11
 # for check spec
 # message($$QMAKESPEC)
 
+# for gprof
+#CONFIG += debug
+#QMAKE_CXXFLAGS_DEBUG += -pg
+#QMAKE_LFLAGS_DEBUG += -pg
+
 # for portable version
 #DEFINES += QTB_PORTABLE_VERSION=1
 

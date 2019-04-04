@@ -36,6 +36,8 @@ case $UNAME in
 			# Qt5.12 -
 			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw73_64"
 			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw730_64"
+#			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw73_32"
+#			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw730_32"
 			# Qt5.9 - 5.11
 #			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
 #			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw530_32"

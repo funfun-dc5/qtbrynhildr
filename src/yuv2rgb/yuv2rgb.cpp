@@ -6,9 +6,6 @@
 
 // System Header
 #include <cmath>
-#if USE_PPM_LOADER_FOR_VP8
-#include <cstdio>
-#endif // USE_PPM_LOADER_FOR_VP8
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -44,9 +41,6 @@ uchar *u2topOrg = 0;
 uchar *v2topOrg = 0;
 
 uchar *rgb = 0;
-#if USE_PPM_LOADER_FOR_VP8
-uchar *ppm = 0;
-#endif // USE_PPM_LOADER_FOR_VP8
 
 // codec context
 vpx_codec_ctx_t c_codec;
@@ -86,21 +80,10 @@ bool setup()
 
   int size = width * height;
   rgbImageSize = size * IMAGE_FORMAT_SIZE;
-#if USE_PPM_LOADER_FOR_VP8
-  if (ppm != 0){
-	delete [] ppm;
-  }
-  ppm = new uchar[rgbImageSize + PPM_HEADER_SIZE_MAX];
-  // make PPM header
-  int length = snprintf((char*)ppm, PPM_HEADER_SIZE_MAX, PPM_HEADER_FORMAT, width, height);
-  // set rgb
-  rgb = ppm + length;
-#else // USE_PPM_LOADER_FOR_VP8
   if (rgb != 0){
 	delete [] rgb;
   }
   rgb = new uchar[rgbImageSize];
-#endif // USE_PPM_LOADER_FOR_VP8
 
   // calc parameters
   y1topOrg = (uchar*)yuv1;

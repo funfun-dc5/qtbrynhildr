@@ -4805,22 +4805,11 @@ void QtBrynhildr::draw_Graphics()
 		return;
 	  }
 
-#if !USE_PPM_LOADER_FOR_VP8
 	  // create QImage
 	  if (image != 0){
 		delete image;
 	  }
 	  image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-#else // !USE_PPM_LOADER_FOR_VP8
-	  // load QImage
-	  bool result = image->loadFromData((const uchar *)qtbrynhildr::ppm,
-										(uint)rgbImageSize + PPM_HEADER_SIZE_MAX,
-										"PPM");
-	  if (!result){
-		// internal error (illigal ppm file image)
-		ABORT();
-	  }
-#endif // !USE_PPM_LOADER_FOR_VP8
 
 	  // draw image
 	  drawDesktop(*image);

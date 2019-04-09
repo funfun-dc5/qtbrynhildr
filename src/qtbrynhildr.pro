@@ -56,13 +56,14 @@ win32-msvc {
 #CELT_SUPPORT = ON
 QMAKE_CXXFLAGS += /wd4819
 QMAKE_LFLAGS += /LTCG
-DEFINES += YY_NO_UNISTD_H __SSE4_1__
+DEFINES += YY_NO_UNISTD_H
 HEADERS += common/msvc.h
 # SIMD (INTEL:MSVC)
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
+DEFINES += __SSE4_1__
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += /arch:AVX

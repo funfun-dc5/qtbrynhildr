@@ -416,23 +416,11 @@ void GraphicsThread::draw_Graphics(int size)
 #endif // QTB_SIMD_SUPPORT
 	//  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
 	if (rgbImageSize != 0){
-#if !USE_PPM_LOADER_FOR_VP8
 	  // create QImage
 	  if (image != 0){
 		delete image;
 	  }
 	  image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-#else // !USE_PPM_LOADER_FOR_VP8
-	  // load QImage
-	  bool result = image->loadFromData((const uchar *)qtbrynhildr::ppm,
-										(uint)rgbImageSize + PPM_HEADER_SIZE_MAX,
-										"PPM");
-	  if (!result){
-		// internal error (illigal PPM file image)
-		cout << "internal error (illigal PPM file image)" << endl << flush;
-		ABORT();
-	  }
-#endif // !USE_PPM_LOADER_FOR_VP8
 	  result = true;
 	}
 	else {

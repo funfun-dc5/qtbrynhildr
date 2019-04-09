@@ -83,17 +83,18 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 
 		// R
 		r = clip(GET_R(y, v));
-		*rgbtop++ = (uchar)r;
 		// G
 		g = clip(GET_G(y, u, v));
-		*rgbtop++ = (uchar)g;
 		// B
 		b = clip(GET_B(y, u));
+#if FORMAT_RGB888
+		*rgbtop++ = (uchar)r;
+		*rgbtop++ = (uchar)g;
 		*rgbtop++ = (uchar)b;
-#if FORMAT_RGBA8888
-		// A
-		*rgbtop++ = (uchar)255;
-#endif // FORMAT_RGBA8888
+#elif FORMAT_RGB32
+		*((int*)rgbtop) = r << 16 | g << 8 | b;
+		rgbtop += IMAGE_FORMAT_SIZE;
+#endif
 #if PRINT_CALC_RATE // for TEST
 		calcCounter++;
 #endif // for TEST
@@ -113,17 +114,18 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 
 		// R
 		r = clip(GET_R(y, v));
-		*rgbtop++ = (uchar)r;
 		// G
 		g = clip(GET_G(y, u, v));
-		*rgbtop++ = (uchar)g;
 		// B
 		b = clip(GET_B(y, u));
+#if FORMAT_RGB888
+		*rgbtop++ = (uchar)r;
+		*rgbtop++ = (uchar)g;
 		*rgbtop++ = (uchar)b;
-#if FORMAT_RGBA8888
-		// A
-		*rgbtop++ = (uchar)255;
-#endif // FORMAT_RGBA8888
+#elif FORMAT_RGB32
+		*((int*)rgbtop) = r << 16 | g << 8 | b;
+		rgbtop += IMAGE_FORMAT_SIZE;
+#endif
 #if PRINT_CALC_RATE // for TEST
 		calcCounter++;
 #endif // for TEST

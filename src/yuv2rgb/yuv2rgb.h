@@ -17,37 +17,21 @@
 #include "vpx_decoder.h"
 #include "vp8dx.h"
 
-// use loadFromData() instead of new QImage()
-#define USE_PPM_LOADER_FOR_VP8	0
-
-#if USE_PPM_LOADER_FOR_VP8
-// for PPM Header
-#define PPM_HEADER_SIZE_MAX 32
-// "P6\n"            : PPM binary
-// "wwww hhhh\n"     : width height
-// "255\n"           : max value (255)
-#define PPM_HEADER_FORMAT "P6\n%d %d\n255\n"
-#endif // USE_PPM_LOADER_FOR_VP8
-
-// RGB image format
-#if USE_PPM_LOADER_FOR_VP8
-#define FORMAT_RGB888 1 // fixed
-#else // USE_PPM_LOADER_FOR_VP8
+// desktop image format
+#define FORMAT_RGB32 1
 //#define FORMAT_RGB888 1
-#define FORMAT_RGBA8888 1
-#endif // USE_PPM_LOADER_FOR_VP8
 
+#if FORMAT_RGB32
+// RGB32 (4bytes) format info.
+#define IMAGE_FORMAT QImage::Format_RGB32
+#define IMAGE_FORMAT_SIZE 4
+#elif FORMAT_RGB888
 // RGB888 (3bytes) format info.
-#if FORMAT_RGB888
 #define IMAGE_FORMAT QImage::Format_RGB888
 #define IMAGE_FORMAT_SIZE 3
-#endif // FORMAT_RGB888
-
-// RGBA8888 (4bytes) format info.
-#if FORMAT_RGBA8888
-#define IMAGE_FORMAT QImage::Format_RGBA8888
-#define IMAGE_FORMAT_SIZE 4
-#endif // FORMAT_RGBA8888
+#else  // FORMAT_RGB888
+#error "unknown image format!"
+#endif
 
 namespace qtbrynhildr {
 
@@ -71,9 +55,6 @@ extern uchar *u2topOrg;
 extern uchar *v2topOrg;
 
 extern uchar *rgb;
-#if USE_PPM_LOADER_FOR_VP8
-extern uchar *ppm;
-#endif // USE_PPM_LOADER_FOR_VP8
 
 // codec context
 extern vpx_codec_ctx_t c_codec;

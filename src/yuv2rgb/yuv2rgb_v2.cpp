@@ -92,7 +92,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		*rgbtop++ = (uchar)g;
 		*rgbtop++ = (uchar)b;
 #elif FORMAT_RGB32
-		*((int*)rgbtop) = r << 16 | g << 8 | b;
+		*((qint32*)rgbtop) = r << 16 | g << 8 | b;
 		rgbtop += IMAGE_FORMAT_SIZE;
 #endif
 #if PRINT_CALC_RATE // for TEST
@@ -123,7 +123,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		*rgbtop++ = (uchar)g;
 		*rgbtop++ = (uchar)b;
 #elif FORMAT_RGB32
-		*((int*)rgbtop) = r << 16 | g << 8 | b;
+		*((qint32*)rgbtop) = r << 16 | g << 8 | b;
 		rgbtop += IMAGE_FORMAT_SIZE;
 #endif
 #if PRINT_CALC_RATE // for TEST

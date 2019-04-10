@@ -167,7 +167,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
-		*((int*)rgbtop) = result[0] << 16 | result[1] << 8 | result[2];
+		*((qint32*)rgbtop) = result[0] << 16 | result[1] << 8 | result[2];
 		rgbtop += IMAGE_FORMAT_SIZE;
 #endif
 
@@ -182,7 +182,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[6];
 #elif FORMAT_RGB32
-		*((int*)rgbtop) = result[4] << 16 | result[5] << 8 | result[6];
+		*((qint32*)rgbtop) = result[4] << 16 | result[5] << 8 | result[6];
 		rgbtop += IMAGE_FORMAT_SIZE;
 #endif
 	  }

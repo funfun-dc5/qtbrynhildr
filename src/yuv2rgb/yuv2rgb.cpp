@@ -31,8 +31,8 @@ int uvNext = 0;
 int rgbNext = 0;
 
 uchar *yuv = 0;
-uchar *yuv1 = 0;
-uchar *yuv2 = 0;
+Aligned(4) uchar *yuv1 = 0;
+Aligned(4) uchar *yuv2 = 0;
 uchar *y1topOrg = 0;
 uchar *u1topOrg = 0;
 uchar *v1topOrg = 0;
@@ -40,7 +40,7 @@ uchar *y2topOrg = 0;
 uchar *u2topOrg = 0;
 uchar *v2topOrg = 0;
 
-uchar *rgb = 0;
+Aligned(4) uchar *rgb = 0;
 
 // codec context
 vpx_codec_ctx_t c_codec;
@@ -84,6 +84,10 @@ bool setup()
 	delete [] rgb;
   }
   rgb = new uchar[rgbImageSize];
+
+  // cout << "yuv1 address = " << hex << (int*)yuv1 << endl;
+  // cout << "yuv2 address = " << hex << (int*)yuv2 << endl;
+  // cout << "rgb address = " << hex << (int*)rgb << endl;
 
   // calc parameters
   y1topOrg = (uchar*)yuv1;

@@ -25,6 +25,9 @@ CONFIG += c++11
 # for check spec
 # message($$QMAKESPEC)
 
+# Endian
+DEFINES += QTB_LITTLE_ENDIAN
+
 # for gprof
 #CONFIG += debug
 #QMAKE_CXXFLAGS_DEBUG += -pg

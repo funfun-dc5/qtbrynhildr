@@ -168,9 +168,26 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
-		// 0xaarrggbb (32bit value)
-		*((qint32*)rgbtop) = result[0] << 16 | result[1] << 8 | result[2];
-		rgbtop += IMAGE_FORMAT_SIZE;
+		  // 0xaarrggbb (32bit value)
+#if QTB_LITTLE_ENDIAN // Little Endian
+		  // B
+		  *rgbtop++ = (uchar)result[2];
+		  // G
+		  *rgbtop++ = (uchar)result[1];
+		  // R
+		  *rgbtop++ = (uchar)result[0];
+		  // A
+		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+#else // QTB_LITTLE_ENDIAN
+		  // A
+		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		  // R
+		  *rgbtop++ = (uchar)result[0];
+		  // G
+		  *rgbtop++ = (uchar)result[1];
+		  // B
+		  *rgbtop++ = (uchar)result[2];
+#endif // QTB_LITTLE_ENDIAN
 #endif
 
 		// xPos+1
@@ -185,9 +202,26 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[6];
 #elif FORMAT_RGB32
-		// 0xaarrggbb (32bit value)
-		*((qint32*)rgbtop) = result[4] << 16 | result[5] << 8 | result[6];
-		rgbtop += IMAGE_FORMAT_SIZE;
+		  // 0xaarrggbb (32bit value)
+#if QTB_LITTLE_ENDIAN // Little Endian
+		  // B
+		  *rgbtop++ = (uchar)result[6];
+		  // G
+		  *rgbtop++ = (uchar)result[5];
+		  // R
+		  *rgbtop++ = (uchar)result[4];
+		  // A
+		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+#else // QTB_LITTLE_ENDIAN
+		  // A
+		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		  // R
+		  *rgbtop++ = (uchar)result[4];
+		  // G
+		  *rgbtop++ = (uchar)result[5];
+		  // B
+		  *rgbtop++ = (uchar)result[6];
+#endif // QTB_LITTLE_ENDIAN
 #endif
 	  }
 	}

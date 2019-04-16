@@ -63,19 +63,44 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		rgbtop += IMAGE_FORMAT_SIZE;
 	  }
 	  else {
+#if FORMAT_RGB888
+		// RR(8bit), GG(8bit), BB(8bit)
 		// R
 		r = clip(GET_R(y, v));
+		*rgbtop++ = (uchar)r;
 		// G
 		g = clip(GET_G(y, u, v));
+		*rgbtop++ = (uchar)g;
 		// B
 		b = clip(GET_B(y, u));
-#if FORMAT_RGB888
-		*rgbtop++ = (uchar)r;
-		*rgbtop++ = (uchar)g;
 		*rgbtop++ = (uchar)b;
 #elif FORMAT_RGB32
-		*((qint32*)rgbtop) = r << 16 | g << 8 | b;
-		rgbtop += IMAGE_FORMAT_SIZE;
+		// 0xaarrggbb (32bit value)
+#if QTB_LITTLE_ENDIAN // Little Endian
+		// B
+		b = clip(GET_B(y, u));
+		*rgbtop++ = (uchar)b;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgbtop++ = (uchar)g;
+		// R
+		r = clip(GET_R(y, v));
+		*rgbtop++ = (uchar)r;
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+#else // QTB_LITTLE_ENDIAN
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		// R
+		r = clip(GET_R(y, v));
+		*rgbtop++ = (uchar)r;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgbtop++ = (uchar)g;
+		// B
+		b = clip(GET_B(y, u));
+		*rgbtop++ = (uchar)b;
+#endif // QTB_LITTLE_ENDIAN
 #endif
 	  }
 
@@ -86,19 +111,44 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		rgbtop += IMAGE_FORMAT_SIZE;
 	  }
 	  else {
+#if FORMAT_RGB888
+		// RR(8bit), GG(8bit), BB(8bit)
 		// R
 		r = clip(GET_R(y, v));
+		*rgbtop++ = (uchar)r;
 		// G
 		g = clip(GET_G(y, u, v));
+		*rgbtop++ = (uchar)g;
 		// B
 		b = clip(GET_B(y, u));
-#if FORMAT_RGB888
-		*rgbtop++ = (uchar)r;
-		*rgbtop++ = (uchar)g;
 		*rgbtop++ = (uchar)b;
 #elif FORMAT_RGB32
-		*((qint32*)rgbtop) = r << 16 | g << 8 | b;
-		rgbtop += IMAGE_FORMAT_SIZE;
+		// 0xaarrggbb (32bit value)
+#if QTB_LITTLE_ENDIAN // Little Endian
+		// B
+		b = clip(GET_B(y, u));
+		*rgbtop++ = (uchar)b;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgbtop++ = (uchar)g;
+		// R
+		r = clip(GET_R(y, v));
+		*rgbtop++ = (uchar)r;
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+#else // QTB_LITTLE_ENDIAN
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		// R
+		r = clip(GET_R(y, v));
+		*rgbtop++ = (uchar)r;
+		// G
+		g = clip(GET_G(y, u, v));
+		*rgbtop++ = (uchar)g;
+		// B
+		b = clip(GET_B(y, u));
+		*rgbtop++ = (uchar)b;
+#endif // QTB_LITTLE_ENDIAN
 #endif
 	  }
 	}

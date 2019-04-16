@@ -115,6 +115,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		  // set rgba32 from result int * 4
 
 #if FORMAT_RGB888
+		  // RR(8bit), GG(8bit), BB(8bit)
 		  // R
 		  *rgbtop++ = (uchar)result[0];
 
@@ -124,6 +125,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		  // B
 		  *rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
+		  // 0xaarrggbb (32bit value)
 		  *((qint32*)rgbtop) = result[0] << 16 | result[1] << 8 | result[2];
 		  rgbtop += IMAGE_FORMAT_SIZE;
 #endif
@@ -169,6 +171,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		  // set rgba32 from result int * 4
 
 #if FORMAT_RGB888
+		  // RR(8bit), GG(8bit), BB(8bit)
 		  // R
 		  *rgbtop++ = (uchar)result[0];
 
@@ -178,6 +181,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		  // B
 		  *rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
+		  // 0xaarrggbb (32bit value)
 		  *((qint32*)rgbtop) = result[0] << 16 | result[1] << 8 | result[2];
 		  rgbtop += IMAGE_FORMAT_SIZE;
 #endif
@@ -222,6 +226,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// set rgba32 from result int * 4
 
 #if FORMAT_RGB888
+		// RR(8bit), GG(8bit), BB(8bit)
 		// R
 		*rgbtop++ = (uchar)result[0];
 
@@ -231,6 +236,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
+		// 0xaarrggbb (32bit value)
 		*((qint32*)rgbtop) = result[0] << 16 | result[1] << 8 | result[2];
 		rgbtop += IMAGE_FORMAT_SIZE;
 #endif
@@ -271,6 +277,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// set rgba32 from result int * 4
 
 #if FORMAT_RGB888
+		// RR(8bit), GG(8bit), BB(8bit)
 		// R
 		*rgbtop++ = (uchar)result[0];
 
@@ -280,6 +287,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
+		// 0xaarrggbb (32bit value)
 		*((qint32*)rgbtop) = result[0] << 16 | result[1] << 8 | result[2];
 		rgbtop += IMAGE_FORMAT_SIZE;
 #endif

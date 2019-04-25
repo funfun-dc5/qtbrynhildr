@@ -4581,7 +4581,7 @@ void QtBrynhildr::finishedDownload()
 	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
 	QString latestTag;
 	latestTag.append(tagRef);
-	//	  cout << "latest tag = v" << qPrintable(latestTag);
+	//	cout << "latest tag = v" << qPrintable(latestTag) << endl;
 
 	startIndex = lastIndex + 2;
 	lastIndex = releasePage.indexOf("<", startIndex);
@@ -4592,7 +4592,7 @@ void QtBrynhildr::finishedDownload()
 
 	QString tag(option->getVersionString());
 	//	  tag = "169";
-	//	  cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
+	//	cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
 	if (tag != latestTag){
 	  // Found new version
 	  //		cout << "Found new version" << endl << flush;

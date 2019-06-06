@@ -487,6 +487,12 @@ void ControlThread::initHeaderForGraphics()
   // image size
   com_data->image_cx		= (SIZE)settings->getDesktopWidth();
   com_data->image_cy		= (SIZE)settings->getDesktopHeight();
+  // com_data->image_cx		= 640; // (SIZE)settings->getDesktopWidth();
+  // com_data->image_cy		= 400; // (SIZE)settings->getDesktopHeight();
+  // com_data->zoom = 1.0;
+  // com_data->client_scroll_x	= -10;
+  // com_data->client_scroll_y	= -20;
+  // com_data->scroll = 1; // enable scroll (public mode 7)
 
 #if QTB_DESKTOP_COMPRESS_MODE
   // desktop compress mode

@@ -214,8 +214,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #endif
 
   // == VIDEO_MODE_MJPEG ==
-  // buffer[]         : JPEG File
-  // receivedDataSize : Size of JPEG File
+  // buffer[]         : JPEG File Image
+  // receivedDataSize : Size of JPEG File Image
 
   // == VIDEO_MODE_COMPRESS ==
   // buffer[]         : VP8 Data
@@ -228,6 +228,20 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
   // received 1 frame
   frameCounter++;
+
+#if 0 // for TEST
+  {
+	fstream file;
+
+	file.open("test.vp8", ios::out | ios::binary | ios::app);
+	if (file.is_open()){
+	  int size = (int)receivedDataSize;
+	  file.write((char *)&size, sizeof(int));
+	  file.write(buffer, receivedDataSize);
+	  file.close();
+	}
+  }
+#endif // for TEST
 
   // for network test
   if (!onDrawing)

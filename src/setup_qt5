@@ -28,7 +28,7 @@ case $UNAME in
 #					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015_64"
 					;;
 				*)
-					echo "setup_qt5 : Unkown argument : $TARGET"
+					echo "setup_qt5 : Unknown argument : $TARGET"
 					exit 1
 					;;
 			esac

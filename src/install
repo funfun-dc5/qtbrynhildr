@@ -30,7 +30,7 @@ if [ -n "$1" ] ; then
 		ubuntu)
 			;;
 		*)
-			echo "Unkown argument1 : $1"
+			echo "Unknown argument1 : $1"
 			exit 1
 			;;
 	esac
@@ -47,7 +47,7 @@ if [ -n "$2" ] ; then
 			PORTABLEVERSION=ON
 			;;
 		*)
-			echo "Unkown argument2 : $2"
+			echo "Unknown argument2 : $2"
 			exit 1
 			;;
 	esac

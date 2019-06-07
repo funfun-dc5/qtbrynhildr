@@ -311,23 +311,23 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		*rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
 #if QTB_LITTLE_ENDIAN // Little Endian
-		  // B
-		  *rgbtop++ = (uchar)result[2];
-		  // G
-		  *rgbtop++ = (uchar)result[1];
-		  // R
-		  *rgbtop++ = (uchar)result[0];
-		  // A
-		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		// B
+		*rgbtop++ = (uchar)result[2];
+		// G
+		*rgbtop++ = (uchar)result[1];
+		// R
+		*rgbtop++ = (uchar)result[0];
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 #else // QTB_LITTLE_ENDIAN
-		  // A
-		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-		  // R
-		  *rgbtop++ = (uchar)result[0];
-		  // G
-		  *rgbtop++ = (uchar)result[1];
-		  // B
-		  *rgbtop++ = (uchar)result[2];
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		// R
+		*rgbtop++ = (uchar)result[0];
+		// G
+		*rgbtop++ = (uchar)result[1];
+		// B
+		*rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
 #endif
 
@@ -381,23 +381,23 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		*rgbtop++ = (uchar)result[2];
 #elif FORMAT_RGB32
 #if QTB_LITTLE_ENDIAN // Little Endian
-		  // B
-		  *rgbtop++ = (uchar)result[2];
-		  // G
-		  *rgbtop++ = (uchar)result[1];
-		  // R
-		  *rgbtop++ = (uchar)result[0];
-		  // A
-		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		// B
+		*rgbtop++ = (uchar)result[2];
+		// G
+		*rgbtop++ = (uchar)result[1];
+		// R
+		*rgbtop++ = (uchar)result[0];
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 #else // QTB_LITTLE_ENDIAN
-		  // A
-		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-		  // R
-		  *rgbtop++ = (uchar)result[0];
-		  // G
-		  *rgbtop++ = (uchar)result[1];
-		  // B
-		  *rgbtop++ = (uchar)result[2];
+		// A
+		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
+		// R
+		*rgbtop++ = (uchar)result[0];
+		// G
+		*rgbtop++ = (uchar)result[1];
+		// B
+		*rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
 #endif
 

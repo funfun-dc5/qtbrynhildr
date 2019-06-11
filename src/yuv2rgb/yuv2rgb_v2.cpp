@@ -119,7 +119,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		b = clip(GET_B(y, u));
 		*rgbtop++ = (uchar)b;
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 
 #if PRINT_CALC_RATE // for TEST
 		calcCounter++;
@@ -176,7 +176,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		b = clip(GET_B(y, u));
 		*rgbtop++ = (uchar)b;
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 
 #if PRINT_CALC_RATE // for TEST
 		calcCounter++;

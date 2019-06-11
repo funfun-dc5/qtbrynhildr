@@ -188,7 +188,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 
 		// xPos+1
 #if FORMAT_RGB888
@@ -222,7 +222,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[6];
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 	  }
 	}
 	rgbtop += rgbNext;

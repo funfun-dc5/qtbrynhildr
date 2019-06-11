@@ -167,7 +167,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		  // B
 		  *rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 		}
 
 		// xPos+1
@@ -241,7 +241,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		  // B
 		  *rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 		}
 	  }
 	  else {
@@ -314,7 +314,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 
 		// xPos+1
 
@@ -383,7 +383,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		// B
 		*rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
-#endif
+#endif // FORMAT_RGB32
 
 		yptop += 2;
 	  }

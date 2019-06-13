@@ -70,6 +70,9 @@ DEFINES += __SSE4_1__
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += /arch:AVX
+# AVX2
+#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+#QMAKE_CXXFLAGS += /arch:AVX2
 }
 
 # for MinGW
@@ -85,6 +88,9 @@ QMAKE_CXXFLAGS += -msse4.1
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
+# AVX2
+#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+#QMAKE_CXXFLAGS += -mavx2
 }
 
 # for Linux/FreeBSD
@@ -106,6 +112,9 @@ QMAKE_CXXFLAGS += -msse4.1
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
+# AVX2
+#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+#QMAKE_CXXFLAGS += -mavx2
 # NEON (RaspberryPi3)
 #DEFINES += QTB_RPI3
 #SOURCES += yuv2rgb/yuv2rgb_neon.cpp

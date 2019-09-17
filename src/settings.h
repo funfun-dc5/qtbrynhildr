@@ -2181,7 +2181,7 @@ private:
 } // end of namespace qtbrynhildr
 
 // for GUI
-#define QTB_ICON_FILENAME			":/images/qtbrynhildr48.ico"
+#define QTB_ICON_FILENAME			":/images/qtbrynhildr48.png"
 #define QTB_SPLASH_SCREEN_FILENAME	":/images/3Bjunior.jpg"
 
 // for log file

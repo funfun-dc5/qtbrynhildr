@@ -101,7 +101,7 @@ MouseBuffer *DesktopPanel::getMouseBuffer() const
 }
 
 // reflesh desktop window
-void DesktopPanel::refreshDesktop(QImage image)
+void DesktopPanel::refreshDesktop(QImage &image)
 {
   // return if not initialized
   if (image.isNull()){
@@ -167,10 +167,14 @@ void DesktopPanel::refreshDesktop(QImage image)
 		// scale
 		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
 #if !QTB_NEW_DESKTOPWINDOW
-		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
-		//image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		this->image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		//this->image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+		//this->image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 #endif // !QTB_NEW_DESKTOPWINDOW
+	  }
+	  else {
+		// copy QImage
+		this->image = image;
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){
@@ -182,27 +186,18 @@ void DesktopPanel::refreshDesktop(QImage image)
 	  if (settings->getDesktopScalingFactor() > 1.0){
 		// scale up
 		currentSize = getSizeForCurrentMode(currentSize * settings->getDesktopScalingFactor());
-		image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		this->image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 	  }
-#if 0 // for TEST
-	  else if (settings->getOnWindowSizeFixed() &&
-			   settings->getDesktopScalingFactor() < 1.0){
-		QSize windowSize = getWindowSize();
-		//QSize windowSize = QSize(640,400); // for TEST
-		if (image.width() > windowSize.width() ||
-			image.height() > windowSize.height()){
-		  qreal scalingFactor = settings->getDesktopScalingFactor();
-		  int x = getWidthForCurrentMode(settings->getDesktopOffsetX() * scalingFactor);
-		  int y = getHeightForCurrentMode(settings->getDesktopOffsetY() * scalingFactor);
-		  int width = windowSize.width();
-		  int height = windowSize.height();
-		  // cut image
-		  image = image.copy(x, y, width, height);
-		}
+	  else {
+		// copy QImage
+		this->image = image;
 	  }
-#endif // 0 // for TEST
 	}
 #endif // defined(QTB_DEV_DESKTOP)
+  }
+  else {
+	// copy QImage
+	this->image = image;
   }
 
   // capture desktop image
@@ -215,15 +210,12 @@ void DesktopPanel::refreshDesktop(QImage image)
 		settings->getDesktopCaptureFormat();
 
 	  // save to file
-	  image.save(filename);
+	  this->image.save(filename);
 
 	  // reset desktop capture flag
 	  settings->setOnDesktopCapture(false);
 	}
   }
-
-  // copy QImage
-  this->image = image;
 
   // resize window
   if (previousSize != currentSize){

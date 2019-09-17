@@ -126,7 +126,7 @@ public:
   MouseBuffer *getMouseBuffer() const;
 
   // refresh desktop window
-  void refreshDesktop(QImage image);
+  void refreshDesktop(QImage &image);
 
   // resize window
   void resizeWindow();

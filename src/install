@@ -70,7 +70,6 @@ case $UNAME in
 		if [ -n "$TARGET" ] ; then
 			case $TARGET in
 				cygwin)
-					UNAMEM=`uname -m`
 					case $UNAMEM in
 						x86_64)
 							PKGNAME="cygwin_x64"
@@ -96,7 +95,6 @@ case $UNAME in
 		fi
 		;;
 	Linux)
-		UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
 				PKGNAME="linux_x64"
@@ -130,7 +128,6 @@ case $UNAME in
 		INSTALLEXEFLAGS="-s"
 		;;
 	FreeBSD)
-		UNAMEM=`uname -m`
 		case $UNAMEM in
 			amd64)
 				PKGNAME="freebsd_x64"
@@ -145,7 +142,6 @@ case $UNAME in
 		INSTALLEXEFLAGS="-s"
 		;;
 	Darwin)
-		UNAMEM=`uname -m`
 		case $UNAMEM in
 			x86_64)
 				DISTDIR="../dist/macosx"
@@ -268,7 +264,14 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Widgets.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Concurrent.dll ${DISTDIR}/bin
 			if [ "$TARGET" = "" ] ; then
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
+			case $UNAMEM in
+				x86_64)
+					${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_seh-1.dll ${DISTDIR}/bin
+					;;
+				x86)
+					${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
+					;;
+			esac
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
 			fi
@@ -276,9 +279,21 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
 			# copy openssl dll
-			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
+			# OpenSSL 1.0.2x
+#			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
+#			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
+#			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
+			# OpenSSL 1.1.1x
+			case $UNAMEM in
+				x86_64)
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+					;;
+				x86)
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+					;;
+			esac
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin

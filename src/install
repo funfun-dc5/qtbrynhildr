@@ -54,9 +54,10 @@ if [ -n "$2" ] ; then
 fi
 
 # setting
-APP="QtBrynhildr"
+APP="Qt Brynhildr"
+APPS="QtBrynhildr"
 KLFC="klfc"
-ISS="$APP.iss"
+ISS="${APPS}.iss"
 INSTALL="/usr/bin/install"
 INSTALLFLAGS="-m444"
 INSTALLEXEFLAGS="-C"
@@ -240,7 +241,7 @@ case $UNAME in
 		# check
 		if [ "$TARGET" = "" -o "$TARGET" = "msvc" -o "$TARGET" = "msvc64" ] ; then
 			echo "Installing for windows..."
-			if [ ! -x release/${APP}.exe ] ; then
+			if [ ! -x "release/${APP}.exe" ] ; then
 				echo "NOT Found ${APP}.exe"
 				exit 1;
 			fi
@@ -248,7 +249,7 @@ case $UNAME in
 				echo "NOT Found ${KLFC}.exe"
 				exit 1;
 			fi
-			VERSION=`release/${APP}.exe -vv`
+			VERSION=`"release/${APP}.exe" -vv`
 			# for windows
 			# create directory
 			mkdir -p ${DISTDIR}/bin
@@ -296,7 +297,7 @@ case $UNAME in
 			esac
 			# copy executable file
 			echo "copy executable file..."
-			${INSTALL} ${INSTALLEXEFLAGS} release/${APP}.exe ${DISTDIR}/bin
+			${INSTALL} ${INSTALLEXEFLAGS} "release/${APP}.exe" ${DISTDIR}/bin
 			# copy translation files for Qt
 			mkdir -p ${DISTDIR}/bin/translations
 			${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
@@ -323,7 +324,7 @@ case $UNAME in
 				fi
 				# create .iss
 				echo "create .iss file"
-				find bin -type f -print | sed -f ../script/iss.sed | awk -f ../script/iss.awk > tmp_bin.iss
+				find bin -type f -print | sed -f ../script/iss.sed | awk -F: -f ../script/iss.awk > tmp_bin.iss
 				cd ..
 				find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss_manual.awk > tmp.iss
 				cat windows/${ISS}.template | sed -f script/buildtool${TARGET}.sed > new_template.iss
@@ -333,7 +334,7 @@ case $UNAME in
 				# portable version package
 				echo "create portable version package"
 				# make package string
-				PKGSTRING="${APP}${APPSUFIX}-${PKGNAME}-v${VERSION}-Portable"
+				PKGSTRING="${APPS}${APPSUFIX}-${PKGNAME}-v${VERSION}-Portable"
 				# 1) make top directory
 				mkdir ${PKGSTRING}
 				mkdir -p ${PKGSTRING}/doc/manual
@@ -355,22 +356,22 @@ case $UNAME in
 		if [ "$TARGET" = "cygwin" ] ; then
 			# check
 			echo "Installing for cygwin..."
-			if [ ! -x ./${APP} ] ; then
-				echo "NOT Found ${APP}"
+			if [ ! -x "./${APP}.exe" ] ; then
+				echo "NOT Found ${APP}.exe"
 				exit 1;
 			fi
-			if [ ! -x keylayout/${KLFC} ] ; then
-				echo "NOT Found ${KLFC}"
+			if [ ! -x keylayout/${KLFC}.exe ] ; then
+				echo "NOT Found ${KLFC}.exe"
 				exit 1;
 			fi
-			VERSION=`./${APP} -vv`
+			VERSION=`"./${APP}" -vv`
 			# for cygwin
 			# create directory
 			mkdir -p ${DISTDIR}/bin
 			mkdir -p ${DISTDIR}/doc/manual
 			# copy executable file
 			echo "copy executable file..."
-			${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+			${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
 			# copy translation files for Qt
 			mkdir -p ${DISTDIR}/bin/translations
 			${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
@@ -393,14 +394,14 @@ case $UNAME in
 			rm -f ${DISTDIR}/doc/manual/.gitkeep
 			# make package string
 			#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
-			PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
+			PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
 			(cd ../dist/cygwin; tar cvfj ${PKGSTRING}.tar.bz2 ${PKGNAME})
 		fi
 		;;
 	Linux)
 		# check
 		echo "Installing for linux..."
-		if [ ! -x ./${APP} ] ; then
+		if [ ! -x "./${APP}" ] ; then
 			echo "NOT Found ${APP}"
 			exit 1;
 		fi
@@ -408,14 +409,14 @@ case $UNAME in
 			echo "NOT Found ${KLFC}"
 			exit 1;
 		fi
-		VERSION=`./${APP} -vv`
+		VERSION=`"./${APP}" -vv`
 		# for linux
 		# create directory
 		mkdir -p ${DISTDIR}/bin
 		mkdir -p ${DISTDIR}/doc/manual
 		# copy executable file
 		echo "copy executable file..."
-		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
 		# copy translation files for Qt
 		mkdir -p ${DISTDIR}/bin/translations
 		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
@@ -437,15 +438,15 @@ case $UNAME in
 		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
 		rm -f ${DISTDIR}/doc/manual/.gitkeep
 		# make package string
-		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
-		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
+		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
 #		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
 		(cd ../dist/linux; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
 		;;
 	FreeBSD)
 		# check
 		echo "Installing for freebsd..."
-		if [ ! -x ./${APP} ] ; then
+		if [ ! -x "./${APP}" ] ; then
 			echo "NOT Found ${APP}"
 			exit 1;
 		fi
@@ -453,14 +454,14 @@ case $UNAME in
 			echo "NOT Found ${KLFC}"
 			exit 1;
 		fi
-		VERSION=`./${APP} -vv`
+		VERSION=`"./${APP}" -vv`
 		# for freebsd
 		# create directory
 		mkdir -p ${DISTDIR}/bin
 		mkdir -p ${DISTDIR}/doc/manual
 		# copy executable file
 		echo "copy executable file..."
-		${INSTALL} ${INSTALLEXEFLAGS} ${APP} ${DISTDIR}/bin
+		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
 		# copy translation files for Qt
 		mkdir -p ${DISTDIR}/bin/translations
 		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
@@ -482,14 +483,14 @@ case $UNAME in
 		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
 		rm -f ${DISTDIR}/doc/manual/.gitkeep
 		# make package string
-		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
-		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
+		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
 		(cd ../dist/freebsd; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
 #		(cd ../dist/freebsd; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
 		;;
 	Darwin)
 		echo "Installing for Darwin..."
-		if [ ! -x ./${APP}.app ] ; then
+		if [ ! -x "./${APP}.app" ] ; then
 			echo "NOT Found ${APP}.app"
 			exit 1;
 		fi
@@ -498,29 +499,29 @@ case $UNAME in
 			exit 1;
 		fi
 		# strip
-		strip ${APP}.app/Contents/MacOS/${APP}
+		strip "${APP}.app/Contents/MacOS/${APP}"
 		# copy translation files for Qt
 		echo "copy translations files for Qt..."
-		mkdir -p ${APP}.app/Contents/MacOS/translations
-		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${APP}.app/Contents/MacOS/translations
+		mkdir -p "${APP}.app/Contents/MacOS/translations"
+		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm "${APP}.app/Contents/MacOS/translations"
 		# install key layout file compiler
 		echo "install klfcompiler..."
-		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${APP}.app/Contents/MacOS/
+		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} "${APP}.app/Contents/MacOS/"
 		# copy key layout file sample
 		echo "copy key layout file sample..."
-		mkdir -p ${APP}.app/Contents/MacOS/keylayout/sample
-		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${APP}.app/Contents/MacOS/keylayout/sample
-		VERSION=`${APP}.app/Contents/MacOS/${APP} -vv`
+		mkdir -p "${APP}.app/Contents/MacOS/keylayout/sample"
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl "${APP}.app/Contents/MacOS/keylayout/sample"
+		VERSION=`"${APP}.app/Contents/MacOS/${APP}" -vv`
 		# make package string
-		#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
-		PKGSTRING="${APP}-${PKGNAME}-v${VERSION}"
+		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
 		# for darwin
 		# create directory
 		mkdir -p ${DISTDIR}
 		# make dmg
-		${QTROOT}/bin/macdeployqt ${APP}.app -dmg
+		${QTROOT}/bin/macdeployqt "${APP}.app" -dmg
 		# mv dist directory
-		mv ${APP}.dmg ${DISTDIR}/${PKGSTRING}.dmg
+		mv "${APP}.dmg" ${DISTDIR}/${PKGSTRING}.dmg
 		;;
 	*)
 		echo "$0 : Not support platform. $UNAME"

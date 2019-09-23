@@ -6,7 +6,7 @@ QT += widgets
 QT += multimedia
 
 TEMPLATE = app
-TARGET = QtBrynhildr
+TARGET = "Qt Brynhildr"
 INCLUDEPATH += .
 RESOURCES = qtbrynhildr.qrc
 TRANSLATIONS = translations/qtbrynhildr_ja.ts

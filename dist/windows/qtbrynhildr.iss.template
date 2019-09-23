@@ -5,7 +5,7 @@
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "2.0.23"
-#define RCName "-branch-RGB32"
+#define RCName "-branch-change-binname"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"
@@ -18,7 +18,7 @@ AppVerName={#Name} {#AppVer} ({#ArchName})
 DefaultGroupName={#Name} ({#ArchName})
 ;OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}-{#AppDateString}
 OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}
-DefaultDirName={pf}\{#ShortName}
+DefaultDirName={pf}\{#Name}
 PrivilegesRequired=admin
 UsePreviousAppDir=yes
 AppendDefaultDirName=yes
@@ -110,8 +110,8 @@ Source: "..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion tou
 ;;Root: HKCU; Subkey: "Software\{#AuthName}\{#Name}"; Flags: uninsdeletekey
 
 [Icons]
-Name: "{commondesktop}\{#Name}"; Filename: "{app}\bin\QtBrynhildr.exe"; WorkingDir: "{app}"; Tasks: desktopicon
-Name: "{group}\{#Name}"; Filename: "{app}\bin\QtBrynhildr.exe"; WorkingDir: "{app}";
+Name: "{commondesktop}\{#Name}"; Filename: "{app}\bin\{#Name}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{group}\{#Name}"; Filename: "{app}\bin\{#Name}.exe"; WorkingDir: "{app}";
 
 Name: "{commondesktop}\{#Name} ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
 

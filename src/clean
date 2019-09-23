@@ -1,5 +1,5 @@
 #!/bin/bash
-APP="QtBrynhildr"
+APP="Qt Brynhildr"
 
 # check arg1
 EXTOPT=""
@@ -46,16 +46,16 @@ case $UNAME in
 		if [ "$1" = "" ] ; then
 			mingw32-make clean
 			# delete executable file
-			rm -f release/${APP}.* debug/${APP}.*
+			rm -f "release/${APP}.exe" "debug/${APP}.exe"
 			# other files
 			rm -f release/*.o debug/*.o release/*.cpp debug/*.cpp
 			# delete executable file for Android
-			rm -f lib${APP}.so
+			rm -f "lib${APP}.so"
 		fi
 		if [ "$1" = "cygwin" ] ; then
 			make clean
 			# delete executable file
-			rm -f ${APP}.exe
+			rm -f "${APP}.exe"
 			# other files
 			rm -f *.o
 		fi
@@ -74,7 +74,7 @@ case $UNAME in
 	Linux)
 		make clean
 		# delete executable file
-		rm -f ${APP}
+		rm -f "${APP}"
 		# clean key layout file compiler
 		pushd keylayout; make clean; popd
 		pushd ../doc/manual
@@ -88,7 +88,7 @@ case $UNAME in
 	FreeBSD)
 		make clean
 		# delete executable file
-		rm -f ${APP}
+		rm -f "${APP}"
 		# clean key layout file compiler
 		pushd keylayout; make clean; popd
 		pushd ../doc/manual
@@ -102,7 +102,7 @@ case $UNAME in
 	Darwin)
 		make clean
 		# delete executable file
-		rm -rf ${APP}.app
+		rm -rf "${APP}.app"
 		# clean key layout file compiler
 		pushd keylayout; make clean; popd
 		pushd ../doc/manual
@@ -121,4 +121,4 @@ esac
 
 echo "$0 : Done."
 
-rm -f ${APP}.log
+rm -f "${APP}.log"

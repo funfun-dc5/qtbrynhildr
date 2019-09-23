@@ -47,6 +47,8 @@ case $UNAME in
 			mingw32-make clean
 			# delete executable file
 			rm -f "release/${APP}.exe" "debug/${APP}.exe"
+			rm -f "release/${APP}.exp" "debug/${APP}.exp"
+			rm -f "release/${APP}.lib" "debug/${APP}.lib"
 			# other files
 			rm -f release/*.o debug/*.o release/*.cpp debug/*.cpp
 			# delete executable file for Android

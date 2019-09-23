@@ -285,6 +285,7 @@ case $UNAME in
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
 			# OpenSSL 1.1.1x
+			if [ "$TARGET" = "" ] ; then
 			case $UNAMEM in
 				x86_64)
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
@@ -295,6 +296,22 @@ case $UNAME in
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
 					;;
 			esac
+			else
+			case $TARGET in
+				msvc64)
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+					;;
+				msvc)
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+					;;
+				*)
+					echo "$0 : Not support platform."
+					exit 1;
+					;;
+			esac
+			fi
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} "release/${APP}.exe" ${DISTDIR}/bin

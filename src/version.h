@@ -5,9 +5,9 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.0.23"
-#define QTB_RCNAME				"-branch-change-binname"
-#define QTB_VERSION_NUMBER		2023
+#define QTB_VERSION				"2.0.24"
+#define QTB_RCNAME				""
+#define QTB_VERSION_NUMBER		2024
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"

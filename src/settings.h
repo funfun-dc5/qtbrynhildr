@@ -438,6 +438,10 @@ typedef enum {
 #define QTB_DESKTOPCAPTUREFORMAT_DEFAULT		".jpg"
 
 // -- other settings --
+// for window position
+#define QTB_WINDOWPOS			"windowPos"
+// for window size
+#define QTB_WINDOWSIZE			"windowSize"
 // for geometry
 #define QTB_GEOMETRY			"geometry"
 // for window state

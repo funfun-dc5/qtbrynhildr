@@ -2819,19 +2819,26 @@ void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
 // load settings from setting files or registry
 void QtBrynhildr::readSettings()
 {
-  QRect defaultRect = QRect(200, 200, 800, 600);
-
   // read global settings
   if (!option->getInitFlag()){
 	settings->readSettings();
   }
 
   // restore geometry
+#if 0 // for all platform
+  QRect defaultRect = QRect(200, 200, 800, 600);
+
   bool result = restoreGeometry(settings->getSettings()->value(QTB_GEOMETRY).toByteArray());
   if (!result){
 	move(defaultRect.topLeft());
 	resize(defaultRect.size());
   }
+#else // for all platform
+	QPoint pos = settings->getSettings()->value(QTB_WINDOWPOS, QVariant(QPoint(200, 200))).toPoint();
+	QSize size = settings->getSettings()->value(QTB_WINDOWSIZE, QVariant(QSize(800, 600))).toSize();
+	move(pos);
+	resize(size);
+#endif // for all platform
 
   // restore window state
   restoreState(settings->getSettings()->value(QTB_WINDOWSTATE).toByteArray());
@@ -2844,7 +2851,14 @@ void QtBrynhildr::writeSettings()
   settings->writeSettings();
 
   // save geometry
+#if 0 // for all platform
   settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
+  qDebug() << "frame geometry: " << frameGeometry();
+  qDebug() << "geometry: " << geometry();
+#else // for all platform
+  settings->getSettings()->setValue(QTB_WINDOWPOS, pos());
+  settings->getSettings()->setValue(QTB_WINDOWSIZE, size());
+#endif // for all platform
 
   // save window state
   settings->getSettings()->setValue(QTB_WINDOWSTATE, saveState());

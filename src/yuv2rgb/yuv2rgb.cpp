@@ -76,7 +76,7 @@ bool setup()
 	delete [] yuv2;
   }
   yuv2 = new uchar[yuvImageSize];
-  memset(yuv2, 0xFF, yuvImageSize);
+  memset(yuv2, 0, yuvImageSize);
 
   int size = width * height;
   rgbImageSize = size * IMAGE_FORMAT_SIZE;
@@ -84,6 +84,10 @@ bool setup()
 	delete [] rgb;
   }
   rgb = new uchar[rgbImageSize];
+  memset(rgb, 0, rgbImageSize);
+  for(int i = 3; i < rgbImageSize; i += 4){
+	rgb[i] = 0xff;
+  }
 
   // cout << "yuv1 address = " << hex << (int*)yuv1 << endl;
   // cout << "yuv2 address = " << hex << (int*)yuv2 << endl;

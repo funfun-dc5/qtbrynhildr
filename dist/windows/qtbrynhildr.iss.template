@@ -2,6 +2,7 @@
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
 #define Name "Qt Brynhildr"
+;;#define AppExeName "Qt Brynhildr.exe"
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "2.0.24"
@@ -128,5 +129,8 @@ Name: desktopicon; Description: "{cm:MakeShortcut}"
 ;（アンインストール時に）設定ファイル及びフォルダを削除
 Type: files; Name: "{userappdata}\{#AuthName}\{#Name}.ini"
 Type: dirifempty; Name: "{userappdata}\{#AuthName}"
+
+;;[Run]
+;;Filename: "{app}\bin\{#AppExeName}"; Description: "{cm:LaunchProgram, {#AppExeName}}"; Flags: nowait postinstall skipifsilent
 
 [Files]

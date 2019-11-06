@@ -55,7 +55,7 @@ case $UNAME in
 			# MinGW
 			PATHLIST=${MINGWROOT}/bin
 			# Coverity Scan
-			PATHLIST=/c/Tools/develop/cov-analysis-win64-2017.07/bin:${PATHLIST}
+			PATHLIST=/c/Tools/develop/cov-analysis-win64-2019.03/bin:${PATHLIST}
 		fi
 	;;
 	Linux)

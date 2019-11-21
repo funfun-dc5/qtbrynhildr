@@ -5,9 +5,9 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.0.24"
-#define QTB_RCNAME				"-branch-autoresize"
-#define QTB_VERSION_NUMBER		2024
+#define QTB_VERSION				"2.0.25"
+#define QTB_RCNAME				"-rc1"
+#define QTB_VERSION_NUMBER		2025
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"

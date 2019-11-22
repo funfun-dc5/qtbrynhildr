@@ -2,7 +2,7 @@
 ; QtBrynhildr installer script for Inno Setup
 ;----------------------------------------------------------------------
 #define Name "Qt Brynhildr"
-;;#define AppExeName "Qt Brynhildr.exe"
+#define AppExeName "Qt Brynhildr.exe"
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "2.0.25"
@@ -94,8 +94,8 @@ english.BeveledLabel=English
 [CustomMessages]
 japanese.MakeShortcut=デスクトップにショートカットアイコンを作成する
 english.MakeShortcut=Make shortcut icon on desktop
-japanese.ManualShortcut=はじめて の {#Name}(Ver.0.9.3)
-english.ManualShortcut=First step of {#Name}(Ver.0.9.3)
+japanese.ManualShortcut=はじめて の {#Name}(Ver.0.9.4)
+english.ManualShortcut=First step of {#Name}(Ver.0.9.4)
 
 [Files]
 ; ランタイム
@@ -130,7 +130,7 @@ Name: desktopicon; Description: "{cm:MakeShortcut}"
 Type: files; Name: "{userappdata}\{#AuthName}\{#Name}.ini"
 Type: dirifempty; Name: "{userappdata}\{#AuthName}"
 
-;;[Run]
-;;Filename: "{app}\bin\{#AppExeName}"; Description: "{cm:LaunchProgram, {#AppExeName}}"; Flags: nowait postinstall skipifsilent
+[Run]
+Filename: "{app}\bin\{#AppExeName}"; Description: "{cm:LaunchProgram, {#AppExeName}}"; Flags: nowait postinstall skipifsilent
 
 [Files]

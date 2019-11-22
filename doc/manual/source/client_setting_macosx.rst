@@ -6,13 +6,13 @@
 1. ダウンロード
 ----------------
 
-.dmgファイルをマウントし、QtBrynhildr.app を /Applications にコピーしてください。
+.dmgファイルをマウントし、Qt Brynhildr.app を /Applications にコピーしてください。
 
 
 2. アンインストール
 ----------------------------------
 
-/Applications/QtBrynhildr.app を削除してください。
+/Applications/Qt Brynhildr.app を削除してください。
 
 3. 起動/終了と設定ファイル
 --------------------------

@@ -3,18 +3,18 @@
 動作環境
 =======================
 
-サーバ
-------
+サーバ (Brynhildr)
+-------------------
 
- Brynhildrのページの **SystemRequirements** を参照してください。
+ Brynhildr のページの **SystemRequirements** を参照してください。
 
 クライアント
 ------------
 
 (1) Windows版  [#]_ 
 ^^^^^^^^^^^^^^^^^^^^
-  * Windows XP      (64bit/32bit) (Qt5.6以下でビルド)
-  * Windows Vista   (64bit/32bit) (Qt5.6以下でビルド)
+  * Windows XP      (64bit/32bit) (Qt5.6.3でビルドする必要あり)
+  * Windows Vista   (64bit/32bit) (Qt5.6.3でビルドする必要あり)
   * Windows 7       (64bit/32bit)
   * Windows 8       (64bit/32bit)
   * Windows 8.1     (64bit/32bit)

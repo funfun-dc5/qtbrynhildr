@@ -20,7 +20,6 @@ Contents:
    client_setting_windows
    client_setting_linux
    client_setting_macosx
-   client_setting_freebsd
    use_qtbrynhildr
    port_forwarding
    option

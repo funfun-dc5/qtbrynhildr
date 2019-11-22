@@ -79,13 +79,13 @@
 1. サーバ名(server1)、パスワード(sample)、ポート番号(30000)を指定して起動後直ぐに接続し、
    設定ファイルはカレントディレクトリのsample.iniを指定する場合
 
-   QtBrynhildr -server server1:sample:30000 sample.ini
+   Qt Brynhildr -server server1:sample:30000 sample.ini
 
 2. サーバ名(server2)、パスワード(sample)を指定して起動後直ぐに接続し、設定ファイルは
    標準のファイルを使用する場合。ポート番号は標準の設定ファイルの値を利用する。
 
-   QtBrynhildr -server server1:sample
+   Qt Brynhildr -server server1:sample
 
 3. 標準の設定ファイル以外に設定ファイルを指定し、デバッグログ出力をONにする場合(Windows版)
 
-   QtBrynhildr -debug on D:\\Settings\\server1.ini
+   Qt Brynhildr -debug on D:\\Settings\\server1.ini

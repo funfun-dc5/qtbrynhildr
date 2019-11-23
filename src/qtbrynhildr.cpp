@@ -3606,6 +3606,8 @@ void QtBrynhildr::refreshPublicMode()
 	menuBar()->setCursor(Qt::CrossCursor);
   }
   else {
+	// change mouse cursor to arrow cursor
+	changeMouseCursor(Qt::ArrowCursor);
 	// change mouse cursor on menus to arrow cursor
 	menuBar()->setCursor(Qt::ArrowCursor);
   }

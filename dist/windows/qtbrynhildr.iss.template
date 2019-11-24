@@ -24,7 +24,7 @@ PrivilegesRequired=admin
 UsePreviousAppDir=yes
 AppendDefaultDirName=yes
 OutputDir=.\
-TouchTime=03:15
+TouchTime=06:21
 %EXTOPTION%
 ; for x64 environment
 ;;ArchitecturesInstallIn64BitMode=x64

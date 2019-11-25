@@ -185,6 +185,11 @@ private:
   // Help Menu
   QMenu *helpMenu;
 
+#if QTB_BENCHMARK
+  // Benchmark Menu
+  QMenu *benchmarkMenu;
+#endif // QTB_BENCHMARK
+
   // QToolBar *fileToolBar;
 
   // ------------------------------------------------------------
@@ -382,6 +387,15 @@ private:
   // disable maxfps
   QAction *disableMaxfps_Action;
 
+#if QTB_BENCHMARK
+  // select phase for benchmark
+  QAction *selectBenchmarkPhase0_Action;
+  QAction *selectBenchmarkPhase1_Action;
+  QAction *selectBenchmarkPhase2_Action;
+  QAction *selectBenchmarkPhase3_Action;
+  QAction *selectBenchmarkPhase4_Action;
+#endif // QTB_BENCHMARK
+
   // connect to server dialog
   ConnectToServerDialog *connectToServerDialog;
 
@@ -542,6 +556,11 @@ private:
 
   // check update in background mode
   bool onCheckUpdateInBackground;
+
+#if QTB_BENCHMARK
+  // initial phase counter for benchmark
+  int initialBenchmarkPhaseCounter;
+#endif // QTB_BENCHMARK
 
   // output log flag
   bool outputLog;
@@ -745,6 +764,12 @@ private:
   void refreshPublicMode();
   // refresh other menu
   void refreshOtherMenu();
+#if QTB_BENCHMARK
+  // refresh benchmark menu check mark
+  void refreshBenchmarkMenuCheck();
+  // refresh benchmark menu
+  void refreshBenchmarkMenu();
+#endif // QTB_BENCHMARK
 
 private slots:
   // select public mode version
@@ -877,6 +902,16 @@ private slots:
 
   // disable maxfps
   void disableMaxfps();
+
+#if QTB_BENCHMARK
+  // select phase for benchmark
+  void selectBenchmarkPhase(int initialBenchmarkPhaseCounter);
+  void selectBenchmarkPhase0();
+  void selectBenchmarkPhase1();
+  void selectBenchmarkPhase2();
+  void selectBenchmarkPhase3();
+  void selectBenchmarkPhase4();
+#endif // QTB_BENCHMARK
 
 private:
   // build GUI

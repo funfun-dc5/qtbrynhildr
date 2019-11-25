@@ -106,6 +106,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,desktopCompressModeSubMenu(0)
 #endif // QTB_DESKTOP_COMPRESS_MODE
   ,helpMenu(0)
+#if QTB_BENCHMARK
+  ,benchmarkMenu(0)
+#endif // QTB_BENCHMARK
   ,connectToServer_Action(0)
   ,disconnectToServer_Action(0)
   ,outputKeyboardLog_Action(0)
@@ -201,6 +204,13 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_PREFERENCE
   ,disableDrawing_Action(0)
   ,disableMaxfps_Action(0)
+#if QTB_BENCHMARK
+  ,selectBenchmarkPhase0_Action(0)
+  ,selectBenchmarkPhase1_Action(0)
+  ,selectBenchmarkPhase2_Action(0)
+  ,selectBenchmarkPhase3_Action(0)
+  ,selectBenchmarkPhase4_Action(0)
+#endif // QTB_BENCHMARK
   ,connectToServerDialog(0)
   ,desktopScalingDialog(0)
   ,logViewDialog(0)
@@ -262,6 +272,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
   ,onCheckUpdateInBackground(false)
+#if QTB_BENCHMARK
+  ,initialBenchmarkPhaseCounter(0)
+#endif // QTB_BENCHMARK
   // for DEBUG
   ,outputLog(false)
 {
@@ -2068,6 +2081,35 @@ void QtBrynhildr::createActions()
   disableMaxfps_Action->setEnabled(true);
   disableMaxfps_Action->setCheckable(true);
   connect(disableMaxfps_Action, SIGNAL(triggered()), this, SLOT(disableMaxfps()));
+
+#if QTB_BENCHMARK
+  // select phase for benchmark
+  selectBenchmarkPhase0_Action = new QAction(tr("Select Phase 0"), this);
+  selectBenchmarkPhase0_Action->setStatusTip(tr("Select Phase 0"));
+  selectBenchmarkPhase0_Action->setEnabled(false);
+  selectBenchmarkPhase0_Action->setCheckable(false);
+  connect(selectBenchmarkPhase0_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase0()));
+  selectBenchmarkPhase1_Action = new QAction(tr("Select Phase 1"), this);
+  selectBenchmarkPhase1_Action->setStatusTip(tr("Select Phase 1"));
+  selectBenchmarkPhase1_Action->setEnabled(false);
+  selectBenchmarkPhase1_Action->setCheckable(false);
+  connect(selectBenchmarkPhase1_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase1()));
+  selectBenchmarkPhase2_Action = new QAction(tr("Select Phase 2"), this);
+  selectBenchmarkPhase2_Action->setStatusTip(tr("Select Phase 2"));
+  selectBenchmarkPhase2_Action->setEnabled(false);
+  selectBenchmarkPhase2_Action->setCheckable(false);
+  connect(selectBenchmarkPhase2_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase2()));
+  selectBenchmarkPhase3_Action = new QAction(tr("Select Phase 3"), this);
+  selectBenchmarkPhase3_Action->setStatusTip(tr("Select Phase 3"));
+  selectBenchmarkPhase3_Action->setEnabled(false);
+  selectBenchmarkPhase3_Action->setCheckable(false);
+  connect(selectBenchmarkPhase3_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase3()));
+  selectBenchmarkPhase4_Action = new QAction(tr("Select Phase 4"), this);
+  selectBenchmarkPhase4_Action->setStatusTip(tr("Select Phase 4"));
+  selectBenchmarkPhase4_Action->setEnabled(false);
+  selectBenchmarkPhase4_Action->setCheckable(false);
+  connect(selectBenchmarkPhase4_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase4()));
+#endif // QTB_BENCHMARK
 }
 
 // create Menus
@@ -2312,6 +2354,19 @@ void QtBrynhildr::createMenus()
 	// disable maxfps
 	helpMenu->addAction(disableMaxfps_Action);
   }
+
+#if QTB_BENCHMARK
+  // benchmark menu
+  benchmarkMenu = menuBar()->addMenu(tr("Benchmark"));
+  benchmarkMenu->addAction(selectBenchmarkPhase0_Action);
+  benchmarkMenu->addAction(selectBenchmarkPhase1_Action);
+  benchmarkMenu->addAction(selectBenchmarkPhase2_Action);
+  benchmarkMenu->addAction(selectBenchmarkPhase3_Action);
+  benchmarkMenu->addAction(selectBenchmarkPhase4_Action);
+
+  // refresh benchmark menu
+  refreshBenchmarkMenu();
+#endif // QTB_BENCHMARK
 }
 
 // create Context Menu
@@ -3611,6 +3666,10 @@ void QtBrynhildr::refreshPublicMode()
 	// change mouse cursor on menus to arrow cursor
 	menuBar()->setCursor(Qt::ArrowCursor);
   }
+#if QTB_BENCHMARK
+  // refresh benchmark menu
+  refreshBenchmarkMenu();
+#endif // QTB_BENCHMARK
 }
 
 // select public mode version
@@ -3659,6 +3718,101 @@ void QtBrynhildr::refreshOtherMenu()
   flag = settings->getOnSound();
   soundMenu->setEnabled(flag);
 }
+
+
+#if QTB_BENCHMARK
+// refresh benchmark menu check mark
+void QtBrynhildr::refreshBenchmarkMenuCheck()
+{
+  selectBenchmarkPhase0_Action->setChecked(false);
+  selectBenchmarkPhase1_Action->setChecked(false);
+  selectBenchmarkPhase2_Action->setChecked(false);
+  selectBenchmarkPhase3_Action->setChecked(false);
+  selectBenchmarkPhase4_Action->setChecked(false);
+  switch(initialBenchmarkPhaseCounter){
+  case 0:
+	selectBenchmarkPhase0_Action->setChecked(true);
+	break;
+  case 1:
+	selectBenchmarkPhase1_Action->setChecked(true);
+	break;
+  case 2:
+	selectBenchmarkPhase2_Action->setChecked(true);
+	break;
+  case 3:
+	selectBenchmarkPhase3_Action->setChecked(true);
+	break;
+  case 4:
+	selectBenchmarkPhase4_Action->setChecked(true);
+	break;
+  default:
+	// do nothing
+	break;
+  }
+}
+// refresh benchmark menu
+void QtBrynhildr::refreshBenchmarkMenu()
+{
+  // benchmark menus
+  if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){ // MODE5/6 (MJPEG)
+	initialBenchmarkPhaseCounter = 2;
+	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
+	selectBenchmarkPhase0_Action->setEnabled(true);
+	selectBenchmarkPhase0_Action->setCheckable(true);
+	selectBenchmarkPhase0_Action->setVisible(true);
+
+	selectBenchmarkPhase1_Action->setText(tr("Create Image Object"));
+	selectBenchmarkPhase1_Action->setEnabled(true);
+	selectBenchmarkPhase1_Action->setCheckable(true);
+	selectBenchmarkPhase1_Action->setVisible(true);
+
+	selectBenchmarkPhase2_Action->setText(tr("Draw JPEG Image"));
+	selectBenchmarkPhase2_Action->setEnabled(true);
+	selectBenchmarkPhase2_Action->setCheckable(true);
+	selectBenchmarkPhase2_Action->setVisible(true);
+
+	selectBenchmarkPhase3_Action->setEnabled(false);
+	selectBenchmarkPhase3_Action->setCheckable(false);
+	selectBenchmarkPhase3_Action->setVisible(false);
+
+	selectBenchmarkPhase4_Action->setEnabled(false);
+	selectBenchmarkPhase4_Action->setCheckable(false);
+	selectBenchmarkPhase4_Action->setVisible(false);
+  }
+  else if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){ // MODE7 (VP8)
+	initialBenchmarkPhaseCounter = 4;
+	selectBenchmarkPhase0_Action->setEnabled(true);
+	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
+	selectBenchmarkPhase0_Action->setCheckable(true);
+	selectBenchmarkPhase0_Action->setVisible(true);
+
+	selectBenchmarkPhase1_Action->setText(tr("Decode VP8"));
+	selectBenchmarkPhase1_Action->setEnabled(true);
+	selectBenchmarkPhase1_Action->setCheckable(true);
+	selectBenchmarkPhase1_Action->setVisible(true);
+
+	selectBenchmarkPhase2_Action->setText(tr("Translate from YUV to RGB"));
+	selectBenchmarkPhase2_Action->setEnabled(true);
+	selectBenchmarkPhase2_Action->setCheckable(true);
+	selectBenchmarkPhase2_Action->setVisible(true);
+
+	selectBenchmarkPhase3_Action->setText(tr("Create Image Object"));
+	selectBenchmarkPhase3_Action->setEnabled(true);
+	selectBenchmarkPhase3_Action->setCheckable(true);
+	selectBenchmarkPhase3_Action->setVisible(true);
+
+	selectBenchmarkPhase4_Action->setText(tr("Draw RGB32 Image"));
+	selectBenchmarkPhase4_Action->setEnabled(true);
+	selectBenchmarkPhase4_Action->setCheckable(true);
+	selectBenchmarkPhase4_Action->setVisible(true);
+  }
+  else {
+	initialBenchmarkPhaseCounter = 5;
+  }
+
+  refreshBenchmarkMenuCheck();
+}
+#endif // QTB_BENCHMARK
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
 void QtBrynhildr::setOnPluginsDisable()
@@ -4456,6 +4610,38 @@ void QtBrynhildr::disableMaxfps()
   controlThread->setOnMaxfps(!flag);
   disableMaxfps_Action->setChecked(flag);
 }
+
+#if QTB_BENCHMARK
+// select phase for benchmark
+void QtBrynhildr::selectBenchmarkPhase(int initialBenchmarkPhaseCounter)
+{
+  if (graphicsThread != 0){
+	this->initialBenchmarkPhaseCounter = initialBenchmarkPhaseCounter;
+	graphicsThread->setInitialBenchmarkPhaseCounter(initialBenchmarkPhaseCounter);
+	refreshBenchmarkMenuCheck();
+  }
+}
+void QtBrynhildr::selectBenchmarkPhase0()
+{
+  selectBenchmarkPhase(0);
+}
+void QtBrynhildr::selectBenchmarkPhase1()
+{
+  selectBenchmarkPhase(1);
+}
+void QtBrynhildr::selectBenchmarkPhase2()
+{
+  selectBenchmarkPhase(2);
+}
+void QtBrynhildr::selectBenchmarkPhase3()
+{
+  selectBenchmarkPhase(3);
+}
+void QtBrynhildr::selectBenchmarkPhase4()
+{
+  selectBenchmarkPhase(4);
+}
+#endif // QTB_BENCHMARK
 
 // toggle outputKeyboardLog
 void QtBrynhildr::toggleOutputKeyboardLog()

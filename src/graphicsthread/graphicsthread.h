@@ -61,6 +61,11 @@ private:
   // local buffer
   char *buffer;
 
+#if QTB_BENCHMARK
+  int initialBenchmarkPhaseCounter;
+  int benchmarkPhaseCounter;
+#endif // QTB_BENCHMARK
+
   //-------------------------------------------------------------------------------
   // Function
   //-------------------------------------------------------------------------------
@@ -99,6 +104,13 @@ public:
 	return onDrawing;
   }
 
+#if QTB_BENCHMARK
+  void setInitialBenchmarkPhaseCounter(int initialBenchmarkPhaseCounter)
+  {
+	this->initialBenchmarkPhaseCounter = initialBenchmarkPhaseCounter;
+  }
+#endif // QTB_BENCHMARK
+
 protected:
   // connect to server
   CONNECT_RESULT connectToServer();
@@ -122,6 +134,10 @@ private:
 #if !QTB_TEST_CODE
   // draw graphics
   void draw_Graphics(int size);
+  // draw graphics MJPEG
+  inline bool draw_Graphics_MJPEG(int size);
+  // draw graphics COMPRESS
+  inline bool draw_Graphics_COMPRESS(int size);
 #endif // !QTB_TEST_CODE
 
   // output received data

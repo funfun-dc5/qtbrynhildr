@@ -48,6 +48,10 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_SIMD_SUPPORT
 #endif // !QTB_TEST_CODE
   ,buffer(0)
+ #if QTB_BENCHMARK
+  ,initialBenchmarkPhaseCounter(20)
+  ,benchmarkPhaseCounter(0)
+#endif // QTB_BENCHMARK
 {
   //outputLog = true; // for DEBUG
 
@@ -184,6 +188,11 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // data size for image
   long dataSize = com_data->data_size;
 
+#if QTB_BENCHMARK
+  // set initial counter for benchmark
+  benchmarkPhaseCounter = initialBenchmarkPhaseCounter;
+#endif // QTB_BENCHMARK
+
   // check
   if (dataSize <= 0){
 	// Nothing to do
@@ -229,6 +238,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // received 1 frame
   frameCounter++;
 
+#if QTB_BENCHMARK
+  // check benchmark phase counter
+  benchmarkPhaseCounter--;
+  if (benchmarkPhaseCounter < 0){
+	return TRANSMIT_SUCCEEDED;
+  }
+#endif // QTB_BENCHMARK
+
 #if 0 // for TEST
   {
 	fstream file;
@@ -257,6 +274,14 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if TEST_THREAD
   printTimeInfo("decoded VP8");
 #endif // TEST_THREAD
+
+#if QTB_BENCHMARK
+  // check benchmark phase counter
+  benchmarkPhaseCounter--;
+  if (benchmarkPhaseCounter < 0){
+	return TRANSMIT_SUCCEEDED;
+  }
+#endif // QTB_BENCHMARK
 
   // draw graphics
   if (settings->getOnGraphics()){
@@ -404,53 +429,95 @@ void GraphicsThread::draw_Graphics(int size)
 
   // MODE 5/6 (MJPEG)
   if (com_data->video_mode == VIDEO_MODE_MJPEG){
-	// load a JPEG data to desktop
-	result = image->loadFromData((const uchar *)buffer,
-									  (uint)size,
-									  "JPEG");
-	if (!result){
-	  // internal error (illigal JPEG file image)
-	  cout << "internal error (illigal JPEG file image)" << endl << flush;
-	  ABORT();
-	}
+	// load a JPEG data
+	result = draw_Graphics_MJPEG(size);
   }
   // MODE 7 (VP8)
   else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
-	// make RGB image
-	int rgbImageSize;
-#if QTB_SIMD_SUPPORT
-	if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-	  rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD, settings->getConvertThreadCount());
-	}
-	else {
-	  rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
-	}
-#else // QTB_SIMD_SUPPORT
-	rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
-#endif // QTB_SIMD_SUPPORT
-	//  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
-	if (rgbImageSize != 0){
-	  // create QImage
-	  if (image != 0){
-		delete image;
-	  }
-	  image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-	  result = true;
-	}
-	else {
-	  if (image->isNull()){
-		delete image;
-		image = new QImage(qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-		image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
-	  }
-	}
+	// load a RGB32 data from YUV image
+	result = draw_Graphics_COMPRESS(size);
   }
+
+#if QTB_BENCHMARK
+  // check benchmark phase counter
+  benchmarkPhaseCounter--;
+  if (benchmarkPhaseCounter < 0){
+	return;
+  }
+#endif // QTB_BENCHMARK
 
   // draw desktop
   if (result){
 	//  image->save("jpg/desktop.jpg", "jpg", 75);
 	emit drawDesktop(*image);
   }
+}
+
+// draw graphics MJPEG
+inline bool GraphicsThread::draw_Graphics_MJPEG(int size)
+{
+  bool result = false;
+
+  // load a JPEG data to desktop
+  result = image->loadFromData((const uchar *)buffer,
+							   (uint)size,
+							   "JPEG");
+  if (!result){
+	// internal error (illigal JPEG file image)
+	cout << "internal error (illigal JPEG file image)" << endl << flush;
+	ABORT();
+  }
+
+  return result;
+}
+
+// draw graphics COMPRESS
+inline bool GraphicsThread::draw_Graphics_COMPRESS(int size)
+{
+  Q_UNUSED(size);
+
+  bool result = false;
+
+  // make RGB image
+  int rgbImageSize;
+
+#if QTB_SIMD_SUPPORT
+  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
+	rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD, settings->getConvertThreadCount());
+  }
+  else {
+	rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
+  }
+#else // QTB_SIMD_SUPPORT
+  rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
+#endif // QTB_SIMD_SUPPORT
+  //  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
+
+#if QTB_BENCHMARK
+  // check benchmark phase counter
+  benchmarkPhaseCounter--;
+  if (benchmarkPhaseCounter < 0){
+	return false;
+  }
+#endif // QTB_BENCHMARK
+
+  if (rgbImageSize != 0){
+	// create QImage
+	if (image != 0){
+	  delete image;
+	}
+	image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
+	result = true;
+  }
+  else {
+	if (image->isNull()){
+	  delete image;
+	  image = new QImage(qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
+	  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
+	}
+  }
+
+  return result;
 }
 
 #endif // !QTB_TEST_CODE

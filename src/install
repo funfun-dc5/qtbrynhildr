@@ -534,7 +534,19 @@ case $UNAME in
 		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
 		# for darwin
 		# create directory
-		mkdir -p ${DISTDIR}
+		mkdir -p "${DISTDIR}"
+		DOCDIR="${APP}.app/Contents/Doc"
+		mkdir -p ${DOCDIR}/manual
+		# copy document file
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DOCDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DOCDIR}
+		# copy manual file
+		pushd ../doc/manual
+		make html
+		make install
+		popd
+		cp -r ../dist/doc/manual/* ${DOCDIR}/manual
+		rm -f ${DOCDIR}/manual/.gitkeep
 		# make dmg
 		${QTROOT}/bin/macdeployqt "${APP}.app" -dmg
 		# mv dist directory

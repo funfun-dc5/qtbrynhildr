@@ -70,23 +70,23 @@
 3. アンインストール
 -------------------
 
-(1) 「プログラムと機能」を開く
+(1) 「アプリと機能」を開く
 
-.. image:: images/client_setting_windows/WS000010.jpg
+.. image:: images/client_setting_windows/WS000008.jpg
 
 (2) 「アンインストール」を実行する
 
 確認ダイアログが表示されます。
 
-.. image:: images/client_setting_windows/WS000008.jpg
+.. image:: images/client_setting_windows/WS000009.jpg
 
 「アンインストール」が実行されます。
 
-.. image:: images/client_setting_windows/WS000009.jpg
+.. image:: images/client_setting_windows/WS000010.jpg
 
 「アンインストール」が完了しました。
 
-.. image:: images/client_setting_windows/WS000010.jpg
+.. image:: images/client_setting_windows/WS000011.jpg
 
 
 4. 起動/終了と設定ファイル

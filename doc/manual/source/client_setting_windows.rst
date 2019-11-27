@@ -12,19 +12,11 @@
 
  <https://github.com/funfun-dc5/qtbrynhildr/releases>
 
-(2) Visual C++ 2015 Redistributable のダウンロード
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- Windows版ではランタイムライブラリパッケージ
+(2) Visual C++ Redistributable のダウンロード
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ Windows版ではランタイムライブラリパッケージが必要な場合があります。
 
-  Visual C++ 2015 x86 Redistributable または Visual C++ 2015 x64 Redistributable
-
- が必要な場合があります。例えば以下から入手できます。
-
- <https://www.microsoft.com/ja-JP/download/details.aspx?id=48145>
-
-
- Qtのバージョンにより必要なランタイムライブラリパッケージは異なる可能性があります。
- 例えば、Qt5.6.2では Visual C++ 2013 のランタイムライブラリパッケージが必要です。
+ Microsoft, 窓の杜 <https://forest.watch.impress.co.jp/> などから入手できます。
 
 2. インストール
 ---------------
@@ -36,68 +28,65 @@
 
 「日本語」もしくは「英語」を選択します。
 
-.. image:: images/windows_installer1.jpg
+.. image:: images/client_setting_windows/WS000000.jpg
 
 (2) セットアップウィザードの開始
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/windows_installer2.jpg
+.. image:: images/client_setting_windows/WS000001.jpg
 
 (3) 使用許諾の同意
 ^^^^^^^^^^^^^^^^^^
-.. image:: images/windows_installer3.jpg
+.. image:: images/client_setting_windows/WS000002.jpg
 
 「 同意する」を選択します。
-
-.. image:: images/windows_installer4.jpg
 
 (4) インストール先の指定
 ^^^^^^^^^^^^^^^^^^^^^^^^
  インストール先を指定します。
 
-.. image:: images/windows_installer5.jpg
+.. image:: images/client_setting_windows/WS000003.jpg
 
 (5) プログラムグループの指定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  登録するスタートアップメニューのグループを指定します。
 
-.. image:: images/windows_installer6.jpg
+.. image:: images/client_setting_windows/WS000004.jpg
 
 (6) 追加タスクの選択
 ^^^^^^^^^^^^^^^^^^^^
 
  必要な作業にチェックを入れてください。
 
-.. image:: images/windows_installer7.jpg
+.. image:: images/client_setting_windows/WS000005.jpg
 
 (7) インストール準備完了
 ^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/windows_installer8.jpg
+.. image:: images/client_setting_windows/WS000006.jpg
 
 (8) セットアップウィザードの完了
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/windows_installer9.jpg
+.. image:: images/client_setting_windows/WS000007.jpg
 
 3. アンインストール
 -------------------
 
 (1) 「プログラムと機能」を開く
 
-.. image:: images/windows_uninstaller2.png
-
+.. image:: images/client_setting_windows/WS000010.jpg
 
 (2) 「アンインストール」を実行する
 
 確認ダイアログが表示されます。
 
-.. image:: images/windows_uninstaller3.jpg
+.. image:: images/client_setting_windows/WS000008.jpg
 
 「アンインストール」が実行されます。
 
-.. image:: images/windows_uninstaller4.jpg
+.. image:: images/client_setting_windows/WS000009.jpg
 
 「アンインストール」が完了しました。
 
-.. image:: images/windows_uninstaller5.jpg
+.. image:: images/client_setting_windows/WS000010.jpg
 
 
 4. 起動/終了と設定ファイル

@@ -12,7 +12,7 @@
 2. アンインストール
 ----------------------------------
 
-/Applications/Qt Brynhildr.app を削除してください。
+/Applications/Qt Brynhildr.app と設定ファイルを含むディレクトリ(~/.config/mcz-xoxo)を削除してください。
 
 3. 起動/終了と設定ファイル
 --------------------------

@@ -41,7 +41,7 @@
  選択します。
 
 
- .. image:: images/brynhildr_at_first_boot.png
+ .. image:: images/server_setting/brynhildr_at_first_boot.jpg
 
  下記の各項目を設定し、「OK」ボタンを押します。
  Port, Passwordはクライアントから接続する時に必要なので、覚えておくか、こっそりメモしてください。
@@ -85,7 +85,7 @@
 ^^^^^^^^^^^^^^^^^^^^
 
  サーバの詳細な振る舞いは **brynhildr.ini** ファイルで指定できます。
- **brynhildr..ini** ファイルは通常のテキストファイルなので、エディタで編集することで
+ **brynhildr.ini** ファイルは通常のテキストファイルなので、エディタで編集することで
  設定を変更できます。
 
  **.ini** ファイルを編集、保存後にサーバを起動(もしくは再起動)する必要があります。

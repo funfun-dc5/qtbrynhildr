@@ -32,35 +32,41 @@
 ..
  image:: images/ubuntu_installer01.png
 
-.. image:: images/ubuntu_installer1.png
+.. image:: images/client_setting_linux/linux_install1.png
 
 (2) インストール先の選択
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_installer2.png
+.. image:: images/client_setting_linux/linux_install2.png
 
 (3) コンポーネントの選択
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_installer3.png
+.. image:: images/client_setting_linux/linux_install3.png
 
 (4) ライセンス条項の同意
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_installer4.png
+.. image:: images/client_setting_linux/linux_install4.png
 
 「同意する」を選択してください。
 
-.. image:: images/ubuntu_installer5.png
+.. image:: images/client_setting_linux/linux_install5.png
 
 (5) インストールの準備完了
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_installer6.png
+.. image:: images/client_setting_linux/linux_install6.png
 
 (6) インストール
 ^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_installer7.png
+.. image:: images/client_setting_linux/linux_install7.png
 
 (7) インストール完了
 ^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_installer8.png
+.. image:: images/client_setting_linux/linux_install8.png
+
+.. image:: images/client_setting_linux/linux_install9.png
+
+.. image:: images/client_setting_linux/linux_install10.png
+
+.. image:: images/client_setting_linux/linux_install11.png
 
 3. Qt5のアンインストール
 ------------------------
@@ -73,20 +79,23 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 ..
  image:: images/ubuntu_uninstaller0.png
 
-.. image:: images/ubuntu_uninstaller1.png
+.. image:: images/client_setting_linux/linux_uninstall1.png
 
 (2) アンインストールの準備完了
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_uninstaller2.png
+.. image:: images/client_setting_linux/linux_uninstall2.png
 
 (3) アンインストール
 ^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_uninstaller3.png
+.. image:: images/client_setting_linux/linux_uninstall3.png
 
 (4) アンインストール完了
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: images/ubuntu_uninstaller4.png
+.. image:: images/client_setting_linux/linux_uninstall4.png
 
+.. image:: images/client_setting_linux/linux_uninstall5.png
+
+.. image:: images/client_setting_linux/linux_uninstall6.png
 
 4. Qt Brynhildrのインストール
 ------------------------------

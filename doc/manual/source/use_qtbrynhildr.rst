@@ -10,7 +10,7 @@
 
  2. 「ファイル」メニューから「接続」を選択して「サーバに接続」ダイアログを表示してください
 
- .. image:: images/connect_to_server_dialog1.jpg
+ .. image:: images/use_qtbrynhildr/connect_to_server_dialog1.jpg
 
  3. 「サーバに接続」ダイアログにIP(もしくはサーバ名)/Port/Passwordを入力、キーボードタイプ/
     パブリックモードのバージョンを選択してください。
@@ -21,7 +21,7 @@
 
      「フルスクリーンで開く」にチェックを入れるとサーバ接続後にフルスクリーン化します。
 
- .. image:: images/connect_to_server_dialog2.jpg
+ .. image:: images/use_qtbrynhildr/connect_to_server_dialog2.jpg
 
  4. 「OK」ボタンを押して接続します
 
@@ -33,20 +33,20 @@
  2. 「確認」ダイアログが出るので、終了して良い場合には「OK」ボタンを押して
     Qt Brynhildrを終了してください。
 
- .. image:: images/confirm_dialog.jpg
+ .. image:: images/use_qtbrynhildr/confirm_dialog.jpg
 
 3. メニュー
 -----------
 
 * 「ファイル」メニュー
 
- .. image:: images/menu_file.jpg
+ .. image:: images/use_qtbrynhildr/menu_file.jpg
 
  * 「接続」
 
    サーバに接続するための「サーバに接続」ダイアログを表示します。
  
- .. image:: images/connect_to_server_dialog1.jpg
+ .. image:: images/use_qtbrynhildr/connect_to_server_dialog3.jpg
 
  * 「切断」
 
@@ -68,11 +68,11 @@
 
    Qt Brynhildr を終了します。「確認」ダイアログが表示されので「OK」ボタンを押すと終了します。
 
- .. image:: images/confirm_dialog.jpg
+ .. image:: images/use_qtbrynhildr/confirm_dialog.jpg
 
 * 「表示」メニュー
 
- .. image:: images/menu_display.jpg
+ .. image:: images/use_qtbrynhildr/menu_display.jpg
 
  * 「メニューバーを表示」
 
@@ -86,7 +86,7 @@
 
    フレームレート(FPSおよびデータレート)の表示のON/OFFを変更します。
 
- .. image:: images/framerate.jpg
+ .. image:: images/use_qtbrynhildr/framerate.jpg
 
  * 「ソフトウェア・キーボードを表示」
 
@@ -114,7 +114,7 @@
 
 * 「ビデオ」メニュー
 
- .. image:: images/menu_video.jpg
+ .. image:: images/use_qtbrynhildr/menu_video.jpg
 
  * 「画質選択」
 
@@ -125,7 +125,7 @@
 
    画面書き換えの頻度(FPS(Frame Per Second))の最大値(maxfps)を変更します。
 
- .. image:: images/menu_video_framerate.jpg
+ .. image:: images/use_qtbrynhildr/menu_video_framerate.jpg
 
  * 「デスクトップのスケーリング」
 
@@ -135,7 +135,7 @@
    「キャンセル」ボタンを押すと変更が無効になり、以前のサイズとなります。
    「リセット」ボタンを押すと等倍サイズに戻ります。
 
- .. image:: images/desktop_scaling_dialog.jpg
+ .. image:: images/use_qtbrynhildr/desktop_scaling_dialog.jpg
 
  * 「デスクトップのキャプチャ」
 
@@ -146,7 +146,7 @@
 
 * 「サウンド」メニュー
 
- .. image:: images/menu_sound.jpg
+ .. image:: images/use_qtbrynhildr/menu_sound.jpg
 
  * 音質選択
 
@@ -159,11 +159,11 @@
 
 * 「コントロール」メニュー
 
- .. image:: images/menu_control.jpg
+ .. image:: images/use_qtbrynhildr/menu_control.jpg
 
  * 「キーを送る」
 
- .. image:: images/menu_control_keys.jpg
+ .. image:: images/use_qtbrynhildr/menu_control_keys.jpg
 
  以下の特殊キー（の組み合わせ）をサーバに送ります。
 
@@ -179,7 +179,7 @@
 
  * 「モニタ選択」
 
- .. image:: images/menu_control_monitor.jpg
+ .. image:: images/use_qtbrynhildr/menu_control_monitor.jpg
 
  マルチモニタを利用している場合に操作対象とするモニタを変更します。
  モニタ1(メインモニタ)からモニタ9を選択します。
@@ -207,7 +207,7 @@
 
  * 「記録と再生」 [#]_
 
-    .. image:: images/menu_control_record_and_replay.jpg
+    .. image:: images/use_qtbrynhildr/menu_control_record_and_replay.jpg
 
  1. 記録開始
 
@@ -232,11 +232,13 @@
 
 * 「オプション」メニュー
 
- .. image:: images/menu_option.jpg
+ .. image:: images/use_qtbrynhildr/menu_option.jpg
 
  * デスクトップ圧縮モード
 
    一時的にデスクトップを縮小(1/2, 1/4, 1/8)表示します。解除すると元のサイズに戻ります。
+
+ .. image:: images/use_qtbrynhildr/menu_option_compressmode.jpg
 
  * 「キーボードログ出力」
 
@@ -248,7 +250,7 @@
 
 * 「ヘルプ」メニュー
 
- .. image:: images/menu_help.jpg
+ .. image:: images/use_qtbrynhildr/menu_help.jpg
 
  * 「ログの表示」
 
@@ -262,5 +264,5 @@
 
    Qt Brynhildr についてバージョン情報などを表示します。
 
- .. image:: images/version.jpg
+ .. image:: images/use_qtbrynhildr/version.jpg
 

@@ -29,13 +29,13 @@ Qt Brynhildrとは
 
  Windows版 Qt Brynhildr
 
- .. image:: images/qtbrynhildr_on_windows.jpg
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_windows.jpg
 
            
  Linux(Ubuntu)版 Qt Brynhildr
 
- .. image:: images/qtbrynhildr_on_ubuntu.png
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_ubuntu.png
 
  Mac版 Qt Brynhildr
 
- .. image:: images/qtbrynhildr_on_macosx.png
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_macosx.png

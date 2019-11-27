@@ -25,7 +25,7 @@ Ver.2.0.25 : 2019/11/xx
 
  2. インストーラパッケージ作成ツールをバージョンアップ(InnoSetup 6.0.3)
 
- 3. Mac版にマニュアル(html版)を同梱(Qt Brynhildr.app/Doc)するように変更
+ 3. Mac版にマニュアル(html版)を同梱(Qt Brynhildr.app/Contents/Doc)するように変更
 
  4. html版マニュアルをVer.2.0.25ベースにアップデート(v0.9.3->v0.9.4)
 

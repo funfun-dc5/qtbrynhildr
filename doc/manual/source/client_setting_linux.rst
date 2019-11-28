@@ -26,12 +26,6 @@
 
 (1) インストーラ起動
 ^^^^^^^^^^^^^^^^^^^^
-..
- image:: images/ubuntu_installer00.png
-
-..
- image:: images/ubuntu_installer01.png
-
 .. image:: images/client_setting_linux/linux_install1.png
 
 (2) インストール先の選択
@@ -133,6 +127,8 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
 6. 起動/終了と設定ファイル
 --------------------------
+
+ 展開したディレクトリ下の linux_x64/bin/Qt Brynhildr を実行すると起動します。
 
 * 設定ファイル
 

@@ -26,7 +26,7 @@
 (1) 言語の選択
 ^^^^^^^^^^^^^^
 
-「日本語」もしくは「英語」を選択します。
+「日本語」もしくは「English」を選択します。
 
 .. image:: images/client_setting_windows/WS000000.jpg
 
@@ -65,6 +65,8 @@
 
 (8) セットアップウィザードの完了
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ ReadMe.txtを表示するか、すぐにQt Brynhildrを実行するかのチェックを確認してセットアップウィザードを完了します。
+
 .. image:: images/client_setting_windows/WS000007.jpg
 
 3. アンインストール

@@ -16,7 +16,7 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  Windows版ではランタイムライブラリパッケージが必要な場合があります。
 
- Microsoft, 窓の杜 <https://forest.watch.impress.co.jp/> などから入手できます。
+ Microsoftのサイト, 窓の杜 <https://forest.watch.impress.co.jp/> などから入手できます。
 
 2. インストール
 ---------------

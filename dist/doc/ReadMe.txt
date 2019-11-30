@@ -727,7 +727,8 @@ serverName6=
 serverName7=
 serverName8=
 serverName9=
-geometry=@ByteArray(xxxxx)
+windowPos=@Point(200 200)
+windowSize=@Size(800 600)
 windowState=@ByteArray(xxxxx)
 ------------------- ここまで -------------------
 

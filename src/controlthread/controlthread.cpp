@@ -239,6 +239,35 @@ PROCESS_RESULT ControlThread::processForHeader()
 	//	cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
 	settings->setDesktopWidth(com_data->server_cx);
 	settings->setDesktopHeight(com_data->server_cy);
+#if 0 // for TEST
+	// check desktop size
+	if (!doneCheckPassword){
+	  // cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
+	  // cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
+	  // cout << "[ControlThread] screen width  = " << settings->getDesktop()->getCurrentScreen().width() << endl;
+	  // cout << "[ControlThread] screen height = " << settings->getDesktop()->getCurrentScreen().height() << endl;
+	  int server_width = com_data->server_cx * settings->getDesktopScalingFactor();
+	  int server_height = com_data->server_cy * settings->getDesktopScalingFactor();
+	  int client_width = settings->getDesktop()->getCurrentScreen().width();
+	  int client_height = settings->getDesktop()->getCurrentScreen().height();
+
+	  // for TEST
+	  //	  client_width = 1024;
+	  //	  client_height = 768;
+	  client_width *= 0.95;
+	  client_height *= 0.95;
+
+	  if (server_width >= client_width ||
+		  server_height >= client_height){
+		// auto scale down
+		qreal sf_width = client_width/(qreal)server_width;
+		qreal sf_height = client_height/(qreal)server_height;
+		qreal sf = sf_width < sf_height ? sf_width : sf_height;
+		settings->setDesktopScalingFactor(sf);
+	  }
+	}
+#endif // 0 // for TEST
+
 	// checked password
 	doneCheckPassword = true;
 

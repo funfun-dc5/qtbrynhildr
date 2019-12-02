@@ -453,7 +453,7 @@ case $UNAME in
 		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtmedia_pulse.so ${DISTDIR}/bin/audio
 #		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtaudio_alsa.so ${DISTDIR}/plugins/audio
 		# std c++ library
-		${INSTALL} ${INSTALLDLLFLAGS} /lib/x86_64-linux-gnu/libstdc++.so.6 ${DISTDIR}/bin
+		${INSTALL} ${INSTALLDLLFLAGS} /usr/lib/${UNAMEM}-linux-gnu/libstdc++.so.6 ${DISTDIR}/bin
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin

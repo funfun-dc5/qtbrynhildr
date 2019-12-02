@@ -98,6 +98,53 @@
 ----------------------------------------------------------------------
 1-2. インストール (Linux版)
 ----------------------------------------------------------------------
+==================================
+[インストール] (Qt5ファイル同梱版)
+==================================
+ (1) 自己解凍ファイルを実行してパッケージを展開します。
+
+ 例)
+
+  chmod 500 ./QtBrynhildr-linux_x64-v100.run
+  ./QtBrynhildr-linux_x64-v100.run
+
+ (2) 環境変数 QTB_HOME を設定します。
+
+  例えば、bashの場合以下のように起動スクリプト "Qt Brynhildr.sh" のあるディレクトリを
+  フルパスで指定します。
+
+  export QTB_HOME=/home/funfun/tool/linux_x64/bin
+
+  .bashrcなどに書いておくと毎回設定せずに済むので便利です。
+
+ (3) 起動確認します。
+
+ [64bit]
+ linux_x64/bin/QtBrynhildr.sh
+
+ [32bit]
+ linux_x86/bin/QtBrynhildr.sh
+
+ (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
+     ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
+
+  例えばlibglu1-mesaなどが必要かもしれません。以下のようにインストールしてください。
+
+  [Ubuntuの場合]
+
+  sudo apt-get install libglu1-mesa
+
+  [エラーメッセージの例]
+  QtBrynhildr: error while loading shared libraries: libGL.so.1: cannot open shared object file: No such file or directory
+
+  [CentOSの場合]
+
+  EPELリポジトリを追加(sudo yum install epel-release)して以下のパッケージを
+  インストールしてください。
+
+  sudo yum install libqtxdg-qt5
+  sudo yum install qt5-qtmultimedia
+
 ==============================
 [インストール]
 ==============================
@@ -977,6 +1024,10 @@ Microsoftのサイト, 窓の杜 <https://forest.watch.impress.co.jp/> などか
 Ver.2.1.0 : 2019/xx/xx
             [新規機能]
              ・Android版の正式サポート
+
+Ver.2.0.26: 2019/12/xx
+            [その他変更]
+             ・Linux版パッケージにQt5のファイルを同梱するように変更
 
 Ver.2.0.25: 2019/11/29
             [不具合修正]

@@ -101,6 +101,7 @@
 ==================================
 [インストール] (Qt5ファイル同梱版)
 ==================================
+
  (1) 自己解凍ファイルを実行してパッケージを展開します。
 
  例)
@@ -110,10 +111,10 @@
 
  (2) 環境変数 QTB_HOME を設定します。
 
-  例えば、bashの場合以下のように起動スクリプト "Qt Brynhildr.sh" のあるディレクトリを
+  例えば、bashの場合展開してできたディレクトリ linux_x64 を以下のように
   フルパスで指定します。
 
-  export QTB_HOME=/home/funfun/tool/linux_x64/bin
+  export QTB_HOME=/home/funfun/tool/linux_x64
 
   .bashrcなどに書いておくと毎回設定せずに済むので便利です。
 
@@ -136,14 +137,6 @@
 
   [エラーメッセージの例]
   QtBrynhildr: error while loading shared libraries: libGL.so.1: cannot open shared object file: No such file or directory
-
-  [CentOSの場合]
-
-  EPELリポジトリを追加(sudo yum install epel-release)して以下のパッケージを
-  インストールしてください。
-
-  sudo yum install libqtxdg-qt5
-  sudo yum install qt5-qtmultimedia
 
 ==============================
 [インストール]

@@ -49,9 +49,9 @@
 
  環境変数 QTB_HOME を設定します。
 
- 例えば、bashの場合以下のように起動スクリプト "Qt Brynhildr.sh" のあるディレクトリをフルパスで指定します。 ::
+ 例えば、bashの場合展開してできたディレクトリ linux_x64 を以下のようにフルパスで指定します。 ::
 
-  export QTB_HOME=/home/funfun/tool/linux_x64/bin
+  export QTB_HOME=/home/funfun/tool/linux_x64
 
  .bashrcなどに書いておくと毎回設定せずに済むので便利です。
 

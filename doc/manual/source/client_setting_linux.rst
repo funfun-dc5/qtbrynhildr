@@ -17,23 +17,25 @@
 
   funfun@ubuntu-PC-x64:~$ chmod 500 ./QtBrynhildr-linux_x64-v100.run
   funfun@ubuntu-PC-x64:~$ ./QtBrynhildr-linux_x64-v100.run
-  UnZipSFX 5.52 of 28 February 2005, by Info-ZIP (http://www.info-zip.org).
+  UnZipSFX 6.00 of 20 April 2009, by Info-ZIP (http://www.info-zip.org).
    creating: linux_x64/
-   creating: linux_x64/bin/
-  inflating: linux_x64/bin/QtBrynhildr
    creating: linux_x64/doc/
-  inflating: linux_x64/doc/LICENSE.txt
    creating: linux_x64/doc/manual/
    creating: linux_x64/doc/manual/doctrees/
-  inflating: linux_x64/doc/manual/doctrees/port_forwarding.doctree
+  inflating: linux_x64/doc/manual/doctrees/client_setting_windows.doctree
+  inflating: linux_x64/doc/manual/doctrees/acknowledgement.doctree
+  inflating: linux_x64/doc/manual/doctrees/option.doctree
 
   :
   略
   :
 
-  inflating: linux_x64/doc/manual/html/index.html
-  inflating: linux_x64/doc/manual/html/genindex.html
-  inflating: linux_x64/doc/ReadMe.txt
+  inflating: linux_x64/bin/libQt5Gui.so.5
+  inflating: linux_x64/bin/klfc
+  inflating: linux_x64/bin/libQt5Concurrent.so.5
+  inflating: linux_x64/bin/libicui18n.so.56
+  inflating: linux_x64/bin/libicudata.so.56
+  inflating: linux_x64/bin/libstdc++.so.6
 
 
 3. Qt Brynhildrのアンインストール
@@ -167,7 +169,7 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
   funfun@ubuntu-PC-x64:~$ chmod 500 ./QtBrynhildr-linux_x64-v100.run
   funfun@ubuntu-PC-x64:~$ ./QtBrynhildr-linux_x64-v100.run
-  UnZipSFX 5.52 of 28 February 2005, by Info-ZIP (http://www.info-zip.org).
+  UnZipSFX 6.00 of 20 April 2009, by Info-ZIP (http://www.info-zip.org).
    creating: linux_x64/
    creating: linux_x64/bin/
   inflating: linux_x64/bin/QtBrynhildr

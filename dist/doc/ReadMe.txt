@@ -854,7 +854,11 @@ windowState=@ByteArray(xxxxx)
 
 Windows版ではランタイムライブラリパッケージが必要な場合があります。
 
-Microsoftのサイト, 窓の杜 <https://forest.watch.impress.co.jp/> などから入手できます。
+以下のサイトなどから入手できます。
+
+ * Microsoft <https://support.microsoft.com/ja-jp/help/2977003/the-latest-supported-visual-c-downloads>
+
+ * 窓の杜 <https://forest.watch.impress.co.jp/>
 
 ----------------------------------------------------------------------
 7. メッセージダイアログについて

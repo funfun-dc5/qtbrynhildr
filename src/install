@@ -3,6 +3,8 @@ UNAME=`uname`
 UNAMEM=`uname -m`
 ARCH=x86
 PORTABLEVERSION=OFF
+# available only for LINUX
+WITHQT=OFF
 export TARGET=$1
 
 # check arg1
@@ -28,6 +30,9 @@ if [ -n "$1" ] ; then
 		ubuntu64)
 			;;
 		ubuntu)
+			;;
+		withqt)
+			WITHQT=ON
 			;;
 		*)
 			echo "Unknown argument1 : $1"
@@ -431,35 +436,38 @@ case $UNAME in
 		# create directory
 		mkdir -p ${DISTDIR}/bin
 		mkdir -p ${DISTDIR}/doc/manual
-		# for Qt dynamic link files
-		echo "copy dynamic link files..."
-		mkdir -p ${DISTDIR}/bin/platforms
-		mkdir -p ${DISTDIR}/bin/imageformats
-		mkdir -p ${DISTDIR}/bin/audio
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Core.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Gui.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Multimedia.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Network.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Widgets.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Concurrent.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5XcbQpa.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5DBus.so.5 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicui18n.so.56 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicuuc.so.56 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicudata.so.56 ${DISTDIR}/bin
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/libqxcb.so ${DISTDIR}/bin/platforms
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/libqjpeg.so ${DISTDIR}/bin/imageformats
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/libqwbmp.so ${DISTDIR}/bin/imageformats
-		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtmedia_pulse.so ${DISTDIR}/bin/audio
-#		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtaudio_alsa.so ${DISTDIR}/plugins/audio
-		# std c++ library
-		${INSTALL} ${INSTALLDLLFLAGS} /usr/lib/${UNAMEM}-linux-gnu/libstdc++.so.6 ${DISTDIR}/bin
+		# with Qt files
+		if [ "${WITHQT}" = "ON" ] ; then
+			# for Qt dynamic link files
+			echo "copy dynamic link files..."
+			mkdir -p ${DISTDIR}/bin/platforms
+			mkdir -p ${DISTDIR}/bin/imageformats
+			mkdir -p ${DISTDIR}/bin/audio
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Core.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Gui.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Multimedia.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Network.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Widgets.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Concurrent.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5XcbQpa.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5DBus.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicui18n.so.56 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicuuc.so.56 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicudata.so.56 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/libqxcb.so ${DISTDIR}/bin/platforms
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/libqjpeg.so ${DISTDIR}/bin/imageformats
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/libqwbmp.so ${DISTDIR}/bin/imageformats
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtmedia_pulse.so ${DISTDIR}/bin/audio
+			#		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtaudio_alsa.so ${DISTDIR}/plugins/audio
+			# std c++ library
+			${INSTALL} ${INSTALLDLLFLAGS} /usr/lib/${UNAMEM}-linux-gnu/libstdc++.so.6 ${DISTDIR}/bin
+			# copy boot script file
+			echo "copy boot script file..."
+			${INSTALL} -m755 "../dist/script/${APP}.sh" ${DISTDIR}/bin
+		fi
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
-		# copy boot script file
-		echo "copy boot script file..."
-		${INSTALL} -m755 "../dist/script/${APP}.sh" ${DISTDIR}/bin
 		# copy translation files for Qt
 		mkdir -p ${DISTDIR}/bin/translations
 		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations

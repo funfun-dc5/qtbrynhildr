@@ -239,9 +239,9 @@ PROCESS_RESULT ControlThread::processForHeader()
 	//	cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
 	settings->setDesktopWidth(com_data->server_cx);
 	settings->setDesktopHeight(com_data->server_cy);
-#if 0 // for TEST
+
 	// check desktop size
-	if (!doneCheckPassword){
+	if (!doneCheckPassword && settings->getDesktopScalingFactor() == 1.0){
 	  // cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
 	  // cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
 	  // cout << "[ControlThread] screen width  = " << settings->getDesktop()->getCurrentScreen().width() << endl;
@@ -251,11 +251,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	  int client_width = settings->getDesktop()->getCurrentScreen().width();
 	  int client_height = settings->getDesktop()->getCurrentScreen().height();
 
-	  // for TEST
-	  //	  client_width = 1024;
-	  //	  client_height = 768;
-	  client_width *= 0.95;
-	  client_height *= 0.95;
+	  client_width *= settings->getAutoresizeDesktopScalingFactor();
+	  client_height *= settings->getAutoresizeDesktopScalingFactor();
 
 	  if (server_width >= client_width ||
 		  server_height >= client_height){
@@ -266,7 +263,6 @@ PROCESS_RESULT ControlThread::processForHeader()
 		settings->setDesktopScalingFactor(sf);
 	  }
 	}
-#endif // 0 // for TEST
 
 	// checked password
 	doneCheckPassword = true;

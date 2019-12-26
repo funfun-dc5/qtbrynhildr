@@ -98,6 +98,46 @@
 ----------------------------------------------------------------------
 1-2. インストール (Linux版)
 ----------------------------------------------------------------------
+==================================
+[インストール] (Qt5ファイル同梱版)
+==================================
+
+ (1) 自己解凍ファイルを実行してパッケージを展開します。
+
+ 例)
+
+  chmod 500 ./QtBrynhildr-linux_x64-v100.run
+  ./QtBrynhildr-linux_x64-v100.run
+
+ (2) 環境変数 QTB_HOME を設定します。
+
+  例えば、bashの場合展開してできたディレクトリ linux_x64 を以下のように
+  フルパスで指定します。
+
+  export QTB_HOME=/home/funfun/tool/linux_x64
+
+  .bashrcなどに書いておくと毎回設定せずに済むので便利です。
+
+ (3) 起動確認します。
+
+ [64bit]
+ linux_x64/bin/QtBrynhildr.sh
+
+ [32bit]
+ linux_x86/bin/QtBrynhildr.sh
+
+ (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
+     ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
+
+  例えばlibglu1-mesaなどが必要かもしれません。以下のようにインストールしてください。
+
+  [Ubuntuの場合]
+
+  sudo apt-get install libglu1-mesa
+
+  [エラーメッセージの例]
+  QtBrynhildr: error while loading shared libraries: libGL.so.1: cannot open shared object file: No such file or directory
+
 ==============================
 [インストール]
 ==============================
@@ -814,7 +854,11 @@ windowState=@ByteArray(xxxxx)
 
 Windows版ではランタイムライブラリパッケージが必要な場合があります。
 
-Microsoftのサイト, 窓の杜 <https://forest.watch.impress.co.jp/> などから入手できます。
+以下のサイトなどから入手できます。
+
+ * Microsoft <https://support.microsoft.com/ja-jp/help/2977003/the-latest-supported-visual-c-downloads>
+
+ * 窓の杜 <https://forest.watch.impress.co.jp/>
 
 ----------------------------------------------------------------------
 7. メッセージダイアログについて
@@ -977,6 +1021,13 @@ Microsoftのサイト, 窓の杜 <https://forest.watch.impress.co.jp/> などか
 Ver.2.1.0 : 2019/xx/xx
             [新規機能]
              ・Android版の正式サポート
+
+Ver.2.0.26: 2020/01/xx
+            [その他変更]
+             ・初めて接続する時に必要ならクライアントマシンのデスクトップ内に収まるように
+　             自動でリサイズするように変更
+             ・Linux版パッケージにQt5のファイルを同梱できるように変更
+             ・Windows版に同梱しているOpenSSL DLL(1.0.2x)を1.0.2uへ更新
 
 Ver.2.0.25: 2019/11/29
             [不具合修正]

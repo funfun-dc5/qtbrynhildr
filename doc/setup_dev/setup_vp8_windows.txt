@@ -1,0 +1,50 @@
+---------------------------------------------------------------------------
+[VS2017 で x86/x64用 VP8デコード スタティックライブラリをビルドする手順]
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+[x86]
+---------------------------------------------------------------------------
+
+1) libvpx-1.4.0.tar.xz を展開
+
+  $ tar xvfJ linvpx-1.4.0.tar.xz
+
+2) libvpx-1.4.0 に入り、build ディレクトリを build_x86 としてコピー
+
+   $ cd libvpx-1.4.0
+   $ cp -r build build_x86
+
+3) build_x86 に入り、configure を実行
+
+   $ cd build_x86
+   $ ../configure --target=x86-win32-vs12 --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests
+
+4) build_x86 下に出来上がった vpx.vcxproj を Visual Studio 2017 で読み込む
+
+5) Release/Win32 でビルド
+
+6) build_x86/Win32/Release 下に出来上がった vpxmd.lib をコピー
+
+---------------------------------------------------------------------------
+[x64]
+---------------------------------------------------------------------------
+
+1) libvpx-1.4.0.tar.xz を展開
+
+  $ tar xvfJ linvpx-1.4.0.tar.xz
+
+2) libvpx-1.4.0 に入り、build ディレクトリを build_x64 としてコピー
+
+   $ cd libvpx-1.4.0
+   $ cp -r build build_x64
+
+3) build_x64 に入り、configure を実行
+
+   $ cd build_x64
+   $ ../configure --target=x86_64-win64-vs12 --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests
+
+4) build_x64 下に出来上がった vpx.vcxproj を Visual Studio 2017 で読み込む
+
+5) Release/x64 でビルド
+
+6) build_x64/x64/Release 下に出来上がった vpxmd.lib をコピー

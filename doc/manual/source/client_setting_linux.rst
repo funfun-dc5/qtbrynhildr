@@ -1,5 +1,76 @@
 .. -*- mode: rst; coding: utf-8-unix -*-
 
+クライアントのインストールと設定 (Linux版:Qt5ファイル同梱)
+==========================================================
+
+1. Qt Brynhildrのダウンロード
+------------------------------
+
+ 以下からダウンロードします。
+
+ <https://github.com/funfun-dc5/qtbrynhildr/releases>
+
+2. Qt Brynhildrのインストール
+------------------------------
+
+ 自己解凍ファイルは以下のようにして展開します。 ::
+
+  funfun@ubuntu-PC-x64:~$ chmod 500 ./QtBrynhildr-linux_x64-v100.run
+  funfun@ubuntu-PC-x64:~$ ./QtBrynhildr-linux_x64-v100.run
+  UnZipSFX 6.00 of 20 April 2009, by Info-ZIP (http://www.info-zip.org).
+   creating: linux_x64/
+   creating: linux_x64/doc/
+   creating: linux_x64/doc/manual/
+   creating: linux_x64/doc/manual/doctrees/
+  inflating: linux_x64/doc/manual/doctrees/client_setting_windows.doctree
+  inflating: linux_x64/doc/manual/doctrees/acknowledgement.doctree
+  inflating: linux_x64/doc/manual/doctrees/option.doctree
+
+  :
+  略
+  :
+
+  inflating: linux_x64/bin/libQt5Gui.so.5
+  inflating: linux_x64/bin/klfc
+  inflating: linux_x64/bin/libQt5Concurrent.so.5
+  inflating: linux_x64/bin/libicui18n.so.56
+  inflating: linux_x64/bin/libicudata.so.56
+  inflating: linux_x64/bin/libstdc++.so.6
+
+
+3. Qt Brynhildrのアンインストール
+----------------------------------
+
+ 以下のようにして展開したディレクトリと設定ファイルを含むディレクトリを手動で削除してください。 ::
+
+  funfun@ubuntu-PC-x64:~$ rm -rf ./linux_x64
+  funfun@ubuntu-PC-x64:~$ rm -rf ~/.config/mcz-xoxo
+
+4. 環境変数 QTB_HOMEの設定
+--------------------------
+
+ 環境変数 QTB_HOME を設定します。
+
+ 例えば、bashの場合展開してできたディレクトリ linux_x64 を以下のようにフルパスで指定します。 ::
+
+  export QTB_HOME=/home/funfun/tool/linux_x64
+
+ .bashrcなどに書いておくと毎回設定せずに済むので便利です。
+
+5. 起動/終了と設定ファイル
+--------------------------
+
+ 展開したディレクトリ下の linux_x64/bin/Qt Brynhildr.sh を実行すると起動します。
+
+* 設定ファイル
+
+  標準では以下のファイルに保存されます。 ::
+
+   ~/.config/mcz-xoxo/Qt Brynhildr.ini
+
+  オプションにファイル名を与えることで変更できます。
+
+
 クライアントのインストールと設定 (Linux版)
 ============================================
 
@@ -98,7 +169,7 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 
   funfun@ubuntu-PC-x64:~$ chmod 500 ./QtBrynhildr-linux_x64-v100.run
   funfun@ubuntu-PC-x64:~$ ./QtBrynhildr-linux_x64-v100.run
-  UnZipSFX 5.52 of 28 February 2005, by Info-ZIP (http://www.info-zip.org).
+  UnZipSFX 6.00 of 20 April 2009, by Info-ZIP (http://www.info-zip.org).
    creating: linux_x64/
    creating: linux_x64/bin/
   inflating: linux_x64/bin/QtBrynhildr

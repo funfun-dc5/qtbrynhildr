@@ -6,6 +6,7 @@
 
 // version
 #define QTB_VERSION				"2.0.25"
+
 #define QTB_RCNAME				"-branch-autoresize"
 #define QTB_VERSION_NUMBER		2025
 

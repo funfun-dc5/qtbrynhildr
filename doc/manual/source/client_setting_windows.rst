@@ -15,8 +15,11 @@
 (2) Visual C++ Redistributable のダウンロード
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  Windows版ではランタイムライブラリパッケージが必要な場合があります。
+ 以下のサイトなどから入手できます。
 
- Microsoftのサイト, 窓の杜 <https://forest.watch.impress.co.jp/> などから入手できます。
+  * Microsoft <https://support.microsoft.com/ja-jp/help/2977003/the-latest-supported-visual-c-downloads>
+
+  * 窓の杜 <https://forest.watch.impress.co.jp/>
 
 2. インストール
 ---------------

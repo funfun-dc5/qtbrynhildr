@@ -46,6 +46,7 @@ case $UNAME in
 		if [ "$1" = "" ] ; then
 			mingw32-make clean
 			# delete executable file
+			rm -f "${APP}.exe"
 			rm -f "release/${APP}.exe" "debug/${APP}.exe"
 			rm -f "release/${APP}.exp" "debug/${APP}.exp"
 			rm -f "release/${APP}.lib" "debug/${APP}.lib"

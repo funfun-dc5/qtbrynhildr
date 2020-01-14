@@ -43,9 +43,7 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
   ,onShiftKey(false)
   ,onFullScreen(false)
   ,drawMarkerCounter(0)
-#if defined(Q_OS_OSX)
   ,previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP)
-#endif // defined(Q_OS_OSX)
   ,widthMargin(0)
   ,heightMargin(0)
   ,keyboardLogFile(0)
@@ -672,10 +670,8 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	  onShiftKey = true;
 	}
 
-#if defined(Q_OS_OSX)
-  // set previous KEYCODE_FLG
-  previous_KEYCODE_FLG = KEYCODE_FLG_KEYDOWN;
-#endif // defined(Q_OS_OSX)
+	// set previous KEYCODE_FLG
+	previous_KEYCODE_FLG = KEYCODE_FLG_KEYDOWN;
   }
 }
 
@@ -719,14 +715,15 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
-#if defined(Q_OS_OSX)
 	// check previous KEYCODE_FLG
 	if (previous_KEYCODE_FLG == KEYCODE_FLG_KEYUP){
 	  // check VK_TAB and VK_SPACE(Eisu and Kana)
 	  switch(VK_Code){
+#if defined(Q_OS_OSX)
 	  case VK_SPACE:
 		VK_Code = VK_KANJI;
 		// Fall Through
+#endif // defined(Q_OS_OSX)
 	  case VK_TAB:
 		keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
 		break;
@@ -735,7 +732,6 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 		break;
 	  }
 	}
-#endif // defined(Q_OS_OSX)
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYUP);
 
@@ -756,10 +752,8 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 	  }
 	}
 
-#if defined(Q_OS_OSX)
 	// set previous KEYCODE_FLG
 	previous_KEYCODE_FLG = KEYCODE_FLG_KEYUP;
-#endif // defined(Q_OS_OSX)
   }
 }
 
@@ -878,6 +872,7 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYDOWN);
 		return true;
 		break;
+		//	  case VK_TAB:
 	  case VK_CONVERT:
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
@@ -899,6 +894,7 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYUP);
 		return true;
 		break;
+		//	  case VK_TAB:
 	  case VK_CONVERT:
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
@@ -1026,13 +1022,13 @@ qreal DesktopPanel::getDesktopScalingFactor(QSize size)
 	}
 #if defined(Q_OS_WIN)
 	else {
-	  // Internal Error: Unkown State
+	  // Internal Error: Unknown State
 	  ABORT();
 	}
 #elif defined(Q_OS_FREEBSD)
 	else {
 	  // Yet
-	  // Internal Error: Unkown State
+	  // Internal Error: Unknown State
 	  ABORT();
 	}
 #elif defined(Q_OS_LINUX)
@@ -1064,7 +1060,7 @@ qreal DesktopPanel::getDesktopScalingFactor(QSize size)
 #elif  defined(Q_OS_OSX)
 	else {
 	  // Darwin
-	  // Internal Error: Unkown State
+	  // Internal Error: Unknown State
 	  ABORT();
 	}
 #endif

@@ -62,6 +62,8 @@ case $UNAME in
 		case $UNAMEM in
 			x86_64)
 				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/gcc_64
+				# Coverity Scan
+				PATHLIST=/opt/cov-analysis-linux64-2019.03/bin:${PATHLIST}
 				;;
 			i686)
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
@@ -94,6 +96,8 @@ case $UNAME in
 		case $UNAMEM in
 			x86_64)
 				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/clang_64
+				# Coverity Scan
+				PATHLIST=/opt/cov-analysis-macosx-2019.03/bin:${PATHLIST}
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

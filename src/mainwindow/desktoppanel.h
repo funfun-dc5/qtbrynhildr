@@ -83,10 +83,8 @@ protected:
   // draw marker counter
   int drawMarkerCounter;
 
-#if defined(Q_OS_OSX)
   // previous KEYCODE_FLG
   KEYCODE_FLG previous_KEYCODE_FLG;
-#endif // defined(Q_OS_OSX)
 
   // margins
   int widthMargin;

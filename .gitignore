@@ -41,11 +41,12 @@ Makefile
 build-*/
 *.pro.user
 src/.qmake.*
+src/object_script.*
 # for windows
 *.exe
 *.dll
 # for unix
 *.o
 *.a
-# for testing
+# for test
 *.qtbf

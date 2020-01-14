@@ -20,7 +20,7 @@ FORMS += GUI/log_view_dialog.ui
 CONFIG += c++11
 
 # for DEBUG
-CONFIG += console
+#CONFIG += console
 
 # for check spec
 # message($$QMAKESPEC)
@@ -77,6 +77,7 @@ DEFINES += __SSE4_1__
 
 # for MinGW
 win32-g++ {
+CONFIG += console
 #LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
 # SIMD (INTEL:gcc/clang)

@@ -1022,13 +1022,13 @@ qreal DesktopPanel::getDesktopScalingFactor(QSize size)
 	}
 #if defined(Q_OS_WIN)
 	else {
-	  // Internal Error: Unkown State
+	  // Internal Error: Unknown State
 	  ABORT();
 	}
 #elif defined(Q_OS_FREEBSD)
 	else {
 	  // Yet
-	  // Internal Error: Unkown State
+	  // Internal Error: Unknown State
 	  ABORT();
 	}
 #elif defined(Q_OS_LINUX)
@@ -1060,7 +1060,7 @@ qreal DesktopPanel::getDesktopScalingFactor(QSize size)
 #elif  defined(Q_OS_OSX)
 	else {
 	  // Darwin
-	  // Internal Error: Unkown State
+	  // Internal Error: Unknown State
 	  ABORT();
 	}
 #endif

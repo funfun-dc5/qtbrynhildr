@@ -165,7 +165,7 @@ void NetThread::run()
 	  if (result_process == PROCESS_UNKNOWN_ERROR){
 		// error
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " Unkown Error: processForHeader()" << endl << flush; // error
+		  cout << "[" << name << "]" << " Unknown Error: processForHeader()" << endl << flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);

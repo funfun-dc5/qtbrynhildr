@@ -20,7 +20,7 @@ FORMS += GUI/log_view_dialog.ui
 CONFIG += c++11
 
 # for DEBUG
-#CONFIG += console
+CONFIG += console
 
 # for check spec
 # message($$QMAKESPEC)

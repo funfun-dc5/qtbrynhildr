@@ -560,6 +560,9 @@ private:
 #if QTB_BENCHMARK
   // initial phase counter for benchmark
   int initialBenchmarkPhaseCounter;
+
+  // display benchmark menu
+  bool onBenchmarkMenu;
 #endif // QTB_BENCHMARK
 
   // output log flag

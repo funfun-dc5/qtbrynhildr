@@ -41,6 +41,7 @@ Option::Option(int argc, char *argv[])
   ,bootupFlag(false)
   ,shutdownFlag(false)
   ,testModeFlag(false)
+  ,benchmarkFlag(false)
 {
   // analysis options
   if (analyzeOptions(argc, argv)){
@@ -262,6 +263,11 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  else if (strncmp("testmode", optionName, sizeof("testmode")) == 0){
 		testModeFlag = true;
 	  }
+#if QTB_BENCHMARK
+	  else if (strncmp("benchmark", optionName, sizeof("benchmark")) == 0){
+		benchmarkFlag = true;
+	  }
+#endif // QTB_BENCHMARK
 	  else {
 		cout << "unknown option : " << argv[1] << endl << flush;
 		shutdownFlag = true;

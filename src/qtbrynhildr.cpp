@@ -274,6 +274,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onCheckUpdateInBackground(false)
 #if QTB_BENCHMARK
   ,initialBenchmarkPhaseCounter(0)
+  ,onBenchmarkMenu(false)
 #endif // QTB_BENCHMARK
   // for DEBUG
   ,outputLog(false)
@@ -355,6 +356,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	// nothing to do -> shutdown now
 	return;
   }
+
+#if QTB_BENCHMARK
+  // benchmark flag
+  onBenchmarkMenu = option->getBenchmarkFlag();
+#endif // QTB_BENCHMARK
 
   // create setting
 #if QTB_CRYPTOGRAM
@@ -2083,32 +2089,34 @@ void QtBrynhildr::createActions()
   connect(disableMaxfps_Action, SIGNAL(triggered()), this, SLOT(disableMaxfps()));
 
 #if QTB_BENCHMARK
-  // select phase for benchmark
-  selectBenchmarkPhase0_Action = new QAction(tr("Select Phase 0"), this);
-  selectBenchmarkPhase0_Action->setStatusTip(tr("Select Phase 0"));
-  selectBenchmarkPhase0_Action->setEnabled(false);
-  selectBenchmarkPhase0_Action->setCheckable(false);
-  connect(selectBenchmarkPhase0_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase0()));
-  selectBenchmarkPhase1_Action = new QAction(tr("Select Phase 1"), this);
-  selectBenchmarkPhase1_Action->setStatusTip(tr("Select Phase 1"));
-  selectBenchmarkPhase1_Action->setEnabled(false);
-  selectBenchmarkPhase1_Action->setCheckable(false);
-  connect(selectBenchmarkPhase1_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase1()));
-  selectBenchmarkPhase2_Action = new QAction(tr("Select Phase 2"), this);
-  selectBenchmarkPhase2_Action->setStatusTip(tr("Select Phase 2"));
-  selectBenchmarkPhase2_Action->setEnabled(false);
-  selectBenchmarkPhase2_Action->setCheckable(false);
-  connect(selectBenchmarkPhase2_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase2()));
-  selectBenchmarkPhase3_Action = new QAction(tr("Select Phase 3"), this);
-  selectBenchmarkPhase3_Action->setStatusTip(tr("Select Phase 3"));
-  selectBenchmarkPhase3_Action->setEnabled(false);
-  selectBenchmarkPhase3_Action->setCheckable(false);
-  connect(selectBenchmarkPhase3_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase3()));
-  selectBenchmarkPhase4_Action = new QAction(tr("Select Phase 4"), this);
-  selectBenchmarkPhase4_Action->setStatusTip(tr("Select Phase 4"));
-  selectBenchmarkPhase4_Action->setEnabled(false);
-  selectBenchmarkPhase4_Action->setCheckable(false);
-  connect(selectBenchmarkPhase4_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase4()));
+  if (onBenchmarkMenu){
+	// select phase for benchmark
+	selectBenchmarkPhase0_Action = new QAction(tr("Select Phase 0"), this);
+	selectBenchmarkPhase0_Action->setStatusTip(tr("Select Phase 0"));
+	selectBenchmarkPhase0_Action->setEnabled(false);
+	selectBenchmarkPhase0_Action->setCheckable(false);
+	connect(selectBenchmarkPhase0_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase0()));
+	selectBenchmarkPhase1_Action = new QAction(tr("Select Phase 1"), this);
+	selectBenchmarkPhase1_Action->setStatusTip(tr("Select Phase 1"));
+	selectBenchmarkPhase1_Action->setEnabled(false);
+	selectBenchmarkPhase1_Action->setCheckable(false);
+	connect(selectBenchmarkPhase1_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase1()));
+	selectBenchmarkPhase2_Action = new QAction(tr("Select Phase 2"), this);
+	selectBenchmarkPhase2_Action->setStatusTip(tr("Select Phase 2"));
+	selectBenchmarkPhase2_Action->setEnabled(false);
+	selectBenchmarkPhase2_Action->setCheckable(false);
+	connect(selectBenchmarkPhase2_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase2()));
+	selectBenchmarkPhase3_Action = new QAction(tr("Select Phase 3"), this);
+	selectBenchmarkPhase3_Action->setStatusTip(tr("Select Phase 3"));
+	selectBenchmarkPhase3_Action->setEnabled(false);
+	selectBenchmarkPhase3_Action->setCheckable(false);
+	connect(selectBenchmarkPhase3_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase3()));
+	selectBenchmarkPhase4_Action = new QAction(tr("Select Phase 4"), this);
+	selectBenchmarkPhase4_Action->setStatusTip(tr("Select Phase 4"));
+	selectBenchmarkPhase4_Action->setEnabled(false);
+	selectBenchmarkPhase4_Action->setCheckable(false);
+	connect(selectBenchmarkPhase4_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase4()));
+  }
 #endif // QTB_BENCHMARK
 }
 
@@ -2356,16 +2364,18 @@ void QtBrynhildr::createMenus()
   }
 
 #if QTB_BENCHMARK
-  // benchmark menu
-  benchmarkMenu = menuBar()->addMenu(tr("Benchmark"));
-  benchmarkMenu->addAction(selectBenchmarkPhase0_Action);
-  benchmarkMenu->addAction(selectBenchmarkPhase1_Action);
-  benchmarkMenu->addAction(selectBenchmarkPhase2_Action);
-  benchmarkMenu->addAction(selectBenchmarkPhase3_Action);
-  benchmarkMenu->addAction(selectBenchmarkPhase4_Action);
+  if (onBenchmarkMenu){
+	// benchmark menu
+	benchmarkMenu = menuBar()->addMenu(tr("Benchmark"));
+	benchmarkMenu->addAction(selectBenchmarkPhase0_Action);
+	benchmarkMenu->addAction(selectBenchmarkPhase1_Action);
+	benchmarkMenu->addAction(selectBenchmarkPhase2_Action);
+	benchmarkMenu->addAction(selectBenchmarkPhase3_Action);
+	benchmarkMenu->addAction(selectBenchmarkPhase4_Action);
 
-  // refresh benchmark menu
-  refreshBenchmarkMenu();
+	// refresh benchmark menu
+	refreshBenchmarkMenu();
+  }
 #endif // QTB_BENCHMARK
 }
 
@@ -3667,8 +3677,10 @@ void QtBrynhildr::refreshPublicMode()
 	menuBar()->setCursor(Qt::ArrowCursor);
   }
 #if QTB_BENCHMARK
-  // refresh benchmark menu
-  refreshBenchmarkMenu();
+  if (onBenchmarkMenu){
+	// refresh benchmark menu
+	refreshBenchmarkMenu();
+  }
 #endif // QTB_BENCHMARK
 }
 

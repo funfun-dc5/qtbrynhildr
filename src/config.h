@@ -131,7 +131,7 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_TEST_CODE				0
 
 // benchmark
-#define QTB_BENCHMARK				0
+#define QTB_BENCHMARK				1
 
 // debug
 #define QTB_DEBUG					1

@@ -73,6 +73,9 @@ private:
   // test mode flag
   bool testModeFlag;
 
+  // benchmark mode flag
+  bool benchmarkFlag;
+
   //-------------------------------------------------------------------------------
   // Function
   //-------------------------------------------------------------------------------
@@ -155,6 +158,12 @@ public:
   bool getTestModeFlag() const
   {
 	return testModeFlag;
+  }
+
+  // get benchmark flag
+  bool getBenchmarkFlag() const
+  {
+	return benchmarkFlag;
   }
 
   // get debug

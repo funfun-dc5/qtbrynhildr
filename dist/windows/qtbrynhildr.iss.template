@@ -6,7 +6,7 @@
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "2.0.25"
-#define RCName "-branch-benchmark"
+#define RCName "-branch-Y2020"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"
@@ -19,12 +19,15 @@ AppVerName={#Name} {#AppVer} ({#ArchName})
 DefaultGroupName={#Name} ({#ArchName})
 ;OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}-{#AppDateString}
 OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}
-DefaultDirName={pf}\{#Name}
+;; for 5.6.x
+;DefaultDirName={pf}\{#Name}
+;; for 6.0.x
+DefaultDirName={commonpf}\{#Name}
 PrivilegesRequired=admin
 UsePreviousAppDir=yes
 AppendDefaultDirName=yes
 OutputDir=.\
-TouchTime=06:21
+;;TouchTime=06:21
 %EXTOPTION%
 ; for x64 environment
 ;;ArchitecturesInstallIn64BitMode=x64
@@ -37,7 +40,7 @@ TouchTime=06:21
 ;----------------------------------------------------------------------
 VersionInfoVersion={#AppVer}
 VersionInfoDescription={#Name}をセットアップするプログラム
-AppCopyright=Copyright(C) 2019 FunFun @ mcz-xoxo, All rights reserved.
+AppCopyright=Copyright(C) 2020 FunFun @ mcz-xoxo, All rights reserved.
 SetupIconFile=..\..\src\images\qtbrynhildr48.ico
 ;ウィザードページに表示されるグラフィック（*.bmp: 164 x 314）
 ;WizardImageFile=bmp\installer_pic.bmp

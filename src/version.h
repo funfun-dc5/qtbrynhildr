@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2020 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef VERSION_H
 #define VERSION_H
@@ -7,7 +7,7 @@
 // version
 #define QTB_VERSION				"2.0.25"
 
-#define QTB_RCNAME				"-branch-benchmark"
+#define QTB_RCNAME				"-branch-Y2020"
 #define QTB_VERSION_NUMBER		2025
 
 #if __x86_64__ || __LP64__ || _WIN64
@@ -17,7 +17,7 @@
 #endif // __x86_64__ || __LP64__ || _WIN64
 
 // year
-#define QTB_YEAR		"2015-2019"
+#define QTB_YEAR		"2015-2020"
 
 // URL of blog
 #define QTB_BLOG		"<a href=\"http://mcz-xoxo.cocolog-nifty.com/blog/\">http://mcz-xoxo.cocolog-nifty.com/blog/</a>"

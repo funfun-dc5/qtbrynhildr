@@ -867,11 +867,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   connect(controlThread,
 		  SIGNAL(refreshMenu()),
 		  SLOT(refreshMenu()));
-
   connect(controlThread,
 		  SIGNAL(finished()),
 		  SLOT(finishedNetThread()));
-
   connect(controlThread,
 		  SIGNAL(exitApplication()),
 		  SLOT(exitApplication()));
@@ -884,6 +882,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   connect(controlThread,
 		  SIGNAL(changeMouseCursor(const QCursor &)),
 		  SLOT(changeMouseCursor(const QCursor &)));
+  connect(controlThread,
+		  SIGNAL(adjustWindow(const QSize &)),
+		  SLOT(adjustWindow(const QSize &)));
 
   // graphics thread
   connect(graphicsThread,
@@ -897,7 +898,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   connect(soundThread,
 		  SIGNAL(connected()),
 		  SLOT(connected()));
-
   connect(soundThread,
 		  SIGNAL(refreshWindow()),
 		  SLOT(refreshWindow()));
@@ -1173,6 +1173,19 @@ void QtBrynhildr::refreshWindow()
 
   // update status bar
   updateStatusBar();
+}
+
+// adjust window
+void QtBrynhildr::adjustWindow(const QSize &size)
+{
+  QRect desktop = settings->getDesktop()->getCurrentScreen();
+  QRect newWindow = QRect(pos(), size);
+  if (!desktop.contains(newWindow)){
+	const QPoint newPos =
+	  QPoint((settings->getDesktop()->getCurrentScreen().width() - size.width() - 64)/2,
+			 (settings->getDesktop()->getCurrentScreen().height() - size.height() - 64)/2);
+	move(newPos);
+  }
 }
 
 // refresh menu

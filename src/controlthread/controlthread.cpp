@@ -241,7 +241,8 @@ PROCESS_RESULT ControlThread::processForHeader()
 	settings->setDesktopHeight(com_data->server_cy);
 
 	// check desktop size
-	if (!doneCheckPassword && settings->getDesktopScalingFactor() == 1.0){
+	if (settings->getOnWindowAutoresize() &&
+		!doneCheckPassword && settings->getDesktopScalingFactor() == 1.0){
 	  // cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
 	  // cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
 	  // cout << "[ControlThread] screen width  = " << settings->getDesktop()->getCurrentScreen().width() << endl;
@@ -261,6 +262,10 @@ PROCESS_RESULT ControlThread::processForHeader()
 		qreal sf_height = client_height/(qreal)server_height;
 		qreal sf = sf_width < sf_height ? sf_width : sf_height;
 		settings->setDesktopScalingFactor(sf);
+
+		// adjust window position
+		QSize newWindowSize = QSize(server_width*sf, server_height*sf);
+		emit adjustWindow(newWindowSize);
 	  }
 	}
 

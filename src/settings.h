@@ -303,6 +303,10 @@ typedef enum {
 #define QTB_ONWINDOWSIZEFIXED				"onWindowSizeFixed"
 #define QTB_ONWINDOWSIZEFIXED_DEFAULT		false
 
+// for onWindowAutoresize
+#define QTB_ONWINDOWAUTORESIZE				"onWindowAutoresize"
+#define QTB_ONWINDOWAUTORESIZE_DEFAULT		true
+
 // for onFrameLessWindow
 #define QTB_ONFRAMELESSWINDOW				"onFrameLessWindow"
 #define QTB_ONFRAMELESSWINDOW_DEFAULT		false
@@ -611,6 +615,9 @@ private:
 
   // window size fixed
   volatile bool onWindowSizeFixed;
+
+  // window auto resize
+  volatile bool onWindowAutoresize;
 
   // frame less window
   volatile bool onFrameLessWindow;
@@ -1712,6 +1719,18 @@ public:
   void setOnWindowSizeFixed(bool onWindowSizeFixed)
   {
 	this->onWindowSizeFixed = onWindowSizeFixed;
+  }
+
+  // get window autoresize flag
+  bool getOnWindowAutoresize() const
+  {
+	return onWindowAutoresize;
+  }
+
+  // set window autoresize flag
+  void setOnWindowAutoresize(bool onWindowAutoresize)
+  {
+	this->onWindowAutoresize = onWindowAutoresize;
   }
 
   // get frame less window flag

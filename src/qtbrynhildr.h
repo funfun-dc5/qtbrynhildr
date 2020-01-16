@@ -637,6 +637,9 @@ public slots:
   // refresh window
   void refreshWindow();
 
+  // adjust window
+  void adjustWindow(const QSize &size);
+
   // refresh menu
   void refreshMenu();
 

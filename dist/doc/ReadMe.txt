@@ -729,6 +729,7 @@ onExitAfterReplay=false
 onStaysOnTop=false
 onDesktopScaleFixed=false
 onWindowSizeFixed=false
+onWindowAutoresize=true
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true
@@ -1030,6 +1031,9 @@ Ver.2.0.26: 2020/01/xx
             [その他変更]
              ・初めて接続する時に必要ならクライアントマシンのデスクトップ内に収まるように
 　             自動でリサイズするように変更
+
+               onWindowAutoresize=false とすることで無効にすることが可能
+
              ・Linux版パッケージにQt5のファイルを同梱できるように変更
              ・Windows版に同梱しているOpenSSL DLL(1.0.2x)を1.0.2uへ更新
              ・性能調査用の開発用オプションを追加

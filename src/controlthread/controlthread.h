@@ -240,6 +240,9 @@ private:
   QCursor createMonochromeMouseCursor(uchar *image, uchar *mask);
 
 signals:
+  // adjust window
+  void adjustWindow(const QSize &size);
+
   // refresh menu
   void refreshMenu();
 

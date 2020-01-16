@@ -241,7 +241,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 	settings->setDesktopHeight(com_data->server_cy);
 
 	// check desktop size
-	if (settings->getOnWindowAutoresize() &&
+	if (settings->getOnDesktopAutoresize() &&
 		!doneCheckPassword && settings->getDesktopScalingFactor() == 1.0){
 	  // cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
 	  // cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;

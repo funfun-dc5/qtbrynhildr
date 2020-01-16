@@ -1032,7 +1032,7 @@ Ver.2.0.26: 2020/01/xx
              ・初めて接続する時に必要ならクライアントマシンのデスクトップ内に収まるように
 　             自動でリサイズするように変更
 
-               onWindowAutoresize=false とすることで無効にすることが可能
+               onDesktopAutoresize=false とすることで無効にすることが可能
 
              ・Linux版パッケージにQt5のファイルを同梱できるように変更
              ・Windows版に同梱しているOpenSSL DLL(1.0.2x)を1.0.2uへ更新

@@ -93,7 +93,7 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   BYTE				dummy13[3];			// padding 3 bytes
   SOUND_QUALITY		sound_quality;
   BYTE				dummy14[3];			// padding 3 bytes
-  unsigned char		frame_no;			// frame number
+  char				frame_no;			// frame number
   BYTE				dummy15[3];			// padding 3 bytes
   GAMEPAD_VALUE		gamepad5;			// gamepad (Pov)
   GAMEPAD_VALUE		gamepad6;			// gamepad (Buttons)

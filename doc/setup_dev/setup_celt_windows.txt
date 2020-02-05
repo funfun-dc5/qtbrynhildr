@@ -1,12 +1,14 @@
 ---------------------------------------------------------------------------
 [VS2017 で x86/x64用 CELTスタティックライブラリをビルドする手順]
 ---------------------------------------------------------------------------
-
+---------------------------------------------------------------------------
+[x86]
+---------------------------------------------------------------------------
 1) celt-0.11.1.tar.xz を展開
 
   $ tar xvfJ celt-0.11.1.tar.xz
 
-2) celt-0.11.1に入り configure を実行 
+2) celt-0.11.1に入り configure を実行
 
   $ cd celt-0.11.1
   $ ./configure --enable-custom-modes --disable-oggtest
@@ -17,12 +19,33 @@
 
 4) libcelt に出来上がった libcelt.vcxproj を Visual Studio 2017 で読み込む
 
-5) 構成としてWin32/x64を用意
+5) 構成としてWin32を用意
 
 6) Release - Win32 でビルド
 
-7) Release - x64 でビルド
+7) libcelt/Release 下に出来上がった libcelt.lib を celt.lib としてコピー
 
-8) libcelt/Release 下に出来上がった libcelt.lib を celt.lib としてコピー
+---------------------------------------------------------------------------
+[x64]
+---------------------------------------------------------------------------
 
-9) libcelt/x64/Release 下に出来上がった libcelt.lib をcelt.lib としてコピー
+1) celt-0.11.1.tar.xz を展開
+
+  $ tar xvfJ celt-0.11.1.tar.xz
+
+2) celt-0.11.1に入り configure を実行
+
+  $ cd celt-0.11.1
+  $ ./configure --enable-custom-modes --disable-oggtest
+
+3) config.h を celt-0.11.1/libcelt にコピー
+
+ config.h を確認。VS2017の場合、マクロ VAR_ARRAYS を無効化する必要がある。
+
+4) libcelt に出来上がった libcelt.vcxproj を Visual Studio 2017 で読み込む
+
+5) 構成としてx64を用意
+
+6) Release - x64 でビルド
+
+7) libcelt/x64/Release 下に出来上がった libcelt.lib を celt.lib としてコピー

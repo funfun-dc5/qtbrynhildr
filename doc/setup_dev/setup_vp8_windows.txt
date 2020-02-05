@@ -23,7 +23,7 @@
 
 5) Release/Win32 でビルド
 
-6) build_x86/Win32/Release 下に出来上がった vpxmd.lib をコピー
+6) build_x86/Win32/Release 下に出来上がった vpxmd.lib を vpx.lib としてコピー
 
 ---------------------------------------------------------------------------
 [x64]
@@ -47,4 +47,4 @@
 
 5) Release/x64 でビルド
 
-6) build_x64/x64/Release 下に出来上がった vpxmd.lib をコピー
+6) build_x64/x64/Release 下に出来上がった vpxmd.lib を　vpx.lib としてコピー

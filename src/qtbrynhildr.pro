@@ -51,7 +51,7 @@ INCLUDEPATH += ../libs/vpx
 #LIBS += -lwsock32 -limm32 -limagehlp -lwinmm # for WinSock
 LIBS += -lws2_32 -limm32 -limagehlp -lwinmm # for WinSock2
 LIBS += -L../libs/vpx -lvpx
-LIBS += -L../libs/celt -lcelt0
+LIBS += -L../libs/celt -lcelt
 }
 
 # for MSVC
@@ -103,7 +103,7 @@ INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx
 #INCLUDEPATH += /usr/include/vpx
 #LIBS += -lvpx
-LIBS += -L../libs/celt -lcelt0
+LIBS += -L../libs/celt -lcelt
 # SIMD (INTEL:gcc/clang)
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
@@ -130,7 +130,7 @@ DESKTOP = ON
 CELT_SUPPORT = ON
 INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx
-LIBS += -L../libs/celt -lcelt0
+LIBS += -L../libs/celt -lcelt
 # SIMD (INTEL:gcc/clang)
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
@@ -148,8 +148,8 @@ DEFINES += QTB_RECORDER=0 PLATFORM_LINUX
 DESKTOP = OFF
 CELT_SUPPORT = ON
 INCLUDEPATH += ../libs/vpx
-LIBS += -L../libs/vpx -lvpx_android
-LIBS += -L../libs/celt -lcelt0_android
+LIBS += -L../libs/vpx -lvpx_android_armv7
+LIBS += -L../libs/celt -lcelt_android_armv7
 # cpufeatures library from android-ndk
 HEADERS += util/android-ndk/cpu-features.h
 SOURCES += util/android-ndk/cpu-features.c

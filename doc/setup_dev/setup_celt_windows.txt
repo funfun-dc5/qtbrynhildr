@@ -23,6 +23,6 @@
 
 7) Release - x64 でビルド
 
-8) libcelt/Release 下に出来上がった libcelt.lib をコピー
+8) libcelt/Release 下に出来上がった libcelt.lib を celt.lib としてコピー
 
-9) libcelt/x64/Release 下に出来上がった libcelt.lib をコピー
+9) libcelt/x64/Release 下に出来上がった libcelt.lib をcelt.lib としてコピー

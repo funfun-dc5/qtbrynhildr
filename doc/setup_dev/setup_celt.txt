@@ -2,7 +2,7 @@
  Setup CELT
 ---------------------------------------------------------------------------
 
-1) download CELT library v0.11.1 souce code
+1) download CELT library v0.11.1 source code
 
  http://downloads.xiph.org/releases/celt/celt-0.11.1.tar.gz
 
@@ -14,6 +14,6 @@
 
 3) copy header files and static library
 
- copy celt.h, celt_types.h and libcelt0.a to qtbrynhilr/libs/celt/
+ copy celt.h, celt_types.h and libcelt0.a(named "libcelt.a") to qtbrynhilr/libs/celt/
 
 4) build Qt Brynhildr

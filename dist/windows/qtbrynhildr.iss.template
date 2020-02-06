@@ -20,9 +20,9 @@ DefaultGroupName={#Name} ({#ArchName})
 ;OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}-{#AppDateString}
 OutputBaseFilename={#ShortName}-windows-v{#AppVerNum}{#RCName}{#BuildTool}
 ;; for 5.6.x
-;DefaultDirName={pf}\{#Name}
+DefaultDirName={pf}\{#Name}
 ;; for 6.0.x
-DefaultDirName={commonpf}\{#Name}
+;DefaultDirName={commonpf}\{#Name}
 PrivilegesRequired=admin
 UsePreviousAppDir=yes
 AppendDefaultDirName=yes

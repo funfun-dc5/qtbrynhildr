@@ -25,6 +25,10 @@ case $UNAME in
 				msvc64)
 					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2017_64"
 					;;
+				xp)
+					QTVERSION=5.6.3
+					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015"
+					;;
 				*)
 					echo "setup_qt5 : Unknown argument : $TARGET"
 					exit 1

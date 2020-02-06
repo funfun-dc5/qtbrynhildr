@@ -27,6 +27,9 @@ if [ -n "$1" ] ; then
 		msvc)
 			ARCH=x86
 			;;
+		xp)
+			ARCH=x86
+			;;
 		ubuntu64)
 			;;
 		ubuntu)
@@ -244,7 +247,7 @@ fi
 case $UNAME in
 	CYGWIN*)
 		# check
-		if [ "$TARGET" = "" -o "$TARGET" = "msvc" -o "$TARGET" = "msvc64" ] ; then
+		if [ "$TARGET" = "" -o "$TARGET" = "msvc" -o "$TARGET" = "msvc64" -o "$TARGET" = "xp" ] ; then
 			echo "Installing for windows..."
 			if [ ! -x "release/${APP}.exe" ] ; then
 				echo "NOT Found ${APP}.exe"
@@ -304,12 +307,20 @@ case $UNAME in
 			else
 			case $TARGET in
 				msvc64)
+					# OpenSSL 1.1.1x
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
 					;;
 				msvc)
+					# OpenSSL 1.1.1x
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+					;;
+				xp)
+					# OpenSSL 1.0.2x
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
 					;;
 				*)
 					echo "$0 : Not support platform."

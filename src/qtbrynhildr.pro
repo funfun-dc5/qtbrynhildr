@@ -55,7 +55,7 @@ LIBS += -L../libs/celt -lcelt
 }
 
 # for MSVC
-win32-msvc {
+win32-msvc* {
 #CELT_SUPPORT = ON
 QMAKE_CXXFLAGS += /wd4819
 QMAKE_LFLAGS += /LTCG

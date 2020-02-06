@@ -16,6 +16,9 @@ if [ -n "$1" ] ; then
 		msvc)
 			EXTOPT="msvc64"
 			;;
+		xp)
+			EXTOPT="xp"
+			;;
 		ubuntu64)
 			EXTOPT="ubuntu64"
 			;;

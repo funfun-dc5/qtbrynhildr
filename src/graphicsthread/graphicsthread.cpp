@@ -36,9 +36,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,graphicsBuffer(0)
   ,graphicsBufferSize(settings->getGraphicsBufferSize())
 #endif // QTB_TEST_CODE
-  ,frameCounter(0)
-  ,previousGetFrameRateTime(0)
-  ,totalFrameCounter(0)
   ,onDrawing(true)
 #if !QTB_TEST_CODE
   ,image(new QImage)
@@ -93,31 +90,6 @@ GraphicsThread::~GraphicsThread()
 	delete [] buffer;
 	buffer = 0;
   }
-}
-
-// get frame rate
-double GraphicsThread::getFrameRate()
-{
-#if 0 // for TEST
-  if (!settings->getOnGraphics()) return 0.0;
-#endif // 0 // for TEST
-
-  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-  double fps = 0.0;
-
-  if (previousGetFrameRateTime != 0){
-	qint64 diffMSeconds = currentTime - previousGetFrameRateTime;
-	if (diffMSeconds != 0){
-	  fps = frameCounter / ((double)diffMSeconds)*1000;
-	  //cout << "frameCounter = " << frameCounter << endl;
-	  //cout << "diffMSeconds = " << diffMSeconds << endl << flush;
-	}
-  }
-  previousGetFrameRateTime = currentTime;
-  totalFrameCounter += frameCounter;
-  frameCounter = 0;
-
-  return fps;
 }
 
 //---------------------------------------------------------------------------
@@ -236,7 +208,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
   // received 1 frame
-  frameCounter++;
+  frameCounter.countUp();
 
 #if QTB_BENCHMARK
   // check benchmark phase counter
@@ -376,10 +348,7 @@ void GraphicsThread::connectedToServer()
   counter_graphics = 0;
 
   // reset frame counter
-  frameCounter = 0;
-
-  // reset previous frame time
-  previousGetFrameRateTime = 0;
+  frameCounter.reset();
 
   NetThread::connectedToServer();
 }
@@ -388,8 +357,8 @@ void GraphicsThread::connectedToServer()
 #if defined(QTB_NET_WIN) || defined(QTB_NET_UNIX)
 void GraphicsThread::shutdownConnection()
 {
-  // reset previous frame time to Null
-  previousGetFrameRateTime = 0;
+  // reset frame counter
+  frameCounter.reset();
 
   if (sock_control != INVALID_SOCKET){
 	shutdown(sock_control, SD_BOTH);
@@ -530,11 +499,11 @@ void GraphicsThread::outputReceivedData(long receivedDataSize)
   int result;
   if (com_data->video_mode == VIDEO_MODE_MJPEG){
 	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg",
-					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter.getFrameCounter());
   }
   else { // binary
 	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.bin",
-					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter);
+					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter.getFrameCounter());
   }
   if (result > 0 && result <= QTB_MAXPATHLEN){
 	file.open(filename, ios::out | ios::binary | ios::trunc);

@@ -14,6 +14,8 @@
 #include "graphicsbuffer.h"
 #endif // QTB_TEST_CODE
 
+#include "framecounter.h"
+
 namespace qtbrynhildr {
 
 // GraphicsThread
@@ -34,13 +36,7 @@ private:
 #endif // QTB_TEST_CODE
 
   // frame counter
-  unsigned int frameCounter;
-
-  // previous get frame rate time
-  qint64 previousGetFrameRateTime;
-
-  // total frame counter
-  unsigned int totalFrameCounter;
+  FrameCounter frameCounter;
 
   // drawing flag
   bool onDrawing;
@@ -76,12 +72,15 @@ public:
   ~GraphicsThread();
 
   // get frame rate
-  double getFrameRate();
+  double getFrameRate()
+  {
+	return frameCounter.getFrameRate();
+  }
 
   // get total frame counter
   unsigned int getTotalFrameCounter() const
   {
-	return totalFrameCounter;
+	return frameCounter.getTotalFrameCounter();
   }
 
 #if QTB_TEST_CODE

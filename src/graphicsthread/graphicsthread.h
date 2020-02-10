@@ -10,11 +10,11 @@
 
 // Local Header
 #include "common/netthread.h"
+#include "framecontroler.h"
+#include "framecounter.h"
 #if QTB_TEST_CODE
 #include "graphicsbuffer.h"
 #endif // QTB_TEST_CODE
-
-#include "framecounter.h"
 
 namespace qtbrynhildr {
 
@@ -61,6 +61,9 @@ private:
   int initialBenchmarkPhaseCounter;
   int benchmarkPhaseCounter;
 #endif // QTB_BENCHMARK
+
+  // frame controler
+  FrameControler frameControler;
 
   //-------------------------------------------------------------------------------
   // Function

@@ -298,9 +298,9 @@ NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
 #HEADERS += graphicsthread/decoder.h
 HEADERS += graphicsthread/framecounter.h
-#HEADERS += graphicsthread/framecontroler.h
+HEADERS += graphicsthread/framecontroler.h
 
 #SOURCES += graphicsthread/decoder.cpp
 SOURCES += graphicsthread/framecounter.cpp
-#SOURCES += graphicsthread/framecontroler.cpp
+SOURCES += graphicsthread/framecontroler.cpp
 }

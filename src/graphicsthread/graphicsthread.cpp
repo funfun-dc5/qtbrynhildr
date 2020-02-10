@@ -260,7 +260,9 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	// clear desktop flag clear
 	onClearDesktop = false;
 
-	draw_Graphics(receivedDataSize);
+	if (frameControler.adjust()){
+	  draw_Graphics(receivedDataSize);
+	}
   }
   else {
 	// clear desktop only at once
@@ -274,6 +276,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   printTimeInfo("emit draw");
 #endif // TEST_THREAD
 
+#if 0 // NG
   // frame rate control
   if (QTB_DESKTOP_FRAMERATE_CONTROL){
 	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -290,6 +293,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  //cout << "sleepTime = 0" << endl << flush;
 	}
   }
+#endif // 0 // NG
 
 #if TEST_THREAD
   printTimeInfo("frame controled");

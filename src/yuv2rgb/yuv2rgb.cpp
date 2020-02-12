@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2018-2020 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -16,6 +16,7 @@
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 // Local Header
+#include "graphicsthread/bitmap.h"
 #include "yuv2rgb.h"
 
 namespace qtbrynhildr {
@@ -40,6 +41,11 @@ uchar *y2topOrg = 0;
 uchar *u2topOrg = 0;
 uchar *v2topOrg = 0;
 
+#if QTB_LOAD_BITMAP
+Aligned(16) uchar *bmp = 0;
+BITMAPFILEHEADER *bfHeader = 0;
+BITMAPINFOHEADER *biHeader = 0;
+#endif // QTB_LOAD_BITMAP
 Aligned(16) uchar *rgb = 0;
 
 // codec context
@@ -80,10 +86,44 @@ bool setup()
 
   int size = width * height;
   rgbImageSize = size * IMAGE_FORMAT_SIZE;
+#if QTB_LOAD_BITMAP
+  if (sizeof(BITMAPFILEHEADER) != 14 ||
+	  sizeof(BITMAPINFOHEADER) != 40){
+	return false;
+  }
+  int headerSize = 64; // sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + 10 (16 bytes padding)
+  if (bmp != 0){
+	delete [] bmp;
+  }
+  bmp = new uchar[headerSize + rgbImageSize];
+  rgb = bmp + headerSize; // rgb image top address
+  bfHeader = (BITMAPFILEHEADER*)bmp;
+  biHeader = (BITMAPINFOHEADER*)(bmp + sizeof(BITMAPFILEHEADER));
+  // initialize BITMAPFILEHEADER
+  bfHeader->bfType[0] = 'B';
+  bfHeader->bfType[1] = 'M';
+  bfHeader->bfSize = rgbImageSize + headerSize;
+  bfHeader->bfReserved1 = 0;
+  bfHeader->bfReserved2 = 0;
+  bfHeader->bfOffBits = 64;
+  // initialize BITMAPINFOHEADER
+  biHeader->biSize = BI_SIZE;
+  biHeader->biWidth = width;
+  biHeader->biHeight = height;
+  biHeader->biPlanes = 1;
+  biHeader->biBitCount = 32;
+  biHeader->biCompression = BI_RGB;
+  biHeader->biSizeImage = rgbImageSize;
+  biHeader->biXPixPerMeter = 0;
+  biHeader->biYPixPerMeter = 0;
+  biHeader->biClrUsed = 0;
+  biHeader->biCirImportant = 0;
+#else // QTB_LOAD_BITMAP
   if (rgb != 0){
 	delete [] rgb;
   }
   rgb = new uchar[rgbImageSize];
+#endif // QTB_LOAD_BITMAP
   memset(rgb, 0, rgbImageSize);
   for(int i = 3; i < rgbImageSize; i += 4){
 	rgb[i] = 0xff;
@@ -102,7 +142,9 @@ bool setup()
   v2topOrg = u2topOrg + size / 4;
   yuv = yuv1;
   uvNext = width / 2;
+#if !QTB_LOAD_BITMAP
   rgbNext = - width * IMAGE_FORMAT_SIZE * 2;
+#endif // !QTB_LOAD_BITMAP
 
   return true;
 }
@@ -181,7 +223,11 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   }
 
   // number of thread 1 or 2 or 4
+#if QTB_LOAD_BITMAP
+  uchar *rgbtop = rgb;
+#else // QTB_LOAD_BITMAP
   uchar *rgbtop = rgb + width * (height - 1) * IMAGE_FORMAT_SIZE;
+#endif // QTB_LOAD_BITMAP
   uchar *ytop;
   uchar *utop;
   uchar *vtop;
@@ -203,36 +249,46 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	QFuture<void> f1, f2, f3;
 
 	int linesOfThread = height / numOfThread;
+#if QTB_LOAD_BITMAP
+	int rgbtopNextThread = width * linesOfThread * IMAGE_FORMAT_SIZE;
+#else // QTB_LOAD_BITMAP
+	int rgbtopNextThread = - (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+#endif // QTB_LOAD_BITMAP
+	int ytopNextThread = width * linesOfThread;
+	int uvtopNextThread = uvNext * linesOfThread/2;
 
 	// start 1st thread
 	f1 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
 
 	if (numOfThread >= 3){
 	  // for next thread
-	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
-	  ytop += width * linesOfThread;
-	  utop += uvNext * linesOfThread/2;
-	  vtop += uvNext * linesOfThread/2;
+	  //rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	  rgbtop += rgbtopNextThread;
+	  ytop += ytopNextThread;
+	  utop += uvtopNextThread;
+	  vtop += uvtopNextThread;
 
 	  // start 2nd thread
 	  f2 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
 	}
 	if (numOfThread >= 4){
 	  // for next thread
-	  rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
-	  ytop += width * linesOfThread;
-	  utop += uvNext * linesOfThread/2;
-	  vtop += uvNext * linesOfThread/2;
+	  //rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	  rgbtop += rgbtopNextThread;
+	  ytop += ytopNextThread;
+	  utop += uvtopNextThread;
+	  vtop += uvtopNextThread;
 
 	  // start 3rd thread
 	  f3 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
 	}
 
 	// start last thread
-	rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
-	ytop += width * linesOfThread;
-	utop += uvNext * linesOfThread/2;
-	vtop += uvNext * linesOfThread/2;
+	//rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+	rgbtop += rgbtopNextThread;
+	ytop += ytopNextThread;
+	utop += uvtopNextThread;
+	vtop += uvtopNextThread;
 	(*convert)(ytop, utop, vtop, rgbtop, linesOfThread);
 
 	// wait for all threads finished

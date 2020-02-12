@@ -127,6 +127,9 @@ const bool QTB_IN_TESTING				= false;
 // SIMD instruction support
 #define QTB_SIMD_SUPPORT			1
 
+// LOAD BITMAP
+#define QTB_LOAD_BITMAP				1
+
 // TEST CODE
 #define QTB_TEST_CODE				0
 

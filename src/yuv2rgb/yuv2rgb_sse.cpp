@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2018-2020 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -77,6 +77,7 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
   Aligned(16) int ya[4] = {  0,   0,   0,   0};
   Aligned(16) int ua[4] = {  0,   0,   0,   0};
   Aligned(16) int va[4] = {  0,   0,   0,   0};
+
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -404,7 +405,9 @@ void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, 
 		yptop += 2;
 	  }
 	}
+#if !QTB_LOAD_BITMAP
 	rgbtop += rgbNext;
+#endif // !QTB_LOAD_BITMAP
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;

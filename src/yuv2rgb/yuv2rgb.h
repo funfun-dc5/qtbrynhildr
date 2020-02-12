@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2018-2020 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef YUV2RGB_H
 #define YUV2RGB_H
@@ -42,7 +42,9 @@ extern int width;
 extern int height;
 extern int imageSize;
 extern int uvNext;
+#if !QTB_LOAD_BITMAP
 extern int rgbNext;
+#endif // !QTB_LOAD_BITMAP
 
 extern uchar *yuv;
 extern uchar *yuv1;
@@ -54,6 +56,9 @@ extern uchar *y2topOrg;
 extern uchar *u2topOrg;
 extern uchar *v2topOrg;
 
+#if QTB_LOAD_BITMAP
+extern uchar *bmp;
+#endif // QTB_LOAD_BITMAP
 extern uchar *rgb;
 
 // codec context

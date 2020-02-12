@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2020 FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef GRAPHICSTHREAD_H
 #define GRAPHICSTHREAD_H
@@ -10,6 +10,12 @@
 
 // Local Header
 #include "common/netthread.h"
+#if 0 // for TEST
+#include "decoder.h"
+#include "decoder_jpeg.h"
+#include "decoder_vp8_cpp.h"
+#include "decoder_vp8_sse.h"
+#endif // 0 // for TEST
 #include "framecontroler.h"
 #include "framecounter.h"
 #if QTB_TEST_CODE
@@ -64,6 +70,11 @@ private:
 
   // frame controler
   FrameControler frameControler;
+
+#if 0 // for TEST
+  // current decoder
+  Decoder *decoder;
+#endif // 0 // for TEST
 
   //-------------------------------------------------------------------------------
   // Function

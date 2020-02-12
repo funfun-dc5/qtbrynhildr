@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2018-2020 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -284,7 +284,9 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 #endif // for TEST
 	  }
 	}
+#if !QTB_LOAD_BITMAP
 	rgbtop += rgbNext;
+#endif // !QTB_LOAD_BITMAP
 	if (yPos & 0x1){
 	  utop += uvNext;
 	  vtop += uvNext;

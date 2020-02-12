@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015-2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2015-2020 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -20,6 +20,9 @@
 #include "util/cpuinfo.h"
 #include "yuv2rgb/yuv2rgb.h"
 #endif // !QTB_TEST_CODE
+
+// for TEST
+#include "bitmap.h"
 
 // for TEST
 #define TEST_THREAD		0
@@ -49,6 +52,9 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,initialBenchmarkPhaseCounter(20)
   ,benchmarkPhaseCounter(0)
 #endif // QTB_BENCHMARK
+#if 0 // for TEST
+  ,decoder(new DecoderVP8SSE)
+#endif // 0 // for TEST
 {
   //outputLog = true; // for DEBUG
 
@@ -71,6 +77,10 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
 #endif // !QTB_TEST_CODE
+
+  cout << "sizeof(BITMAPFILEHEADER) = " << sizeof(BITMAPFILEHEADER) << endl << flush;
+  cout << "sizeof(BITMAPINFOHEADER) = " << sizeof(BITMAPINFOHEADER) << endl << flush;
+  cout << "sizeof(RGBQUAD) = " << sizeof(RGBQUAD) << endl << flush;
 }
 
 // destructor
@@ -209,6 +219,16 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
   // received 1 frame
   frameCounter.countUp();
+
+#if 0 // for TEST
+  {
+	decoder->preprocess(buffer, receivedDataSize);
+	QImage *image;
+	image = decoder->getDesktopImage();
+	if (image == nullptr)
+	  cout << "DECODER: " << decoder->name() << endl << flush;
+  }
+#endif // 0 // for TEST
 
 #if QTB_BENCHMARK
   // check benchmark phase counter
@@ -431,7 +451,7 @@ inline bool GraphicsThread::draw_Graphics_MJPEG(int size)
 {
   bool result = false;
 
-  // load a JPEG data to desktop
+  // load a JPEG data to QImage
   result = image->loadFromData((const uchar *)buffer,
 							   (uint)size,
 							   "JPEG");
@@ -464,6 +484,7 @@ inline bool GraphicsThread::draw_Graphics_COMPRESS(int size)
 #else // QTB_SIMD_SUPPORT
   rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
 #endif // QTB_SIMD_SUPPORT
+
   //  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
 
 #if QTB_BENCHMARK
@@ -475,12 +496,35 @@ inline bool GraphicsThread::draw_Graphics_COMPRESS(int size)
 #endif // QTB_BENCHMARK
 
   if (rgbImageSize != 0){
+#if 0 // for TEST
+	{
+	  static bool flag = true;
+	  fstream file;
+
+	  if (flag){
+		file.open("test.bmp", ios::out | ios::binary);
+		if (file.is_open()){
+		  int size = (int)rgbImageSize + 64;
+		  file.write((const char*)qtbrynhildr::bmp, size);
+		  file.close();
+		}
+		//flag = false;
+	  }
+	}
+#endif // for TEST
+#if QTB_LOAD_BITMAP
+	// load a BMP data to QImage
+	result = image->loadFromData((const uchar *)qtbrynhildr::bmp,
+								 (uint)rgbImageSize + 64,
+								 "BMP");
+#else // QTB_LOAD_BITMAP
 	// create QImage
 	if (image != 0){
 	  delete image;
 	}
 	image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
 	result = true;
+#endif // QTB_LOAD_BITMAP
   }
   else {
 	if (image->isNull()){

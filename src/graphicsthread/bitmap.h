@@ -26,7 +26,11 @@ namespace qtbrynhildr {
 #pragma pack(push, 1)
 struct BITMAPFILEHEADER { // for C/C++ Compatibility
 #else // _MSC_VER
+#if defined(__MINGW32__)
 struct __attribute__((gcc_struct, __packed__)) BITMAPFILEHEADER {
+#else // defined(__MINGW32__)
+struct __attribute__((__packed__)) BITMAPFILEHEADER {
+#endif // defined(__MINGW32__)
 #endif // _MSC_VER
 	char		bfType[2]; // "BM"
 	uint32_t	bfSize;
@@ -34,6 +38,9 @@ struct __attribute__((gcc_struct, __packed__)) BITMAPFILEHEADER {
 	uint16_t	bfReserved2;
 	uint32_t	bfOffBits;
   };
+#if _MSC_VER
+#pragma pack(pop)
+#endif // _MSC_VER
 
 // constant value
 #define BFTYPE_ID "BM"
@@ -57,6 +64,9 @@ struct __attribute__((__packed__)) BITMAPINFOHEADER {
 	uint32_t	biClrUsed;
 	uint32_t	biCirImportant;
   };
+#if _MSC_VER
+#pragma pack(pop)
+#endif // _MSC_VER
 
 // constant value
 #if !defined(BI_RGB)
@@ -76,6 +86,9 @@ struct RGBQUAD {
 	uchar	rgbRed;
 	uchar	rgbReserved; // 0
   };
+#if _MSC_VER
+#pragma pack(pop)
+#endif // _MSC_VER
 
 } // end of namespace qtbrynhildr
 

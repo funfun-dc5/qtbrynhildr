@@ -10,12 +10,12 @@
 
 // Local Header
 #include "common/netthread.h"
-#if 0 // for TEST
+#if 1 // for TEST
 #include "decoder.h"
 #include "decoder_jpeg.h"
 #include "decoder_vp8_cpp.h"
 #include "decoder_vp8_sse.h"
-#endif // 0 // for TEST
+#endif // 1 // for TEST
 #include "framecontroler.h"
 #include "framecounter.h"
 #if QTB_TEST_CODE
@@ -48,8 +48,11 @@ private:
   bool onDrawing;
 
 #if !QTB_TEST_CODE
+
+#if 0 // for TEST
   // image for drawing desktop
   QImage *image;
+#endif // 0 // for TEST
 
   // clear desktop flag
   bool onClearDesktop;
@@ -71,10 +74,10 @@ private:
   // frame controler
   FrameControler frameControler;
 
-#if 0 // for TEST
+#if 1 // for TEST
   // current decoder
   Decoder *decoder;
-#endif // 0 // for TEST
+#endif // 1 // for TEST
 
   //-------------------------------------------------------------------------------
   // Function
@@ -145,12 +148,14 @@ private:
   inline long receiveData(char *buf, long size);
 
 #if !QTB_TEST_CODE
+#if 0 // for TEST
   // draw graphics
   void draw_Graphics(int size);
   // draw graphics MJPEG
   inline bool draw_Graphics_MJPEG(int size);
   // draw graphics COMPRESS
   inline bool draw_Graphics_COMPRESS(int size);
+#endif // 0 // for TEST
 #endif // !QTB_TEST_CODE
 
   // output received data

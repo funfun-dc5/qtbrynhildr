@@ -89,9 +89,12 @@ bool setup()
 #if QTB_LOAD_BITMAP
   if (sizeof(BITMAPFILEHEADER) != 14 ||
 	  sizeof(BITMAPINFOHEADER) != 40){
+	cout << "[bitmap] sizeof(BITMAPFILEHEADER) = " << sizeof(BITMAPFILEHEADER) << endl << flush;
+    cout << "[bitmap] sizeof(BITMAPINFOHEADER) = " << sizeof(BITMAPINFOHEADER) << endl << flush;
+    cout << "[bitmap] sizeof(RGBQUAD) = " << sizeof(RGBQUAD) << endl << flush;
 	return false;
   }
-  int headerSize = 64; // sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + 10 (16 bytes padding)
+  int headerSize = 64; // sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + 10 (16 bytes boundary)
   if (bmp != 0){
 	delete [] bmp;
   }

@@ -22,9 +22,6 @@
 #endif // !QTB_TEST_CODE
 
 // for TEST
-#include "bitmap.h"
-
-// for TEST
 #define TEST_THREAD		0
 
 namespace qtbrynhildr {
@@ -41,7 +38,9 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
 #if !QTB_TEST_CODE
+#if 0 // for TEST
   ,image(new QImage)
+#endif // 0 // for TEST
   ,onClearDesktop(false)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
@@ -52,9 +51,9 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,initialBenchmarkPhaseCounter(20)
   ,benchmarkPhaseCounter(0)
 #endif // QTB_BENCHMARK
-#if 0 // for TEST
+#if 1 // for TEST
   ,decoder(new DecoderVP8SSE)
-#endif // 0 // for TEST
+#endif // 1 // for TEST
 {
   //outputLog = true; // for DEBUG
 
@@ -77,10 +76,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
 #endif // !QTB_TEST_CODE
-
-  cout << "sizeof(BITMAPFILEHEADER) = " << sizeof(BITMAPFILEHEADER) << endl << flush;
-  cout << "sizeof(BITMAPINFOHEADER) = " << sizeof(BITMAPINFOHEADER) << endl << flush;
-  cout << "sizeof(RGBQUAD) = " << sizeof(RGBQUAD) << endl << flush;
 }
 
 // destructor
@@ -224,7 +219,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   {
 	decoder->preprocess(buffer, receivedDataSize);
 	QImage *image;
-	image = decoder->getDesktopImage();
+	image = decoder->getDesktopImage(1);
 	if (image == nullptr)
 	  cout << "DECODER: " << decoder->name() << endl << flush;
   }
@@ -251,6 +246,39 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
   }
 #endif // for TEST
+
+#if 1 // for TEST
+
+  // decode VP8
+  decoder->preprocess(buffer, receivedDataSize);
+
+  // for network test
+  if (!onDrawing)
+	return TRANSMIT_SUCCEEDED;
+
+  // draw graphics
+  if (settings->getOnGraphics()){
+	// clear desktop flag clear
+	onClearDesktop = false;
+
+	if (frameControler.adjust()){
+	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
+	  if (image != nullptr){
+		//  image->save("jpg/desktop.jpg", "jpg", 75);
+		emit drawDesktop(*image);
+	  }
+	}
+  }
+  else {
+	// clear desktop only at once
+	if (!onClearDesktop){
+	  onClearDesktop = true;
+	  emit clearDesktop();
+	}
+  }
+#endif // 1 // for TEST
+
+#if 0 // for TEST
 
   // for network test
   if (!onDrawing)
@@ -362,6 +390,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #endif // !QTB_TEST_CODE
 
+#endif // 0 // for TEST
+
   return TRANSMIT_SUCCEEDED;
 }
 
@@ -414,6 +444,8 @@ long GraphicsThread::receiveData(char *buf, long size)
 }
 
 #if !QTB_TEST_CODE
+
+#if 0 // for TEST
 
 // draw graphics
 void GraphicsThread::draw_Graphics(int size)
@@ -537,11 +569,18 @@ inline bool GraphicsThread::draw_Graphics_COMPRESS(int size)
   return result;
 }
 
+#endif // 0 // for TEST
+
 #endif // !QTB_TEST_CODE
 
 // output received data
 void GraphicsThread::outputReceivedData(long receivedDataSize)
 {
+#if 1 // for TEST
+
+  decoder->outputDataToFile(buffer, receivedDataSize, frameCounter.getFrameCounter());
+
+#else // 1 // for TEST
   fstream file;
   char filename[QTB_MAXPATHLEN+1];
   int result;
@@ -566,6 +605,7 @@ void GraphicsThread::outputReceivedData(long receivedDataSize)
 	  cout << "[GraphicsThread] snprintf() error!" << endl << flush;
 	}
   }
+#endif // 1 // for TEST
 }
 
 } // end of namespace qtbrynhildr

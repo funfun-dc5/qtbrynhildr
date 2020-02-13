@@ -297,17 +297,21 @@ DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
 HEADERS += graphicsthread/bitmap.h
-#HEADERS += graphicsthread/decoder.h
-#HEADERS += graphicsthread/decoder_jpeg.h
-#HEADERS += graphicsthread/decoder_vp8.h
-#HEADERS += graphicsthread/decoder_vp8_cpp.h
-#HEADERS += graphicsthread/decoder_vp8_sse.h
+HEADERS += graphicsthread/decoder.h
+HEADERS += graphicsthread/decoder_jpeg.h
+HEADERS += graphicsthread/decoder_vp8.h
+HEADERS += graphicsthread/decoder_vp8_cpp.h
+# for INTEL cpu
+HEADERS += graphicsthread/decoder_vp8_sse.h
+HEADERS += graphicsthread/decoder_vp8_avx2.h
 
-#SOURCES += graphicsthread/decoder.cpp
-#SOURCES += graphicsthread/decoder_jpeg.cpp
-#SOURCES += graphicsthread/decoder_vp8.cpp
-#SOURCES += graphicsthread/decoder_vp8_cpp.cpp
-#SOURCES += graphicsthread/decoder_vp8_sse.cpp
+SOURCES += graphicsthread/decoder.cpp
+SOURCES += graphicsthread/decoder_jpeg.cpp
+SOURCES += graphicsthread/decoder_vp8.cpp
+SOURCES += graphicsthread/decoder_vp8_cpp.cpp
+# for INTEL cpu
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
+SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 
 HEADERS += graphicsthread/framecounter.h
 HEADERS += graphicsthread/framecontroler.h

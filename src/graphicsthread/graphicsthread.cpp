@@ -247,14 +247,16 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 #endif // for TEST
 
+  // for network test
+  if (!onDrawing)
+	return TRANSMIT_SUCCEEDED;
+
+#if !QTB_TEST_CODE
+
 #if 1 // for TEST
 
   // decode VP8
   decoder->preprocess(buffer, receivedDataSize);
-
-  // for network test
-  if (!onDrawing)
-	return TRANSMIT_SUCCEEDED;
 
   // draw graphics
   if (settings->getOnGraphics()){
@@ -276,15 +278,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  emit clearDesktop();
 	}
   }
-#endif // 1 // for TEST
 
-#if 0 // for TEST
-
-  // for network test
-  if (!onDrawing)
-	return TRANSMIT_SUCCEEDED;
-
-#if !QTB_TEST_CODE
+#else // 1 // for TEST
 
   // decode VP8
   if (com_data->video_mode == VIDEO_MODE_COMPRESS){
@@ -347,6 +342,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   printTimeInfo("frame controled");
 #endif // TEST_THREAD
 
+#endif // 1 // for TEST
+
 #else // !QTB_TEST_CODE
 
   // put data into graphics buffer
@@ -389,8 +386,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
 
 #endif // !QTB_TEST_CODE
-
-#endif // 0 // for TEST
 
   return TRANSMIT_SUCCEEDED;
 }

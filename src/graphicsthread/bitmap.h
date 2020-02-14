@@ -24,12 +24,12 @@ namespace qtbrynhildr {
   // file header
 #if _MSC_VER
 #pragma pack(push, 1)
-struct BITMAPFILEHEADER { // for C/C++ Compatibility
+typedef struct BITMAPFILEHEADER { // for C/C++ Compatibility
 #else // _MSC_VER
 #if defined(__MINGW32__)
-struct __attribute__((gcc_struct, __packed__)) BITMAPFILEHEADER {
+typedef struct __attribute__((gcc_struct, __packed__)) BITMAPFILEHEADER { // for C/C++ Compatibility
 #else // defined(__MINGW32__)
-struct __attribute__((__packed__)) BITMAPFILEHEADER {
+typedef struct __attribute__((__packed__)) BITMAPFILEHEADER { // for C/C++ Compatibility
 #endif // defined(__MINGW32__)
 #endif // _MSC_VER
 	char		bfType[2]; // "BM"
@@ -37,7 +37,7 @@ struct __attribute__((__packed__)) BITMAPFILEHEADER {
 	uint16_t	bfReserved1;
 	uint16_t	bfReserved2;
 	uint32_t	bfOffBits;
-  };
+  } BITMAPFILEHEADER;
 #if _MSC_VER
 #pragma pack(pop)
 #endif // _MSC_VER
@@ -48,9 +48,9 @@ struct __attribute__((__packed__)) BITMAPFILEHEADER {
   // information header
 #if _MSC_VER
 #pragma pack(push, 1)
-struct BITMAPINFOHEADER {
+typedef struct BITMAPINFOHEADER { // for C/C++ Compatibility
 #else // _MSC_VER
-struct __attribute__((__packed__)) BITMAPINFOHEADER {
+typedef struct __attribute__((__packed__)) BITMAPINFOHEADER { // for C/C++ Compatibility
 #endif // _MSC_VER
 	uint32_t	biSize; // 40 for Windows
 	uint32_t	biWidth;
@@ -63,7 +63,7 @@ struct __attribute__((__packed__)) BITMAPINFOHEADER {
 	int32_t		biYPixPerMeter;
 	uint32_t	biClrUsed;
 	uint32_t	biCirImportant;
-  };
+  } BITMAPINFOHEADER ;
 #if _MSC_VER
 #pragma pack(pop)
 #endif // _MSC_VER
@@ -77,15 +77,15 @@ struct __attribute__((__packed__)) BITMAPINFOHEADER {
   // pallet data
 #if _MSC_VER
 #pragma pack(push, 1)
-struct RGBQUAD {
+typedef struct RGBQUAD { // for C/C++ Compatibility
 #else // _MSC_VER
-  struct __attribute__((__packed__)) RGBQUAD {
+typedef struct __attribute__((__packed__)) RGBQUAD { // for C/C++ Compatibility
 #endif // _MSC_VER
 	uchar	rgbBlue;
 	uchar	rgbGreen;
 	uchar	rgbRed;
 	uchar	rgbReserved; // 0
-  };
+  } RGBQUAD;
 #if _MSC_VER
 #pragma pack(pop)
 #endif // _MSC_VER

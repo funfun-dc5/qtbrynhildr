@@ -313,6 +313,9 @@ SOURCES += graphicsthread/decoder_vp8_cpp.cpp
 SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 
+SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+QMAKE_CXXFLAGS += -mavx2
+
 HEADERS += graphicsthread/framecounter.h
 HEADERS += graphicsthread/framecontroler.h
 

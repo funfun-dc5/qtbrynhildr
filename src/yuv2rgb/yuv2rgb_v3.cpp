@@ -32,7 +32,7 @@ inline int clip(int val)
 #define GET_B(Y, U)		((Y + 453 * U          ) >> 8)
 
 // YUV convert to RGB (qtbrynhildr::convertYUVtoRGB())
-void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
+void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
   uchar *yptop;
   uchar *uptop;

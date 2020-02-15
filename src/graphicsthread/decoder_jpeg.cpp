@@ -14,10 +14,10 @@
 namespace qtbrynhildr {
 
 // constructor
-DecoderJPEG::DecoderJPEG()
-  :
+DecoderJPEG::DecoderJPEG(QImage *image)
+  :Decoder(image)
   // for DEBUG
-  outputLog(true)
+  ,outputLog(true)
 {
 }
 

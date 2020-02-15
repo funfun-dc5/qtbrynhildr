@@ -14,10 +14,10 @@
 namespace qtbrynhildr {
 
 // constructor
-DecoderVP8SSE::DecoderVP8SSE()
-  :
+DecoderVP8SSE::DecoderVP8SSE(QImage *image)
+  :DecoderVP8(image)
   // for DEBUG
-  outputLog(true)
+  ,outputLog(true)
 {
 }
 
@@ -48,7 +48,7 @@ QImage* DecoderVP8SSE::getDesktopImage(int numOfThread)
 #if 1 // for TEST
 
   // make RGB image
-  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD, numOfThread);
+  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_SSE, numOfThread);
 
   // get QImage
   image = getImage(rgbImageSize);

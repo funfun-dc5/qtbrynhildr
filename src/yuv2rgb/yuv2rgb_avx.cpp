@@ -29,7 +29,7 @@ namespace qtbrynhildr {
 #if QTB_MULTI_THREAD_CONVERTER
 
 // YUV convert to RGB (SIMD version)
-void convertYUVtoRGB_SIMD(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
+void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
   Aligned(32) int result[8];
 

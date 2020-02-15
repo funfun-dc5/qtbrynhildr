@@ -38,7 +38,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
 #if !QTB_TEST_CODE
-#if 0 // for TEST
+#if 1 // for TEST
   ,image(new QImage)
 #endif // 0 // for TEST
   ,onClearDesktop(false)
@@ -52,7 +52,10 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,benchmarkPhaseCounter(0)
 #endif // QTB_BENCHMARK
 #if 1 // for TEST
-  ,decoder(new DecoderVP8SSE)
+   //,decoder(new DecoderJPEG(image))
+   //,decoder(new DecoderVP8CPP(image))
+   ,decoder(new DecoderVP8SSE(image))
+   //,decoder(new DecoderVP8AVX2(image))
 #endif // 1 // for TEST
 {
   //outputLog = true; // for DEBUG
@@ -255,7 +258,10 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if 1 // for TEST
 
-  // decode VP8
+  // change decoder
+  //
+
+  // pre-process
   decoder->preprocess(buffer, receivedDataSize);
 
   // draw graphics

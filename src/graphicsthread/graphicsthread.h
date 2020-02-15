@@ -15,6 +15,8 @@
 #include "decoder_jpeg.h"
 #include "decoder_vp8_cpp.h"
 #include "decoder_vp8_sse.h"
+#include "decoder_vp8_avx2.h"
+//#include "decoder_vp8_neon.h"
 #endif // 1 // for TEST
 #include "framecontroler.h"
 #include "framecounter.h"
@@ -49,7 +51,7 @@ private:
 
 #if !QTB_TEST_CODE
 
-#if 0 // for TEST
+#if 1 // for TEST
   // image for drawing desktop
   QImage *image;
 #endif // 0 // for TEST

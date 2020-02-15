@@ -14,10 +14,10 @@
 namespace qtbrynhildr {
 
 // constructor
-DecoderVP8::DecoderVP8()
-  :
+DecoderVP8::DecoderVP8(QImage *image)
+  :Decoder(image)
   // for DEBUG
-  outputLog(true)
+  ,outputLog(true)
 {
 }
 

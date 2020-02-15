@@ -40,7 +40,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  Decoder();
+  Decoder(QImage *image);
   // destructor
   virtual ~Decoder();
 

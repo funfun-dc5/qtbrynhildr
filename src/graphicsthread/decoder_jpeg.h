@@ -30,7 +30,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DecoderJPEG();
+  DecoderJPEG(QImage *image);
   // destructor
   virtual ~DecoderJPEG();
 

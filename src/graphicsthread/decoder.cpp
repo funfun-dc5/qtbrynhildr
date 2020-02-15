@@ -17,11 +17,11 @@
 namespace qtbrynhildr {
 
 // constructor
-Decoder::Decoder()
+Decoder::Decoder(QImage *image)
   :
   buffer(0),
   size(0),
-  image(new QImage),
+  image(image),
   // for DEBUG
   outputLog(true)
 {
@@ -68,7 +68,7 @@ bool Decoder::outputDataToFile(char *buf, int len, int frameId)
   }
   else {
 	// snprintf() error
-	cout << "[Decorder] snprintf() error!" << endl << flush;
+	cout << "[Decoder] snprintf() error!" << endl << flush;
 	return false;
   }
 

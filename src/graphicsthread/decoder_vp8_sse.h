@@ -23,7 +23,7 @@ class DecoderVP8SSE : public DecoderVP8
   //-------------------------------------------------------------------------------
 private:
   // output log flag
-  bool outputLog;
+  //  bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function

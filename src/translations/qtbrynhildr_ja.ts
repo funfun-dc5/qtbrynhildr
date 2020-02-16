@@ -314,9 +314,9 @@
     </message>
     <message>
         <location filename="../GUI/preference_dialog.ui"/>
-        <source>SIMD Operation (SSE/NEON) Support</source>
+        <source>SIMD Operation (AVX2/SSE/NEON) Support</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>SIMD命令 (SSE/NEON) を利用する</translation>
+        <translation>SIMD命令 (AVX2/SSE/NEON) を利用する</translation>
     </message>
 </context>
 <context>

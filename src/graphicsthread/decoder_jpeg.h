@@ -23,7 +23,7 @@ class DecoderJPEG : public Decoder
   //-------------------------------------------------------------------------------
 private:
   // output log flag
-  bool outputLog;
+  //  bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function

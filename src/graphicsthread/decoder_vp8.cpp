@@ -17,7 +17,7 @@ namespace qtbrynhildr {
 DecoderVP8::DecoderVP8(QImage *image)
   :Decoder(image)
   // for DEBUG
-  ,outputLog(true)
+  //,outputLog(false)
 {
 }
 
@@ -29,10 +29,12 @@ DecoderVP8::~DecoderVP8()
 // pre-process
 bool DecoderVP8::preprocess(char *buffer, int size)
 {
-  static bool flag = true;
-  if (flag){
-	cout << "DecoderVP8::preprocess()" << endl << flush;
-	flag = false;
+  if (outputLog){
+	static bool flag = true;
+	if (flag){
+	  cout << "DecoderVP8::preprocess()" << endl << flush;
+	  flag = false;
+	}
   }
 
   // set parameters

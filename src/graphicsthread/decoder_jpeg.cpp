@@ -17,7 +17,7 @@ namespace qtbrynhildr {
 DecoderJPEG::DecoderJPEG(QImage *image)
   :Decoder(image)
   // for DEBUG
-  ,outputLog(true)
+  //,outputLog(false)
 {
 }
 
@@ -31,10 +31,12 @@ QImage* DecoderJPEG::getDesktopImage(int numOfThread)
 {
   Q_UNUSED(numOfThread);
 
-  static bool flag = true;
-  if (flag){
-	cout << "DecoderJPEG::getDesktopImage()" << endl << flush;
-	flag = false;
+  if (outputLog){
+	static bool flag = true;
+	if (flag){
+	  cout << "DecoderJPEG::getDesktopImage()" << endl << flush;
+	  flag = false;
+	}
   }
 
   // load a JPEG data to QImage

@@ -23,7 +23,7 @@ Decoder::Decoder(QImage *image)
   size(0),
   image(image),
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
 }
 
@@ -35,10 +35,12 @@ Decoder::~Decoder()
 // pre-process
 bool Decoder::preprocess(char *buffer, int size)
 {
-  static bool flag = true;
-  if (flag){
-	cout << "Decoder::preprocess()" << endl << flush;
-	flag = false;
+  if (outputLog){
+	static bool flag = true;
+	if (flag){
+	  cout << "Decoder::preprocess()" << endl << flush;
+	  flag = false;
+	}
   }
 
   // set parameters

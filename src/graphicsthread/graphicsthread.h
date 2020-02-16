@@ -77,8 +77,16 @@ private:
   FrameControler frameControler;
 
 #if 1 // for TEST
+  // decoders
+  Decoder *decoderMode56;	// for MODE5/6
+  Decoder *decoderMode7;	// for MODE7
+  Decoder *decoderMode7SIMD;// for MODE7(SIMD)
+
   // current decoder
   Decoder *decoder;
+
+  // current video mode
+  VIDEO_MODE video_mode;
 #endif // 1 // for TEST
 
   //-------------------------------------------------------------------------------

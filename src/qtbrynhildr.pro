@@ -301,24 +301,29 @@ HEADERS += graphicsthread/decoder.h
 HEADERS += graphicsthread/decoder_jpeg.h
 HEADERS += graphicsthread/decoder_vp8.h
 HEADERS += graphicsthread/decoder_vp8_cpp.h
-# for INTEL cpu
-HEADERS += graphicsthread/decoder_vp8_sse.h
-HEADERS += graphicsthread/decoder_vp8_avx2.h
 
 SOURCES += graphicsthread/decoder.cpp
 SOURCES += graphicsthread/decoder_jpeg.cpp
 SOURCES += graphicsthread/decoder_vp8.cpp
 SOURCES += graphicsthread/decoder_vp8_cpp.cpp
+
 # for INTEL cpu
+HEADERS += graphicsthread/decoder_vp8_sse.h
+HEADERS += graphicsthread/decoder_vp8_avx2.h
 SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 
 SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
 QMAKE_CXXFLAGS += -mavx2
+#QMAKE_CXXFLAGS += /arch:AVX2
+
+# for ARM cpu
+#HEADERS += graphicsthread/decoder_vp8_neon.h
+#SOURCES += graphicsthread/decoder_vp8_neon.cpp
 
 HEADERS += graphicsthread/framecounter.h
-HEADERS += graphicsthread/framecontroler.h
-
 SOURCES += graphicsthread/framecounter.cpp
+
+HEADERS += graphicsthread/framecontroler.h
 SOURCES += graphicsthread/framecontroler.cpp
 }

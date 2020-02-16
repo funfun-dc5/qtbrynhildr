@@ -31,7 +31,7 @@ protected:
   // desktop image
   QImage *image;
 
-private:
+protected:
   // output log flag
   bool outputLog;
 

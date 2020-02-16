@@ -181,7 +181,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>SIMD Operation (SSE/NEON) Support</string>
+      <string>SIMD Operation (AVX2/SSE/NEON) Support</string>
      </property>
     </widget>
    </widget>

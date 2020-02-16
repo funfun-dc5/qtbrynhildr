@@ -54,8 +54,13 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #if 1 // for TEST
    //,decoder(new DecoderJPEG(image))
    //,decoder(new DecoderVP8CPP(image))
-   ,decoder(new DecoderVP8SSE(image))
+   //,decoder(new DecoderVP8SSE(image))
    //,decoder(new DecoderVP8AVX2(image))
+  ,decoderMode56(0)
+  ,decoderMode7(0)
+  ,decoderMode7SIMD(0)
+  ,decoder(0)
+  ,video_mode(-1)
 #endif // 1 // for TEST
 {
   //outputLog = true; // for DEBUG
@@ -72,11 +77,36 @@ GraphicsThread::GraphicsThread(Settings *settings)
   initVPX();
 
 #if QTB_SIMD_SUPPORT
+#if 0 // for TEST
+
 #if !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::SSE41();
 #else // !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::NEON();
 #endif // !defined(__ARM_NEON__)
+
+#else // 0 // for TEST
+
+  // set decoders
+  decoderMode56 = new DecoderJPEG(image);
+  decoderMode7 = new DecoderVP8CPP(image);
+#if !defined(__ARM_NEON__)
+  if (CPUInfo::AVX2()){
+	decoderMode7SIMD = new DecoderVP8AVX2(image);
+	hasSIMDInstruction = true;
+  }
+  else if (CPUInfo::SSE41()){
+	decoderMode7SIMD = new DecoderVP8SSE(image);
+	hasSIMDInstruction = true;
+  }
+#else // !defined(__ARM_NEON__)
+  if (CPUInfo::NEON()){
+	decoderMode7SIMD = new DecoderVP8NEON(image);
+	hasSIMDInstruction = true;
+  }
+#endif // !defined(__ARM_NEON__)
+
+#endif // 0 // for TEST
 #endif // QTB_SIMD_SUPPORT
 #endif // !QTB_TEST_CODE
 }
@@ -258,8 +288,38 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if 1 // for TEST
 
-  // change decoder
-  //
+  // check mode
+  if (com_data->video_mode == video_mode){ // no change mode
+	// MODE 7 (VP8)
+	if (com_data->video_mode == VIDEO_MODE_COMPRESS){
+	  if (hasSIMDInstruction){
+		if (decoder == decoderMode7){
+		  if(settings->getOnSIMDOperationSupport())
+			decoder = decoderMode7SIMD;
+		}
+		else { // decoder == decoderMode7SIMD
+		  if(!settings->getOnSIMDOperationSupport())
+			decoder = decoderMode7;
+		}
+	  }
+	}
+  }
+  else { // change mode
+	// change decoder
+	// MODE 5/6 (MJPEG)
+	if (com_data->video_mode == VIDEO_MODE_MJPEG){
+	  decoder = decoderMode56;
+	}
+	// MODE 7 (VP8)
+	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
+	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
+		decoder = decoderMode7SIMD;
+	  }
+	  else {
+		decoder = decoderMode7;
+	  }
+	}
+  }
 
   // pre-process
   decoder->preprocess(buffer, receivedDataSize);

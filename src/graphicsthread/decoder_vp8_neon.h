@@ -23,7 +23,7 @@ class DecoderVP8NEON : public DecoderVP8
   //-------------------------------------------------------------------------------
 private:
   // output log flag
-  bool outputLog;
+  //  bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function

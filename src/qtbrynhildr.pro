@@ -296,7 +296,8 @@ DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 # for new feature
 NEW_FEATURE = ON
 equals(NEW_FEATURE, ON){
-HEADERS += graphicsthread/bitmap.h
+HEADERS += yuv2rgb/bitmap.h
+
 HEADERS += graphicsthread/decoder.h
 HEADERS += graphicsthread/decoder_jpeg.h
 HEADERS += graphicsthread/decoder_vp8.h

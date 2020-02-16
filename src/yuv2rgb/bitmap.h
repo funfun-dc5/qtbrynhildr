@@ -42,9 +42,6 @@ typedef struct __attribute__((__packed__)) BITMAPFILEHEADER { // for C/C++ Compa
 #pragma pack(pop)
 #endif // _MSC_VER
 
-// constant value
-#define BFTYPE_ID "BM"
-
   // information header
 #if _MSC_VER
 #pragma pack(push, 1)

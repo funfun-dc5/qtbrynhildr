@@ -16,7 +16,7 @@
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 // Local Header
-#include "graphicsthread/bitmap.h"
+#include "bitmap.h"
 #include "yuv2rgb.h"
 
 namespace qtbrynhildr {
@@ -116,7 +116,7 @@ bool setup()
   biHeader->biPlanes = 1;
   biHeader->biBitCount = 32;
   biHeader->biCompression = BI_RGB;
-  biHeader->biSizeImage = rgbImageSize;
+  biHeader->biSizeImage = 0;
   biHeader->biXPixPerMeter = 0;
   biHeader->biYPixPerMeter = 0;
   biHeader->biClrUsed = 0;

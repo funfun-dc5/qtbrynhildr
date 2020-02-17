@@ -137,6 +137,19 @@ public:
   }
 #endif // QTB_BENCHMARK
 
+#if QTB_SIMD_SUPPORT
+  // get SIMD decoder name
+  const char* getSIMDDecoderName()
+  {
+	if (decoderMode7SIMD != nullptr){
+	  return decoderMode7SIMD->name();
+	}
+	else {
+	  return nullptr;
+	}
+  }
+#endif // QTB_SIMD_SUPPORT
+
 protected:
   // connect to server
   CONNECT_RESULT connectToServer();

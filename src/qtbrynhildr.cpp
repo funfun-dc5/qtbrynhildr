@@ -330,7 +330,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
-  hasSIMDInstruction = CPUInfo::SSE41();
+  hasSIMDInstruction = CPUInfo::SSE41() || CPUInfo::AVX2();
 #else // !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::NEON();
 #endif // !defined(__ARM_NEON__)
@@ -978,6 +978,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   cout << "(width, height) = (" <<
 	currentSize.width() << ", " << currentSize.height() << ")" << endl << flush;
 #endif // for TEST
+
+#if QTB_SIMD_SUPPORT
+  // SIMD decoder name
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "VP8 SIMD decoder: "
+							   + (QString)graphicsThread->getSIMDDecoderName());
+#endif // QTB_SIMD_SUPPORT
 }
 
 // destructor

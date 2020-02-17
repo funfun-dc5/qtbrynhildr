@@ -22,7 +22,7 @@ namespace qtbrynhildr {
 
 // SSE
 
-#if defined(__SSE4_1__)
+#if defined(__SSE4_2__)
 
 #if QTB_MULTI_THREAD_CONVERTER
 
@@ -419,7 +419,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 
 #endif // QTB_MULTI_THREAD_CONVERTER
 
-#endif // defined(__SSE4_1__)
+#endif // defined(__SSE4_2__)
 
 #endif // QTB_SIMD_SUPPORT
 

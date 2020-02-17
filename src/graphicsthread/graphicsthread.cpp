@@ -80,7 +80,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #if 0 // for TEST
 
 #if !defined(__ARM_NEON__)
-  hasSIMDInstruction = CPUInfo::SSE41();
+  hasSIMDInstruction = CPUInfo::SSE42() || CPUInfo::AVX2();
 #else // !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::NEON();
 #endif // !defined(__ARM_NEON__)
@@ -95,7 +95,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 	decoderMode7SIMD = new DecoderVP8AVX2(image);
 	hasSIMDInstruction = true;
   }
-  else if (CPUInfo::SSE41()){
+  else if (CPUInfo::SSE42()){
 	decoderMode7SIMD = new DecoderVP8SSE(image);
 	hasSIMDInstruction = true;
   }

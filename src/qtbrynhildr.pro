@@ -68,9 +68,9 @@ SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
-# SSE4.1
+# SSE4.2
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
-DEFINES += __SSE4_1__
+DEFINES += __SSE4_2__
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += /arch:AVX
@@ -91,9 +91,9 @@ SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
-# SSE4.1
+# SSE4.2
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
-QMAKE_CXXFLAGS += -msse4.1
+QMAKE_CXXFLAGS += -msse4.2
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
@@ -119,9 +119,9 @@ SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
-# SSE4.1
+# SSE4.2
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
-QMAKE_CXXFLAGS += -msse4.1
+QMAKE_CXXFLAGS += -msse4.2
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
@@ -150,9 +150,9 @@ SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
-# SSE4.1
+# SSE4.2
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
-QMAKE_CXXFLAGS += -msse4.1
+QMAKE_CXXFLAGS += -msse4.2
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx

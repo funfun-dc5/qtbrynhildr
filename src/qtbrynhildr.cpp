@@ -330,7 +330,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
-  hasSIMDInstruction = CPUInfo::SSE41() || CPUInfo::AVX2();
+  hasSIMDInstruction = CPUInfo::SSE42() || CPUInfo::AVX2();
 #else // !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::NEON();
 #endif // !defined(__ARM_NEON__)

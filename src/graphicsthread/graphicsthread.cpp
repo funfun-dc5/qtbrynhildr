@@ -21,6 +21,19 @@
 #include "yuv2rgb/yuv2rgb.h"
 #endif // !QTB_TEST_CODE
 
+#if 1 // for TEST
+#include "decoder_jpeg.h"
+#include "decoder_vp8_cpp.h"
+#if !defined(__ARM_NEON__)
+#include "decoder_vp8_sse.h"
+#if defined(__AVX2__)
+#include "decoder_vp8_avx2.h"
+#endif // defined(__AVX2__)
+#else // !defined(__ARM_NEON__)
+#include "decoder_vp8_neon.h"
+#endif // !defined(__ARM_NEON__)
+#endif // 1 // for TEST
+
 // for TEST
 #define TEST_THREAD		0
 
@@ -91,6 +104,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   decoderMode56 = new DecoderJPEG(image);
   decoderMode7 = new DecoderVP8CPP(image);
 #if !defined(__ARM_NEON__)
+#if defined(__AVX2__)
   if (CPUInfo::AVX2()){
 	decoderMode7SIMD = new DecoderVP8AVX2(image);
 	hasSIMDInstruction = true;
@@ -99,6 +113,12 @@ GraphicsThread::GraphicsThread(Settings *settings)
 	decoderMode7SIMD = new DecoderVP8SSE(image);
 	hasSIMDInstruction = true;
   }
+#else // defined(__AVX2__)
+  if (CPUInfo::SSE42()){
+	decoderMode7SIMD = new DecoderVP8SSE(image);
+	hasSIMDInstruction = true;
+  }
+#endif // defined(__AVX2__)
 #else // !defined(__ARM_NEON__)
   if (CPUInfo::NEON()){
 	decoderMode7SIMD = new DecoderVP8NEON(image);

@@ -62,21 +62,21 @@ QMAKE_LFLAGS += /LTCG
 DEFINES += YY_NO_UNISTD_H
 HEADERS += common/msvc.h
 # SIMD (INTEL:MSVC)
-HEADERS += graphicsthread/decoder_vp8_sse.h
-HEADERS += graphicsthread/decoder_vp8_avx2.h
-SOURCES += graphicsthread/decoder_vp8_sse.cpp
-SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.2
+HEADERS += graphicsthread/decoder_vp8_sse.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 DEFINES += __SSE4_2__
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += /arch:AVX
 # AVX2
-SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-QMAKE_CXXFLAGS += /arch:AVX2
+#HEADERS += graphicsthread/decoder_vp8_avx2.h
+#SOURCES += graphicsthread/decoder_vp8_avx2.cpp
+#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+#QMAKE_CXXFLAGS += /arch:AVX2
 }
 
 # for MinGW
@@ -85,21 +85,21 @@ CONFIG += console
 #LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
 # SIMD (INTEL:gcc/clang)
-HEADERS += graphicsthread/decoder_vp8_sse.h
-HEADERS += graphicsthread/decoder_vp8_avx2.h
-SOURCES += graphicsthread/decoder_vp8_sse.cpp
-SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.2
+HEADERS += graphicsthread/decoder_vp8_sse.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.2
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 # AVX2
-SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-QMAKE_CXXFLAGS += -mavx2
+#HEADERS += graphicsthread/decoder_vp8_avx2.h
+#SOURCES += graphicsthread/decoder_vp8_avx2.cpp
+#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+#QMAKE_CXXFLAGS += -mavx2
 }
 
 # for Linux/FreeBSD
@@ -113,21 +113,21 @@ LIBS += -L../libs/vpx -lvpx
 #LIBS += -lvpx
 LIBS += -L../libs/celt -lcelt
 # SIMD (INTEL:gcc/clang)
-HEADERS += graphicsthread/decoder_vp8_sse.h
-HEADERS += graphicsthread/decoder_vp8_avx2.h
-SOURCES += graphicsthread/decoder_vp8_sse.cpp
-SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.2
+HEADERS += graphicsthread/decoder_vp8_sse.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.2
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 # AVX2
-SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-QMAKE_CXXFLAGS += -mavx2
+#HEADERS += graphicsthread/decoder_vp8_avx2.h
+#SOURCES += graphicsthread/decoder_vp8_avx2.cpp
+#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+#QMAKE_CXXFLAGS += -mavx2
 # NEON (RaspberryPi3)
 #DEFINES += QTB_RPI3
 #SOURCES += yuv2rgb/yuv2rgb_neon.cpp
@@ -144,21 +144,21 @@ INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt
 # SIMD (INTEL:gcc/clang)
-HEADERS += graphicsthread/decoder_vp8_sse.h
-HEADERS += graphicsthread/decoder_vp8_avx2.h
-SOURCES += graphicsthread/decoder_vp8_sse.cpp
-SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.2
+HEADERS += graphicsthread/decoder_vp8_sse.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
 SOURCES += yuv2rgb/yuv2rgb_sse.cpp
 QMAKE_CXXFLAGS += -msse4.2
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 # AVX2
-SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-QMAKE_CXXFLAGS += -mavx2
+#HEADERS += graphicsthread/decoder_vp8_avx2.h
+#SOURCES += graphicsthread/decoder_vp8_avx2.cpp
+#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+#QMAKE_CXXFLAGS += -mavx2
 }
 
 # for Android

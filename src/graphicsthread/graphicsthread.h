@@ -12,11 +12,6 @@
 #include "common/netthread.h"
 #if 1 // for TEST
 #include "decoder.h"
-#include "decoder_jpeg.h"
-#include "decoder_vp8_cpp.h"
-#include "decoder_vp8_sse.h"
-#include "decoder_vp8_avx2.h"
-//#include "decoder_vp8_neon.h"
 #endif // 1 // for TEST
 #include "framecontroler.h"
 #include "framecounter.h"

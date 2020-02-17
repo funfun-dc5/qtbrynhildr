@@ -98,8 +98,20 @@ private:
 	  hasSSE41 = ((data[2] >> 19) & 1) != 0;
 	  hasSSE42 = ((data[2] >> 20) & 1) != 0;
 	  hasAVX   = ((data[2] >> 28) & 1) != 0;
+#if 0 // for TEST
+	  cout << "data[0] : 0x" << hex << data[0] << endl << flush;
+	  cout << "data[1] : 0x" << hex << data[1] << endl << flush;
+	  cout << "data[2] : 0x" << hex << data[2] << endl << flush;
+	  cout << "data[3] : 0x" << hex << data[3] << endl << flush;
+#endif // 0 // for TEST
 	  getCPUID(7, data);
 	  hasAVX2  = ((data[1] >>  5) & 1) != 0;
+#if 0 // for TEST
+	  cout << "data[0] : 0x" << hex << data[0] << endl << flush;
+	  cout << "data[1] : 0x" << hex << data[1] << endl << flush;
+	  cout << "data[2] : 0x" << hex << data[2] << endl << flush;
+	  cout << "data[3] : 0x" << hex << data[3] << endl << flush;
+#endif // 0 // for TEST
 
 	  // for TEST
 	  if (outputLog){

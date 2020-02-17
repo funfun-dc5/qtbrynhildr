@@ -47,7 +47,9 @@ void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])
 // get cpuid
 void CPUInfo::getCPUID(int function_id, int data[4])
 {
-  __cpuid(function_id, data[0], data[1], data[2], data[3]);
+  __asm__ volatile ("cpuid"
+					:"=a"(data[0]), "=b"(data[1]), "=c"(data[2]), "=d"(data[3])
+					: "a" (function_id), "c" (0));
 }
 // get cpuidex
 void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])

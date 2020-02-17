@@ -37,7 +37,7 @@ public:
   // get decoder name
   const char*  name()
   {
-	return "vp8 sse decoder";
+	return "vp8 avx2 decoder";
   }
 
 #if 0

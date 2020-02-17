@@ -13,15 +13,6 @@
 // Qt Header
 
 // Local Header
-#include "graphicsthread.h"
-#include "parameters.h"
-#include "qtbrynhildr.h"
-#if !QTB_TEST_CODE
-#include "util/cpuinfo.h"
-#include "yuv2rgb/yuv2rgb.h"
-#endif // !QTB_TEST_CODE
-
-#if 1 // for TEST
 #include "decoder_jpeg.h"
 #include "decoder_vp8_cpp.h"
 #if !defined(__ARM_NEON__)
@@ -32,7 +23,13 @@
 #else // !defined(__ARM_NEON__)
 #include "decoder_vp8_neon.h"
 #endif // !defined(__ARM_NEON__)
-#endif // 1 // for TEST
+#include "graphicsthread.h"
+#include "parameters.h"
+#include "qtbrynhildr.h"
+#if !QTB_TEST_CODE
+#include "util/cpuinfo.h"
+#include "yuv2rgb/yuv2rgb.h"
+#endif // !QTB_TEST_CODE
 
 // for TEST
 #define TEST_THREAD		0
@@ -51,9 +48,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
 #if !QTB_TEST_CODE
-#if 1 // for TEST
   ,image(new QImage)
-#endif // 0 // for TEST
   ,onClearDesktop(false)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
@@ -64,17 +59,11 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,initialBenchmarkPhaseCounter(20)
   ,benchmarkPhaseCounter(0)
 #endif // QTB_BENCHMARK
-#if 1 // for TEST
-   //,decoder(new DecoderJPEG(image))
-   //,decoder(new DecoderVP8CPP(image))
-   //,decoder(new DecoderVP8SSE(image))
-   //,decoder(new DecoderVP8AVX2(image))
   ,decoderMode56(0)
   ,decoderMode7(0)
   ,decoderMode7SIMD(0)
   ,decoder(0)
   ,video_mode(-1)
-#endif // 1 // for TEST
 {
   //outputLog = true; // for DEBUG
 
@@ -657,36 +646,7 @@ inline bool GraphicsThread::draw_Graphics_COMPRESS(int size)
 // output received data
 void GraphicsThread::outputReceivedData(long receivedDataSize)
 {
-#if 1 // for TEST
-
   decoder->outputDataToFile(buffer, receivedDataSize, frameCounter.getFrameCounter());
-
-#else // 1 // for TEST
-  fstream file;
-  char filename[QTB_MAXPATHLEN+1];
-  int result;
-  if (com_data->video_mode == VIDEO_MODE_MJPEG){
-	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.jpg",
-					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter.getFrameCounter());
-  }
-  else { // binary
-	result = snprintf(filename, QTB_MAXPATHLEN, "jpg/%s_%06d.bin",
-					  QTB_GRAPHICS_OUTPUT_FILENAME_PREFIX, frameCounter.getFrameCounter());
-  }
-  if (result > 0 && result <= QTB_MAXPATHLEN){
-	file.open(filename, ios::out | ios::binary | ios::trunc);
-	if (file.is_open()){
-	  file.write(buffer, receivedDataSize);
-	  file.close();
-	}
-  }
-  else {
-	// snprintf() error
-	if (settings->getOutputLog()){
-	  cout << "[GraphicsThread] snprintf() error!" << endl << flush;
-	}
-  }
-#endif // 1 // for TEST
 }
 
 } // end of namespace qtbrynhildr

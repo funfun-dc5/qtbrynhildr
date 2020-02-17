@@ -62,6 +62,10 @@ QMAKE_LFLAGS += /LTCG
 DEFINES += YY_NO_UNISTD_H
 HEADERS += common/msvc.h
 # SIMD (INTEL:MSVC)
+HEADERS += graphicsthread/decoder_vp8_sse.h
+HEADERS += graphicsthread/decoder_vp8_avx2.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
+SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
@@ -71,8 +75,8 @@ DEFINES += __SSE4_1__
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += /arch:AVX
 # AVX2
-#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-#QMAKE_CXXFLAGS += /arch:AVX2
+SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+QMAKE_CXXFLAGS += /arch:AVX2
 }
 
 # for MinGW
@@ -81,6 +85,10 @@ CONFIG += console
 #LIBS += -static-libgcc -static-libstdc++
 #CELT_SUPPORT = ON
 # SIMD (INTEL:gcc/clang)
+HEADERS += graphicsthread/decoder_vp8_sse.h
+HEADERS += graphicsthread/decoder_vp8_avx2.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
+SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
@@ -90,8 +98,8 @@ QMAKE_CXXFLAGS += -msse4.1
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 # AVX2
-#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-#QMAKE_CXXFLAGS += -mavx2
+SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+QMAKE_CXXFLAGS += -mavx2
 }
 
 # for Linux/FreeBSD
@@ -105,6 +113,10 @@ LIBS += -L../libs/vpx -lvpx
 #LIBS += -lvpx
 LIBS += -L../libs/celt -lcelt
 # SIMD (INTEL:gcc/clang)
+HEADERS += graphicsthread/decoder_vp8_sse.h
+HEADERS += graphicsthread/decoder_vp8_avx2.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
+SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
@@ -114,8 +126,8 @@ QMAKE_CXXFLAGS += -msse4.1
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
 # AVX2
-#SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-#QMAKE_CXXFLAGS += -mavx2
+SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+QMAKE_CXXFLAGS += -mavx2
 # NEON (RaspberryPi3)
 #DEFINES += QTB_RPI3
 #SOURCES += yuv2rgb/yuv2rgb_neon.cpp
@@ -132,6 +144,10 @@ INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx -lvpx
 LIBS += -L../libs/celt -lcelt
 # SIMD (INTEL:gcc/clang)
+HEADERS += graphicsthread/decoder_vp8_sse.h
+HEADERS += graphicsthread/decoder_vp8_avx2.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
+SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 # SSE4.1
@@ -140,6 +156,9 @@ QMAKE_CXXFLAGS += -msse4.1
 # AVX
 #SOURCES += yuv2rgb/yuv2rgb_avx.cpp
 #QMAKE_CXXFLAGS += -mavx
+# AVX2
+SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+QMAKE_CXXFLAGS += -mavx2
 }
 
 # for Android
@@ -154,6 +173,8 @@ LIBS += -L../libs/celt -lcelt_android_armv7
 HEADERS += util/android-ndk/cpu-features.h
 SOURCES += util/android-ndk/cpu-features.c
 # SIMD (ARM:gcc)
+HEADERS += graphicsthread/decoder_vp8_neon.h
+SOURCES += graphicsthread/decoder_vp8_neon.cpp
 HEADERS += yuv2rgb/yuv2rgb.h
 SOURCES += yuv2rgb/yuv2rgb_v3.cpp
 SOURCES += yuv2rgb/yuv2rgb_neon.cpp
@@ -262,13 +283,20 @@ HEADERS += controlthread/controlthread.h
 HEADERS += controlthread/keybuffer.h controlthread/mousebuffer.h
 HEADERS += controlthread/mousebutton.h controlthread/mousewheel.h
 HEADERS += graphicsthread/graphicsthread.h
-HEADERS += soundthread/soundthread.h
 HEADERS += graphicsthread/graphicsbuffer.h
+HEADERS += graphicsthread/decoder.h
+HEADERS += graphicsthread/decoder_jpeg.h
+HEADERS += graphicsthread/decoder_vp8.h
+HEADERS += graphicsthread/decoder_vp8_cpp.h
+HEADERS += graphicsthread/framecounter.h
+HEADERS += graphicsthread/framecontroler.h
+HEADERS += soundthread/soundthread.h
 HEADERS += soundthread/soundbuffer.h
 HEADERS += soundthread/wave.h
 HEADERS += windows/eventconverter.h windows/ntfs.h windows/keycodes.h windows/keyevent.h
 HEADERS += function/recorder.h
 HEADERS += yuv2rgb/yuv2rgb.h
+HEADERS += yuv2rgb/bitmap.h
 
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
@@ -283,8 +311,14 @@ SOURCES += controlthread/controlthread.cpp
 SOURCES += controlthread/keybuffer.cpp controlthread/mousebuffer.cpp
 SOURCES += controlthread/mousebutton.cpp controlthread/mousewheel.cpp
 SOURCES += graphicsthread/graphicsthread.cpp
-SOURCES += soundthread/soundthread.cpp
 SOURCES += graphicsthread/graphicsbuffer.cpp
+SOURCES += graphicsthread/decoder.cpp
+SOURCES += graphicsthread/decoder_jpeg.cpp
+SOURCES += graphicsthread/decoder_vp8.cpp
+SOURCES += graphicsthread/decoder_vp8_cpp.cpp
+SOURCES += graphicsthread/framecounter.cpp
+SOURCES += graphicsthread/framecontroler.cpp
+SOURCES += soundthread/soundthread.cpp
 SOURCES += soundthread/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 SOURCES += function/recorder.cpp
@@ -294,37 +328,6 @@ SOURCES += yuv2rgb/yuv2rgb.cpp
 DEFINES += QTB_TEST_TOUCHPANEL_ON_DESKTOP=0
 
 # for new feature
-NEW_FEATURE = ON
-equals(NEW_FEATURE, ON){
-HEADERS += yuv2rgb/bitmap.h
-
-HEADERS += graphicsthread/decoder.h
-HEADERS += graphicsthread/decoder_jpeg.h
-HEADERS += graphicsthread/decoder_vp8.h
-HEADERS += graphicsthread/decoder_vp8_cpp.h
-
-SOURCES += graphicsthread/decoder.cpp
-SOURCES += graphicsthread/decoder_jpeg.cpp
-SOURCES += graphicsthread/decoder_vp8.cpp
-SOURCES += graphicsthread/decoder_vp8_cpp.cpp
-
-# for INTEL cpu
-HEADERS += graphicsthread/decoder_vp8_sse.h
-HEADERS += graphicsthread/decoder_vp8_avx2.h
-SOURCES += graphicsthread/decoder_vp8_sse.cpp
-SOURCES += graphicsthread/decoder_vp8_avx2.cpp
-
-SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
-QMAKE_CXXFLAGS += -mavx2
-#QMAKE_CXXFLAGS += /arch:AVX2
-
-# for ARM cpu
-#HEADERS += graphicsthread/decoder_vp8_neon.h
-#SOURCES += graphicsthread/decoder_vp8_neon.cpp
-
-HEADERS += graphicsthread/framecounter.h
-SOURCES += graphicsthread/framecounter.cpp
-
-HEADERS += graphicsthread/framecontroler.h
-SOURCES += graphicsthread/framecontroler.cpp
-}
+# NEW_FEATURE = ON
+# equals(NEW_FEATURE, ON){
+# }

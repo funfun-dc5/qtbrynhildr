@@ -28,7 +28,6 @@
 #include "qtbrynhildr.h"
 #if !QTB_TEST_CODE
 #include "util/cpuinfo.h"
-#include "yuv2rgb/yuv2rgb.h"
 #endif // !QTB_TEST_CODE
 
 // for TEST
@@ -76,22 +75,12 @@ GraphicsThread::GraphicsThread(Settings *settings)
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
 
 #if !QTB_TEST_CODE
-  initVPX();
 
 #if QTB_SIMD_SUPPORT
-#if 0 // for TEST
-
-#if !defined(__ARM_NEON__)
-  hasSIMDInstruction = CPUInfo::SSE42() || CPUInfo::AVX2();
-#else // !defined(__ARM_NEON__)
-  hasSIMDInstruction = CPUInfo::NEON();
-#endif // !defined(__ARM_NEON__)
-
-#else // 0 // for TEST
-
   // set decoders
   decoderMode56 = new DecoderJPEG(image);
   decoderMode7 = new DecoderVP8CPP(image);
+
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
   if (CPUInfo::AVX2()){
@@ -114,9 +103,8 @@ GraphicsThread::GraphicsThread(Settings *settings)
 	hasSIMDInstruction = true;
   }
 #endif // !defined(__ARM_NEON__)
-
-#endif // 0 // for TEST
 #endif // QTB_SIMD_SUPPORT
+
 #endif // !QTB_TEST_CODE
 }
 
@@ -257,16 +245,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // received 1 frame
   frameCounter.countUp();
 
-#if 0 // for TEST
-  {
-	decoder->preprocess(buffer, receivedDataSize);
-	QImage *image;
-	image = decoder->getDesktopImage(1);
-	if (image == nullptr)
-	  cout << "DECODER: " << decoder->name() << endl << flush;
-  }
-#endif // 0 // for TEST
-
 #if QTB_BENCHMARK
   // check benchmark phase counter
   benchmarkPhaseCounter--;
@@ -294,8 +272,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	return TRANSMIT_SUCCEEDED;
 
 #if !QTB_TEST_CODE
-
-#if 1 // for TEST
 
   // check mode
   if (com_data->video_mode == video_mode){ // no change mode
@@ -333,38 +309,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   // pre-process
   decoder->preprocess(buffer, receivedDataSize);
 
-  // draw graphics
-  if (settings->getOnGraphics()){
-	// clear desktop flag clear
-	onClearDesktop = false;
-
-	if (frameControler.adjust()){
-	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
-	  if (image != nullptr){
-		//  image->save("jpg/desktop.jpg", "jpg", 75);
-		emit drawDesktop(*image);
-	  }
-	}
-  }
-  else {
-	// clear desktop only at once
-	if (!onClearDesktop){
-	  onClearDesktop = true;
-	  emit clearDesktop();
-	}
-  }
-
-#else // 1 // for TEST
-
-  // decode VP8
-  if (com_data->video_mode == VIDEO_MODE_COMPRESS){
-	decodeVPX((uchar*)buffer, receivedDataSize);
-  }
-
-#if TEST_THREAD
-  printTimeInfo("decoded VP8");
-#endif // TEST_THREAD
-
 #if QTB_BENCHMARK
   // check benchmark phase counter
   benchmarkPhaseCounter--;
@@ -379,7 +323,20 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	onClearDesktop = false;
 
 	if (frameControler.adjust()){
-	  draw_Graphics(receivedDataSize);
+	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
+
+#if QTB_BENCHMARK
+	  // check benchmark phase counter
+	  benchmarkPhaseCounter--;
+	  if (benchmarkPhaseCounter < 0){
+		return TRANSMIT_SUCCEEDED;
+	  }
+#endif // QTB_BENCHMARK
+
+	  if (image != nullptr){
+		//  image->save("jpg/desktop.jpg", "jpg", 75);
+		emit drawDesktop(*image);
+	  }
 	}
   }
   else {
@@ -389,35 +346,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	  emit clearDesktop();
 	}
   }
-
-#if TEST_THREAD
-  printTimeInfo("emit draw");
-#endif // TEST_THREAD
-
-#if 0 // NG
-  // frame rate control
-  if (QTB_DESKTOP_FRAMERATE_CONTROL){
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	qint64 pastTime = threadSleepTime + currentTime - startTime;
-	qint64 interval = settings->getFrameInterval();
-	//cout << "interval = " << interval << ", pastTime = " << pastTime << endl << flush;
-
-	if (pastTime < interval){
-	  qint64 sleepTime = interval - pastTime;
-	  //cout << "sleepTime = " << sleepTime << endl << flush;
-	  QThread::msleep(sleepTime);
-	}
-	else {
-	  //cout << "sleepTime = 0" << endl << flush;
-	}
-  }
-#endif // 0 // NG
-
-#if TEST_THREAD
-  printTimeInfo("frame controled");
-#endif // TEST_THREAD
-
-#endif // 1 // for TEST
 
 #else // !QTB_TEST_CODE
 
@@ -513,140 +441,12 @@ long GraphicsThread::receiveData(char *buf, long size)
   return NetThread::receiveData(sock_graphics, buf, size);
 }
 
-#if !QTB_TEST_CODE
-
-#if 0 // for TEST
-
-// draw graphics
-void GraphicsThread::draw_Graphics(int size)
-{
-  bool result = false;
-
-  // MODE 5/6 (MJPEG)
-  if (com_data->video_mode == VIDEO_MODE_MJPEG){
-	// load a JPEG data
-	result = draw_Graphics_MJPEG(size);
-  }
-  // MODE 7 (VP8)
-  else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
-	// load a RGB32 data from YUV image
-	result = draw_Graphics_COMPRESS(size);
-  }
-
-#if QTB_BENCHMARK
-  // check benchmark phase counter
-  benchmarkPhaseCounter--;
-  if (benchmarkPhaseCounter < 0){
-	return;
-  }
-#endif // QTB_BENCHMARK
-
-  // draw desktop
-  if (result){
-	//  image->save("jpg/desktop.jpg", "jpg", 75);
-	emit drawDesktop(*image);
-  }
-}
-
-// draw graphics MJPEG
-inline bool GraphicsThread::draw_Graphics_MJPEG(int size)
-{
-  bool result = false;
-
-  // load a JPEG data to QImage
-  result = image->loadFromData((const uchar *)buffer,
-							   (uint)size,
-							   "JPEG");
-  if (!result){
-	// internal error (illigal JPEG file image)
-	cout << "internal error (illigal JPEG file image)" << endl << flush;
-	ABORT();
-  }
-
-  return result;
-}
-
-// draw graphics COMPRESS
-inline bool GraphicsThread::draw_Graphics_COMPRESS(int size)
-{
-  Q_UNUSED(size);
-
-  bool result = false;
-
-  // make RGB image
-  int rgbImageSize;
-
-#if QTB_SIMD_SUPPORT
-  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-	rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD, settings->getConvertThreadCount());
-  }
-  else {
-	rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
-  }
-#else // QTB_SIMD_SUPPORT
-  rgbImageSize = makeRGBImage(convertYUVtoRGB, settings->getConvertThreadCount());
-#endif // QTB_SIMD_SUPPORT
-
-  //  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
-
-#if QTB_BENCHMARK
-  // check benchmark phase counter
-  benchmarkPhaseCounter--;
-  if (benchmarkPhaseCounter < 0){
-	return false;
-  }
-#endif // QTB_BENCHMARK
-
-  if (rgbImageSize != 0){
-#if 0 // for TEST
-	{
-	  static bool flag = true;
-	  fstream file;
-
-	  if (flag){
-		file.open("test.bmp", ios::out | ios::binary);
-		if (file.is_open()){
-		  int size = (int)rgbImageSize + 64;
-		  file.write((const char*)qtbrynhildr::bmp, size);
-		  file.close();
-		}
-		//flag = false;
-	  }
-	}
-#endif // for TEST
-#if QTB_LOAD_BITMAP
-	// load a BMP data to QImage
-	result = image->loadFromData((const uchar *)qtbrynhildr::bmp,
-								 (uint)rgbImageSize + 64,
-								 "BMP");
-#else // QTB_LOAD_BITMAP
-	// create QImage
-	if (image != 0){
-	  delete image;
-	}
-	image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-	result = true;
-#endif // QTB_LOAD_BITMAP
-  }
-  else {
-	if (image->isNull()){
-	  delete image;
-	  image = new QImage(qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-	  image->fill(QTB_DESKTOP_BACKGROUND_COLOR);
-	}
-  }
-
-  return result;
-}
-
-#endif // 0 // for TEST
-
-#endif // !QTB_TEST_CODE
-
 // output received data
 void GraphicsThread::outputReceivedData(long receivedDataSize)
 {
-  decoder->outputDataToFile(buffer, receivedDataSize, frameCounter.getFrameCounter());
+  decoder->outputDataToFile(buffer,
+							receivedDataSize,
+							frameCounter.getFrameCounter());
 }
 
 } // end of namespace qtbrynhildr

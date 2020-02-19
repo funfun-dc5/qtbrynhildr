@@ -393,7 +393,6 @@ private:
   QAction *selectBenchmarkPhase1_Action;
   QAction *selectBenchmarkPhase2_Action;
   QAction *selectBenchmarkPhase3_Action;
-  QAction *selectBenchmarkPhase4_Action;
 #endif // QTB_BENCHMARK
 
   // connect to server dialog
@@ -916,7 +915,6 @@ private slots:
   void selectBenchmarkPhase1();
   void selectBenchmarkPhase2();
   void selectBenchmarkPhase3();
-  void selectBenchmarkPhase4();
 #endif // QTB_BENCHMARK
 
 private:

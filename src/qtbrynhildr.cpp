@@ -209,7 +209,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,selectBenchmarkPhase1_Action(0)
   ,selectBenchmarkPhase2_Action(0)
   ,selectBenchmarkPhase3_Action(0)
-  ,selectBenchmarkPhase4_Action(0)
 #endif // QTB_BENCHMARK
   ,connectToServerDialog(0)
   ,desktopScalingDialog(0)
@@ -2130,11 +2129,6 @@ void QtBrynhildr::createActions()
 	selectBenchmarkPhase3_Action->setEnabled(false);
 	selectBenchmarkPhase3_Action->setCheckable(false);
 	connect(selectBenchmarkPhase3_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase3()));
-	selectBenchmarkPhase4_Action = new QAction(tr("Select Phase 4"), this);
-	selectBenchmarkPhase4_Action->setStatusTip(tr("Select Phase 4"));
-	selectBenchmarkPhase4_Action->setEnabled(false);
-	selectBenchmarkPhase4_Action->setCheckable(false);
-	connect(selectBenchmarkPhase4_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase4()));
   }
 #endif // QTB_BENCHMARK
 }
@@ -2390,7 +2384,6 @@ void QtBrynhildr::createMenus()
 	benchmarkMenu->addAction(selectBenchmarkPhase1_Action);
 	benchmarkMenu->addAction(selectBenchmarkPhase2_Action);
 	benchmarkMenu->addAction(selectBenchmarkPhase3_Action);
-	benchmarkMenu->addAction(selectBenchmarkPhase4_Action);
 
 	// refresh benchmark menu
 	refreshBenchmarkMenu();
@@ -3759,7 +3752,6 @@ void QtBrynhildr::refreshBenchmarkMenuCheck()
   selectBenchmarkPhase1_Action->setChecked(false);
   selectBenchmarkPhase2_Action->setChecked(false);
   selectBenchmarkPhase3_Action->setChecked(false);
-  selectBenchmarkPhase4_Action->setChecked(false);
   switch(initialBenchmarkPhaseCounter){
   case 0:
 	selectBenchmarkPhase0_Action->setChecked(true);
@@ -3773,9 +3765,6 @@ void QtBrynhildr::refreshBenchmarkMenuCheck()
   case 3:
 	selectBenchmarkPhase3_Action->setChecked(true);
 	break;
-  case 4:
-	selectBenchmarkPhase4_Action->setChecked(true);
-	break;
   default:
 	// do nothing
 	break;
@@ -3786,32 +3775,28 @@ void QtBrynhildr::refreshBenchmarkMenu()
 {
   // benchmark menus
   if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){ // MODE5/6 (MJPEG)
-	initialBenchmarkPhaseCounter = 2;
+	initialBenchmarkPhaseCounter = 3;
 	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
 	selectBenchmarkPhase0_Action->setEnabled(true);
 	selectBenchmarkPhase0_Action->setCheckable(true);
 	selectBenchmarkPhase0_Action->setVisible(true);
 
-	selectBenchmarkPhase1_Action->setText(tr("Create Image Object"));
-	selectBenchmarkPhase1_Action->setEnabled(true);
-	selectBenchmarkPhase1_Action->setCheckable(true);
-	selectBenchmarkPhase1_Action->setVisible(true);
+	selectBenchmarkPhase1_Action->setEnabled(false);
+	selectBenchmarkPhase1_Action->setCheckable(false);
+	selectBenchmarkPhase1_Action->setVisible(false);
 
-	selectBenchmarkPhase2_Action->setText(tr("Draw JPEG Image"));
+	selectBenchmarkPhase2_Action->setText(tr("Create Image Object"));
 	selectBenchmarkPhase2_Action->setEnabled(true);
 	selectBenchmarkPhase2_Action->setCheckable(true);
 	selectBenchmarkPhase2_Action->setVisible(true);
 
-	selectBenchmarkPhase3_Action->setEnabled(false);
-	selectBenchmarkPhase3_Action->setCheckable(false);
-	selectBenchmarkPhase3_Action->setVisible(false);
-
-	selectBenchmarkPhase4_Action->setEnabled(false);
-	selectBenchmarkPhase4_Action->setCheckable(false);
-	selectBenchmarkPhase4_Action->setVisible(false);
+	selectBenchmarkPhase3_Action->setText(tr("Draw JPEG Image"));
+	selectBenchmarkPhase3_Action->setEnabled(true);
+	selectBenchmarkPhase3_Action->setCheckable(true);
+	selectBenchmarkPhase3_Action->setVisible(true);
   }
   else if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){ // MODE7 (VP8)
-	initialBenchmarkPhaseCounter = 4;
+	initialBenchmarkPhaseCounter = 3;
 	selectBenchmarkPhase0_Action->setEnabled(true);
 	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
 	selectBenchmarkPhase0_Action->setCheckable(true);
@@ -3822,23 +3807,18 @@ void QtBrynhildr::refreshBenchmarkMenu()
 	selectBenchmarkPhase1_Action->setCheckable(true);
 	selectBenchmarkPhase1_Action->setVisible(true);
 
-	selectBenchmarkPhase2_Action->setText(tr("Translate from YUV to RGB"));
+	selectBenchmarkPhase2_Action->setText(tr("Create Image Object"));
 	selectBenchmarkPhase2_Action->setEnabled(true);
 	selectBenchmarkPhase2_Action->setCheckable(true);
 	selectBenchmarkPhase2_Action->setVisible(true);
 
-	selectBenchmarkPhase3_Action->setText(tr("Create Image Object"));
+	selectBenchmarkPhase3_Action->setText(tr("Draw RGB32 Image"));
 	selectBenchmarkPhase3_Action->setEnabled(true);
 	selectBenchmarkPhase3_Action->setCheckable(true);
 	selectBenchmarkPhase3_Action->setVisible(true);
-
-	selectBenchmarkPhase4_Action->setText(tr("Draw RGB32 Image"));
-	selectBenchmarkPhase4_Action->setEnabled(true);
-	selectBenchmarkPhase4_Action->setCheckable(true);
-	selectBenchmarkPhase4_Action->setVisible(true);
   }
   else {
-	initialBenchmarkPhaseCounter = 5;
+	initialBenchmarkPhaseCounter = 4;
   }
 
   refreshBenchmarkMenuCheck();
@@ -4667,10 +4647,6 @@ void QtBrynhildr::selectBenchmarkPhase2()
 void QtBrynhildr::selectBenchmarkPhase3()
 {
   selectBenchmarkPhase(3);
-}
-void QtBrynhildr::selectBenchmarkPhase4()
-{
-  selectBenchmarkPhase(4);
 }
 #endif // QTB_BENCHMARK
 

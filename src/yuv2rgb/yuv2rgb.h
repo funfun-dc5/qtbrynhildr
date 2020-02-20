@@ -83,10 +83,13 @@ extern int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, u
 extern void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 
 #if QTB_SIMD_SUPPORT
+#if !defined(__ARM_NEON__)
 // YUV convert to RGB (SIMD version)
 extern void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
-  //extern void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
+#else // !defined(__ARM_NEON__)
+extern void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
+#endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
 
 #endif // QTB_MULTI_THREAD_CONVERTER

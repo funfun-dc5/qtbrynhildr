@@ -33,7 +33,7 @@ private:
   int nextPos;
 
   // output log flag
-  bool outputLog;
+  //bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function

@@ -56,7 +56,7 @@ private:
   int frameCount;
 
   // output log flag
-  bool outputLog;
+  //bool outputLog;
 
 #if QTB_REC
   fstream *file;

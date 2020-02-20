@@ -20,7 +20,7 @@ GraphicsBuffer::GraphicsBuffer(int size)
   ,nextFrameNo(0)
   ,frameCount(0)
   // for DEBUG
-  ,outputLog(false)
+  //,outputLog(false)
 {
   // initialize
   ringBuffer = new RingBuffer(size);

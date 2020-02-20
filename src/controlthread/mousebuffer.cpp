@@ -18,7 +18,7 @@ MouseBuffer::MouseBuffer(int size)
   :wheel(0)
   ,enabled(true)
   // for DEBUG
-  ,outputLog(false)
+  //,outputLog(false)
 {
   // initialize button queues
   for (int i = 0; i < MOUSE_BUTTON_NUM; i++){

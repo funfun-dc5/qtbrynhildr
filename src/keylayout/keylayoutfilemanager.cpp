@@ -22,9 +22,10 @@ namespace qtbrynhildr {
 
 // constructor
 KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
-  :path(layoutfilepath)
+  :
+  //path(layoutfilepath)
   // for DEBUG
-  ,outputLog(false)
+  outputLog(false)
 {
   if (outputLog)
 	cout << "Created KeyLayoutFileManager! layoutfilepath = " << layoutfilepath << endl << flush;

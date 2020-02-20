@@ -22,7 +22,7 @@ class KeyLayoutFileManager {
   //-------------------------------------------------------------------------------
 private:
   // key layout file path
-  const char *path;
+  //const char *path;
 
   // output log flag
   const bool outputLog;

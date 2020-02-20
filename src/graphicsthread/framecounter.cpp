@@ -21,7 +21,7 @@ FrameCounter::FrameCounter()
   ,previousGetFrameRateTime(0)
   ,totalFrameCounter(0)
   // for DEBUG
-  ,outputLog(true)
+  //,outputLog(true)
 {
 }
 

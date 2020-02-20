@@ -19,7 +19,7 @@ MouseButton::MouseButton(int size)
   ,bufferSize(0)
   ,topPos(0)
   ,nextPos(0)
-  ,outputLog(true)
+   //,outputLog(false)
 {
   // allocate buffer
   buffer = new MOUSE_BUTTON[size];

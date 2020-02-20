@@ -157,6 +157,15 @@ private:
 		  (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_NEON) != 0){
 		hasNEON = true;
 	  }
+	  	  // for TEST
+	  if (outputLog){
+		if (hasNEON){
+		  cout << "NEON : Supported" << endl;
+		}
+		else {
+		  cout << "NEON : NOT Supported" << endl;
+		}
+	  }
 #endif // !defined(__ARM_NEON__)
 	}
   };

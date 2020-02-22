@@ -20,14 +20,14 @@ case $UNAME in
 					# ignore
 					;;
 				msvc)
-					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2017"
+					QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/msvc2017"
 					;;
 				msvc64)
-					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2017_64"
+					QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/msvc2017_64"
 					;;
 				xp)
 					QTVERSION=5.6.3
-					QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/msvc2015"
+					QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/msvc2015"
 					;;
 				*)
 					echo "setup_qt5 : Unknown argument : $TARGET"
@@ -38,28 +38,28 @@ case $UNAME in
 			# Qt5.12 -
 			case $UNAMEM in
 			x86_64)
-				QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw73_64"
-				MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw730_64"
+				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw73_64"
+				MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw730_64"
 				;;
 			i686)
-				QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw73_32"
-				MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw730_32"
+				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw73_32"
+				MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw730_32"
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
 				return;;
 			esac
 			# Qt5.9 - 5.11
-#			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
-#			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw530_32"
+#			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
+#			MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw530_32"
 			# Qt5.6 for XP/Vista
 #			QTVERSION=5.6.3
-#			QTROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/${QTVERSION}/mingw49_32"
-#			MINGWROOT="/c/Tools/develop/Qt/Qt${QTVERSION}/Tools/mingw492_32"
+#			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw49_32"
+#			MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw492_32"
 			# MinGW
 			PATHLIST=${MINGWROOT}/bin
 			# Coverity Scan
-			PATHLIST=/c/Tools/develop/cov-analysis-win64-2019.03/bin:${PATHLIST}
+			PATHLIST=/opt/cov-analysis-win64-2019.03/bin:${PATHLIST}
 		fi
 	;;
 	Linux)

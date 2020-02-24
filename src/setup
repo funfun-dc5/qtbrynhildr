@@ -8,6 +8,7 @@ source ./setup_qt5 $1
 ./clean $1
 rm -f Makefile Makefile.Release Makefile.Debug
 rm -f object_script.*
+echo RUN : ${QTROOT}/bin/${QMAKE} ${PRO}
 ${QTROOT}/bin/${QMAKE} ${PRO}
 
 case $UNAME in

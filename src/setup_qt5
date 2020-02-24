@@ -1,5 +1,6 @@
 # setup for Qt5
 #
+TARGET=$1
 UNAME=`uname`
 export UNAMEM=`uname -m`
 QMAKE=qmake

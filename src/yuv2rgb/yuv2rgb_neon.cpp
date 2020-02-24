@@ -22,8 +22,6 @@ namespace qtbrynhildr {
 
 #if defined(__ARM_NEON__)
 
-#if QTB_MULTI_THREAD_CONVERTER
-
 // YUV convert to RGB (SIMD version)
 void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
@@ -374,8 +372,6 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 	}
   }
 }
-
-#endif // QTB_MULTI_THREAD_CONVERTER
 
 #endif // defined(__ARM_NEON__)
 

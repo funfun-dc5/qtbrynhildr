@@ -13,7 +13,6 @@
 
 namespace qtbrynhildr {
 
-#if QTB_MULTI_THREAD_CONVERTER
 // clip
 inline int clip(int val)
 {
@@ -163,7 +162,5 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	}
   }
 }
-
-#endif // QTB_MULTI_THREAD_CONVERTER
 
 } // end of namespace qtbrynhildr

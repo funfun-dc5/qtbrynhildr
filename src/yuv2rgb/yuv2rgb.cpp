@@ -21,8 +21,6 @@
 
 namespace qtbrynhildr {
 
-#if QTB_MULTI_THREAD_CONVERTER
-
 // parameters
 int width = 0;
 int height = 0;
@@ -51,7 +49,6 @@ Aligned(16) uchar *rgb = 0;
 // codec context
 vpx_codec_ctx_t c_codec;
 
-#endif // QTB_MULTI_THREAD_CONVERTER
 
 // initialize for yuv
 void initVPX()
@@ -245,6 +242,7 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	vtop = v2topOrg;
   }
 
+#if QTB_MULTI_THREAD_CONVERTER
   if (numOfThread <= 1 || height % 2 != 0){
 	(*convert)(ytop, utop, vtop, rgbtop, height);
   }
@@ -299,6 +297,11 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	f2.waitForFinished();
 	f3.waitForFinished();
   }
+#else // QTB_MULTI_THREAD_CONVERTER
+  // no other thread
+  Q_UNUSED(numOfThread);
+  (*convert)(ytop, utop, vtop, rgbtop, height);
+#endif // QTB_MULTI_THREAD_CONVERTER
 
   return rgbImageSize;
 }

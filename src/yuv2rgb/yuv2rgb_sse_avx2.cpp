@@ -24,8 +24,6 @@ namespace qtbrynhildr {
 
 #if defined(__AVX2__)
 
-#if QTB_MULTI_THREAD_CONVERTER
-
 // YUV convert to RGB (SIMD version)
 void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
@@ -399,9 +397,6 @@ void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 	}
   }
 }
-
-
-#endif // QTB_MULTI_THREAD_CONVERTER
 
 #endif // defined(__AVX2__)
 

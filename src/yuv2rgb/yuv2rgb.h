@@ -35,8 +35,6 @@
 
 namespace qtbrynhildr {
 
-#if QTB_MULTI_THREAD_CONVERTER
-
 // parameters
 extern int width;
 extern int height;
@@ -91,8 +89,6 @@ extern void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uch
 extern void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 #endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
-
-#endif // QTB_MULTI_THREAD_CONVERTER
 
 } // end of namespace qtbrynhildr
 

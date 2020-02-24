@@ -52,10 +52,16 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   spinBox_serverNameListSize->setRange(5, 100);	// for TEST
 
   // convertThreadCount
+#if QTB_MULTI_THREAD_CONVERTER
   comboBox_convertThreadCount->insertItem(0, tr("1 thread"));
   comboBox_convertThreadCount->insertItem(1, tr("2 threads"));
   comboBox_convertThreadCount->insertItem(2, tr("4 threads"));
   //  comboBox_convertThreadCount->insertItem(3, tr("8 threads"));
+#else // QTB_MULTI_THREAD_CONVERTER
+  comboBox_convertThreadCount->insertItem(0, tr("1 thread"));
+  comboBox_convertThreadCount->setCurrentIndex(0);
+  comboBox_convertThreadCount->setEnabled(false);
+#endif // QTB_MULTI_THREAD_CONVERTER
 
   // doubleClickThreshold
   spinBox_doubleClickThreshold->setRange(100, 1000); // for TEST
@@ -79,6 +85,7 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
 #endif // QTB_PORTABLE_VERSION
 
 #if !QTB_SIMD_SUPPORT
+  checkBox_onSIMDOperationSupport->setCheckState(Qt::Unchecked);
   checkBox_onSIMDOperationSupport->setEnabled(false);
 #endif // !QTB_SIMD_SUPPORT
 
@@ -127,13 +134,16 @@ void PreferenceDialog::getFromSettings()
   }
 
   // onSIMDOperationSupport
+#if QTB_SIMD_SUPPORT
   checkBox_onSIMDOperationSupport->
 	setCheckState(settings->getOnSIMDOperationSupport() ? Qt::Checked : Qt::Unchecked);
+#endif // QTB_SIMD_SUPPORT
 
   // serverNameListSize
   spinBox_serverNameListSize->setValue(settings->getServerNameListSize());
 
   // convertThreadCount
+#if QTB_MULTI_THREAD_CONVERTER
   int convertThreadCount = settings->getConvertThreadCount();
   switch (convertThreadCount){
   case 1:
@@ -147,6 +157,7 @@ void PreferenceDialog::getFromSettings()
 	break;
   }
   comboBox_convertThreadCount->setCurrentIndex(convertThreadCount);
+#endif // QTB_MULTI_THREAD_CONVERTER
 
   // keylayoutPath
   lineEdit_keylayoutPath->setText(settings->getKeylayoutPath());
@@ -236,13 +247,16 @@ bool PreferenceDialog::setToSettings()
 						  DESKTOPSCALING_TYPE_ON_SERVER : DESKTOPSCALING_TYPE_ON_CLIENT);
 
   // onSIMDOperationSupport
+#if QTB_SIMD_SUPPORT
   settings->
 	setOnSIMDOperationSupport(checkBox_onSIMDOperationSupport->checkState() == Qt::Checked);
+#endif // QTB_SIMD_SUPPORT
 
   // serverNameListSize
   settings->
 	setServerNameListSize(spinBox_serverNameListSize->value());
 
+#if QTB_MULTI_THREAD_CONVERTER
   // convertThreadCount
   int convertThreadCount = comboBox_convertThreadCount->currentIndex();
   switch (convertThreadCount){
@@ -257,6 +271,7 @@ bool PreferenceDialog::setToSettings()
 	break;
   }
   settings->setConvertThreadCount(convertThreadCount);
+#endif // QTB_MULTI_THREAD_CONVERTER
 
   // keylayoutPath
   settings->

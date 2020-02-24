@@ -12,6 +12,15 @@
 
  configure script option : --enable-custom-modes --disable-oggtest
 
+
+[MinGW]
+
+--build=i686-w64-mingw32
+
+[MinGW x64]
+
+--build=x86_64-w64-mingw32
+
 3) copy header files and static library
 
  copy celt.h, celt_types.h and libcelt0.a(named "libcelt.a") to qtbrynhilr/libs/celt/

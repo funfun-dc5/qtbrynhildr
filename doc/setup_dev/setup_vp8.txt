@@ -15,6 +15,8 @@ see `./configure --help`
 
 [MinGW] --target=x86-win32-gcc
 
+[MinGW x64] --target=x86_64-win64-gcc
+
 [MSVC] --target=x86-win32-vs12
 
 [MSVC x64] --target=x86_64-win32-vs12
@@ -25,6 +27,9 @@ see `./configure --help`
 
 [macOS] --target=x86_64-darwin14-gcc
 
+[Cygwin] --target=x86-win32-gcc
+
+[Cygwin x64] --target=x86_64-win64-gcc
 
 [additional options]
 

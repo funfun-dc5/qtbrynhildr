@@ -11,7 +11,7 @@
 // Local Header
 #include "common/netthread.h"
 #include "decoder.h"
-#include "framecontroler.h"
+#include "framecontroller.h"
 #include "framecounter.h"
 #if QTB_TEST_CODE
 #include "graphicsbuffer.h"

@@ -10,7 +10,7 @@
 #include <QDateTime>
 
 // Local Header
-#include "framecontroler.h"
+#include "framecontroller.h"
 
 namespace qtbrynhildr {
 

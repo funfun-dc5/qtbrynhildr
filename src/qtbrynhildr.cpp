@@ -703,6 +703,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   screenHeight += 20; // for TEST (Nexus7(2013):1920x1200)
   //  qDebug() << "screenHeight = " << screenHeight;
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // setup touchpanel interface
   // keroremote
   int checkHeight = screenHeight * 0.05; // 1/20 of screen height
@@ -716,6 +717,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	QRect(0, screenHeight/8 * 3, checkWidth, screenHeight/4);
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
 	QRect(screenWidth - checkWidth, screenHeight/8 * 3, screenWidth, screenHeight/4);
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog

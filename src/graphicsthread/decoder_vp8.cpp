@@ -19,8 +19,6 @@ bool DecoderVP8::doneInitVPX = false;
 // constructor
 DecoderVP8::DecoderVP8(QImage *image)
   :Decoder(image)
-  // for DEBUG
-  //,outputLog(false)
 {
   // initialize libvpx
   if (!doneInitVPX){

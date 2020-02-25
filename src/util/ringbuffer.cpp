@@ -17,8 +17,10 @@ RingBuffer::RingBuffer(int size)
   :topPos(0)
   ,nextPos(0)
   // for DEBUG
-  //,outputLog(false)
+  ,outputLog(false)
 {
+  Q_UNUSED(outputLog);
+
   // allocate buffer
   buffer = new char[size];
   pairBuffer = new char[size];

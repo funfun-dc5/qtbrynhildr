@@ -16,8 +16,6 @@ namespace qtbrynhildr {
 // constructor
 DecoderVP8NEON::DecoderVP8NEON(QImage *image)
   :DecoderVP8(image)
-  // for DEBUG
-  //,outputLog(false)
 {
 }
 

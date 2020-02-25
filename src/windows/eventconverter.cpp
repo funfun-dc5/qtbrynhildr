@@ -35,8 +35,10 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 #endif // USE_KEYLAYOUTFILE
   ,type(KEYTOP_TYPE_UNKNOWN)
   ,shiftKeyControl(SHIFTKEY_THROUGH)
-  //,outputLog(false)
+  ,outputLog(false)
 {
+  Q_UNUSED(outputLog);
+
   // set keyboard type
   setKeytopType(type);
 

@@ -25,9 +25,6 @@ class DecoderVP8 : public Decoder
   // Variable
   //-------------------------------------------------------------------------------
 private:
-  // output log flag
-  //  bool outputLog;
-
   // flag for initVPX()
   static bool doneInitVPX;
 

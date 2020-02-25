@@ -18,8 +18,10 @@ MouseBuffer::MouseBuffer(int size)
   :wheel(0)
   ,enabled(true)
   // for DEBUG
-  //,outputLog(false)
+  ,outputLog(false)
 {
+  Q_UNUSED(outputLog);
+
   // initialize button queues
   for (int i = 0; i < MOUSE_BUTTON_NUM; i++){
 	buttons[i] = new MouseButton(size);

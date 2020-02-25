@@ -19,8 +19,10 @@ MouseWheel::MouseWheel(int size)
   ,bufferSize(0)
   ,topPos(0)
   ,nextPos(0)
-   //,outputLog(true)
+  ,outputLog(true)
 {
+  Q_UNUSED(outputLog);
+
   // allocate buffer
   buffer = new MOUSE_WHEEL[size];
   bufferSize = size;

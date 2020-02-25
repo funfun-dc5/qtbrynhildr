@@ -20,8 +20,10 @@ GraphicsBuffer::GraphicsBuffer(int size)
   ,nextFrameNo(0)
   ,frameCount(0)
   // for DEBUG
-  //,outputLog(false)
+  ,outputLog(false)
 {
+  Q_UNUSED(outputLog);
+
   // initialize
   ringBuffer = new RingBuffer(size);
   memset(frameTable, 0, sizeof(frameTable));

@@ -32,7 +32,7 @@ private:
   unsigned int totalFrameCounter;
 
   // output log flag
-  //bool outputLog;
+  bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function

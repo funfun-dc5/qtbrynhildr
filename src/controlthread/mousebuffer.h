@@ -49,7 +49,7 @@ private:
   bool enabled;
 
   // output log flag
-  //const bool outputLog;
+  const bool outputLog;
 
   //-------------------------------------------------------------------------------
   // Function

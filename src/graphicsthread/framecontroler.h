@@ -34,7 +34,7 @@ public:
   virtual ~FrameControler();
 
   // adjust frame
-  bool adjust();
+  bool adjust(int frame_no);
 
 protected:
 

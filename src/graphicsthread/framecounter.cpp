@@ -16,8 +16,7 @@ namespace qtbrynhildr {
 
 // constructor
 FrameCounter::FrameCounter()
-  :
-  frameCounter(0)
+  :frameCounter(0)
   ,previousGetFrameRateTime(0)
   ,totalFrameCounter(0)
   // for DEBUG

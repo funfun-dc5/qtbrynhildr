@@ -7,6 +7,7 @@
 // System Header
 
 // Qt Header
+#include <QDateTime>
 
 // Local Header
 #include "framecontroler.h"
@@ -17,7 +18,7 @@ namespace qtbrynhildr {
 FrameControler::FrameControler()
   :
   // for DEBUG
-  outputLog(true)
+  outputLog(false)
 {
 }
 
@@ -27,8 +28,13 @@ FrameControler::~FrameControler()
 }
 
 // adjust frame
-bool FrameControler::adjust()
+bool FrameControler::adjust(int frame_no)
 {
+  if (outputLog){
+	cout << "frame_no : " << frame_no << endl << flush;
+	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	cout << "time     : " << currentTime << endl << flush;
+  }
   return true;
 }
 

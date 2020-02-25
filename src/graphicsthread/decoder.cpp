@@ -18,12 +18,11 @@ namespace qtbrynhildr {
 
 // constructor
 Decoder::Decoder(QImage *image)
-  :
-  buffer(0),
-  size(0),
-  image(image),
+  :buffer(0)
+  ,size(0)
+  ,image(image)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
 }
 

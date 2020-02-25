@@ -31,8 +31,7 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
-  :
-  SoftwareKeyboard(KEYTOP_TYPE_JP, parent)
+  :SoftwareKeyboard(KEYTOP_TYPE_JP, parent)
 {
 }
 

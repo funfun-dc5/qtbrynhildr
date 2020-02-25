@@ -48,7 +48,7 @@ QImage* DecoderVP8NEON::getDesktopImage(int numOfThread)
   }
 
   // make RGB image
-  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_NEON, numOfThread); // Yet
+  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_NEON, numOfThread);
 
   // get QImage
   image = getImage(rgbImageSize);

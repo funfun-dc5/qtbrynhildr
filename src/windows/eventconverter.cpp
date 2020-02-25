@@ -28,15 +28,14 @@ EventConverter::EventConverter()
 }
 
 EventConverter::EventConverter(KEYTOP_TYPE type)
-  :
-  keyEventTable(0),
-  tableSize(0),
+  :keyEventTable(0)
+  ,tableSize(0)
 #ifdef USE_KEYLAYOUTFILE
-  klf(0),
+  ,klf(0)
 #endif // USE_KEYLAYOUTFILE
-  type(KEYTOP_TYPE_UNKNOWN),
-  shiftKeyControl(SHIFTKEY_THROUGH),
-  outputLog(false)
+  ,type(KEYTOP_TYPE_UNKNOWN)
+  ,shiftKeyControl(SHIFTKEY_THROUGH)
+  //,outputLog(false)
 {
   // set keyboard type
   setKeytopType(type);

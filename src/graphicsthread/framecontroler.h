@@ -1,8 +1,8 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2020 FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef FRAMECONTROLER_H
-#define FRAMECONTROLER_H
+#ifndef FRAMECONTROLLER_H
+#define FRAMECONTROLLER_H
 // Common Header
 #include "common/common.h"
 
@@ -15,7 +15,7 @@
 
 namespace qtbrynhildr {
 
-class FrameControler
+class FrameController
 {
   //-------------------------------------------------------------------------------
   // Variable
@@ -29,9 +29,9 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  FrameControler();
+  FrameController();
   // destructor
-  virtual ~FrameControler();
+  virtual ~FrameController();
 
   // adjust frame
   bool adjust(int frame_no);
@@ -44,4 +44,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // FRAMECONTROLER_H
+#endif // FRAMECONTROLLER_H

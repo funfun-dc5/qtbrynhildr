@@ -15,7 +15,7 @@
 namespace qtbrynhildr {
 
 // constructor
-FrameControler::FrameControler()
+FrameController::FrameController()
   :
   // for DEBUG
   outputLog(false)
@@ -23,12 +23,12 @@ FrameControler::FrameControler()
 }
 
 // destructor
-FrameControler::~FrameControler()
+FrameController::~FrameController()
 {
 }
 
 // adjust frame
-bool FrameControler::adjust(int frame_no)
+bool FrameController::adjust(int frame_no)
 {
   if (outputLog){
 	cout << "frame_no : " << frame_no << endl << flush;

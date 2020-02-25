@@ -322,7 +322,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	// clear desktop flag clear
 	onClearDesktop = false;
 
-	if (frameControler.adjust((int)com_data->frame_no)){
+	if (frameController.adjust((int)com_data->frame_no)){
 	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
 
 #if QTB_BENCHMARK

@@ -64,8 +64,8 @@ private:
   int benchmarkPhaseCounter;
 #endif // QTB_BENCHMARK
 
-  // frame controler
-  FrameControler frameControler;
+  // frame controller
+  FrameController frameController;
 
   // decoders
   Decoder *decoderMode56;	// for MODE5/6

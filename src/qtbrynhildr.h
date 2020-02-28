@@ -76,6 +76,9 @@
 // event converter
 #include "windows/eventconverter.h"
 
+// for TEST
+#define QTB_TEST_DRAW_FRAME 0
+
 namespace qtbrynhildr {
 
 // ----------------------------------------------
@@ -434,6 +437,11 @@ private:
 
   // current data rate
   double currentDataRate;
+
+#if QTB_TEST_DRAW_FRAME
+  // draw counter
+  int drawCounter;
+#endif // QTB_TEST_DRAW_FRAME
 
   // option
   Option *option;

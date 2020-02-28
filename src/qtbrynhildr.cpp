@@ -223,6 +223,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,totalFrameCounter(0)
   ,currentFrameRate(0)
   ,currentDataRate(0)
+#if QTB_TEST_DRAW_FRAME
+  ,drawCounter(0)
+#endif // QTB_TEST_DRAW_FRAME
   ,option(option)
   ,iniFileName(0)
   ,settings(0)
@@ -1401,6 +1404,11 @@ void QtBrynhildr::drawDesktop(QImage image)
 
   // update desktop
   desktopPanel->refreshDesktop(image);
+
+#if QTB_TEST_DRAW_FRAME
+  // count up draw counter
+  drawCounter++;
+#endif // QTB_TEST_DRAW_FRAME
 
   // set desktop scaling factor for full screen mode
   if (onSetDesktopScalingFactorForFullScreen){
@@ -4867,6 +4875,19 @@ void QtBrynhildr::finishedDownload()
 void QtBrynhildr::timerExpired()
 {
   //  cout << "timerExpired()!" << endl << flush;
+#if QTB_TEST_DRAW_FRAME
+  {
+	static int previousDrawCounter = 0;
+	if (previousDrawCounter == 0){
+	  previousDrawCounter = drawCounter;
+	}
+	else {
+	  int frameRate = drawCounter - previousDrawCounter;
+	  previousDrawCounter = drawCounter;
+	  cout << "frameRate: " << frameRate << endl << flush;
+	}
+  }
+#endif // QTB_TEST_DRAW_FRAME
 
   // update current frame rate
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON

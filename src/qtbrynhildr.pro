@@ -32,7 +32,7 @@ DEFINES += QTB_LITTLE_ENDIAN
 # message($$QMAKESPEC)
 
 # configuration for Qt Brynhildr
-#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-neon multi_thread_converter updatecheck gprof portable
+#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx vp8-avx2 vp8-neon multi_thread_converter updatecheck gprof portable
 CONFIG += celt vp8 multi_thread_converter updatecheck
 
 # gprof
@@ -202,6 +202,21 @@ QMAKE_CXXFLAGS += /arch:AVX2
 
 *-g++:vp8-avx2 | *-clang:vp8-avx2 {
 QMAKE_CXXFLAGS += -mavx2
+}
+
+# VP8-AVX
+vp8-avx {
+SOURCES += yuv2rgb/yuv2rgb_sse_avx.cpp
+HEADERS += graphicsthread/decoder_vp8_avx.h
+SOURCES += graphicsthread/decoder_vp8_avx.cpp
+}
+
+*-msvc:vp8-avx {
+QMAKE_CXXFLAGS += /arch:AVX
+}
+
+*-g++:vp8-avx | *-clang:vp8-avx {
+QMAKE_CXXFLAGS += -mavx
 }
 
 # VP8-NEON

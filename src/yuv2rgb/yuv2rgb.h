@@ -84,6 +84,7 @@ extern void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rg
 #if !defined(__ARM_NEON__)
 // YUV convert to RGB (SIMD version)
 extern void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
+extern void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 #else // !defined(__ARM_NEON__)
 extern void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);

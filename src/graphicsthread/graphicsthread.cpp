@@ -15,14 +15,20 @@
 // Local Header
 #include "decoder_jpeg.h"
 #include "decoder_vp8_cpp.h"
+
 #if !defined(__ARM_NEON__)
-#include "decoder_vp8_sse.h"
 #if defined(__AVX2__)
 #include "decoder_vp8_avx2.h"
-#endif // defined(__AVX2__)
+#elif defined(__AVX__)
+#include "decoder_vp8_avx.h"
+#endif // defined(__AVX__)
+#if defined(__SSE4_2__)
+#include "decoder_vp8_sse.h"
+#endif // defined(__SSE4_2__)
 #else // !defined(__ARM_NEON__)
 #include "decoder_vp8_neon.h"
 #endif // !defined(__ARM_NEON__)
+
 #include "graphicsthread.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
@@ -83,20 +89,25 @@ GraphicsThread::GraphicsThread(Settings *settings)
 
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
-  if (CPUInfo::AVX2()){
+  // AVX2
+  if (decoderMode7SIMD == nullptr && CPUInfo::AVX2()){
 	decoderMode7SIMD = new DecoderVP8AVX2(image);
 	hasSIMDInstruction = true;
   }
-  else if (CPUInfo::SSE42()){
+#elif defined(__AVX__)
+  // AVX
+  if (decoderMode7SIMD == nullptr && CPUInfo::AVX()){
+	decoderMode7SIMD = new DecoderVP8AVX(image);
+	hasSIMDInstruction = true;
+  }
+#endif // defined(__AVX__)
+#if defined(__SSE4_2__)
+  // SSE
+  if (decoderMode7SIMD == nullptr && CPUInfo::SSE42()){
 	decoderMode7SIMD = new DecoderVP8SSE(image);
 	hasSIMDInstruction = true;
   }
-#else // defined(__AVX2__)
-  if (CPUInfo::SSE42()){
-	decoderMode7SIMD = new DecoderVP8SSE(image);
-	hasSIMDInstruction = true;
-  }
-#endif // defined(__AVX2__)
+#endif // defined(__SSE4_2__)
 #else // !defined(__ARM_NEON__)
   if (CPUInfo::NEON()){
 	decoderMode7SIMD = new DecoderVP8NEON(image);

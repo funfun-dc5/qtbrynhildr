@@ -183,6 +183,7 @@ public:
 #if !defined(__ARM_NEON__)
   // for Intel CPU
   static bool SSE42() { return CPUInformation.hasSSE42; }
+  static bool AVX() { return CPUInformation.hasAVX; }
   static bool AVX2() { return CPUInformation.hasAVX2; }
 #else // !defined(__ARM_NEON__)
   // for ARM CPU

@@ -32,7 +32,7 @@ DEFINES += QTB_LITTLE_ENDIAN
 # message($$QMAKESPEC)
 
 # configuration for Qt Brynhildr
-#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx vp8-avx2 vp8-neon multi_thread_converter updatecheck gprof portable
+#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter updatecheck gprof portable
 CONFIG += celt vp8 multi_thread_converter updatecheck
 
 # gprof

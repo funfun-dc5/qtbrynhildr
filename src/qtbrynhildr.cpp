@@ -3572,12 +3572,12 @@ void QtBrynhildr::toggleOnControl()
 // toggle onGraphics
 void QtBrynhildr::toggleOnGraphics()
 {
-  static unsigned int currentFrameRate;
+  static unsigned int originalFrameRate = 0;
   bool flag = !settings->getOnGraphics();
 
   if (flag){ // Off -> On
 	// restore framerate
-	settings->setFrameRate(currentFrameRate);
+	settings->setFrameRate(originalFrameRate);
   }
   else { // On -> Off
 	// onControl Off
@@ -3588,7 +3588,7 @@ void QtBrynhildr::toggleOnGraphics()
 	}
 
 	// change framerate to 5
-	currentFrameRate = settings->getFrameRate();
+	originalFrameRate = settings->getFrameRate();
 	settings->setFrameRate(5);
   }
 

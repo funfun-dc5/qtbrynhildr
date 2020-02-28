@@ -34,7 +34,7 @@
 #include "util/cpuinfo.h"
 #include "version.h"
 #if QTB_TEST_CODE
-#include "yuv2rgb/yuv2rgb.h"
+#include "graphicsthread/yuv2rgb/yuv2rgb.h"
 #endif // QTB_TEST_CODE
 
 // for TEST

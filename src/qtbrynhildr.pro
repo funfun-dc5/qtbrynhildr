@@ -157,10 +157,10 @@ LIBS += -lcelt
 vp8 {
 INCLUDEPATH += ../libs/vpx
 LIBS += -L../libs/vpx
-HEADERS += yuv2rgb/bitmap.h
-HEADERS += yuv2rgb/yuv2rgb.h
-SOURCES += yuv2rgb/yuv2rgb.cpp
-SOURCES += yuv2rgb/yuv2rgb_v3.cpp
+HEADERS += graphicsthread/yuv2rgb/bitmap.h
+HEADERS += graphicsthread/yuv2rgb/yuv2rgb.h
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb.cpp
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb_v3.cpp
 HEADERS += graphicsthread/decoder_vp8.h
 SOURCES += graphicsthread/decoder_vp8.cpp
 HEADERS += graphicsthread/decoder_vp8_cpp.h
@@ -176,7 +176,7 @@ LIBS += -lvpx
 
 # VP8-SSE
 vp8-sse {
-SOURCES += yuv2rgb/yuv2rgb_sse.cpp
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse.cpp
 HEADERS += graphicsthread/decoder_vp8_sse.h
 SOURCES += graphicsthread/decoder_vp8_sse.cpp
 }
@@ -191,7 +191,7 @@ QMAKE_CXXFLAGS += -msse4.2
 
 # VP8-AVX2
 vp8-avx2 {
-SOURCES += yuv2rgb/yuv2rgb_sse_avx2.cpp
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx2.cpp
 HEADERS += graphicsthread/decoder_vp8_avx2.h
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 }
@@ -206,7 +206,7 @@ QMAKE_CXXFLAGS += -mavx2
 
 # VP8-AVX
 vp8-avx {
-SOURCES += yuv2rgb/yuv2rgb_sse_avx.cpp
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx.cpp
 HEADERS += graphicsthread/decoder_vp8_avx.h
 SOURCES += graphicsthread/decoder_vp8_avx.cpp
 }
@@ -222,7 +222,7 @@ QMAKE_CXXFLAGS += -mavx
 # VP8-NEON
 android-*:vp8-neon {
 # SIMD (ARM:gcc)
-SOURCES += yuv2rgb/yuv2rgb_neon.cpp
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
 SOURCES += graphicsthread/decoder_vp8_neon.cpp
 QMAKE_CXXFLAGS += -mfpu=neon

@@ -14,8 +14,10 @@
 
 
 // libvxp Header
+#if !defined(BENCHMARK)
 #include "vpx_decoder.h"
 #include "vp8dx.h"
+#endif // !defined(BENCHMARK)
 
 // desktop image format
 #define FORMAT_RGB32 1
@@ -59,6 +61,7 @@ extern uchar *bmp;
 #endif // QTB_LOAD_BITMAP
 extern uchar *rgb;
 
+#if !defined(BENCHMARK)
 // codec context
 extern vpx_codec_ctx_t c_codec;
 
@@ -67,6 +70,7 @@ extern void initVPX();
 
 // decode VP8
 extern void decodeVPX(uchar *buffer, int size);
+#endif // !defined(BENCHMARK)
 
 // setup for yuv, rgb
 extern bool setup();

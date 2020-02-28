@@ -46,6 +46,7 @@ BITMAPINFOHEADER *biHeader = 0;
 #endif // QTB_LOAD_BITMAP
 Aligned(16) uchar *rgb = 0;
 
+#if !defined(BENCHMARK)
 // codec context
 vpx_codec_ctx_t c_codec;
 
@@ -64,6 +65,7 @@ void decodeVPX(uchar *buffer, int size)
   // decode vp8
   vpx_codec_decode(&c_codec, (uint8_t*)buffer, size, 0, 0);
 }
+#endif // !defined(BENCHMARK)
 
 // setup for yuv, rgb
 bool setup()
@@ -149,6 +151,7 @@ bool setup()
   return true;
 }
 
+#if !defined(BENCHMARK)
 // make YUV image
 bool makeYUVImage()
 {
@@ -214,6 +217,13 @@ bool makeYUVImage()
 
   return true;
 }
+#else // !defined(BENCHMARK)
+// make YUV image
+bool makeYUVImage()
+{
+  return true;
+}
+#endif // !defined(BENCHMARK)
 
 int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height), int numOfThread)
 {

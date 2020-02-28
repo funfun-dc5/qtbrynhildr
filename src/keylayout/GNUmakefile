@@ -10,7 +10,7 @@ TARGET = klfc
 
 OBJPATH = obj/
 OBJS = \
-	$(OBJPATH)main.o \
+	$(OBJPATH)klfc.o \
 	$(OBJPATH)klfcompiler_lex.o \
 	$(OBJPATH)klfcompiler.tab.o
 

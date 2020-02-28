@@ -10,12 +10,12 @@ LFLAGS=
 TARGET = klfc.exe
 
 SOURCES = \
-	main.c \
+	klfc.c \
 	klfcompiler_lex.c \
 	klfcompiler.tab.c
 
 OBJS = \
-	obj\main.obj \
+	obj\klfc.obj \
 	obj\klfcompiler_lex.obj \
 	obj\klfcompiler.tab.obj
 
@@ -26,8 +26,8 @@ compile: $(TARGET)
 $(TARGET): $(OBJS)
 	$(LINKER) $(LFLAGS) $(OBJS) /OUT:$(TARGET)
 
-obj\main.obj: main.c
-	$(CC) -c $(CFLAGS) -Foobj\ main.c
+obj\klfc.obj: klfc.c
+	$(CC) -c $(CFLAGS) -Foobj\ klfc.c
 
 obj\klfcompiler_lex.obj: klfcompiler_lex.c
 	$(CC) -c $(CFLAGS) -Foobj\ klfcompiler_lex.c

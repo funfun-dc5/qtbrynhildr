@@ -186,6 +186,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,sendKey5_Action(0)
   ,sendKey6_Action(0)
   ,onScrollMode_Action(0)
+  ,onViewerMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,touchpanelInterfaceTypeKeroRemote_Action(0)
   ,touchpanelInterfaceTypeQtBrynhildr_Action(0)
@@ -2028,6 +2029,16 @@ void QtBrynhildr::createActions()
 	connect(onScrollMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnScrollMode()));
   }
 
+  // on Viewer Mode Action
+  if (QTB_VIEWER_MODE){
+	onViewerMode_Action = new QAction(tr("Viewer Mode"), this);
+	onViewerMode_Action->setEnabled(false);
+	onViewerMode_Action->setCheckable(true);
+	onViewerMode_Action->setChecked(settings->getOnViewerMode());
+	onViewerMode_Action->setStatusTip(tr("Viewer Mode"));
+	connect(onViewerMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnViewerMode()));
+  }
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel interface type
   touchpanelInterfaceTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
@@ -2345,6 +2356,10 @@ void QtBrynhildr::createMenus()
 	optionMenu->addAction(onScrollMode_Action);
   }
 
+  if (QTB_VIEWER_MODE){
+	optionMenu->addAction(onViewerMode_Action);
+  }
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel interface type
   touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface"));
@@ -2582,6 +2597,11 @@ void QtBrynhildr::connected()
 	onScrollMode_Action->setEnabled(true);
   }
 
+  // enable viewer mode
+  if (QTB_VIEWER_MODE){
+	onViewerMode_Action->setEnabled(true);
+  }
+
   // enable full screen
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -2698,6 +2718,11 @@ void QtBrynhildr::disconnected()
   // disabled scroll mode
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action->setEnabled(false);
+  }
+
+  // disabled viewer mode
+  if (QTB_VIEWER_MODE){
+	onViewerMode_Action->setEnabled(false);
   }
 
   // disabled full screen
@@ -3748,6 +3773,9 @@ void QtBrynhildr::refreshOtherMenu()
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action->setEnabled(flag);
   }
+  if (QTB_VIEWER_MODE){
+	onViewerMode_Action->setEnabled(flag);
+  }
 
   // enable/disable menu for sound
   flag = settings->getOnSound();
@@ -4541,6 +4569,20 @@ void QtBrynhildr::toggleOnScrollMode()
   }
   else {
 	settings->setOnScrollMode(true);
+  }
+}
+
+// toggle viewer mode
+void QtBrynhildr::toggleOnViewerMode()
+{
+  if (!QTB_VIEWER_MODE)
+	return;
+
+  if (settings->getOnViewerMode()){
+	settings->setOnViewerMode(false);
+  }
+  else {
+	settings->setOnViewerMode(true);
   }
 }
 

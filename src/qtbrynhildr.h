@@ -355,6 +355,9 @@ private:
   // toggle scroll mode
   QAction *onScrollMode_Action;
 
+  // toggle viewer mode
+  QAction *onViewerMode_Action;
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel interface type KeroRemote
   QAction *touchpanelInterfaceTypeKeroRemote_Action;
@@ -887,6 +890,9 @@ private slots:
 
   // scroll mode
   void toggleOnScrollMode();
+
+  // viewer mode
+  void toggleOnViewerMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel interface type

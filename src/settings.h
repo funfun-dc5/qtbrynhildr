@@ -659,6 +659,9 @@ private:
   // scroll mode
   volatile bool onScrollMode;
 
+  // viewer mode
+  volatile bool onViewerMode;
+
   // show password
   volatile bool onShowPassword;
 
@@ -1865,6 +1868,18 @@ public:
   void setOnScrollMode(bool onScrollMode)
   {
 	this->onScrollMode = onScrollMode;
+  }
+
+  // get on viewer mode flag
+  bool getOnViewerMode() const
+  {
+	return onViewerMode;
+  }
+
+  // set on viewer mode flag
+  void setOnViewerMode(bool onViewerMode)
+  {
+	this->onViewerMode = onViewerMode;
   }
 
   // get on desktop capture flag

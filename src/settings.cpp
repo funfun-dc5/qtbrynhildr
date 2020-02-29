@@ -50,6 +50,7 @@ Settings::Settings(const char *iniFileName)
 #endif // QTB_RECORDER
   ,onDesktopCapture(false)
   ,onScrollMode(false)
+  ,onViewerMode(false)
 {
   if (iniFileName != 0){
 	settings = new QSettings(iniFileName, QSettings::IniFormat);

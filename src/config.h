@@ -70,6 +70,9 @@ const bool QTB_SCROLL_MODE				= false;
 const bool QTB_SCROLL_MODE				= false;
 #endif // defined(QTB_DEV_DESKTOP)
 
+// viewer mode
+const bool QTB_VIEWER_MODE				= true;
+
 // log view dialog
 const bool QTB_LOG_VIEW					= true;
 

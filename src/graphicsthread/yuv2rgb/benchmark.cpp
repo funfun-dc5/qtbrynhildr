@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
 	int imageSize = convertFrame();
 	if (imageSize == 0){
 	  cout << "Error : imageSize == 0" << endl << flush;
+	  break;
 	}
   }
 

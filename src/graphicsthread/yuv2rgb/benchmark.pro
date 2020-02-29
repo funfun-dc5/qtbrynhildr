@@ -11,7 +11,7 @@ QT += widgets
 QT += concurrent
 
 # spec.
-DEFINES += BENCHMARK  QTB_MULTI_THREAD_CONVERTER
+DEFINES += BENCHMARK QTB_MULTI_THREAD_CONVERTER
 
 # ========= benchmark spec. =========
 DEFINES += LOOP_COUNT=10000 MULTI_THREAD=2

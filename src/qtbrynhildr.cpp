@@ -38,6 +38,9 @@
 #endif // QTB_TEST_CODE
 
 // for TEST
+#include "graphicsthread/yuv2rgb/yuv2rgb.h"
+
+// for TEST
 #define QTB_TEST_DESKTOP_IMAGE_CAPTURE1	0
 #define QTB_TEST_DESKTOP_IMAGE_CAPTURE2	0
 
@@ -2464,7 +2467,28 @@ void QtBrynhildr::updateConnected()
   // set label
   if (settings->getConnected()){
 	// connection
-	connectionLabel->setText(tr("Connected : ") + settings->getServerName());
+#if QTB_BENCHMARK
+	QString str;
+	if (onBenchmarkMenu){
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ] Calc Rate :  %4 %").
+		arg(settings->getServerName()).
+		arg(settings->getDesktopWidth(), 3).
+		arg(settings->getDesktopHeight(), 3).
+		arg(calcRate, 4, 'f', 2, ' ');
+	}
+	else {
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+		arg(settings->getServerName()).
+		arg(settings->getDesktopWidth(), 3).
+		arg(settings->getDesktopHeight(), 3);
+	}
+#else // QTB_BENCHMARK
+	QString str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+	  arg(settings->getServerName()).
+	  arg(settings->getDesktopWidth(), 3).
+	  arg(settings->getDesktopHeight(), 3);
+#endif // QTB_BENCHMARK
+	connectionLabel->setText(str);
   }
   else {
 	// connection
@@ -4905,6 +4929,11 @@ void QtBrynhildr::timerExpired()
 	// Mbps
 	currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
 	updateFrameRate();
+#if QTB_BENCHMARK
+	if (onBenchmarkMenu){
+	  updateConnected();
+	}
+#endif // QTB_BENCHMARK
   }
 }
 

@@ -11,9 +11,6 @@
 // Local Header
 #include "yuv2rgb.h"
 
-// for TEST
-#define PRINT_CALC_RATE 0
-
 namespace qtbrynhildr {
 
 // clip
@@ -46,15 +43,12 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
-#if PRINT_CALC_RATE // for TEST
-  // frame counter
-  static int frameCounter = 0;
-  frameCounter++;
+#if QTB_BENCHMARK
   // skip counter
   int skipCounter = 0;
   // calc counter
   int calcCounter = 0;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -76,9 +70,9 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		yp = *yptop++;
 		if (y == yp){
 		  rgbtop += IMAGE_FORMAT_SIZE;
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		  skipCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 		}
 		else {
 		  y <<= 8; // y * 256
@@ -123,9 +117,9 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		  calcCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 		}
 
 		// == xPos+1 ==
@@ -133,9 +127,9 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		yp = *yptop++;
 		if (y == yp){
 		  rgbtop += IMAGE_FORMAT_SIZE;
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		  skipCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 		}
 		else {
 		  y <<= 8; // y * 256
@@ -180,9 +174,9 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		  calcCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 		}
 	  }
 	  else {
@@ -277,9 +271,10 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 #endif // FORMAT_RGB32
 
 		yptop += 2;
-#if PRINT_CALC_RATE // for TEST
+
+#if QTB_BENCHMARK
 		calcCounter += 2;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 	  }
 	}
 #if !QTB_LOAD_BITMAP
@@ -292,10 +287,9 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 	  vptop += uvNext;
 	}
   }
-#if PRINT_CALC_RATE // for TEST
-  cout << "  calc rate : " <<
-	(float)calcCounter/(calcCounter + skipCounter) * 100.0 << " (%) : frame " << frameCounter << endl << flush;
-#endif // for TEST
+#if QTB_BENCHMARK
+  calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
+#endif // QTB_BENCHMARK
 }
 
 } // end of namespace qtbrynhildr

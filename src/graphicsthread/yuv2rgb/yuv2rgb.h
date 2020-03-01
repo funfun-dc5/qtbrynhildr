@@ -37,6 +37,12 @@
 
 namespace qtbrynhildr {
 
+// for benchmark
+#if QTB_BENCHMARK
+// calculation rate
+extern double calcRate;
+#endif //QTB_BENCHMARK
+
 // parameters
 extern int width;
 extern int height;

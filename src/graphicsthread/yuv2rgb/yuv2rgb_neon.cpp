@@ -53,6 +53,13 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
+#if QTB_BENCHMARK
+  // skip counter
+  int skipCounter = 0;
+  // calc counter
+  int calcCounter = 0;
+#endif // QTB_BENCHMARK
+
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int y, u, v;
@@ -80,6 +87,9 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		yp = *yptop++;
 		if (y == yp){
 		  rgbtop += IMAGE_FORMAT_SIZE;
+#if QTB_BENCHMARK
+		  skipCounter++;
+#endif // QTB_BENCHMARK
 		}
 		else {
 		  // 1) load Y
@@ -144,6 +154,10 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  *rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
+
+#if QTB_BENCHMARK
+		  calcCounter++;
+#endif // QTB_BENCHMARK
 		}
 
 		// xPos+1
@@ -153,6 +167,9 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		yp = *yptop++;
 		if (y == yp){
 		  rgbtop += IMAGE_FORMAT_SIZE;
+#if QTB_BENCHMARK
+		  skipCounter++;
+#endif // QTB_BENCHMARK
 		}
 		else {
 		  // 1) load Y
@@ -217,6 +234,10 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  *rgbtop++ = (uchar)result[2];
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
+
+#if QTB_BENCHMARK
+		  calcCounter++;
+#endif // QTB_BENCHMARK
 		}
 	  }
 	  else {
@@ -359,6 +380,10 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 #endif // FORMAT_RGB32
 
 		yptop += 2;
+
+#if QTB_BENCHMARK
+		calcCounter += 2;
+#endif // QTB_BENCHMARK
 	  }
 	}
 #if !QTB_LOAD_BITMAP
@@ -371,6 +396,9 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 	  vptop += uvNext;
 	}
   }
+#if QTB_BENCHMARK
+  calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
+#endif // QTB_BENCHMARK
 }
 
 #endif // defined(__ARM_NEON__)

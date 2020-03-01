@@ -611,7 +611,7 @@ void ControlThread::initHeaderForGraphics_test()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	com_data->max_fps = (char)settings->getFrameRate();
+	com_data->max_fps		= (char)settings->getFrameRate();
   }
   // zoom
   com_data->zoom = (ZOOM)1.0;

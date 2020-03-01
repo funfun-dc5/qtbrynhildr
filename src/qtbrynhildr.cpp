@@ -2470,10 +2470,13 @@ void QtBrynhildr::updateConnected()
 #if QTB_BENCHMARK
 	QString str;
 	if (onBenchmarkMenu){
-	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ] Calc Rate :  %4 %").
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ Calc Rate :  %7 % ]").
 		arg(settings->getServerName()).
 		arg(settings->getDesktopWidth(), 3).
 		arg(settings->getDesktopHeight(), 3).
+		arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
+		arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
+		arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3).
 		arg(calcRate, 4, 'f', 2, ' ');
 	}
 	else {

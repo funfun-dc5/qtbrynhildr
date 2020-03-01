@@ -39,6 +39,16 @@ uchar *y2topOrg = 0;
 uchar *u2topOrg = 0;
 uchar *v2topOrg = 0;
 
+#if QTB_MULTI_THREAD_CONVERTER
+#define ALL_NEW_THREAD 0
+#if ALL_NEW_THREAD
+// for thread wait
+QFuture<void> f1, f2, f3, f4;
+#else // ALL_NEW_THREAD
+QFuture<void> f1, f2, f3;
+#endif // ALL_NEW_THREAD
+#endif // QTB_MULTI_THREAD_CONVERTER
+
 #if QTB_LOAD_BITMAP
 Aligned(16) uchar *bmp = 0;
 BITMAPFILEHEADER *bfHeader = 0;
@@ -49,7 +59,6 @@ Aligned(16) uchar *rgb = 0;
 #if !defined(BENCHMARK)
 // codec context
 vpx_codec_ctx_t c_codec;
-
 
 // initialize for yuv
 void initVPX()
@@ -253,12 +262,64 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   }
 
 #if QTB_MULTI_THREAD_CONVERTER
+#if ALL_NEW_THREAD
+  // other threads
+  int linesOfThread = height / numOfThread;
+#if QTB_LOAD_BITMAP
+  int rgbtopNextThread = width * linesOfThread * IMAGE_FORMAT_SIZE;
+#else // QTB_LOAD_BITMAP
+  int rgbtopNextThread = - (width * linesOfThread) * IMAGE_FORMAT_SIZE;
+#endif // QTB_LOAD_BITMAP
+  int ytopNextThread = width * linesOfThread;
+  int uvtopNextThread = uvNext * linesOfThread/2;
+
+  // start 1st thread
+  f1 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
+
+  if (numOfThread >= 2){
+	// for next thread
+	rgbtop += rgbtopNextThread;
+	ytop += ytopNextThread;
+	utop += uvtopNextThread;
+	vtop += uvtopNextThread;
+
+	// start 2nd thread
+	f2 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
+  }
+  if (numOfThread >= 3){
+	// for next thread
+	rgbtop += rgbtopNextThread;
+	ytop += ytopNextThread;
+	utop += uvtopNextThread;
+	vtop += uvtopNextThread;
+
+	// start 3rd thread
+	f3 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
+  }
+  if (numOfThread >= 4){
+	// for next thread
+	rgbtop += rgbtopNextThread;
+	ytop += ytopNextThread;
+	utop += uvtopNextThread;
+	vtop += uvtopNextThread;
+
+	// start 4th thread
+	f4 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
+  }
+
+  // wait for all threads finished
+  f1.waitForFinished();
+  f2.waitForFinished();
+  f3.waitForFinished();
+  f4.waitForFinished();
+
+#else // ALL_NEW_THREAD
+
+  // this thread and other threads
   if (numOfThread <= 1 || height % 2 != 0){
 	(*convert)(ytop, utop, vtop, rgbtop, height);
   }
   else { // numOfThread >= 2
-	QFuture<void> f1, f2, f3;
-
 	int linesOfThread = height / numOfThread;
 #if QTB_LOAD_BITMAP
 	int rgbtopNextThread = width * linesOfThread * IMAGE_FORMAT_SIZE;
@@ -294,7 +355,7 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	  f3 = QtConcurrent::run(convert, ytop, utop, vtop, rgbtop, linesOfThread);
 	}
 
-	// start last thread
+	// start last thread (this thread)
 	//rgbtop -= (width * linesOfThread) * IMAGE_FORMAT_SIZE;
 	rgbtop += rgbtopNextThread;
 	ytop += ytopNextThread;
@@ -307,6 +368,8 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	f2.waitForFinished();
 	f3.waitForFinished();
   }
+
+#endif // ALL_NEW_THREAD
 #else // QTB_MULTI_THREAD_CONVERTER
   // no other thread
   Q_UNUSED(numOfThread);

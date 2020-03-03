@@ -56,7 +56,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
   ,buffer(0)
- #if QTB_BENCHMARK
+#if QTB_BENCHMARK
   ,initialBenchmarkPhaseCounter(20)
   ,benchmarkPhaseCounter(0)
 #endif // QTB_BENCHMARK

@@ -13,9 +13,7 @@
 #include "decoder.h"
 #include "framecontroller.h"
 #include "framecounter.h"
-#if QTB_TEST_CODE
 #include "graphicsbuffer.h"
-#endif // QTB_TEST_CODE
 
 namespace qtbrynhildr {
 
@@ -29,11 +27,11 @@ class GraphicsThread : public NetThread
   //-------------------------------------------------------------------------------
 private:
 #if QTB_TEST_CODE
-  // graphics buffer
-  GraphicsBuffer *graphicsBuffer;
-
   // graphics buffer size
   int graphicsBufferSize;
+
+  // graphics buffer
+  GraphicsBuffer *graphicsBuffer;
 #endif // QTB_TEST_CODE
 
   // frame counter
@@ -41,8 +39,6 @@ private:
 
   // drawing flag
   bool onDrawing;
-
-#if !QTB_TEST_CODE
 
   // image for drawing desktop
   QImage *image;
@@ -54,7 +50,6 @@ private:
   // has SIMD instruction
   bool hasSIMDInstruction;
 #endif // QTB_SIMD_SUPPORT
-#endif // !QTB_TEST_CODE
 
   // local buffer
   char *buffer;
@@ -162,14 +157,15 @@ private:
   // output received data
   void outputReceivedData(long receivedDataSize);
 
-#if !QTB_TEST_CODE
+  // draw desktop image
+  inline void drawDesktopImage(char *buf, int size, VIDEO_MODE mode);
+
 signals:
   // draw desktop
   void drawDesktop(QImage image);
 
   // clear desktop
   void clearDesktop();
-#endif // !QTB_TEST_CODE
 };
 
 } // end of namespace qtbrynhildr

@@ -16,6 +16,7 @@
 #include "decoder_jpeg.h"
 #include "decoder_vp8_cpp.h"
 
+#if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
 #include "decoder_vp8_avx2.h"
@@ -28,6 +29,7 @@
 #else // !defined(__ARM_NEON__)
 #include "decoder_vp8_neon.h"
 #endif // !defined(__ARM_NEON__)
+#endif // QTB_SIMD_SUPPORT
 
 #include "graphicsthread.h"
 #include "parameters.h"
@@ -62,7 +64,9 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_BENCHMARK
   ,decoderMode56(0)
   ,decoderMode7(0)
+#if QTB_SIMD_SUPPORT
   ,decoderMode7SIMD(0)
+#endif // QTB_SIMD_SUPPORT
   ,decoder(0)
   ,video_mode(-1)
 {
@@ -77,11 +81,11 @@ GraphicsThread::GraphicsThread(Settings *settings)
   // local buffer
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
 
-#if QTB_SIMD_SUPPORT
   // set decoders
   decoderMode56 = new DecoderJPEG(image);
   decoderMode7 = new DecoderVP8CPP(image);
 
+#if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
   // AVX2
@@ -377,6 +381,7 @@ void GraphicsThread::outputReceivedData(long receivedDataSize)
 void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 {
   // check mode
+#if QTB_SIMD_SUPPORT
   if (mode == video_mode){ // no change mode
 	// MODE 7 (VP8)
 	if (mode == VIDEO_MODE_COMPRESS){
@@ -408,6 +413,19 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	  }
 	}
   }
+#else // QTB_SIMD_SUPPORT
+  if (mode != video_mode){ // change mode
+	// change decoder
+	// MODE 5/6 (MJPEG)
+	if (mode == VIDEO_MODE_MJPEG){
+	  decoder = decoderMode56;
+	}
+	// MODE 7 (VP8)
+	else if (mode == VIDEO_MODE_COMPRESS){
+	  decoder = decoderMode7;
+	}
+  }
+#endif // QTB_SIMD_SUPPORT
 
   // pre-process
   decoder->preprocess(buf, size);

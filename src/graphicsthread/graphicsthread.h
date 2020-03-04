@@ -65,7 +65,9 @@ private:
   // decoders
   Decoder *decoderMode56;	// for MODE5/6
   Decoder *decoderMode7;	// for MODE7
+#if QTB_SIMD_SUPPORT
   Decoder *decoderMode7SIMD;// for MODE7(SIMD)
+#endif // QTB_SIMD_SUPPORT
 
   // current decoder
   Decoder *decoder;

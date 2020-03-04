@@ -181,6 +181,7 @@ CONFIG += vp8-sse
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx2.cpp
 HEADERS += graphicsthread/decoder_vp8_avx2.h
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
 }
 
 *-msvc:vp8-avx2 {
@@ -197,6 +198,7 @@ CONFIG += vp8-sse
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_avx.cpp
 HEADERS += graphicsthread/decoder_vp8_avx.h
 SOURCES += graphicsthread/decoder_vp8_avx.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
 }
 
 *-msvc:vp8-avx {
@@ -212,6 +214,7 @@ vp8-sse {
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse.cpp
 HEADERS += graphicsthread/decoder_vp8_sse.h
 SOURCES += graphicsthread/decoder_vp8_sse.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
 }
 
 *-msvc:vp8-sse {
@@ -228,6 +231,7 @@ android-*:vp8-neon {
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
 SOURCES += graphicsthread/decoder_vp8_neon.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
 QMAKE_CXXFLAGS += -mfpu=neon
 }
 

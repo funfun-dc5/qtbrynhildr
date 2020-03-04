@@ -58,10 +58,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
   ,buffer(0)
-#if QTB_BENCHMARK
-  ,initialBenchmarkPhaseCounter(20)
-  ,benchmarkPhaseCounter(0)
-#endif // QTB_BENCHMARK
   ,decoderMode56(0)
   ,decoderMode7(0)
 #if QTB_SIMD_SUPPORT
@@ -69,6 +65,10 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_SIMD_SUPPORT
   ,decoder(0)
   ,video_mode(-1)
+#if QTB_BENCHMARK
+  ,initialBenchmarkPhaseCounter(20)
+  ,benchmarkPhaseCounter(0)
+#endif // QTB_BENCHMARK
 {
   //outputLog = true; // for DEBUG
 

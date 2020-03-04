@@ -54,11 +54,6 @@ private:
   // local buffer
   char *buffer;
 
-#if QTB_BENCHMARK
-  int initialBenchmarkPhaseCounter;
-  int benchmarkPhaseCounter;
-#endif // QTB_BENCHMARK
-
   // frame controller
   FrameController frameController;
 
@@ -74,6 +69,11 @@ private:
 
   // current video mode
   VIDEO_MODE video_mode;
+
+#if QTB_BENCHMARK
+  int initialBenchmarkPhaseCounter;
+  int benchmarkPhaseCounter;
+#endif // QTB_BENCHMARK
 
   //-------------------------------------------------------------------------------
   // Function
@@ -116,13 +116,6 @@ public:
 	return onDrawing;
   }
 
-#if QTB_BENCHMARK
-  void setInitialBenchmarkPhaseCounter(int initialBenchmarkPhaseCounter)
-  {
-	this->initialBenchmarkPhaseCounter = initialBenchmarkPhaseCounter;
-  }
-#endif // QTB_BENCHMARK
-
 #if QTB_SIMD_SUPPORT
   // get SIMD decoder name
   const char* getSIMDDecoderName()
@@ -135,6 +128,13 @@ public:
 	}
   }
 #endif // QTB_SIMD_SUPPORT
+
+#if QTB_BENCHMARK
+  void setInitialBenchmarkPhaseCounter(int initialBenchmarkPhaseCounter)
+  {
+	this->initialBenchmarkPhaseCounter = initialBenchmarkPhaseCounter;
+  }
+#endif // QTB_BENCHMARK
 
 protected:
   // connect to server

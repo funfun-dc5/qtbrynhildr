@@ -19,11 +19,13 @@
    $ cd build_x86
    $ ../configure --target=x86-win32-vs12 --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests
 
-4) build_x86 下に出来上がった vpx.vcxproj を Visual Studio 2017 で読み込む
+4) build_x86 に入り make を実行
 
-5) Release/Win32 でビルド
+5) build_x86 下に出来上がった vpx.sln を Visual Studio 2017 で読み込む
 
-6) build_x86/Win32/Release 下に出来上がった vpxmd.lib を vpx.lib としてコピー
+6) Release/Win32 でビルド
+
+7) build_x86/Win32/Release 下に出来上がった vpxmd.lib を vpx.lib としてコピー
 
 ---------------------------------------------------------------------------
 [x64]
@@ -43,8 +45,10 @@
    $ cd build_x64
    $ ../configure --target=x86_64-win64-vs12 --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests
 
-4) build_x64 下に出来上がった vpx.vcxproj を Visual Studio 2017 で読み込む
+4) build_x64 に入り make を実行
 
-5) Release/x64 でビルド
+5) build_x64 下に出来上がった vpx.sln を Visual Studio 2017 で読み込む
 
-6) build_x64/x64/Release 下に出来上がった vpxmd.lib を　vpx.lib としてコピー
+6) Release/x64 でビルド
+
+7) build_x64/x64/Release 下に出来上がった vpxmd.lib を　vpx.lib としてコピー

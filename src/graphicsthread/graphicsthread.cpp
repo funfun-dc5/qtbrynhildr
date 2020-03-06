@@ -446,6 +446,14 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	if (frameController.adjust((int)com_data->frame_no)){
 	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
 
+#if QTB_BENCHMARK
+	  // check benchmark phase counter
+	  benchmarkPhaseCounter--;
+	  if (benchmarkPhaseCounter < 0){
+		return;
+	  }
+#endif // QTB_BENCHMARK
+
 	  if (image != nullptr){
 		//  image->save("jpg/desktop.jpg", "jpg", 75);
 		emit drawDesktop(*image);

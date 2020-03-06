@@ -77,6 +77,8 @@ void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
   int skipCounter = 0;
   // calc counter
   int calcCounter = 0;
+  // calc rate
+  calcRate = 0.0;
 #endif // QTB_BENCHMARK
 
   for (int yPos = 0; yPos < height; yPos++){
@@ -422,7 +424,8 @@ void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 	}
   }
 #if QTB_BENCHMARK
-  calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
+  if (calcCounter + skipCounter > 0)
+	calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
 #endif // QTB_BENCHMARK
 }
 

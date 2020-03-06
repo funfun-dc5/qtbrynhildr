@@ -288,7 +288,8 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 	}
   }
 #if QTB_BENCHMARK
-  calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
+  if (calcCounter + skipCounter > 0)
+	calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
 #endif // QTB_BENCHMARK
 }
 

@@ -43,6 +43,15 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
+#if QTB_BENCHMARK
+  // skip counter
+  int skipCounter = 0;
+  // calc counter
+  int calcCounter = 0;
+  // calc rate
+  calcRate = 0.0;
+#endif // QTB_BENCHMARK
+
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
 	  int r, g, b;
@@ -60,6 +69,9 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgbtop += IMAGE_FORMAT_SIZE;
+#if QTB_BENCHMARK
+		skipCounter++;
+#endif // QTB_BENCHMARK
 	  }
 	  else {
 #if FORMAT_RGB888
@@ -101,6 +113,10 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		*rgbtop++ = (uchar)b;
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
+
+#if QTB_BENCHMARK
+		calcCounter++;
+#endif // QTB_BENCHMARK
 	  }
 
 	  // == xPos+1 ==
@@ -108,6 +124,9 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgbtop += IMAGE_FORMAT_SIZE;
+#if QTB_BENCHMARK
+		skipCounter++;
+#endif // QTB_BENCHMARK
 	  }
 	  else {
 #if FORMAT_RGB888
@@ -149,6 +168,10 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		*rgbtop++ = (uchar)b;
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
+
+#if QTB_BENCHMARK
+		calcCounter++;
+#endif // QTB_BENCHMARK
 	  }
 	}
 #if !QTB_LOAD_BITMAP
@@ -161,6 +184,10 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	  vptop += uvNext;
 	}
   }
+#if QTB_BENCHMARK
+  if (calcCounter + skipCounter > 0)
+	calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
+#endif // QTB_BENCHMARK
 }
 
 } // end of namespace qtbrynhildr

@@ -21,6 +21,11 @@
 
 namespace qtbrynhildr {
 
+#if QTB_BENCHMARK
+// calculation rate
+double calcRate = 0.0;
+#endif // QTB_BENCHMARK
+
 // parameters
 int width = 0;
 int height = 0;

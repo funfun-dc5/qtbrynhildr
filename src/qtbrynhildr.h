@@ -62,9 +62,9 @@
 // thread
 #include "controlthread/controlthread.h"
 #include "graphicsthread/graphicsthread.h"
-#if QTB_TEST_CODE
+#if 0 // for TEST
 #include "graphicsthread/graphicsbuffer.h"
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 #include "soundthread/soundthread.h"
 
 #ifdef USE_KEYLAYOUTFILE
@@ -483,10 +483,10 @@ private:
   // thread for graphics
   GraphicsThread *graphicsThread;
 
-#if QTB_TEST_CODE
+#if 0 // for TEST
   // graphics buffer
   GraphicsBuffer *graphicsBuffer;
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 
   // thread for sound
   SoundThread *soundThread;
@@ -547,13 +547,13 @@ private:
   // timer for GUI
   QTimer *timer;
 
-#if QTB_TEST_CODE
+#if 0 // for TEST
   // timer for Graphics
   QTimer *timer_Graphics;
 
   // image
   QImage *image;
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 
   // clear desktop flag
   bool onClearDesktop;
@@ -1011,7 +1011,7 @@ private:
 	this->heightMargin = heightMargin;
   }
 
-#if QTB_TEST_CODE
+#if 0 // for TEST
   // start timer graphics
   void startTimer_Graphics(int frameRate);
 
@@ -1020,7 +1020,7 @@ private:
 
   // draw graphics
   void draw_Graphics();
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 
 private slots:
   // finished download
@@ -1028,9 +1028,9 @@ private slots:
 
   void timerExpired();
 
-#if QTB_TEST_CODE
+#if 0 // for TEST
   void timerExpired_Graphics();
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 };
 
 } // end of namespace qtbrynhildr

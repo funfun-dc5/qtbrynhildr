@@ -13,6 +13,7 @@
 #endif // QTB_REC
 
 // Local Header
+#include "common/protocols.h"
 #include "util/ringbuffer.h"
 
 namespace qtbrynhildr {
@@ -24,18 +25,13 @@ class GraphicsBuffer
   // Variable
   //-------------------------------------------------------------------------------
 public:
-  typedef enum {
-	TYPE_JPEG,
-	TYPE_VP8
-  } FrameType;
-
   // frame table size
   static const int FRAME_TABLE_NUM = 256;
 
 private:
   // frame entry
   typedef struct {
-	FrameType type;	// data type for this frame
+	VIDEO_MODE mode;	// data mode for this frame
 	unsigned int rate;	// data frame rate for this frame
 	int	size;		// data size for this frame
   } FrameEntry;
@@ -75,10 +71,10 @@ public:
   void clear();
 
   // put frame
-  int putFrame(const char *buf, int len, FrameType type, unsigned int rate);
+  int putFrame(const char *buf, int len, VIDEO_MODE mode, unsigned int rate);
 
   // get frame
-  int getFrame(char *buf, FrameType *type, unsigned int *rate);
+  int getFrame(char *buf, VIDEO_MODE &mode, unsigned int &rate);
 
   // get frame count
   int getFrameCount() const

@@ -13,9 +13,7 @@
 #include "decoder.h"
 #include "framecontroller.h"
 #include "framecounter.h"
-#if QTB_TEST_CODE
 #include "graphicsbuffer.h"
-#endif // QTB_TEST_CODE
 
 namespace qtbrynhildr {
 
@@ -29,11 +27,11 @@ class GraphicsThread : public NetThread
   //-------------------------------------------------------------------------------
 private:
 #if QTB_TEST_CODE
-  // graphics buffer
-  GraphicsBuffer *graphicsBuffer;
-
   // graphics buffer size
   int graphicsBufferSize;
+
+  // graphics buffer
+  GraphicsBuffer *graphicsBuffer;
 #endif // QTB_TEST_CODE
 
   // frame counter
@@ -41,8 +39,6 @@ private:
 
   // drawing flag
   bool onDrawing;
-
-#if !QTB_TEST_CODE
 
   // image for drawing desktop
   QImage *image;
@@ -54,15 +50,9 @@ private:
   // has SIMD instruction
   bool hasSIMDInstruction;
 #endif // QTB_SIMD_SUPPORT
-#endif // !QTB_TEST_CODE
 
   // local buffer
   char *buffer;
-
-#if QTB_BENCHMARK
-  int initialBenchmarkPhaseCounter;
-  int benchmarkPhaseCounter;
-#endif // QTB_BENCHMARK
 
   // frame controller
   FrameController frameController;
@@ -70,13 +60,20 @@ private:
   // decoders
   Decoder *decoderMode56;	// for MODE5/6
   Decoder *decoderMode7;	// for MODE7
+#if QTB_SIMD_SUPPORT
   Decoder *decoderMode7SIMD;// for MODE7(SIMD)
+#endif // QTB_SIMD_SUPPORT
 
   // current decoder
   Decoder *decoder;
 
   // current video mode
   VIDEO_MODE video_mode;
+
+#if QTB_BENCHMARK
+  int initialBenchmarkPhaseCounter;
+  int benchmarkPhaseCounter;
+#endif // QTB_BENCHMARK
 
   //-------------------------------------------------------------------------------
   // Function
@@ -119,13 +116,6 @@ public:
 	return onDrawing;
   }
 
-#if QTB_BENCHMARK
-  void setInitialBenchmarkPhaseCounter(int initialBenchmarkPhaseCounter)
-  {
-	this->initialBenchmarkPhaseCounter = initialBenchmarkPhaseCounter;
-  }
-#endif // QTB_BENCHMARK
-
 #if QTB_SIMD_SUPPORT
   // get SIMD decoder name
   const char* getSIMDDecoderName()
@@ -138,6 +128,13 @@ public:
 	}
   }
 #endif // QTB_SIMD_SUPPORT
+
+#if QTB_BENCHMARK
+  void setInitialBenchmarkPhaseCounter(int initialBenchmarkPhaseCounter)
+  {
+	this->initialBenchmarkPhaseCounter = initialBenchmarkPhaseCounter;
+  }
+#endif // QTB_BENCHMARK
 
 protected:
   // connect to server
@@ -162,14 +159,15 @@ private:
   // output received data
   void outputReceivedData(long receivedDataSize);
 
-#if !QTB_TEST_CODE
+  // draw desktop image
+  inline void drawDesktopImage(char *buf, int size, VIDEO_MODE mode);
+
 signals:
   // draw desktop
   void drawDesktop(QImage image);
 
   // clear desktop
   void clearDesktop();
-#endif // !QTB_TEST_CODE
 };
 
 } // end of namespace qtbrynhildr

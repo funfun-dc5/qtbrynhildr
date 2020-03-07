@@ -33,9 +33,12 @@
 #include "settings.h"
 #include "util/cpuinfo.h"
 #include "version.h"
-#if QTB_TEST_CODE
+#if 0 // for TEST
 #include "graphicsthread/yuv2rgb/yuv2rgb.h"
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
+
+// for TEST
+#include "graphicsthread/yuv2rgb/yuv2rgb.h"
 
 // for TEST
 #define QTB_TEST_DESKTOP_IMAGE_CAPTURE1	0
@@ -241,9 +244,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,logMessage(new LogMessage(this))
   ,controlThread(0)
   ,graphicsThread(0)
-#if QTB_TEST_CODE
+#if 0 // for TEST
   ,graphicsBuffer(0)
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
   ,soundThread(0)
 #ifdef USE_KEYLAYOUTFILE
   ,keyLayoutFileManager(0)
@@ -267,10 +270,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,keyBuffer(0)
   ,mouseBuffer(0)
   ,timer(0)
-#if QTB_TEST_CODE
+#if 0 // for TEST
   ,timer_Graphics(0)
   ,image(new QImage)
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
   ,onClearDesktop(false)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
@@ -834,10 +837,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
-#if QTB_TEST_CODE
+#if 0 // for TEST
   // get buffers
   graphicsBuffer = graphicsThread->getGraphicsBuffer();
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 
   // connect
   // all thread
@@ -929,14 +932,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   connect(timer, SIGNAL(timeout()), SLOT(timerExpired()));
   timer->start(QTB_WINDOW_UPDATE_DURATION);
 
-#if QTB_TEST_CODE
+#if 0 // for TEST
   // initialize timer for Graphics
   timer_Graphics = new QTimer(this);
   connect(timer_Graphics, SIGNAL(timeout()), SLOT(timerExpired_Graphics()));
   startTimer_Graphics(settings->getFrameRate());
 
   init_Graphics();
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 
 #if 0 // for TEST
   // initialize mouse cursor
@@ -1001,7 +1004,7 @@ QtBrynhildr::~QtBrynhildr()
 	delete timer;
 	timer = 0;
   }
-#if QTB_TEST_CODE
+#if 0 // for TEST
   if (timer_Graphics != 0){
 	timer_Graphics->stop();
 	delete timer_Graphics;
@@ -1011,7 +1014,7 @@ QtBrynhildr::~QtBrynhildr()
 	delete image;
 	image = 0;
   }
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
   if (settings != 0){
 	// disconnect to server
 	if (settings->getConnected())
@@ -1031,9 +1034,9 @@ QtBrynhildr::~QtBrynhildr()
 	// delete
 	delete graphicsThread;
 	graphicsThread = 0;
-#if QTB_TEST_CODE
+#if 0 // for TEST
 	graphicsBuffer = 0;
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
   }
   if (soundThread != 0){
 	// delete
@@ -2479,7 +2482,42 @@ void QtBrynhildr::updateConnected()
   // set label
   if (settings->getConnected()){
 	// connection
-	connectionLabel->setText(tr("Connected : ") + settings->getServerName());
+#if QTB_BENCHMARK
+	QString str;
+	if (onBenchmarkMenu){
+	  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ Calc Rate :  %7 % ]").
+		  arg(settings->getServerName()).
+		  arg(settings->getDesktopWidth(), 3).
+		  arg(settings->getDesktopHeight(), 3).
+		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
+		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
+		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3).
+		  arg(calcRate, 4, 'f', 2, ' ');
+	  }
+	  else {
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ]").
+		  arg(settings->getServerName()).
+		  arg(settings->getDesktopWidth(), 3).
+		  arg(settings->getDesktopHeight(), 3).
+		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
+		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
+		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3);
+	  }
+	}
+	else {
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+		arg(settings->getServerName()).
+		arg(settings->getDesktopWidth(), 3).
+		arg(settings->getDesktopHeight(), 3);
+	}
+#else // QTB_BENCHMARK
+	QString str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+	  arg(settings->getServerName()).
+	  arg(settings->getDesktopWidth(), 3).
+	  arg(settings->getDesktopHeight(), 3);
+#endif // QTB_BENCHMARK
+	connectionLabel->setText(str);
   }
   else {
 	// connection
@@ -4947,10 +4985,15 @@ void QtBrynhildr::timerExpired()
 	// Mbps
 	currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
 	updateFrameRate();
+#if QTB_BENCHMARK
+	if (onBenchmarkMenu){
+	  updateConnected();
+	}
+#endif // QTB_BENCHMARK
   }
 }
 
-#if QTB_TEST_CODE
+#if 0 // for TEST
 void QtBrynhildr::timerExpired_Graphics()
 {
   //  cout << "timerExpired_Graphics()!" << endl << flush;
@@ -5108,6 +5151,6 @@ void QtBrynhildr::draw_Graphics()
 	}
   }
 }
-#endif // QTB_TEST_CODE
+#endif // 0 // for TEST
 
 } // end of namespace qtbrynhildr

@@ -61,7 +61,8 @@ LIBS += -lws2_32 -limm32 -limagehlp -lwinmm # for WinSock2
 
 # MinGW
 win32-g++ {
-#CONFIG += console
+# for DEBUG
+CONFIG += console
 }
 
 # MSVC
@@ -174,26 +175,13 @@ else:vp8 {
 LIBS += -lvpx
 }
 
-# VP8-SSE
-vp8-sse {
-SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse.cpp
-HEADERS += graphicsthread/decoder_vp8_sse.h
-SOURCES += graphicsthread/decoder_vp8_sse.cpp
-}
-
-*-msvc:vp8-sse {
-DEFINES += __SSE4_2__
-}
-
-*-g++:vp8-sse | *-clang:vp8-sse {
-QMAKE_CXXFLAGS += -msse4.2
-}
-
 # VP8-AVX2
 vp8-avx2 {
+CONFIG += vp8-sse
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx2.cpp
 HEADERS += graphicsthread/decoder_vp8_avx2.h
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
 }
 
 *-msvc:vp8-avx2 {
@@ -206,9 +194,11 @@ QMAKE_CXXFLAGS += -mavx2
 
 # VP8-AVX
 vp8-avx {
-SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx.cpp
+CONFIG += vp8-sse
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb_avx.cpp
 HEADERS += graphicsthread/decoder_vp8_avx.h
 SOURCES += graphicsthread/decoder_vp8_avx.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
 }
 
 *-msvc:vp8-avx {
@@ -219,12 +209,29 @@ QMAKE_CXXFLAGS += /arch:AVX
 QMAKE_CXXFLAGS += -mavx
 }
 
+# VP8-SSE
+vp8-sse {
+SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse.cpp
+HEADERS += graphicsthread/decoder_vp8_sse.h
+SOURCES += graphicsthread/decoder_vp8_sse.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
+}
+
+*-msvc:vp8-sse {
+DEFINES += __SSE4_2__
+}
+
+*-g++:vp8-sse | *-clang:vp8-sse {
+QMAKE_CXXFLAGS += -msse4.2
+}
+
 # VP8-NEON
 android-*:vp8-neon {
 # SIMD (ARM:gcc)
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
 SOURCES += graphicsthread/decoder_vp8_neon.cpp
+DEFINES += QTB_SIMD_SUPPORT=1
 QMAKE_CXXFLAGS += -mfpu=neon
 }
 

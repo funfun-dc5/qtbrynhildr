@@ -65,7 +65,7 @@ void GraphicsBuffer::clear()
 }
 
 // put frame
-int GraphicsBuffer::putFrame(const char *buf, int len, FrameType type, unsigned int rate)
+int GraphicsBuffer::putFrame(const char *buf, int len, VIDEO_MODE mode, unsigned int rate)
 {
   // check table
   if (frameCount >= FRAME_TABLE_NUM){
@@ -88,7 +88,7 @@ int GraphicsBuffer::putFrame(const char *buf, int len, FrameType type, unsigned 
 #endif // QTB_REC
 
   // set to frame table
-  frameTable[nextFrameNo].type = type;
+  frameTable[nextFrameNo].mode = mode;
   frameTable[nextFrameNo].rate = rate;
   frameTable[nextFrameNo].size = len;
   nextFrameNo = (nextFrameNo >= FRAME_TABLE_NUM - 1) ? 0 : nextFrameNo + 1;
@@ -102,7 +102,7 @@ int GraphicsBuffer::putFrame(const char *buf, int len, FrameType type, unsigned 
 }
 
 // get frame
-int GraphicsBuffer::getFrame(char *buf, FrameType *type, unsigned int *rate)
+int GraphicsBuffer::getFrame(char *buf, VIDEO_MODE &mode, unsigned int &rate)
 {
   // check table
   if (frameCount <= 0){
@@ -122,8 +122,8 @@ int GraphicsBuffer::getFrame(char *buf, FrameType *type, unsigned int *rate)
 
   // clear frame table entry
   frameTable[currentFrameNo].size = 0;
-  *type = frameTable[currentFrameNo].type;
-  *rate = frameTable[currentFrameNo].rate;
+  mode = frameTable[currentFrameNo].mode;
+  rate = frameTable[currentFrameNo].rate;
   currentFrameNo = (currentFrameNo >= FRAME_TABLE_NUM - 1) ? 0 : currentFrameNo + 1;
 
   // current frame count--

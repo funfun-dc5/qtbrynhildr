@@ -17,7 +17,7 @@
 
  config.h を確認。VS2017の場合、マクロ VAR_ARRAYS を無効化する必要がある。
 
-4) libcelt に出来上がった libcelt.vcxproj を Visual Studio 2017 で読み込む
+4) libcelt にある libcelt.vcxproj を Visual Studio 2017 で読み込む
 
 5) 構成としてWin32を用意
 
@@ -42,7 +42,7 @@
 
  config.h を確認。VS2017の場合、マクロ VAR_ARRAYS を無効化する必要がある。
 
-4) libcelt に出来上がった libcelt.vcxproj を Visual Studio 2017 で読み込む
+4) libcelt にある libcelt.vcxproj を Visual Studio 2017 で読み込む
 
 5) 構成としてx64を用意
 

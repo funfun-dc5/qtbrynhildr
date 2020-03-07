@@ -11,9 +11,6 @@
 // Local Header
 #include "yuv2rgb.h"
 
-// for TEST
-#define PRINT_CALC_RATE 0
-
 namespace qtbrynhildr {
 
 // clip
@@ -46,15 +43,14 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
-#if PRINT_CALC_RATE // for TEST
-  // frame counter
-  static int frameCounter = 0;
-  frameCounter++;
+#if QTB_BENCHMARK
   // skip counter
   int skipCounter = 0;
   // calc counter
   int calcCounter = 0;
-#endif // for TEST
+  // calc rate
+  calcRate = 0.0;
+#endif // QTB_BENCHMARK
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
@@ -73,9 +69,9 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgbtop += IMAGE_FORMAT_SIZE;
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		skipCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 	  }
 	  else {
 		y <<= 8; // y * 256
@@ -120,9 +116,9 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		calcCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 	  }
 
 	  // == xPos+1 ==
@@ -130,9 +126,9 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	  yp = *yptop++;
 	  if (y == yp && u == up && v == vp){
 		rgbtop += IMAGE_FORMAT_SIZE;
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		skipCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 	  }
 	  else {
 		y <<= 8; // y * 256
@@ -177,9 +173,9 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
-#if PRINT_CALC_RATE // for TEST
+#if QTB_BENCHMARK
 		calcCounter++;
-#endif // for TEST
+#endif // QTB_BENCHMARK
 	  }
 	}
 #if !QTB_LOAD_BITMAP
@@ -192,10 +188,10 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 	  vptop += uvNext;
 	}
   }
-#if PRINT_CALC_RATE // for TEST
-  cout << "  calc rate : " <<
-	(float)calcCounter/(calcCounter + skipCounter) * 100.0 << " (%) : frame " << frameCounter << endl << flush;
-#endif // for TEST
+#if QTB_BENCHMARK
+  if (calcCounter + skipCounter > 0)
+	calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
+#endif // QTB_BENCHMARK
 }
 
 } // end of namespace qtbrynhildr

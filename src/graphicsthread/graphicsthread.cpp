@@ -16,6 +16,7 @@
 #include "decoder_jpeg.h"
 #include "decoder_vp8_cpp.h"
 
+#if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
 #include "decoder_vp8_avx2.h"
@@ -28,13 +29,12 @@
 #else // !defined(__ARM_NEON__)
 #include "decoder_vp8_neon.h"
 #endif // !defined(__ARM_NEON__)
+#endif // QTB_SIMD_SUPPORT
 
 #include "graphicsthread.h"
 #include "parameters.h"
 #include "qtbrynhildr.h"
-#if !QTB_TEST_CODE
 #include "util/cpuinfo.h"
-#endif // !QTB_TEST_CODE
 
 // for TEST
 #define TEST_THREAD		0
@@ -48,45 +48,44 @@ namespace qtbrynhildr {
 GraphicsThread::GraphicsThread(Settings *settings)
   :NetThread("GraphicsThread", settings)
 #if QTB_TEST_CODE
+  ,graphicsBufferSize(0)
   ,graphicsBuffer(0)
-  ,graphicsBufferSize(settings->getGraphicsBufferSize())
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
-#if !QTB_TEST_CODE
   ,image(new QImage)
   ,onClearDesktop(false)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
-#endif // !QTB_TEST_CODE
   ,buffer(0)
- #if QTB_BENCHMARK
+  ,decoderMode56(0)
+  ,decoderMode7(0)
+#if QTB_SIMD_SUPPORT
+  ,decoderMode7SIMD(0)
+#endif // QTB_SIMD_SUPPORT
+  ,decoder(0)
+  ,video_mode(-1)
+#if QTB_BENCHMARK
   ,initialBenchmarkPhaseCounter(20)
   ,benchmarkPhaseCounter(0)
 #endif // QTB_BENCHMARK
-  ,decoderMode56(0)
-  ,decoderMode7(0)
-  ,decoderMode7SIMD(0)
-  ,decoder(0)
-  ,video_mode(-1)
 {
   //outputLog = true; // for DEBUG
 
 #if QTB_TEST_CODE
   // graphics buffer
-  graphicsBuffer = new GraphicsBuffer(settings->getGraphicsBufferSize());
+  graphicsBufferSize = settings->getGraphicsBufferSize();
+  graphicsBuffer = new GraphicsBuffer(graphicsBufferSize);
 #endif // QTB_TEST_CODE
 
   // local buffer
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
 
-#if !QTB_TEST_CODE
-
-#if QTB_SIMD_SUPPORT
   // set decoders
   decoderMode56 = new DecoderJPEG(image);
   decoderMode7 = new DecoderVP8CPP(image);
 
+#if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
   // AVX2
@@ -115,8 +114,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
   }
 #endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
-
-#endif // !QTB_TEST_CODE
 }
 
 // destructor
@@ -128,6 +125,7 @@ GraphicsThread::~GraphicsThread()
   if (graphicsBuffer != 0){
 	delete graphicsBuffer;
 	graphicsBuffer = 0;
+	graphicsBufferSize = 0;
   }
 #endif // QTB_TEST_CODE
 
@@ -284,98 +282,13 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if !QTB_TEST_CODE
 
-  // check mode
-  if (com_data->video_mode == video_mode){ // no change mode
-	// MODE 7 (VP8)
-	if (com_data->video_mode == VIDEO_MODE_COMPRESS){
-	  if (hasSIMDInstruction){
-		if (decoder == decoderMode7){
-		  if(settings->getOnSIMDOperationSupport())
-			decoder = decoderMode7SIMD;
-		}
-		else { // decoder == decoderMode7SIMD
-		  if(!settings->getOnSIMDOperationSupport())
-			decoder = decoderMode7;
-		}
-	  }
-	}
-  }
-  else { // change mode
-	// change decoder
-	// MODE 5/6 (MJPEG)
-	if (com_data->video_mode == VIDEO_MODE_MJPEG){
-	  decoder = decoderMode56;
-	}
-	// MODE 7 (VP8)
-	else if (com_data->video_mode == VIDEO_MODE_COMPRESS){
-	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-		decoder = decoderMode7SIMD;
-	  }
-	  else {
-		decoder = decoderMode7;
-	  }
-	}
-  }
-
-  // pre-process
-  decoder->preprocess(buffer, receivedDataSize);
-
-#if QTB_BENCHMARK
-  // check benchmark phase counter
-  benchmarkPhaseCounter--;
-  if (benchmarkPhaseCounter < 0){
-	return TRANSMIT_SUCCEEDED;
-  }
-#endif // QTB_BENCHMARK
-
-  // draw graphics
-  if (settings->getOnGraphics()){
-	// clear desktop flag clear
-	onClearDesktop = false;
-
-	if (frameController.adjust((int)com_data->frame_no)){
-	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
-
-#if QTB_BENCHMARK
-	  // check benchmark phase counter
-	  benchmarkPhaseCounter--;
-	  if (benchmarkPhaseCounter < 0){
-		return TRANSMIT_SUCCEEDED;
-	  }
-#endif // QTB_BENCHMARK
-
-	  if (image != nullptr){
-		//  image->save("jpg/desktop.jpg", "jpg", 75);
-		emit drawDesktop(*image);
-	  }
-	}
-  }
-  else {
-	// clear desktop only at once
-	if (!onClearDesktop){
-	  onClearDesktop = true;
-	  emit clearDesktop();
-	}
-  }
+  // draw 1 frame
+  drawDesktopImage(buffer, receivedDataSize, com_data->video_mode);
 
 #else // !QTB_TEST_CODE
 
   // put data into graphics buffer
-  GraphicsBuffer::FrameType type;
-  // put into graphics buffer
-  switch(com_data->video_mode){
-  case VIDEO_MODE_MJPEG:
-	type = GraphicsBuffer::TYPE_JPEG;
-	break;
-  case VIDEO_MODE_COMPRESS:
-	type = GraphicsBuffer::TYPE_VP8;
-	break;
-  default:
-	// internal error
-	ABORT();
-	break;
-  }
-  if (settings->getOnGraphics() || type == GraphicsBuffer::TYPE_VP8){
+  if (settings->getOnGraphics() || com_data->video_mode == VIDEO_MODE_COMPRESS){
 	// block
 	while (graphicsBuffer->getFrameCount() >= GraphicsBuffer::FRAME_TABLE_NUM ||
 		   graphicsBuffer->getSize() + receivedDataSize > graphicsBufferSize){
@@ -383,20 +296,24 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	}
 
 	unsigned int rate = settings->getFrameRate();
-	int putSize = graphicsBuffer->putFrame(buffer, receivedDataSize, type, rate);
+	int putSize = graphicsBuffer->putFrame(buffer, receivedDataSize, com_data->video_mode, rate);
 	if (putSize != receivedDataSize){
 	  // error for put()
 	  // Failed to put into graphics buffer
 	  cout << "Failed to put into graphics buffer" << endl << flush;
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
-#if 0 // for TEST
+
 	// get from graphics buffer
-	int getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-	if (getSize != receivedDataSize){
-	  cout << "Graphics Buffer : getFrame() failed!" << endl << flush;
+	VIDEO_MODE mode;
+	int getSize = graphicsBuffer->getFrame(buffer, mode, rate);
+	if (getSize != 0){
+	  // draw 1 frame
+	  drawDesktopImage(buffer, getSize, mode);
 	}
-#endif // 0 // for TEST
+	else {
+	  cout << "Graphics Buffer is empty!" << endl << flush;
+	}
   }
 
 #endif // !QTB_TEST_CODE
@@ -458,6 +375,98 @@ void GraphicsThread::outputReceivedData(long receivedDataSize)
   decoder->outputDataToFile(buffer,
 							receivedDataSize,
 							frameCounter.getFrameCounter());
+}
+
+// draw desktop image
+void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
+{
+  // check mode
+#if QTB_SIMD_SUPPORT
+  if (mode == video_mode){ // no change mode
+	// MODE 7 (VP8)
+	if (mode == VIDEO_MODE_COMPRESS){
+	  if (hasSIMDInstruction){
+		if (decoder == decoderMode7){
+		  if(settings->getOnSIMDOperationSupport())
+			decoder = decoderMode7SIMD;
+		}
+		else { // decoder == decoderMode7SIMD
+		  if(!settings->getOnSIMDOperationSupport())
+			decoder = decoderMode7;
+		}
+	  }
+	}
+  }
+  else { // change mode
+	// change decoder
+	// MODE 5/6 (MJPEG)
+	if (mode == VIDEO_MODE_MJPEG){
+	  decoder = decoderMode56;
+	}
+	// MODE 7 (VP8)
+	else if (mode == VIDEO_MODE_COMPRESS){
+	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
+		decoder = decoderMode7SIMD;
+	  }
+	  else {
+		decoder = decoderMode7;
+	  }
+	}
+  }
+#else // QTB_SIMD_SUPPORT
+  if (mode != video_mode){ // change mode
+	// change decoder
+	// MODE 5/6 (MJPEG)
+	if (mode == VIDEO_MODE_MJPEG){
+	  decoder = decoderMode56;
+	}
+	// MODE 7 (VP8)
+	else if (mode == VIDEO_MODE_COMPRESS){
+	  decoder = decoderMode7;
+	}
+  }
+#endif // QTB_SIMD_SUPPORT
+
+  // pre-process
+  decoder->preprocess(buf, size);
+
+#if QTB_BENCHMARK
+  // check benchmark phase counter
+  benchmarkPhaseCounter--;
+  if (benchmarkPhaseCounter < 0){
+	return;
+  }
+#endif // QTB_BENCHMARK
+
+  // draw graphics
+  if (settings->getOnGraphics()){
+	// clear desktop flag clear
+	onClearDesktop = false;
+
+	if (frameController.adjust((int)com_data->frame_no)){
+	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
+
+#if QTB_BENCHMARK
+	  // check benchmark phase counter
+	  benchmarkPhaseCounter--;
+	  if (benchmarkPhaseCounter < 0){
+		return;
+	  }
+#endif // QTB_BENCHMARK
+
+	  if (image != nullptr){
+		//  image->save("jpg/desktop.jpg", "jpg", 75);
+		emit drawDesktop(*image);
+	  }
+	}
+  }
+  else {
+	// clear desktop only at once
+	if (!onClearDesktop){
+	  onClearDesktop = true;
+	  emit clearDesktop();
+	}
+  }
 }
 
 } // end of namespace qtbrynhildr

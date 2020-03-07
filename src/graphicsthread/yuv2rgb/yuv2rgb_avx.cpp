@@ -29,7 +29,7 @@ namespace qtbrynhildr {
 // YUV convert to RGB (SIMD version)
 void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
-  Aligned(32) int result[8];
+  Aligned(16) int result[8];
 
   uchar *yptop;
   uchar *uptop;
@@ -57,8 +57,8 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 
 #else // for TEST
 
-  Aligned(32) const float constUc[8] = {0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0};
-  Aligned(32) const float constVc[8] = {1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0};
+  Aligned(16) const float constUc[8] = {0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0};
+  Aligned(16) const float constVc[8] = {1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0};
 
   const float constMax = 255.0;
   const float constMin = 0.0;
@@ -82,9 +82,18 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
   mxcsr |= 0x00006000;
   _mm_setcsr(mxcsr);
 
+#if QTB_BENCHMARK
+  // skip counter
+  int skipCounter = 0;
+  // calc counter
+  int calcCounter = 0;
+  // calc rate
+  calcRate = 0.0;
+#endif // QTB_BENCHMARK
+
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0, uvOffset = 0; xPos < width; xPos += 2, uvOffset++){
-	  Aligned(32) float y[8];
+	  Aligned(16) float y[8];
 	  int y1, y2, u, v;
 	  int y1p, y2p, up, vp;
 	  float yf1, yf2, uf, vf;
@@ -104,6 +113,9 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 	  if (y1 == y1p && y2 == y2p && u == up && v == vp){
 		// No need to calculate XPos and XPos+1
 		rgbtop += IMAGE_FORMAT_SIZE * 2;
+#if QTB_BENCHMARK
+		skipCounter += 2;
+#endif // QTB_BENCHMARK
 	  }
 	  else {
 
@@ -221,6 +233,10 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		*rgbtop++ = (uchar)result[6];
 #endif // QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
+
+#if QTB_BENCHMARK
+		calcCounter += 2;
+#endif // QTB_BENCHMARK
 	  }
 	}
 #if !QTB_LOAD_BITMAP
@@ -233,6 +249,10 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 	  vptop += uvNext;
 	}
   }
+#if QTB_BENCHMARK
+  if (calcCounter + skipCounter > 0)
+	calcRate = (double)calcCounter/(calcCounter + skipCounter) * 100.0;
+#endif // QTB_BENCHMARK
 }
 
 #endif // defined(__AVX__)

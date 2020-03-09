@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
   QApplication app(argc, argv);
 
   // benchmark spec.
-  qtbrynhildr::width = 1024;
+  qtbrynhildr::width = 1280;
   qtbrynhildr::height = 800;
 
   // setup

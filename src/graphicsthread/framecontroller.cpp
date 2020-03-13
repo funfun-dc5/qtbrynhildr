@@ -7,7 +7,6 @@
 // System Header
 
 // Qt Header
-#include <QDateTime>
 
 // Local Header
 #include "framecontroller.h"
@@ -16,10 +15,14 @@ namespace qtbrynhildr {
 
 // constructor
 FrameController::FrameController()
-  :
+  :previousTime(0)
+  ,startTimeOfDecode(0)
+  ,endTimeOfDecode(0)
+  ,decodeTime(0)
   // for DEBUG
-  outputLog(false)
+  ,outputLog(false)
 {
+  reset();
 }
 
 // destructor
@@ -28,14 +31,33 @@ FrameController::~FrameController()
 }
 
 // adjust frame
-bool FrameController::adjust(int frame_no)
+bool FrameController::adjust(char frame_no, unsigned long frameInterval)
 {
-  if (outputLog){
-	cout << "frame_no : " << frame_no << endl << flush;
-	qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	cout << "time     : " << currentTime << endl << flush;
+  qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+  qint64 diffTime = 0;
+  if (previousTime != 0){
+	diffTime = currentTime - previousTime;
   }
-  return true;
+  previousTime = currentTime;
+
+  if (outputLog){
+	cout << "== frame_no: " << (int)frame_no << endl;
+	cout << "diff time  : " << diffTime << " (ms)" << endl;
+	cout << "decode time: " << decodeTime << " (ms)" << endl;
+	cout << "FI         : " << frameInterval << " (ms)" << endl << flush;
+  }
+
+  return true; // default
+
+  if (diffTime > frameInterval * 2){
+	if (outputLog){
+	  cout << "drop a frame!" << endl << flush;
+	}
+	return false;
+  }
+  else {
+	return true;
+  }
 }
 
 } // end of namespace qtbrynhildr

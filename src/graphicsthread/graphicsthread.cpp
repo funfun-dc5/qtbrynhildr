@@ -330,6 +330,9 @@ void GraphicsThread::connectedToServer()
   // reset frame counter
   frameCounter.reset();
 
+  // reset frame controller
+  frameController.reset();
+
   NetThread::connectedToServer();
 }
 
@@ -427,6 +430,9 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
   }
 #endif // QTB_SIMD_SUPPORT
 
+  // record the start time of decode
+  frameController.startDecode();
+
   // pre-process
   decoder->preprocess(buf, size);
 
@@ -443,7 +449,7 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	// clear desktop flag clear
 	onClearDesktop = false;
 
-	if (frameController.adjust((int)com_data->frame_no)){
+	if (frameController.adjust(com_data->frame_no, settings->getFrameInterval())){
 	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
 
 #if QTB_BENCHMARK
@@ -459,6 +465,8 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		emit drawDesktop(*image);
 	  }
 	}
+	// record the end time of decode
+	frameController.endDecode();
   }
   else {
 	// clear desktop only at once

@@ -548,17 +548,35 @@ void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 // mouse wheel event
 void DesktopPanel::wheelEvent(QWheelEvent *event)
 {
-  int degrees = event->delta() / 8;
-  // for DEBUG
-  if (outputLogForMouse){
-	int ticks = degrees/15;
-	cout << "[DesktopPanel] wheelEvent: " << degrees << " (ticks = " << ticks << ")" << endl << flush; // for DEBUG
+  MOUSE_WHEEL mouseWheel = 0;
+
+  if(event->source() == Qt::MouseEventNotSynthesized){
+	//cout << "[WheelEvent] source() : " << event->source() << endl << flush;
+	QPoint degrees = event->angleDelta() / 8;
+	mouseWheel = degrees.y();
+
+	// for DEBUG
+	if (outputLogForMouse){
+	  int ticks = mouseWheel/15;
+	  cout << "[DesktopPanel] wheelEvent(degrees): " << mouseWheel << " (ticks = " << ticks << ")" << endl << flush; // for DEBUG
+	}
+  }
+  else if (event->source() == Qt::MouseEventSynthesizedBySystem){
+	//cout << "[WheelEvent] source() : " << event->source() << endl << flush;
+	QPoint pixels = event->pixelDelta();
+	mouseWheel = pixels.y();
+
+	// for DEBUG
+	if (outputLogForMouse){
+	  cout << "[DesktopPanel] wheelEvent(pixels): " << mouseWheel << endl << flush; // for DEBUG
+	}
   }
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
 	if (!settings->getOnShowSoftwareButton()){
-	  mouseBuffer->putWheel(degrees);
+	  // put into mouse wheel buffer
+	  mouseBuffer->putWheel(mouseWheel);
 	}
   }
 }

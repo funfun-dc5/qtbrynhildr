@@ -244,6 +244,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
   }
 
+#if QTB_SOUND_PUSH_MODE
   // put PCM data into sound device
   if (settings->getOnSound()){
 	TRANSMIT_RESULT result = putPCMDataIntoSoundDevice();
@@ -255,6 +256,8 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 #if TEST_THREAD
 	printTimeInfo("transfered PCM");
 #endif // TEST_THREAD
+
+#endif // QTB_SOUND_PUSH_MODE
 
   return TRANSMIT_SUCCEEDED;
 }

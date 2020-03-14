@@ -29,18 +29,20 @@ Desktop::Desktop()
 	cout << "[Desktop] desktop total height = " << desktop->height() << endl;
   }
 
+  screens = QGuiApplication::screens();
+
   if (outputLog){
-	int screenCount = desktop->screenCount();
+	int screenCount = screens.count();
 	for (int i = 0; i < screenCount; i++){
 	  cout << "[Desktop] screen : " << i << endl;
-	  QWidget *screen = desktop->screen(i);
-	  cout << "[Desktop] width  = " << screen->width() << endl;
-	  cout << "[Desktop] height = " << screen->height() << endl;
+	  QScreen *screen = screens.at(i);
+	  cout << "[Desktop] width  = " << screen->geometry().width() << endl;
+	  cout << "[Desktop] height = " << screen->geometry().height() << endl;
 	}
   }
 
   currentScreenNumber = desktop->screenNumber();
-  currentScreen = desktop->screenGeometry(currentScreenNumber);
+  currentScreen = screens.at(currentScreenNumber)->geometry();
   if (outputLog){
 	cout << "[Desktop] current screen : " << currentScreenNumber << endl;
 	cout << "[Desktop] width  = " << currentScreen.width() << endl;

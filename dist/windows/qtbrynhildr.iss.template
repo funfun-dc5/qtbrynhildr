@@ -5,8 +5,8 @@
 #define AppExeName "Qt Brynhildr.exe"
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
-#define AppVer "2.0.27"
-#define RCName "-branch-framecontrol"
+#define AppVer "2.0.28"
+#define RCName "-branch-mousewheel"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"

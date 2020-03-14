@@ -8,8 +8,11 @@
 
 // Qt Header
 #include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QList>
 #include <QRect>
 #include <QSize>
+#include <QScreen>
 
 namespace qtbrynhildr {
 
@@ -22,6 +25,9 @@ class Desktop
 private:
   // desktop informaation
   QDesktopWidget *desktop;
+
+  // screens
+  QList<QScreen*> screens;
 
   // current screen number
   int currentScreenNumber;
@@ -48,7 +54,7 @@ public:
   QRect getCurrentScreen()
   {
 	if (currentScreenNumber != desktop->screenNumber()){
-	  currentScreen = desktop->screenGeometry(currentScreenNumber);
+	  currentScreen = screens.at(currentScreenNumber)->geometry();
 	}
 	return currentScreen;
   }

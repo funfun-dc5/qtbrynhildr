@@ -23,7 +23,19 @@ SoundBuffer::~SoundBuffer()
 {
 }
 
-#if HAS_QIODEVICE
+#if QTB_SOUND_PULL_MODE
+// start iodevice
+void SoundBuffer::start()
+{
+  open(QIODevice::ReadOnly);
+}
+
+// stop iodevice
+void SoundBuffer::stop()
+{
+  close();
+}
+
 // QIODevice interface
 qint64 SoundBuffer::readData(char *data, qint64 maxlen)
 {
@@ -44,8 +56,8 @@ qint64 SoundBuffer::writeData(const char *data, qint64 len)
 
 qint64 SoundBuffer::bytesAvailable() const
 {
-  return getSize();
+  return getSize() + QIODevice::bytesAvailable();
 }
-#endif // HAS_QIODEVICE
+#endif // QTB_SOUND_PULL_MODE
 
 } // end of namespace qtbrynhildr

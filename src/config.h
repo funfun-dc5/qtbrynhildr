@@ -130,8 +130,14 @@ const bool QTB_IN_TESTING				= false;
 // SIMD instruction support
 //#define QTB_SIMD_SUPPORT			1
 
+// sound push mode
+#define QTB_SOUND_PUSH_MODE			1
+
+// sound pull mode
+#define QTB_SOUND_PULL_MODE			0
+
 // LOAD BITMAP
-#define QTB_LOAD_BITMAP				1
+#define QTB_LOAD_BITMAP				0
 
 // TEST CODE
 #define QTB_TEST_CODE				0

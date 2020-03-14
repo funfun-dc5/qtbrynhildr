@@ -49,7 +49,11 @@
        </spacer>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox_hostname"/>
+       <widget class="QComboBox" name="comboBox_hostname">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

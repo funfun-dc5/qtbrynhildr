@@ -2486,7 +2486,7 @@ void QtBrynhildr::updateConnected()
 	QString str;
 	if (onBenchmarkMenu){
 	  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
-		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ Calc Rate :  %7 % ]").
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ "+tr("ReCalc Rate")+" :  %7 % ]").
 		  arg(settings->getServerName()).
 		  arg(settings->getDesktopWidth(), 3).
 		  arg(settings->getDesktopHeight(), 3).

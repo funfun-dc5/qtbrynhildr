@@ -4,16 +4,13 @@
 #ifndef SOUNDBUFFER_H
 #define SOUNDBUFFER_H
 
-// for TEST
-#define HAS_QIODEVICE 0
-
 // Common Header
 #include "common/common.h"
 
 // Qt Header
-#if HAS_QIODEVICE
+#if QTB_SOUND_PULL_MODE
 #include <QIODevice>
-#endif // HAS_QIODEVICE
+#endif // QTB_SOUND_PULL_MODE
 
 // Local Header
 #include "util/ringbuffer.h"
@@ -21,12 +18,15 @@
 namespace qtbrynhildr {
 
 // SoundBuffer
-#if HAS_QIODEVICE
-class SoundBuffer : public RingBuffer, public QIODevice
-#else // HAS_QIODEVICE
+#if QTB_SOUND_PULL_MODE
+class SoundBuffer : public QIODevice, public RingBuffer
+#else // QTB_SOUND_PULL_MODE
 class SoundBuffer : public RingBuffer
-#endif // HAS_QIODEVICE
+#endif // QTB_SOUND_PULL_MODE
 {
+#if QTB_SOUND_PULL_MODE
+  Q_OBJECT;
+#endif // QTB_SOUND_PULL_MODE
   //-------------------------------------------------------------------------------
   // Variable
   //-------------------------------------------------------------------------------
@@ -41,13 +41,18 @@ public:
   // destructor
   ~SoundBuffer();
 
-#if HAS_QIODEVICE
-protected:
+#if QTB_SOUND_PULL_MODE
+public:
+  // start iodevice
+  void start();
+  // stop iodevice
+  void stop();
+
   // QIODevice interface
-  qint64 readData(char *data, qint64 maxlen);
-  qint64 writeData(const char *data, qint64 len);
-  qint64 bytesAvailable() const;
-#endif // HAS_QIODEVICE
+  qint64 readData(char *data, qint64 maxlen) override;
+  qint64 writeData(const char *data, qint64 len) override;
+  qint64 bytesAvailable() const override;
+#endif // QTB_SOUND_PULL_MODE
 
 private:
 

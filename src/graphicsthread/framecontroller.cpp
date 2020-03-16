@@ -47,8 +47,7 @@ bool FrameController::adjust(char frame_no, unsigned long frameInterval)
 	cout << "FI         : " << frameInterval << " (ms)" << endl << flush;
   }
 
-  return true; // default
-
+#if 0 // for TEST
   if (diffTime > frameInterval * 2){
 	if (outputLog){
 	  cout << "drop a frame!" << endl << flush;
@@ -58,6 +57,9 @@ bool FrameController::adjust(char frame_no, unsigned long frameInterval)
   else {
 	return true;
   }
+#else // 0 // for TEST
+  return true; // default
+#endif // 0 // for TEST
 }
 
 } // end of namespace qtbrynhildr

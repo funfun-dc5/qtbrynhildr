@@ -5,7 +5,7 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.0.28"
+#define QTB_VERSION				"2.0.29"
 
 #define QTB_RCNAME				"-branch-framecontrol"
 #define QTB_VERSION_NUMBER		2028

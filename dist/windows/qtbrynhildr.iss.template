@@ -134,6 +134,6 @@ Type: files; Name: "{userappdata}\{#AuthName}\{#Name}.ini"
 Type: dirifempty; Name: "{userappdata}\{#AuthName}"
 
 [Run]
-Filename: "{app}\bin\{#AppExeName}"; Description: "{cm:LaunchProgram, {#AppExeName}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\bin\{#AppExeName}"; Description: "{cm:LaunchProgram, {#Name}}"; Flags: nowait postinstall skipifsilent
 
 [Files]

@@ -43,6 +43,12 @@ private:
   // image for drawing desktop
   QImage *image;
 
+  // desktop size
+  QSize currentSize;
+
+  // previous desktop size
+  QSize previousSize;
+
   // clear desktop flag
   bool onClearDesktop;
 
@@ -161,6 +167,46 @@ private:
 
   // draw desktop image
   inline void drawDesktopImage(char *buf, int size, VIDEO_MODE mode);
+
+  // rescale image
+  inline void rescaleDesktopImage(QImage *image);
+
+  // get desktop scaling factor
+  qreal getDesktopScalingFactor(QSize targetSize);
+
+  // get width for current MODE
+  inline SIZE getWidthForCurrentMode(SIZE width)
+  {
+	if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	  return (width + 3) & ~3;
+	}
+	else {
+	  return width;
+	}
+  }
+
+  // get height for current MODE
+  inline SIZE getHeightForCurrentMode(SIZE height)
+  {
+	if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	  return (height + 3) & ~3;
+	}
+	else {
+	  return height;
+	}
+  }
+
+  // get size for current MODE
+  inline QSize getSizeForCurrentMode(QSize size)
+  {
+	if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	  return QSize(getWidthForCurrentMode(size.width()),
+				   getHeightForCurrentMode(size.height()));
+	}
+	else {
+	  return size;
+	}
+  }
 
 signals:
   // draw desktop

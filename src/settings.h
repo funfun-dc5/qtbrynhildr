@@ -12,6 +12,7 @@
 // Qt Header
 #include <QDir>
 #include <QSettings>
+#include <QSize>
 #include <QString>
 #if QTB_AUTO_COMPLETE
 #include <QStringList>
@@ -541,6 +542,8 @@ private:
   volatile bool onBrynhildr2Support;
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;
+
+  QSize desktopImageSize;
 
   // Sound
   volatile bool onSound;
@@ -1300,6 +1303,16 @@ public:
   unsigned long getFrameInterval()
   {
 	return frameInterval;
+  }
+
+  // get desktop image size
+  QSize getDesktopImageSize(){
+	return desktopImageSize;
+  }
+
+  // set desktop image size
+  void setDesktopImageSize(QSize desktopImageSize){
+	this->desktopImageSize = desktopImageSize;
   }
 
 #if QTB_CELT_SUPPORT

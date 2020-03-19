@@ -674,8 +674,8 @@ void ControlThread::setMouseControl()
 	com_data->mouse_move = MOUSE_MOVE_ON;
 	if (QTB_DESKTOP_IMAGE_SCALING){
 	  QSize windowSize = desktopPanel->getSize();
-	  QSize desktopSize = desktopPanel->getDesktopSize();
-	  if (!(windowSize.isValid() && desktopSize.isValid())){
+	  QSize desktopImageSize = settings->getDesktopImageSize();
+	  if (!(windowSize.isValid() && desktopImageSize.isValid())){
 		// Nothing to do
 		com_data->mouse_move = MOUSE_MOVE_OFF;
 	  }
@@ -683,17 +683,17 @@ void ControlThread::setMouseControl()
 		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
 		  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
 		  if (scalingFactor > 1.0){
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width() * scalingFactor;
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height() * scalingFactor;
+			com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width() * scalingFactor;
+			com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height() * scalingFactor;
 		  }
 		  else {
-			com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width();
-			com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height();
+			com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
+			com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
 		  }
 		}
 		else {
-		  com_data->mouse_x = pos.x * desktopSize.width()/windowSize.width();
-		  com_data->mouse_y = pos.y * desktopSize.height()/windowSize.height();
+		  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
+		  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
 		}
 		// set offset
 		com_data->mouse_x += settings->getDesktopOffsetX();

@@ -582,65 +582,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // set Widget
   scrollArea->setWidget(desktopWindow);
   scrollArea->setFocusProxy(desktopWindow);
+  scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
   setCentralWidget(scrollArea);
-
-#if !QTB_NEW_DESKTOPWINDOW
-  // set margin
-  QString kernelVersion = QSysInfo::kernelVersion();
-  int hspace = 0;
-  int vspace = 0;
-
-#if defined(Q_OS_WIN)
-  if (kernelVersion.startsWith("10.")){			// Windows 10
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.2")){	// Windows 8
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.1")){	// Windows 7
-	hspace = 2;
-	vspace = 4;
-  }
-  else {
-	// NOT supported Version
-	hspace = 2;
-	vspace = 3;
-  }
-#elif defined(Q_OS_LINUX)
-  // Linux base
-#if defined(Q_OS_ANDROID)
-  // Android
-  hspace = 2;
-  vspace = 4;
-#else // defined(Q_OS_ANDROID)
-  // Linux Desktop
-  hspace = 2;
-  vspace = 2;
-#endif // defined(Q_OS_ANDROID)
-
-#elif defined(Q_OS_CYGWIN)
-  // Cygwin
-  hspace = 2;
-  vspace = 2;
-#elif defined(Q_OS_FREEBSD)
-  // FreeBSD
-  hspace = 0;
-  vspace = 0;
-#elif defined(Q_OS_OSX)
-  // Darwin
-  hspace = 0;
-  vspace = 0;
-#endif // defined(Q_OS_OSX)
-
-  setMargins(hspace, vspace);
-  desktopPanel->setMargins(hspace, vspace);
-#endif // !QTB_NEW_DESKTOPWINDOW
 
   // initialize palette
   backgroundPalette = fullScreenBackgroundPalette = scrollArea->palette();
@@ -825,6 +768,64 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   if (settings->getOnTransferClipboardSupport()){
 	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
   }
+
+#if !QTB_NEW_DESKTOPWINDOW
+  // set margin
+  QString kernelVersion = QSysInfo::kernelVersion();
+  int hspace = 0;
+  int vspace = 0;
+
+#if defined(Q_OS_WIN)
+  if (kernelVersion.startsWith("10.")){			// Windows 10
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.2")){	// Windows 8
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.1")){	// Windows 7
+	hspace = 2;
+	vspace = 4;
+  }
+  else {
+	// NOT supported Version
+	hspace = 2;
+	vspace = 3;
+  }
+#elif defined(Q_OS_LINUX)
+  // Linux base
+#if defined(Q_OS_ANDROID)
+  // Android
+  hspace = 2;
+  vspace = 4;
+#else // defined(Q_OS_ANDROID)
+  // Linux Desktop
+  hspace = 2;
+  vspace = (menuBar()->sizeHint().height() == 0) ? 2 : 8;
+#endif // defined(Q_OS_ANDROID)
+
+#elif defined(Q_OS_CYGWIN)
+  // Cygwin
+  hspace = 2;
+  vspace = 2;
+#elif defined(Q_OS_FREEBSD)
+  // FreeBSD
+  hspace = 0;
+  vspace = 0;
+#elif defined(Q_OS_OSX)
+  // Darwin
+  hspace = 0;
+  vspace = 0;
+#endif // defined(Q_OS_OSX)
+
+  setMargins(hspace, vspace);
+  desktopPanel->setMargins(hspace, vspace);
+#endif // !QTB_NEW_DESKTOPWINDOW
 
   //------------------------------------------------------------
   // create threads

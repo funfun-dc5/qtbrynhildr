@@ -2873,6 +2873,13 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 #endif // for TEST
 	setDesktopScalingFactor(event->size());
   }
+#if 0 // for TEST
+  else {
+	cout << "resizeEvent() : Rescaling for (width, height) = ("
+		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
+	//setDesktopScalingFactor(event->size());
+  }
+#endif // for TEST
 #else // 0 // for TEST
   // rescaling desktop
 #if 1 // for TEST

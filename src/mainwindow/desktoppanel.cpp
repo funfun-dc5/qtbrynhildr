@@ -462,15 +462,19 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 
 	// for DEBUG
 	if (outputLogForMouse){
-	  cout << "[DesktopPanel] wheelEvent(pixels): " << mouseWheel << endl << flush; // for DEBUG
+	  cout << "[DesktopPanel] wheelEvent(pixels): " << (int)mouseWheel << endl << flush; // for DEBUG
 	}
+
+	// adjust
+	mouseWheel *= settings->getDesktopScalingFactor();
   }
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
 	if (!settings->getOnShowSoftwareButton()){
 	  // put into mouse wheel buffer
-	  mouseBuffer->putWheel(mouseWheel);
+	  if (mouseWheel != 0)
+		mouseBuffer->putWheel(mouseWheel);
 	}
   }
 }

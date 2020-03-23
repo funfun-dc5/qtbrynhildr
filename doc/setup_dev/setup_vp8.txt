@@ -11,7 +11,7 @@
 see `./configure --help`
 
 [common]
- configure script option : --target=xxxx-xxxx-xxxx   --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests
+ configure script option : --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests --target=xxxx-xxxx-xxxx
 
 [MinGW] --target=x86-win32-gcc
 

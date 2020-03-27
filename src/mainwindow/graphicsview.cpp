@@ -78,7 +78,7 @@ void GraphicsView::setScale(qreal scalingFactor)
   setTransform(transform);
   // get window size
   QSize windowSize = size();
-  QSize desktopImageSize = desktopPanel->getDesktopImageSize();
+  QSize desktopImageSize = settings->getDesktopImageSize();
   QSize currentDesktopSize = desktopImageSize * scalingFactor;
   QSize diffSize = currentDesktopSize - windowSize;
   if (outputLog){

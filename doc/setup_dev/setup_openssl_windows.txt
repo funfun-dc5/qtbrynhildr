@@ -1,0 +1,73 @@
+---------------------------------------------------------------------------
+[VS2017 で x86/x64用 OpenSSLライブラリをビルドする手順]
+---------------------------------------------------------------------------
+
+[0] 以下をinstallしておく
+
+VS2017 Community Edition
+Qt5.12.7 (同梱のMinGWを利用する)
+ActivePerl 5.28.1 (x64)
+
+[1] コマンドプロンプトを起動
+
+    perl -v を実行し ActivePerl が起動できることを確認しておく
+
+[2] 必要なら Qt5.12.7 にある MinGW にパスを通す
+
+ Ex.)
+
+    set PATH=c:\Tools\develop\Qt5.12.7\Tools\mingw730_64\bin;%PATH%
+
+      or
+
+    set PATH=c:\Tools\develop\Qt5.12.7\Tools\mingw730_32\bin;%PATH%
+
+[3] Win32::Console をインストールする
+
+  (1) cpan.batを起動して CPAN から dmake をダウンロードする
+
+    cpan> install dmake
+
+    C:\Perl64\cpan\build\dmake-0下のdmake.exe と startup をPATHの通ったところ(C:\Perl64\binなど)に
+    コピーする。
+
+  (2) 続いて CPAN から Win32::Console をインストールする
+
+    cpan> install Win32::Console
+
+    インストールのためにdmakeを起動して、MinGWのgccを利用している。
+    インストールが正常終了していることをログメッセージで確認する。
+
+[4] openssl-1.1.1eのソースパッケージをダウンロード、展開する
+
+ <64bit版ライブラリ作成>
+
+ (1)「VS2017用 x64 Native Tools コマンド プロンプト」を起動する
+
+ (2) cd openssl-1.1.1e
+
+ (3) mkdir build_x64
+
+ (4) cd build_x64
+
+ (5) perl ..\Configure VC-WIN64A
+
+ (6) nmake
+
+ (7) 64bit版DLL libssl-1_1-x64.dll, libcrypto-1_1-x64.dll の2つのファイルがカレントに出来上がる
+
+ <32bit版ライブラリ作成>
+
+ (1)「x86 Native Tools Command Prompt for VS 2017」を起動する
+
+ (2) cd openssl-1.1.1e
+
+ (3) mkdir build_x86
+
+ (4) cd build_x86
+
+ (5) perl ..\Configure VC-WIN32
+
+ (6) nmake
+
+ (7) 32bit版DLL libssl-1_1.dll, libcrypto-1_1.dll の2つのファイルがカレントに出来上がる

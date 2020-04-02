@@ -60,13 +60,13 @@
 5. 起動/終了と設定ファイル
 --------------------------
 
- 展開したディレクトリ下の linux_x64/bin/Qt Brynhildr.sh を実行すると起動します。
+ 展開したディレクトリ下の linux_x64/bin/Qt\ Brynhildr.sh を実行すると起動します。
 
 * 設定ファイル
 
   標準では以下のファイルに保存されます。 ::
 
-   ~/.config/mcz-xoxo/Qt Brynhildr.ini
+   ~/.config/mcz-xoxo/Qt\ Brynhildr.ini
 
   オプションにファイル名を与えることで変更できます。
 
@@ -172,7 +172,7 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
   UnZipSFX 6.00 of 20 April 2009, by Info-ZIP (http://www.info-zip.org).
    creating: linux_x64/
    creating: linux_x64/bin/
-  inflating: linux_x64/bin/QtBrynhildr
+  inflating: linux_x64/bin/Qt Brynhildr
    creating: linux_x64/doc/
   inflating: linux_x64/doc/LICENSE.txt
    creating: linux_x64/doc/manual/
@@ -199,13 +199,13 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
 6. 起動/終了と設定ファイル
 --------------------------
 
- 展開したディレクトリ下の linux_x64/bin/Qt Brynhildr を実行すると起動します。
+ 展開したディレクトリ下の linux_x64/bin/Qt\ Brynhildr を実行すると起動します。
 
 * 設定ファイル
 
   標準では以下のファイルに保存されます。 ::
 
-   ~/.config/mcz-xoxo/Qt Brynhildr.ini
+   ~/.config/mcz-xoxo/Qt\ Brynhildr.ini
 
   オプションにファイル名を与えることで変更できます。
 
@@ -216,6 +216,6 @@ root権限でQt5.x.x/MaintenanceToolを実行してください。
        同じウィンドウにメニューバーを表示したい場合は、環境変数UBUNTU_MENUPROXYに0を設定して
        Qt Brynhildrを起動してください。Qt Brynhildr実行時だけ変えたい場合は例えば
 
-       env UBUNTU_MENUPROXY=0 ./linux_x64/bin/QtBrynhildr
+       env UBUNTU_MENUPROXY=0 ./linux_x64/bin/Qt\ Brynhildr
 
        という感じです。

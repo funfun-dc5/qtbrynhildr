@@ -121,10 +121,10 @@
  (3) 起動確認します。
 
  [64bit]
- linux_x64/bin/QtBrynhildr.sh
+ linux_x64/bin/Qt\ Brynhildr.sh
 
  [32bit]
- linux_x86/bin/QtBrynhildr.sh
+ linux_x86/bin/Qt\ Brynhildr.sh
 
  (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
      ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
@@ -168,10 +168,10 @@
  (3) 起動確認します。
 
  [64bit]
- ./linux_x64/bin/QtBrynhildr
+ ./linux_x64/bin/Qt\ Brynhildr
 
  [32bit]
- ./linux_x86/bin/QtBrynhildr
+ ./linux_x86/bin/Qt\ Brynhildr
 
  (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
      ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
@@ -240,13 +240,13 @@
 [インストール]
 ==============================
 
- .dmgファイルをマウントし、QtBrynhildr.app を /Applications にコピーしてください。
+ .dmgファイルをマウントし、Qt\ Brynhildr.app を /Applications にコピーしてください。
 
 ==============================
 [アンインストール]
 ==============================
 
- ~/.config/mcz-xoxoと/Applications/QtBrynhildr.app を削除してください。
+ ~/.config/mcz-xoxoと/Applications/Qt\ Brynhildr.app を削除してください。
 
 ----------------------------------------------------------------------
 1-4. インストール (FreeBSD版)
@@ -272,10 +272,10 @@
  (3) 起動確認します。
 
  [64bit]
- ./freebsd_x64/bin/QtBrynhildr
+ ./freebsd_x64/bin/Qt\ Brynhildr
 
  [32bit]
- ./freebsd_x86/bin/QtBrynhildr
+ ./freebsd_x86/bin/Qt\ Brynhildr
 
 ==============================
 [アンインストール]
@@ -667,7 +667,7 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 [Linux/Mac/FreeBSD版]
 ホームディレクトリの以下のファイルに保存されます。
 
-~/.config/mcz-xoxo/Qt Brynhildr.ini
+~/.config/mcz-xoxo/Qt\ Brynhildr.ini
 
 (*) 起動時に引数としてファイル名を渡すことで、任意のファイルを
     指定できます。「5. オプション」を参照してください。

@@ -184,7 +184,7 @@ SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
 }
 
-*-msvc:vp8-avx2 {
+*-msvc*:vp8-avx2 {
 QMAKE_CXXFLAGS += /arch:AVX2
 }
 
@@ -201,7 +201,7 @@ SOURCES += graphicsthread/decoder_vp8_avx.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
 }
 
-*-msvc:vp8-avx {
+*-msvc*:vp8-avx {
 QMAKE_CXXFLAGS += /arch:AVX
 }
 
@@ -217,7 +217,7 @@ SOURCES += graphicsthread/decoder_vp8_sse.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
 }
 
-*-msvc:vp8-sse {
+*-msvc*:vp8-sse {
 DEFINES += __SSE4_2__
 }
 

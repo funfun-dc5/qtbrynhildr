@@ -30,7 +30,6 @@ double calcRate = 0.0;
 int width = 0;
 int height = 0;
 int rgbImageSize = 0;
-int hwidth = 0;
 int uvNext = 0;
 int rgbNext = 0;
 

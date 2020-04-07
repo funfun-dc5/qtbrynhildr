@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2017,2020 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 
@@ -114,7 +114,11 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 		painter.setBrush(panelColor);
 	  }
 	  painter.setPen(pen);
+#if QT_VERSION >= 0x050d00 // Qt 5.13.0
+	  painter.drawRoundedRect(rect, 25, 25);
+#else // QT_VERSION >= 0x050d00
 	  painter.drawRoundRect(rect);
+#endif // QT_VERSION >= 0x050d00
 	  //painter.drawRect(rect);
 	  if (layout[i].pushed){
 		painter.setPen(panelColor);

@@ -1079,7 +1079,11 @@ bool ControlThread::sendFile()
   sentDataSize = sendData(filename, QTB_FILENAME_IMAGE_SIZE);
 
   // send time stamp
+#if QT_VERSION >= 0x050a00 // Qt 5.10.0
   qint64 CreationTime = ntfs->toFILETIME(fileInfo.birthTime()); // UTC
+#else // QT_VERSION >= 0x050a00
+  qint64 CreationTime = ntfs->toFILETIME(fileInfo.created()); // UTC
+#endif // QT_VERSION >= 0x050a00
   fileTimeStamp[0] = (CreationTime >>  0) & 0xFF;
   fileTimeStamp[1] = (CreationTime >>  8) & 0xFF;
   fileTimeStamp[2] = (CreationTime >> 16) & 0xFF;

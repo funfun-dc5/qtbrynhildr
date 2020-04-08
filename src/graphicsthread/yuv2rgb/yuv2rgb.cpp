@@ -380,6 +380,30 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   (*convert)(ytop, utop, vtop, rgbtop, height);
 #endif // QTB_MULTI_THREAD_CONVERTER
 
+#if 0 // for TEST
+  {
+	static bool doFlag = true;
+	static int counter = 0;
+	counter++;
+	if (doFlag && counter == 30){
+	  fstream file;
+	  int yuvImageSize = width * height + width * height / 2;
+
+	  file.open("jpg/rgb.dat", ios::out | ios::binary);
+	  if (file.is_open()){
+		file.write((const char*)rgb, rgbImageSize);
+		file.close();
+	  }
+	  file.open("jpg/yuv.dat", ios::out | ios::binary);
+	  if (file.is_open()){
+		file.write((const char*)yuv, yuvImageSize);
+		file.close();
+	  }
+	  doFlag = false;
+	}
+  }
+#endif // for TEST
+
   return rgbImageSize;
 }
 

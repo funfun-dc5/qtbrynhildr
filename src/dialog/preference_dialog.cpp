@@ -137,6 +137,12 @@ void PreferenceDialog::getFromSettings()
 #if QTB_SIMD_SUPPORT
   checkBox_onSIMDOperationSupport->
 	setCheckState(settings->getOnSIMDOperationSupport() ? Qt::Checked : Qt::Unchecked);
+  if (settings->getConnected()){
+	checkBox_onSIMDOperationSupport->setEnabled(false);
+  }
+  else {
+	checkBox_onSIMDOperationSupport->setEnabled(true);
+  }
 #endif // QTB_SIMD_SUPPORT
 
   // serverNameListSize

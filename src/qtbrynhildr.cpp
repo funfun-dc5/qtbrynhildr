@@ -2497,6 +2497,8 @@ void QtBrynhildr::updateConnected()
 		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
 		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3);
 	  }
+	  // sample rate (sound)
+	  str += QString(" : Sound %1 Hz").arg(soundThread->getSampleRate());
 	}
 	else {
 	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").

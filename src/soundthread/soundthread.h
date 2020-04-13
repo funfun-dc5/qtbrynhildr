@@ -65,6 +65,12 @@ public:
 	return soundBuffer;
   }
 
+  // get sample rate
+  SAMPLERATE getSampleRate() const
+  {
+	return samplerate;
+  }
+
 protected:
   // connect to server
   CONNECT_RESULT connectToServer();

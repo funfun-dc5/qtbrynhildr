@@ -3845,7 +3845,6 @@ void QtBrynhildr::refreshBenchmarkMenu()
 {
   // benchmark menus
   if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){ // MODE5/6 (MJPEG)
-	initialBenchmarkPhaseCounter = 4;
 	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
 	selectBenchmarkPhase0_Action->setEnabled(true);
 	selectBenchmarkPhase0_Action->setCheckable(true);
@@ -3869,9 +3868,10 @@ void QtBrynhildr::refreshBenchmarkMenu()
 	selectBenchmarkPhase4_Action->setEnabled(true);
 	selectBenchmarkPhase4_Action->setCheckable(true);
 	selectBenchmarkPhase4_Action->setVisible(true);
+
+	initialBenchmarkPhaseCounter = 4;
   }
   else if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){ // MODE7 (VP8)
-	initialBenchmarkPhaseCounter = 5;
 	selectBenchmarkPhase0_Action->setEnabled(true);
 	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
 	selectBenchmarkPhase0_Action->setCheckable(true);
@@ -3896,6 +3896,8 @@ void QtBrynhildr::refreshBenchmarkMenu()
 	selectBenchmarkPhase4_Action->setEnabled(true);
 	selectBenchmarkPhase4_Action->setCheckable(true);
 	selectBenchmarkPhase4_Action->setVisible(true);
+
+	initialBenchmarkPhaseCounter = 4;
   }
   else {
 	initialBenchmarkPhaseCounter = 5;

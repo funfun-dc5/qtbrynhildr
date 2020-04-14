@@ -64,7 +64,7 @@
       お約束は出来ません。
 
       Qt5のサポートする環境(OS)について詳しくは以下のページを御覧ください。
-      http://doc.qt.io/QtSupportedPlatforms/index.html
+      https://doc.qt.io/QtSupportedPlatforms/index.html
 
  (*3) XP/Vistaで動作する版をビルドするにはバージョンが5.6.3以下のQt5を使ってビルドする必要があります。
 
@@ -1974,7 +1974,7 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 
 (3) Qt Projectのページ
 
- http://www.qt.io/
+ https://www.qt.io/
 
 (4) CELTのページ
 
@@ -1982,11 +1982,11 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 
 (5) OpenSSLのページ
 
- http://www.openssl.org/
+ https://www.openssl.org/
 
 (6) VP8のページ
 
- http://www.webmproject.org/
+ https://www.webmproject.org/
 
 ----------------------------------------------------------------------
 12. 謝辞

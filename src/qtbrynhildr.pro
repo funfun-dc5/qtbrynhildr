@@ -101,8 +101,8 @@ android-g++ | android-clang {
 CONFIG += touchpanel vp8-neon
 DEFINES += PLATFORM_LINUX
 # cpufeatures library from android-ndk
-HEADERS += util/android-ndk/cpu-features.h
-SOURCES += util/android-ndk/cpu-features.c
+# HEADERS += util/android-ndk/cpu-features.h
+# SOURCES += util/android-ndk/cpu-features.c
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
@@ -226,7 +226,7 @@ QMAKE_CXXFLAGS += -msse4.2
 }
 
 # VP8-NEON
-android-*:vp8-neon {
+vp8-neon {
 # SIMD (ARM:gcc)
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
@@ -346,3 +346,15 @@ SOURCES += function/recorder.cpp
 #CONFIG += new_feature
 new_feature {
 }
+
+DISTFILES += \
+    ../dist/android/build.gradle \
+    ../dist/android/gradle/wrapper/gradle-wrapper.jar \
+    ../dist/android/gradle/wrapper/gradle-wrapper.jar \
+    ../dist/android/gradle/wrapper/gradle-wrapper.properties \
+    ../dist/android/gradle/wrapper/gradle-wrapper.properties \
+    ../dist/android/gradlew \
+    ../dist/android/gradlew \
+    ../dist/android/gradlew.bat \
+    ../dist/android/gradlew.bat \
+    ../dist/android/res/values/libs.xml

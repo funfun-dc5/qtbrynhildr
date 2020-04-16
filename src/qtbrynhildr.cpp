@@ -672,22 +672,22 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
-  connectToServerDialog = new ConnectToServerDialog(settings, this);
+  connectToServerDialog = new ConnectToServerDialog(settings, nullptr);
   connect(connectToServerDialog, SIGNAL(connectToServer()), SLOT(connectToServer()));
 
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog = new DesktopScalingDialog(settings, this);
+	desktopScalingDialog = new DesktopScalingDialog(settings, nullptr);
   }
 
   // set up log view dialog
   if (QTB_LOG_VIEW){
-	logViewDialog = new LogViewDialog(settings, this);
+	logViewDialog = new LogViewDialog(settings, nullptr);
   }
 
 #if QTB_PREFERENCE
   // preference dialog
-  preferenceDialog = new PreferenceDialog(settings, this);
+  preferenceDialog = new PreferenceDialog(settings, nullptr);
 #endif // QTB_PREFERENCE
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON

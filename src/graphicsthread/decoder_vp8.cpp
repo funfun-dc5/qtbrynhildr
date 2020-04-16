@@ -30,6 +30,11 @@ DecoderVP8::DecoderVP8(QImage *image)
 // destructor
 DecoderVP8::~DecoderVP8()
 {
+  // uninitialize libvpx
+  if (doneInitVPX){
+	uninitVPX();
+	doneInitVPX = false;
+  }
 }
 
 // pre-process

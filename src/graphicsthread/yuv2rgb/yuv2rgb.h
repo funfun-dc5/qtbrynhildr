@@ -74,6 +74,9 @@ extern vpx_codec_ctx_t c_codec;
 // initialize for yuv
 extern void initVPX();
 
+// uninitialize for yuv
+extern void uninitVPX();
+
 // decode VP8
 extern void decodeVPX(uchar *buffer, int size);
 #endif // !defined(BENCHMARK)

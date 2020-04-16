@@ -72,6 +72,13 @@ void initVPX()
   vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
 }
 
+// uninitialize for yuv
+void uninitVPX()
+{
+  // uninitialize libvpx
+  vpx_codec_destroy(&c_codec);
+}
+
 // decode VP8
 void decodeVPX(uchar *buffer, int size)
 {

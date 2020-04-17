@@ -351,11 +351,6 @@ new_feature {
 DISTFILES += \
     ../dist/android/build.gradle \
     ../dist/android/gradle/wrapper/gradle-wrapper.jar \
-    ../dist/android/gradle/wrapper/gradle-wrapper.jar \
-    ../dist/android/gradle/wrapper/gradle-wrapper.properties \
     ../dist/android/gradle/wrapper/gradle-wrapper.properties \
     ../dist/android/gradlew \
-    ../dist/android/gradlew \
-    ../dist/android/gradlew.bat \
-    ../dist/android/gradlew.bat \
-    ../dist/android/res/values/libs.xml
+    ../dist/android/gradlew.bat

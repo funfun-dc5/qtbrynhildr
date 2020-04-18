@@ -126,23 +126,13 @@ void PreferenceDialog::getFromSettings()
   // desktopScalingType
   checkBox_desktopScalingType->
 	setCheckState(settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER ? Qt::Checked : Qt::Unchecked);
-  if (settings->getConnected()){
-	checkBox_desktopScalingType->setEnabled(false);
-  }
-  else {
-	checkBox_desktopScalingType->setEnabled(true);
-  }
+  checkBox_desktopScalingType->setEnabled(!settings->getConnected());
 
   // onSIMDOperationSupport
 #if QTB_SIMD_SUPPORT
   checkBox_onSIMDOperationSupport->
 	setCheckState(settings->getOnSIMDOperationSupport() ? Qt::Checked : Qt::Unchecked);
-  if (settings->getConnected()){
-	checkBox_onSIMDOperationSupport->setEnabled(false);
-  }
-  else {
-	checkBox_onSIMDOperationSupport->setEnabled(true);
-  }
+  checkBox_onSIMDOperationSupport->setEnabled(!settings->getConnected());
 #endif // QTB_SIMD_SUPPORT
 
   // serverNameListSize
@@ -163,6 +153,7 @@ void PreferenceDialog::getFromSettings()
 	break;
   }
   comboBox_convertThreadCount->setCurrentIndex(convertThreadCount);
+  comboBox_convertThreadCount->setEnabled(!settings->getConnected());
 #endif // QTB_MULTI_THREAD_CONVERTER
 
   // keylayoutPath

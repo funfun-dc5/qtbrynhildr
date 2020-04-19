@@ -49,6 +49,12 @@ SOURCES += yuv2rgb_sse_avx2.cpp
 QMAKE_CXXFLAGS += -mavx2
 }
 
+neon {
+DEFINES += BENCHMARK_YUV2RGB=1 __ARM_NEON__
+SOURCES += yuv2rgb_neon.cpp
+QMAKE_CXXFLAGS += -mfpu=neon
+}
+
 create_image {
 DEFINES += BENCHMARK_CREATE_IMAGE=1
 }

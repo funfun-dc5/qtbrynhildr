@@ -22,14 +22,15 @@ class Decoder
   // Variable
   //-------------------------------------------------------------------------------
 protected:
+  // desktop image
+  static QImage *image;
+
+protected:
   // data buffer
   char *buffer;
 
   // data size
   int size;
-
-  // desktop image
-  QImage *image;
 
 protected:
   // output log flag
@@ -40,7 +41,7 @@ protected:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  Decoder(QImage *image);
+  Decoder();
   // destructor
   virtual ~Decoder();
 

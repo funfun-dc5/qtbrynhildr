@@ -14,8 +14,8 @@
 namespace qtbrynhildr {
 
 // constructor
-DecoderVP8AVX2::DecoderVP8AVX2(QImage *image)
-  :DecoderVP8(image)
+DecoderVP8AVX2::DecoderVP8AVX2()
+  :DecoderVP8()
 {
 }
 

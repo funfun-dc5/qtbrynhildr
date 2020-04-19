@@ -41,7 +41,7 @@ private:
   bool onDrawing;
 
   // image for drawing desktop
-  QImage *image;
+  //QImage *image;
 
   // desktop size
   QSize currentSize;

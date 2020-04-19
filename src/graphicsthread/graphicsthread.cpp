@@ -52,7 +52,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,graphicsBuffer(0)
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
-  ,image(new QImage)
+   //,image(new QImage)
   ,onClearDesktop(false)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
@@ -82,34 +82,35 @@ GraphicsThread::GraphicsThread(Settings *settings)
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
 
   // set decoders
-  decoderMode56 = new DecoderJPEG(image);
-  decoderMode7 = new DecoderVP8CPP(image);
+  //Decoder::image = image;
+  decoderMode56 = new DecoderJPEG();
+  decoderMode7 = new DecoderVP8CPP();
 
 #if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
   // AVX2
   if (decoderMode7SIMD == nullptr && CPUInfo::AVX2()){
-	decoderMode7SIMD = new DecoderVP8AVX2(image);
+	decoderMode7SIMD = new DecoderVP8AVX2();
 	hasSIMDInstruction = true;
   }
 #elif defined(__AVX__)
   // AVX
   if (decoderMode7SIMD == nullptr && CPUInfo::AVX()){
-	decoderMode7SIMD = new DecoderVP8AVX(image);
+	decoderMode7SIMD = new DecoderVP8AVX();
 	hasSIMDInstruction = true;
   }
 #endif // defined(__AVX__)
 #if defined(__SSE4_2__)
   // SSE
   if (decoderMode7SIMD == nullptr && CPUInfo::SSE42()){
-	decoderMode7SIMD = new DecoderVP8SSE(image);
+	decoderMode7SIMD = new DecoderVP8SSE();
 	hasSIMDInstruction = true;
   }
 #endif // defined(__SSE4_2__)
 #else // !defined(__ARM_NEON__)
   if (CPUInfo::NEON()){
-	decoderMode7SIMD = new DecoderVP8NEON(image);
+	decoderMode7SIMD = new DecoderVP8NEON();
 	hasSIMDInstruction = true;
   }
 #endif // !defined(__ARM_NEON__)

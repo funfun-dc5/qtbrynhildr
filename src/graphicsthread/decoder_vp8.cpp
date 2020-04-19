@@ -17,8 +17,8 @@ namespace qtbrynhildr {
 bool DecoderVP8::doneInitVPX = false;
 
 // constructor
-DecoderVP8::DecoderVP8(QImage *image)
-  :Decoder(image)
+DecoderVP8::DecoderVP8()
+  :Decoder()
 {
   // initialize libvpx
   if (!doneInitVPX){

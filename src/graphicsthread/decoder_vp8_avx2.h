@@ -28,7 +28,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DecoderVP8AVX2(QImage *image);
+  DecoderVP8AVX2();
   // destructor
   virtual ~DecoderVP8AVX2();
 

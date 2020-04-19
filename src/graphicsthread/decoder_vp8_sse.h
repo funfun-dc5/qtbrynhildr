@@ -28,7 +28,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DecoderVP8SSE(QImage *image);
+  DecoderVP8SSE();
   // destructor
   virtual ~DecoderVP8SSE();
 

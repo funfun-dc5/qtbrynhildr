@@ -16,11 +16,13 @@
 
 namespace qtbrynhildr {
 
+// desktop image
+QImage*  Decoder::image = new QImage;
+
 // constructor
-Decoder::Decoder(QImage *image)
+Decoder::Decoder()
   :buffer(0)
   ,size(0)
-  ,image(image)
   // for DEBUG
   ,outputLog(false)
 {

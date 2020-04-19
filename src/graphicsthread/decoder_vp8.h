@@ -33,7 +33,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DecoderVP8(QImage *image);
+  DecoderVP8();
   // destructor
   virtual ~DecoderVP8();
 

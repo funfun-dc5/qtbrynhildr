@@ -28,7 +28,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DecoderVP8NEON(QImage *image);
+  DecoderVP8NEON();
   // destructor
   virtual ~DecoderVP8NEON();
 

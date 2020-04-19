@@ -380,7 +380,7 @@ typedef enum {
 
 // for onSIMDOperationSupport
 #define QTB_ONSIMDOPERATIONSUPPORT			"onSIMDOperationSupport"
-#define QTB_ONSIMDOPERATIONSUPPORT_DEFAULT	true
+#define QTB_ONSIMDOPERATIONSUPPORT_DEFAULT	false
 
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"

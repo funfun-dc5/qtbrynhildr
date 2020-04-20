@@ -100,8 +100,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
 	decoderMode7SIMD = new DecoderVP8AVX();
 	hasSIMDInstruction = true;
   }
-#endif // defined(__AVX__)
-#if defined(__SSE4_2__)
+#elif defined(__SSE4_2__)
   // SSE
   if (decoderMode7SIMD == nullptr && CPUInfo::SSE42()){
 	decoderMode7SIMD = new DecoderVP8SSE();

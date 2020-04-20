@@ -178,7 +178,6 @@ LIBS += -lvpx
 
 # VP8-AVX2
 vp8-avx2 {
-CONFIG += vp8-sse
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx2.cpp
 HEADERS += graphicsthread/decoder_vp8_avx2.h
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
@@ -195,7 +194,6 @@ QMAKE_CXXFLAGS += -mavx2
 
 # VP8-AVX
 vp8-avx {
-CONFIG += vp8-sse
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_avx.cpp
 HEADERS += graphicsthread/decoder_vp8_avx.h
 SOURCES += graphicsthread/decoder_vp8_avx.cpp

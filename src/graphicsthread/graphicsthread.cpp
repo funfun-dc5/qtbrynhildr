@@ -464,8 +464,10 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		// save desktop image size
 		settings->setDesktopImageSize(image->size());
 
+#if !(defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW)
 		// rescale image
 		rescaleDesktopImage(image);
+#endif // !(defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW)
 
 #if QTB_BENCHMARK
 		// check benchmark phase counter

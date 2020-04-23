@@ -461,6 +461,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 #endif // QTB_RECORDER
 
+#if QTB_UPDATECHECK
   // create http getter
   httpGetter = new HttpGetter();
   if (!httpGetter->supportsSsl()){
@@ -472,6 +473,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 #endif // for DEBUG
   connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
+#endif // QTB_UPDATECHECK
 
   // version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION QTB_RCNAME QTB_ARCHNAME);

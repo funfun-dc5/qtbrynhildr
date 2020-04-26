@@ -100,7 +100,7 @@ void LogViewDialog::show()
 // reset
 void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
-  if (button->text() == "Reset"){
+  if (button->text() == tr("Reset")){
 	// clear log
 	//	cout << "Clear log!" << endl <<flush;
 	topPos = lastPos;

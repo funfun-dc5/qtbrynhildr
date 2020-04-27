@@ -395,6 +395,15 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 
   // audio device information
   const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
+  {
+	QString str;
+	str = "SoundType : " + QString::number(settings->getSoundType());
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SoundCacheTime : " + QString::number(settings->getSoundCacheTime()) + " (ms)";
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SampleRate : " + QString::number(samplerate) + " (Hz)";
+	emit outputLogMessage(PHASE_SOUND, str);
+  }
   // supported Sample Rates
   if (settings->getOutputLog()){
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();

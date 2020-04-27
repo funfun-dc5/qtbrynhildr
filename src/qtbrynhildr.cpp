@@ -15,6 +15,7 @@
 #if 0 // for TEST
 #include <QApplication>
 #endif // for TEST
+#include <QAudioDeviceInfo>
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
@@ -376,7 +377,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_CRYPTGRAM
 
   // restore settings
+#if !defined(QTB_DEV_TOUCHPANEL) // for TEST
   readSettings();
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // open Log File
   if (!logMessage->openLogFile(settings->getLogFile())){
@@ -528,6 +531,17 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 (QString)"Desktop Width  = " + QString::number(desktopWidth));
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 (QString)"Desktop Height = " + QString::number(desktopHeight));
+  }
+
+  // Supported Sound Sample Rate List
+  {
+	const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
+	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
+	QString str = "Supported Sampling Rate (Hz) :";
+	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
+	  str =  str + " " + QString::number((int)(*i));
+	}
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
   }
 
   // set current onControl/onGraphics/onSound

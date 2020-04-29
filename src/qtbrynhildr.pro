@@ -51,7 +51,7 @@ DEFINES += QTB_PORTABLE_VERSION=1
 # Windows (MinGW, MSVC)
 # ------------------------------------------------------------------------------
 win32 {
-CONFIG += desktop vp8-sse
+CONFIG += desktop vp8-sse vp8-avx2
 DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
@@ -77,10 +77,10 @@ HEADERS += common/msvc.h
 # Linux/FreeBSD/Cygwin
 # ------------------------------------------------------------------------------
 linux-g++-64 | linux-g++ | freebsd-g++ | cygwin-g++ {
-CONFIG += desktop vp8-sse
+CONFIG += desktop vp8-sse vp8-avx2
 DEFINES += PLATFORM_LINUX
 # NEON (RaspberryPi3)
-#CONFIG -= vp8-sse
+#CONFIG -= vp8-sse vp8-avx2
 #CONFIG += vp8-neon
 #DEFINES += QTB_RPI3
 }
@@ -89,7 +89,7 @@ DEFINES += PLATFORM_LINUX
 # MacOSX
 # ------------------------------------------------------------------------------
 macx {
-CONFIG += desktop vp8-sse
+CONFIG += desktop vp8-sse vp8-avx2
 DEFINES += PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 }
@@ -185,11 +185,12 @@ DEFINES += QTB_SIMD_SUPPORT=1
 }
 
 *-msvc*:vp8-avx2 {
-QMAKE_CXXFLAGS += /arch:AVX2
+#QMAKE_CXXFLAGS += /arch:AVX2
+DEFINES += __AVX2__
 }
 
 *-g++:vp8-avx2 | *-clang:vp8-avx2 {
-QMAKE_CXXFLAGS += -mavx2
+QMAKE_CXXFLAGS += -mavx2 -U__AVX__
 }
 
 # VP8-AVX
@@ -201,7 +202,8 @@ DEFINES += QTB_SIMD_SUPPORT=1
 }
 
 *-msvc*:vp8-avx {
-QMAKE_CXXFLAGS += /arch:AVX
+#QMAKE_CXXFLAGS += /arch:AVX
+DEFINES += __AVX__
 }
 
 *-g++:vp8-avx | *-clang:vp8-avx {

@@ -85,8 +85,9 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
 #endif // QTB_PORTABLE_VERSION
 
 #if !QTB_SIMD_SUPPORT
-  checkBox_onSIMDOperationSupport->setCheckState(Qt::Unchecked);
-  checkBox_onSIMDOperationSupport->setEnabled(false);
+  comboBox_SIMDOperationTypeName->insertItem(0, "None");
+  comboBox_SIMDOperationTypeName->setCurrentIndex(0);
+  comboBox_SIMDOperationTypeName->setEnabled(false);
 #endif // !QTB_SIMD_SUPPORT
 
   connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
@@ -102,6 +103,12 @@ void PreferenceDialog::resizeEvent(QResizeEvent *event)
 void PreferenceDialog::setKeylayoutList(const QStringList keylayoutList)
 {
   listWidget_keylayoutList->addItems(keylayoutList);
+}
+
+// sey decoder name list
+void PreferenceDialog::setDecoderNameList(QStringList list)
+{
+  comboBox_SIMDOperationTypeName->addItems(list);
 }
 
 // get from settings
@@ -128,11 +135,13 @@ void PreferenceDialog::getFromSettings()
 	setCheckState(settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER ? Qt::Checked : Qt::Unchecked);
   checkBox_desktopScalingType->setEnabled(!settings->getConnected());
 
-  // onSIMDOperationSupport
 #if QTB_SIMD_SUPPORT
-  checkBox_onSIMDOperationSupport->
-	setCheckState(settings->getOnSIMDOperationSupport() ? Qt::Checked : Qt::Unchecked);
-  checkBox_onSIMDOperationSupport->setEnabled(!settings->getConnected());
+  // SIMDOperationTypeName
+  int currentIndex =
+	comboBox_SIMDOperationTypeName->findText(settings->getSIMDOperationTypeName(), Qt::MatchExactly);
+  comboBox_SIMDOperationTypeName->setCurrentIndex(currentIndex);
+  comboBox_SIMDOperationTypeName->setEnabled(!settings->getConnected() &&
+											 settings->getPublicModeVersion() == MODE_PUBLIC7);
 #endif // QTB_SIMD_SUPPORT
 
   // serverNameListSize
@@ -153,7 +162,8 @@ void PreferenceDialog::getFromSettings()
 	break;
   }
   comboBox_convertThreadCount->setCurrentIndex(convertThreadCount);
-  comboBox_convertThreadCount->setEnabled(!settings->getConnected());
+  comboBox_convertThreadCount->setEnabled(!settings->getConnected() &&
+										  settings->getPublicModeVersion() == MODE_PUBLIC7);
 #endif // QTB_MULTI_THREAD_CONVERTER
 
   // keylayoutPath
@@ -243,10 +253,10 @@ bool PreferenceDialog::setToSettings()
 	setDesktopScalingType(checkBox_desktopScalingType->checkState() == Qt::Checked ?
 						  DESKTOPSCALING_TYPE_ON_SERVER : DESKTOPSCALING_TYPE_ON_CLIENT);
 
-  // onSIMDOperationSupport
 #if QTB_SIMD_SUPPORT
+  // onSIMDOperationTypeName
   settings->
-	setOnSIMDOperationSupport(checkBox_onSIMDOperationSupport->checkState() == Qt::Checked);
+	setSIMDOperationTypeName(comboBox_SIMDOperationTypeName->currentText());
 #endif // QTB_SIMD_SUPPORT
 
   // serverNameListSize
@@ -444,6 +454,11 @@ void PreferenceDialog::publicModeVersionChanged(int version)
 
 	checkBox_onTransferClipboardSupport->setEnabled(true);
   }
+
+  if (!settings->getConnected()){
+	comboBox_SIMDOperationTypeName->setEnabled(version == MODE_PUBLIC7);
+	comboBox_convertThreadCount->setEnabled(version == MODE_PUBLIC7);
+  }
 }
 
 void PreferenceDialog::on_comboBox_publicModeVersion_currentIndexChanged(int index)
@@ -483,9 +498,9 @@ void PreferenceDialog::on_checkBox_desktopScalingType_stateChanged(int state)
   changedSettings();
 }
 
-void PreferenceDialog::on_checkBox_onSIMDOperationSupport_stateChanged(int state)
+void PreferenceDialog::on_comboBox_SIMDOperationTypeName_currentIndexChanged(int index)
 {
-  Q_UNUSED(state);
+  Q_UNUSED(index);
 
   changedSettings();
 }

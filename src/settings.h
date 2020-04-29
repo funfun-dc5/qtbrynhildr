@@ -378,9 +378,9 @@ typedef enum {
 #define QTB_ONTRANSFERCLIPBOARDSUPPORT			"onTransferClipboardSupport"
 #define QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT	true
 
-// for onSIMDOperationSupport
-#define QTB_ONSIMDOPERATIONSUPPORT			"onSIMDOperationSupport"
-#define QTB_ONSIMDOPERATIONSUPPORT_DEFAULT	false
+// for SIMDOprationType
+#define QTB_SIMDOPERATIONTYPENAME				"SIMDOperationTypeName"
+#define QTB_SIMDOPERATIONTYPENAME_DEFAULT		"C++"
 
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"
@@ -683,8 +683,8 @@ private:
   // send/receive clipboard support
   volatile bool onTransferClipboardSupport;
 
-  // SIMD opeation support
-  volatile bool onSIMDOperationSupport;
+  // SIMD opeation type name
+  QString SIMDOperationTypeName;
 
   // buffer
   volatile int graphicsBufferSize;
@@ -1978,16 +1978,16 @@ public:
 	this->onTransferClipboardSupport = onTransferClipboardSupport;
   }
 
-  // get SIMD operation support flag
-  bool getOnSIMDOperationSupport() const
+  // get SIMD operation type name
+  QString getSIMDOperationTypeName() const
   {
-	return onSIMDOperationSupport;
+	return SIMDOperationTypeName;
   }
 
-  // set SIMD operation support flag
-  void setOnSIMDOperationSupport(bool onSIMDOperationSupport)
+  // set SIMD operation type name
+  void setSIMDOperationTypeName(QString SIMDOperationTypeName)
   {
-	this->onSIMDOperationSupport = onSIMDOperationSupport;
+	this->SIMDOperationTypeName = SIMDOperationTypeName;
   }
 
   // get on show Software Keyboard flag

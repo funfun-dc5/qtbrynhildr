@@ -20,7 +20,8 @@
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
 #include "decoder_vp8_avx2.h"
-#elif defined(__AVX__)
+#endif // defined(__AVX2__)
+#if defined(__AVX__)
 #include "decoder_vp8_avx.h"
 #endif // defined(__AVX__)
 #if defined(__SSE4_2__)
@@ -60,9 +61,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,buffer(0)
   ,decoderMode56(0)
   ,decoderMode7(0)
-#if QTB_SIMD_SUPPORT
-  ,decoderMode7SIMD(0)
-#endif // QTB_SIMD_SUPPORT
   ,decoder(0)
   ,video_mode(-1)
 #if QTB_BENCHMARK
@@ -82,38 +80,51 @@ GraphicsThread::GraphicsThread(Settings *settings)
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
 
   // set decoders
-  //Decoder::image = image;
+  // for MODE5/6
   decoderMode56 = new DecoderJPEG();
-  decoderMode7 = new DecoderVP8CPP();
 
+  // for MODE7
 #if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
-  // AVX2
-  if (decoderMode7SIMD == nullptr && CPUInfo::AVX2()){
-	decoderMode7SIMD = new DecoderVP8AVX2();
+  if (CPUInfo::AVX2()){
+	decoderMode7 = new DecoderVP8AVX2();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
-#elif defined(__AVX__)
-  // AVX
-  if (decoderMode7SIMD == nullptr && CPUInfo::AVX()){
-	decoderMode7SIMD = new DecoderVP8AVX();
+#endif // defined(__AVX2__)
+#if defined(__AVX__)
+  if (CPUInfo::AVX()){
+	decoderMode7 = new DecoderVP8AVX();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
-#elif defined(__SSE4_2__)
-  // SSE
-  if (decoderMode7SIMD == nullptr && CPUInfo::SSE42()){
-	decoderMode7SIMD = new DecoderVP8SSE();
+#endif // defined(__AVX__)
+#if defined(__SSE4_2__)
+  if (CPUInfo::SSE42()){
+	decoderMode7 = new DecoderVP8SSE();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
 #endif // defined(__SSE4_2__)
 #else // !defined(__ARM_NEON__)
   if (CPUInfo::NEON()){
-	decoderMode7SIMD = new DecoderVP8NEON();
+	decoderMode7 = new DecoderVP8NEON();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
 #endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
+
+  decoderMode7 = new DecoderVP8CPP();
+  decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+  decoderMode7NameList.insert(0, decoderMode7->name());
+
+  //qDebug() << "decoderMode7NameList : " << decoderMode7NameList;
 }
 
 // destructor
@@ -333,6 +344,17 @@ void GraphicsThread::connectedToServer()
   // reset frame controller
   frameController.reset();
 
+  // set decoder for MODE7 (VP8)
+  decoderMode7 = decoderMode7Map.value(settings->getSIMDOperationTypeName());
+#if 0 // for TEST
+  if (decoderMode7 != 0){
+	cout << "decoder : " << decoderMode7->name() << endl << flush;
+  }
+  else {
+	qDebug() << "decoderMode7 == 0 for " << settings->getSIMDOperationTypeName();
+  }
+#endif // 0 // for TEST
+
   NetThread::connectedToServer();
 }
 
@@ -384,39 +406,6 @@ void GraphicsThread::outputReceivedData(long receivedDataSize)
 void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 {
   // check mode
-#if QTB_SIMD_SUPPORT
-  if (mode == video_mode){ // no change mode
-	// MODE 7 (VP8)
-	if (mode == VIDEO_MODE_COMPRESS){
-	  if (hasSIMDInstruction){
-		if (decoder == decoderMode7){
-		  if(settings->getOnSIMDOperationSupport())
-			decoder = decoderMode7SIMD;
-		}
-		else { // decoder == decoderMode7SIMD
-		  if(!settings->getOnSIMDOperationSupport())
-			decoder = decoderMode7;
-		}
-	  }
-	}
-  }
-  else { // change mode
-	// change decoder
-	// MODE 5/6 (MJPEG)
-	if (mode == VIDEO_MODE_MJPEG){
-	  decoder = decoderMode56;
-	}
-	// MODE 7 (VP8)
-	else if (mode == VIDEO_MODE_COMPRESS){
-	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-		decoder = decoderMode7SIMD;
-	  }
-	  else {
-		decoder = decoderMode7;
-	  }
-	}
-  }
-#else // QTB_SIMD_SUPPORT
   if (mode != video_mode){ // change mode
 	// change decoder
 	// MODE 5/6 (MJPEG)
@@ -428,7 +417,6 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	  decoder = decoderMode7;
 	}
   }
-#endif // QTB_SIMD_SUPPORT
 
   // record the start time of decode
   frameController.startDecode();

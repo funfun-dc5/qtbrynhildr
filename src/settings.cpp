@@ -159,7 +159,7 @@ Settings::Settings(const char *iniFileName)
 #endif // QTB_DRAG_AND_DROP_SUPPORT
   setOnTransferClipboardSupport(QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT);
 
-  setOnSIMDOperationSupport(QTB_ONSIMDOPERATIONSUPPORT_DEFAULT);
+  setSIMDOperationTypeName(QTB_SIMDOPERATIONTYPENAME_DEFAULT);
 
   setGraphicsBufferSize(QTB_GRAPHICSBUFFERSIZE_DEFAULT);
   setSoundBufferSize(QTB_SOUNDBUFFERSIZE_DEFAULT);
@@ -458,9 +458,9 @@ void Settings::readSettings()
   setOnTransferClipboardSupport(settings->value(QTB_ONTRANSFERCLIPBOARDSUPPORT,
 												QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT).toBool());
 
-  // load onSIMDOperationSupport
-  setOnSIMDOperationSupport(settings->value(QTB_ONSIMDOPERATIONSUPPORT,
-											QTB_ONSIMDOPERATIONSUPPORT_DEFAULT).toBool());
+  // load SIMDOperationTypeName
+  setSIMDOperationTypeName(settings->value(QTB_SIMDOPERATIONTYPENAME,
+										   QTB_SIMDOPERATIONTYPENAME_DEFAULT).toString());
 
   // load graphicsBufferSize
   setGraphicsBufferSize(settings->value(QTB_GRAPHICSBUFFERSIZE,
@@ -703,8 +703,8 @@ void Settings::writeSettings()
   // save onTransferClipboardSupport
   settings->setValue(QTB_ONTRANSFERCLIPBOARDSUPPORT, onTransferClipboardSupport);
 
-  // save onSIMDOperationSupport
-  settings->setValue(QTB_ONSIMDOPERATIONSUPPORT, onSIMDOperationSupport);
+  // save SIMDOperationTypeName
+  settings->setValue(QTB_SIMDOPERATIONTYPENAME, SIMDOperationTypeName);
 
   // save graphicsBufferSize
   settings->setValue(QTB_GRAPHICSBUFFERSIZE, graphicsBufferSize);
@@ -838,7 +838,7 @@ void Settings::printSettings() const
 #endif // QTB_DRAG_AND_DROP_SUPPORT
   qDebug() << "TransferClipboardSupport: " << onTransferClipboardSupport;
 
-  qDebug() << "SIMDOperationSupport    : " << onSIMDOperationSupport;
+  qDebug() << "SIMDOperationTypeName   : " << SIMDOperationTypeName;
 
   qDebug() << "Brynhildr2Support       : " << onBrynhildr2Support;
 

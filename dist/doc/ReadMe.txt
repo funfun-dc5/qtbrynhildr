@@ -740,7 +740,7 @@ onShowPassword=false
 onClipCursor=false
 onShowMouseCursorMarker=false
 onTransferFile=true
-onSIMDOperationSupport=false
+SIMDOperationTypeName=C++
 onShowTotalProgressForTransferFile=false
 onTransferFileByDragAndDrop=true
 onTransferClipboard=true
@@ -1030,6 +1030,7 @@ Ver.2.0.31: 2020/04/xx
 
             [その他変更]
              ・Windows版に同梱しているOpenSSL DLL(1.1.1系)を1.1.1gへ更新
+             ・AVX2命令を利用したデコーダを追加(対応するCPUの場合のみ有効となる)
 
 Ver.2.0.30: 2020/04/20
             [不具合修正]

@@ -35,7 +35,7 @@ public:
   // get decoder name
   const char*  name()
   {
-	return "vp8 neon decoder";
+	return "NEON";
   }
 
 #if 0

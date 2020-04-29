@@ -7,6 +7,10 @@
 #include "common/common.h"
 
 // Qt Header
+#include <QImage>
+#include <QMap>
+#include <QSize>
+#include <QStringList>
 
 // Local Header
 #include "common/netthread.h"
@@ -67,7 +71,8 @@ private:
   Decoder *decoderMode56;	// for MODE5/6
   Decoder *decoderMode7;	// for MODE7
 #if QTB_SIMD_SUPPORT
-  Decoder *decoderMode7SIMD;// for MODE7(SIMD)
+  QMap <QString, Decoder*>decoderMode7Map;
+  QStringList decoderMode7NameList;
 #endif // QTB_SIMD_SUPPORT
 
   // current decoder
@@ -123,15 +128,10 @@ public:
   }
 
 #if QTB_SIMD_SUPPORT
-  // get SIMD decoder name
-  const char* getSIMDDecoderName()
+  // get SIMD decoder name list
+  QStringList getSIMDDecoderNameList()
   {
-	if (decoderMode7SIMD != nullptr){
-	  return decoderMode7SIMD->name();
-	}
-	else {
-	  return nullptr;
-	}
+	return decoderMode7NameList;
   }
 #endif // QTB_SIMD_SUPPORT
 

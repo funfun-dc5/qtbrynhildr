@@ -46,7 +46,7 @@ QImage* DecoderVP8AVX2::getDesktopImage(int numOfThread)
   }
 
   // make RGB image
-  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_AVX2, numOfThread); // Yet
+  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_AVX2, numOfThread);
 
   // get QImage
   image = getImage(rgbImageSize);

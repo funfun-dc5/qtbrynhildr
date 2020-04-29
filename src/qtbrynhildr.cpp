@@ -1011,8 +1011,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if QTB_SIMD_SUPPORT
   // SIMD decoder name
-  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "VP8 SIMD decoder: "
-							   + (QString)graphicsThread->getSIMDDecoderName());
+  QStringList list = graphicsThread->getSIMDDecoderNameList();
+  QString str = list.join(", ");
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "VP8 decoder: " + str);
+  // set SIMD decoder name list
+  preferenceDialog->setDecoderNameList(graphicsThread->getSIMDDecoderNameList());
 #endif // QTB_SIMD_SUPPORT
 }
 
@@ -2499,14 +2502,15 @@ void QtBrynhildr::updateConnected()
 	QString str;
 	if (onBenchmarkMenu){
 	  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
-		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ "+tr("ReCalc Rate")+" :  %7 % ]").
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ "+tr("ReCalc Rate")+" :  %7 % : %8]").
 		  arg(settings->getServerName()).
 		  arg(settings->getDesktopWidth(), 3).
 		  arg(settings->getDesktopHeight(), 3).
 		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
 		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
 		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3).
-		  arg(calcRate, 4, 'f', 2, ' ');
+		  arg(calcRate, 4, 'f', 2, ' ').
+		  arg(settings->getSIMDOperationTypeName());
 	  }
 	  else {
 		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ]").

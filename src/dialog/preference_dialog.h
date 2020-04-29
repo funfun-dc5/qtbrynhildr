@@ -52,6 +52,9 @@ public:
   // set keylayout file list
   void setKeylayoutList(const QStringList keylayoutList);
 
+  // set decoder name list
+  void setDecoderNameList(QStringList list);
+
 protected:
   // show Event
   void showEvent(QShowEvent *event);
@@ -94,7 +97,7 @@ private slots:
 
   void on_checkBox_desktopScalingType_stateChanged(int state);
 
-  void on_checkBox_onSIMDOperationSupport_stateChanged(int state);
+  void on_comboBox_SIMDOperationTypeName_currentIndexChanged(int index);
 
   void on_spinBox_serverNameListSize_valueChanged(int i);
 

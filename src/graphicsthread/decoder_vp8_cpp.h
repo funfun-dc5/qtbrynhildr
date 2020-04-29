@@ -35,9 +35,9 @@ public:
   // get decoder name
   const char*  name()
   {
-	return "vp8 cpp decoder";
+	return "C++";
   }
-  
+
 #if 0
   // pre-process
   bool preprocess(char *buffer, int size);

@@ -1013,9 +1013,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // SIMD decoder name
   QStringList list = graphicsThread->getSIMDDecoderNameList();
   QString str = list.join(", ");
-  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "VP8 decoder: " + str);
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "VP8 decoder : " + str);
+#if QTB_PREFERENCE
   // set SIMD decoder name list
   preferenceDialog->setDecoderNameList(graphicsThread->getSIMDDecoderNameList());
+#endif // QTB_PREFERENCE
 #endif // QTB_SIMD_SUPPORT
 }
 

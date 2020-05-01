@@ -103,11 +103,24 @@ private:
   // create .wav file
   void createWavFile(int dataSize);
 
+  // sound data check
+  inline bool hasSoundData(char *buf, long len)
+  {
+	for(int i = 0; i < len; i++){
+	  if (buf[i] != 0) return true;
+	}
+	return false;
+  }
+
 private slots:
 #if defined(DEBUG)
   // stateCanged
   void handleStateChanged(QAudio::State state);
 #endif // defined(DEBUG)
+
+#if 0 // for TEST
+  void notify();
+#endif // 0 // for TEST
 
 signals:
   // connected

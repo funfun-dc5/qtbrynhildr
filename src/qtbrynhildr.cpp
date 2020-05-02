@@ -15,6 +15,7 @@
 #if 0 // for TEST
 #include <QApplication>
 #endif // for TEST
+#include <QAudioDeviceInfo>
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
@@ -213,6 +214,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,selectBenchmarkPhase1_Action(0)
   ,selectBenchmarkPhase2_Action(0)
   ,selectBenchmarkPhase3_Action(0)
+  ,selectBenchmarkPhase4_Action(0)
 #endif // QTB_BENCHMARK
   ,connectToServerDialog(0)
   ,desktopScalingDialog(0)
@@ -376,7 +378,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_CRYPTGRAM
 
   // restore settings
+#if !defined(QTB_DEV_TOUCHPANEL) // for TEST
   readSettings();
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // open Log File
   if (!logMessage->openLogFile(settings->getLogFile())){
@@ -461,6 +465,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 #endif // QTB_RECORDER
 
+#if QTB_UPDATECHECK
   // create http getter
   httpGetter = new HttpGetter();
   if (!httpGetter->supportsSsl()){
@@ -472,6 +477,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 #endif // for DEBUG
   connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
+#endif // QTB_UPDATECHECK
 
   // version
   logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "Version    : v" QTB_VERSION QTB_RCNAME QTB_ARCHNAME);
@@ -528,6 +534,17 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 (QString)"Desktop Height = " + QString::number(desktopHeight));
   }
 
+  // Supported Sound Sample Rate List
+  {
+	const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
+	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
+	QString str = "Supported Sampling Rate (Hz) :";
+	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
+	  str =  str + " " + QString::number((int)(*i));
+	}
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+  }
+
   // set current onControl/onGraphics/onSound
   onControl = settings->getOnControl();
   onGraphics = settings->getOnGraphics();
@@ -582,65 +599,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // set Widget
   scrollArea->setWidget(desktopWindow);
   scrollArea->setFocusProxy(desktopWindow);
+  scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
   setCentralWidget(scrollArea);
-
-#if !QTB_NEW_DESKTOPWINDOW
-  // set margin
-  QString kernelVersion = QSysInfo::kernelVersion();
-  int hspace = 0;
-  int vspace = 0;
-
-#if defined(Q_OS_WIN)
-  if (kernelVersion.startsWith("10.")){			// Windows 10
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.2")){	// Windows 8
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.1")){	// Windows 7
-	hspace = 2;
-	vspace = 4;
-  }
-  else {
-	// NOT supported Version
-	hspace = 2;
-	vspace = 3;
-  }
-#elif defined(Q_OS_LINUX)
-  // Linux base
-#if defined(Q_OS_ANDROID)
-  // Android
-  hspace = 2;
-  vspace = 4;
-#else // defined(Q_OS_ANDROID)
-  // Linux Desktop
-  hspace = 2;
-  vspace = 2;
-#endif // defined(Q_OS_ANDROID)
-
-#elif defined(Q_OS_CYGWIN)
-  // Cygwin
-  hspace = 2;
-  vspace = 2;
-#elif defined(Q_OS_FREEBSD)
-  // FreeBSD
-  hspace = 0;
-  vspace = 0;
-#elif defined(Q_OS_OSX)
-  // Darwin
-  hspace = 0;
-  vspace = 0;
-#endif // defined(Q_OS_OSX)
-
-  setMargins(hspace, vspace);
-  desktopPanel->setMargins(hspace, vspace);
-#endif // !QTB_NEW_DESKTOPWINDOW
 
   // initialize palette
   backgroundPalette = fullScreenBackgroundPalette = scrollArea->palette();
@@ -729,22 +689,26 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
-  connectToServerDialog = new ConnectToServerDialog(settings, this);
+  connectToServerDialog = new ConnectToServerDialog(settings, nullptr);
+  connectToServerDialog->setModal(true);
   connect(connectToServerDialog, SIGNAL(connectToServer()), SLOT(connectToServer()));
 
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog = new DesktopScalingDialog(settings, this);
+	desktopScalingDialog = new DesktopScalingDialog(settings, nullptr);
+	desktopScalingDialog->setModal(true);
   }
 
   // set up log view dialog
   if (QTB_LOG_VIEW){
-	logViewDialog = new LogViewDialog(settings, this);
+	logViewDialog = new LogViewDialog(settings, nullptr);
+	logViewDialog->setModal(true);
   }
 
 #if QTB_PREFERENCE
   // preference dialog
-  preferenceDialog = new PreferenceDialog(settings, this);
+  preferenceDialog = new PreferenceDialog(settings, nullptr);
+  preferenceDialog->setModal(true);
 #endif // QTB_PREFERENCE
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -825,6 +789,64 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   if (settings->getOnTransferClipboardSupport()){
 	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
   }
+
+#if !QTB_NEW_DESKTOPWINDOW
+  // set margin
+  QString kernelVersion = QSysInfo::kernelVersion();
+  int hspace = 0;
+  int vspace = 0;
+
+#if defined(Q_OS_WIN)
+  if (kernelVersion.startsWith("10.")){			// Windows 10
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.2")){	// Windows 8
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.1")){	// Windows 7
+	hspace = 2;
+	vspace = 4;
+  }
+  else {
+	// NOT supported Version
+	hspace = 2;
+	vspace = 3;
+  }
+#elif defined(Q_OS_LINUX)
+  // Linux base
+#if defined(Q_OS_ANDROID)
+  // Android
+  hspace = 2;
+  vspace = 4;
+#else // defined(Q_OS_ANDROID)
+  // Linux Desktop
+  hspace = 2;
+  vspace = (menuBar()->sizeHint().height() == 0) ? 2 : 8;
+#endif // defined(Q_OS_ANDROID)
+
+#elif defined(Q_OS_CYGWIN)
+  // Cygwin
+  hspace = 2;
+  vspace = 2;
+#elif defined(Q_OS_FREEBSD)
+  // FreeBSD
+  hspace = 0;
+  vspace = 0;
+#elif defined(Q_OS_OSX)
+  // Darwin
+  hspace = 0;
+  vspace = 0;
+#endif // defined(Q_OS_OSX)
+
+  setMargins(hspace, vspace);
+  desktopPanel->setMargins(hspace, vspace);
+#endif // !QTB_NEW_DESKTOPWINDOW
 
   //------------------------------------------------------------
   // create threads
@@ -990,8 +1012,13 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if QTB_SIMD_SUPPORT
   // SIMD decoder name
-  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "VP8 SIMD decoder: "
-							   + (QString)graphicsThread->getSIMDDecoderName());
+  QStringList list = graphicsThread->getSIMDDecoderNameList();
+  QString str = list.join(", ");
+  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "VP8 decoder : " + str);
+#if QTB_PREFERENCE
+  // set SIMD decoder name list
+  preferenceDialog->setDecoderNameList(graphicsThread->getSIMDDecoderNameList());
+#endif // QTB_PREFERENCE
 #endif // QTB_SIMD_SUPPORT
 }
 
@@ -2154,6 +2181,11 @@ void QtBrynhildr::createActions()
 	selectBenchmarkPhase3_Action->setEnabled(false);
 	selectBenchmarkPhase3_Action->setCheckable(false);
 	connect(selectBenchmarkPhase3_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase3()));
+	selectBenchmarkPhase4_Action = new QAction(tr("Select Phase 4"), this);
+	selectBenchmarkPhase4_Action->setStatusTip(tr("Select Phase 4"));
+	selectBenchmarkPhase4_Action->setEnabled(false);
+	selectBenchmarkPhase4_Action->setCheckable(false);
+	connect(selectBenchmarkPhase4_Action, SIGNAL(triggered()), this, SLOT(selectBenchmarkPhase4()));
   }
 #endif // QTB_BENCHMARK
 }
@@ -2413,6 +2445,7 @@ void QtBrynhildr::createMenus()
 	benchmarkMenu->addAction(selectBenchmarkPhase1_Action);
 	benchmarkMenu->addAction(selectBenchmarkPhase2_Action);
 	benchmarkMenu->addAction(selectBenchmarkPhase3_Action);
+	benchmarkMenu->addAction(selectBenchmarkPhase4_Action);
 
 	// refresh benchmark menu
 	refreshBenchmarkMenu();
@@ -2486,14 +2519,15 @@ void QtBrynhildr::updateConnected()
 	QString str;
 	if (onBenchmarkMenu){
 	  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
-		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ "+tr("ReCalc Rate")+" :  %7 % ]").
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ "+tr("ReCalc Rate")+" :  %7 % : %8]").
 		  arg(settings->getServerName()).
 		  arg(settings->getDesktopWidth(), 3).
 		  arg(settings->getDesktopHeight(), 3).
 		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
 		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
 		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3).
-		  arg(calcRate, 4, 'f', 2, ' ');
+		  arg(calcRate, 4, 'f', 2, ' ').
+		  arg(settings->getSIMDOperationTypeName());
 	  }
 	  else {
 		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ]").
@@ -2504,6 +2538,8 @@ void QtBrynhildr::updateConnected()
 		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
 		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3);
 	  }
+	  // sample rate (sound)
+	  str += QString(" : Sound %1 Hz").arg(soundThread->getSampleRate());
 	}
 	else {
 	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
@@ -2819,8 +2855,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	// NOT change scaling
 	return;
   }
-  QSize desktopSize = desktopPanel->getDesktopSize();
-  if (!desktopSize.isValid()){
+  QSize desktopImageSize = settings->getDesktopImageSize();
+  if (!desktopImageSize.isValid()){
 	return;
   }
 
@@ -2840,8 +2876,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	height = desktopPanel->getSize().height();
   }
 
-  int desktopWidth = desktopSize.width();
-  int desktopHeight = desktopSize.height();
+  int desktopWidth = desktopImageSize.width();
+  int desktopHeight = desktopImageSize.height();
   qreal widthFactor = (qreal)width/desktopWidth;
   qreal heightFactor = (qreal)height/desktopHeight;
   if (widthFactor < heightFactor){
@@ -2890,6 +2926,13 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 #endif // for TEST
 	setDesktopScalingFactor(event->size());
   }
+#if 0 // for TEST
+  else {
+	cout << "resizeEvent() : Rescaling for (width, height) = ("
+		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
+	//setDesktopScalingFactor(event->size());
+  }
+#endif // for TEST
 #else // 0 // for TEST
   // rescaling desktop
 #if 1 // for TEST
@@ -3829,6 +3872,7 @@ void QtBrynhildr::refreshBenchmarkMenuCheck()
   selectBenchmarkPhase1_Action->setChecked(false);
   selectBenchmarkPhase2_Action->setChecked(false);
   selectBenchmarkPhase3_Action->setChecked(false);
+  selectBenchmarkPhase4_Action->setChecked(false);
   switch(initialBenchmarkPhaseCounter){
   case 0:
 	selectBenchmarkPhase0_Action->setChecked(true);
@@ -3842,6 +3886,9 @@ void QtBrynhildr::refreshBenchmarkMenuCheck()
   case 3:
 	selectBenchmarkPhase3_Action->setChecked(true);
 	break;
+  case 4:
+	selectBenchmarkPhase4_Action->setChecked(true);
+	break;
   default:
 	// do nothing
 	break;
@@ -3852,7 +3899,6 @@ void QtBrynhildr::refreshBenchmarkMenu()
 {
   // benchmark menus
   if (settings->getPublicModeVersion() <= PUBLICMODE_VERSION6){ // MODE5/6 (MJPEG)
-	initialBenchmarkPhaseCounter = 3;
 	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
 	selectBenchmarkPhase0_Action->setEnabled(true);
 	selectBenchmarkPhase0_Action->setCheckable(true);
@@ -3867,13 +3913,19 @@ void QtBrynhildr::refreshBenchmarkMenu()
 	selectBenchmarkPhase2_Action->setCheckable(true);
 	selectBenchmarkPhase2_Action->setVisible(true);
 
-	selectBenchmarkPhase3_Action->setText(tr("Draw JPEG Image"));
+	selectBenchmarkPhase3_Action->setText(tr("Rescale Image"));
 	selectBenchmarkPhase3_Action->setEnabled(true);
 	selectBenchmarkPhase3_Action->setCheckable(true);
 	selectBenchmarkPhase3_Action->setVisible(true);
+
+	selectBenchmarkPhase4_Action->setText(tr("Draw JPEG Image"));
+	selectBenchmarkPhase4_Action->setEnabled(true);
+	selectBenchmarkPhase4_Action->setCheckable(true);
+	selectBenchmarkPhase4_Action->setVisible(true);
+
+	initialBenchmarkPhaseCounter = 4;
   }
   else if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){ // MODE7 (VP8)
-	initialBenchmarkPhaseCounter = 3;
 	selectBenchmarkPhase0_Action->setEnabled(true);
 	selectBenchmarkPhase0_Action->setText(tr("Data Communication"));
 	selectBenchmarkPhase0_Action->setCheckable(true);
@@ -3889,13 +3941,20 @@ void QtBrynhildr::refreshBenchmarkMenu()
 	selectBenchmarkPhase2_Action->setCheckable(true);
 	selectBenchmarkPhase2_Action->setVisible(true);
 
-	selectBenchmarkPhase3_Action->setText(tr("Draw RGB32 Image"));
+	selectBenchmarkPhase3_Action->setText(tr("Rescale Image"));
 	selectBenchmarkPhase3_Action->setEnabled(true);
 	selectBenchmarkPhase3_Action->setCheckable(true);
 	selectBenchmarkPhase3_Action->setVisible(true);
+
+	selectBenchmarkPhase4_Action->setText(tr("Draw RGB32 Image"));
+	selectBenchmarkPhase4_Action->setEnabled(true);
+	selectBenchmarkPhase4_Action->setCheckable(true);
+	selectBenchmarkPhase4_Action->setVisible(true);
+
+	initialBenchmarkPhaseCounter = 4;
   }
   else {
-	initialBenchmarkPhaseCounter = 4;
+	initialBenchmarkPhaseCounter = 5;
   }
 
   refreshBenchmarkMenuCheck();
@@ -4738,6 +4797,10 @@ void QtBrynhildr::selectBenchmarkPhase2()
 void QtBrynhildr::selectBenchmarkPhase3()
 {
   selectBenchmarkPhase(3);
+}
+void QtBrynhildr::selectBenchmarkPhase4()
+{
+  selectBenchmarkPhase(4);
 }
 #endif // QTB_BENCHMARK
 

@@ -51,7 +51,7 @@ DEFINES += QTB_PORTABLE_VERSION=1
 # Windows (MinGW, MSVC)
 # ------------------------------------------------------------------------------
 win32 {
-CONFIG += desktop vp8-sse
+CONFIG += desktop vp8-sse vp8-avx2
 DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
@@ -77,10 +77,10 @@ HEADERS += common/msvc.h
 # Linux/FreeBSD/Cygwin
 # ------------------------------------------------------------------------------
 linux-g++-64 | linux-g++ | freebsd-g++ | cygwin-g++ {
-CONFIG += desktop vp8-sse
+CONFIG += desktop vp8-sse vp8-avx2
 DEFINES += PLATFORM_LINUX
 # NEON (RaspberryPi3)
-#CONFIG -= vp8-sse
+#CONFIG -= vp8-sse vp8-avx2
 #CONFIG += vp8-neon
 #DEFINES += QTB_RPI3
 }
@@ -89,7 +89,7 @@ DEFINES += PLATFORM_LINUX
 # MacOSX
 # ------------------------------------------------------------------------------
 macx {
-CONFIG += desktop vp8-sse
+CONFIG += desktop vp8-sse vp8-avx2
 DEFINES += PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 }
@@ -98,11 +98,12 @@ ICON = images/qtbrynhildr.icns
 # Android
 # ------------------------------------------------------------------------------
 android-g++ | android-clang {
+TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
 DEFINES += PLATFORM_LINUX
 # cpufeatures library from android-ndk
-HEADERS += util/android-ndk/cpu-features.h
-SOURCES += util/android-ndk/cpu-features.c
+# HEADERS += util/android-ndk/cpu-features.h
+# SOURCES += util/android-ndk/cpu-features.c
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
@@ -177,32 +178,32 @@ LIBS += -lvpx
 
 # VP8-AVX2
 vp8-avx2 {
-CONFIG += vp8-sse
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx2.cpp
 HEADERS += graphicsthread/decoder_vp8_avx2.h
 SOURCES += graphicsthread/decoder_vp8_avx2.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
 }
 
-*-msvc:vp8-avx2 {
-QMAKE_CXXFLAGS += /arch:AVX2
+*-msvc*:vp8-avx2 {
+#QMAKE_CXXFLAGS += /arch:AVX2
+DEFINES += __AVX2__
 }
 
 *-g++:vp8-avx2 | *-clang:vp8-avx2 {
-QMAKE_CXXFLAGS += -mavx2
+QMAKE_CXXFLAGS += -mavx2 -U__AVX__
 }
 
 # VP8-AVX
 vp8-avx {
-CONFIG += vp8-sse
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_avx.cpp
 HEADERS += graphicsthread/decoder_vp8_avx.h
 SOURCES += graphicsthread/decoder_vp8_avx.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
 }
 
-*-msvc:vp8-avx {
-QMAKE_CXXFLAGS += /arch:AVX
+*-msvc*:vp8-avx {
+#QMAKE_CXXFLAGS += /arch:AVX
+DEFINES += __AVX__
 }
 
 *-g++:vp8-avx | *-clang:vp8-avx {
@@ -217,7 +218,7 @@ SOURCES += graphicsthread/decoder_vp8_sse.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
 }
 
-*-msvc:vp8-sse {
+*-msvc*:vp8-sse {
 DEFINES += __SSE4_2__
 }
 
@@ -226,7 +227,7 @@ QMAKE_CXXFLAGS += -msse4.2
 }
 
 # VP8-NEON
-android-*:vp8-neon {
+vp8-neon {
 # SIMD (ARM:gcc)
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
@@ -346,3 +347,10 @@ SOURCES += function/recorder.cpp
 #CONFIG += new_feature
 new_feature {
 }
+
+DISTFILES += \
+    ../dist/android/build.gradle \
+    ../dist/android/gradle/wrapper/gradle-wrapper.jar \
+    ../dist/android/gradle/wrapper/gradle-wrapper.properties \
+    ../dist/android/gradlew \
+    ../dist/android/gradlew.bat

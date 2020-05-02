@@ -64,7 +64,7 @@
       お約束は出来ません。
 
       Qt5のサポートする環境(OS)について詳しくは以下のページを御覧ください。
-      http://doc.qt.io/QtSupportedPlatforms/index.html
+      https://doc.qt.io/QtSupportedPlatforms/index.html
 
  (*3) XP/Vistaで動作する版をビルドするにはバージョンが5.6.3以下のQt5を使ってビルドする必要があります。
 
@@ -121,10 +121,10 @@
  (3) 起動確認します。
 
  [64bit]
- linux_x64/bin/QtBrynhildr.sh
+ linux_x64/bin/Qt\ Brynhildr.sh
 
  [32bit]
- linux_x86/bin/QtBrynhildr.sh
+ linux_x86/bin/Qt\ Brynhildr.sh
 
  (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
      ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
@@ -168,10 +168,10 @@
  (3) 起動確認します。
 
  [64bit]
- ./linux_x64/bin/QtBrynhildr
+ ./linux_x64/bin/Qt\ Brynhildr
 
  [32bit]
- ./linux_x86/bin/QtBrynhildr
+ ./linux_x86/bin/Qt\ Brynhildr
 
  (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
      ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
@@ -240,13 +240,13 @@
 [インストール]
 ==============================
 
- .dmgファイルをマウントし、QtBrynhildr.app を /Applications にコピーしてください。
+ .dmgファイルをマウントし、Qt\ Brynhildr.app を /Applications にコピーしてください。
 
 ==============================
 [アンインストール]
 ==============================
 
- ~/.config/mcz-xoxoと/Applications/QtBrynhildr.app を削除してください。
+ ~/.config/mcz-xoxoと/Applications/Qt\ Brynhildr.app を削除してください。
 
 ----------------------------------------------------------------------
 1-4. インストール (FreeBSD版)
@@ -272,10 +272,10 @@
  (3) 起動確認します。
 
  [64bit]
- ./freebsd_x64/bin/QtBrynhildr
+ ./freebsd_x64/bin/Qt\ Brynhildr
 
  [32bit]
- ./freebsd_x86/bin/QtBrynhildr
+ ./freebsd_x86/bin/Qt\ Brynhildr
 
 ==============================
 [アンインストール]
@@ -667,7 +667,7 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 [Linux/Mac/FreeBSD版]
 ホームディレクトリの以下のファイルに保存されます。
 
-~/.config/mcz-xoxo/Qt Brynhildr.ini
+~/.config/mcz-xoxo/Qt\ Brynhildr.ini
 
 (*) 起動時に引数としてファイル名を渡すことで、任意のファイルを
     指定できます。「5. オプション」を参照してください。
@@ -740,7 +740,7 @@ onShowPassword=false
 onClipCursor=false
 onShowMouseCursorMarker=false
 onTransferFile=true
-onSIMDOperationSupport=false
+SIMDOperationTypeName=C++
 onShowTotalProgressForTransferFile=false
 onTransferFileByDragAndDrop=true
 onTransferClipboard=true
@@ -1023,9 +1023,38 @@ Ver.2.1.0 : 2020/xx/xx
             [新規機能]
              ・Android版の正式サポート
 
-Ver.2.0.29: 2020/03/xx
+Ver.2.0.90: 2020/05/01
+            [不具合修正]
+             ・ログ表示ダイアログでリセットボタンを押したときにリセットされない
+               不具合修正
+             ・サウンド再生の遅延及びプチノイズの発生低減
+
             [その他変更]
+             ・Windows版に同梱しているOpenSSL DLL(1.1.1系)を1.1.1gへ更新
+             ・AVX2命令を利用したデコーダを追加(対応するCPUの場合のみ有効となる)
+
+Ver.2.0.30: 2020/04/20
+            [不具合修正]
+             ・モード7で接続した後モード5/6で再接続しようとした場合に
+               不正終了となる不具合修正
+             ・モード7で接続した後SIMD命令の使用/不使用を変更して
+               再接続しようとした場合に不正終了となる不具合修正
+
+            [その他変更]
+             ・サーバ接続中はSIMD Operation Supportを変更できない仕様に変更
+             ・SIMD命令(SSE/NEON)の利用コードを標準では無効に変更
+
+Ver.2.0.29: 2020/04/09
+            [不具合修正]
+             ・メニューがそれぞれのウィンドウにある場合とない場合でウィンドウの
+               サイズ計算が不正確となる場合がある不具合修正(Linux版のみ)
+
+            [その他変更]
+             ・画像表示処理の改善
              ・PADでのマウスホイールイベントによる微小なスクロール動作への対応
+             ・Windows版に同梱しているOpenSSL DLL(1.1.1系)を1.1.1fへ更新
+             ・Qt5.6.3(VS2015)でのビルドエラー対応
+             ・Qt5.12.8でビルドするように変更(Linux(x86)版のみ5.4.2のまま)
 
 Ver.2.0.28: 2020/03/11
             [その他変更]
@@ -1962,7 +1991,7 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 
 (3) Qt Projectのページ
 
- http://www.qt.io/
+ https://www.qt.io/
 
 (4) CELTのページ
 
@@ -1970,11 +1999,11 @@ Ver.0.26 : αテストバージョン (デスクトップサイズ固定)
 
 (5) OpenSSLのページ
 
- http://www.openssl.org/
+ https://www.openssl.org/
 
 (6) VP8のページ
 
- http://www.webmproject.org/
+ https://www.webmproject.org/
 
 ----------------------------------------------------------------------
 12. 謝辞

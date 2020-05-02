@@ -39,7 +39,7 @@
 3. Qt Projectのページ
 ----------------------
 
- Qt Project <http://www.qt.io/>
+ Qt Project <https://www.qt.io/>
 
 4. CELTのページ
 ----------------
@@ -49,9 +49,9 @@
 5. OpenSSLのページ
 -------------------
 
- OpenSSL Toolkit <http://www.openssl.org/>
+ OpenSSL Toolkit <https://www.openssl.org/>
 
 6. VP8のページ
 ---------------
 
- WebM project <http://www.webmproject.org/>
+ WebM project <https://www.webmproject.org/>

@@ -78,13 +78,13 @@ void GraphicsView::setScale(qreal scalingFactor)
   setTransform(transform);
   // get window size
   QSize windowSize = size();
-  QSize desktopSize = desktopPanel->getDesktopSize();
-  QSize currentDesktopSize = desktopSize * scalingFactor;
+  QSize desktopImageSize = settings->getDesktopImageSize();
+  QSize currentDesktopSize = desktopImageSize * scalingFactor;
   QSize diffSize = currentDesktopSize - windowSize;
   if (outputLog){
 	qDebug() << "--- setScale() ---";
 	qDebug() << "windowSize = " << windowSize;
-	qDebug() << "desktopPanel->getDesktopSize() = " << desktopSize;
+	qDebug() << "desktopPanel->getDesktopSize() = " << desktopImageSize;
 	qDebug() << "currentDesktopSize = " << currentDesktopSize;
 	qDebug() << "diffSize = " << diffSize;
   }

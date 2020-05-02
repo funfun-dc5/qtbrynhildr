@@ -20,7 +20,8 @@
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
 #include "decoder_vp8_avx2.h"
-#elif defined(__AVX__)
+#endif // defined(__AVX2__)
+#if defined(__AVX__)
 #include "decoder_vp8_avx.h"
 #endif // defined(__AVX__)
 #if defined(__SSE4_2__)
@@ -52,7 +53,7 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,graphicsBuffer(0)
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
-  ,image(new QImage)
+   //,image(new QImage)
   ,onClearDesktop(false)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
@@ -60,9 +61,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
   ,buffer(0)
   ,decoderMode56(0)
   ,decoderMode7(0)
-#if QTB_SIMD_SUPPORT
-  ,decoderMode7SIMD(0)
-#endif // QTB_SIMD_SUPPORT
   ,decoder(0)
   ,video_mode(-1)
 #if QTB_BENCHMARK
@@ -82,38 +80,51 @@ GraphicsThread::GraphicsThread(Settings *settings)
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
 
   // set decoders
-  decoderMode56 = new DecoderJPEG(image);
-  decoderMode7 = new DecoderVP8CPP(image);
+  // for MODE5/6
+  decoderMode56 = new DecoderJPEG();
 
+  // for MODE7
 #if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
-  // AVX2
-  if (decoderMode7SIMD == nullptr && CPUInfo::AVX2()){
-	decoderMode7SIMD = new DecoderVP8AVX2(image);
+  if (CPUInfo::AVX2()){
+	decoderMode7 = new DecoderVP8AVX2();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
-#elif defined(__AVX__)
-  // AVX
-  if (decoderMode7SIMD == nullptr && CPUInfo::AVX()){
-	decoderMode7SIMD = new DecoderVP8AVX(image);
+#endif // defined(__AVX2__)
+#if defined(__AVX__)
+  if (CPUInfo::AVX()){
+	decoderMode7 = new DecoderVP8AVX();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
 #endif // defined(__AVX__)
 #if defined(__SSE4_2__)
-  // SSE
-  if (decoderMode7SIMD == nullptr && CPUInfo::SSE42()){
-	decoderMode7SIMD = new DecoderVP8SSE(image);
+  if (CPUInfo::SSE42()){
+	decoderMode7 = new DecoderVP8SSE();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
 #endif // defined(__SSE4_2__)
 #else // !defined(__ARM_NEON__)
   if (CPUInfo::NEON()){
-	decoderMode7SIMD = new DecoderVP8NEON(image);
+	decoderMode7 = new DecoderVP8NEON();
+	decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+	decoderMode7NameList.insert(0, decoderMode7->name());
 	hasSIMDInstruction = true;
   }
 #endif // !defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
+
+  decoderMode7 = new DecoderVP8CPP();
+  decoderMode7Map.insert(decoderMode7->name(), decoderMode7);
+  decoderMode7NameList.insert(0, decoderMode7->name());
+
+  //qDebug() << "decoderMode7NameList : " << decoderMode7NameList;
 }
 
 // destructor
@@ -330,6 +341,20 @@ void GraphicsThread::connectedToServer()
   // reset frame counter
   frameCounter.reset();
 
+  // reset frame controller
+  frameController.reset();
+
+  // set decoder for MODE7 (VP8)
+  decoderMode7 = decoderMode7Map.value(settings->getSIMDOperationTypeName());
+#if 0 // for TEST
+  if (decoderMode7 != 0){
+	cout << "decoder : " << decoderMode7->name() << endl << flush;
+  }
+  else {
+	qDebug() << "decoderMode7 == 0 for " << settings->getSIMDOperationTypeName();
+  }
+#endif // 0 // for TEST
+
   NetThread::connectedToServer();
 }
 
@@ -381,39 +406,6 @@ void GraphicsThread::outputReceivedData(long receivedDataSize)
 void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 {
   // check mode
-#if QTB_SIMD_SUPPORT
-  if (mode == video_mode){ // no change mode
-	// MODE 7 (VP8)
-	if (mode == VIDEO_MODE_COMPRESS){
-	  if (hasSIMDInstruction){
-		if (decoder == decoderMode7){
-		  if(settings->getOnSIMDOperationSupport())
-			decoder = decoderMode7SIMD;
-		}
-		else { // decoder == decoderMode7SIMD
-		  if(!settings->getOnSIMDOperationSupport())
-			decoder = decoderMode7;
-		}
-	  }
-	}
-  }
-  else { // change mode
-	// change decoder
-	// MODE 5/6 (MJPEG)
-	if (mode == VIDEO_MODE_MJPEG){
-	  decoder = decoderMode56;
-	}
-	// MODE 7 (VP8)
-	else if (mode == VIDEO_MODE_COMPRESS){
-	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-		decoder = decoderMode7SIMD;
-	  }
-	  else {
-		decoder = decoderMode7;
-	  }
-	}
-  }
-#else // QTB_SIMD_SUPPORT
   if (mode != video_mode){ // change mode
 	// change decoder
 	// MODE 5/6 (MJPEG)
@@ -425,7 +417,9 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	  decoder = decoderMode7;
 	}
   }
-#endif // QTB_SIMD_SUPPORT
+
+  // record the start time of decode
+  frameController.startDecode();
 
   // pre-process
   decoder->preprocess(buf, size);
@@ -443,7 +437,7 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	// clear desktop flag clear
 	onClearDesktop = false;
 
-	if (frameController.adjust((int)com_data->frame_no)){
+	if (frameController.adjust(com_data->frame_no, settings->getFrameInterval())){
 	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
 
 #if QTB_BENCHMARK
@@ -455,10 +449,28 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 #endif // QTB_BENCHMARK
 
 	  if (image != nullptr){
+		// save desktop image size
+		settings->setDesktopImageSize(image->size());
+
+#if !(defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW)
+		// rescale image
+		rescaleDesktopImage(image);
+#endif // !(defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW)
+
+#if QTB_BENCHMARK
+		// check benchmark phase counter
+		benchmarkPhaseCounter--;
+		if (benchmarkPhaseCounter < 0){
+		  return;
+		}
+#endif // QTB_BENCHMARK
+
 		//  image->save("jpg/desktop.jpg", "jpg", 75);
 		emit drawDesktop(*image);
 	  }
 	}
+	// record the end time of decode
+	frameController.endDecode();
   }
   else {
 	// clear desktop only at once
@@ -467,6 +479,177 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	  emit clearDesktop();
 	}
   }
+}
+
+// rescale image
+void GraphicsThread::rescaleDesktopImage(QImage *image)
+{
+  // cut blank area
+  if (QTB_CUT_DESKTOP_BLANK_AREA){
+	// for offset
+	if (settings->getOnCutDesktopBlankArea()){
+	  if (settings->getDesktopOffsetX() != 0 || settings->getDesktopOffsetY() != 0){
+		*image = image->copy(0,0,
+							 image->size().width()  - settings->getDesktopOffsetX(),
+							 image->size().height() - settings->getDesktopOffsetY());
+	  }
+	}
+  }
+
+  // save size info.
+  currentSize = image->size();
+  bool isSameSize = currentSize == previousSize;
+
+  // capture desktop image (original size)
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	if (settings->getOnDesktopCapture() &&
+		!settings->getDesktopCaptureFormat().startsWith(".")){
+	  QDateTime now = QDateTime::currentDateTime();
+	  QString filename = settings->getOutputPath() +
+		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
+		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
+		"." + settings->getDesktopCaptureFormat();
+
+	  // save to file
+	  image->save(filename);
+
+	  // reset desktop capture flag
+	  settings->setOnDesktopCapture(false);
+	}
+  }
+
+  // rescale
+  if (QTB_DESKTOP_IMAGE_SCALING){
+	switch (settings->getDesktopScalingType()){
+	case DESKTOPSCALING_TYPE_ON_SERVER:
+	  if (settings->getDesktopScalingFactor() > 1.0){
+		// scale up
+		currentSize = getSizeForCurrentMode(image->size() * settings->getDesktopScalingFactor());
+		*image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+	  }
+	  break;
+	case DESKTOPSCALING_TYPE_ON_CLIENT:
+	  {
+		qreal scalingFactor = getDesktopScalingFactor(currentSize);
+		if (!isSameSize){
+		  // recalculate scaling factor
+		  qreal widthRate = (qreal)previousSize.width()/currentSize.width();
+		  qreal heightRate = (qreal)previousSize.height()/currentSize.height();
+		  if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_SINGLE_TO_ALL){
+			scalingFactor = widthRate < heightRate ? widthRate : heightRate;
+		  }
+		  else if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_ALL_TO_SINGLE){
+			scalingFactor = widthRate > heightRate ? widthRate : heightRate;
+		  }
+		  // flag clear
+		  settings->setMonitorChangeType(MONITOR_CHANGE_TYPE_NONE);
+		}
+		if (scalingFactor != 1.0){
+		  // scale
+		  currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
+#if !QTB_NEW_DESKTOPWINDOW
+		  *image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		  //*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+		  //*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+#endif // !QTB_NEW_DESKTOPWINDOW
+		}
+		// save scaling factor
+		if (scalingFactor != settings->getDesktopScalingFactor()){
+		  settings->setDesktopScalingFactor(scalingFactor);
+		}
+	  }
+	  break;
+	default:
+	  // unknown scaling type
+	  break;
+	}
+  }
+
+  // capture desktop image (rescaled size)
+  if (QTB_DESKTOP_IMAGE_CAPTURE){
+	if (settings->getOnDesktopCapture()){
+	  QDateTime now = QDateTime::currentDateTime();
+	  QString filename = settings->getOutputPath() +
+		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
+		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
+		settings->getDesktopCaptureFormat();
+
+	  // save to file
+	  image->save(filename);
+
+	  // reset desktop capture flag
+	  settings->setOnDesktopCapture(false);
+	}
+  }
+
+  // save size info.
+  if (currentSize != previousSize){
+	previousSize = currentSize;
+  }
+}
+
+// get desktop scaling factor
+qreal GraphicsThread::getDesktopScalingFactor(QSize size)
+{
+  Q_UNUSED(size);
+
+  qreal scalingFactor = settings->getDesktopScalingFactor();
+
+  if (scalingFactor != 1.0){
+	unsigned long maxImageDataSize = settings->getDesktop()->getMaxImageDataSize();
+	if (maxImageDataSize == 0){
+	  if (settings->getOutputLog()){
+		cout << "[DesktopPanel] scaled... maxImageDataSize = " << maxImageDataSize << endl << flush;
+	  }
+	  return scalingFactor;
+	}
+#if defined(Q_OS_WIN)
+	else {
+	  // Internal Error: Unknown State
+	  ABORT();
+	}
+#elif defined(Q_OS_FREEBSD)
+	else {
+	  // Yet
+	  // Internal Error: Unknown State
+	  ABORT();
+	}
+#elif defined(Q_OS_LINUX)
+	else {
+	  // for Linux
+	  unsigned long pageSizeMask = (unsigned long)getpagesize()-1;
+	  qreal unitFactor = 1.0/DesktopScalingDialog::SLIDER_FACTOR;
+	  while(true){ // for checking scaling factor
+		QSize targetSize = getSizeForCurrentMode(size * scalingFactor);
+		unsigned long imageDataSize = targetSize.width() * targetSize.height() * 4;
+		imageDataSize = (imageDataSize + pageSizeMask) & ~pageSizeMask;
+		if (imageDataSize <= maxImageDataSize){
+		  return scalingFactor;
+		}
+		else {
+		  // Can't shmget() in QXcbShmImage::QXcbShmImage() in qxcbbackingstore.cpp
+		  if (settings->getOutputLog()){
+			cout << "[DesktopPanel] Can't scale... imageDataSize    = " << imageDataSize << endl;
+			cout << "[DesktopPanel] Can't scale... maxImageDataSize = " << maxImageDataSize << endl << flush;
+		  }
+		  // scale down
+		  scalingFactor -= unitFactor;
+		  if (scalingFactor < unitFactor){
+			return unitFactor;
+		  }
+		}
+	  } // end of while
+	}
+#elif  defined(Q_OS_OSX)
+	else {
+	  // Darwin
+	  // Internal Error: Unknown State
+	  ABORT();
+	}
+#endif
+  }
+
+  return scalingFactor;
 }
 
 } // end of namespace qtbrynhildr

@@ -86,20 +86,30 @@ bool SK::event(QEvent *event)
   case QEvent::TouchUpdate:
   case QEvent::TouchEnd:
 	{
-	  qDebug() << "event type  = " << event->type();
+	  if (outputLog){
+		qDebug() << "event type  = " << event->type();
+	  }
 
 	  QTouchEvent *touchEvent = (QTouchEvent*)event;
-	  qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+	  if (outputLog){
+		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+	  }
 
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
 	  if (touchPoints.count() == 1){
 		// 1 finger
-		qDebug() << "== 1 Point == ";
+		if (outputLog){
+		  qDebug() << "== 1 Point == ";
+		}
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
-		qDebug() << "pos = " << touchPoint.pos();
+		if (outputLog){
+		  qDebug() << "pos = " << touchPoint.pos();
+		}
 		//		break; // to QGraphicsView::viewportEvent(event)
 		if(touchEvent->touchPointStates() == Qt::TouchPointPressed){
-		  qDebug() << "Pressed";
+		  if (outputLog){
+			qDebug() << "Pressed";
+		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
@@ -109,9 +119,13 @@ bool SK::event(QEvent *event)
 		  mousePressEvent(newEvent);
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
-		  qDebug() << "Released";
+		  if (outputLog){
+			qDebug() << "Released";
+		  }
 		  // tap
-		  qDebug() << "TAP";
+		  if (outputLog){
+			qDebug() << "TAP";
+		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
@@ -121,7 +135,9 @@ bool SK::event(QEvent *event)
 		  mouseReleaseEvent(newEvent);
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
-		  qDebug() << "Moved:SK";
+		  if (outputLog){
+			qDebug() << "Moved:SK";
+		  }
 		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 		  // move mouse cursor
 		  QPoint pos = touchPoint.pos().toPoint();

@@ -109,120 +109,20 @@ void DesktopPanel::refreshDesktop(QImage &image)
 	return;
   }
 
-  // cut blank area
-  if (QTB_CUT_DESKTOP_BLANK_AREA){
-	// for offset
-	if (settings->getOnCutDesktopBlankArea()){
-	  if (settings->getDesktopOffsetX() != 0 || settings->getDesktopOffsetY() != 0){
-		image = image.copy(0,0,
-						   image.size().width()  - settings->getDesktopOffsetX(),
-						   image.size().height() - settings->getDesktopOffsetY());
-	  }
-	}
-  }
-
+  // copy image
+  this->image = image;
   // save size
   currentSize = image.size();
-  bool isSameSize = currentSize == desktopSize;
-  desktopSize = currentSize;
-
-  // capture desktop image for original size
-  if (QTB_DESKTOP_IMAGE_CAPTURE){
-	if (settings->getOnDesktopCapture() &&
-		!settings->getDesktopCaptureFormat().startsWith(".")){
-	  QDateTime now = QDateTime::currentDateTime();
-	  QString filename = settings->getOutputPath() +
-		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
-		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
-		"." + settings->getDesktopCaptureFormat();
-
-	  // save to file
-	  image.save(filename);
-
-	  // reset desktop capture flag
-	  settings->setOnDesktopCapture(false);
-	}
-  }
-
-  // scaling image
-  if (QTB_DESKTOP_IMAGE_SCALING){
-	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
-	  qreal scalingFactor = getDesktopScalingFactor(currentSize);
-	  if (!isSameSize){
-		// recalculate scaling factor
-		qreal widthRate = (qreal)previousSize.width()/currentSize.width();
-		qreal heightRate = (qreal)previousSize.height()/currentSize.height();
-		if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_SINGLE_TO_ALL){
-		  scalingFactor = widthRate < heightRate ? widthRate : heightRate;
-		}
-		else if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_ALL_TO_SINGLE){
-		  scalingFactor = widthRate > heightRate ? widthRate : heightRate;
-		}
-		// flag clear
-		settings->setMonitorChangeType(MONITOR_CHANGE_TYPE_NONE);
-	  }
-	  if (scalingFactor != 1.0){
-		// scale
-		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
-#if !QTB_NEW_DESKTOPWINDOW
-		this->image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-		//this->image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
-		//this->image = image.scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-#endif // !QTB_NEW_DESKTOPWINDOW
-	  }
-	  else {
-		// copy QImage
-		this->image = image;
-	  }
-	  // save scaling factor
-	  if (scalingFactor != settings->getDesktopScalingFactor()){
-		settings->setDesktopScalingFactor(scalingFactor);
-	  }
-	}
-#if defined(QTB_DEV_DESKTOP)
-	else { // DESKTOPSCALING_TYPE_ON_SERVER
-	  if (settings->getDesktopScalingFactor() > 1.0){
-		// scale up
-		currentSize = getSizeForCurrentMode(currentSize * settings->getDesktopScalingFactor());
-		this->image = image.scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-	  }
-	  else {
-		// copy QImage
-		this->image = image;
-	  }
-	}
-#endif // defined(QTB_DEV_DESKTOP)
-  }
-  else {
-	// copy QImage
-	this->image = image;
-  }
-
-  // capture desktop image
-  if (QTB_DESKTOP_IMAGE_CAPTURE){
-	if (settings->getOnDesktopCapture()){
-	  QDateTime now = QDateTime::currentDateTime();
-	  QString filename = settings->getOutputPath() +
-		QString(QTB_DESKTOP_CAPTURE_FILENAME_PREFIX) +
-		now.toString(QTB_DESKTOP_CAPTURE_FILENAME_DATE_FORMAT) +
-		settings->getDesktopCaptureFormat();
-
-	  // save to file
-	  this->image.save(filename);
-
-	  // reset desktop capture flag
-	  settings->setOnDesktopCapture(false);
-	}
-  }
 
   // resize window
-  if (previousSize != currentSize){
+  if (currentSize != previousSize){
 #if 0 // for DEBUG
 	cout << "resize..." << endl; // for DEBUG
 	cout << "image.size().width()  = " << image.size().width() << endl; // for DEBUG
 	cout << "image.size().height() = " << image.size().height() << endl << flush; // for DEBUG
 #endif
 	previousSize = currentSize;
+
 	// resize main window
 	resizeDesktop(currentSize.width(), currentSize.height());
 
@@ -305,12 +205,6 @@ void DesktopPanel::clearDesktop()
 QSize DesktopPanel::getSize() const
 {
   return currentSize;
-}
-
-// get desktop size
-QSize DesktopPanel::getDesktopSize() const
-{
-  return desktopSize;
 }
 
 // get window size
@@ -568,15 +462,19 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 
 	// for DEBUG
 	if (outputLogForMouse){
-	  cout << "[DesktopPanel] wheelEvent(pixels): " << mouseWheel << endl << flush; // for DEBUG
+	  cout << "[DesktopPanel] wheelEvent(pixels): " << (int)mouseWheel << endl << flush; // for DEBUG
 	}
+
+	// adjust
+	mouseWheel *= settings->getDesktopScalingFactor();
   }
 
   if (settings->getConnected() &&
 	  settings->getOnControl()){
 	if (!settings->getOnShowSoftwareButton()){
 	  // put into mouse wheel buffer
-	  mouseBuffer->putWheel(mouseWheel);
+	  if (mouseWheel != 0)
+		mouseBuffer->putWheel(mouseWheel);
 	}
   }
 }
@@ -1021,70 +919,6 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
   }
 
   return result;
-}
-
-// get desktop scaling factor
-qreal DesktopPanel::getDesktopScalingFactor(QSize size)
-{
-  Q_UNUSED(size);
-
-  qreal scalingFactor = settings->getDesktopScalingFactor();
-
-  if (scalingFactor != 1.0){
-	unsigned long maxImageDataSize = settings->getDesktop()->getMaxImageDataSize();
-	if (maxImageDataSize == 0){
-	  if (settings->getOutputLog()){
-		cout << "[DesktopPanel] scaled... maxImageDataSize = " << maxImageDataSize << endl << flush;
-	  }
-	  return scalingFactor;
-	}
-#if defined(Q_OS_WIN)
-	else {
-	  // Internal Error: Unknown State
-	  ABORT();
-	}
-#elif defined(Q_OS_FREEBSD)
-	else {
-	  // Yet
-	  // Internal Error: Unknown State
-	  ABORT();
-	}
-#elif defined(Q_OS_LINUX)
-	else {
-	  // for Linux
-	  unsigned long pageSizeMask = (unsigned long)getpagesize()-1;
-	  qreal unitFactor = 1.0/DesktopScalingDialog::SLIDER_FACTOR;
-	  while(true){ // for checking scaling factor
-		QSize targetSize = getSizeForCurrentMode(size * scalingFactor);
-		unsigned long imageDataSize = targetSize.width() * targetSize.height() * 4;
-		imageDataSize = (imageDataSize + pageSizeMask) & ~pageSizeMask;
-		if (imageDataSize <= maxImageDataSize){
-		  return scalingFactor;
-		}
-		else {
-		  // Can't shmget() in QXcbShmImage::QXcbShmImage() in qxcbbackingstore.cpp
-		  if (settings->getOutputLog()){
-			cout << "[DesktopPanel] Can't scale... imageDataSize    = " << imageDataSize << endl;
-			cout << "[DesktopPanel] Can't scale... maxImageDataSize = " << maxImageDataSize << endl << flush;
-		  }
-		  // scale down
-		  scalingFactor -= unitFactor;
-		  if (scalingFactor < unitFactor){
-			return unitFactor;
-		  }
-		}
-	  } // end of while
-	}
-#elif  defined(Q_OS_OSX)
-	else {
-	  // Darwin
-	  // Internal Error: Unknown State
-	  ABORT();
-	}
-#endif
-  }
-
-  return scalingFactor;
 }
 
 //----------------------------------------------------------------------

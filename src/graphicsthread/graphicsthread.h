@@ -7,6 +7,10 @@
 #include "common/common.h"
 
 // Qt Header
+#include <QImage>
+#include <QMap>
+#include <QSize>
+#include <QStringList>
 
 // Local Header
 #include "common/netthread.h"
@@ -41,7 +45,13 @@ private:
   bool onDrawing;
 
   // image for drawing desktop
-  QImage *image;
+  //QImage *image;
+
+  // desktop size
+  QSize currentSize;
+
+  // previous desktop size
+  QSize previousSize;
 
   // clear desktop flag
   bool onClearDesktop;
@@ -61,7 +71,8 @@ private:
   Decoder *decoderMode56;	// for MODE5/6
   Decoder *decoderMode7;	// for MODE7
 #if QTB_SIMD_SUPPORT
-  Decoder *decoderMode7SIMD;// for MODE7(SIMD)
+  QMap <QString, Decoder*>decoderMode7Map;
+  QStringList decoderMode7NameList;
 #endif // QTB_SIMD_SUPPORT
 
   // current decoder
@@ -117,15 +128,10 @@ public:
   }
 
 #if QTB_SIMD_SUPPORT
-  // get SIMD decoder name
-  const char* getSIMDDecoderName()
+  // get SIMD decoder name list
+  QStringList getSIMDDecoderNameList()
   {
-	if (decoderMode7SIMD != nullptr){
-	  return decoderMode7SIMD->name();
-	}
-	else {
-	  return nullptr;
-	}
+	return decoderMode7NameList;
   }
 #endif // QTB_SIMD_SUPPORT
 
@@ -161,6 +167,46 @@ private:
 
   // draw desktop image
   inline void drawDesktopImage(char *buf, int size, VIDEO_MODE mode);
+
+  // rescale image
+  inline void rescaleDesktopImage(QImage *image);
+
+  // get desktop scaling factor
+  qreal getDesktopScalingFactor(QSize targetSize);
+
+  // get width for current MODE
+  inline SIZE getWidthForCurrentMode(SIZE width)
+  {
+	if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	  return (width + 3) & ~3;
+	}
+	else {
+	  return width;
+	}
+  }
+
+  // get height for current MODE
+  inline SIZE getHeightForCurrentMode(SIZE height)
+  {
+	if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	  return (height + 3) & ~3;
+	}
+	else {
+	  return height;
+	}
+  }
+
+  // get size for current MODE
+  inline QSize getSizeForCurrentMode(QSize size)
+  {
+	if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	  return QSize(getWidthForCurrentMode(size.width()),
+				   getHeightForCurrentMode(size.height()));
+	}
+	else {
+	  return size;
+	}
+  }
 
 signals:
   // draw desktop

@@ -38,17 +38,15 @@ yet:
 $(OBJPATH)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
+$(OBJPATH)klfcompiler_lex.o: klfcompiler.tab.h
 
 klfcompiler_lex.c: klfcompiler.l
 	flex -o $@ klfcompiler.l
 
-klfcompiler.tab.h: klfcompiler.y
+klfcompiler.tab.h klfcompiler.tab.c : klfcompiler.y
 	bison -d klfcompiler.y
-
-klfcompiler.tab.c: klfcompiler.y
-	bison klfcompiler.y
 
 -include $(DEPENDS)
 
-.SUFFIXES: .c .h .o .d .l
+.SUFFIXES: .c .h .o .d .y .l
 .PHONY: compile clean mk_dir yet

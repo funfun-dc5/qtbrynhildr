@@ -233,6 +233,11 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	outputReceivedData(receivedDataSize, "pcm/" QTB_SOUND_OUTPUT_FILENAME);
   }
 
+  // no sound output check
+  if (!hasSoundData(buffer, receivedDataSize)){
+	return TRANSMIT_SUCCEEDED;
+  }
+
   // put PCM data into sound buffer
   if (settings->getOnSound()){
 	// put into soundBuffer
@@ -243,6 +248,8 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  return TRANSMIT_FAILED_PUT_BUFFER;
 	}
   }
+
+  //cout << "[" << name << "]  receivedDataSize = " << receivedDataSize << endl << flush; // error
 
 #if QTB_SOUND_PUSH_MODE
   // put PCM data into sound device
@@ -366,10 +373,12 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 		--chunks;
 	  }
 	}
+#if 0 // for TEST
 	else {
 	  // start output
 	  output = audioOutput->start();
 	}
+#endif // 0 // for TEST
   }
 
   return TRANSMIT_SUCCEEDED;
@@ -395,6 +404,15 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 
   // audio device information
   const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
+  {
+	QString str;
+	str = "SoundType : " + QString::number(settings->getSoundType());
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SoundCacheTime : " + QString::number(settings->getSoundCacheTime()) + " (ms)";
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SampleRate : " + QString::number(samplerate) + " (Hz)";
+	emit outputLogMessage(PHASE_SOUND, str);
+  }
   // supported Sample Rates
   if (settings->getOutputLog()){
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
@@ -434,6 +452,14 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 #if defined(DEBUG)
   connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
 #endif // defined(DEBUG)
+
+#if 0 // for TEST
+  audioOutput->setNotifyInterval(1000); // 1000 (ms)
+  connect(audioOutput, SIGNAL(notify()), SLOT(notify()));
+#endif // 0 // for TEST
+
+  // start output
+  output = audioOutput->start();
 
 #if QTB_CELT_SUPPORT
   // setup converter
@@ -545,5 +571,12 @@ void SoundThread::handleStateChanged(QAudio::State state)
   cout << "state = " << state << endl << flush;
 }
 #endif // defined(DEBUG)
+
+#if 0 // for TEST
+void SoundThread::notify()
+{
+  cout << "called notify" << endl << flush;
+}
+#endif // 0 // for TEST
 
 } // end of namespace qtbrynhildr

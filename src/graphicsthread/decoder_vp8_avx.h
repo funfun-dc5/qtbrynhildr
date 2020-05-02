@@ -28,14 +28,14 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DecoderVP8AVX(QImage *image);
+  DecoderVP8AVX();
   // destructor
   virtual ~DecoderVP8AVX();
 
   // get decoder name
   const char*  name()
   {
-	return "vp8 avx decoder";
+	return "AVX";
   }
 
 #if 0

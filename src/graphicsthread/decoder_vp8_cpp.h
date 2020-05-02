@@ -28,16 +28,16 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DecoderVP8CPP(QImage *image);
+  DecoderVP8CPP();
   // destructor
   virtual ~DecoderVP8CPP();
 
   // get decoder name
   const char*  name()
   {
-	return "vp8 cpp decoder";
+	return "C++";
   }
-  
+
 #if 0
   // pre-process
   bool preprocess(char *buffer, int size);

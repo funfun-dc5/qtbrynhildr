@@ -14,8 +14,8 @@
 namespace qtbrynhildr {
 
 // constructor
-DecoderVP8AVX::DecoderVP8AVX(QImage *image)
-  :DecoderVP8(image)
+DecoderVP8AVX::DecoderVP8AVX()
+  :DecoderVP8()
 {
 }
 
@@ -46,7 +46,7 @@ QImage* DecoderVP8AVX::getDesktopImage(int numOfThread)
   }
 
   // make RGB image
-  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_AVX, numOfThread); // Yet
+  int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_AVX, numOfThread);
 
   // get QImage
   image = getImage(rgbImageSize);

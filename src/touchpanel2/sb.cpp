@@ -303,20 +303,30 @@ bool SB::event(QEvent *event)
   case QEvent::TouchUpdate:
   case QEvent::TouchEnd:
 	{
-	  qDebug() << "event type  = " << event->type();
+	  if (outputLog){
+		qDebug() << "event type  = " << event->type();
+	  }
 
 	  QTouchEvent *touchEvent = (QTouchEvent*)event;
-	  qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+	  if (outputLog){
+		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
+	  }
 
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
 	  if (touchPoints.count() == 1){
 		// 1 finger
-		qDebug() << "== 1 Point == ";
+		if (outputLog){
+		  qDebug() << "== 1 Point == ";
+		}
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
-		qDebug() << "pos = " << touchPoint.pos();
+		if (outputLog){
+		  qDebug() << "pos = " << touchPoint.pos();
+		}
 		//		break; // to QGraphicsView::viewportEvent(event)
 		if(touchEvent->touchPointStates() == Qt::TouchPointPressed){
-		  qDebug() << "Pressed";
+		  if (outputLog){
+			qDebug() << "Pressed";
+		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
@@ -326,9 +336,13 @@ bool SB::event(QEvent *event)
 		  mousePressEvent(newEvent);
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
-		  qDebug() << "Released";
+		  if (outputLog){
+			qDebug() << "Released";
+		  }
 		  // tap
-		  qDebug() << "TAP";
+		  if (outputLog){
+			qDebug() << "TAP";
+		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
@@ -338,12 +352,16 @@ bool SB::event(QEvent *event)
 		  mouseReleaseEvent(newEvent);
 		}
 		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
-		  qDebug() << "Moved:SB";
+		  if (outputLog){
+			qDebug() << "Moved:SB";
+		  }
 #if 1 // for TEST
 		  QPoint currentPos = touchPoint.pos().toPoint();
 		  QPoint lastPos = touchPoint.lastPos().toPoint();
 		  QPoint move = currentPos - lastPos;
-		  qDebug() << "move = " << move;
+		  if (outputLog){
+			qDebug() << "move = " << move;
+		  }
 		  graphicsView->mouseMoveRelatively(move);
 #else  // for TEST
 		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
@@ -362,14 +380,18 @@ bool SB::event(QEvent *event)
 	  }
 	  else if (touchPoints.count() == 2){
 		// 2 fingers
-		qDebug() << "== 2 Point == ";
+		if (outputLog){
+		  qDebug() << "== 2 Point == ";
+		}
 		if (pressedMouseLeftButton){
 		  // drag
 		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.last();
 		  QPoint currentPos = touchPoint.pos().toPoint();
 		  QPoint lastPos = touchPoint.lastPos().toPoint();
 		  QPoint move = currentPos - lastPos;
-		  qDebug() << "move = " << move;
+		  if (outputLog){
+			qDebug() << "move = " << move;
+		  }
 		  graphicsView->mouseMoveRelatively(move);
 		}
 		else {
@@ -379,7 +401,9 @@ bool SB::event(QEvent *event)
 		  qreal currentScalingFactor =
 			QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 			QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
-		  qDebug() << "currentScalingFactor = " << currentScalingFactor;
+		  if (outputLog){
+			qDebug() << "currentScalingFactor = " << currentScalingFactor;
+		  }
 		  qreal scalingFactor = settings->getDesktopScalingFactor();
 		  if (currentScalingFactor < 1.0){
 			scalingFactor -= 0.02;
@@ -389,7 +413,9 @@ bool SB::event(QEvent *event)
 		  }
 		  settings->setDesktopScalingFactor(scalingFactor);
 		  scalingFactor = settings->getDesktopScalingFactor();
-		  qDebug() << "scalingFactor = " << scalingFactor;
+		  if (outputLog){
+			qDebug() << "scalingFactor = " << scalingFactor;
+		  }
 		  graphicsView->setScale(scalingFactor);
 		}
 	  }

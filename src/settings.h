@@ -12,6 +12,7 @@
 // Qt Header
 #include <QDir>
 #include <QSettings>
+#include <QSize>
 #include <QString>
 #if QTB_AUTO_COMPLETE
 #include <QStringList>
@@ -78,7 +79,7 @@ typedef int PUBLICMODE_VERSION;
 // for serverName
 #define QTB_SERVERNAME			"serverName"
 #if defined(QTB_DEV_TOUCHPANEL) // for TEST
-#define QTB_SERVERNAME_DEFAULT	"192.168.10.3"
+#define QTB_SERVERNAME_DEFAULT	"192.168.10.12"
 //#define QTB_SERVERNAME_DEFAULT	""
 #else // defined(QTB_DEV_TOUCHPANEL)
 //#define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
@@ -377,9 +378,9 @@ typedef enum {
 #define QTB_ONTRANSFERCLIPBOARDSUPPORT			"onTransferClipboardSupport"
 #define QTB_ONTRANSFERCLIPBOARDSUPPORT_DEFAULT	true
 
-// for onSIMDOperationSupport
-#define QTB_ONSIMDOPERATIONSUPPORT			"onSIMDOperationSupport"
-#define QTB_ONSIMDOPERATIONSUPPORT_DEFAULT	true
+// for SIMDOprationType
+#define QTB_SIMDOPERATIONTYPENAME				"SIMDOperationTypeName"
+#define QTB_SIMDOPERATIONTYPENAME_DEFAULT		"C++"
 
 // for graphicsBufferSize
 #define QTB_GRAPHICSBUFFERSIZE				"graphicsBufferSize"
@@ -542,6 +543,8 @@ private:
   volatile unsigned int frameRate;
   volatile unsigned long frameInterval;
 
+  QSize desktopImageSize;
+
   // Sound
   volatile bool onSound;
 #if QTB_CELT_SUPPORT
@@ -683,8 +686,8 @@ private:
   // send/receive clipboard support
   volatile bool onTransferClipboardSupport;
 
-  // SIMD opeation support
-  volatile bool onSIMDOperationSupport;
+  // SIMD opeation type name
+  QString SIMDOperationTypeName;
 
   // buffer
   volatile int graphicsBufferSize;
@@ -1303,6 +1306,16 @@ public:
   unsigned long getFrameInterval()
   {
 	return frameInterval;
+  }
+
+  // get desktop image size
+  QSize getDesktopImageSize(){
+	return desktopImageSize;
+  }
+
+  // set desktop image size
+  void setDesktopImageSize(QSize desktopImageSize){
+	this->desktopImageSize = desktopImageSize;
   }
 
 #if QTB_CELT_SUPPORT
@@ -1980,16 +1993,16 @@ public:
 	this->onTransferClipboardSupport = onTransferClipboardSupport;
   }
 
-  // get SIMD operation support flag
-  bool getOnSIMDOperationSupport() const
+  // get SIMD operation type name
+  QString getSIMDOperationTypeName() const
   {
-	return onSIMDOperationSupport;
+	return SIMDOperationTypeName;
   }
 
-  // set SIMD operation support flag
-  void setOnSIMDOperationSupport(bool onSIMDOperationSupport)
+  // set SIMD operation type name
+  void setSIMDOperationTypeName(QString SIMDOperationTypeName)
   {
-	this->onSIMDOperationSupport = onSIMDOperationSupport;
+	this->SIMDOperationTypeName = SIMDOperationTypeName;
   }
 
   // get on show Software Keyboard flag

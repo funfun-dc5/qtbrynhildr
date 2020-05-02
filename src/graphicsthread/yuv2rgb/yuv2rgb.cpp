@@ -30,7 +30,6 @@ double calcRate = 0.0;
 int width = 0;
 int height = 0;
 int rgbImageSize = 0;
-int hwidth = 0;
 int uvNext = 0;
 int rgbNext = 0;
 
@@ -71,6 +70,13 @@ void initVPX()
   // initialize libvpx
   memset(&c_codec, 0, sizeof(c_codec)); // for coverity scan
   vpx_codec_dec_init(&c_codec, &vpx_codec_vp8_dx_algo, 0, 0);
+}
+
+// uninitialize for yuv
+void uninitVPX()
+{
+  // uninitialize libvpx
+  vpx_codec_destroy(&c_codec);
 }
 
 // decode VP8
@@ -380,6 +386,30 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   Q_UNUSED(numOfThread);
   (*convert)(ytop, utop, vtop, rgbtop, height);
 #endif // QTB_MULTI_THREAD_CONVERTER
+
+#if 0 // for TEST
+  {
+	static bool doFlag = true;
+	static int counter = 0;
+	counter++;
+	if (doFlag && counter == 30){
+	  fstream file;
+	  int yuvImageSize = width * height + width * height / 2;
+
+	  file.open("jpg/rgb.dat", ios::out | ios::binary);
+	  if (file.is_open()){
+		file.write((const char*)rgb, rgbImageSize);
+		file.close();
+	  }
+	  file.open("jpg/yuv.dat", ios::out | ios::binary);
+	  if (file.is_open()){
+		file.write((const char*)yuv, yuvImageSize);
+		file.close();
+	  }
+	  doFlag = false;
+	}
+  }
+#endif // for TEST
 
   return rgbImageSize;
 }

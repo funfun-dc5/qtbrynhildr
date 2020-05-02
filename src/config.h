@@ -133,9 +133,6 @@ const bool QTB_IN_TESTING				= false;
 // sound push mode
 #define QTB_SOUND_PUSH_MODE			1
 
-// sound pull mode
-#define QTB_SOUND_PULL_MODE			0
-
 // LOAD BITMAP
 #define QTB_LOAD_BITMAP				0
 

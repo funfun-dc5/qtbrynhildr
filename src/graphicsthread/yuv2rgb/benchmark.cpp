@@ -16,6 +16,7 @@
 #if BENCHMARK_YUV2RGB
 int convertFrame()
 {
+#if !defined(__ARM_NEON__)
 #if defined(__AVX2__)
   return qtbrynhildr::makeRGBImage(qtbrynhildr::convertYUVtoRGB_SIMD_AVX2, MULTI_THREAD);
 #elif defined(__AVX__)
@@ -25,6 +26,9 @@ int convertFrame()
 #else // defined(__SSE4_2__)
   return qtbrynhildr::makeRGBImage(qtbrynhildr::convertYUVtoRGB_CPP, MULTI_THREAD);
 #endif // defined(__SSE4_2__)
+#else // !defined(__ARM_NEON__)
+  return qtbrynhildr::makeRGBImage(qtbrynhildr::convertYUVtoRGB_SIMD_NEON, MULTI_THREAD);
+#endif // !defined(__ARM_NEON__)
 }
 #endif // BENCHMARK_YUV2RGB
 

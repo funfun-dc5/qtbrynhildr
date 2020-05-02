@@ -14,8 +14,8 @@
 namespace qtbrynhildr {
 
 // constructor
-DecoderVP8SSE::DecoderVP8SSE(QImage *image)
-  :DecoderVP8(image)
+DecoderVP8SSE::DecoderVP8SSE()
+  :DecoderVP8()
 {
 }
 

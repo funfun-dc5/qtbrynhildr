@@ -14,6 +14,7 @@
 #include "function/recorder.h"
 #endif // QTB_RECORDER
 #include "keybuffer.h"
+#include "mainwindow/desktoppanel.h"
 #include "mousebuffer.h"
 #include "settings.h"
 #include "parameters.h"

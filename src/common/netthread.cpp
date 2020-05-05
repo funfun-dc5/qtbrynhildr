@@ -12,6 +12,7 @@
 #include <iostream>
 
 // Qt Header
+#include <QDateTime>
 
 // Local Header
 #include "netthread.h"

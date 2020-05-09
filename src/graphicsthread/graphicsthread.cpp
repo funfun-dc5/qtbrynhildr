@@ -416,6 +416,11 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	else if (mode == VIDEO_MODE_COMPRESS){
 	  decoder = decoderMode7;
 	}
+	// save current mode
+	video_mode = mode;
+
+	QString str = "Decoder : " + QString(decoder->name());
+	emit outputLogMessage(PHASE_GRAPHICS, str);
   }
 
   // record the start time of decode

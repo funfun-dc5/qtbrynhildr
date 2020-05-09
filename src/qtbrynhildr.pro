@@ -32,7 +32,7 @@ DEFINES += QTB_LITTLE_ENDIAN
 # message($$QMAKESPEC)
 
 # configuration for Qt Brynhildr
-#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter updatecheck gprof portable
+#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter recorder updatecheck gprof portable
 CONFIG += celt vp8 multi_thread_converter updatecheck
 
 # gprof
@@ -51,7 +51,7 @@ DEFINES += QTB_PORTABLE_VERSION=1
 # Windows (MinGW, MSVC)
 # ------------------------------------------------------------------------------
 win32 {
-CONFIG += desktop vp8-sse vp8-avx2
+CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
@@ -77,7 +77,7 @@ HEADERS += common/msvc.h
 # Linux/FreeBSD/Cygwin
 # ------------------------------------------------------------------------------
 linux-g++-64 | linux-g++ | freebsd-g++ | cygwin-g++ {
-CONFIG += desktop vp8-sse vp8-avx2
+CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_LINUX
 # NEON (RaspberryPi3)
 #CONFIG -= vp8-sse vp8-avx2
@@ -89,7 +89,7 @@ DEFINES += PLATFORM_LINUX
 # MacOSX
 # ------------------------------------------------------------------------------
 macx {
-CONFIG += desktop vp8-sse vp8-avx2
+CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 }
@@ -280,6 +280,16 @@ else {
 DEFINES += QTB_PREFERENCE=0
 }
 
+# recorder
+recorder {
+DEFINES += QTB_RECORDER=1
+HEADERS += function/recorder.h
+SOURCES += function/recorder.cpp
+}
+else {
+DEFINES += QTB_RECORDER=0
+}
+
 # update checker
 updatecheck {
 HEADERS += util/httpgetter.h
@@ -315,7 +325,6 @@ HEADERS += soundthread/soundthread.h
 HEADERS += soundthread/soundbuffer.h
 HEADERS += soundthread/wave.h
 HEADERS += windows/eventconverter.h windows/ntfs.h windows/keycodes.h windows/keyevent.h
-HEADERS += function/recorder.h
 
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
@@ -341,7 +350,6 @@ SOURCES += graphicsthread/framecontroller.cpp
 SOURCES += soundthread/soundthread.cpp
 SOURCES += soundthread/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
-SOURCES += function/recorder.cpp
 
 # for new feature
 #CONFIG += new_feature

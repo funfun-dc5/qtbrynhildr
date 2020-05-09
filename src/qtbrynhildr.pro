@@ -100,7 +100,7 @@ ICON = images/qtbrynhildr.icns
 android-g++ | android-clang {
 TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
-DEFINES += PLATFORM_LINUX
+DEFINES += PLATFORM_LINUX QTB_ANDROID
 # cpufeatures library from android-ndk
 HEADERS += util/android-ndk/cpu-features.h
 SOURCES += util/android-ndk/cpu-features.c

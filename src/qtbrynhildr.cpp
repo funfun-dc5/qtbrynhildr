@@ -377,7 +377,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_CRYPTGRAM
 
   // restore settings
-#if !defined(QTB_DEV_TOUCHPANEL) // for TEST
+#if 1 // !defined(QTB_DEV_TOUCHPANEL) // for TEST
   readSettings();
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 

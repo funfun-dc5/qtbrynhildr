@@ -13,7 +13,7 @@
 
 // Local Header
 
-#if 0 // for TEST
+#if 1 // for TEST
 #if defined(__ARM_NEON__)
 #include "util/android-ndk/cpu-features.h"
 #endif // defined(__ARM_NEON__)
@@ -155,7 +155,7 @@ private:
 	  }
 #else // !defined(__ARM_NEON__)
 	  // check NEON
-#if 0 // for TEST
+#if 1 // for TEST
 	  if ((android_getCpuFamily() == ANDROID_CPU_FAMILY_ARM) &&
 		  (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_NEON) != 0){
 		hasNEON = true;

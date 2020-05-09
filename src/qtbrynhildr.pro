@@ -102,8 +102,8 @@ TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
 DEFINES += PLATFORM_LINUX
 # cpufeatures library from android-ndk
-# HEADERS += util/android-ndk/cpu-features.h
-# SOURCES += util/android-ndk/cpu-features.c
+HEADERS += util/android-ndk/cpu-features.h
+SOURCES += util/android-ndk/cpu-features.c
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \

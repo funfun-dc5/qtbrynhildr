@@ -79,9 +79,18 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
   //  cout << "frameSize : " << frameSize << endl << flush;
   for(int decodedDataSize = 0 ; decodedDataSize < size; ){
 	// decode 1 CELT data chunk
+#if 1 // for TEST
+	// for miss align
+	celt_int32 chunkSize = *chunkTop++;
+	chunkSize |= *(chunkTop++) << 8;
+	chunkSize |= *(chunkTop++) << 16;
+	chunkSize |= *(chunkTop++) << 24;
+	//	cout << "chunkSize : " << chunkSize << endl << flush;
+#else // 1 // for TEST
 	celt_int32 chunkSize = *((celt_int32 *)(chunkTop));
 	//	cout << "chunkSize : " << chunkSize << endl << flush;
 	chunkTop += 4;
+#endif // 1 // for TEST
 	error = celt_decode(decoder, chunkTop, chunkSize, workTop, frameSize);
 	if (error != 0){
 	  // decode error

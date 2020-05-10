@@ -3825,7 +3825,9 @@ void QtBrynhildr::refreshOtherMenu()
   // enable/disable menu for graphics
   flag = settings->getOnGraphics();
   videoMenu->setEnabled(flag);
+#if QTB_DESKTOP_COMPRESS_MODE
   desktopCompressModeSubMenu->setEnabled(flag);
+#endif // QTB_DESKTOP_COMPRESS_MODE
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action->setEnabled(flag);
   }

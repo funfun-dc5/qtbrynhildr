@@ -87,6 +87,19 @@ void decodeVPX(uchar *buffer, int size)
 }
 #endif // !defined(BENCHMARK)
 
+// initialize for yuv, rgb
+void initYUV2RGB()
+{
+  int yuvImageSize = width * height + width * height / 2;
+  // allocate yuv/rgb buffer
+  if (yuv1 != 0){
+	memset(yuv1, 0, yuvImageSize);
+  }
+  if (yuv2 != 0){
+	memset(yuv2, -1, yuvImageSize);
+  }
+}
+
 // setup for yuv, rgb
 bool setup()
 {

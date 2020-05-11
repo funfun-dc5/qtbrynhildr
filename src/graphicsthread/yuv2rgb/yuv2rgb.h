@@ -81,6 +81,9 @@ extern void uninitVPX();
 extern void decodeVPX(uchar *buffer, int size);
 #endif // !defined(BENCHMARK)
 
+// initialize for yuv, rgb
+extern void initYUV2RGB();
+
 // setup for yuv, rgb
 extern bool setup();
 

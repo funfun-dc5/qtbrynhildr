@@ -354,6 +354,8 @@ void GraphicsThread::connectedToServer()
 	qDebug() << "decoderMode7 == 0 for " << settings->getSIMDOperationTypeName();
   }
 #endif // 0 // for TEST
+  // initialize for yuv, rgb
+  initYUV2RGB();
 
   NetThread::connectedToServer();
 }

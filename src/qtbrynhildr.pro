@@ -115,6 +115,12 @@ DISTFILES += \
     $$PWD/../dist/android/res/drawable-xxhdpi/qtbrynhildr.png \
     $$PWD/../dist/android/res/mipmap/qtbrynhildr.png
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
+DISTFILES += \
+    $$PWD/../dist/android/build.gradle \
+    $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.jar \
+    $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.properties \
+    $$PWD/../dist/android/gradlew \
+    $$PWD/../dist/android/gradlew.bat
 }
 
 # desktop/touchpanel
@@ -355,10 +361,3 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 #CONFIG += new_feature
 new_feature {
 }
-
-DISTFILES += \
-    ../dist/android/build.gradle \
-    ../dist/android/gradle/wrapper/gradle-wrapper.jar \
-    ../dist/android/gradle/wrapper/gradle-wrapper.properties \
-    ../dist/android/gradlew \
-    ../dist/android/gradlew.bat

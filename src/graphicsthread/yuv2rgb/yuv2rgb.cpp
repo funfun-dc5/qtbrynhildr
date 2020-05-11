@@ -97,7 +97,14 @@ void initYUV2RGB()
 	  memset(yuv1, 0, yuvImageSize);
 	}
 	if (yuv2 != 0){
-	  memset(yuv2, -1, yuvImageSize);
+	  memset(yuv2, 0, yuvImageSize);
+	}
+  }
+  int size = width * height;
+  rgbImageSize = size * IMAGE_FORMAT_SIZE;
+  if (rgbImageSize > 0){
+	if (rgb != 0){
+	  memset(rgb, 0, rgbImageSize);
 	}
   }
 }
@@ -116,7 +123,7 @@ bool setup()
 	delete [] yuv2;
   }
   yuv2 = new uchar[yuvImageSize];
-  memset(yuv2, -1, yuvImageSize);
+  memset(yuv2, 0, yuvImageSize);
 
   int size = width * height;
   rgbImageSize = size * IMAGE_FORMAT_SIZE;

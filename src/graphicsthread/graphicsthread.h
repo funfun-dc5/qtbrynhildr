@@ -70,10 +70,8 @@ private:
   // decoders
   Decoder *decoderMode56;	// for MODE5/6
   Decoder *decoderMode7;	// for MODE7
-#if QTB_SIMD_SUPPORT
   QMap <QString, Decoder*>decoderMode7Map;
   QStringList decoderMode7NameList;
-#endif // QTB_SIMD_SUPPORT
 
   // current decoder
   Decoder *decoder;

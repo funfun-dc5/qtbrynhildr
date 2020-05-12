@@ -156,6 +156,7 @@ DEFINES += QTB_CELT_SUPPORT=0
 
 android-*:celt {
 LIBS += -lcelt_android_armv7
+#LIBS += -lcelt_android_aarch64
 }
 else:celt {
 LIBS += -lcelt
@@ -177,6 +178,8 @@ SOURCES += graphicsthread/decoder_vp8_cpp.cpp
 
 android-*:vp8 {
 LIBS += -lvpx_android_armv7
+#LIBS += -lvpx_android_aarch64
+#LIBS += -lvpx_android_aarch64_nosimd
 }
 else:vp8 {
 LIBS += -lvpx
@@ -239,7 +242,10 @@ SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
 SOURCES += graphicsthread/decoder_vp8_neon.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
+# armv7
 QMAKE_CXXFLAGS += -mfpu=neon
+# armv8
+#QMAKE_CXXFLAGS -= -mfpu=neon
 }
 
 # multi thread converter

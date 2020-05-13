@@ -121,6 +121,8 @@ DISTFILES += \
     $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.properties \
     $$PWD/../dist/android/gradlew \
     $$PWD/../dist/android/gradlew.bat
+# arm64
+#CONFIG += android64
 }
 
 # desktop/touchpanel
@@ -156,10 +158,14 @@ DEFINES += QTB_CELT_SUPPORT=0
 
 android-*:celt {
 LIBS += -lcelt_android_armv7
-#LIBS += -lcelt_android_aarch64
 }
 else:celt {
 LIBS += -lcelt
+}
+
+android64:celt {
+LIBS -= -lcelt_android_armv7
+LIBS += -lcelt_android_aarch64
 }
 
 # VP8
@@ -178,11 +184,14 @@ SOURCES += graphicsthread/decoder_vp8_cpp.cpp
 
 android-*:vp8 {
 LIBS += -lvpx_android_armv7
-#LIBS += -lvpx_android_aarch64
-#LIBS += -lvpx_android_aarch64_nosimd
 }
 else:vp8 {
 LIBS += -lvpx
+}
+
+android64:vp8 {
+LIBS -= -lvpx_android_armv7
+LIBS += -lvpx_android_aarch64
 }
 
 # VP8-AVX2
@@ -242,10 +251,11 @@ SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
 SOURCES += graphicsthread/decoder_vp8_neon.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
-# armv7
 QMAKE_CXXFLAGS += -mfpu=neon
-# armv8
-#QMAKE_CXXFLAGS -= -mfpu=neon
+}
+
+android64:vp8-neon {
+QMAKE_CXXFLAGS -= -mfpu=neon
 }
 
 # multi thread converter

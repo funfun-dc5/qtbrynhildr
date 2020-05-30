@@ -114,7 +114,7 @@ int LogMessage::criticalMessage(PHASE_ID id,
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
 	(*logFileStream) << phaseName[id] << KIND_OF_CRITICAL;
-	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << endl << flush;
+	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
 
   return ret;
@@ -139,7 +139,7 @@ int LogMessage::warningMessage(PHASE_ID id,
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
 	(*logFileStream) << phaseName[id] << KIND_OF_WARNING;
-	(*logFileStream) << dateTime.toString(dateFormat)   << " : " << text << endl << flush;
+	(*logFileStream) << dateTime.toString(dateFormat)   << " : " << text << QTextStream_endl << QTextStream_flush;
   }
 
   return ret;
@@ -164,7 +164,7 @@ int LogMessage::informationMessage(PHASE_ID id,
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
 	(*logFileStream) << phaseName[id] << KIND_OF_INFORMATION;
-	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << endl << flush;
+	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
 
   return ret;
@@ -189,7 +189,7 @@ int LogMessage::questionMessage(PHASE_ID id,
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
 	(*logFileStream) << phaseName[id] << KIND_OF_QUESTION;
-	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << endl << flush;
+	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
 
   return ret;
@@ -201,7 +201,7 @@ void LogMessage::outputLogMessage(PHASE_ID id, const QString text)
   QDateTime dateTime = QDateTime::currentDateTime();
   if (hasValidLogFileStream()){
 	(*logFileStream) << phaseName[id] << KIND_OF_NORMAL;
-	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << endl << flush;
+	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
 }
 

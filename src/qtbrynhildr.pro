@@ -121,6 +121,8 @@ DISTFILES += \
     $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.properties \
     $$PWD/../dist/android/gradlew \
     $$PWD/../dist/android/gradlew.bat
+# arm64
+#CONFIG += android64
 }
 
 # desktop/touchpanel
@@ -161,6 +163,11 @@ else:celt {
 LIBS += -lcelt
 }
 
+android64:celt {
+LIBS -= -lcelt_android_armv7
+LIBS += -lcelt_android_aarch64
+}
+
 # VP8
 vp8 {
 INCLUDEPATH += ../libs/vpx
@@ -180,6 +187,11 @@ LIBS += -lvpx_android_armv7
 }
 else:vp8 {
 LIBS += -lvpx
+}
+
+android64:vp8 {
+LIBS -= -lvpx_android_armv7
+LIBS += -lvpx_android_aarch64
 }
 
 # VP8-AVX2
@@ -240,6 +252,10 @@ HEADERS += graphicsthread/decoder_vp8_neon.h
 SOURCES += graphicsthread/decoder_vp8_neon.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
 QMAKE_CXXFLAGS += -mfpu=neon
+}
+
+android64:vp8-neon {
+QMAKE_CXXFLAGS -= -mfpu=neon
 }
 
 # multi thread converter

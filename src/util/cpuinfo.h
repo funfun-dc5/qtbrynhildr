@@ -14,11 +14,11 @@
 // Local Header
 
 
-#if defined(__ARM_NEON__)
+#if defined(__arm__) || defined(__aarch64__)
 #if defined(QTB_ANDROID)
 #include "util/android-ndk/cpu-features.h"
 #endif // defined(QTB_ANDROID)
-#endif // defined(__ARM_NEON__)
+#endif // defined(__arm__) || defined(__aarch64__)
 
 namespace qtbrynhildr {
 
@@ -70,7 +70,8 @@ private:
 	  memset(vender, 0, sizeof(vender));
 	  memset(brand, 0, sizeof(brand));
 
-#if !defined(__ARM_NEON__)
+#if !(defined(__arm__) || defined(__aarch64__))
+	  // INTEL CPU
 	  int data[4];
 
 	  // get vender
@@ -154,8 +155,8 @@ private:
 		}
 		cout << flush;
 	  }
-#else // !defined(__ARM_NEON__)
-	  // check NEON
+#else // !(defined(__arm__) || defined(__aarch64__))
+	  // ARM CPU
 #if defined(QTB_ANDROID)
 	  if ((android_getCpuFamily() == ANDROID_CPU_FAMILY_ARM) &&
 		  (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_NEON) != 0){
@@ -173,7 +174,7 @@ private:
 		  cout << "NEON : NOT Supported" << endl;
 		}
 	  }
-#endif // !defined(__ARM_NEON__)
+#endif // !(defined(__arm__) || defined(__aarch64__))
 	}
   };
 

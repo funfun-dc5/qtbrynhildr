@@ -5,9 +5,9 @@
 #include "common/common.h"
 
 // System Header
-#if defined(__ARM_NEON__)
+#if defined(__arm__) || defined(__aarch64__)
 #include <arm_neon.h>
-#endif // defined(__ARM_NEON__)
+#endif // defined(__arm__) || defined(__aarch64__)
 
 // Qt Header
 
@@ -20,7 +20,7 @@ namespace qtbrynhildr {
 
 // NEON
 
-#if defined(__ARM_NEON__)
+#if defined(__arm__) || defined(__aarch64__)
 
 // YUV convert to RGB (SIMD version)
 void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
@@ -404,7 +404,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 #endif // QTB_BENCHMARK
 }
 
-#endif // defined(__ARM_NEON__)
+#endif // defined(__arm__) || defined(__aarch64__)
 
 #endif // QTB_SIMD_SUPPORT
 

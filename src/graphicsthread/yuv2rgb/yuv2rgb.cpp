@@ -105,6 +105,9 @@ void initYUV2RGB()
   if (rgbImageSize > 0){
 	if (rgb != 0){
 	  memset(rgb, 0, rgbImageSize);
+	  for(int i = 3; i < rgbImageSize; i += 4){
+		rgb[i] = 0xff;
+	  }
 	}
   }
 }

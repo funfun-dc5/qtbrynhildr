@@ -54,7 +54,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
    //,image(new QImage)
-  ,onClearDesktop(false)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
@@ -341,9 +340,6 @@ void GraphicsThread::connectedToServer()
   // reset frame counter
   frameCounter.reset();
 
-  // reset frame controller
-  frameController.reset();
-
   // set decoder for MODE7 (VP8)
   decoderMode7 = decoderMode7Map.value(settings->getSIMDOperationTypeName());
 #if 0 // for TEST
@@ -354,6 +350,7 @@ void GraphicsThread::connectedToServer()
 	qDebug() << "decoderMode7 == 0 for " << settings->getSIMDOperationTypeName();
   }
 #endif // 0 // for TEST
+
   // initialize for yuv, rgb
   initYUV2RGB();
 
@@ -425,9 +422,6 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	emit outputLogMessage(PHASE_GRAPHICS, str);
   }
 
-  // record the start time of decode
-  frameController.startDecode();
-
   // pre-process
   decoder->preprocess(buf, size);
 
@@ -441,10 +435,15 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 
   // draw graphics
   if (settings->getOnGraphics()){
-	// clear desktop flag clear
-	onClearDesktop = false;
+	// adjust frame time
+	//adjustFrame();
 
-	if (frameController.adjust(com_data->frame_no, settings->getFrameInterval())){
+	// check frame skip
+	if (doSkipFrame(com_data->frame_no)){
+	  // skip this frame
+	}
+	else {
+	  // draw this frame
 	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
 
 #if QTB_BENCHMARK
@@ -475,15 +474,6 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		//  image->save("jpg/desktop.jpg", "jpg", 75);
 		emit drawDesktop(*image);
 	  }
-	}
-	// record the end time of decode
-	frameController.endDecode();
-  }
-  else {
-	// clear desktop only at once
-	if (!onClearDesktop){
-	  onClearDesktop = true;
-	  emit clearDesktop();
 	}
   }
 }
@@ -657,6 +647,44 @@ qreal GraphicsThread::getDesktopScalingFactor(QSize size)
   }
 
   return scalingFactor;
+}
+
+// adjust frame
+// void GraphicsThread::adjustFrame()
+// {
+// }
+
+// check skip frame
+bool GraphicsThread::doSkipFrame(char frame_no)
+{
+  //cout << "[" << name << "] frame_no : " << (int)(uchar)frame_no << endl << flush;
+
+  int currentFrameNo = (uchar)frame_no;
+
+  if (currentFrameNo % 2 == 0)
+	// NOT skip frame
+	return false;
+
+  // check skip frame
+  int frameNo = frameNoOfServer;
+  //cout << "frameNo : " << frameNo << endl << flush;
+  //cout << "currentFrameNo : " << currentFrameNo << endl << flush;
+  if (frameNo < currentFrameNo){
+	 frameNo += 255;
+  }
+
+  int delay = frameNo - currentFrameNo;
+  int threshold = settings->getFrameRate() >> 3;
+
+  if (delay > threshold){
+	// need skip frame
+	//cout << "doSkipFrame! delay =  " << delay << endl << flush;
+	return true;
+  }
+  else {
+	// no need skip frame
+	return false;
+  }
 }
 
 } // end of namespace qtbrynhildr

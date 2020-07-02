@@ -74,6 +74,9 @@ int counter_control = 0;
 // counter for graphics
 int counter_graphics = 0;
 
+// frame_no of server
+int frameNoOfServer = 0;
+
 // date format
 const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
@@ -3661,24 +3664,15 @@ void QtBrynhildr::toggleOnControl()
 // toggle onGraphics
 void QtBrynhildr::toggleOnGraphics()
 {
-  static unsigned int originalFrameRate = 0;
   bool flag = !settings->getOnGraphics();
 
-  if (flag){ // Off -> On
-	// restore framerate
-	settings->setFrameRate(originalFrameRate);
-  }
-  else { // On -> Off
+  if (!flag){ // On -> Off
 	// onControl Off
 	if (settings->getOnControlOffWithGraphicsOff()){
 	  settings->setOnControl(false);
 	  onControl = false;
 	  onControl_Action->setChecked(false);
 	}
-
-	// change framerate to 5
-	originalFrameRate = settings->getFrameRate();
-	settings->setFrameRate(5);
   }
 
   settings->setOnGraphics(flag);

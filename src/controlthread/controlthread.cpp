@@ -301,6 +301,10 @@ PROCESS_RESULT ControlThread::processForHeader()
   // check result (mode)
   checkMode();
 
+  // save frame no of server
+  frameNoOfServer = (uchar)com_data->frame_no;
+  //cout << "[" << name << "] frameNoOfServer : " << frameNoOfServer << endl << flush;
+
   return PROCESS_SUCCEEDED;
 }
 
@@ -319,6 +323,9 @@ void ControlThread::connectedToServer()
 {
   // reset counter
   counter_control = 0;
+
+  // save frame no of server
+  frameNoOfServer = 0;
 
   // mouse position
   prevPos.x = -1;
@@ -501,7 +508,12 @@ void ControlThread::initHeaderForGraphics()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	com_data->max_fps		= (char)settings->getFrameRate();
+	if (settings->getOnGraphics()){
+	  com_data->max_fps		= (char)settings->getFrameRate();
+	}
+	else {
+	  com_data->max_fps		= (char)1;
+	}
   }
   // zoom
   if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
@@ -549,7 +561,12 @@ void ControlThread::initHeaderForGraphics()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	com_data->max_fps		= (char)settings->getFrameRate();
+	if (settings->getOnGraphics()){
+	  com_data->max_fps		= (char)settings->getFrameRate();
+	}
+	else {
+	  com_data->max_fps		= (char)1;
+	}
   }
 
   // image size and zoom
@@ -615,7 +632,12 @@ void ControlThread::initHeaderForGraphics_test()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	com_data->max_fps		= (char)settings->getFrameRate();
+	if (settings->getOnGraphics()){
+	  com_data->max_fps		= (char)settings->getFrameRate();
+	}
+	else {
+	  com_data->max_fps		= (char)1;
+	}
   }
   // zoom
   com_data->zoom = (ZOOM)1.0;

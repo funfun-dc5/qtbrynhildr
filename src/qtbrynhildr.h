@@ -98,6 +98,10 @@ extern int counter_control;
 // counter for graphics
 extern int counter_graphics;
 
+// frame_no of server
+extern int frameNoOfServer;
+
+
 // QtBrynhildr
 class QtBrynhildr : public QMainWindow
 {

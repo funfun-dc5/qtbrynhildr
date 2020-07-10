@@ -5,10 +5,10 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.0.92"
+#define QTB_VERSION				"2.0.93"
 
-#define QTB_RCNAME				"-branch-framecontrol"
-#define QTB_VERSION_NUMBER		2092
+#define QTB_RCNAME				""
+#define QTB_VERSION_NUMBER		2093
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"

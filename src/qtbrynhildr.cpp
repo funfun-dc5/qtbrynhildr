@@ -588,8 +588,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  //scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  scrollArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  //scrollArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
   if (settings->getOnDesktopScaleFixed()){
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -627,6 +627,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // show or hide
   menuBar()->setVisible(settings->getOnShowMenuBar());
   statusBar()->setVisible(settings->getOnShowStatusBar());
+  statusBar()->setSizeGripEnabled(false);
   // save onShow* flags
   onShowMenuBar = settings->getOnShowMenuBar();
   onShowStatusBar = settings->getOnShowStatusBar();
@@ -644,9 +645,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   flags |= Qt::WindowSystemMenuHint;
   flags |= Qt::WindowCloseButtonHint;
   flags |= Qt::WindowMinimizeButtonHint;
+  flags &= ~Qt::WindowMaximizeButtonHint;
   if (settings->getOnFrameLessWindow()){
 	flags |= Qt::FramelessWindowHint;
   }
+  flags |= Qt::MSWindowsFixedSizeDialogHint;
   setWindowFlags(flags);
 
   // refresh window
@@ -2854,8 +2857,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	height = desktopPanel->getSize().height();
   }
 
-  int desktopWidth = desktopImageSize.width();
-  int desktopHeight = desktopImageSize.height();
+  int desktopWidth = settings->getDesktopWidth();
+  int desktopHeight = settings->getDesktopHeight();
   qreal widthFactor = (qreal)width/desktopWidth;
   qreal heightFactor = (qreal)height/desktopHeight;
   if (widthFactor < heightFactor){
@@ -2864,6 +2867,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   else {
 	settings->setDesktopScalingFactor(heightFactor);
   }
+  //cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << endl << flush;
 }
 
 #if 0 // for TEST
@@ -2895,30 +2899,12 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
   //cout << "resizeEvent()" << endl << flush;
 
 #if !QTB_NEW_DESKTOPWINDOW
-#if 1 // for TEST
   // rescaling desktop
-  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
 #if 0 // for TEST
-	cout << "resizeEvent() : Rescaling for (width, height) = ("
-		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
-#endif // for TEST
-	setDesktopScalingFactor(event->size());
-  }
-#if 0 // for TEST
-  else {
-	cout << "resizeEvent() : Rescaling for (width, height) = ("
-		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
-	//setDesktopScalingFactor(event->size());
-  }
-#endif // for TEST
-#else // 0 // for TEST
-  // rescaling desktop
-#if 1 // for TEST
   cout << "resizeEvent() : Rescaling for (width, height) = ("
 	   << event->size().width() << "," << event->size().height() << ")" << endl << flush;
 #endif // for TEST
-  setDesktopScalingFactor(event->size());
-#endif // 0 // for TEST
+  //setDesktopScalingFactor(event->size());
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // resize software keyboard/button
@@ -4173,6 +4159,8 @@ void QtBrynhildr::fullScreen()
   cout << "fullScreen() : height = " << size.height() << endl << flush;
 #endif
 
+  static qreal originalScalingFactor = 1.0;
+
   fullScreenMode = !fullScreenMode;
   if (fullScreenMode){
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -4191,7 +4179,10 @@ void QtBrynhildr::fullScreen()
 	showFullScreen();
 	//cout << "size(width, height) = ("
 	//	 << size().width() << "," << size().height() << ")" << endl << flush;
-	setDesktopScalingFactor(size());
+	//setDesktopScalingFactor(size());
+	originalScalingFactor = settings->getDesktopScalingFactor();
+	QSize size = settings->getDesktop()->getCurrentScreen().size();
+	setDesktopScalingFactor(size);
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -4210,7 +4201,8 @@ void QtBrynhildr::fullScreen()
 	showNormal();
 	//cout << "size(width, height) = ("
 	//	 << size().width() << "," << size().height() << ")" << endl << flush;
-	setDesktopScalingFactor(size());
+	//setDesktopScalingFactor(size());
+	settings->setDesktopScalingFactor(originalScalingFactor);
   }
   // set checked flag
 #if defined(QTB_DEV_DESKTOP)

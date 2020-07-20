@@ -39,9 +39,8 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);
-#else // defined(QTB_DEV_TOUCHPANEL)
-  setMouseTracking(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
+  setMouseTracking(true);
   setRenderHint(QPainter::Antialiasing, false);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   //  setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
@@ -76,6 +75,7 @@ void GraphicsView::setScale(qreal scalingFactor)
 
   transform.scale(scalingFactor, scalingFactor);
   setTransform(transform);
+#if 0 // for TEST
   // get window size
   QSize windowSize = size();
   QSize desktopImageSize = settings->getDesktopImageSize();
@@ -88,7 +88,6 @@ void GraphicsView::setScale(qreal scalingFactor)
 	qDebug() << "currentDesktopSize = " << currentDesktopSize;
 	qDebug() << "diffSize = " << diffSize;
   }
-#if 0 // for TEST
 #if defined(QTB_DEV_TOUCHPANEL)
 #if 1
   //  verticalScrollBar()->setRange(1, diffSize.height()-1);
@@ -367,9 +366,6 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //  cout << "mouseDoubleClicEvent" << endl << flush;
-#if defined(QTB_DEV_TOUCHPANEL)
-  Q_UNUSED(event);
-#else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -381,7 +377,6 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseDoubleClickEvent(newEvent);
   }
-#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
@@ -403,13 +398,11 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
   }
 }
 
-#if defined(QTB_DEV_DESKTOP)
 void GraphicsView::wheelEvent(QWheelEvent *event)
 {
   //  cout << "wheelEvent" << endl << flush;
   desktopPanel->wheelEvent(event);
 }
-#endif // defined(QTB_DEV_DESKTOP)
 
 // keyboard event
 void GraphicsView::keyPressEvent(QKeyEvent *event)

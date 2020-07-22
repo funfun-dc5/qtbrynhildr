@@ -43,15 +43,15 @@ SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
 void SK::pressedKey(ID_KEY id)
 {
   SoftwareKeyboard::pressedKey(id);
+  if (id == ID_KEY_Fn){
+	qtbrynhildr->toggleSoftwareKeyboard();
+  }
 }
 
 // released key
 void SK::releasedKey(ID_KEY id)
 {
   SoftwareKeyboard::releasedKey(id);
-  if (id == ID_KEY_Fn){
-	qtbrynhildr->toggleSoftwareKeyboard();
-  }
 }
 
 // key down

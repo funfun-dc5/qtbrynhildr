@@ -55,6 +55,7 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
   switch (id){
   case ID_BUTTON_1:
 	// Fn
+	qtbrynhildr->toggleSoftwareButton();
 	break;
   case ID_BUTTON_2:
 	// Monitor
@@ -270,7 +271,6 @@ void SB::releasedButton(SoftwareButton::ID_BUTTON id)
   switch (id){
   case ID_BUTTON_1:
 	// Fn
-	qtbrynhildr->toggleSoftwareButton();
 	break;
   case ID_BUTTON_31:
 	// Mouse Left Button

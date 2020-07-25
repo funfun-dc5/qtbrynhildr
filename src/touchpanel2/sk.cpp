@@ -86,29 +86,21 @@ bool SK::event(QEvent *event)
   case QEvent::TouchUpdate:
   case QEvent::TouchEnd:
 	{
-	  if (outputLog){
-		qDebug() << "event type  = " << event->type();
-	  }
-
 	  QTouchEvent *touchEvent = (QTouchEvent*)event;
 	  if (outputLog){
+		qDebug() << "event type  = " << event->type();
 		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
 	  }
 
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
-	  if (touchPoints.count() == 1){
-		// 1 finger
-		if (outputLog){
-		  qDebug() << "== 1 Point == ";
-		}
+	  int touchPointCount = touchPoints.count();
+	  if (touchPointCount == 1){ // 1 finger
+
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
-		if (outputLog){
-		  qDebug() << "pos = " << touchPoint.pos();
-		}
-		//		break; // to QGraphicsView::viewportEvent(event)
-		if(touchEvent->touchPointStates() == Qt::TouchPointPressed){
+
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){
 		  if (outputLog){
-			qDebug() << "Pressed";
+			qDebug() << "SK: 1 Pressed!";
 		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.pos(),
@@ -118,13 +110,9 @@ bool SK::event(QEvent *event)
 		  // left mouse button press
 		  mousePressEvent(newEvent);
 		}
-		else if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){
 		  if (outputLog){
-			qDebug() << "Released";
-		  }
-		  // tap
-		  if (outputLog){
-			qDebug() << "TAP";
+			qDebug() << "SK: 1 Released!";
 		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 												  touchPoint.pos(),
@@ -134,11 +122,10 @@ bool SK::event(QEvent *event)
 		  // left mouse button release
 		  mouseReleaseEvent(newEvent);
 		}
-		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){
 		  if (outputLog){
-			qDebug() << "Moved:SK";
+			qDebug() << "SK: 1 Moved!";
 		  }
-		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 		  // move mouse cursor
 		  QPoint pos = touchPoint.pos().toPoint();
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
@@ -151,8 +138,11 @@ bool SK::event(QEvent *event)
 		  mouseMoveEvent(newEvent);
 		}
 	  }
-	  else if (touchPoints.count() == 2){
-		// 2 fingers
+	  else if (touchPointCount == 2){ // 2 fingers
+		// Nothing to do
+	  }
+	  else { // touchPointCount >= 3 fingers
+		// Nothing to do
 	  }
 	  return true;
 	}

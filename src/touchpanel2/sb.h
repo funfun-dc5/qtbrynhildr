@@ -49,6 +49,9 @@ private:
   // mouse left button
   bool pressedMouseLeftButton;
 
+  // mouse right button
+  bool pressedMouseRightButton;
+
 #if QTB_NEW_DESKTOPWINDOW
   // graphics view
   GraphicsView *graphicsView;

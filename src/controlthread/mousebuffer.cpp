@@ -118,6 +118,13 @@ void MouseBuffer::setPos(MOUSE_POS pos)
   this->pos = pos;
 }
 
+// set mouse posittion
+void MouseBuffer::setPos(POS x, POS y)
+{
+  this->pos.x = x;
+  this->pos.y = y;
+}
+
 // get mouse position
 MOUSE_POS MouseBuffer::getPos() const
 {

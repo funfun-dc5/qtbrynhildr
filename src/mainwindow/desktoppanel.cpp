@@ -102,6 +102,13 @@ MouseBuffer *DesktopPanel::getMouseBuffer() const
   return mouseBuffer;
 }
 
+// set mouse position
+void DesktopPanel::setMousePos(POS x, POS y)
+{
+  currentMousePos.setX(x);
+  currentMousePos.setY(y);
+}
+
 // reflesh desktop window
 void DesktopPanel::refreshDesktop(QImage &image)
 {

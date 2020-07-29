@@ -120,6 +120,9 @@ public:
   // get mouse buffer
   MouseBuffer *getMouseBuffer() const;
 
+  // set mouse position
+  void setMousePos(POS x, POS y);
+
   // refresh desktop window
   void refreshDesktop(QImage &image);
 

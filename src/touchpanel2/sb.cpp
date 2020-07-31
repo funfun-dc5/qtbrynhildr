@@ -324,7 +324,7 @@ bool SB::event(QEvent *event)
 		  qDebug() << "id = " << touchPoint.id();
 		}
 
-		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 		  if (outputLog){
 			qDebug() << "SB: 1 Pressed!";
 		  }
@@ -342,7 +342,7 @@ bool SB::event(QEvent *event)
 			idMouseButton = touchPoint.id();
 		  }
 		}
-		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 		  if (outputLog){
 			qDebug() << "SB: 1 Released!";
 		  }
@@ -355,7 +355,7 @@ bool SB::event(QEvent *event)
 		  mouseReleaseEvent(newEvent);
 		  delete newEvent;
 		}
-		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 		  if (outputLog){
 			qDebug() << "SB: 1 Moved!";
 		  }
@@ -378,19 +378,22 @@ bool SB::event(QEvent *event)
 		  qDebug() << "Point0.id = " << touchPoint0.id();
 		  qDebug() << "Point1.id = " << touchPoint1.id();
 		}
-		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 		  if (outputLog){
 			qDebug() << "SB: 2 Pressed!";
 		  }
 		}
-		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 		  if (outputLog){
 			qDebug() << "SB: 2 Released!";
 		  }
 		  const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
 		  const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+		  // check first point
 		  if (touchPoint0.state() & Qt::TouchPointReleased){
-			qDebug() << "first point release id = " << touchPoint0.id();
+			if (outputLog){
+			  qDebug() << "first point release id = " << touchPoint0.id();
+			}
 			if (touchPoint0.id() == idMouseButton){
 			  // release mouse button
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
@@ -401,10 +404,16 @@ bool SB::event(QEvent *event)
 			  // left mouse button release
 			  mouseReleaseEvent(newEvent);
 			  delete newEvent;
+
+			  // clear button id
+			  idMouseButton = 0;
 			}
 		  }
-		  if (touchPoint1.state() & Qt::TouchPointReleased){
-			qDebug() << "second point release id = " << touchPoint1.id();
+		  // check second point
+		  else if (touchPoint1.state() & Qt::TouchPointReleased){
+			if (outputLog){
+			  qDebug() << "second point release id = " << touchPoint1.id();
+			}
 			if (touchPoint1.id() == idMouseButton){
 			  // release mouse button
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
@@ -415,10 +424,13 @@ bool SB::event(QEvent *event)
 			  // left mouse button release
 			  mouseReleaseEvent(newEvent);
 			  delete newEvent;
+
+			  // clear button id
+			  idMouseButton = 0;
 			}
 		  }
 		}
-		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 		  if (outputLog){
 			qDebug() << "SB: 2 Moved!";
 		  }

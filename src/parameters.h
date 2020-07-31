@@ -46,6 +46,15 @@ const double QTB_WINDOW_OPACITY = 0.95;
 const double QTB_WINDOW_UPDATE_DURATION = 1000;
 
 //---------------------------------------------------------------------------
+// for GUI (TOUCHPANEL)
+//---------------------------------------------------------------------------
+// tap time thresold for touchpanel (ms)
+const int QTB_TOUCHPANEL_TAP_TIME_THRESHOLD = 500;
+
+// move distance thresold for touchpanel
+const int QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD = 20;
+
+//---------------------------------------------------------------------------
 // for others
 //---------------------------------------------------------------------------
 // max path length

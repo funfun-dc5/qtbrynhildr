@@ -121,11 +121,13 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_AUTO_COMPLETE			1
 
 // update check
+#if 0 // for TEST
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				1
 #else // defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				0
 #endif // defined(QTB_DEV_DESKTOP)
+#endif // 0 // for TEST
 
 // preference dialog
 //#define QTB_PREFERENCE				1

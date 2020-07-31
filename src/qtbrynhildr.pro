@@ -100,6 +100,7 @@ ICON = images/qtbrynhildr.icns
 android-g++ | android-clang {
 TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
+CONFIG -= updatecheck
 DEFINES += PLATFORM_LINUX QTB_ANDROID
 # cpufeatures library from android-ndk
 HEADERS += util/android-ndk/cpu-features.h
@@ -314,8 +315,12 @@ DEFINES += QTB_RECORDER=0
 
 # update checker
 updatecheck {
+DEFINES += QTB_UPDATECHECK=1
 HEADERS += util/httpgetter.h
 SOURCES += util/httpgetter.cpp
+}
+else {
+DEFINES += QTB_UPDATECHECK=0
 }
 
 # input files

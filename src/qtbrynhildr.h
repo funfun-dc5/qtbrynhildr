@@ -728,8 +728,10 @@ private slots:
   // about dialog
   void about();
 
+#if QTB_UPDATECHECK
   // check update
   void checkUpdate();
+#endif // QTB_UPDATECHECK
 
   // exit from QtBynhildr
   void exit();
@@ -1023,8 +1025,10 @@ private:
 #endif // 0 // for TEST
 
 private slots:
+#if QTB_UPDATECHECK
   // finished download
   void finishedDownload();
+#endif // QTB_UPDATECHECK
 
   void timerExpired();
 

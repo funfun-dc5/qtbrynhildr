@@ -380,9 +380,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_CRYPTGRAM
 
   // restore settings
-#if 1 // !defined(QTB_DEV_TOUCHPANEL) // for TEST
   readSettings();
-#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // open Log File
   if (!logMessage->openLogFile(settings->getLogFile())){
@@ -992,12 +990,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	popUpConnectToServer();
   }
 
+#if QTB_UPDATECHECK
   // check update
   if (settings->getOnCheckUpdateAtBootup()){
 	// check update
 	onCheckUpdateInBackground = true;
 	checkUpdate();
   }
+#endif // QTB_UPDATECHECK
 
   // for test mode
   disableDrawing_Action->setChecked(!graphicsThread->getOnDrawing());
@@ -3057,6 +3057,7 @@ void QtBrynhildr::popUpConnectToServer()
   connectToServerDialog->show();
 }
 
+#if QTB_UPDATECHECK
 // check update
 void QtBrynhildr::checkUpdate()
 {
@@ -3071,6 +3072,7 @@ void QtBrynhildr::checkUpdate()
 
   //  cout << "leave checkUpdate()" << endl << flush;
 }
+#endif // QTB_UPDATECHECK
 
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()
@@ -4860,6 +4862,7 @@ bool QtBrynhildr::shutdownPlatform()
 }
 #endif // defined(QTB_NET_UNIX)
 
+#if QTB_UPDATECHECK
 // finished download
 void QtBrynhildr::finishedDownload()
 {
@@ -4960,6 +4963,7 @@ void QtBrynhildr::finishedDownload()
   // clear memory
   httpGetter->clear();
 }
+#endif // QTB_UPDATECHECK
 
 void QtBrynhildr::timerExpired()
 {

@@ -98,7 +98,7 @@ bool SK::event(QEvent *event)
 
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 
-		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 		  if (outputLog){
 			qDebug() << "SK: 1 Pressed!";
 			qDebug() << "pos = " << touchPoint.pos().toPoint();
@@ -113,7 +113,7 @@ bool SK::event(QEvent *event)
 
 		  delete newEvent;
 		}
-		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 		  if (outputLog){
 			qDebug() << "SK: 1 Released!";
 			qDebug() << "pos = " << touchPoint.pos().toPoint();
@@ -128,15 +128,14 @@ bool SK::event(QEvent *event)
 
 		  delete newEvent;
 		}
-		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 		  if (outputLog){
 			qDebug() << "SK: 1 Moved!";
 			qDebug() << "pos = " << touchPoint.pos().toPoint();
 		  }
 		  // move mouse cursor
-		  QPoint pos = touchPoint.pos().toPoint();
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
-												  pos,
+												  touchPoint.pos(),
 												  Qt::NoButton,
 												  Qt::NoButton,
 												  Qt::NoModifier);

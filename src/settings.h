@@ -278,7 +278,7 @@ typedef enum {
 
 // for onCheckUpdateAtBootup
 #define QTB_ONCHECKUPDATEATBOOTUP				"onCheckUpdateAtBootup"
-#define QTB_ONCHECKUPDATEATBOOTUP_DEFAULT		false
+#define QTB_ONCHECKUPDATEATBOOTUP_DEFAULT		true
 
 // for onConfirmAtExit
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"

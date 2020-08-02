@@ -322,7 +322,15 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			// Nothing to do
 		  }
 		  else {
-			if (!inZooming){
+			if (inZooming){
+			  // scroll graphics view
+			  QPoint currentPos = touchPoint.pos().toPoint();
+			  QPoint lastPos = touchPoint.lastPos().toPoint();
+			  QPoint move = lastPos - currentPos;
+			  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
+			  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
+			}
+			else {
 			  // move mouse cursor absolutely
 			  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													   touchPoint.pos(),
@@ -333,14 +341,6 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			  mouseMoveEvent(moveEvent);
 
 			  delete moveEvent;
-			}
-			else {
-			  // scroll graphics view
-			  QPoint currentPos = touchPoint.pos().toPoint();
-			  QPoint lastPos = touchPoint.lastPos().toPoint();
-			  QPoint move = lastPos - currentPos;
-			  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
-			  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 			}
 		  }
 		}
@@ -397,6 +397,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYUP); // Windows key release
 		}
 		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
+		  // Nothing to do
 		}
 	  }
 	  return true;

@@ -189,6 +189,13 @@ private:
   QMenu *desktopCompressModeSubMenu;
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  QMenu *decodeOptionSubMenu;
+  QMenu *decodeOptionTypeSubMenu;
+  QMenu *decodeOptionThreadSubMenu;
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // Help Menu
   QMenu *helpMenu;
 
@@ -382,6 +389,15 @@ private:
   QAction *desktopCompressMode4_Action;
   QAction *desktopCompressMode8_Action;
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  QAction *decodeOptionTypeCPP_Action;
+  QAction *decodeOptionTypeNEON_Action;
+  QAction *decodeOptionThread1_Action;
+  QAction *decodeOptionThread2_Action;
+  QAction *decodeOptionThread4_Action;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_PREFERENCE
   // preferences
@@ -916,6 +932,15 @@ private slots:
   void desktopCompressMode4();
   void desktopCompressMode8();
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode type
+  void decodeOptionTypeCPP();
+  void decodeOptionTypeNEON();
+  void decodeOptionThread1();
+  void decodeOptionThread2();
+  void decodeOptionThread4();
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // disable drawing
   void disableDrawing();

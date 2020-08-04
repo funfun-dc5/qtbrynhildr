@@ -112,6 +112,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if QTB_DESKTOP_COMPRESS_MODE
   ,desktopCompressModeSubMenu(0)
 #endif // QTB_DESKTOP_COMPRESS_MODE
+#if defined(QTB_DEV_TOUCHPANEL)
+  ,decodeOptionSubMenu(0)
+#endif // defined(QTB_DEV_TOUCHPANEL)
   ,helpMenu(0)
 #if QTB_BENCHMARK
   ,benchmarkMenu(0)
@@ -206,6 +209,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,desktopCompressMode4_Action(0)
   ,desktopCompressMode8_Action(0)
 #endif // QTB_DESKTOP_COMPRESS_MODE
+#if defined(QTB_DEV_TOUCHPANEL)
+   // decode option for touchpanel
+  ,decodeOptionTypeCPP_Action(0)
+  ,decodeOptionTypeNEON_Action(0)
+  ,decodeOptionThread1_Action(0)
+  ,decodeOptionThread2_Action(0)
+  ,decodeOptionThread4_Action(0)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #if QTB_PREFERENCE
   ,preferences_Action(0)
 #endif // QTB_PREFERENCE
@@ -2131,6 +2142,44 @@ void QtBrynhildr::createActions()
   connect(desktopCompressMode8_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode8()));
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  decodeOptionTypeCPP_Action = new QAction("C++", this);
+  decodeOptionTypeCPP_Action->setEnabled(true);
+  decodeOptionTypeCPP_Action->setCheckable(true);
+  decodeOptionTypeCPP_Action->setChecked(settings->getSIMDOperationTypeName() == "C++");
+  decodeOptionTypeCPP_Action->setStatusTip(tr("Decode Type : C++"));
+  connect(decodeOptionTypeCPP_Action, SIGNAL(triggered()), this, SLOT(decodeOptionTypeCPP()));
+
+  decodeOptionTypeNEON_Action = new QAction("NEON", this);
+  decodeOptionTypeNEON_Action->setEnabled(true);
+  decodeOptionTypeNEON_Action->setCheckable(true);
+  decodeOptionTypeNEON_Action->setChecked(settings->getSIMDOperationTypeName() == "NEON");
+  decodeOptionTypeNEON_Action->setStatusTip(tr("Decode Type : NEON"));
+  connect(decodeOptionTypeNEON_Action, SIGNAL(triggered()), this, SLOT(decodeOptionTypeNEON()));
+
+  decodeOptionThread1_Action = new QAction(tr("1 thread"), this);
+  decodeOptionThread1_Action->setEnabled(true);
+  decodeOptionThread1_Action->setCheckable(true);
+  decodeOptionThread1_Action->setChecked(settings->getConvertThreadCount() == 1);
+  decodeOptionThread1_Action->setStatusTip(tr("Decode Thread : 1 thread"));
+  connect(decodeOptionThread1_Action, SIGNAL(triggered()), this, SLOT(decodeOptionThread1()));
+
+  decodeOptionThread2_Action = new QAction(tr("2 threads"), this);
+  decodeOptionThread2_Action->setEnabled(true);
+  decodeOptionThread2_Action->setCheckable(true);
+  decodeOptionThread2_Action->setChecked(settings->getConvertThreadCount() == 2);
+  decodeOptionThread2_Action->setStatusTip(tr("Decode Thread : 2 threads"));
+  connect(decodeOptionThread2_Action, SIGNAL(triggered()), this, SLOT(decodeOptionThread2()));
+
+  decodeOptionThread4_Action = new QAction(tr("4 threads"), this);
+  decodeOptionThread4_Action->setEnabled(true);
+  decodeOptionThread4_Action->setCheckable(true);
+  decodeOptionThread4_Action->setChecked(settings->getConvertThreadCount() == 4);
+  decodeOptionThread4_Action->setStatusTip(tr("Decode Thread : 4 threads"));
+  connect(decodeOptionThread4_Action, SIGNAL(triggered()), this, SLOT(decodeOptionThread4()));
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if QTB_PREFERENCE
   // preferences
   preferences_Action = new QAction(tr("Preferences..."), this);
@@ -2381,6 +2430,26 @@ void QtBrynhildr::createMenus()
   }
   optionMenu->addSeparator();
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option
+  decodeOptionSubMenu = optionMenu->addMenu(tr("Decode Option"));
+  decodeOptionTypeSubMenu = decodeOptionSubMenu->addMenu(tr("Type"));
+  decodeOptionTypeSubMenu->addAction(decodeOptionTypeCPP_Action);
+  decodeOptionTypeSubMenu->addAction(decodeOptionTypeNEON_Action);
+
+  decodeOptionThreadSubMenu = decodeOptionSubMenu->addMenu(tr("Thread"));
+  decodeOptionThreadSubMenu->addAction(decodeOptionThread1_Action);
+  decodeOptionThreadSubMenu->addAction(decodeOptionThread2_Action);
+  decodeOptionThreadSubMenu->addAction(decodeOptionThread4_Action);
+
+  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	decodeOptionSubMenu->setEnabled(true);
+  }
+  else {
+	decodeOptionSubMenu->setEnabled(false);
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   if (QTB_SCROLL_MODE){
 	optionMenu->addAction(onScrollMode_Action);
@@ -2707,6 +2776,11 @@ void QtBrynhildr::connected()
   }
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  decodeOptionSubMenu->setEnabled(false);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // reset total frame counter
   totalFrameCounter = 0;
 
@@ -2809,6 +2883,16 @@ void QtBrynhildr::disconnected()
 	desktopWindow->setAcceptDrops(false);
 #endif // QTB_NEW_DESKTOPWINDOW
   }
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	decodeOptionSubMenu->setEnabled(true);
+  }
+  else {
+	decodeOptionSubMenu->setEnabled(false);
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
   // plugins disable
@@ -4703,6 +4787,48 @@ void QtBrynhildr::desktopCompressMode8()
   desktopCompressMode8_Action->setChecked(true);
 }
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+#if defined(QTB_DEV_TOUCHPANEL)
+// decode type
+void QtBrynhildr::decodeOptionTypeCPP()
+{
+  settings->setSIMDOperationTypeName("C++");
+
+  decodeOptionTypeCPP_Action->setChecked(true);
+  decodeOptionTypeNEON_Action->setChecked(false);
+}
+void QtBrynhildr::decodeOptionTypeNEON()
+{
+  settings->setSIMDOperationTypeName("NEON");
+
+  decodeOptionTypeCPP_Action->setChecked(false);
+  decodeOptionTypeNEON_Action->setChecked(true);
+}
+void QtBrynhildr::decodeOptionThread1()
+{
+  settings->setConvertThreadCount(1);
+
+  decodeOptionThread1_Action->setChecked(true);
+  decodeOptionThread2_Action->setChecked(false);
+  decodeOptionThread4_Action->setChecked(false);
+}
+void QtBrynhildr::decodeOptionThread2()
+{
+  settings->setConvertThreadCount(2);
+
+  decodeOptionThread1_Action->setChecked(false);
+  decodeOptionThread2_Action->setChecked(true);
+  decodeOptionThread4_Action->setChecked(false);
+}
+void QtBrynhildr::decodeOptionThread4()
+{
+  settings->setConvertThreadCount(4);
+
+  decodeOptionThread1_Action->setChecked(false);
+  decodeOptionThread2_Action->setChecked(false);
+  decodeOptionThread4_Action->setChecked(true);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // disable drawing
 void QtBrynhildr::disableDrawing()

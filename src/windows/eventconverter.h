@@ -9,6 +9,10 @@
 #include <QString>
 #include <Qt>
 
+#if defined(QTB_DEV_TOUCHPANEL)
+#include <QMap>
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 // Local Header
 #include "keycodes.h"
 
@@ -382,6 +386,11 @@ private:
 
   // output log flag
   bool outputLog;
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // Key map for OEM keys
+  QMap<QString, Key> keyMap;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   //-------------------------------------------------------------------------------
   // Function

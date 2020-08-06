@@ -499,12 +499,14 @@ void GraphicsView::wheelEvent(QWheelEvent *event)
 void GraphicsView::keyPressEvent(QKeyEvent *event)
 {
   //  cout << "keyPressEvent" << endl << flush;
+  //qDebug() << "KeyPress : " << event;
   desktopPanel->keyPressEvent(event);
 }
 
 void GraphicsView::keyReleaseEvent(QKeyEvent *event)
 {
   //  cout << "keyReleaseEvent" << endl << flush;
+  //qDebug() << "KeyRelease : " << event;
   desktopPanel->keyReleaseEvent(event);
 }
 

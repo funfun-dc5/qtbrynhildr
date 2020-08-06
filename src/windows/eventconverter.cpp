@@ -12,6 +12,8 @@
 // Qt Header
 #include <QString>
 
+//#include <QDebug>
+
 // Local Header
 
 #include "eventconverter.h"
@@ -25,6 +27,45 @@ namespace qtbrynhildr {
 EventConverter::EventConverter()
   :EventConverter(KEYTOP_TYPE_JP)
 {
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // check and fix key for OEM keys
+  keyMap["!"] = Qt::Key_Exclam;
+  keyMap["\""] = Qt::Key_QuoteDbl;
+  keyMap["#"] = Qt::Key_NumberSign;
+  keyMap["$"] = Qt::Key_Dollar;
+  keyMap["%"] = Qt::Key_Percent;
+  keyMap["&"] = Qt::Key_Ampersand;
+  keyMap["'"] = Qt::Key_Apostrophe;
+  keyMap["("] = Qt::Key_ParenLeft;
+  keyMap[")"] = Qt::Key_ParenRight;
+
+  keyMap["*"] = Qt::Key_Asterisk;
+  keyMap["+"] = Qt::Key_Plus;
+  keyMap[","] = Qt::Key_Comma;
+  keyMap["-"] = Qt::Key_Minus;
+  keyMap["."] = Qt::Key_Period;
+  keyMap["/"] = Qt::Key_Slash;
+
+  keyMap[":"] = Qt::Key_Colon;
+  keyMap[";"] = Qt::Key_Semicolon;
+  keyMap["<"] = Qt::Key_Less;
+  keyMap["="] = Qt::Key_Equal;
+  keyMap[">"] = Qt::Key_Greater;
+  keyMap["?"] = Qt::Key_Question;
+  keyMap["@"] = Qt::Key_At;
+  keyMap["`"] = Qt::Key_QuoteLeft;
+
+  keyMap["["] = Qt::Key_BracketLeft;
+  keyMap["{"] = Qt::Key_BraceLeft;
+  keyMap["\\"] = Qt::Key_Backslash;
+  keyMap["|"] = Qt::Key_yen;
+  keyMap["_"] = Qt::Key_Underscore;
+  keyMap["]"] = Qt::Key_BracketRight;
+  keyMap["}"] = Qt::Key_BraceRight;
+  keyMap["~"] = Qt::Key_AsciiTilde;
+  keyMap["^"] = Qt::Key_AsciiCircum;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 EventConverter::EventConverter(KEYTOP_TYPE type)
@@ -140,16 +181,24 @@ uchar EventConverter::getVKCode(QKeyEvent *keyEvent)
 {
   Key key = (Key)keyEvent->key();
 
- for(int i = 0; i < tableSize; i++){
-   if (keyEventTable[i].key == key){
-	 shiftKeyControl = keyEventTable[i].shiftKeyControl;
-	 return keyEventTable[i].VK_Code;
-   }
- }
+#if defined(QTB_DEV_TOUCHPANEL)
+  // check and fix key for OEM keys
+  if (keyMap.contains(keyEvent->text())){
+	key = keyMap[keyEvent->text()];
+	//qDebug() << "keyEvent = " << keyEvent;
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
- // unknown key
- shiftKeyControl = SHIFTKEY_THROUGH;
- return VK_NONE_00;
+  for(int i = 0; i < tableSize; i++){
+	if (keyEventTable[i].key == key){
+	  shiftKeyControl = keyEventTable[i].shiftKeyControl;
+	  return keyEventTable[i].VK_Code;
+	}
+  }
+
+  // unknown key
+  shiftKeyControl = SHIFTKEY_THROUGH;
+  return VK_NONE_00;
 }
 
 // get shift key control

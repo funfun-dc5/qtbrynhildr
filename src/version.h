@@ -7,7 +7,7 @@
 // version
 #define QTB_VERSION				"2.0.95"
 
-#define QTB_RCNAME				""
+#define QTB_RCNAME				"-branch-android"
 #define QTB_VERSION_NUMBER		2095
 
 #if __x86_64__ || __LP64__ || _WIN64

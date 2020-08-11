@@ -521,6 +521,9 @@ void ControlThread::initHeaderForGraphics()
 	  com_data->max_fps		= (char)1;
 	}
   }
+  // frame_no
+  com_data->frame_no = (char)frameNoOfClient;
+
   // zoom
   if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
 	  settings->getDesktopScalingFactor() < 1.0){
@@ -574,6 +577,8 @@ void ControlThread::initHeaderForGraphics()
 	  com_data->max_fps		= (char)1;
 	}
   }
+  // frame_no
+  com_data->frame_no = (char)frameNoOfClient;
 
   // image size and zoom
   SIZE imageWidth = settings->getDesktopWidth();

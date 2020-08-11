@@ -100,6 +100,8 @@ extern int counter_graphics;
 
 // frame_no of server
 extern int frameNoOfServer;
+// frame_no of client
+extern int frameNoOfClient;
 
 
 // QtBrynhildr

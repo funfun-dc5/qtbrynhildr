@@ -76,6 +76,8 @@ int counter_graphics = 0;
 
 // frame_no of server
 int frameNoOfServer = 0;
+// frame_no of client
+int frameNoOfClient = 0;
 
 // date format
 const QString dateFormat = QTB_LOG_DATE_FORMAT;

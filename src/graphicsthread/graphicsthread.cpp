@@ -475,6 +475,9 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		emit drawDesktop(*image);
 	  }
 	}
+
+	// save frame_no of client
+	frameNoOfClient = com_data->frame_no;
   }
 }
 

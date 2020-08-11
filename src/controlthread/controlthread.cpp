@@ -327,6 +327,9 @@ void ControlThread::connectedToServer()
   // save frame no of server
   frameNoOfServer = 0;
 
+  // save frame no of client
+  frameNoOfClient = 0;
+
   // mouse position
   prevPos.x = -1;
   prevPos.y = -1;

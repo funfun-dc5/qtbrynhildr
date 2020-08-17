@@ -30,4 +30,4 @@
  パブリックモードでサポートしていないビデオコーデックがサーバで指定されています。 [#]_
  brynhildr.iniでvideocodec=2(MotionJPEG)もしくはvideocodec=3(Compress)と指定していること、もしくはvideocodec自体の指定がないことを確認してください。
 
- .. [#] 現在のところvideocode=0(Speed)/1(Hybrid)はサポートしていません。
+ .. [#] 現在のところvideocodec=0(Speed)/1(Hybrid)はサポートしていません。

@@ -2268,7 +2268,9 @@ void QtBrynhildr::createMenus()
 #if 0 // for TEST
   displayMenu->addAction(showMenuBar_Action);
 #endif // if 1
+#if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
+#endif // defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showFrameRate_Action);
 
   // software keyboard and button

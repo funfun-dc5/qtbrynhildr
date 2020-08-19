@@ -357,7 +357,11 @@ typedef enum {
 
 // for onTransferFileSupport
 #define QTB_ONTRANSFERFILESUPPORT			"onTransferFileSupport"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONTRANSFERFILESUPPORT_DEFAULT	false
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONTRANSFERFILESUPPORT_DEFAULT	true
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowTotalProgressForTransferFile
 #define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE			"onShowTotalProgressForTransferFile"

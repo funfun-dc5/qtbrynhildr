@@ -33,7 +33,11 @@ namespace qtbrynhildr {
 const bool QTB_FIXED_MAINWINDOW_SIZE	= true;
 
 // desktop image scaling
+#if defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_SCALING	= true;
+#else // defined(QTB_DEV_DESKTOP)
+const bool QTB_DESKTOP_IMAGE_SCALING	= false;
+#endif // defined(QTB_DEV_DESKTOP)
 
 // desktop image capture
 #if defined(QTB_DEV_DESKTOP)

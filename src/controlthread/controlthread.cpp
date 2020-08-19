@@ -708,68 +708,6 @@ void ControlThread::setMouseControl()
 
   // setup mouse position
   MOUSE_POS pos = mouseBuffer->getPos();
-#if 0 // for TEST
-  // if mouse cursor is moved.
-  if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
-	// set information
-	com_data->mouse_move = MOUSE_MOVE_ON;
-	if (QTB_DESKTOP_IMAGE_SCALING){
-	  QSize windowSize = desktopPanel->getSize();
-	  QSize desktopImageSize = settings->getDesktopImageSize();
-	  if (!(windowSize.isValid() && desktopImageSize.isValid())){
-		// Nothing to do
-		com_data->mouse_move = MOUSE_MOVE_OFF;
-	  }
-	  else {
-		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-		  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
-		  if (scalingFactor > 1.0){
-			com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width() * scalingFactor;
-			com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height() * scalingFactor;
-		  }
-		  else {
-			com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
-			com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
-		  }
-		}
-		else {
-		  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
-		  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
-		}
-		// set offset
-		com_data->mouse_x += settings->getDesktopOffsetX();
-		com_data->mouse_y += settings->getDesktopOffsetY();
-
-		// save pos
-		prevPos = pos;
-	  }
-	}
-	else {
-	  // set offset
-	  com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
-	  com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
-
-	  // save pos
-	  prevPos = pos;
-	}
-#if QTB_DESKTOP_COMPRESS_MODE
-	// desktop compress mode
-	int desktopCompressMode = settings->getDesktopCompressMode();
-	if (desktopCompressMode > 1){
-	  com_data->mouse_x *= desktopCompressMode;
-	  com_data->mouse_y *= desktopCompressMode;
-	}
-#endif // QTB_DESKTOP_COMPRESS_MODE
-
-	//cout << "com_data->mouse_x = " << com_data->mouse_x << endl;
-	//cout << "com_data->mouse_y = " << com_data->mouse_y << endl;
-
-#if 0 // for TEST
-	// save pos
-	prevPos = pos;
-#endif // 0 // for TEST
-  }
-#else // 0 // for TEST
   // if mouse cursor is moved.
   QSize windowSize = desktopPanel->getSize();
   QSize desktopImageSize = settings->getDesktopImageSize();
@@ -780,31 +718,24 @@ void ControlThread::setMouseControl()
   else if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	// set information
 	com_data->mouse_move = MOUSE_MOVE_ON;
-	if (QTB_DESKTOP_IMAGE_SCALING){
-	  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-		qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
-		if (scalingFactor > 1.0){
-		  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width() * scalingFactor;
-		  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height() * scalingFactor;
-		}
-		else {
-		  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
-		  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
-		}
+	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+	  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
+	  if (scalingFactor > 1.0){
+		com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width() * scalingFactor;
+		com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height() * scalingFactor;
 	  }
 	  else {
 		com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
 		com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
 	  }
-	  // set offset
-	  com_data->mouse_x += settings->getDesktopOffsetX();
-	  com_data->mouse_y += settings->getDesktopOffsetY();
 	}
 	else {
-	  // set offset
-	  com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
-	  com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
+	  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
+	  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
 	}
+	// set offset
+	com_data->mouse_x += settings->getDesktopOffsetX();
+	com_data->mouse_y += settings->getDesktopOffsetY();
 #if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode
 	int desktopCompressMode = settings->getDesktopCompressMode();
@@ -820,7 +751,6 @@ void ControlThread::setMouseControl()
 	// save pos
 	prevPos = pos;
   }
-#endif // 0 // for TEST
 }
 
 // set keyboard control

@@ -519,50 +519,48 @@ void GraphicsThread::rescaleDesktopImage(QImage *image)
   }
 
   // rescale
-  if (QTB_DESKTOP_IMAGE_SCALING){
-	switch (settings->getDesktopScalingType()){
-	case DESKTOPSCALING_TYPE_ON_SERVER:
-	  if (settings->getDesktopScalingFactor() > 1.0){
-		// scale up
-		currentSize = getSizeForCurrentMode(image->size() * settings->getDesktopScalingFactor());
-		*image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-	  }
-	  break;
-	case DESKTOPSCALING_TYPE_ON_CLIENT:
-	  {
-		qreal scalingFactor = getDesktopScalingFactor(currentSize);
-		if (!isSameSize){
-		  // recalculate scaling factor
-		  qreal widthRate = (qreal)previousSize.width()/currentSize.width();
-		  qreal heightRate = (qreal)previousSize.height()/currentSize.height();
-		  if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_SINGLE_TO_ALL){
-			scalingFactor = widthRate < heightRate ? widthRate : heightRate;
-		  }
-		  else if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_ALL_TO_SINGLE){
-			scalingFactor = widthRate > heightRate ? widthRate : heightRate;
-		  }
-		  // flag clear
-		  settings->setMonitorChangeType(MONITOR_CHANGE_TYPE_NONE);
-		}
-		if (scalingFactor != 1.0){
-		  // scale
-		  currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
-#if !QTB_NEW_DESKTOPWINDOW
-		  *image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-		  //*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
-		  //*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-#endif // !QTB_NEW_DESKTOPWINDOW
-		}
-		// save scaling factor
-		if (scalingFactor != settings->getDesktopScalingFactor()){
-		  settings->setDesktopScalingFactor(scalingFactor);
-		}
-	  }
-	  break;
-	default:
-	  // unknown scaling type
-	  break;
+  switch (settings->getDesktopScalingType()){
+  case DESKTOPSCALING_TYPE_ON_SERVER:
+	if (settings->getDesktopScalingFactor() > 1.0){
+	  // scale up
+	  currentSize = getSizeForCurrentMode(image->size() * settings->getDesktopScalingFactor());
+	  *image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 	}
+	break;
+  case DESKTOPSCALING_TYPE_ON_CLIENT:
+	{
+	  qreal scalingFactor = getDesktopScalingFactor(currentSize);
+	  if (!isSameSize){
+		// recalculate scaling factor
+		qreal widthRate = (qreal)previousSize.width()/currentSize.width();
+		qreal heightRate = (qreal)previousSize.height()/currentSize.height();
+		if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_SINGLE_TO_ALL){
+		  scalingFactor = widthRate < heightRate ? widthRate : heightRate;
+		}
+		else if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_ALL_TO_SINGLE){
+		  scalingFactor = widthRate > heightRate ? widthRate : heightRate;
+		}
+		// flag clear
+		settings->setMonitorChangeType(MONITOR_CHANGE_TYPE_NONE);
+	  }
+	  if (scalingFactor != 1.0){
+		// scale
+		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
+#if !QTB_NEW_DESKTOPWINDOW
+		*image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+#endif // !QTB_NEW_DESKTOPWINDOW
+	  }
+	  // save scaling factor
+	  if (scalingFactor != settings->getDesktopScalingFactor()){
+		settings->setDesktopScalingFactor(scalingFactor);
+	  }
+	}
+	break;
+  default:
+	// unknown scaling type
+	break;
   }
 
   // capture desktop image (rescaled size)

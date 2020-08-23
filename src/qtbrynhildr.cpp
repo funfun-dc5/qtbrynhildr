@@ -2271,11 +2271,15 @@ void QtBrynhildr::createMenus()
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
 #endif // defined(QTB_DEV_DESKTOP)
+#if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showFrameRate_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // software keyboard and button
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#if defined(QTB_DEV_DESKTOP)
   displayMenu->addSeparator();
+#endif // defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showSoftwareButton_Action);
   displayMenu->addAction(showSoftwareKeyboard_Action);
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -2374,6 +2378,7 @@ void QtBrynhildr::createMenus()
   sendKeySubMenu->addAction(sendKey5_Action);
   sendKeySubMenu->addAction(sendKey6_Action);
 
+#if defined(QTB_DEV_DESKTOP)
   // for select monitor
   selectMonitorNoSubMenu = controlMenu->addMenu(tr("Select Monitor"));
   selectMonitorNoSubMenu->addAction(selectMonitorNo1_Action);
@@ -2386,12 +2391,15 @@ void QtBrynhildr::createMenus()
   selectMonitorNoSubMenu->addAction(selectMonitorNo8_Action);
   selectMonitorNoSubMenu->addAction(selectMonitorNo9_Action);
   selectMonitorNoSubMenu->addAction(selectMonitorNoAll_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
+#if defined(QTB_DEV_DESKTOP)
   // for control
   controlMenu->addSeparator();
   controlMenu->addAction(onControl_Action);
   controlMenu->addAction(onGraphics_Action);
   controlMenu->addAction(onSound_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // for select publicmode version
   controlMenu->addSeparator();
@@ -2411,11 +2419,11 @@ void QtBrynhildr::createMenus()
   recordAndReplaySubMenu->addAction(stopReplayRecordingControl_Action);
 #endif // QTB_RECORDER
 
-#if QTB_PLUGINS_DISABLE_SUPPORT
+#if QTB_PLUGINS_DISABLE_SUPPORT && defined(QTB_DEV_DESKTOP)
   // for plugins disable
   controlMenu->addSeparator();
   controlMenu->addAction(onPluginsDisable_Action);
-#endif // QTB_PLUGINS_DISABLE_SUPPORT
+#endif // QTB_PLUGINS_DISABLE_SUPPORT && defined(QTB_DEV_DESKTOP)
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("Option"));
@@ -2466,9 +2474,11 @@ void QtBrynhildr::createMenus()
   touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeQtBrynhildr_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
+#if defined(QTB_DEV_DESKTOP)
   optionMenu->addSeparator();
   optionMenu->addAction(outputKeyboardLog_Action);
   optionMenu->addAction(outputLog_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // in testing sub menu
   if (QTB_IN_TESTING){
@@ -3886,7 +3896,9 @@ void QtBrynhildr::refreshOtherMenu()
   // enable/disable menu for control
   flag = settings->getOnControl();
   sendKeySubMenu->setEnabled(flag);
+#if defined(QTB_DEV_DESKTOP)
   selectMonitorNoSubMenu->setEnabled(flag);
+#endif // defined(QTB_DEV_DESKTOP)
   selectPublicModeVersionSubMenu->setEnabled(flag);
 #if QTB_RECORDER
   recordAndReplaySubMenu->setEnabled(flag);

@@ -8,9 +8,12 @@
 #include <iostream>
 
 // Qt Header
+#include <QDateTime>
 #include <QDialog>
 #include <QFont>
 #include <QRect>
+
+//#include <QDebug>
 
 // Local Header
 #include "connect_to_server_dialog.h"
@@ -29,17 +32,37 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   ,serverNameList(0)
   ,completer(0)
 #endif // QTB_AUTO_COMPLETE
+#if defined(QTB_DEV_TOUCHPANEL)
+  ,serverNameListIndex(0)
+#endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
   ,outputLog(false)
 {
   setupUi(this);
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  setAttribute(Qt::WA_AcceptTouchEvents, true);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // server name field
   serverNameList = settings->getServerNameList();
 #if defined(Q_OS_ANDROID) // for DEBUG
   if (serverNameList->size() == 0){
 	serverNameList->append(settings->getServerName());
+	serverNameListIndex = 0;
   }
+#if 0 // for TEST
+  serverNameList->replace(0, QString("1.1.1.0"));
+  serverNameList->replace(1, QString("1.1.1.1"));
+  serverNameList->replace(2, QString("1.1.1.2"));
+  serverNameList->replace(3, QString("1.1.1.3"));
+  serverNameList->replace(4, QString("1.1.1.4"));
+  serverNameList->replace(5, QString("1.1.1.5"));
+  serverNameList->replace(6, QString("1.1.1.6"));
+  serverNameList->replace(7, QString("1.1.1.7"));
+  serverNameList->replace(8, QString("1.1.1.8"));
+  serverNameList->replace(9, QString("1.1.1.9"));
+#endif // 1 // for TEST
 #endif // for DEBUG
 
 #if QTB_AUTO_COMPLETE
@@ -47,7 +70,8 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 #endif // QTB_AUTO_COMPLETE
 
 #if defined(QTB_DEV_TOUCHPANEL) // for TEST
-  lineEdit_hostname->insert(settings->getServerName()); // for TEST
+  lineEdit_hostname->insert(settings->getServerName());
+  serverNameListIndex = serverNameList->indexOf(settings->getServerName());
 #if QTB_AUTO_COMPLETE
   lineEdit_hostname->setCompleter(completer);
 #endif // QTB_AUTO_COMPLETE
@@ -149,6 +173,44 @@ void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
 {
   Q_UNUSED(event);
 }
+
+#if defined(QTB_DEV_TOUCHPANEL)
+// event
+bool ConnectToServerDialog::event(QEvent *event)
+{
+  switch(event->type()){
+  case QEvent::TouchBegin:
+  case QEvent::TouchEnd:
+	{
+	  static QDateTime prevPressedTime;
+	  QDateTime currentTime = QDateTime::currentDateTime();
+	  qint64 tapTime = prevPressedTime.msecsTo(currentTime);
+	  if (prevPressedTime.isValid() && tapTime < QTB_TOUCHPANEL_TAP_TIME_THRESHOLD){
+		if (serverNameList->size() > 1){
+		  if (serverNameListIndex < serverNameList->size()-1){
+			serverNameListIndex++;
+			//qDebug() << "length : " << serverNameList->at(serverNameListIndex).length();
+			if (serverNameList->at(serverNameListIndex).length() == 0)
+			  serverNameListIndex = 0;
+		  }
+		  else {
+			serverNameListIndex = 0;
+		  }
+		  //qDebug() << "srverNameList->size() : " << serverNameList->size();
+		  //qDebug() << "serverNameListIndex : " << serverNameListIndex;
+		  lineEdit_hostname->clear();
+		  lineEdit_hostname->insert(serverNameList->at(serverNameListIndex));
+		}
+	  }
+	  prevPressedTime = currentTime;
+	}
+	break;
+  default:
+	break;
+  }
+  return QDialog::event(event);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // settings for Tablet
 void ConnectToServerDialog::resetting()

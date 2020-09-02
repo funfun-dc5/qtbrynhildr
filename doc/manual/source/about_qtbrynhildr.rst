@@ -39,3 +39,7 @@ Qt Brynhildrとは
  Mac版 Qt Brynhildr
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_macosx.png
+
+ Android版 Qt Brynhildr
+
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_android.png

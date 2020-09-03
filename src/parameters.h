@@ -10,7 +10,7 @@ namespace qtbrynhildr {
 // for threads(control/graphics/sound)
 //---------------------------------------------------------------------------
 // sleep time (milli seconds)
-const unsigned long QTB_THREAD_SLEEP_TIME = 5;
+const unsigned long QTB_THREAD_SLEEP_TIME = 1;
 
 //---------------------------------------------------------------------------
 // for control
@@ -44,6 +44,15 @@ const double QTB_WINDOW_OPACITY = 0.95;
 
 // window update duration (ms)
 const double QTB_WINDOW_UPDATE_DURATION = 1000;
+
+//---------------------------------------------------------------------------
+// for GUI (TOUCHPANEL)
+//---------------------------------------------------------------------------
+// tap time thresold for touchpanel (ms)
+const int QTB_TOUCHPANEL_TAP_TIME_THRESHOLD = 500;
+
+// move distance thresold for touchpanel
+const int QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD = 20;
 
 //---------------------------------------------------------------------------
 // for others

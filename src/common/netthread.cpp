@@ -12,6 +12,7 @@
 #include <iostream>
 
 // Qt Header
+#include <QDateTime>
 
 // Local Header
 #include "netthread.h"
@@ -589,7 +590,7 @@ void NetThread::printHeader(COM_DATA *com_data)
   cout << "com_data->gamepad4       :"	<< com_data->gamepad4 << endl;
   cout << "com_data->client_scroll_x:"  << com_data->client_scroll_x << endl;
   cout << "com_data->client_scroll_y:"  << com_data->client_scroll_y << endl;
-  cout << "com_data->video_mode     :"  << com_data->video_mode << endl;
+  cout << "com_data->video_mode     :"  << (int)com_data->video_mode << endl;
   cout << "com_data->server_version :"  << com_data->server_version << endl;
   cout << "com_data->zoom           :"  << com_data->zoom << endl;
   cout << "com_data->mode           :"	<< (int)com_data->mode << endl;

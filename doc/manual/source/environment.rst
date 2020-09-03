@@ -31,9 +31,6 @@
 ^^^^^^^^^^
   * Mac OS X 10.10 (Yosemite)以降
 
-(4) FreeBSD版
-^^^^^^^^^^^^^^
-
-(5) Android版
+(4) Android版
 ^^^^^^^^^^^^^^
   * Android 4.1以降

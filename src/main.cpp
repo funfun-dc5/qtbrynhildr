@@ -7,6 +7,10 @@
 // System Header
 #include <iostream>
 
+// #if defined(Q_OS_WIN)
+// #include <windows.h>
+// #endif // defined(Q_OS_WIN)
+
 // Qt Header
 #include <QApplication>
 #include <QClipboard>

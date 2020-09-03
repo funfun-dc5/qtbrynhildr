@@ -33,7 +33,11 @@ namespace qtbrynhildr {
 const bool QTB_FIXED_MAINWINDOW_SIZE	= true;
 
 // desktop image scaling
+#if defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_SCALING	= true;
+#else // defined(QTB_DEV_DESKTOP)
+const bool QTB_DESKTOP_IMAGE_SCALING	= false;
+#endif // defined(QTB_DEV_DESKTOP)
 
 // desktop image capture
 #if defined(QTB_DEV_DESKTOP)
@@ -82,10 +86,12 @@ const bool QTB_TRANSLATION				= true;
 // in testing
 const bool QTB_IN_TESTING				= false;
 
+#if 0 // for TEST
 // recorder
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_RECORDER				1
 #endif // defined(QTB_DEV_DESKTOP)
+#endif // 0 // for TEST
 
 // splash screen
 #define QTB_SPLASH_SCREEN			0
@@ -109,7 +115,11 @@ const bool QTB_IN_TESTING				= false;
 #endif // defined(QTB_DEV_DESKTOP)
 
 // desktop compress mode
+#if QTB_NEW_DESKTOPWINDOW
+#define QTB_DESKTOP_COMPRESS_MODE	0
+#else // QTB_NEW_DESKTOPWINDOW
 #define QTB_DESKTOP_COMPRESS_MODE	1
+#endif // QTB_NEW_DESKTOPWINDOW
 
 // disable plugins support
 #define QTB_PLUGINS_DISABLE_SUPPORT	1
@@ -118,11 +128,13 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_AUTO_COMPLETE			1
 
 // update check
+#if 0 // for TEST
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				1
 #else // defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				0
 #endif // defined(QTB_DEV_DESKTOP)
+#endif // 0 // for TEST
 
 // preference dialog
 //#define QTB_PREFERENCE				1

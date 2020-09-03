@@ -78,13 +78,8 @@ typedef int PUBLICMODE_VERSION;
 
 // for serverName
 #define QTB_SERVERNAME			"serverName"
-#if defined(QTB_DEV_TOUCHPANEL) // for TEST
-#define QTB_SERVERNAME_DEFAULT	"192.168.10.12"
-//#define QTB_SERVERNAME_DEFAULT	""
-#else // defined(QTB_DEV_TOUCHPANEL)
-//#define QTB_SERVERNAME_DEFAULT	"mcz.world.idol.jp"
+//#define QTB_SERVERNAME_DEFAULT	"192.168.10.12"
 #define QTB_SERVERNAME_DEFAULT	""
-#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for serverNameListSize
 #define QTB_SERVERNAMELISTSIZE			"serverNameListSize"
@@ -278,7 +273,7 @@ typedef enum {
 
 // for onCheckUpdateAtBootup
 #define QTB_ONCHECKUPDATEATBOOTUP				"onCheckUpdateAtBootup"
-#define QTB_ONCHECKUPDATEATBOOTUP_DEFAULT		false
+#define QTB_ONCHECKUPDATEATBOOTUP_DEFAULT		true
 
 // for onConfirmAtExit
 #define QTB_ONCONFIRMATEXIT				"onConfirmAtExit"
@@ -362,7 +357,11 @@ typedef enum {
 
 // for onTransferFileSupport
 #define QTB_ONTRANSFERFILESUPPORT			"onTransferFileSupport"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONTRANSFERFILESUPPORT_DEFAULT	false
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONTRANSFERFILESUPPORT_DEFAULT	true
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowTotalProgressForTransferFile
 #define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE			"onShowTotalProgressForTransferFile"

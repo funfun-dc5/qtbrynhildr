@@ -43,15 +43,15 @@ SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
 void SK::pressedKey(ID_KEY id)
 {
   SoftwareKeyboard::pressedKey(id);
+  if (id == ID_KEY_Fn){
+	qtbrynhildr->toggleSoftwareKeyboard();
+  }
 }
 
 // released key
 void SK::releasedKey(ID_KEY id)
 {
   SoftwareKeyboard::releasedKey(id);
-  if (id == ID_KEY_Fn){
-	qtbrynhildr->toggleSoftwareKeyboard();
-  }
 }
 
 // key down
@@ -86,29 +86,22 @@ bool SK::event(QEvent *event)
   case QEvent::TouchUpdate:
   case QEvent::TouchEnd:
 	{
-	  if (outputLog){
-		qDebug() << "event type  = " << event->type();
-	  }
-
 	  QTouchEvent *touchEvent = (QTouchEvent*)event;
 	  if (outputLog){
+		qDebug() << "event type  = " << event->type();
 		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
 	  }
 
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
-	  if (touchPoints.count() == 1){
-		// 1 finger
-		if (outputLog){
-		  qDebug() << "== 1 Point == ";
-		}
+	  int touchPointCount = touchPoints.count();
+	  if (touchPointCount == 1){ // 1 finger
+
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
-		if (outputLog){
-		  qDebug() << "pos = " << touchPoint.pos();
-		}
-		//		break; // to QGraphicsView::viewportEvent(event)
-		if(touchEvent->touchPointStates() == Qt::TouchPointPressed){
+
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 		  if (outputLog){
-			qDebug() << "Pressed";
+			qDebug() << "SK: 1 Pressed!";
+			qDebug() << "pos = " << touchPoint.pos().toPoint();
 		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.pos(),
@@ -117,14 +110,13 @@ bool SK::event(QEvent *event)
 												  Qt::NoModifier);
 		  // left mouse button press
 		  mousePressEvent(newEvent);
+
+		  delete newEvent;
 		}
-		else if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 		  if (outputLog){
-			qDebug() << "Released";
-		  }
-		  // tap
-		  if (outputLog){
-			qDebug() << "TAP";
+			qDebug() << "SK: 1 Released!";
+			qDebug() << "pos = " << touchPoint.pos().toPoint();
 		  }
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 												  touchPoint.pos(),
@@ -133,26 +125,32 @@ bool SK::event(QEvent *event)
 												  Qt::NoModifier);
 		  // left mouse button release
 		  mouseReleaseEvent(newEvent);
+
+		  delete newEvent;
 		}
-		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 		  if (outputLog){
-			qDebug() << "Moved:SK";
+			qDebug() << "SK: 1 Moved!";
+			qDebug() << "pos = " << touchPoint.pos().toPoint();
 		  }
-		  const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
 		  // move mouse cursor
-		  QPoint pos = touchPoint.pos().toPoint();
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
-												  pos,
+												  touchPoint.pos(),
 												  Qt::NoButton,
 												  Qt::NoButton,
 												  Qt::NoModifier);
 
 		  // move
 		  mouseMoveEvent(newEvent);
+
+		  delete newEvent;
 		}
 	  }
-	  else if (touchPoints.count() == 2){
-		// 2 fingers
+	  else if (touchPointCount == 2){ // 2 fingers
+		// Nothing to do
+	  }
+	  else { // touchPointCount >= 3 fingers
+		// Nothing to do
 	  }
 	  return true;
 	}

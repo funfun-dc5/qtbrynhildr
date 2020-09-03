@@ -54,7 +54,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_TEST_CODE
   ,onDrawing(true)
    //,image(new QImage)
-  ,onClearDesktop(false)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
@@ -341,9 +340,6 @@ void GraphicsThread::connectedToServer()
   // reset frame counter
   frameCounter.reset();
 
-  // reset frame controller
-  frameController.reset();
-
   // set decoder for MODE7 (VP8)
   decoderMode7 = decoderMode7Map.value(settings->getSIMDOperationTypeName());
 #if 0 // for TEST
@@ -354,6 +350,9 @@ void GraphicsThread::connectedToServer()
 	qDebug() << "decoderMode7 == 0 for " << settings->getSIMDOperationTypeName();
   }
 #endif // 0 // for TEST
+
+  // initialize for yuv, rgb
+  initYUV2RGB();
 
   NetThread::connectedToServer();
 }
@@ -416,10 +415,12 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	else if (mode == VIDEO_MODE_COMPRESS){
 	  decoder = decoderMode7;
 	}
-  }
+	// save current mode
+	video_mode = mode;
 
-  // record the start time of decode
-  frameController.startDecode();
+	QString str = "Decoder : " + QString(decoder->name());
+	emit outputLogMessage(PHASE_GRAPHICS, str);
+  }
 
   // pre-process
   decoder->preprocess(buf, size);
@@ -434,10 +435,15 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 
   // draw graphics
   if (settings->getOnGraphics()){
-	// clear desktop flag clear
-	onClearDesktop = false;
+	// adjust frame time
+	//adjustFrame();
 
-	if (frameController.adjust(com_data->frame_no, settings->getFrameInterval())){
+	// check frame skip
+	if (doSkipFrame(com_data->frame_no)){
+	  // skip this frame
+	}
+	else {
+	  // draw this frame
 	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
 
 #if QTB_BENCHMARK
@@ -469,15 +475,9 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		emit drawDesktop(*image);
 	  }
 	}
-	// record the end time of decode
-	frameController.endDecode();
-  }
-  else {
-	// clear desktop only at once
-	if (!onClearDesktop){
-	  onClearDesktop = true;
-	  emit clearDesktop();
-	}
+
+	// save frame_no of client
+	frameNoOfClient = com_data->frame_no;
   }
 }
 
@@ -519,50 +519,48 @@ void GraphicsThread::rescaleDesktopImage(QImage *image)
   }
 
   // rescale
-  if (QTB_DESKTOP_IMAGE_SCALING){
-	switch (settings->getDesktopScalingType()){
-	case DESKTOPSCALING_TYPE_ON_SERVER:
-	  if (settings->getDesktopScalingFactor() > 1.0){
-		// scale up
-		currentSize = getSizeForCurrentMode(image->size() * settings->getDesktopScalingFactor());
-		*image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-	  }
-	  break;
-	case DESKTOPSCALING_TYPE_ON_CLIENT:
-	  {
-		qreal scalingFactor = getDesktopScalingFactor(currentSize);
-		if (!isSameSize){
-		  // recalculate scaling factor
-		  qreal widthRate = (qreal)previousSize.width()/currentSize.width();
-		  qreal heightRate = (qreal)previousSize.height()/currentSize.height();
-		  if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_SINGLE_TO_ALL){
-			scalingFactor = widthRate < heightRate ? widthRate : heightRate;
-		  }
-		  else if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_ALL_TO_SINGLE){
-			scalingFactor = widthRate > heightRate ? widthRate : heightRate;
-		  }
-		  // flag clear
-		  settings->setMonitorChangeType(MONITOR_CHANGE_TYPE_NONE);
-		}
-		if (scalingFactor != 1.0){
-		  // scale
-		  currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
-#if !QTB_NEW_DESKTOPWINDOW
-		  *image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
-		  //*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
-		  //*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-#endif // !QTB_NEW_DESKTOPWINDOW
-		}
-		// save scaling factor
-		if (scalingFactor != settings->getDesktopScalingFactor()){
-		  settings->setDesktopScalingFactor(scalingFactor);
-		}
-	  }
-	  break;
-	default:
-	  // unknown scaling type
-	  break;
+  switch (settings->getDesktopScalingType()){
+  case DESKTOPSCALING_TYPE_ON_SERVER:
+	if (settings->getDesktopScalingFactor() > 1.0){
+	  // scale up
+	  currentSize = getSizeForCurrentMode(image->size() * settings->getDesktopScalingFactor());
+	  *image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 	}
+	break;
+  case DESKTOPSCALING_TYPE_ON_CLIENT:
+	{
+	  qreal scalingFactor = getDesktopScalingFactor(currentSize);
+	  if (!isSameSize){
+		// recalculate scaling factor
+		qreal widthRate = (qreal)previousSize.width()/currentSize.width();
+		qreal heightRate = (qreal)previousSize.height()/currentSize.height();
+		if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_SINGLE_TO_ALL){
+		  scalingFactor = widthRate < heightRate ? widthRate : heightRate;
+		}
+		else if (settings->getMonitorChangeType() == MONITOR_CHANGE_TYPE_ALL_TO_SINGLE){
+		  scalingFactor = widthRate > heightRate ? widthRate : heightRate;
+		}
+		// flag clear
+		settings->setMonitorChangeType(MONITOR_CHANGE_TYPE_NONE);
+	  }
+	  if (scalingFactor != 1.0){
+		// scale
+		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
+#if !QTB_NEW_DESKTOPWINDOW
+		*image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
+		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+#endif // !QTB_NEW_DESKTOPWINDOW
+	  }
+	  // save scaling factor
+	  if (scalingFactor != settings->getDesktopScalingFactor()){
+		settings->setDesktopScalingFactor(scalingFactor);
+	  }
+	}
+	break;
+  default:
+	// unknown scaling type
+	break;
   }
 
   // capture desktop image (rescaled size)
@@ -650,6 +648,44 @@ qreal GraphicsThread::getDesktopScalingFactor(QSize size)
   }
 
   return scalingFactor;
+}
+
+// adjust frame
+// void GraphicsThread::adjustFrame()
+// {
+// }
+
+// check skip frame
+bool GraphicsThread::doSkipFrame(char frame_no)
+{
+  //cout << "[" << name << "] frame_no : " << (int)(uchar)frame_no << endl << flush;
+
+  int currentFrameNo = (uchar)frame_no;
+
+  if (currentFrameNo % 2 == 0)
+	// NOT skip frame
+	return false;
+
+  // check skip frame
+  int frameNo = frameNoOfServer;
+  //cout << "frameNo : " << frameNo << endl << flush;
+  //cout << "currentFrameNo : " << currentFrameNo << endl << flush;
+  if (frameNo < currentFrameNo){
+	 frameNo += 255;
+  }
+
+  int delay = frameNo - currentFrameNo;
+  int threshold = settings->getFrameRate() >> 3;
+
+  if (delay > threshold){
+	// need skip frame
+	//cout << "doSkipFrame! delay =  " << delay << endl << flush;
+	return true;
+  }
+  else {
+	// no need skip frame
+	return false;
+  }
 }
 
 } // end of namespace qtbrynhildr

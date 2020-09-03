@@ -7,7 +7,6 @@
 #include "common/common.h"
 
 // Qt Header
-#include <QDateTime>
 #include <QThread>
 
 // Windows Header
@@ -26,7 +25,7 @@
 
 // Local Header
 #include "logmessage.h"
-#include "mainwindow/desktoppanel.h"
+#include "protocols.h"
 #include "settings.h"
 
 namespace qtbrynhildr {

@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2017 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2017-2020 FunFun <fu.aba.dc5@gmail.com>
 
 // Common Header
 #include "common/common.h"
@@ -39,9 +39,8 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   setAttribute(Qt::WA_AcceptTouchEvents, true);
-#else // defined(QTB_DEV_TOUCHPANEL)
-  setMouseTracking(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
+  setMouseTracking(true);
   setRenderHint(QPainter::Antialiasing, false);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   //  setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
@@ -76,6 +75,7 @@ void GraphicsView::setScale(qreal scalingFactor)
 
   transform.scale(scalingFactor, scalingFactor);
   setTransform(transform);
+#if 0 // for TEST
   // get window size
   QSize windowSize = size();
   QSize desktopImageSize = settings->getDesktopImageSize();
@@ -88,7 +88,6 @@ void GraphicsView::setScale(qreal scalingFactor)
 	qDebug() << "currentDesktopSize = " << currentDesktopSize;
 	qDebug() << "diffSize = " << diffSize;
   }
-#if 0 // for TEST
 #if defined(QTB_DEV_TOUCHPANEL)
 #if 1
   //  verticalScrollBar()->setRange(1, diffSize.height()-1);
@@ -167,130 +166,214 @@ bool GraphicsView::viewportEvent(QEvent *event){
   case QEvent::TouchUpdate:
   case QEvent::TouchEnd:
 	{
-	  if (outputLog){
-		qDebug() << "event type  = " << event->type();
-	  }
 	  QTouchEvent *touchEvent = (QTouchEvent*)event;
 	  if (outputLog){
+		qDebug() << "event type  = " << event->type();
 		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
 	  }
 
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
-	  if (touchPoints.count() == 1){
-		// 1 finger
-		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
-		if (outputLog){
-		  qDebug() << "== 1 Point == ";
-		  qDebug() << "pos = " << touchPoint.pos();
+	  int touchPointCount = touchPoints.count();
+	  if (touchPointCount == 1){ // 1 finger
+		// check software panel
+		if (settings->getOnShowSoftwareButton()){
+		  // Nothing to do
+		  return true;
 		}
-		//		break; // to QGraphicsView::viewportEvent(event)
-		if(touchEvent->touchPointStates() == Qt::TouchPointReleased){
-		  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
-		  if (distance < 20){ // for TEST (Nexus7(2013):1920x1200)
-			// tap
+
+		// last position of mouse cursor
+		static QPointF lastPos;
+
+		// open software panel check flags
+		static bool inCheckingButtonOpen = false;
+		static bool inCheckingKeyboardOpen = false;
+		// for zoom
+		static bool inZooming = false;
+		static QDateTime pressTimeInZooming;
+
+		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
+
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
+		  if (outputLog){
+			qDebug() << "GV: 1 Pressed!";
+		  }
+		  if (softwareButtonRect.contains(touchPoint.pos().toPoint())){
 			if (outputLog){
-			  qDebug() << "TAP";
+			  qDebug() << "GV: into software button open area";
 			}
-			if (!settings->getOnShowSoftwareButton()){
-			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+			inCheckingButtonOpen = true;
+		  }
+		  else if (softwareKeyboardRect.contains(touchPoint.pos().toPoint())){
+			if (outputLog){
+			  qDebug() << "GV: into software keyboard open area";
+			}
+			inCheckingKeyboardOpen = true;
+		  }
+		  else if (inZooming){
+			// for release
+			pressTimeInZooming = QDateTime::currentDateTime();
+		  }
+		  else {
+			// move mouse cursor and press left button
+			qreal distance = QLineF(lastPos, touchPoint.pos()).length();
+			//qDebug() << "distance = " << distance;
+			if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+			  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+													   touchPoint.pos(),
+													   Qt::NoButton,
+													   Qt::NoButton,
+													   Qt::NoModifier);
+
+			  mouseMoveEvent(moveEvent);
+			  delete moveEvent;
+			  lastPos = touchPoint.pos();
+			}
+			QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
 													  touchPoint.pos(),
 													  Qt::LeftButton,
 													  Qt::LeftButton,
 													  Qt::NoModifier);
-			  // move + L mouse button
-			  mouseMoveEvent(newEvent);
-			  mousePressEvent(newEvent);
-			  mouseReleaseEvent(newEvent);
-			}
+
+			mousePressEvent(pressEvent);
+			delete pressEvent;
 		  }
-		  else {
+		}
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
+		  if (outputLog){
+			qDebug() << "GV: 1 Released!";
+		  }
+		  if (inCheckingButtonOpen || inCheckingKeyboardOpen){
+			// display software panel check
 			QPoint currentPos = touchPoint.pos().toPoint();
-			QPoint startPos = touchPoint.startPos().toPoint();
-			if (outputLog){
-			  qDebug() << "softwareButtonRect = " << softwareButtonRect;
-			  qDebug() << "softwareKeyboardRect = " << softwareKeyboardRect;
-			  qDebug() << "currentPos = " << currentPos;
-			  qDebug() << "startPos = " << startPos;
-			}
-			// show software button
-			if (softwareButtonRect.contains(startPos) &&
+			if (inCheckingButtonOpen &&
 				!softwareButtonRect.contains(currentPos, true)){
+			  // open software button
 			  qtbrynhildr->toggleSoftwareButton();
 			}
-			// show software keyboard
-			else if (softwareKeyboardRect.contains(startPos) &&
-					 !softwareKeyboardRect.contains(currentPos, true)){
+			if (inCheckingKeyboardOpen &&
+				!softwareKeyboardRect.contains(currentPos, true)){
+			  // open software keyboard
 			  qtbrynhildr->toggleSoftwareKeyboard();
 			}
 		  }
-		}
-		else if(touchEvent->touchPointStates() == Qt::TouchPointMoved){
-		  if (outputLog){
-			qDebug() << "Moved:GraphicsView";
+		  else if (inZooming){
+			// check tap
+			QDateTime currentTime = QDateTime::currentDateTime();
+			qint64 tapTime = pressTimeInZooming.msecsTo(currentTime);
+			if (tapTime < QTB_TOUCHPANEL_TAP_TIME_THRESHOLD){
+			  // tap
+			  // move mouse cursor and press left button and release left button
+			  qreal distance = QLineF(lastPos, touchPoint.pos()).length();
+			  //qDebug() << "distance = " << distance;
+			  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+				QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+														 touchPoint.pos(),
+														 Qt::NoButton,
+														 Qt::NoButton,
+														 Qt::NoModifier);
+
+				mouseMoveEvent(moveEvent);
+				delete moveEvent;
+				lastPos = touchPoint.pos();
+			  }
+			  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+														touchPoint.pos(),
+														Qt::LeftButton,
+														Qt::LeftButton,
+														Qt::NoModifier);
+
+			  mousePressEvent(pressEvent);
+			  delete pressEvent;
+
+			  // release left button
+			  QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+														  touchPoint.pos(),
+														  Qt::LeftButton,
+														  Qt::LeftButton,
+														  Qt::NoModifier);
+
+			  mouseReleaseEvent(releaseEvent);
+			  delete releaseEvent;
+			}
 		  }
-		  QPoint startPos = touchPoint.startPos().toPoint();
-		  QPoint currentPos = touchPoint.pos().toPoint();
-		  QPoint lastPos = touchPoint.lastPos().toPoint();
-		  // move mouse cursor
-		  if (softwareButtonRect.contains(startPos, true) ||
-			  softwareKeyboardRect.contains(startPos, true)){
+		  else {
+			// release left button
+			QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+														touchPoint.pos(),
+														Qt::LeftButton,
+														Qt::LeftButton,
+														Qt::NoModifier);
+
+			mouseReleaseEvent(releaseEvent);
+
+			delete releaseEvent;
+		  }
+
+		  // reset open software panel check flags
+		  inCheckingButtonOpen = false;
+		  inCheckingKeyboardOpen = false;
+		  inZooming = settings->getDesktopScalingFactor() > scalingFactorForFullScreen;
+		}
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
+		  if (outputLog){
+			qDebug() << "GV: 1 Moved!";
+		  }
+		  if (inCheckingButtonOpen || inCheckingKeyboardOpen){
 			// Nothing to do
 		  }
-		  else if (settings->getDesktopScalingFactor() <= scalingFactorForFullScreen){
-#if 1 // for TEST
-			if (!settings->getOnShowSoftwareButton()){
-			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
-													  touchPoint.pos(),
-													  Qt::LeftButton,
-													  Qt::LeftButton,
-													  Qt::NoModifier);
-			  // move
-			  mouseMoveEvent(newEvent);
-			}
-			else {
+		  else {
+			if (inZooming){
+			  // scroll graphics view
 			  QPoint currentPos = touchPoint.pos().toPoint();
 			  QPoint lastPos = touchPoint.lastPos().toPoint();
-			  QPoint move = currentPos - lastPos;
-			  if (outputLog){
-				qDebug() << "move = " << move;
-			  }
-			  mouseMoveRelatively(move);
+			  QPoint move = lastPos - currentPos;
+			  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
+			  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 			}
-#else // for TEST
-			QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
-													touchPoint.pos(),
-													Qt::LeftButton,
-													Qt::LeftButton,
-													Qt::NoModifier);
-			// move
-			mouseMoveEvent(newEvent);
-#endif // for TEST
-		  }
-		  // scroll desktop
-		  else {
-			QPoint move = lastPos - currentPos;
-			if (outputLog){
-			  qDebug() << "scroll move = " << move;
+			else {
+			  // move mouse cursor absolutely
+			  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+													   touchPoint.pos(),
+													   Qt::NoButton,
+													   Qt::NoButton,
+													   Qt::NoModifier);
+
+			  mouseMoveEvent(moveEvent);
+
+			  delete moveEvent;
 			}
-			horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
-			verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 		  }
 		}
 	  }
-	  else if (touchPoints.count() == 2){
-		// 2 fingers
-		if (outputLog){
-		  qDebug() << "== 2 Point == ";
+	  else if (touchPointCount == 2){ // 2 fingers
+		// check software panel
+		if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton()){
+		  // Nothing to do
+		  return true;
 		}
-		if (!(settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton())){
+
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
+		  if (outputLog){
+			qDebug() << "GV: 2 Pressed!";
+		  }
+		  // Nothing to do
+		}
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
+		  if (outputLog){
+			qDebug() << "GV: 2 Released!";
+		  }
+		  // Nothing to do
+		}
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
+		  if (outputLog){
+			qDebug() << "GV: 2 Moved!";
+		  }
+		  // change scaling factor
 		  const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
 		  const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
 		  qreal currentScalingFactor =
 			QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 			QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
-			if (outputLog){
-			  qDebug() << "currentScalingFactor = " << currentScalingFactor;
-			}
 		  if (currentScalingFactor < 1.0){
 			scalingFactor -= 0.02;
 		  }
@@ -299,16 +382,22 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  }
 		  settings->setDesktopScalingFactor(scalingFactor);
 		  scalingFactor = settings->getDesktopScalingFactor();
-		  if (outputLog){
-			qDebug() << "scalingFactor = " << scalingFactor;
-		  }
 		  setScale(scalingFactor);
 		}
 	  }
-	  else {
-		// others
-		if (outputLog){
-		  qDebug() << "== many Point == ";
+	  else { // touchPointCount >= 3 fingers
+		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
+		  // press
+		  //keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYDOWN); // Windows key press
+		}
+		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
+		  // press
+		  keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYDOWN); // Windows key press
+		  // release
+		  keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYUP); // Windows key release
+		}
+		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
+		  // Nothing to do
 		}
 	  }
 	  return true;
@@ -317,6 +406,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
   default:
 	break;
   }
+
   return QGraphicsView::viewportEvent(event);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -367,9 +457,6 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
   //  cout << "mouseDoubleClicEvent" << endl << flush;
-#if defined(QTB_DEV_TOUCHPANEL)
-  Q_UNUSED(event);
-#else // defined(QTB_DEV_TOUCHPANEL)
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -381,7 +468,6 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 											event->modifiers());
 	desktopPanel->mouseDoubleClickEvent(newEvent);
   }
-#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
@@ -403,24 +489,24 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
   }
 }
 
-#if defined(QTB_DEV_DESKTOP)
 void GraphicsView::wheelEvent(QWheelEvent *event)
 {
   //  cout << "wheelEvent" << endl << flush;
   desktopPanel->wheelEvent(event);
 }
-#endif // defined(QTB_DEV_DESKTOP)
 
 // keyboard event
 void GraphicsView::keyPressEvent(QKeyEvent *event)
 {
   //  cout << "keyPressEvent" << endl << flush;
+  //qDebug() << "KeyPress : " << event;
   desktopPanel->keyPressEvent(event);
 }
 
 void GraphicsView::keyReleaseEvent(QKeyEvent *event)
 {
   //  cout << "keyReleaseEvent" << endl << flush;
+  //qDebug() << "KeyRelease : " << event;
   desktopPanel->keyReleaseEvent(event);
 }
 

@@ -15,7 +15,6 @@
 // Local Header
 #include "common/netthread.h"
 #include "decoder.h"
-#include "framecontroller.h"
 #include "framecounter.h"
 #include "graphicsbuffer.h"
 
@@ -53,9 +52,6 @@ private:
   // previous desktop size
   QSize previousSize;
 
-  // clear desktop flag
-  bool onClearDesktop;
-
 #if QTB_SIMD_SUPPORT
   // has SIMD instruction
   bool hasSIMDInstruction;
@@ -64,16 +60,11 @@ private:
   // local buffer
   char *buffer;
 
-  // frame controller
-  FrameController frameController;
-
   // decoders
   Decoder *decoderMode56;	// for MODE5/6
   Decoder *decoderMode7;	// for MODE7
-#if QTB_SIMD_SUPPORT
   QMap <QString, Decoder*>decoderMode7Map;
   QStringList decoderMode7NameList;
-#endif // QTB_SIMD_SUPPORT
 
   // current decoder
   Decoder *decoder;
@@ -173,6 +164,12 @@ private:
 
   // get desktop scaling factor
   qreal getDesktopScalingFactor(QSize targetSize);
+
+  // adjust frame
+  //inline void adjustFrame();
+
+  // check skip frame
+  inline bool doSkipFrame(char frame_no);
 
   // get width for current MODE
   inline SIZE getWidthForCurrentMode(SIZE width)

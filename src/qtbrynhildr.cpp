@@ -74,6 +74,11 @@ int counter_control = 0;
 // counter for graphics
 int counter_graphics = 0;
 
+// frame_no of server
+int frameNoOfServer = 0;
+// frame_no of client
+int frameNoOfClient = 0;
+
 // date format
 const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
@@ -109,6 +114,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if QTB_DESKTOP_COMPRESS_MODE
   ,desktopCompressModeSubMenu(0)
 #endif // QTB_DESKTOP_COMPRESS_MODE
+#if defined(QTB_DEV_TOUCHPANEL)
+  ,decodeOptionSubMenu(0)
+#endif // defined(QTB_DEV_TOUCHPANEL)
   ,helpMenu(0)
 #if QTB_BENCHMARK
   ,benchmarkMenu(0)
@@ -204,6 +212,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,desktopCompressMode4_Action(0)
   ,desktopCompressMode8_Action(0)
 #endif // QTB_DESKTOP_COMPRESS_MODE
+#if defined(QTB_DEV_TOUCHPANEL)
+   // decode option for touchpanel
+  ,decodeOptionTypeCPP_Action(0)
+  ,decodeOptionTypeNEON_Action(0)
+  ,decodeOptionThread1_Action(0)
+  ,decodeOptionThread2_Action(0)
+  ,decodeOptionThread4_Action(0)
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #if QTB_PREFERENCE
   ,preferences_Action(0)
 #endif // QTB_PREFERENCE
@@ -378,9 +394,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_CRYPTGRAM
 
   // restore settings
-#if !defined(QTB_DEV_TOUCHPANEL) // for TEST
   readSettings();
-#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // open Log File
   if (!logMessage->openLogFile(settings->getLogFile())){
@@ -586,8 +600,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // Scroll Area
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  //scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  scrollArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  //scrollArea->setAlignment(Qt::AlignLeft | Qt::AlignTop);
   if (settings->getOnDesktopScaleFixed()){
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -625,6 +639,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // show or hide
   menuBar()->setVisible(settings->getOnShowMenuBar());
   statusBar()->setVisible(settings->getOnShowStatusBar());
+  statusBar()->setSizeGripEnabled(false);
   // save onShow* flags
   onShowMenuBar = settings->getOnShowMenuBar();
   onShowStatusBar = settings->getOnShowStatusBar();
@@ -642,9 +657,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   flags |= Qt::WindowSystemMenuHint;
   flags |= Qt::WindowCloseButtonHint;
   flags |= Qt::WindowMinimizeButtonHint;
+  flags &= ~Qt::WindowMaximizeButtonHint;
   if (settings->getOnFrameLessWindow()){
 	flags |= Qt::FramelessWindowHint;
   }
+  flags |= Qt::MSWindowsFixedSizeDialogHint;
   setWindowFlags(flags);
 
   // refresh window
@@ -987,12 +1004,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	popUpConnectToServer();
   }
 
+#if QTB_UPDATECHECK
   // check update
   if (settings->getOnCheckUpdateAtBootup()){
 	// check update
 	onCheckUpdateInBackground = true;
 	checkUpdate();
   }
+#endif // QTB_UPDATECHECK
 
   // for test mode
   disableDrawing_Action->setChecked(!graphicsThread->getOnDrawing());
@@ -2136,6 +2155,44 @@ void QtBrynhildr::createActions()
   connect(desktopCompressMode8_Action, SIGNAL(triggered()), this, SLOT(desktopCompressMode8()));
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  decodeOptionTypeCPP_Action = new QAction("C++", this);
+  decodeOptionTypeCPP_Action->setEnabled(true);
+  decodeOptionTypeCPP_Action->setCheckable(true);
+  decodeOptionTypeCPP_Action->setChecked(settings->getSIMDOperationTypeName() == "C++");
+  decodeOptionTypeCPP_Action->setStatusTip(tr("Decode Type : C++"));
+  connect(decodeOptionTypeCPP_Action, SIGNAL(triggered()), this, SLOT(decodeOptionTypeCPP()));
+
+  decodeOptionTypeNEON_Action = new QAction("NEON", this);
+  decodeOptionTypeNEON_Action->setEnabled(true);
+  decodeOptionTypeNEON_Action->setCheckable(true);
+  decodeOptionTypeNEON_Action->setChecked(settings->getSIMDOperationTypeName() == "NEON");
+  decodeOptionTypeNEON_Action->setStatusTip(tr("Decode Type : NEON"));
+  connect(decodeOptionTypeNEON_Action, SIGNAL(triggered()), this, SLOT(decodeOptionTypeNEON()));
+
+  decodeOptionThread1_Action = new QAction(tr("1 thread"), this);
+  decodeOptionThread1_Action->setEnabled(true);
+  decodeOptionThread1_Action->setCheckable(true);
+  decodeOptionThread1_Action->setChecked(settings->getConvertThreadCount() == 1);
+  decodeOptionThread1_Action->setStatusTip(tr("Decode Thread : 1 thread"));
+  connect(decodeOptionThread1_Action, SIGNAL(triggered()), this, SLOT(decodeOptionThread1()));
+
+  decodeOptionThread2_Action = new QAction(tr("2 threads"), this);
+  decodeOptionThread2_Action->setEnabled(true);
+  decodeOptionThread2_Action->setCheckable(true);
+  decodeOptionThread2_Action->setChecked(settings->getConvertThreadCount() == 2);
+  decodeOptionThread2_Action->setStatusTip(tr("Decode Thread : 2 threads"));
+  connect(decodeOptionThread2_Action, SIGNAL(triggered()), this, SLOT(decodeOptionThread2()));
+
+  decodeOptionThread4_Action = new QAction(tr("4 threads"), this);
+  decodeOptionThread4_Action->setEnabled(true);
+  decodeOptionThread4_Action->setCheckable(true);
+  decodeOptionThread4_Action->setChecked(settings->getConvertThreadCount() == 4);
+  decodeOptionThread4_Action->setStatusTip(tr("Decode Thread : 4 threads"));
+  connect(decodeOptionThread4_Action, SIGNAL(triggered()), this, SLOT(decodeOptionThread4()));
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if QTB_PREFERENCE
   // preferences
   preferences_Action = new QAction(tr("Preferences..."), this);
@@ -2222,12 +2279,18 @@ void QtBrynhildr::createMenus()
 #if 0 // for TEST
   displayMenu->addAction(showMenuBar_Action);
 #endif // if 1
+#if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
+#endif // defined(QTB_DEV_DESKTOP)
+#if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showFrameRate_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // software keyboard and button
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#if defined(QTB_DEV_DESKTOP)
   displayMenu->addSeparator();
+#endif // defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showSoftwareButton_Action);
   displayMenu->addAction(showSoftwareKeyboard_Action);
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -2326,6 +2389,7 @@ void QtBrynhildr::createMenus()
   sendKeySubMenu->addAction(sendKey5_Action);
   sendKeySubMenu->addAction(sendKey6_Action);
 
+#if defined(QTB_DEV_DESKTOP)
   // for select monitor
   selectMonitorNoSubMenu = controlMenu->addMenu(tr("Select Monitor"));
   selectMonitorNoSubMenu->addAction(selectMonitorNo1_Action);
@@ -2338,12 +2402,15 @@ void QtBrynhildr::createMenus()
   selectMonitorNoSubMenu->addAction(selectMonitorNo8_Action);
   selectMonitorNoSubMenu->addAction(selectMonitorNo9_Action);
   selectMonitorNoSubMenu->addAction(selectMonitorNoAll_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
+#if defined(QTB_DEV_DESKTOP)
   // for control
   controlMenu->addSeparator();
   controlMenu->addAction(onControl_Action);
   controlMenu->addAction(onGraphics_Action);
   controlMenu->addAction(onSound_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // for select publicmode version
   controlMenu->addSeparator();
@@ -2363,11 +2430,11 @@ void QtBrynhildr::createMenus()
   recordAndReplaySubMenu->addAction(stopReplayRecordingControl_Action);
 #endif // QTB_RECORDER
 
-#if QTB_PLUGINS_DISABLE_SUPPORT
+#if QTB_PLUGINS_DISABLE_SUPPORT && defined(QTB_DEV_DESKTOP)
   // for plugins disable
   controlMenu->addSeparator();
   controlMenu->addAction(onPluginsDisable_Action);
-#endif // QTB_PLUGINS_DISABLE_SUPPORT
+#endif // QTB_PLUGINS_DISABLE_SUPPORT && defined(QTB_DEV_DESKTOP)
 
   // option menu
   optionMenu = menuBar()->addMenu(tr("Option"));
@@ -2387,6 +2454,26 @@ void QtBrynhildr::createMenus()
   optionMenu->addSeparator();
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option
+  decodeOptionSubMenu = optionMenu->addMenu(tr("Decode Option"));
+  decodeOptionTypeSubMenu = decodeOptionSubMenu->addMenu(tr("Type"));
+  decodeOptionTypeSubMenu->addAction(decodeOptionTypeCPP_Action);
+  decodeOptionTypeSubMenu->addAction(decodeOptionTypeNEON_Action);
+
+  decodeOptionThreadSubMenu = decodeOptionSubMenu->addMenu(tr("Thread"));
+  decodeOptionThreadSubMenu->addAction(decodeOptionThread1_Action);
+  decodeOptionThreadSubMenu->addAction(decodeOptionThread2_Action);
+  decodeOptionThreadSubMenu->addAction(decodeOptionThread4_Action);
+
+  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	decodeOptionSubMenu->setEnabled(true);
+  }
+  else {
+	decodeOptionSubMenu->setEnabled(false);
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   if (QTB_SCROLL_MODE){
 	optionMenu->addAction(onScrollMode_Action);
   }
@@ -2402,9 +2489,11 @@ void QtBrynhildr::createMenus()
   touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeQtBrynhildr_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
+#if defined(QTB_DEV_DESKTOP)
   optionMenu->addSeparator();
   optionMenu->addAction(outputKeyboardLog_Action);
   optionMenu->addAction(outputLog_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 
   // in testing sub menu
   if (QTB_IN_TESTING){
@@ -2582,7 +2671,7 @@ void QtBrynhildr::updateFrameRate()
 	  currentDataRate = 0;
 	}
 	if (settings->getOnShowFrameRate()){ // Status Bar
-	  QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps]").
+	  QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps] ").
 		arg(currentFrameRate, 3).
 		arg(currentDataRate, 4, 'f', 1, ' ');
 	  frameRateLabel->setText(str);
@@ -2606,7 +2695,7 @@ void QtBrynhildr::updateFrameRate()
 	  currentFrameRate = 0;
 	  currentDataRate = 0;
 	}
-	QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps]").
+	QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps] ").
 	  arg(currentFrameRate, 3).
 	  arg(currentDataRate, 4, 'f', 1, ' ');
 	frameRateLabel->setText(str);
@@ -2721,6 +2810,11 @@ void QtBrynhildr::connected()
   }
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  decodeOptionSubMenu->setEnabled(false);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // reset total frame counter
   totalFrameCounter = 0;
 
@@ -2829,6 +2923,16 @@ void QtBrynhildr::disconnected()
 #endif // QTB_NEW_DESKTOPWINDOW
   }
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
+	decodeOptionSubMenu->setEnabled(true);
+  }
+  else {
+	decodeOptionSubMenu->setEnabled(false);
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if QTB_PLUGINS_DISABLE_SUPPORT
   // plugins disable
   settings->setOnPluginsDisable(false);
@@ -2876,8 +2980,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	height = desktopPanel->getSize().height();
   }
 
-  int desktopWidth = desktopImageSize.width();
-  int desktopHeight = desktopImageSize.height();
+  int desktopWidth = settings->getDesktopWidth();
+  int desktopHeight = settings->getDesktopHeight();
   qreal widthFactor = (qreal)width/desktopWidth;
   qreal heightFactor = (qreal)height/desktopHeight;
   if (widthFactor < heightFactor){
@@ -2886,6 +2990,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   else {
 	settings->setDesktopScalingFactor(heightFactor);
   }
+  //cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << endl << flush;
 }
 
 #if 0 // for TEST
@@ -2917,30 +3022,12 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
   //cout << "resizeEvent()" << endl << flush;
 
 #if !QTB_NEW_DESKTOPWINDOW
-#if 1 // for TEST
   // rescaling desktop
-  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_CLIENT){
 #if 0 // for TEST
-	cout << "resizeEvent() : Rescaling for (width, height) = ("
-		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
-#endif // for TEST
-	setDesktopScalingFactor(event->size());
-  }
-#if 0 // for TEST
-  else {
-	cout << "resizeEvent() : Rescaling for (width, height) = ("
-		 << event->size().width() << "," << event->size().height() << ")" << endl << flush;
-	//setDesktopScalingFactor(event->size());
-  }
-#endif // for TEST
-#else // 0 // for TEST
-  // rescaling desktop
-#if 1 // for TEST
   cout << "resizeEvent() : Rescaling for (width, height) = ("
 	   << event->size().width() << "," << event->size().height() << ")" << endl << flush;
 #endif // for TEST
-  setDesktopScalingFactor(event->size());
-#endif // 0 // for TEST
+  //setDesktopScalingFactor(event->size());
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // resize software keyboard/button
@@ -3093,6 +3180,7 @@ void QtBrynhildr::popUpConnectToServer()
   connectToServerDialog->show();
 }
 
+#if QTB_UPDATECHECK
 // check update
 void QtBrynhildr::checkUpdate()
 {
@@ -3107,6 +3195,7 @@ void QtBrynhildr::checkUpdate()
 
   //  cout << "leave checkUpdate()" << endl << flush;
 }
+#endif // QTB_UPDATECHECK
 
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()
@@ -3686,24 +3775,15 @@ void QtBrynhildr::toggleOnControl()
 // toggle onGraphics
 void QtBrynhildr::toggleOnGraphics()
 {
-  static unsigned int originalFrameRate = 0;
   bool flag = !settings->getOnGraphics();
 
-  if (flag){ // Off -> On
-	// restore framerate
-	settings->setFrameRate(originalFrameRate);
-  }
-  else { // On -> Off
+  if (!flag){ // On -> Off
 	// onControl Off
 	if (settings->getOnControlOffWithGraphicsOff()){
 	  settings->setOnControl(false);
 	  onControl = false;
 	  onControl_Action->setChecked(false);
 	}
-
-	// change framerate to 5
-	originalFrameRate = settings->getFrameRate();
-	settings->setFrameRate(5);
   }
 
   settings->setOnGraphics(flag);
@@ -3841,7 +3921,9 @@ void QtBrynhildr::refreshOtherMenu()
   // enable/disable menu for control
   flag = settings->getOnControl();
   sendKeySubMenu->setEnabled(flag);
+#if defined(QTB_DEV_DESKTOP)
   selectMonitorNoSubMenu->setEnabled(flag);
+#endif // defined(QTB_DEV_DESKTOP)
   selectPublicModeVersionSubMenu->setEnabled(flag);
 #if QTB_RECORDER
   recordAndReplaySubMenu->setEnabled(flag);
@@ -3850,7 +3932,9 @@ void QtBrynhildr::refreshOtherMenu()
   // enable/disable menu for graphics
   flag = settings->getOnGraphics();
   videoMenu->setEnabled(flag);
+#if QTB_DESKTOP_COMPRESS_MODE
   desktopCompressModeSubMenu->setEnabled(flag);
+#endif // QTB_DESKTOP_COMPRESS_MODE
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action->setEnabled(flag);
   }
@@ -4205,6 +4289,8 @@ void QtBrynhildr::fullScreen()
   cout << "fullScreen() : height = " << size.height() << endl << flush;
 #endif
 
+  static qreal originalScalingFactor = 1.0;
+
   fullScreenMode = !fullScreenMode;
   if (fullScreenMode){
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -4223,7 +4309,10 @@ void QtBrynhildr::fullScreen()
 	showFullScreen();
 	//cout << "size(width, height) = ("
 	//	 << size().width() << "," << size().height() << ")" << endl << flush;
-	setDesktopScalingFactor(size());
+	//setDesktopScalingFactor(size());
+	originalScalingFactor = settings->getDesktopScalingFactor();
+	QSize size = settings->getDesktop()->getCurrentScreen().size();
+	setDesktopScalingFactor(size);
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -4242,7 +4331,8 @@ void QtBrynhildr::fullScreen()
 	showNormal();
 	//cout << "size(width, height) = ("
 	//	 << size().width() << "," << size().height() << ")" << endl << flush;
-	setDesktopScalingFactor(size());
+	//setDesktopScalingFactor(size());
+	settings->setDesktopScalingFactor(originalScalingFactor);
   }
   // set checked flag
 #if defined(QTB_DEV_DESKTOP)
@@ -4756,6 +4846,48 @@ void QtBrynhildr::desktopCompressMode8()
 }
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+// decode type
+void QtBrynhildr::decodeOptionTypeCPP()
+{
+  settings->setSIMDOperationTypeName("C++");
+
+  decodeOptionTypeCPP_Action->setChecked(true);
+  decodeOptionTypeNEON_Action->setChecked(false);
+}
+void QtBrynhildr::decodeOptionTypeNEON()
+{
+  settings->setSIMDOperationTypeName("NEON");
+
+  decodeOptionTypeCPP_Action->setChecked(false);
+  decodeOptionTypeNEON_Action->setChecked(true);
+}
+void QtBrynhildr::decodeOptionThread1()
+{
+  settings->setConvertThreadCount(1);
+
+  decodeOptionThread1_Action->setChecked(true);
+  decodeOptionThread2_Action->setChecked(false);
+  decodeOptionThread4_Action->setChecked(false);
+}
+void QtBrynhildr::decodeOptionThread2()
+{
+  settings->setConvertThreadCount(2);
+
+  decodeOptionThread1_Action->setChecked(false);
+  decodeOptionThread2_Action->setChecked(true);
+  decodeOptionThread4_Action->setChecked(false);
+}
+void QtBrynhildr::decodeOptionThread4()
+{
+  settings->setConvertThreadCount(4);
+
+  decodeOptionThread1_Action->setChecked(false);
+  decodeOptionThread2_Action->setChecked(false);
+  decodeOptionThread4_Action->setChecked(true);
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 // disable drawing
 void QtBrynhildr::disableDrawing()
 {
@@ -4914,6 +5046,7 @@ bool QtBrynhildr::shutdownPlatform()
 }
 #endif // defined(QTB_NET_UNIX)
 
+#if QTB_UPDATECHECK
 // finished download
 void QtBrynhildr::finishedDownload()
 {
@@ -5014,6 +5147,7 @@ void QtBrynhildr::finishedDownload()
   // clear memory
   httpGetter->clear();
 }
+#endif // QTB_UPDATECHECK
 
 void QtBrynhildr::timerExpired()
 {

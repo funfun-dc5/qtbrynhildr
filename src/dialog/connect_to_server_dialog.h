@@ -46,6 +46,11 @@ private:
   QCompleter *completer;
 #endif // QTB_AUTO_COMPLETE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // current server name list index
+  int serverNameListIndex;
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // output log flag
   bool outputLog;
 
@@ -66,6 +71,12 @@ public:
 
   // set keyboard type
   void setKeyboardType(KEYBOARD_TYPE keyboardType);
+
+#if defined(QTB_DEV_TOUCHPANEL)
+protected:
+  // event
+  bool event(QEvent *event);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 private:
   // resettings for dialog

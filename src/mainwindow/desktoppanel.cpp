@@ -9,6 +9,10 @@
 #include <unistd.h>
 #endif // defined(QTB_NET_UNIX)
 
+// #if defined(Q_OS_WIN)
+// #include <windows.h>
+// #endif // defined(Q_OS_WIN)
+
 // Qt Header
 #include <QDateTime>
 #include <QKeyEvent>
@@ -96,6 +100,13 @@ KeyBuffer *DesktopPanel::getKeyBuffer() const
 MouseBuffer *DesktopPanel::getMouseBuffer() const
 {
   return mouseBuffer;
+}
+
+// set mouse position
+void DesktopPanel::setMousePos(POS x, POS y)
+{
+  currentMousePos.setX(x);
+  currentMousePos.setY(y);
 }
 
 // reflesh desktop window
@@ -543,7 +554,7 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
   if (outputLogForKeyboard){
 	qDebug() << "[DesktopPanel]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Press   : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
-	  ":" << hex << VK_Code;
+	  ":" << QTextStream_hex << VK_Code;
   }
 
   // on Scroll Mode
@@ -568,7 +579,7 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	  if (settings->getOutputKeyboardLog()){
 		(*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
 								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
-								 << " => Sent" << endl << flush;
+								 << " => Sent" << QTextStream_endl << QTextStream_flush;
 	  }
 	}
 
@@ -578,7 +589,7 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	if (settings->getOutputKeyboardLog()){
 	  (*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
 							   << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
-							   << " => Sent" << endl << flush;
+							   << " => Sent" << QTextStream_endl << QTextStream_flush;
 	}
 
 	// set shift key status
@@ -612,14 +623,14 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
   if (outputLogForKeyboard){
 	qDebug() << "[DesktopPanel]" << eventConverter->getEventConverterName() << // for DEBUG
 	  ": Release : VK_Code =" << eventConverter->getVKCodeByString(VK_Code) <<
-	  ":" << hex << VK_Code;
+	  ":" << QTextStream_hex << VK_Code;
   }
 
   // output Keyboard Log
   if (settings->getOutputKeyboardLog()){
 	(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
 							 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
-							 << " => Sent" << endl << flush;
+							 << " => Sent" << QTextStream_endl << QTextStream_flush;
   }
 
   // on Scroll Mode
@@ -664,7 +675,7 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 	  if (settings->getOutputKeyboardLog()){
 		(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
 								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
-								 << " => Sent" << endl << flush;
+								 << " => Sent" << QTextStream_endl << QTextStream_flush;
 	  }
 	}
 

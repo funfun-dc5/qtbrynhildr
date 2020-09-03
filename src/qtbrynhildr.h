@@ -98,6 +98,12 @@ extern int counter_control;
 // counter for graphics
 extern int counter_graphics;
 
+// frame_no of server
+extern int frameNoOfServer;
+// frame_no of client
+extern int frameNoOfClient;
+
+
 // QtBrynhildr
 class QtBrynhildr : public QMainWindow
 {
@@ -184,6 +190,13 @@ private:
   // Desktop Compress Mode Sub Menu
   QMenu *desktopCompressModeSubMenu;
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  QMenu *decodeOptionSubMenu;
+  QMenu *decodeOptionTypeSubMenu;
+  QMenu *decodeOptionThreadSubMenu;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // Help Menu
   QMenu *helpMenu;
@@ -381,6 +394,15 @@ private:
   QAction *desktopCompressMode4_Action;
   QAction *desktopCompressMode8_Action;
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode option for touchpanel
+  QAction *decodeOptionTypeCPP_Action;
+  QAction *decodeOptionTypeNEON_Action;
+  QAction *decodeOptionThread1_Action;
+  QAction *decodeOptionThread2_Action;
+  QAction *decodeOptionThread4_Action;
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_PREFERENCE
   // preferences
@@ -727,8 +749,10 @@ private slots:
   // about dialog
   void about();
 
+#if QTB_UPDATECHECK
   // check update
   void checkUpdate();
+#endif // QTB_UPDATECHECK
 
   // exit from QtBynhildr
   void exit();
@@ -917,6 +941,15 @@ private slots:
   void desktopCompressMode8();
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // decode type
+  void decodeOptionTypeCPP();
+  void decodeOptionTypeNEON();
+  void decodeOptionThread1();
+  void decodeOptionThread2();
+  void decodeOptionThread4();
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // disable drawing
   void disableDrawing();
 
@@ -1025,8 +1058,10 @@ private:
 #endif // 0 // for TEST
 
 private slots:
+#if QTB_UPDATECHECK
   // finished download
   void finishedDownload();
+#endif // QTB_UPDATECHECK
 
   void timerExpired();
 

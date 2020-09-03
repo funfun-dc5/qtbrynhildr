@@ -32,7 +32,7 @@ DEFINES += QTB_LITTLE_ENDIAN
 # message($$QMAKESPEC)
 
 # configuration for Qt Brynhildr
-#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter updatecheck gprof portable
+#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter recorder updatecheck gprof portable
 CONFIG += celt vp8 multi_thread_converter updatecheck
 
 # gprof
@@ -51,7 +51,7 @@ DEFINES += QTB_PORTABLE_VERSION=1
 # Windows (MinGW, MSVC)
 # ------------------------------------------------------------------------------
 win32 {
-CONFIG += desktop vp8-sse vp8-avx2
+CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += QWT_DLL PLATFORM_WINDOWS
 RC_ICONS = images/qtbrynhildr64.ico
 RC_FILE = resource/qtbrynhildr.rc
@@ -77,7 +77,7 @@ HEADERS += common/msvc.h
 # Linux/FreeBSD/Cygwin
 # ------------------------------------------------------------------------------
 linux-g++-64 | linux-g++ | freebsd-g++ | cygwin-g++ {
-CONFIG += desktop vp8-sse vp8-avx2
+CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_LINUX
 # NEON (RaspberryPi3)
 #CONFIG -= vp8-sse vp8-avx2
@@ -89,7 +89,7 @@ DEFINES += PLATFORM_LINUX
 # MacOSX
 # ------------------------------------------------------------------------------
 macx {
-CONFIG += desktop vp8-sse vp8-avx2
+CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
 }
@@ -100,10 +100,11 @@ ICON = images/qtbrynhildr.icns
 android-g++ | android-clang {
 TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
-DEFINES += PLATFORM_LINUX
+CONFIG -= updatecheck
+DEFINES += PLATFORM_LINUX QTB_ANDROID
 # cpufeatures library from android-ndk
-# HEADERS += util/android-ndk/cpu-features.h
-# SOURCES += util/android-ndk/cpu-features.c
+HEADERS += util/android-ndk/cpu-features.h
+SOURCES += util/android-ndk/cpu-features.c
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
@@ -115,6 +116,14 @@ DISTFILES += \
     $$PWD/../dist/android/res/drawable-xxhdpi/qtbrynhildr.png \
     $$PWD/../dist/android/res/mipmap/qtbrynhildr.png
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
+DISTFILES += \
+    $$PWD/../dist/android/build.gradle \
+    $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.jar \
+    $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.properties \
+    $$PWD/../dist/android/gradlew \
+    $$PWD/../dist/android/gradlew.bat
+# arm64
+#CONFIG += android64
 }
 
 # desktop/touchpanel
@@ -155,6 +164,11 @@ else:celt {
 LIBS += -lcelt
 }
 
+android64:celt {
+LIBS -= -lcelt_android_armv7
+LIBS += -lcelt_android_aarch64
+}
+
 # VP8
 vp8 {
 INCLUDEPATH += ../libs/vpx
@@ -174,6 +188,11 @@ LIBS += -lvpx_android_armv7
 }
 else:vp8 {
 LIBS += -lvpx
+}
+
+android64:vp8 {
+LIBS -= -lvpx_android_armv7
+LIBS += -lvpx_android_aarch64
 }
 
 # VP8-AVX2
@@ -236,6 +255,10 @@ DEFINES += QTB_SIMD_SUPPORT=1
 QMAKE_CXXFLAGS += -mfpu=neon
 }
 
+android64:vp8-neon {
+QMAKE_CXXFLAGS -= -mfpu=neon
+}
+
 # multi thread converter
 multi_thread_converter {
 QT += concurrent
@@ -280,10 +303,24 @@ else {
 DEFINES += QTB_PREFERENCE=0
 }
 
+# recorder
+recorder {
+DEFINES += QTB_RECORDER=1
+HEADERS += function/recorder.h
+SOURCES += function/recorder.cpp
+}
+else {
+DEFINES += QTB_RECORDER=0
+}
+
 # update checker
 updatecheck {
+DEFINES += QTB_UPDATECHECK=1
 HEADERS += util/httpgetter.h
 SOURCES += util/httpgetter.cpp
+}
+else {
+DEFINES += QTB_UPDATECHECK=0
 }
 
 # input files
@@ -310,12 +347,10 @@ HEADERS += graphicsthread/graphicsthread.h
 HEADERS += graphicsthread/decoder.h
 HEADERS += graphicsthread/decoder_jpeg.h
 HEADERS += graphicsthread/framecounter.h
-HEADERS += graphicsthread/framecontroller.h
 HEADERS += soundthread/soundthread.h
 HEADERS += soundthread/soundbuffer.h
 HEADERS += soundthread/wave.h
 HEADERS += windows/eventconverter.h windows/ntfs.h windows/keycodes.h windows/keyevent.h
-HEADERS += function/recorder.h
 
 SOURCES += main.cpp
 SOURCES += qtbrynhildr.cpp
@@ -337,20 +372,11 @@ SOURCES += graphicsthread/graphicsthread.cpp
 SOURCES += graphicsthread/decoder.cpp
 SOURCES += graphicsthread/decoder_jpeg.cpp
 SOURCES += graphicsthread/framecounter.cpp
-SOURCES += graphicsthread/framecontroller.cpp
 SOURCES += soundthread/soundthread.cpp
 SOURCES += soundthread/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
-SOURCES += function/recorder.cpp
 
 # for new feature
 #CONFIG += new_feature
 new_feature {
 }
-
-DISTFILES += \
-    ../dist/android/build.gradle \
-    ../dist/android/gradle/wrapper/gradle-wrapper.jar \
-    ../dist/android/gradle/wrapper/gradle-wrapper.properties \
-    ../dist/android/gradlew \
-    ../dist/android/gradlew.bat

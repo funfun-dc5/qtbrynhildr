@@ -81,6 +81,9 @@ extern void uninitVPX();
 extern void decodeVPX(uchar *buffer, int size);
 #endif // !defined(BENCHMARK)
 
+// initialize for yuv, rgb
+extern void initYUV2RGB();
+
 // setup for yuv, rgb
 extern bool setup();
 
@@ -94,14 +97,14 @@ extern int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, u
 extern void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 
 #if QTB_SIMD_SUPPORT
-#if !defined(__ARM_NEON__)
+#if !(defined(__arm__) || defined(__aarch64__))
 // YUV convert to RGB (SIMD version)
 extern void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
-#else // !defined(__ARM_NEON__)
+#else // !(defined(__arm__) || defined(__aarch64__))
 extern void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
-#endif // !defined(__ARM_NEON__)
+#endif // !(defined(__arm__) || defined(__aarch64__))
 #endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr

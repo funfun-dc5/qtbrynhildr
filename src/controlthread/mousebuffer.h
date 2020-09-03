@@ -80,6 +80,9 @@ public:
   // set mouse position
   void setPos(MOUSE_POS pos);
 
+  // set mouse posittion
+  void setPos(POS x, POS y);
+
   // get mouse position
   MOUSE_POS getPos() const;
 };

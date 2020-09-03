@@ -11,6 +11,10 @@
 #include <iostream>
 #include <iomanip>
 
+// #if defined(Q_OS_WIN)
+// #include <windows.h>
+// #endif // defined(Q_OS_WIN)
+
 // Qt Header
 #include <QBitmap>
 #include <QByteArray>
@@ -297,6 +301,10 @@ PROCESS_RESULT ControlThread::processForHeader()
   // check result (mode)
   checkMode();
 
+  // save frame no of server
+  frameNoOfServer = (uchar)com_data->frame_no;
+  //cout << "[" << name << "] frameNoOfServer : " << frameNoOfServer << endl << flush;
+
   return PROCESS_SUCCEEDED;
 }
 
@@ -316,6 +324,12 @@ void ControlThread::connectedToServer()
   // reset counter
   counter_control = 0;
 
+  // save frame no of server
+  frameNoOfServer = 0;
+
+  // save frame no of client
+  frameNoOfClient = 0;
+
   // mouse position
   prevPos.x = -1;
   prevPos.y = -1;
@@ -324,6 +338,12 @@ void ControlThread::connectedToServer()
   keydownSHIFT	= KEYDOWN_OFF;
   keydownALT	= KEYDOWN_OFF;
   keydownCONTROL= KEYDOWN_OFF;
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // set initial mouse position
+  mouseBuffer->setPos(400, 400);
+  desktopPanel->setMousePos(400, 400);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   NetThread::connectedToServer();
 }
@@ -497,8 +517,16 @@ void ControlThread::initHeaderForGraphics()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	com_data->max_fps		= (char)settings->getFrameRate();
+	if (settings->getOnGraphics()){
+	  com_data->max_fps		= (char)settings->getFrameRate();
+	}
+	else {
+	  com_data->max_fps		= (char)1;
+	}
   }
+  // frame_no
+  com_data->frame_no = (char)frameNoOfClient;
+
   // zoom
   if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
 	  settings->getDesktopScalingFactor() < 1.0){
@@ -545,8 +573,15 @@ void ControlThread::initHeaderForGraphics()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	com_data->max_fps		= (char)settings->getFrameRate();
+	if (settings->getOnGraphics()){
+	  com_data->max_fps		= (char)settings->getFrameRate();
+	}
+	else {
+	  com_data->max_fps		= (char)1;
+	}
   }
+  // frame_no
+  com_data->frame_no = (char)frameNoOfClient;
 
   // image size and zoom
   SIZE imageWidth = settings->getDesktopWidth();
@@ -611,7 +646,12 @@ void ControlThread::initHeaderForGraphics_test()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	com_data->max_fps		= (char)settings->getFrameRate();
+	if (settings->getOnGraphics()){
+	  com_data->max_fps		= (char)settings->getFrameRate();
+	}
+	else {
+	  com_data->max_fps		= (char)1;
+	}
   }
   // zoom
   com_data->zoom = (ZOOM)1.0;
@@ -669,42 +709,33 @@ void ControlThread::setMouseControl()
   // setup mouse position
   MOUSE_POS pos = mouseBuffer->getPos();
   // if mouse cursor is moved.
-  if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
+  QSize windowSize = desktopPanel->getSize();
+  QSize desktopImageSize = settings->getDesktopImageSize();
+  if (!(windowSize.isValid() && desktopImageSize.isValid())){
+	// Nothing to do
+	com_data->mouse_move = MOUSE_MOVE_OFF;
+  }
+  else if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	// set information
 	com_data->mouse_move = MOUSE_MOVE_ON;
-	if (QTB_DESKTOP_IMAGE_SCALING){
-	  QSize windowSize = desktopPanel->getSize();
-	  QSize desktopImageSize = settings->getDesktopImageSize();
-	  if (!(windowSize.isValid() && desktopImageSize.isValid())){
-		// Nothing to do
-		com_data->mouse_move = MOUSE_MOVE_OFF;
+	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+	  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
+	  if (scalingFactor > 1.0){
+		com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width() * scalingFactor;
+		com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height() * scalingFactor;
 	  }
 	  else {
-		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
-		  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
-		  if (scalingFactor > 1.0){
-			com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width() * scalingFactor;
-			com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height() * scalingFactor;
-		  }
-		  else {
-			com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
-			com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
-		  }
-		}
-		else {
-		  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
-		  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
-		}
-		// set offset
-		com_data->mouse_x += settings->getDesktopOffsetX();
-		com_data->mouse_y += settings->getDesktopOffsetY();
+		com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
+		com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
 	  }
 	}
 	else {
-	  // set offset
-	  com_data->mouse_x = pos.x + settings->getDesktopOffsetX();
-	  com_data->mouse_y = pos.y + settings->getDesktopOffsetY();
+	  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
+	  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
 	}
+	// set offset
+	com_data->mouse_x += settings->getDesktopOffsetX();
+	com_data->mouse_y += settings->getDesktopOffsetY();
 #if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode
 	int desktopCompressMode = settings->getDesktopCompressMode();
@@ -717,7 +748,7 @@ void ControlThread::setMouseControl()
 	//cout << "com_data->mouse_x = " << com_data->mouse_x << endl;
 	//cout << "com_data->mouse_y = " << com_data->mouse_y << endl;
 
-	// save prevPos
+	// save pos
 	prevPos = pos;
   }
 }

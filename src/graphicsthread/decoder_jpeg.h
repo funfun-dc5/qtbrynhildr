@@ -35,7 +35,7 @@ public:
   // get decoder name
   const char* name()
   {
-	return "jpeg decoder";
+	return "JPEG";
   }
 
   // get suffix

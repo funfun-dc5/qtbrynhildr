@@ -7,7 +7,7 @@
 // version
 #define QTB_VERSION				"2.1.0"
 
-#define QTB_RCNAME				""
+#define QTB_RCNAME				"-viewermode"
 #define QTB_VERSION_NUMBER		210
 
 #if __x86_64__ || __LP64__ || _WIN64

@@ -33,4 +33,4 @@
 
 (4) Android版
 ^^^^^^^^^^^^^^
-  * Android 4.1以降
+  * Android 4.4以降

@@ -12,11 +12,13 @@ PATHLIST=
 #------------------
 QTVERSION=5.12.9
 VCVERSION=msvc2017
+MINGWVERSION=mingw73
 #------------------
 # Qt 5.15 -
 #------------------
-#QTVERSION=5.15.0
+#QTVERSION=5.15.1
 #VCVERSION=msvc2019
+#MINGWVERSION=mingw81
 
 case $UNAME in
 	CYGWIN*)
@@ -47,20 +49,12 @@ case $UNAME in
 		else
 			case $UNAMEM in
 			x86_64)
-				# Qt5.15 -
-#				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw81_64"
-#				MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw810_64"
-				# Qt 5.12 - 5.14
-				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw73_64"
-				MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw730_64"
+				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${MINGWVERSION}_64"
+				MINGWROOT="/opt/Qt${QTVERSION}/Tools/${MINGWVERSION}0_64"
 				;;
 			i686)
-				# Qt 5.15 -
-#				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw81_32"
-#				MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw810_32"
-				# Qt 5.12 - 5.14
-				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw73_32"
-				MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw730_32"
+				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${MINGWVERSION}_32"
+				MINGWROOT="/opt/Qt${QTVERSION}/Tools/${MINGWVERSION}0_32"
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

@@ -48,6 +48,7 @@ case $UNAME in
 	CYGWIN*)
 		if [ "$1" = "" ] ; then
 			mingw32-make clean
+			rm -f .qmake.stash
 			# delete executable file
 			rm -f "${APP}.exe"
 			rm -f "release/${APP}.exe" "debug/${APP}.exe"

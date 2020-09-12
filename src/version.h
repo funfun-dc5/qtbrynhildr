@@ -5,11 +5,10 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.1.1"
-
+#define QTB_VERSION				"2.1.2"
 
 #define QTB_RCNAME				"-viewermode"
-#define QTB_VERSION_NUMBER		211
+#define QTB_VERSION_NUMBER		212
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"

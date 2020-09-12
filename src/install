@@ -259,6 +259,8 @@ case $UNAME in
 			fi
 			VERSION=`"release/${APP}.exe" -vv`
 			# for windows
+			# remove all binary files
+			rm -rf ${DISTDIR}/bin
 			# create directory
 			mkdir -p ${DISTDIR}/bin
 			echo "copy DLL files..."

@@ -305,7 +305,6 @@ bool GraphicsView::viewportEvent(QEvent *event){
 														Qt::NoModifier);
 
 			mouseReleaseEvent(releaseEvent);
-
 			delete releaseEvent;
 		  }
 
@@ -331,16 +330,18 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 			}
 			else {
-			  // move mouse cursor absolutely
-			  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
-													   touchPoint.pos(),
-													   Qt::NoButton,
-													   Qt::NoButton,
-													   Qt::NoModifier);
-
-			  mouseMoveEvent(moveEvent);
-
-			  delete moveEvent;
+			  qreal distance = QLineF(lastPos, touchPoint.pos()).length();
+			  //qDebug() << "distance = " << distance;
+			  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+				QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+														 touchPoint.pos(),
+														 Qt::LeftButton,
+														 Qt::LeftButton,
+														 Qt::NoModifier);
+				mouseMoveEvent(moveEvent);
+				delete moveEvent;
+				lastPos = touchPoint.pos();
+			  }
 			}
 		  }
 		}

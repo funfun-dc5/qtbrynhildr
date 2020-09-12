@@ -339,7 +339,7 @@ void ControlThread::connectedToServer()
   keydownALT	= KEYDOWN_OFF;
   keydownCONTROL= KEYDOWN_OFF;
 
-#if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // defined(QTB_DEV_TOUCHPANEL)
   // set initial mouse position
   mouseBuffer->setPos(400, 400);
   desktopPanel->setMousePos(400, 400);

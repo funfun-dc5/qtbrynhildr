@@ -5,7 +5,7 @@
 #define AppExeName "Qt Brynhildr.exe"
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
-#define AppVer "2.1.2"
+#define AppVer "2.1.3"
 #define RCName ""
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")

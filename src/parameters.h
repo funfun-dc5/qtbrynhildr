@@ -52,7 +52,7 @@ const double QTB_WINDOW_UPDATE_DURATION = 1000;
 const int QTB_TOUCHPANEL_TAP_TIME_THRESHOLD = 500;
 
 // move distance thresold for touchpanel
-const int QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD = 20;
+const int QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD = 40;
 
 //---------------------------------------------------------------------------
 // for others

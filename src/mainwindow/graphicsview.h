@@ -94,6 +94,8 @@ public:
   void setScalingFactorForFullScreen(qreal scalingFactorForFullScreen)
   {
 	this->scalingFactorForFullScreen = scalingFactorForFullScreen;
+	// set desktop scaling factor limit
+	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
   }
 #endif // defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
 

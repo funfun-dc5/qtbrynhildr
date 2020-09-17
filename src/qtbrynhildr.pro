@@ -108,6 +108,7 @@ SOURCES += util/android-ndk/cpu-features.c
 # for Android APK
 DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
+    $$PWD/../dist/android/res/values/libs.xml \
     $$PWD/../dist/android/res/values/style.xml \
     $$PWD/../dist/android/res/drawable-hdpi/icon.png \
     $$PWD/../dist/android/res/drawable-mdpi/icon.png \

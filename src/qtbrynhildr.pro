@@ -114,13 +114,7 @@ DISTFILES += \
     $$PWD/../dist/android/res/drawable-mdpi/icon.png \
     $$PWD/../dist/android/res/drawable-xhdpi/icon.png \
     $$PWD/../dist/android/res/drawable-xxhdpi/icon.png \
-    $$PWD/../dist/android/res/drawable-xxxhdpi/icon.png \
-    $$PWD/../dist/android/res/mipmap-ldpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/mipmap-mdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/mipmap-hdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/mipmap-xhdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/mipmap-xxhdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/mipmap-xxxhdpi/qtbrynhildr.png
+    $$PWD/../dist/android/res/drawable-xxxhdpi/icon.png
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 # arm64
 #CONFIG += android64

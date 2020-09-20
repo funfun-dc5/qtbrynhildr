@@ -110,11 +110,12 @@ DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
     $$PWD/../dist/android/res/values/libs.xml \
     $$PWD/../dist/android/res/values/style.xml \
-    $$PWD/../dist/android/res/drawable-hdpi/icon.png \
-    $$PWD/../dist/android/res/drawable-mdpi/icon.png \
-    $$PWD/../dist/android/res/drawable-xhdpi/icon.png \
-    $$PWD/../dist/android/res/drawable-xxhdpi/icon.png \
-    $$PWD/../dist/android/res/drawable-xxxhdpi/icon.png
+    $$PWD/../dist/android/res/mipmap-ldpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-mdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-hdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-xhdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-xxhdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-xxxhdpi/icon.png
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 # arm64
 #CONFIG += android64

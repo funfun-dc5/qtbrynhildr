@@ -7,7 +7,7 @@
 // version
 #define QTB_VERSION				"2.1.4"
 
-#define QTB_RCNAME				""
+#define QTB_RCNAME				"-dev-env"
 #define QTB_VERSION_NUMBER		214
 
 #if __x86_64__ || __LP64__ || _WIN64

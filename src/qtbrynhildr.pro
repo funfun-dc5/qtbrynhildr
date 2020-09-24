@@ -110,18 +110,13 @@ DISTFILES += \
     $$PWD/../dist/android/AndroidManifest.xml \
     $$PWD/../dist/android/res/values/libs.xml \
     $$PWD/../dist/android/res/values/style.xml \
-    $$PWD/../dist/android/res/drawable-hdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/drawable-mdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/drawable-xhdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/drawable-xxhdpi/qtbrynhildr.png \
-    $$PWD/../dist/android/res/mipmap/qtbrynhildr.png
+    $$PWD/../dist/android/res/mipmap-ldpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-mdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-hdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-xhdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-xxhdpi/icon.png \
+    $$PWD/../dist/android/res/mipmap-xxxhdpi/icon.png
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
-DISTFILES += \
-    $$PWD/../dist/android/build.gradle \
-    $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.jar \
-    $$PWD/../dist/android/gradle/wrapper/gradle-wrapper.properties \
-    $$PWD/../dist/android/gradlew \
-    $$PWD/../dist/android/gradlew.bat
 # arm64
 #CONFIG += android64
 }

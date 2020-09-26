@@ -7,7 +7,6 @@
 release/
 debug/
 build/
-libs/
 obj/
 # for Sphinx
 doctrees/
@@ -45,6 +44,7 @@ src/object_script.*
 # for windows
 *.exe
 *.dll
+*.lib
 # for unix
 *.o
 *.a

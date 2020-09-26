@@ -2,14 +2,81 @@
 UNAME=`uname`
 UNAMEM=`uname -m`
 PRO="qtbrynhildr.pro"
+TARGET=$1
+BUILDARCH=mingw73-x64
 
-source ./setup_qt5 $1
+# TARGET
+if [ -n "$TARGET" ] ; then
+	# BUILDARCH
+	if [ -n "$2" ] ; then
+		BUILDARCH=$2
+	else
+		echo "Usage : $0 <TARGET> <BUILDARCH>"
+		exit 1;
+	fi
+else
+case $UNAME in
+	CYGWIN*)
+			case $UNAMEM in
+			x86_64)
+				;;
+			i686)
+				;;
+			*)
+				echo "$0 : Not Support $UNAMEM"
+				return;;
+			esac
+		;;
+	Linux)
+		case $UNAMEM in
+			x86_64)
+				BUILDARCH=linux-x64
+				;;
+			i686)
+				BUILDARCH=linux-x86
+				;;
+			*)
+				echo "$0 : Not Support $UNAMEM"
+				return;;
+		esac
+		;;
+	FreeBSD)
+		case $UNAMEM in
+			amd64)
+				BUILDARCH=freebsd-x64
+				;;
+			i386)
+				BUILDARCH=freebsd-x86
+				;;
+			*)
+				echo "$0 : Not Support $UNAMEM"
+				return;;
+		esac
+		;;
+	Darwin)
+		case $UNAMEM in
+			x86_64)
+				BUILDARCH=macos-x64
+				;;
+			*)
+				echo "$0 : Not Support $UNAMEM"
+				return;;
+		esac
+		;;
+	*)
+		echo "$0 : Not support platform."
+		exit 1;
+		;;
+esac
+fi
 
-./clean $1
+source ./setup_qt5 $TARGET
+
+./clean $TARGET
 rm -f Makefile Makefile.Release Makefile.Debug
 rm -f object_script.*
 echo RUN : ${QTROOT}/bin/${QMAKE} ${PRO}
-${QTROOT}/bin/${QMAKE} ${PRO}
+${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
 
 case $UNAME in
 	CYGWIN*)

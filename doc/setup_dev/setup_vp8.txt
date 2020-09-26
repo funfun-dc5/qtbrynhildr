@@ -42,8 +42,8 @@ see `./configure --help`
 
 3) copy header files and static library
 
- copy to qtbrynhilr/libs/vpx
+ copy libvpx.a to qtbrynhilr/libs/vpx/<BUILDARCH>
 
- vp8dx.h,vpx_encoder.h,vpx_integer.h,vp8.h,vpx_codec.h,vpx_frame_buffer.h,svc_context.h,vp8cx.h,vpx_decoder.h, vpx_image.h and libvpx.a
+ copy vp8dx.h,vpx_encoder.h,vpx_integer.h,vp8.h,vpx_codec.h,vpx_frame_buffer.h,svc_context.h,vp8cx.h,vpx_decoder.h, vpx_image.h to qtbrynhilr/libs/vpx/include
 
 4) build Qt Brynhildr

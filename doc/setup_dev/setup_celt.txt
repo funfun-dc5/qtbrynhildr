@@ -23,6 +23,6 @@
 
 3) copy header files and static library
 
- copy celt.h, celt_types.h and libcelt0.a(named "libcelt.a") to qtbrynhilr/libs/celt/
+ copy celt.h, celt_types.h and libcelt0.a(named "libcelt.a") to qtbrynhilr/libs/celt/<BUILDARCH>
 
 4) build Qt Brynhildr

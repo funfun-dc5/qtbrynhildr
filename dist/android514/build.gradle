@@ -36,7 +36,7 @@ android {
 
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '30.0.2'
 
     sourceSets {
         main {
@@ -50,6 +50,10 @@ android {
             jniLibs.srcDirs = ['libs']
        }
     }
+
+	defaultConfig {
+	    resConfigs "en", "ja"
+	}
 
     lintOptions {
         abortOnError false

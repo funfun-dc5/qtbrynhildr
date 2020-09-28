@@ -118,7 +118,7 @@ DISTFILES += \
     $$PWD/../dist/android/res/mipmap-xxxhdpi/icon.png
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android514
 # 32bit
-BUILDARCH = android-armeabi-v7a
+BUILDARCH = android-$(OBJECTS_DIR)
 # 64bit
 #CONFIG += android64
 }

@@ -211,13 +211,13 @@
 
 [野良アプリ版]
 
-QtBrynhildr-android32-v2100.apk [32bit版]
+QtBrynhildr-android32-v210.apk [32bit版]
 
-QtBrynhildr-android64-v2100.apk [64bit版]
+QtBrynhildr-android64-v210.apk [64bit版]
 
-[Google Play版](予定)
+[Google Play版]
 
-QtBrynhildr-android-v2100.apk [32bit/64bit同梱版]
+Qt Brynhildr で検索インストール
 
 =========================================================
 [タッチパネル操作]

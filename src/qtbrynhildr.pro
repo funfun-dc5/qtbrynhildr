@@ -116,12 +116,12 @@ DISTFILES += \
     $$PWD/../dist/android/res/mipmap-xhdpi/icon.png \
     $$PWD/../dist/android/res/mipmap-xxhdpi/icon.png \
     $$PWD/../dist/android/res/mipmap-xxxhdpi/icon.png
-# for Qt 5.12
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
 # for Qt 5.14
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android514
-# 32bit
 BUILDARCH = android-$(OBJECTS_DIR)
+# for Qt 5.12
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
+#BUILDARCH = android-armeabi-v7a
 # 64bit
 #CONFIG += android64
 }

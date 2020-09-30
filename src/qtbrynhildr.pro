@@ -120,7 +120,7 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android514
 BUILDARCH = android-$(OBJECTS_DIR)
 # for Qt 5.12
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android512
 # 32bit
 #BUILDARCH = android-armeabi-v7a
 # 64bit

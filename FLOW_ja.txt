@@ -42,10 +42,10 @@
     version.h
     qtbrynhildr.rc
     qtbrynhildr.iss.template
-    AndroidManifest.xml
+    AndroidManifest.xml (android/android514)
 
- qtbrynhildr.rcのFILEVERSION, FileVersionは、以下のルールとする。
- (*)PRODUCTVERSION, ProductVersionには適用しない
+ [1] qtbrynhildr.rcのFILEVERSION, FileVersionは、以下のルールとする
+     (*)PRODUCTVERSION, ProductVersionには適用しない
 
  [Release Candidate(RC)の場合]
 
@@ -57,14 +57,22 @@
  RCが存在しなかった場合 -> *.*.*.0
  RCが存在した場合       -> *.*.*.? (?: 最後のRC番号)
 
- version.h のバージョン番号(QTB_VERSION_NUMBER)のフォーマットは以下の通り。
+[2] version.h のバージョン番号(QTB_VERSION_NUMBER)のフォーマットは以下の通り
 
  2.0.9 まで  : Major Version, Minor Version(1桁)、Revision(1桁) : ex) 209
                                                            =            =
  2.0.10 以降 : Major Version, Minor Version(1桁)、Revision(2桁) : ex) 2010
                                                            =            ==
  ex) 2.1.0 -> 2100
+     2.1.5 -> 2105
+
+[3] AndroidManifest.xml の versionCode のフォーマットは以下の通り
+
+ [2] の version.h と同じ
 
 (3) タグ(tag)を打つ
+
+ 2.1.0     -> v210
+ 2.1.0-rc1 -> v210-rc1
 
 (4) リリース作業

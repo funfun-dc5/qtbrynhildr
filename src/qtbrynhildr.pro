@@ -116,9 +116,20 @@ DISTFILES += \
     $$PWD/../dist/android/res/mipmap-xhdpi/icon.png \
     $$PWD/../dist/android/res/mipmap-xxhdpi/icon.png \
     $$PWD/../dist/android/res/mipmap-xxxhdpi/icon.png
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android
-# arm64
+# for Qt 5.14
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android514
+BUILDARCH = android-$(OBJECTS_DIR)
+# for Qt 5.12
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android512
+# 32bit
+#BUILDARCH = android-armeabi-v7a
+# 64bit
 #CONFIG += android64
+}
+
+# arm64
+android64 {
+BUILDARCH = android-arm64-v8a
 }
 
 # desktop/touchpanel
@@ -143,31 +154,19 @@ message(config error : NOT found desktop or touchpanel in CONFIG)
 # CELT
 celt {
 DEFINES += QTB_CELT_SUPPORT=1
-INCLUDEPATH += ../libs/celt
+INCLUDEPATH += ../libs/celt/include
 HEADERS += soundthread/converter.h soundthread/converter_celt.h
 SOURCES += soundthread/converter.cpp soundthread/converter_celt.cpp
-LIBS += -L../libs/celt
+LIBS += -L../libs/celt/$$BUILDARCH -lcelt
 }
 else {
 DEFINES += QTB_CELT_SUPPORT=0
 }
 
-android-*:celt {
-LIBS += -lcelt_android_armv7
-}
-else:celt {
-LIBS += -lcelt
-}
-
-android64:celt {
-LIBS -= -lcelt_android_armv7
-LIBS += -lcelt_android_aarch64
-}
-
 # VP8
 vp8 {
-INCLUDEPATH += ../libs/vpx
-LIBS += -L../libs/vpx
+INCLUDEPATH += ../libs/vpx/include
+LIBS += -L../libs/vpx/$$BUILDARCH -lvpx
 HEADERS += graphicsthread/yuv2rgb/bitmap.h
 HEADERS += graphicsthread/yuv2rgb/yuv2rgb.h
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb.cpp
@@ -176,18 +175,6 @@ HEADERS += graphicsthread/decoder_vp8.h
 SOURCES += graphicsthread/decoder_vp8.cpp
 HEADERS += graphicsthread/decoder_vp8_cpp.h
 SOURCES += graphicsthread/decoder_vp8_cpp.cpp
-}
-
-android-*:vp8 {
-LIBS += -lvpx_android_armv7
-}
-else:vp8 {
-LIBS += -lvpx
-}
-
-android64:vp8 {
-LIBS -= -lvpx_android_armv7
-LIBS += -lvpx_android_aarch64
 }
 
 # VP8-AVX2
@@ -375,3 +362,5 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 #CONFIG += new_feature
 new_feature {
 }
+
+ANDROID_ABIS = armeabi-v7a arm64-v8a

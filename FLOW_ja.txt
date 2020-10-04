@@ -42,7 +42,7 @@
     version.h
     qtbrynhildr.rc
     qtbrynhildr.iss.template
-    AndroidManifest.xml (android/android514)
+    AndroidManifest.xml (android512/android514)
 
  [1] qtbrynhildr.rcのFILEVERSION, FileVersionは、以下のルールとする
      (*)PRODUCTVERSION, ProductVersionには適用しない

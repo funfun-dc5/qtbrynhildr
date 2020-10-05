@@ -257,6 +257,11 @@ bool Recorder::checkFileHeader()
 	return false;
   }
 
+  // fixed version id bug from Ver.2.1.0 to Ver.2.1.5-rc1
+  if (header->version >= 210 && header->version <= 215){
+	header->version = 2100 + header->version - 210;
+  }
+
   return true;
 }
 

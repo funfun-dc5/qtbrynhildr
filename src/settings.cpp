@@ -78,6 +78,8 @@ Settings::Settings(const char *iniFileName)
   setPassword(QTB_PASSWORD_DEFAULT);
   setOnControl(QTB_ONCONTROL_DEFAULT);
   setOnTaskbarAssist(QTB_ONTASKBARASSIST_DEFAULT);
+  setTaskbarAssistAreaWidth(QTB_TASKBARASSISTAREAWIDTH_DEFAULT);
+  setTaskbarAssistAreaHeight(QTB_TASKBARASSISTAREAHEIGHT_DEFAULT);
 #if QTB_PLUGINS_DISABLE_SUPPORT
   setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
@@ -285,6 +287,14 @@ void Settings::readSettings()
   // load onTaskbarAssist
   setOnTaskbarAssist(settings->value(QTB_ONTASKBARASSIST,
 									 QTB_ONTASKBARASSIST_DEFAULT).toBool());
+
+  // load taskbarAssistAreaWidth
+  setTaskbarAssistAreaWidth(settings->value(QTB_TASKBARASSISTAREAWIDTH,
+											QTB_TASKBARASSISTAREAWIDTH_DEFAULT).toInt());
+
+  // load taskbarAssistAreaHeight
+  setTaskbarAssistAreaHeight(settings->value(QTB_TASKBARASSISTAREAHEIGHT,
+											 QTB_TASKBARASSISTAREAHEIGHT_DEFAULT).toInt());
 
   // load onHoldMouseControl
   setOnHoldMouseControl(settings->value(QTB_ONHOLDMOUSECONTROL,
@@ -577,6 +587,12 @@ void Settings::writeSettings()
   // save onTaskbarAssist
   settings->setValue(QTB_ONTASKBARASSIST, onTaskbarAssist);
 
+  // save taskbarAssistAreaWidth
+  settings->setValue(QTB_TASKBARASSISTAREAWIDTH, taskbarAssistAreaWidth);
+
+  // save taskbarAssistAreaHeight
+  settings->setValue(QTB_TASKBARASSISTAREAHEIGHT, taskbarAssistAreaHeight);
+
   // save onHoldMouseControl
   settings->setValue(QTB_ONHOLDMOUSECONTROL, onHoldMouseControl);
 
@@ -787,6 +803,8 @@ void Settings::printSettings() const
   qDebug() << "Password      : " << password;
   qDebug() << "Control       : " << onControl;
   qDebug() << "Taskbar Assist: " << onTaskbarAssist;
+  qDebug() << "Taskbar Assist Area Width : " << taskbarAssistAreaWidth;
+  qDebug() << "Taskbar Assist Area Height: " << taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT

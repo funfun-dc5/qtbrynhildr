@@ -120,10 +120,10 @@ void DesktopWindow::enterEvent(QEvent *event)
 	// taskbar assist
 	if (settings->getOnTaskbarAssist()){
 	  QPoint pos = ((QEnterEvent*)event)->pos();
-	  const int areaHeight = 10; // height()/100;
-	  const int areaWidth = 10; // width()/100;
-	  int windowHeight = height();
+	  const int areaWidth = settings->getTaskbarAssistAreaWidth(); // width()/100;
+	  const int areaHeight = settings->getTaskbarAssistAreaHeight(); // height()/100;
 	  int windowWidth = width();
+	  int windowHeight = height();
 	  if (outputLog) qDebug() << "EtnerEvent->pos() : " << pos;
 	  // check top side
 	  if (pos.y() <= areaHeight){

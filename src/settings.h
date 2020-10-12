@@ -140,6 +140,14 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONTASKBARASSIST_DEFAULT true
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
+// for taskbarAssistAreaWidth
+#define QTB_TASKBARASSISTAREAWIDTH "taskbarAssistAreaWidth"
+#define QTB_TASKBARASSISTAREAWIDTH_DEFAULT 10
+
+// for taskbarAssistAreaHeight
+#define QTB_TASKBARASSISTAREAHEIGHT "taskbarAssistAreaHeight"
+#define QTB_TASKBARASSISTAREAHEIGHT_DEFAULT 10
+
 #if QTB_PLUGINS_DISABLE_SUPPORT
 // for onPluginsDisable
 #define QTB_ONPLUGINSDISABLE			"onPluginsDisable"
@@ -525,6 +533,8 @@ private:
   // Control
   volatile bool onControl;
   volatile bool onTaskbarAssist;
+  volatile int taskbarAssistAreaWidth;
+  volatile int taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   volatile bool onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
@@ -1099,6 +1109,30 @@ public:
   {
 	this->onTaskbarAssist = onTaskbarAssist;
 	return true;
+  }
+
+  // get taskbar assist area width
+  int getTaskbarAssistAreaWidth() const
+  {
+	return this->taskbarAssistAreaWidth;
+  }
+
+  // set taskbar assist area width
+  void setTaskbarAssistAreaWidth(int taskbarAssistAreaWidth)
+  {
+	this->taskbarAssistAreaWidth = taskbarAssistAreaWidth;
+  }
+
+  // get taskbar assist area height
+  int getTaskbarAssistAreaHeight() const
+  {
+	return this->taskbarAssistAreaHeight;
+  }
+
+  // set taskbar assist area height
+  void setTaskbarAssistAreaHeight(int taskbarAssistAreaHeight)
+  {
+	this->taskbarAssistAreaHeight = taskbarAssistAreaHeight;
   }
 
 #if QTB_PLUGINS_DISABLE_SUPPORT

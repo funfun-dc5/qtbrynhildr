@@ -71,6 +71,9 @@ protected:
   // window event
   void paintEvent(QPaintEvent *event);
 
+  // widget enter event
+  void enterEvent(QEvent *event);
+
   // widget leave event
   void leaveEvent(QEvent *event);
 

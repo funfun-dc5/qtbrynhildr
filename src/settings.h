@@ -132,6 +132,14 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONCONTROL			"onControl"
 #define QTB_ONCONTROL_DEFAULT	true
 
+// for onTaskbarAssist
+#define QTB_ONTASKBARASSIST			"onTaskbarAssist"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONTASKBARASSIST_DEFAULT false
+#else // defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONTASKBARASSIST_DEFAULT true
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 #if QTB_PLUGINS_DISABLE_SUPPORT
 // for onPluginsDisable
 #define QTB_ONPLUGINSDISABLE			"onPluginsDisable"
@@ -516,6 +524,7 @@ private:
 
   // Control
   volatile bool onControl;
+  volatile bool onTaskbarAssist;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   volatile bool onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
@@ -1076,6 +1085,19 @@ public:
   bool setOnControl(bool onControl)
   {
 	this->onControl = onControl;
+	return true;
+  }
+
+  // get taskbar assist flag
+  bool getOnTaskbarAssist() const
+  {
+	return onTaskbarAssist;
+  }
+
+  // set taskbar assist flag
+  bool setOnTaskbarAssist(bool onTaskbarAssist)
+  {
+	this->onTaskbarAssist = onTaskbarAssist;
 	return true;
   }
 

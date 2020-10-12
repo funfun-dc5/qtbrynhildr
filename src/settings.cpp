@@ -77,6 +77,7 @@ Settings::Settings(const char *iniFileName)
   setPortNo(QTB_PORTNO_DEFAULT);
   setPassword(QTB_PASSWORD_DEFAULT);
   setOnControl(QTB_ONCONTROL_DEFAULT);
+  setOnTaskbarAssist(QTB_ONTASKBARASSIST_DEFAULT);
 #if QTB_PLUGINS_DISABLE_SUPPORT
   setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
@@ -280,6 +281,10 @@ void Settings::readSettings()
   // load onControl
   setOnControl(settings->value(QTB_ONCONTROL,
 							   QTB_ONCONTROL_DEFAULT).toBool());
+
+  // load onTaskbarAssist
+  setOnTaskbarAssist(settings->value(QTB_ONTASKBARASSIST,
+									 QTB_ONTASKBARASSIST_DEFAULT).toBool());
 
   // load onHoldMouseControl
   setOnHoldMouseControl(settings->value(QTB_ONHOLDMOUSECONTROL,
@@ -569,6 +574,9 @@ void Settings::writeSettings()
   // save onControl
   settings->setValue(QTB_ONCONTROL, onControl);
 
+  // save onTaskbarAssist
+  settings->setValue(QTB_ONTASKBARASSIST, onTaskbarAssist);
+
   // save onHoldMouseControl
   settings->setValue(QTB_ONHOLDMOUSECONTROL, onHoldMouseControl);
 
@@ -778,6 +786,7 @@ void Settings::printSettings() const
   qDebug() << "Port No       : " << portNo;
   qDebug() << "Password      : " << password;
   qDebug() << "Control       : " << onControl;
+  qDebug() << "Taskbar Assist: " << onTaskbarAssist;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT

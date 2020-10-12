@@ -8,7 +8,9 @@
 
 // Qt Header
 #include <QCursor>
+#include <QEnterEvent>
 #include <QPainter>
+#include <QPoint>
 #include <QSize>
 #include <QtGui>
 
@@ -108,6 +110,47 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
   QPainter widgetPainter(this);
   widgetPainter.drawImage(0, 0, image2);
 #endif // for TEST
+}
+
+// widget enter event
+void DesktopWindow::enterEvent(QEvent *event)
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	// taskbar assist
+	if (settings->getOnTaskbarAssist()){
+	  QPoint pos = ((QEnterEvent*)event)->pos();
+	  const int areaHeight = 10; // height()/100;
+	  const int areaWidth = 10; // width()/100;
+	  int windowHeight = height();
+	  int windowWidth = width();
+	  if (outputLog) qDebug() << "EtnerEvent->pos() : " << pos;
+	  // check top side
+	  if (pos.y() <= areaHeight){
+		if (outputLog) qDebug() << "top size";
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_TOPSIDE, MOUSE_BUTTON_UP);
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_TOPSIDE, MOUSE_BUTTON_UP);
+	  }
+	  // check bottom side
+	  else if (pos.y() >= windowHeight - areaHeight){
+		if (outputLog) qDebug() << "bottom side";
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_BOTTOMSIDE, MOUSE_BUTTON_UP);
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_BOTTOMSIDE, MOUSE_BUTTON_UP);
+	  }
+	  // check left side
+	  else if (pos.x() <= areaWidth){
+		if (outputLog) qDebug() << "left side";
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_LEFTSIDE, MOUSE_BUTTON_UP);
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_LEFTSIDE, MOUSE_BUTTON_UP);
+	  }
+	  // check right side
+	  else if (pos.x() >= windowWidth - areaWidth){
+		if (outputLog) qDebug() << "right side";
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_RIGHTSIDE, MOUSE_BUTTON_UP);
+		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_MOVE_RIGHTSIDE, MOUSE_BUTTON_UP);
+	  }
+	}
+  }
 }
 
 // widget leave event

@@ -7,8 +7,8 @@
 IDI_ICON1	ICON	DISCARDABLE	"D:/home/masaaki/Src/qtbrynhildr/src/images/qtbrynhildr48.ico"
 
 VS_VERSION_INFO VERSIONINFO
-	FILEVERSION 2,1,5,2
-	PRODUCTVERSION 2,1,5,0
+	FILEVERSION 2,1,6,0
+	PRODUCTVERSION 2,1,6,0
 	FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 	FILEFLAGS VS_FF_DEBUG
@@ -25,11 +25,11 @@ VS_VERSION_INFO VERSIONINFO
 			BEGIN
 				VALUE "CompanyName", "mcz-xoxo\0"
 				VALUE "FileDescription", "Qt Brynhildr : A client software for Brynhildr\0"
-				VALUE "FileVersion", "2.1.5.2\0"
+				VALUE "FileVersion", "2.1.6.0\0"
 				VALUE "LegalCopyright", "FunFun @ mcz-xoxo\0"
 				VALUE "OriginalFilename", "qtbrynhildr.exe\0"
 				VALUE "ProductName", "Qt Brynhildr\0"
-				VALUE "ProductVersion", "2.1.5.0\0"
+				VALUE "ProductVersion", "2.1.6.0\0"
 			END
 		END
 		BLOCK "VarFileInfo"

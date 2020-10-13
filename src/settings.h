@@ -345,7 +345,11 @@ typedef enum {
 
 // for onShowFrameRate
 #define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONSHOWFRAMERATE_DEFAULT			false
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWFRAMERATE_DEFAULT			true
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowPassword
 #define QTB_ONSHOWPASSWORD					"onShowPassword"

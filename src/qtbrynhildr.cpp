@@ -287,6 +287,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,keyBuffer(0)
   ,mouseBuffer(0)
   ,timer(0)
+  ,isExecutingToConnect(false)
 #if 0 // for TEST
   ,timer_Graphics(0)
   ,image(new QImage)
@@ -2586,6 +2587,17 @@ void QtBrynhildr::updateConnected()
 	return;
   }
 
+  // check executing to connect
+  if (isExecutingToConnect){
+	QString str = QString(tr("Connecting ... : ")+"%1").
+	  arg(settings->getServerName());
+	// set label
+	connectionLabel->setText(str);
+	// set minimum size
+	connectionLabel->setMinimumSize(connectionLabel->sizeHint());
+	return;
+  }
+
   // set label
   if (settings->getConnected()){
 	// connection
@@ -2822,6 +2834,10 @@ void QtBrynhildr::connected()
   // save settings
   settings->writeSettings();
 #endif // defined(QTB_DEV_TOUCHPANEL)
+
+  // try to connect flag
+  isExecutingToConnect = false;
+  updateConnected();
 }
 
 // disconnected
@@ -2925,6 +2941,10 @@ void QtBrynhildr::disconnected()
 
   // reset pop up Connect To Server Dialog flag
   onPopUpConnectToServer = false;
+
+  // try to connect flag
+  isExecutingToConnect = false;
+  updateConnected();
 }
 
 // set desktop scaling factor
@@ -3183,11 +3203,9 @@ void QtBrynhildr::popUpDisconnectToServer()
 void QtBrynhildr::connectToServer()
 {
   // disconnected
-  if (settings->getConnected()){
-	disconnectToServer();
-	// wait for reconnect to server
-	QThread::sleep(1);
-  }
+  disconnectToServer();
+  // wait for reconnect to server
+  QThread::sleep(1);
 
   // clear desktop
   desktopPanel->clearDesktop();
@@ -3306,6 +3324,13 @@ void QtBrynhildr::connectToServer()
   //graphicsThread->start(QThread::TimeCriticalPriority);
   soundThread->start(QThread::NormalPriority);
 #endif // 1 // for TEST
+
+  // try to connect flag
+  isExecutingToConnect = true;
+  updateConnected();
+
+  // enabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
 }
 
 // reconnect to server

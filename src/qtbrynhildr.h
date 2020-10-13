@@ -567,6 +567,9 @@ private:
   // timer for GUI
   QTimer *timer;
 
+  // try to connect flag
+  bool isExecutingToConnect;
+
 #if 0 // for TEST
   // timer for Graphics
   QTimer *timer_Graphics;

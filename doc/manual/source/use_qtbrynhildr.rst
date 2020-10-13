@@ -64,9 +64,13 @@
 
    「設定」ダイアログを表示します。
 
+ * 「設定の初期化」
+
+    設定を初期化します。.iniファイルも初期値に戻します。
+
  * 「終了」
 
-   Qt Brynhildr を終了します。「確認」ダイアログが表示されので「OK」ボタンを押すと終了します。
+    Qt Brynhildr を終了します。「確認」ダイアログが表示されので「OK」ボタンを押すと終了します。
 
  .. image:: images/use_qtbrynhildr/confirm_dialog.jpg
 

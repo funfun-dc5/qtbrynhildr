@@ -436,1071 +436,1085 @@
 <context>
     <name>qtbrynhildr::QtBrynhildr</name>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="954"/>
+        <location filename="../qtbrynhildr.cpp" line="955"/>
         <source>Bootup.</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>起動しました。</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="964"/>
+        <location filename="../qtbrynhildr.cpp" line="965"/>
         <source>You are in Debug Logging mode.</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デバッグログ出力モードです。</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1566"/>
+        <location filename="../qtbrynhildr.cpp" line="1567"/>
         <source>Connect</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>接続</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1586"/>
-        <location filename="../qtbrynhildr.cpp" line="1589"/>
+        <location filename="../qtbrynhildr.cpp" line="1593"/>
+        <location filename="../qtbrynhildr.cpp" line="1596"/>
         <source>Output Log</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デバッグログ出力</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1593"/>
+        <location filename="../qtbrynhildr.cpp" line="1600"/>
         <source>Exit</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1594"/>
+        <location filename="../qtbrynhildr.cpp" line="1601"/>
         <source>Exit Qt Brynhildr</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Qt Brynhildrを終了します</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1601"/>
+        <location filename="../qtbrynhildr.cpp" line="1608"/>
         <source>About Qt Brynhildr</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Qt Brynhildr について</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="404"/>
+        <location filename="../qtbrynhildr.cpp" line="405"/>
         <source>warning</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="405"/>
+        <location filename="../qtbrynhildr.cpp" line="406"/>
         <source>Failed to open log file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ログファイルのオープンに失敗しました</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1701"/>
-        <location filename="../qtbrynhildr.cpp" line="1704"/>
+        <location filename="../qtbrynhildr.cpp" line="1708"/>
+        <location filename="../qtbrynhildr.cpp" line="1711"/>
         <source>Video Quality : Minimum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 最低</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1708"/>
-        <location filename="../qtbrynhildr.cpp" line="1711"/>
+        <location filename="../qtbrynhildr.cpp" line="1715"/>
+        <location filename="../qtbrynhildr.cpp" line="1718"/>
         <source>Video Quality : Low</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 低</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1715"/>
-        <location filename="../qtbrynhildr.cpp" line="1718"/>
+        <location filename="../qtbrynhildr.cpp" line="1722"/>
+        <location filename="../qtbrynhildr.cpp" line="1725"/>
         <source>Video Quality : Standard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 標準</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1722"/>
-        <location filename="../qtbrynhildr.cpp" line="1725"/>
+        <location filename="../qtbrynhildr.cpp" line="1729"/>
+        <location filename="../qtbrynhildr.cpp" line="1732"/>
         <source>Video Quality : High</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 高</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1729"/>
-        <location filename="../qtbrynhildr.cpp" line="1732"/>
+        <location filename="../qtbrynhildr.cpp" line="1736"/>
+        <location filename="../qtbrynhildr.cpp" line="1739"/>
         <source>Video Quality : Maximum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ画質 : 最高</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1642"/>
-        <location filename="../qtbrynhildr.cpp" line="1643"/>
+        <location filename="../qtbrynhildr.cpp" line="1649"/>
+        <location filename="../qtbrynhildr.cpp" line="1650"/>
         <source>Full Screen</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フルスクリーン</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3992"/>
-        <location filename="../qtbrynhildr.cpp" line="4020"/>
+        <location filename="../qtbrynhildr.cpp" line="4038"/>
+        <location filename="../qtbrynhildr.cpp" line="4066"/>
         <source>Create Image Object</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>イメージオブジェクトの生成</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4002"/>
+        <location filename="../qtbrynhildr.cpp" line="4048"/>
         <source>Draw JPEG Image</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>JPEG イメージの描画</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4015"/>
+        <location filename="../qtbrynhildr.cpp" line="4061"/>
         <source>Decode VP8</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>VP8 デコード</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4030"/>
+        <location filename="../qtbrynhildr.cpp" line="4076"/>
         <source>Draw RGB32 Image</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>RGB32 イメージの描画</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="5080"/>
+        <location filename="../qtbrynhildr.cpp" line="5126"/>
         <source>Found new release. Open release page?</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>新しいバージョンが見つかりました。 リリースページを開きますか？</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="5091"/>
+        <location filename="../qtbrynhildr.cpp" line="5137"/>
         <source>Information</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>情報</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="5092"/>
+        <location filename="../qtbrynhildr.cpp" line="5138"/>
         <source>Up-to-date!</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>最新のバージョンです!</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1572"/>
+        <location filename="../qtbrynhildr.cpp" line="1573"/>
         <source>Disconnect</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>切断</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1573"/>
+        <location filename="../qtbrynhildr.cpp" line="1574"/>
         <source>Disconnect to Brynhildr Server</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Brynhildrサーバから切断します</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1579"/>
-        <location filename="../qtbrynhildr.cpp" line="1582"/>
+        <location filename="../qtbrynhildr.cpp" line="1586"/>
+        <location filename="../qtbrynhildr.cpp" line="1589"/>
         <source>Output Keyboard Log</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>キーボードログ出力</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1600"/>
+        <location filename="../qtbrynhildr.cpp" line="1607"/>
         <source>About</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Qt Brynhildr について</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1607"/>
-        <location filename="../qtbrynhildr.cpp" line="1608"/>
+        <location filename="../qtbrynhildr.cpp" line="1614"/>
+        <location filename="../qtbrynhildr.cpp" line="1615"/>
         <source>Check Update</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>アップデートを確認</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1614"/>
-        <location filename="../qtbrynhildr.cpp" line="1615"/>
+        <location filename="../qtbrynhildr.cpp" line="1621"/>
+        <location filename="../qtbrynhildr.cpp" line="1622"/>
         <source>Show Menu Bar</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>メニューバーを表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1626"/>
-        <location filename="../qtbrynhildr.cpp" line="1627"/>
+        <location filename="../qtbrynhildr.cpp" line="1633"/>
+        <location filename="../qtbrynhildr.cpp" line="1634"/>
         <source>Show Status Bar</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ステータスバーを表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1633"/>
-        <location filename="../qtbrynhildr.cpp" line="1634"/>
+        <location filename="../qtbrynhildr.cpp" line="1640"/>
+        <location filename="../qtbrynhildr.cpp" line="1641"/>
         <source>Show Frame Rate</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フレームレートを表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1654"/>
-        <location filename="../qtbrynhildr.cpp" line="1655"/>
+        <location filename="../qtbrynhildr.cpp" line="1661"/>
+        <location filename="../qtbrynhildr.cpp" line="1662"/>
         <source>Stays On Top</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>常に最前面に表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1663"/>
-        <location filename="../qtbrynhildr.cpp" line="1664"/>
+        <location filename="../qtbrynhildr.cpp" line="1670"/>
+        <location filename="../qtbrynhildr.cpp" line="1671"/>
         <source>Desktop Scale Fixed</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップのスケールを固定</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1673"/>
-        <location filename="../qtbrynhildr.cpp" line="1674"/>
+        <location filename="../qtbrynhildr.cpp" line="1680"/>
+        <location filename="../qtbrynhildr.cpp" line="1681"/>
         <source>Window Size Fixed</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ウィンドウサイズを固定</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1684"/>
-        <location filename="../qtbrynhildr.cpp" line="1685"/>
+        <location filename="../qtbrynhildr.cpp" line="1691"/>
+        <location filename="../qtbrynhildr.cpp" line="1692"/>
         <source>Show Software Keyboard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ソフトウェア・キーボードを表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1692"/>
-        <location filename="../qtbrynhildr.cpp" line="1693"/>
+        <location filename="../qtbrynhildr.cpp" line="1699"/>
+        <location filename="../qtbrynhildr.cpp" line="1700"/>
         <source>Show Software Button</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ソフトウェア・ボタンを表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1737"/>
-        <location filename="../qtbrynhildr.cpp" line="1738"/>
+        <location filename="../qtbrynhildr.cpp" line="1744"/>
+        <location filename="../qtbrynhildr.cpp" line="1745"/>
         <source>Desktop Scaling</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップのスケーリング</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1745"/>
-        <location filename="../qtbrynhildr.cpp" line="1746"/>
+        <location filename="../qtbrynhildr.cpp" line="1752"/>
+        <location filename="../qtbrynhildr.cpp" line="1753"/>
         <source>Desktop Capture</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップのキャプチャ</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1753"/>
-        <location filename="../qtbrynhildr.cpp" line="1754"/>
+        <location filename="../qtbrynhildr.cpp" line="1760"/>
+        <location filename="../qtbrynhildr.cpp" line="1761"/>
         <source>Log View</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ログの表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1976"/>
+        <location filename="../qtbrynhildr.cpp" line="1983"/>
         <source>MODE 5</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モード 5</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1980"/>
+        <location filename="../qtbrynhildr.cpp" line="1987"/>
         <source>Public Mode 5</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パブリックモード5</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1983"/>
+        <location filename="../qtbrynhildr.cpp" line="1990"/>
         <source>MODE 6</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モード 6</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1987"/>
+        <location filename="../qtbrynhildr.cpp" line="1994"/>
         <source>Public Mode 6</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パブリックモード&#x3000;6</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1990"/>
+        <location filename="../qtbrynhildr.cpp" line="1997"/>
         <source>MODE 7</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モード 7</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1994"/>
+        <location filename="../qtbrynhildr.cpp" line="2001"/>
         <source>Public Mode 7</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パブリックモード 7</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1759"/>
+        <location filename="../qtbrynhildr.cpp" line="1766"/>
         <source>5 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>5 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1763"/>
+        <location filename="../qtbrynhildr.cpp" line="1580"/>
+        <location filename="../qtbrynhildr.cpp" line="1581"/>
+        <source>Initialize Settings</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>設定の初期化</translation>
+    </message>
+    <message>
+        <location filename="../qtbrynhildr.cpp" line="1770"/>
         <source>maxfps 5 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps 5 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1766"/>
+        <location filename="../qtbrynhildr.cpp" line="1773"/>
         <source>10 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>10 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1770"/>
+        <location filename="../qtbrynhildr.cpp" line="1777"/>
         <source>maxfps 10 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps 10 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1773"/>
+        <location filename="../qtbrynhildr.cpp" line="1780"/>
         <source>20 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>20 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1777"/>
+        <location filename="../qtbrynhildr.cpp" line="1784"/>
         <source>maxfps 20 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps 20 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1780"/>
+        <location filename="../qtbrynhildr.cpp" line="1787"/>
         <source>30 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>30 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1784"/>
+        <location filename="../qtbrynhildr.cpp" line="1791"/>
         <source>maxfps 30 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps 30 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1787"/>
+        <location filename="../qtbrynhildr.cpp" line="1794"/>
         <source>40 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>40 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1791"/>
+        <location filename="../qtbrynhildr.cpp" line="1798"/>
         <source>maxfps 40 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps 40 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1794"/>
+        <location filename="../qtbrynhildr.cpp" line="1801"/>
         <source>50 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>50 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1798"/>
+        <location filename="../qtbrynhildr.cpp" line="1805"/>
         <source>maxfps 50 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps 50 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1801"/>
+        <location filename="../qtbrynhildr.cpp" line="1808"/>
         <source>60 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>60 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1805"/>
+        <location filename="../qtbrynhildr.cpp" line="1812"/>
         <source>maxfps 60 FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps 60 FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1808"/>
+        <location filename="../qtbrynhildr.cpp" line="1815"/>
         <source>Maximum FPS</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Maximum FPS</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1812"/>
+        <location filename="../qtbrynhildr.cpp" line="1819"/>
         <source>maxfps Maximum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps Maximum</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1816"/>
-        <location filename="../qtbrynhildr.cpp" line="1820"/>
+        <location filename="../qtbrynhildr.cpp" line="1823"/>
+        <location filename="../qtbrynhildr.cpp" line="1827"/>
         <source>Monitor 1</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 1</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1822"/>
-        <location filename="../qtbrynhildr.cpp" line="1826"/>
+        <location filename="../qtbrynhildr.cpp" line="1829"/>
+        <location filename="../qtbrynhildr.cpp" line="1833"/>
         <source>Monitor 2</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 2</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1828"/>
-        <location filename="../qtbrynhildr.cpp" line="1832"/>
+        <location filename="../qtbrynhildr.cpp" line="1835"/>
+        <location filename="../qtbrynhildr.cpp" line="1839"/>
         <source>Monitor 3</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 3</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1834"/>
-        <location filename="../qtbrynhildr.cpp" line="1838"/>
+        <location filename="../qtbrynhildr.cpp" line="1841"/>
+        <location filename="../qtbrynhildr.cpp" line="1845"/>
         <source>Monitor 4</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 4</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1840"/>
-        <location filename="../qtbrynhildr.cpp" line="1844"/>
+        <location filename="../qtbrynhildr.cpp" line="1847"/>
+        <location filename="../qtbrynhildr.cpp" line="1851"/>
         <source>Monitor 5</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 5</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1846"/>
-        <location filename="../qtbrynhildr.cpp" line="1850"/>
+        <location filename="../qtbrynhildr.cpp" line="1853"/>
+        <location filename="../qtbrynhildr.cpp" line="1857"/>
         <source>Monitor 6</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 6</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1852"/>
-        <location filename="../qtbrynhildr.cpp" line="1856"/>
+        <location filename="../qtbrynhildr.cpp" line="1859"/>
+        <location filename="../qtbrynhildr.cpp" line="1863"/>
         <source>Monitor 7</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 7</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1858"/>
-        <location filename="../qtbrynhildr.cpp" line="1862"/>
+        <location filename="../qtbrynhildr.cpp" line="1865"/>
+        <location filename="../qtbrynhildr.cpp" line="1869"/>
         <source>Monitor 8</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 8</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1864"/>
-        <location filename="../qtbrynhildr.cpp" line="1868"/>
+        <location filename="../qtbrynhildr.cpp" line="1871"/>
+        <location filename="../qtbrynhildr.cpp" line="1875"/>
         <source>Monitor 9</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ 9</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1870"/>
-        <location filename="../qtbrynhildr.cpp" line="1874"/>
+        <location filename="../qtbrynhildr.cpp" line="1877"/>
+        <location filename="../qtbrynhildr.cpp" line="1881"/>
         <source>Monitor All</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ すべて</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1878"/>
-        <location filename="../qtbrynhildr.cpp" line="1881"/>
+        <location filename="../qtbrynhildr.cpp" line="1885"/>
+        <location filename="../qtbrynhildr.cpp" line="1888"/>
         <source>Sound Quality : Minimum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 最低</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1885"/>
-        <location filename="../qtbrynhildr.cpp" line="1888"/>
+        <location filename="../qtbrynhildr.cpp" line="1892"/>
+        <location filename="../qtbrynhildr.cpp" line="1895"/>
         <source>Sound Quality : Low</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 低</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1892"/>
-        <location filename="../qtbrynhildr.cpp" line="1895"/>
+        <location filename="../qtbrynhildr.cpp" line="1899"/>
+        <location filename="../qtbrynhildr.cpp" line="1902"/>
         <source>Sound Quality : Standard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 標準</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1899"/>
-        <location filename="../qtbrynhildr.cpp" line="1902"/>
+        <location filename="../qtbrynhildr.cpp" line="1906"/>
+        <location filename="../qtbrynhildr.cpp" line="1909"/>
         <source>Sound Quality : High</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 高</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1906"/>
-        <location filename="../qtbrynhildr.cpp" line="1909"/>
+        <location filename="../qtbrynhildr.cpp" line="1913"/>
+        <location filename="../qtbrynhildr.cpp" line="1916"/>
         <source>Sound Quality : Maximum</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド音質 : 最高</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1913"/>
-        <location filename="../qtbrynhildr.cpp" line="1916"/>
+        <location filename="../qtbrynhildr.cpp" line="1920"/>
+        <location filename="../qtbrynhildr.cpp" line="1923"/>
         <source>Level 0</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>レベル 0</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1920"/>
-        <location filename="../qtbrynhildr.cpp" line="1923"/>
+        <location filename="../qtbrynhildr.cpp" line="1927"/>
+        <location filename="../qtbrynhildr.cpp" line="1930"/>
         <source>Level 1</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>レベル 1</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1927"/>
-        <location filename="../qtbrynhildr.cpp" line="1930"/>
+        <location filename="../qtbrynhildr.cpp" line="1934"/>
+        <location filename="../qtbrynhildr.cpp" line="1937"/>
         <source>Level 2</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>レベル 2</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1934"/>
-        <location filename="../qtbrynhildr.cpp" line="1937"/>
+        <location filename="../qtbrynhildr.cpp" line="1941"/>
+        <location filename="../qtbrynhildr.cpp" line="1944"/>
         <source>Level 3</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>レベル 3</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1941"/>
-        <location filename="../qtbrynhildr.cpp" line="1944"/>
+        <location filename="../qtbrynhildr.cpp" line="1948"/>
+        <location filename="../qtbrynhildr.cpp" line="1951"/>
         <source>Level 4</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>レベル 4</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1948"/>
-        <location filename="../qtbrynhildr.cpp" line="1951"/>
+        <location filename="../qtbrynhildr.cpp" line="1955"/>
+        <location filename="../qtbrynhildr.cpp" line="1958"/>
         <source>Level 5</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>レベル 5</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1955"/>
-        <location filename="../qtbrynhildr.cpp" line="1958"/>
+        <location filename="../qtbrynhildr.cpp" line="1962"/>
+        <location filename="../qtbrynhildr.cpp" line="1965"/>
         <source>Control ON/OFF</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>コントロール ON/OFF</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1962"/>
-        <location filename="../qtbrynhildr.cpp" line="1965"/>
+        <location filename="../qtbrynhildr.cpp" line="1969"/>
+        <location filename="../qtbrynhildr.cpp" line="1972"/>
         <source>Graphics ON/OFF</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>グラフィックス ON/OFF</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1969"/>
-        <location filename="../qtbrynhildr.cpp" line="1972"/>
+        <location filename="../qtbrynhildr.cpp" line="1976"/>
+        <location filename="../qtbrynhildr.cpp" line="1979"/>
         <source>Sound ON/OFF</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド ON/OFF</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2020"/>
-        <location filename="../qtbrynhildr.cpp" line="2022"/>
+        <location filename="../qtbrynhildr.cpp" line="2027"/>
+        <location filename="../qtbrynhildr.cpp" line="2029"/>
         <source>Stop Replay</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>再生終了</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2028"/>
-        <location filename="../qtbrynhildr.cpp" line="2032"/>
+        <location filename="../qtbrynhildr.cpp" line="2035"/>
+        <location filename="../qtbrynhildr.cpp" line="2039"/>
         <source>Disable Plugins</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>プラグインの無効化</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2038"/>
+        <location filename="../qtbrynhildr.cpp" line="2045"/>
         <source>Ctrl + Alt + Del</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Ctrl + Alt + Del</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2040"/>
+        <location filename="../qtbrynhildr.cpp" line="2047"/>
         <source>Send key: Ctrl + Alt + Del</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Send key: Ctrl + Alt + Del</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2046"/>
+        <location filename="../qtbrynhildr.cpp" line="2053"/>
         <source>Alt + F4</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Alt + F4</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2048"/>
+        <location filename="../qtbrynhildr.cpp" line="2055"/>
         <source>Send key: Alt + F4</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Send key: Alt + F4</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2051"/>
+        <location filename="../qtbrynhildr.cpp" line="2058"/>
         <source>Ctrl + Esc</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Ctrl + Esc</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2053"/>
+        <location filename="../qtbrynhildr.cpp" line="2060"/>
         <source>Send key: Ctrl + Esc</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Send key: Ctrl + Esc</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2056"/>
+        <location filename="../qtbrynhildr.cpp" line="2063"/>
         <source>Windows</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Windows</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2058"/>
+        <location filename="../qtbrynhildr.cpp" line="2065"/>
         <source>Send key: Windows</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Send key: Windows</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2061"/>
+        <location filename="../qtbrynhildr.cpp" line="2068"/>
         <source>PrintScreen</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>PrintScreen</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2063"/>
+        <location filename="../qtbrynhildr.cpp" line="2070"/>
         <source>Send key: PrintScreen</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Send key: PrintScreen</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2066"/>
+        <location filename="../qtbrynhildr.cpp" line="2073"/>
         <source>Alt + PrintScreen</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Alt + PrintScreen</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2068"/>
+        <location filename="../qtbrynhildr.cpp" line="2075"/>
         <source>Send key: Alt + PrintScreen</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Send key: Alt + PrintScreen</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2073"/>
-        <location filename="../qtbrynhildr.cpp" line="2077"/>
+        <location filename="../qtbrynhildr.cpp" line="2080"/>
+        <location filename="../qtbrynhildr.cpp" line="2084"/>
         <source>Scroll Mode</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>スクロールモード</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2083"/>
-        <location filename="../qtbrynhildr.cpp" line="2088"/>
+        <location filename="../qtbrynhildr.cpp" line="2090"/>
+        <location filename="../qtbrynhildr.cpp" line="2095"/>
         <source>KeroRemote Type</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>KeroRemoteタイプ</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2092"/>
-        <location filename="../qtbrynhildr.cpp" line="2097"/>
+        <location filename="../qtbrynhildr.cpp" line="2099"/>
+        <location filename="../qtbrynhildr.cpp" line="2104"/>
         <source>Qt Brynhildr Type</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Qt Brynhildrタイプ</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2109"/>
-        <location filename="../qtbrynhildr.cpp" line="2111"/>
+        <location filename="../qtbrynhildr.cpp" line="2116"/>
+        <location filename="../qtbrynhildr.cpp" line="2118"/>
         <source>Send File</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルを送信</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2103"/>
-        <location filename="../qtbrynhildr.cpp" line="2105"/>
+        <location filename="../qtbrynhildr.cpp" line="2110"/>
+        <location filename="../qtbrynhildr.cpp" line="2112"/>
         <source>Send Clipboard</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>クリップボードを送信</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2646"/>
+        <location filename="../qtbrynhildr.cpp" line="2654"/>
         <source>Not Connected</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>未接続</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2244"/>
+        <location filename="../qtbrynhildr.cpp" line="2251"/>
         <source>File</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイル</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2171"/>
+        <location filename="../qtbrynhildr.cpp" line="2178"/>
         <source>2 threads</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>2 スレッド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2175"/>
+        <location filename="../qtbrynhildr.cpp" line="2182"/>
         <source>Decode Thread : 2 threads</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デコードスレッド : 2 スレッド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2178"/>
+        <location filename="../qtbrynhildr.cpp" line="2185"/>
         <source>4 threads</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>4 スレッド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2182"/>
+        <location filename="../qtbrynhildr.cpp" line="2189"/>
         <source>Decode Thread : 4 threads</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デコードスレッド : 4 スレッド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2268"/>
+        <location filename="../qtbrynhildr.cpp" line="2276"/>
         <source>Display</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>表示</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2322"/>
+        <location filename="../qtbrynhildr.cpp" line="2330"/>
         <source>Video</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ビデオ</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2331"/>
+        <location filename="../qtbrynhildr.cpp" line="2339"/>
         <source>Select Frame Rate</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フレームレート選択</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2384"/>
+        <location filename="../qtbrynhildr.cpp" line="2392"/>
         <source>Select Monitor</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>モニタ選択</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2415"/>
+        <location filename="../qtbrynhildr.cpp" line="2423"/>
         <source>Record and Replay</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>記録と再生</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2449"/>
+        <location filename="../qtbrynhildr.cpp" line="2457"/>
         <source>Decode Option</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デコード オプション</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2450"/>
+        <location filename="../qtbrynhildr.cpp" line="2458"/>
         <source>Type</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>タイプ</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2454"/>
+        <location filename="../qtbrynhildr.cpp" line="2462"/>
         <source>Thread</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>スレッド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2473"/>
+        <location filename="../qtbrynhildr.cpp" line="2481"/>
         <source>Touchpanel Interface</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>タッチパネル・インターフェース</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2518"/>
+        <location filename="../qtbrynhildr.cpp" line="2526"/>
         <source>Benchmark</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ベンチマーク</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2592"/>
+        <location filename="../qtbrynhildr.cpp" line="2600"/>
         <source>Connecting ... : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>接続実行中 ... : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2608"/>
+        <location filename="../qtbrynhildr.cpp" line="2616"/>
         <source>ReCalc Rate</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>再計算率</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3500"/>
+        <location filename="../qtbrynhildr.cpp" line="3514"/>
         <source>FPS of last session : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>最後の接続の平均フレームレート : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3983"/>
-        <location filename="../qtbrynhildr.cpp" line="4011"/>
+        <location filename="../qtbrynhildr.cpp" line="3579"/>
+        <source>Do you initialize settings ?</source>
+        <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
+        <translation>設定を初期化しますか ?</translation>
+    </message>
+    <message>
+        <location filename="../qtbrynhildr.cpp" line="4029"/>
+        <location filename="../qtbrynhildr.cpp" line="4057"/>
         <source>Data Communication</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>データ通信</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3997"/>
-        <location filename="../qtbrynhildr.cpp" line="4025"/>
+        <location filename="../qtbrynhildr.cpp" line="4043"/>
+        <location filename="../qtbrynhildr.cpp" line="4071"/>
         <source>Rescale Image</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>イメージの拡大・縮小</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4083"/>
+        <location filename="../qtbrynhildr.cpp" line="4129"/>
         <source>Save file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルに保存</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4085"/>
-        <location filename="../qtbrynhildr.cpp" line="4113"/>
+        <location filename="../qtbrynhildr.cpp" line="4131"/>
+        <location filename="../qtbrynhildr.cpp" line="4159"/>
         <source>Control Record File (*.qtb)</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Control Record File (*.qtb)</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3524"/>
-        <location filename="../qtbrynhildr.cpp" line="4111"/>
+        <location filename="../qtbrynhildr.cpp" line="3538"/>
+        <location filename="../qtbrynhildr.cpp" line="4157"/>
         <source>Open file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルを開く</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2354"/>
+        <location filename="../qtbrynhildr.cpp" line="2362"/>
         <source>Sound</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1999"/>
-        <location filename="../qtbrynhildr.cpp" line="2003"/>
+        <location filename="../qtbrynhildr.cpp" line="2006"/>
+        <location filename="../qtbrynhildr.cpp" line="2010"/>
         <source>Start Recording</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>記録開始</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="1567"/>
+        <location filename="../qtbrynhildr.cpp" line="1568"/>
         <source>Connec to Brynhildr Server</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Brynhildrサーバに接続します</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2007"/>
-        <location filename="../qtbrynhildr.cpp" line="2009"/>
+        <location filename="../qtbrynhildr.cpp" line="2014"/>
+        <location filename="../qtbrynhildr.cpp" line="2016"/>
         <source>Stop Recording</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>記録終了</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2013"/>
-        <location filename="../qtbrynhildr.cpp" line="2016"/>
+        <location filename="../qtbrynhildr.cpp" line="2020"/>
+        <location filename="../qtbrynhildr.cpp" line="2023"/>
         <source>Start Replay</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>再生開始</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2115"/>
-        <location filename="../qtbrynhildr.cpp" line="2117"/>
+        <location filename="../qtbrynhildr.cpp" line="2122"/>
+        <location filename="../qtbrynhildr.cpp" line="2124"/>
         <source>Cancel File Transferring</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルの転送を中止</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2122"/>
+        <location filename="../qtbrynhildr.cpp" line="2129"/>
         <source>None</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>圧縮しない</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2126"/>
+        <location filename="../qtbrynhildr.cpp" line="2133"/>
         <source>Desktop Compress Mode : None</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップ圧縮 : しない</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2128"/>
+        <location filename="../qtbrynhildr.cpp" line="2135"/>
         <source>1/2</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>1/2 圧縮</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2132"/>
+        <location filename="../qtbrynhildr.cpp" line="2139"/>
         <source>Desktop Compress Mode : 1/2</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップ圧縮 : 1/2 圧縮</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2134"/>
+        <location filename="../qtbrynhildr.cpp" line="2141"/>
         <source>1/4</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>1/4 圧縮</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2138"/>
+        <location filename="../qtbrynhildr.cpp" line="2145"/>
         <source>Desktop Compress Mode : 1/4</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップ圧縮 : 1/4 圧縮</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2140"/>
+        <location filename="../qtbrynhildr.cpp" line="2147"/>
         <source>1/8</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>1/8 圧縮</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2144"/>
+        <location filename="../qtbrynhildr.cpp" line="2151"/>
         <source>Desktop Compress Mode : 1/8</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップ圧縮 : 1/8 圧縮</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2154"/>
+        <location filename="../qtbrynhildr.cpp" line="2161"/>
         <source>Decode Type : C++</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デコードタイプ : C++</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2161"/>
+        <location filename="../qtbrynhildr.cpp" line="2168"/>
         <source>Decode Type : NEON</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デコードタイプ : NEON</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2164"/>
+        <location filename="../qtbrynhildr.cpp" line="2171"/>
         <source>1 thread</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>1 スレッド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2168"/>
+        <location filename="../qtbrynhildr.cpp" line="2175"/>
         <source>Decode Thread : 1 thread</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デコードスレッド : 1 スレッド</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2188"/>
-        <location filename="../qtbrynhildr.cpp" line="2189"/>
+        <location filename="../qtbrynhildr.cpp" line="2195"/>
+        <location filename="../qtbrynhildr.cpp" line="2196"/>
         <source>Preferences...</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>設定...</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2195"/>
-        <location filename="../qtbrynhildr.cpp" line="2196"/>
+        <location filename="../qtbrynhildr.cpp" line="2202"/>
+        <location filename="../qtbrynhildr.cpp" line="2203"/>
         <source>Disable Drawing</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>描画を行わない</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2202"/>
-        <location filename="../qtbrynhildr.cpp" line="2203"/>
+        <location filename="../qtbrynhildr.cpp" line="2209"/>
+        <location filename="../qtbrynhildr.cpp" line="2210"/>
         <source>Disable Maxfps</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>maxfps を無効にする</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2211"/>
-        <location filename="../qtbrynhildr.cpp" line="2212"/>
+        <location filename="../qtbrynhildr.cpp" line="2218"/>
+        <location filename="../qtbrynhildr.cpp" line="2219"/>
         <source>Select Phase 0</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フェーズ 0 まで実行</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2216"/>
-        <location filename="../qtbrynhildr.cpp" line="2217"/>
+        <location filename="../qtbrynhildr.cpp" line="2223"/>
+        <location filename="../qtbrynhildr.cpp" line="2224"/>
         <source>Select Phase 1</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フェーズ 1 まで実行</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2221"/>
-        <location filename="../qtbrynhildr.cpp" line="2222"/>
+        <location filename="../qtbrynhildr.cpp" line="2228"/>
+        <location filename="../qtbrynhildr.cpp" line="2229"/>
         <source>Select Phase 2</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フェーズ 2 まで実行</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2226"/>
-        <location filename="../qtbrynhildr.cpp" line="2227"/>
+        <location filename="../qtbrynhildr.cpp" line="2233"/>
+        <location filename="../qtbrynhildr.cpp" line="2234"/>
         <source>Select Phase 3</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フェーズ 3 まで実行</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2231"/>
-        <location filename="../qtbrynhildr.cpp" line="2232"/>
+        <location filename="../qtbrynhildr.cpp" line="2238"/>
+        <location filename="../qtbrynhildr.cpp" line="2239"/>
         <source>Select Phase 4</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フェーズ 4 まで実行</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2407"/>
+        <location filename="../qtbrynhildr.cpp" line="2415"/>
         <source>Select Public Mode Version</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>パブリックモード選択</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2361"/>
+        <location filename="../qtbrynhildr.cpp" line="2369"/>
         <source>Sound Cache</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>サウンド キャッシュ</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2370"/>
+        <location filename="../qtbrynhildr.cpp" line="2378"/>
         <source>Control</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>コントロール</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2372"/>
+        <location filename="../qtbrynhildr.cpp" line="2380"/>
         <source>Send Key</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>キーを送信</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2430"/>
+        <location filename="../qtbrynhildr.cpp" line="2438"/>
         <source>Option</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>オプション</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2487"/>
+        <location filename="../qtbrynhildr.cpp" line="2495"/>
         <source>In Testing</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>テスト中の機能</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2433"/>
+        <location filename="../qtbrynhildr.cpp" line="2441"/>
         <source>Desktop Compress Mode</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>デスクトップ圧縮モード</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2494"/>
+        <location filename="../qtbrynhildr.cpp" line="2502"/>
         <source>Help</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2671"/>
-        <location filename="../qtbrynhildr.cpp" line="2695"/>
+        <location filename="../qtbrynhildr.cpp" line="2679"/>
+        <location filename="../qtbrynhildr.cpp" line="2703"/>
         <source>Frame Rate : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>フレームレート : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="2608"/>
-        <location filename="../qtbrynhildr.cpp" line="2619"/>
-        <location filename="../qtbrynhildr.cpp" line="2631"/>
-        <location filename="../qtbrynhildr.cpp" line="2637"/>
+        <location filename="../qtbrynhildr.cpp" line="2616"/>
+        <location filename="../qtbrynhildr.cpp" line="2627"/>
+        <location filename="../qtbrynhildr.cpp" line="2639"/>
+        <location filename="../qtbrynhildr.cpp" line="2645"/>
         <source>Connected : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>接続中 : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3448"/>
-        <location filename="../qtbrynhildr.cpp" line="5079"/>
+        <location filename="../qtbrynhildr.cpp" line="3462"/>
+        <location filename="../qtbrynhildr.cpp" line="3578"/>
+        <location filename="../qtbrynhildr.cpp" line="5125"/>
         <source>Confirm</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3430"/>
-        <location filename="../qtbrynhildr.cpp" line="3449"/>
+        <location filename="../qtbrynhildr.cpp" line="3444"/>
+        <location filename="../qtbrynhildr.cpp" line="3463"/>
         <source>exit application?</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>アプリケーションを終了しますか?</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3487"/>
+        <location filename="../qtbrynhildr.cpp" line="3501"/>
         <source>Shutdown.</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>終了しました。</translation>

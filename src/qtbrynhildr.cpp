@@ -123,6 +123,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_BENCHMARK
   ,connectToServer_Action(0)
   ,disconnectToServer_Action(0)
+  ,initializeSettings_Action(0)
   ,outputKeyboardLog_Action(0)
   ,outputLog_Action(0)
   ,exit_Action(0)
@@ -1575,6 +1576,12 @@ void QtBrynhildr::createActions()
   disconnectToServer_Action->setEnabled(false);
   connect(disconnectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpDisconnectToServer()));
 
+  //   initialize settings
+  initializeSettings_Action = new QAction(tr("Initialize Settings"), this);
+  initializeSettings_Action->setStatusTip(tr("Initialize Settings"));
+  initializeSettings_Action->setEnabled(true);
+  connect(initializeSettings_Action, SIGNAL(triggered()), this, SLOT(initializeSettings()));
+
   // output keyboardlog Action
   outputKeyboardLog_Action = new QAction(tr("Output Keyboard Log"), this);
   outputKeyboardLog_Action->setCheckable(true);
@@ -2259,6 +2266,7 @@ void QtBrynhildr::createMenus()
   fileMenu->addSeparator();
   fileMenu->addAction(preferences_Action);
 #endif // QTB_PREFERENCE
+  fileMenu->addAction(initializeSettings_Action);
 #if defined(QTB_DEV_DESKTOP)
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
@@ -2822,6 +2830,11 @@ void QtBrynhildr::connected()
   // refresh menu
   refreshMenu();
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // save settings
+  settings->writeSettings();
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // full screen at connected
   fullScreenMode = false;
   onSetDesktopScalingFactorForFullScreen = false;
@@ -2830,14 +2843,12 @@ void QtBrynhildr::connected()
 	onSetDesktopScalingFactorForFullScreen = true;
   }
 
-#if defined(QTB_DEV_TOUCHPANEL)
-  // save settings
-  settings->writeSettings();
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
   // try to connect flag
   isExecutingToConnect = false;
   updateConnected();
+
+  // disable initialize settings menu
+  initializeSettings_Action->setEnabled(false);
 }
 
 // disconnected
@@ -2945,6 +2956,9 @@ void QtBrynhildr::disconnected()
   // try to connect flag
   isExecutingToConnect = false;
   updateConnected();
+
+  // disable initialize settings menu
+  initializeSettings_Action->setEnabled(true);
 }
 
 // set desktop scaling factor
@@ -3554,6 +3568,43 @@ void QtBrynhildr::preferences()
   //cout << "leave preferences()" << endl << flush;
 }
 #endif // QTB_PREFERENCE
+
+// initialize settings
+void QtBrynhildr::initializeSettings()
+{
+  //cout << "enter initializeSettings()" << endl << flush;
+
+  int ret = QMessageBox::question(this,
+								  tr("Confirm"),
+								  tr("Do you initialize settings ?"),
+								  QMessageBox::Ok | QMessageBox::Cancel,
+								  QMessageBox::Cancel);
+  if (ret == QMessageBox::Cancel){
+	// cancel
+	return;
+  }
+
+  // remove settings
+  if (settings != 0)
+	delete settings;
+
+  // create setting
+#if QTB_CRYPTOGRAM
+  settinegs = new Settings(iniFileName, cipher);
+#else // QTB_CRYPTGRAM
+  settings = new Settings(iniFileName);
+#endif // QTB_CRYPTGRAM
+
+  // save settings
+  settings->writeSettings();
+
+  // close connect to server dialog
+  if (onPopUpConnectToServer){
+	connectToServerDialog->hide();
+  }
+
+  //cout << "leave initializeSettings()" << endl << flush;
+}
 
 // clear Video Quality check
 void QtBrynhildr::clearVideoQualityCheck()

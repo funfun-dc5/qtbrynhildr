@@ -217,6 +217,9 @@ private:
   // disconnect to server
   QAction *disconnectToServer_Action;
 
+  // initialize settings
+  QAction *initializeSettings_Action;
+
   // output keyboard log
   QAction *outputKeyboardLog_Action;
 
@@ -770,6 +773,9 @@ private slots:
   // preferences
   void preferences();
 #endif // QTB_PREFERENCE
+
+  // initialize settings
+  void initializeSettings();
 
   // set video quality
   void setVideoQuality_MINIMUM();

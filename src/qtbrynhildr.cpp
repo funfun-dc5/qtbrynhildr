@@ -12,9 +12,6 @@
 //#include <iostream>
 
 // Qt Header
-#if 0 // for TEST
-#include <QApplication>
-#endif // for TEST
 #include <QAudioDeviceInfo>
 #include <QByteArray>
 #include <QCloseEvent>
@@ -29,34 +26,13 @@
 #include <QSysInfo>
 
 // Local Header
+#include "graphicsthread/yuv2rgb/yuv2rgb.h"
 #include "qtbrynhildr.h"
 #include "parameters.h"
 #include "settings.h"
 #include "util/cpuinfo.h"
 #include "version.h"
-#if 0 // for TEST
-#include "graphicsthread/yuv2rgb/yuv2rgb.h"
-#endif // 0 // for TEST
 
-// for TEST
-#include "graphicsthread/yuv2rgb/yuv2rgb.h"
-
-// for TEST
-#define QTB_TEST_DESKTOP_IMAGE_CAPTURE1	0
-#define QTB_TEST_DESKTOP_IMAGE_CAPTURE2	0
-
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE1 // for TEST Desktop Image Capture
-#include <QPixmap>
-#include <QScreen>
-#include <QWindow>
-#include <QWidget>
-#endif // for TEST
-
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE2 // for TEST Desktop Image Capture
-// for Desktop Duplication API
-#include <d3d11.h>
-#include <dxgi1_2.h>
-#endif // for TEST
 
 namespace qtbrynhildr {
 
@@ -262,9 +238,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,logMessage(new LogMessage(this))
   ,controlThread(0)
   ,graphicsThread(0)
-#if 0 // for TEST
-  ,graphicsBuffer(0)
-#endif // 0 // for TEST
   ,soundThread(0)
 #ifdef USE_KEYLAYOUTFILE
   ,keyLayoutFileManager(0)
@@ -289,10 +262,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,mouseBuffer(0)
   ,timer(0)
   ,isExecutingToConnect(false)
-#if 0 // for TEST
-  ,timer_Graphics(0)
-  ,image(new QImage)
-#endif // 0 // for TEST
   ,onClearDesktop(false)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
@@ -304,52 +273,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // for DEBUG
   ,outputLog(false)
 {
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE1 // for TEST Desktop Image Capture
-  QScreen *screen = QGuiApplication::primaryScreen();
-  if (screen != 0){
-	cout << "primaryScreen(): OK" << endl << flush;
-  }
-  else {
-	cout << "primaryScreen(): NG" << endl << flush;
-  }
-  const QWindow *window = windowHandle();
-  if (window != 0){
-	cout << "windowHandle(): OK" << endl << flush;
-	screen = window->screen();
-  }
-  else {
-	cout << "windowHandle(): NG" << endl << flush;
-  }
-  if (screen == 0){
-	cout << "capture: NG" << endl << flush;
-  }
-  else {
-	cout << "capture: OK" << endl << flush;
-	QDateTime beginTime = QDateTime::currentDateTime();
-	QPixmap pixmap;
-	QImage image;
-	for (int i = 0 ; i < 1000; i++){
-	  pixmap = screen->grabWindow(0);	// 33 (ms)
-	  //	  image = pixmap.toImage();
-	  //	  image.convertToFormat(QImage::Format_RGB888); // 17 (ms)
-	}
-	QDateTime endTime = QDateTime::currentDateTime();
-	qint64 diffSeconds = endTime.toMSecsSinceEpoch() - beginTime.toMSecsSinceEpoch();
-	cout << "diff time = " << diffSeconds << " msecs." << endl << flush;
-	pixmap.save("jpg/desktop.jpg", "jpg", 75);
-  }
-#endif // for TEST
-
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE2 // for TEST Desktop Image Capture
-#if _MSC_VER
-  // Desktop Duplication API
-  IDXGIResource *DesktopResource = 0;
-  DXGI_OUTDUPL_FRAME_INFO FrameInfo;
-#else // _MSC_VER
-#error "MSVC Only"
-#endif // _MSC_VER
-#endif // for TEST
-
   // bootTime
   bootTime = QDateTime::currentDateTime();
 
@@ -523,7 +446,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 currentPath,
 								 QMessageBox::Ok,
 								 QMessageBox::NoButton);
-#endif
+#endif // for DEBUG
 
   // current system name
   if (settings->getOutputLog()){
@@ -877,11 +800,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
-#if 0 // for TEST
-  // get buffers
-  graphicsBuffer = graphicsThread->getGraphicsBuffer();
-#endif // 0 // for TEST
-
   // connect
   // all thread
   connect(controlThread,
@@ -973,15 +891,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   timer->start(QTB_WINDOW_UPDATE_DURATION);
 
 #if 0 // for TEST
-  // initialize timer for Graphics
-  timer_Graphics = new QTimer(this);
-  connect(timer_Graphics, SIGNAL(timeout()), SLOT(timerExpired_Graphics()));
-  startTimer_Graphics(settings->getFrameRate());
-
-  init_Graphics();
-#endif // 0 // for TEST
-
-#if 0 // for TEST
   // initialize mouse cursor
   if (settings->getOnDisplayMouseCursor()){
 	menuBar()->setCursor(cursor());
@@ -1051,17 +960,6 @@ QtBrynhildr::~QtBrynhildr()
 	delete timer;
 	timer = 0;
   }
-#if 0 // for TEST
-  if (timer_Graphics != 0){
-	timer_Graphics->stop();
-	delete timer_Graphics;
-	timer_Graphics = 0;
-  }
-  if (image != 0){
-	delete image;
-	image = 0;
-  }
-#endif // 0 // for TEST
   if (settings != 0){
 	// disconnect to server
 	if (settings->getConnected())
@@ -1081,9 +979,6 @@ QtBrynhildr::~QtBrynhildr()
 	// delete
 	delete graphicsThread;
 	graphicsThread = 0;
-#if 0 // for TEST
-	graphicsBuffer = 0;
-#endif // 0 // for TEST
   }
   if (soundThread != 0){
 	// delete
@@ -2276,7 +2171,7 @@ void QtBrynhildr::createMenus()
   displayMenu = menuBar()->addMenu(tr("Display"));
 #if 0 // for TEST
   displayMenu->addAction(showMenuBar_Action);
-#endif // if 1
+#endif // for TEST
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
 #endif // defined(QTB_DEV_DESKTOP)
@@ -2380,7 +2275,7 @@ void QtBrynhildr::createMenus()
   sendKeySubMenu = controlMenu->addMenu(tr("Send Key"));
 #if 0 // for TEST
   sendKeySubMenu->addAction(sendKey1_Action);
-#endif
+#endif // for TEST
   sendKeySubMenu->addAction(sendKey2_Action);
   sendKeySubMenu->addAction(sendKey3_Action);
   sendKeySubMenu->addAction(sendKey4_Action);
@@ -4210,7 +4105,7 @@ void QtBrynhildr::sendKey_CTRL_ALT_DEL()
 	keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP); // CTRL key release
   }
 }
-#endif
+#endif // for TEST
 
 // send key for ALT + F4
 void QtBrynhildr::sendKey_ALT_F4()
@@ -5223,165 +5118,5 @@ void QtBrynhildr::timerExpired()
 #endif // QTB_BENCHMARK
   }
 }
-
-#if 0 // for TEST
-void QtBrynhildr::timerExpired_Graphics()
-{
-  //  cout << "timerExpired_Graphics()!" << endl << flush;
-
-  if (graphicsBuffer == 0){
-	// Nothing to do
-	return;
-  }
-
-  if (!settings->getConnected()){
-	// Nothing to do
-	return;
-  }
-
-  // draw a desktop image
-  draw_Graphics();
-}
-
-// restart timer graphics
-void QtBrynhildr::startTimer_Graphics(int frameRate)
-{
-  if (frameRate == 0) // MAXIMUM
-	frameRate = 100;
-
-  frameRate *= 1.1;
-  timer_Graphics->stop();
-  timer_Graphics->start(1000/frameRate);
-  //  cout << "interval = " << 1000/frameRate << " (ms)" << endl << flush;
-}
-
-// initialize graphics
-void QtBrynhildr::init_Graphics()
-{
-  initVPX();
-}
-
-// draw graphics
-void QtBrynhildr::draw_Graphics()
-{
-  // draw a desktop image
-  const int bufferSize = 512 * 1024; // 512KB for TEST
-  char buffer[bufferSize];
-  GraphicsBuffer::FrameType type;
-  unsigned int rate;
-
-  int getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-  //  cout << "getSize = " << getSize << endl << flush;
-  //  cout << "type = " << type << endl << flush;
-  if (getSize == 0){
-	// Nothing to do
-	return;
-  }
-  if (getSize > bufferSize){
-	// internal error
-	ABORT();
-  }
-
-  // MODE 5/6 (MJPEG)
-  if (type == GraphicsBuffer::TYPE_JPEG){
-	if (rate != settings->getFrameRate()){
-	  while (rate != settings->getFrameRate()){
-		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-		if (getSize == 0){
-		  return;
-		}
-	  }
-	  // change interval
-	  startTimer_Graphics(settings->getFrameRate());
-	}
-
-	// draw desktop
-	if (settings->getOnGraphics()){
-	  bool result = image->loadFromData((const uchar *)buffer, (uint)getSize, "JPEG");
-	  if (result){
-		//  image->save("jpg/desktop.jpg", "jpg", 75);
-		drawDesktop(*image);
-
-		// clear desktop flag clear
-		onClearDesktop = false;
-	  }
-	  else {
-		// Failed to loadFromData()
-		cout << "Failed to loadFromData()" << endl << flush;
-	  }
-	}
-  }
-  // MODE 7 (VP8)
-  else if (type == GraphicsBuffer::TYPE_VP8){
-	// decode VP8
-	decodeVPX((uchar*)buffer, getSize);
-
-	//	cout << "rate = " << rate <<
-	//	  ", settings->getFrameRate() = " << settings->getFrameRate() << endl << flush;
-
-	if (rate != settings->getFrameRate()){
-	  while (rate != settings->getFrameRate()){
-		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-		if (getSize == 0){
-		  return;
-		}
-		decodeVPX((uchar*)buffer, getSize);
-		//	  cout << "skip frame : " << rate << endl << flush;
-		//	  cout << "rate = " << rate <<
-		//		", settings->getFrameRate() = " << settings->getFrameRate() << endl << flush;
-	  }
-	  // change interval
-	  startTimer_Graphics(settings->getFrameRate());
-	}
-
-	// draw desktop
-	if (settings->getOnGraphics()){
-	  // make RGB image
-#if QTB_SIMD_SUPPORT
-	  int rgbImageSize;
-	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-		rgbImageSize = makeRGBImage_SIMD(settings->getConvertThreadCount());
-	  }
-	  else {
-		rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
-	  }
-#else // QTB_SIMD_SUPPORT
-	  int rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
-#endif // QTB_SIMD_SUPPORT
-	  //  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
-
-	  if (rgbImageSize == 0){
-		return;
-	  }
-
-	  // create QImage
-	  if (image != 0){
-		delete image;
-	  }
-	  image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-
-	  // draw image
-	  drawDesktop(*image);
-	  //  image->save("jpg/desktop.jpg", "jpg", 75);
-
-	  // clear desktop flag clear
-	  onClearDesktop = false;
-	}
-  }
-  else {
-	// internal error : unknown type
-	ABORT();
-  }
-
-  // clear desktop
-  if (!settings->getOnGraphics()){
-	// clear desktop only at once
-	if (!onClearDesktop){
-	  onClearDesktop = true;
-	  clearDesktop();
-	}
-  }
-}
-#endif // 0 // for TEST
 
 } // end of namespace qtbrynhildr

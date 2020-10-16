@@ -62,9 +62,6 @@
 // thread
 #include "controlthread/controlthread.h"
 #include "graphicsthread/graphicsthread.h"
-#if 0 // for TEST
-#include "graphicsthread/graphicsbuffer.h"
-#endif // 0 // for TEST
 #include "soundthread/soundthread.h"
 
 #ifdef USE_KEYLAYOUTFILE
@@ -506,11 +503,6 @@ private:
   // thread for graphics
   GraphicsThread *graphicsThread;
 
-#if 0 // for TEST
-  // graphics buffer
-  GraphicsBuffer *graphicsBuffer;
-#endif // 0 // for TEST
-
   // thread for sound
   SoundThread *soundThread;
 
@@ -572,14 +564,6 @@ private:
 
   // try to connect flag
   bool isExecutingToConnect;
-
-#if 0 // for TEST
-  // timer for Graphics
-  QTimer *timer_Graphics;
-
-  // image
-  QImage *image;
-#endif // 0 // for TEST
 
   // clear desktop flag
   bool onClearDesktop;
@@ -1049,17 +1033,6 @@ private:
 	this->heightMargin = heightMargin;
   }
 
-#if 0 // for TEST
-  // start timer graphics
-  void startTimer_Graphics(int frameRate);
-
-  // initialize graphics
-  void init_Graphics();
-
-  // draw graphics
-  void draw_Graphics();
-#endif // 0 // for TEST
-
 private slots:
 #if QTB_UPDATECHECK
   // finished download
@@ -1067,10 +1040,6 @@ private slots:
 #endif // QTB_UPDATECHECK
 
   void timerExpired();
-
-#if 0 // for TEST
-  void timerExpired_Graphics();
-#endif // 0 // for TEST
 };
 
 } // end of namespace qtbrynhildr

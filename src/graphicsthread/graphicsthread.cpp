@@ -48,10 +48,6 @@ namespace qtbrynhildr {
 // constructor
 GraphicsThread::GraphicsThread(Settings *settings)
   :NetThread("GraphicsThread", settings)
-#if QTB_TEST_CODE
-  ,graphicsBufferSize(0)
-  ,graphicsBuffer(0)
-#endif // QTB_TEST_CODE
   ,onDrawing(true)
    //,image(new QImage)
 #if QTB_SIMD_SUPPORT
@@ -68,12 +64,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #endif // QTB_BENCHMARK
 {
   //outputLog = true; // for DEBUG
-
-#if QTB_TEST_CODE
-  // graphics buffer
-  graphicsBufferSize = settings->getGraphicsBufferSize();
-  graphicsBuffer = new GraphicsBuffer(graphicsBufferSize);
-#endif // QTB_TEST_CODE
 
   // local buffer
   buffer = new char [QTB_GRAPHICS_LOCAL_BUFFER_SIZE];
@@ -130,15 +120,6 @@ GraphicsThread::GraphicsThread(Settings *settings)
 GraphicsThread::~GraphicsThread()
 {
   // delete objects
-#if QTB_TEST_CODE
-  // graphics buffer
-  if (graphicsBuffer != 0){
-	delete graphicsBuffer;
-	graphicsBuffer = 0;
-	graphicsBufferSize = 0;
-  }
-#endif // QTB_TEST_CODE
-
   // local buffer
   if (buffer != 0){
 	delete [] buffer;
@@ -290,43 +271,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   if (!onDrawing)
 	return TRANSMIT_SUCCEEDED;
 
-#if !QTB_TEST_CODE
-
   // draw 1 frame
   drawDesktopImage(buffer, receivedDataSize, com_data->video_mode);
-
-#else // !QTB_TEST_CODE
-
-  // put data into graphics buffer
-  if (settings->getOnGraphics() || com_data->video_mode == VIDEO_MODE_COMPRESS){
-	// block
-	while (graphicsBuffer->getFrameCount() >= GraphicsBuffer::FRAME_TABLE_NUM ||
-		   graphicsBuffer->getSize() + receivedDataSize > graphicsBufferSize){
-	  QThread::msleep(5); // 5 milli seconds sleep
-	}
-
-	unsigned int rate = settings->getFrameRate();
-	int putSize = graphicsBuffer->putFrame(buffer, receivedDataSize, com_data->video_mode, rate);
-	if (putSize != receivedDataSize){
-	  // error for put()
-	  // Failed to put into graphics buffer
-	  cout << "Failed to put into graphics buffer" << endl << flush;
-	  return TRANSMIT_FAILED_PUT_BUFFER;
-	}
-
-	// get from graphics buffer
-	VIDEO_MODE mode;
-	int getSize = graphicsBuffer->getFrame(buffer, mode, rate);
-	if (getSize != 0){
-	  // draw 1 frame
-	  drawDesktopImage(buffer, getSize, mode);
-	}
-	else {
-	  cout << "Graphics Buffer is empty!" << endl << flush;
-	}
-  }
-
-#endif // !QTB_TEST_CODE
 
   return TRANSMIT_SUCCEEDED;
 }

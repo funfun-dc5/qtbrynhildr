@@ -145,9 +145,6 @@ const bool QTB_IN_TESTING				= false;
 // LOAD BITMAP
 #define QTB_LOAD_BITMAP				0
 
-// TEST CODE
-#define QTB_TEST_CODE				0
-
 // benchmark
 #define QTB_BENCHMARK				1
 

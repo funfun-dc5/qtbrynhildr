@@ -2379,7 +2379,7 @@ void QtBrynhildr::createMenus()
   touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeQtBrynhildr_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if defined(QTB_DEV_DESKTOP)
+#if 1 // defined(QTB_DEV_DESKTOP)
   optionMenu->addSeparator();
   optionMenu->addAction(outputKeyboardLog_Action);
   optionMenu->addAction(outputLog_Action);

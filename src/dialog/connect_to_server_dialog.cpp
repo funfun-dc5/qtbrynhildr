@@ -161,8 +161,11 @@ bool ConnectToServerDialog::event(QEvent *event)
 		  }
 		  //qDebug() << "srverNameList->size() : " << serverNameList->size();
 		  //qDebug() << "serverNameListIndex : " << serverNameListIndex;
-		  lineEdit_hostname->clear();
-		  lineEdit_hostname->insert(serverNameList->at(serverNameListIndex));
+		  QString serverName = serverNameList->at(serverNameListIndex);
+		  if (serverName != ""){
+			lineEdit_hostname->clear();
+			lineEdit_hostname->insert(serverName);
+		  }
 		}
 	  }
 	  prevPressedTime = currentTime;

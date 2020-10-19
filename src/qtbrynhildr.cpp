@@ -461,22 +461,24 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 settings->getSettings()->fileName());
   }
 
+#if defined(QTB_DEV_DESKTOP)
   // desktop size information
   if (settings->getOutputLog()){
 	QRect currentScreen = settings->getDesktop()->getCurrentScreen();
 	int desktopWidth = currentScreen.width();
 	int desktopHeight = currentScreen.height();
 	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Desktop Width  = " + QString::number(desktopWidth));
+								 (QString)"Desktop Width : " + QString::number(desktopWidth));
 	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Desktop Height = " + QString::number(desktopHeight));
+								 (QString)"Desktop Height: " + QString::number(desktopHeight));
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // Supported Sound Sample Rate List
   {
 	const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
-	QString str = "Supported Sampling Rate (Hz) :";
+	QString str = "Supported Sampling Rate (Hz): ";
 	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
 	  str =  str + " " + QString::number((int)(*i));
 	}
@@ -608,7 +610,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   int screenHeight = settings->getDesktop()->getCurrentScreen().size().height();
   //  qDebug() << "screenSize = " << settings->getDesktop()->getCurrentScreen();
   screenHeight += heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
-  screenHeight += 20; // for TEST (Nexus7(2013):1920x1200)
+  screenHeight += 15; // for TEST (Nexus7(2013):1920x1200)
   //  qDebug() << "screenHeight = " << screenHeight;
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -626,6 +628,44 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
 	QRect(screenWidth - checkWidth, screenHeight/8 * 3, checkWidth, screenHeight/4);
 
+  // screen size information
+  if (settings->getOutputLog()){
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 (QString)"Screen Width : " + QString::number(screenWidth));
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 (QString)"Screen Height: " + QString::number(screenHeight));
+	int interfaceType = settings->getTouchpanelInterfaceType();
+	QPoint topLeft =
+	  touchpanelInterface[interfaceType].softwareButtonRect.topLeft();
+	QPoint bottomRight =
+	  touchpanelInterface[interfaceType].softwareButtonRect.bottomRight();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "software button check area: (" +
+								 QString::number(topLeft.x()) +
+								 ", " +
+								 QString::number(topLeft.y()) +
+								 ") - (" +
+								 QString::number(bottomRight.x()) +
+								 ", " +
+								 QString::number(bottomRight.y()) +
+								 ")"
+								 );
+	topLeft =
+	  touchpanelInterface[interfaceType].softwareKeyboardRect.topLeft();
+	bottomRight =
+	  touchpanelInterface[interfaceType].softwareKeyboardRect.bottomRight();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "software keyboard check area: (" +
+								 QString::number(topLeft.x()) +
+								 ", " +
+								 QString::number(topLeft.y()) +
+								 ") - (" +
+								 QString::number(bottomRight.x()) +
+								 ", " +
+								 QString::number(bottomRight.y()) +
+								 ")"
+								 );
+  }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #endif // defined(QTB_DEV_TOUCHPANEL)

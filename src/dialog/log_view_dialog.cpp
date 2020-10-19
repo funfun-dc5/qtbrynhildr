@@ -7,6 +7,7 @@
 // System Header
 
 // Qt Header
+//#include <QDebug>
 #include <QDialog>
 #include <QFile>
 #include <QRect>
@@ -94,23 +95,27 @@ void LogViewDialog::show()
   }
   clear();
   setPlainText(logText);
+  //qDebug() << "topPos : " << topPos;
+  //qDebug() << "lastPos: " << lastPos;
   QDialog::show();
 }
 
 // reset
 void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
-  if (button->text() == tr("Reset")){
+
+  if (button->text() == tr("Reset") || button->text() == "Reset"){ // for Android(Bug?)
 	// clear log
 	//	cout << "Clear log!" << endl <<flush;
 	topPos = lastPos;
+	//qDebug() << "Reset: topPos: " << lastPos;
 	show();
   }
 #if 0 // for DEBUG
   else {
-	cout << "Other!" << endl <<flush;
+	qDebug()<< "Reset: unknown text! : " << button->text();
   }
-#endif // for DEBUG
+#endif // 0 // for DEBUG
 }
 
 } // end of namespace qtbrynhildr

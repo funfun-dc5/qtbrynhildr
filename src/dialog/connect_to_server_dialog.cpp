@@ -215,6 +215,9 @@ void ConnectToServerDialog::getFromSettings()
   else {
 	checkBox_fullScreen->setVisible(false);
   }
+#if defined(QTB_DEV_TOUCHPANEL)
+  checkBox_fullScreen->setVisible(false);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 // set to settings

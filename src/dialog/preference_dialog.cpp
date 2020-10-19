@@ -352,11 +352,11 @@ void PreferenceDialog::resetting()
 {
 #if defined(QTB_DEV_TOUCHPANEL)
   QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-  int desktopWidth = currentScreen.width();
-  int desktopHeight = currentScreen.height();
+  int screenWidth = currentScreen.width();
+  int screenHeight = currentScreen.height();
 
-  int dialogWidth = desktopWidth * 0.5;
-  int dialogHeight = desktopHeight * 0.5;
+  int dialogWidth = screenWidth * 0.5;
+  int dialogHeight = screenHeight * 0.8;
   int fontPointSize = 14;
 
   // set minimum width

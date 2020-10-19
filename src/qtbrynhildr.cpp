@@ -2203,7 +2203,7 @@ void QtBrynhildr::createMenus()
   fileMenu->addAction(preferences_Action);
 #endif // QTB_PREFERENCE
   fileMenu->addAction(initializeSettings_Action);
-#if defined(QTB_DEV_DESKTOP)
+#if 1 // defined(QTB_DEV_DESKTOP)
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
 #endif // defined(QTB_DEV_DESKTOP)

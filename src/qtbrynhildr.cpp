@@ -624,7 +624,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareButtonRect =
 	QRect(0, screenHeight/8 * 3, checkWidth, screenHeight/4);
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
-	QRect(screenWidth - checkWidth, screenHeight/8 * 3, screenWidth, screenHeight/4);
+	QRect(screenWidth - checkWidth, screenHeight/8 * 3, checkWidth, screenHeight/4);
+
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #endif // defined(QTB_DEV_TOUCHPANEL)

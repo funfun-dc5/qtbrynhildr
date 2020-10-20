@@ -7,9 +7,7 @@
 // System Header
 
 // Qt Header
-#if 0 // for TEST
 #include <QFileInfo>
-#endif
 #include <QtNetwork>
 
 // Local Header

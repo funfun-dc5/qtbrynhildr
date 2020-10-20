@@ -83,12 +83,12 @@ const bool QTB_TRANSLATION				= true;
 // in testing
 const bool QTB_IN_TESTING				= false;
 
-#if 0 // for TEST
+#if 0 // into qtbrynhildr.pro
 // recorder
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_RECORDER				1
 #endif // defined(QTB_DEV_DESKTOP)
-#endif // 0 // for TEST
+#endif // into qtbrynhildr.pro
 
 // splash screen
 #define QTB_SPLASH_SCREEN			0
@@ -125,13 +125,13 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_AUTO_COMPLETE			1
 
 // update check
-#if 0 // for TEST
+#if 0 // into qtbrynhildr.pro
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				1
 #else // defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				0
 #endif // defined(QTB_DEV_DESKTOP)
-#endif // 0 // for TEST
+#endif // into qtbrynhildr.pro
 
 // preference dialog
 //#define QTB_PREFERENCE				1

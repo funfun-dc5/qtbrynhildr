@@ -95,7 +95,7 @@ void Recorder::stopRecording(const char* saveFileName)
   in_file.close();
   out_file.close();
   remove(filename);
-#else
+#else // copy for TEST
   if (rename(filename, saveFileName) == 0){
 	if (outputLog)
 	  cout << "succeeded to rename()." << endl << flush;
@@ -103,7 +103,7 @@ void Recorder::stopRecording(const char* saveFileName)
   else {
 	cout << "failed to rename()." << endl << flush;
   }
-#endif
+#endif // copy for TEST
 }
 
 // put com_data

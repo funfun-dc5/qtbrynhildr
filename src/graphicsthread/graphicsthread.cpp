@@ -227,7 +227,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if 0 // for TEST
   cout << "[" << name << "] frame no = " << (int)com_data->frame_no << endl;
   cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush;
-#endif
+#endif // for TEST
 
   // == VIDEO_MODE_MJPEG ==
   // buffer[]         : JPEG File Image

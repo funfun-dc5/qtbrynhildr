@@ -1977,14 +1977,12 @@ void QtBrynhildr::createActions()
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // send key Action
-#if 0 // for TEST
+#if 0 // disable now
   sendKey1_Action = new QAction(tr("Ctrl + Alt + Del"), this);
   sendKey1_Action->setEnabled(false);
   sendKey1_Action->setStatusTip(tr("Send key: Ctrl + Alt + Del"));
   connect(sendKey1_Action, SIGNAL(triggered()), this, SLOT(sendKey_CTRL_ALT_DEL()));
-#else
-  sendKey1_Action = 0;
-#endif
+#endif // disable now
 
   sendKey2_Action = new QAction(tr("Alt + F4"), this);
   sendKey2_Action->setEnabled(false);
@@ -2190,10 +2188,10 @@ void QtBrynhildr::createMenus()
   if (settings->getOnTransferFileSupport() || settings->getOnTransferClipboardSupport()){
 	fileMenu->addSeparator();
   }
-#if 0 // for TEST
+#if 0 // disable now
   if (settings->getOnTransferClipboardSupport())
 	fileMenu->addAction(sendClipboard_Action);
-#endif
+#endif // disable now
   if (settings->getOnTransferFileSupport()){
 	fileMenu->addAction(sendFile_Action);
 	fileMenu->addAction(cancelFileTransferring_Action);
@@ -2210,9 +2208,9 @@ void QtBrynhildr::createMenus()
 
   // display menu
   displayMenu = menuBar()->addMenu(tr("Display"));
-#if 0 // for TEST
+#if 0 // disable now
   displayMenu->addAction(showMenuBar_Action);
-#endif // for TEST
+#endif // disable now
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
 #endif // defined(QTB_DEV_DESKTOP)
@@ -2314,9 +2312,9 @@ void QtBrynhildr::createMenus()
   controlMenu = menuBar()->addMenu(tr("Control"));
   // for send key
   sendKeySubMenu = controlMenu->addMenu(tr("Send Key"));
-#if 0 // for TEST
+#if 0 // disable now
   sendKeySubMenu->addAction(sendKey1_Action);
-#endif // for TEST
+#endif // disable now
   sendKeySubMenu->addAction(sendKey2_Action);
   sendKeySubMenu->addAction(sendKey3_Action);
   sendKeySubMenu->addAction(sendKey4_Action);
@@ -2938,7 +2936,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   //cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << endl << flush;
 }
 
-#if 0 // for TEST
+#if 0 // disable now
 // change event
 void QtBrynhildr::changeEvent(QEvent *event)
 {
@@ -2949,7 +2947,7 @@ void QtBrynhildr::changeEvent(QEvent *event)
 	//  OR'ed Qt::WindowNoState, Qt::WindowMaximized, Qt::WindowMinimized, Qt::WindowActive
   }
 }
-#endif // for TEST
+#endif // disable now
 
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
@@ -3060,10 +3058,10 @@ void QtBrynhildr::readSettings()
 	resize(defaultRect.size());
   }
 #else // for all platform
-	QPoint pos = settings->getSettings()->value(QTB_WINDOWPOS, QVariant(QPoint(200, 200))).toPoint();
-	QSize size = settings->getSettings()->value(QTB_WINDOWSIZE, QVariant(QSize(800, 600))).toSize();
-	move(pos);
-	resize(size);
+  QPoint pos = settings->getSettings()->value(QTB_WINDOWPOS, QVariant(QPoint(200, 200))).toPoint();
+  QSize size = settings->getSettings()->value(QTB_WINDOWSIZE, QVariant(QSize(800, 600))).toSize();
+  move(pos);
+  resize(size);
 #endif // for all platform
 
   // restore window state
@@ -3079,8 +3077,8 @@ void QtBrynhildr::writeSettings()
   // save geometry
 #if 0 // for all platform
   settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
-  qDebug() << "frame geometry: " << frameGeometry();
-  qDebug() << "geometry: " << geometry();
+  //qDebug() << "frame geometry: " << frameGeometry();
+  //qDebug() << "geometry: " << geometry();
 #else // for all platform
   settings->getSettings()->setValue(QTB_WINDOWPOS, pos());
   settings->getSettings()->setValue(QTB_WINDOWSIZE, size());
@@ -3308,10 +3306,10 @@ void QtBrynhildr::reconnectToServer()
   // update status bar
   updateStatusBar();
 
-#if 0 // for TEST
+#if 0 // disable now
   // desktop clear
   onDesktopClear();
-#endif
+#endif // disable now
 }
 
 // disconnect to server
@@ -3332,23 +3330,9 @@ void QtBrynhildr::disconnectToServer()
   graphicsThread->exitThread();
   soundThread->exitThread();
 
-#if 1 // no event loop
   controlThread->wait();
   graphicsThread->wait();
   soundThread->wait();
-#else // 1 // no event loop
-  controlThread->exit();
-  controlThread->wait();
-  graphicsThread->exit();
-  graphicsThread->wait();
-  soundThread->exit();
-  soundThread->wait();
-#endif// 1 // no event loop
-
-#if 0 // for TEST
-  // close socket
-  closeSocket();
-#endif
 
   // disconnected
   disconnected();
@@ -4129,7 +4113,7 @@ void QtBrynhildr::stopReplayRecordingControl()
 }
 #endif // QTB_RECORDER
 
-#if 0 // for TEST
+#if 0 // disable now
 // send key for CTRL + ALT + DEL
 void QtBrynhildr::sendKey_CTRL_ALT_DEL()
 {
@@ -4146,7 +4130,7 @@ void QtBrynhildr::sendKey_CTRL_ALT_DEL()
 	keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP); // CTRL key release
   }
 }
-#endif // for TEST
+#endif // disable now
 
 // send key for ALT + F4
 void QtBrynhildr::sendKey_ALT_F4()
@@ -4271,7 +4255,7 @@ void QtBrynhildr::fullScreen()
   QSize size = desktopPanel->getSize();
   cout << "fullScreen() : width  = " << size.width() << endl << flush;
   cout << "fullScreen() : height = " << size.height() << endl << flush;
-#endif
+#endif // for DEBUG
 
   static qreal originalScalingFactor = 1.0;
 
@@ -4493,15 +4477,9 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   QSize size = softwareKeyboard->resetSize();
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
 #if !QTB_NEW_DESKTOPWINDOW
-#if 0 // for TEST
-  // correct
-  windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
-  windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
-#else // 0 // for TEST
   // correct
   windowSize.setWidth(windowSize.width() - widthMargin);
   windowSize.setHeight(windowSize.height() - heightMargin);
-#endif // 0 // for TEST
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size
@@ -5036,7 +5014,7 @@ void QtBrynhildr::finishedDownload()
 #endif // for TEST
 
   QString releasePage(byteArray);
-#if 1
+
   // check latest release
   int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
   if (startIndex > 0) {
@@ -5087,32 +5065,6 @@ void QtBrynhildr::finishedDownload()
   else {
 	cout << "NOT Found tag!" << endl << flush;
   }
-#else // for TEST
-  // display all tag and version in release page
-  int startIndex = 0;
-  while(true){
-	startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH, startIndex);
-	if (startIndex < 0) break;
-
-	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
-	int lastIndex = releasePage.indexOf("\"", startIndex);
-	//  cout << "startIndex = " << startIndex << endl << flush;
-	//  cout << "lastIndex  = " << lastIndex << endl << flush;
-	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString tag;
-	tag.append(tagRef);
-	cout << "Found tag = v" << qPrintable(tag);
-	startIndex = lastIndex;
-
-	startIndex = lastIndex + 2;
-	lastIndex = releasePage.indexOf("<", startIndex);
-	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString ver;
-	ver.append(verRef);
-	cout << " : ver = " << qPrintable(ver) << endl << flush;
-	startIndex = lastIndex;
-  }
-#endif // for TEST
 
   // clear memory
   httpGetter->clear();

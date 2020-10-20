@@ -434,7 +434,7 @@ void ControlThread::setupHeader()
   cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
   cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
   cout.flags(flags);
-#endif
+#endif // for DEBUG
 }
 
 // init protocol header

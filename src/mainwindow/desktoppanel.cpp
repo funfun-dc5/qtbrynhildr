@@ -131,7 +131,7 @@ void DesktopPanel::refreshDesktop(QImage &image)
 	cout << "resize..." << endl; // for DEBUG
 	cout << "image.size().width()  = " << image.size().width() << endl; // for DEBUG
 	cout << "image.size().height() = " << image.size().height() << endl << flush; // for DEBUG
-#endif
+#endif // for DEBUG
 	previousSize = currentSize;
 
 	// resize main window
@@ -201,11 +201,6 @@ void DesktopPanel::resizeWindow()
 void DesktopPanel::clearDesktop()
 {
   //  cout << "clearDesktop()" << endl << flush;
-#if 0 // for TEST
-  if (settings->getConnected()){
-	return;
-  }
-#endif
   if (!image.isNull()){
 	image.fill(QTB_DESKTOP_BACKGROUND_COLOR);
 	updateDesktop();
@@ -879,7 +874,7 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
   return false;
 }
 #endif // defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-#endif
+#endif // for TEST
 
 // scroll area
 bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)

@@ -24,16 +24,6 @@ DecoderVP8SSE::~DecoderVP8SSE()
 {
 }
 
-#if 0
-// pre-process
-bool DecoderVP8SSE::preprocess(char *buffer, int size)
-{
-  cout << "DecoderVP8SSE::preprocess()" << endl << flush;
-
-  return true;
-}
-#endif // 0
-
 // get desktop image
 QImage* DecoderVP8SSE::getDesktopImage(int numOfThread)
 {

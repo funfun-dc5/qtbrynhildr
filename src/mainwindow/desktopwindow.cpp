@@ -81,7 +81,6 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
 	return;
   }
 
-#if 1 // for TEST
   QPainter painter(this);
   painter.drawImage(0, 0, image);
   // draw marker for mouse cursor
@@ -100,15 +99,6 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
   else {
 	drawMarkerCounter = 30;
   }
-#endif // for TEST
-#else // for TEST
-  QImage image2(image.size().width(), image.size().height(), QImage::Format_ARGB32_Premultiplied);
-  QPainter imagePainter(&image2);
-  imagePainter.setRenderHint(QPainter::Antialiasing, true);
-  imagePainter.drawImage(0, 0, image);
-
-  QPainter widgetPainter(this);
-  widgetPainter.drawImage(0, 0, image2);
 #endif // for TEST
 }
 

@@ -691,10 +691,10 @@ public slots:
   void outputLogMessage(int id, const QString text);
 
 protected:
-#if 0 // for TEST
+#if 0 // disable now
   // change event
   void changeEvent(QEvent *event);
-#endif // for TEST
+#endif // disable now
 
   // window close event
   void closeEvent(QCloseEvent *event);
@@ -822,9 +822,9 @@ private slots:
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // send key
-#if 0 // for TEST
+#if 0 // disable now
   void sendKey_CTRL_ALT_DEL(); // CTRL + ALT + DEL
-#endif
+#endif // disable now
   void sendKey_ALT_F4(); // ALT + F4
   void sendKey_CTRL_ESC(); // CTRL + ESC
   void sendKey_WINDOWS(); // WINDOWS

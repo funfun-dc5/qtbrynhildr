@@ -10,6 +10,7 @@
 //#include <QDebug>
 #include <QDialog>
 #include <QFile>
+#include <QPushButton>
 #include <QRect>
 #include <QTextStream>
 
@@ -33,6 +34,14 @@ LogViewDialog::LogViewDialog(Settings *settings,
 
   // Read Only
   textEdit->setReadOnly(true);
+
+  // select All button
+  QPushButton *selectAllButton = buttonBox->addButton(tr("Select All"), QDialogButtonBox::ActionRole);
+  connect(selectAllButton, SIGNAL(pressed()), textEdit, SLOT(selectAll()));
+
+  // Copy button
+  QPushButton *copyButton = buttonBox->addButton(tr("Copy"), QDialogButtonBox::ActionRole);
+  connect(copyButton, SIGNAL(pressed()), textEdit, SLOT(copy()));
 
   // resetting
   resetting();
@@ -102,7 +111,6 @@ void LogViewDialog::show()
 // reset
 void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
-
   if (button->text() == tr("Reset") || button->text() == "Reset"){ // for Android(Bug?)
 	// clear log
 	//	cout << "Clear log!" << endl <<flush;

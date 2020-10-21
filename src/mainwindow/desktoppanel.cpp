@@ -177,7 +177,7 @@ void DesktopPanel::resizeWindow()
 		height += heightMargin;
 #endif // !QTB_NEW_DESKTOPWINDOW
 
-		QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+		QSize screenSize = settings->getCurrentScreenSize();
 		if (width > screenSize.width()){
 		  width = screenSize.width();
 		}

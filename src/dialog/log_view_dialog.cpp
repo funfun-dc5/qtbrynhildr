@@ -51,11 +51,10 @@ void LogViewDialog::resizeEvent(QResizeEvent *event)
 void LogViewDialog::resetting()
 {
 #if defined(QTB_DEV_TOUCHPANEL)
-  QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-  int screenWidth = currentScreen.width();
-  int screenHeight = currentScreen.height();
+  int screenWidth = settings->getCurrentScreenWidth();
+  int screenHeight = settings->getCurrentScreenHeight();
   int dialogWidth = screenWidth-200;
-  int dialogHeight = screenHeight-200;
+  int dialogHeight = screenHeight-400;
   int fontPointSize = 14;
 
   // resetting dialog window size and font size

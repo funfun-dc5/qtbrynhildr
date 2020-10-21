@@ -112,6 +112,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,videoQuality_MAXIMUM_Action(0)
   ,showMenuBar_Action(0)
   ,showStatusBar_Action(0)
+  ,showTouchpanelCheckArea_Action(0)
   ,showFrameRate_Action(0)
   ,fullScreen_Action(0)
   ,staysOnTop_Action(0)
@@ -462,15 +463,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 
 #if defined(QTB_DEV_DESKTOP)
-  // desktop size information
+  // screen size information
   if (settings->getOutputLog()){
-	QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-	int desktopWidth = currentScreen.width();
-	int desktopHeight = currentScreen.height();
+	int screenWidth = settings->getCurrentScreenWidth();
+	int screenHeight = settings->getCurrentScreenHeight();
 	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Desktop Width : " + QString::number(desktopWidth));
+								 (QString)"Screen Width : " + QString::number(screenWidth));
 	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Desktop Height: " + QString::number(desktopHeight));
+								 (QString)"Screen Height: " + QString::number(screenHeight));
   }
 #endif // defined(QTB_DEV_DESKTOP)
 
@@ -606,23 +606,26 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set window information
-  int screenWidth = settings->getDesktop()->getCurrentScreen().size().width();
-  int screenHeight = settings->getDesktop()->getCurrentScreen().size().height();
-  //  qDebug() << "screenSize = " << settings->getDesktop()->getCurrentScreen();
-  screenHeight += heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
-  screenHeight += 15; // for TEST (Nexus7(2013):1920x1200)
+  int screenHeightOffset = heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
+  screenHeightOffset += 15; // for TEST (Nexus7(2013):1920x1200)
+  settings->setScreenHeightOffset(screenHeightOffset);
+  int screenWidth = settings->getCurrentScreenWidth();
+  int screenHeight = settings->getCurrentScreenHeight();
+  //  qDebug() << "screenSize = " << settings->getCurrentScreenSize();
   //  qDebug() << "screenHeight = " << screenHeight;
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // setup touchpanel interface
   // keroremote
-  int checkHeight = screenHeight * 0.05; // 1/20 of screen height
+  //int checkHeight = screenHeight * 0.05; // 1/20 of screen height
+  int checkHeight = screenHeight / 25 ; // 1/25 of screen height
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareButtonRect =
 	QRect(0, screenHeight - checkHeight, screenWidth/4, checkHeight);
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareKeyboardRect =
 	QRect(screenWidth/8 * 3, screenHeight - checkHeight, screenWidth/4, checkHeight);
   // qtbrynhilr
-  int checkWidth = screenWidth * 0.05; // 1/20 of screen width
+  //int checkWidth = screenWidth * 0.05; // 1/20 of screen width
+  int checkWidth = screenWidth / 32; // 1/32 of screen width
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareButtonRect =
 	QRect(0, screenHeight/8 * 3, checkWidth, screenHeight/4);
   touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
@@ -1176,12 +1179,12 @@ void QtBrynhildr::refreshWindow()
 // adjust window
 void QtBrynhildr::adjustWindow(const QSize &size)
 {
-  QRect desktop = settings->getDesktop()->getCurrentScreen();
+  QRect desktop = settings->getCurrentScreen();
   QRect newWindow = QRect(pos(), size);
   if (!desktop.contains(newWindow)){
 	const QPoint newPos =
-	  QPoint((settings->getDesktop()->getCurrentScreen().width() - size.width() - 64)/2,
-			 (settings->getDesktop()->getCurrentScreen().height() - size.height() - 64)/2);
+	  QPoint((settings->getCurrentScreenWidth() - size.width() - 64)/2,
+			 (settings->getCurrentScreenHeight() - size.height() - 64)/2);
 	move(newPos);
   }
 }
@@ -1400,7 +1403,7 @@ void QtBrynhildr::drawDesktop(QImage image)
   // set desktop scaling factor for full screen mode
   if (onSetDesktopScalingFactorForFullScreen){
 	onSetDesktopScalingFactorForFullScreen = false;
-	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+	QSize screenSize = settings->getCurrentScreenSize();
 	setDesktopScalingFactor(screenSize);
 #if QTB_NEW_DESKTOPWINDOW
 	graphicsView->setScalingFactorForFullScreen(settings->getDesktopScalingFactor());
@@ -1571,6 +1574,13 @@ void QtBrynhildr::createActions()
   showStatusBar_Action->setCheckable(true);
   showStatusBar_Action->setChecked(settings->getOnShowStatusBar());
   connect(showStatusBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowStatusBar()));
+
+  // Show Touchpanel Check Area
+  showTouchpanelCheckArea_Action = new QAction(tr("Show Touchpanel Check Area"), this);
+  showTouchpanelCheckArea_Action->setStatusTip(tr("Show Touchpanel Check Area"));
+  showTouchpanelCheckArea_Action->setCheckable(true);
+  showTouchpanelCheckArea_Action->setChecked(settings->getOnShowTouchpanelCheckArea());
+  connect(showTouchpanelCheckArea_Action, SIGNAL(triggered()), this, SLOT(toggleShowTouchpanelCheckArea()));
 
   // Show FrameRate
   showFrameRate_Action = new QAction(tr("Show Frame Rate"), this);
@@ -2214,6 +2224,9 @@ void QtBrynhildr::createMenus()
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
 #endif // defined(QTB_DEV_DESKTOP)
+#if defined(QTB_DEV_TOUCHPANEL)
+  displayMenu->addAction(showTouchpanelCheckArea_Action);
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showFrameRate_Action);
 #endif // defined(QTB_DEV_DESKTOP)
@@ -2915,7 +2928,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   height -= heightMargin;
 #endif // !QTB_NEW_DESKTOPWINDOW
 
-  QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+  QSize screenSize = settings->getCurrentScreenSize();
+
   if (desktopPanel->getSize().width() > screenSize.width()){
 	width = desktopPanel->getSize().width();
   }
@@ -4231,6 +4245,12 @@ void QtBrynhildr::toggleShowStatusBar()
   refreshWindow();
 }
 
+// toggle show status bar
+void QtBrynhildr::toggleShowTouchpanelCheckArea()
+{
+  settings->setOnShowTouchpanelCheckArea(!settings->getOnShowTouchpanelCheckArea());
+}
+
 // toggle show frame rate
 void QtBrynhildr::toggleShowFrameRate()
 {
@@ -4279,8 +4299,8 @@ void QtBrynhildr::fullScreen()
 	//	 << size().width() << "," << size().height() << ")" << endl << flush;
 	//setDesktopScalingFactor(size());
 	originalScalingFactor = settings->getDesktopScalingFactor();
-	QSize size = settings->getDesktop()->getCurrentScreen().size();
-	setDesktopScalingFactor(size);
+	QSize screenSize = settings->getCurrentScreenSize();
+	setDesktopScalingFactor(screenSize);
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -4591,6 +4611,18 @@ void QtBrynhildr::toggleSoftwareKeyboard()
 void QtBrynhildr::toggleSoftwareButton()
 {
   toggleShowSoftwareButton();
+}
+
+// get software keyboard check area
+QRect QtBrynhildr::getSoftwareKeyboardCheckArea()
+{
+  return touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareKeyboardRect;
+}
+
+// get software button check area
+QRect QtBrynhildr::getSoftwareButtonCheckArea()
+{
+  return touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareButtonRect;
 }
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON

@@ -118,6 +118,8 @@ Settings::Settings(const char *iniFileName)
   setDesktopWidth(QTB_MAX_SERVER_DESKTOP_WIDTH);
   setDesktopHeight(QTB_MAX_SERVER_DESKTOP_WIDTH);
 
+  setScreenHeightOffset(0);
+
   setMonitorNo(QTB_MONITOR_NO_DEFAULT);
 
   setOnOpenConnectToServerDialogAtBootup(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT);
@@ -142,6 +144,7 @@ Settings::Settings(const char *iniFileName)
 
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
+  setOnShowTouchpanelCheckArea(QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT);
 
   setOnFullScreenAtConnected(QTB_ONFULLSCREENATCONNECTED_DEFAULT);
 
@@ -433,6 +436,10 @@ void Settings::readSettings()
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
 									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
 
+  // load onShowTouchpanelCheckArea
+  setOnShowTouchpanelCheckArea(settings->value(QTB_ONSHOWTOUCHPANELCHECKAREA,
+											   QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT).toBool());
+
   // load onFullScreenAtConnected
   setOnFullScreenAtConnected(settings->value(QTB_ONFULLSCREENATCONNECTED,
 											 QTB_ONFULLSCREENATCONNECTED_DEFAULT).toBool());
@@ -698,6 +705,9 @@ void Settings::writeSettings()
   // save onShowStatusBar
   settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
 
+  // save onShowTouchpanelCheckArea
+  settings->setValue(QTB_ONSHOWTOUCHPANELCHECKAREA, onShowTouchpanelCheckArea);
+
   // save onFullScreenAtConnected
   settings->setValue(QTB_ONFULLSCREENATCONNECTED, onFullScreenAtConnected);
 
@@ -852,6 +862,7 @@ void Settings::printSettings() const
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
+  qDebug() << "ShowTouchpanelCheckArea : " << onShowTouchpanelCheckArea;
   qDebug() << "FullScreenAtConnected   : " << onFullScreenAtConnected;
   qDebug() << "HideMenuAndStatusBarAtFullScreen : " << onHideMenuAndStatusBarAtFullScreen;
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;

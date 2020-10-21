@@ -331,6 +331,14 @@ typedef enum {
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
 
+// for onShowTouchpanelCheckArea
+#define QTB_ONSHOWTOUCHPANELCHECKAREA			"onShowTouchpanelCheckArea"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT	true
+#else // defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT	false
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -600,6 +608,9 @@ private:
   // desktop height
   volatile SIZE desktopHeight;
 
+  // screen height offset
+  volatile int screenHeightOffset;
+
   // select monitor
   volatile MONITOR_NO monitorNo;
 
@@ -644,6 +655,9 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+  // show touchpanel check area
+  volatile bool onShowTouchpanelCheckArea;
 
   // full screen
   volatile bool onFullScreenAtConnected;
@@ -1624,6 +1638,40 @@ public:
 	return true;
   }
 
+  // get current screen
+  QRect getCurrentScreen() const
+  {
+	return desktop->getCurrentScreen();
+  }
+
+  // get current screen width
+  int getCurrentScreenWidth() const
+  {
+	return desktop->getCurrentScreen().width();
+  }
+
+  // get current screen height
+  int getCurrentScreenHeight() const
+  {
+	int screenHeight = desktop->getCurrentScreen().height();
+	screenHeight += screenHeightOffset;
+	return screenHeight;
+  }
+
+  // get current screen size
+  QSize getCurrentScreenSize() const
+  {
+	int width = getCurrentScreenWidth();
+	int height = getCurrentScreenHeight();
+	return QSize(width, height);
+  }
+
+  // set screen height offset
+  void setScreenHeightOffset(int screenHeightOffset)
+  {
+	this->screenHeightOffset = screenHeightOffset;
+  }
+
   // get monitor change type
   MONITOR_CHANGE_TYPE getMonitorChangeType() const
   {
@@ -1831,6 +1879,18 @@ public:
   void setOnShowStatusBar(bool onShowStatusBar)
   {
 	this->onShowStatusBar = onShowStatusBar;
+  }
+
+  // get show touchpanel cheak area flag
+  bool getOnShowTouchpanelCheckArea() const
+  {
+	return onShowTouchpanelCheckArea;
+  }
+
+  // set show touchpanel check area flag
+  void setOnShowTouchpanelCheckArea(bool onShowTouchpanelCheckArea)
+  {
+	this->onShowTouchpanelCheckArea = onShowTouchpanelCheckArea;
   }
 
   // get full screen flag

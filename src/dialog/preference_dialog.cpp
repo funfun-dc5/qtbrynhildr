@@ -351,10 +351,8 @@ bool PreferenceDialog::setToSettings()
 void PreferenceDialog::resetting()
 {
 #if defined(QTB_DEV_TOUCHPANEL)
-  QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-  int screenWidth = currentScreen.width();
-  int screenHeight = currentScreen.height();
-
+  int screenWidth = settings->getCurrentScreenWidth();
+  int screenHeight = settings->getCurrentScreenHeight();
   int dialogWidth = screenWidth * 0.5;
   int dialogHeight = screenHeight * 0.8;
   int fontPointSize = 14;

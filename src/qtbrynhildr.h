@@ -249,6 +249,9 @@ private:
   // show status bar
   QAction *showStatusBar_Action;
 
+  // show touchpanel check area
+  QAction *showTouchpanelCheckArea_Action;
+
   // show frame rate
   QAction *showFrameRate_Action;
 
@@ -645,6 +648,11 @@ public:
   void toggleSoftwareKeyboard();
   // toggle software button
   void toggleSoftwareButton();
+
+  // get software keyboard check area
+  QRect getSoftwareKeyboardCheckArea();
+  // get software button check area
+  QRect getSoftwareButtonCheckArea();
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 public slots:
@@ -836,6 +844,9 @@ private slots:
 
   // toggle show status bar
   void toggleShowStatusBar();
+
+  // toggle show touchpanel check area
+  void toggleShowTouchpanelCheckArea();
 
   // toggle show frame rate
   void toggleShowFrameRate();

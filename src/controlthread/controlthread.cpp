@@ -249,12 +249,12 @@ PROCESS_RESULT ControlThread::processForHeader()
 		!doneCheckPassword && settings->getDesktopScalingFactor() == 1.0){
 	  // cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
 	  // cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
-	  // cout << "[ControlThread] screen width  = " << settings->getDesktop()->getCurrentScreen().width() << endl;
-	  // cout << "[ControlThread] screen height = " << settings->getDesktop()->getCurrentScreen().height() << endl;
+	  // cout << "[ControlThread] screen width  = " << settings->getCurrentScreenWidth() << endl;
+	  // cout << "[ControlThread] screen height = " << settings->getCurrentScreenHeight() << endl;
 	  int server_width = com_data->server_cx * settings->getDesktopScalingFactor();
 	  int server_height = com_data->server_cy * settings->getDesktopScalingFactor();
-	  int client_width = settings->getDesktop()->getCurrentScreen().width();
-	  int client_height = settings->getDesktop()->getCurrentScreen().height();
+	  int client_width = settings->getCurrentScreenWidth();
+	  int client_height = settings->getCurrentScreenHeight();
 
 	  client_width *= settings->getAutoresizeDesktopScalingFactor();
 	  client_height *= settings->getAutoresizeDesktopScalingFactor();

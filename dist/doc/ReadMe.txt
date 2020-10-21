@@ -270,9 +270,9 @@ Qt Brynhildr で検索インストール
 
 [3点タップ] Windowsキーの送出
 
-[左端中央から中央に向かってフリック] ソフトウェア・キーボード表示
+[左端中央から中央に向かってフリック] ソフトウェア・ボタン表示
 
-[右端中央から中央に向かってフリック] ソフトウェア・ボタン表示
+[右端中央から中央に向かってフリック] ソフトウェア・キーボード表示
 
 ---------------------------------------------------------
 [ソフトウェア・キーボード表示中]
@@ -341,6 +341,12 @@ Qt Brynhildr で検索インストール
 
      KeroRemoteとは異なる呼び出し方(左右の中央の端からのスワイプ)で
      ソフトウェア・キーボード/ボタンを表示します。
+
+(3) 「タッチパネルのチェックエリアを表示」
+
+     ソフトウェア・キーボード/ボタンを表示するためにチェックしているエリアを表示します。
+     最初にエリア内へタッチしたあとエリアの外までフリックすることで
+     ソフトウェア・キーボード/ボタンの表示を開始します。
 
 ----------------------------------------------------------------------
 2. Brynhildrサーバの準備 (パブリックモードの有効化)
@@ -779,6 +785,7 @@ onDesktopAutoresize=true
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true
+onShowTouchpanelCheckArea=false
 onFullScreenAtConnected=false
 onHideMenuAndStatusBarAtFullScreen=true
 onShowFrameRate=true

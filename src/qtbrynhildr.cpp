@@ -84,7 +84,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_RECORDER
   ,optionMenu(0)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,touchpanelInterfaceTypeSubMenu(0)
+  ,touchpanelOperationTypeSubMenu(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,inTestingSubMenu(0)
 #if QTB_DESKTOP_COMPRESS_MODE
@@ -112,7 +112,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,videoQuality_MAXIMUM_Action(0)
   ,showMenuBar_Action(0)
   ,showStatusBar_Action(0)
-  ,showTouchpanelCheckArea_Action(0)
   ,showFrameRate_Action(0)
   ,fullScreen_Action(0)
   ,staysOnTop_Action(0)
@@ -177,8 +176,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,sendKey6_Action(0)
   ,onScrollMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,touchpanelInterfaceTypeKeroRemote_Action(0)
-  ,touchpanelInterfaceTypeQtBrynhildr_Action(0)
+  ,touchpanelOperationTypeKeroRemote_Action(0)
+  ,touchpanelOperationTypeQtBrynhildr_Action(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,sendClipboard_Action(0)
   ,sendFile_Action(0)
@@ -603,45 +602,33 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "statusBar height = " + QString::number(heightOfStatusBar));
   }
+#if 0 // for TEST
+  qDebug() << "titleBar height = " << heightOfTitleBar;
+  qDebug() << "menuBar height = " << heightOfMenuBar;
+  qDebug() << "statusBar height = " << heightOfStatusBar;
+#endif // for TEST
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set window information
-  int screenHeightOffset = heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
-  screenHeightOffset += 15; // for TEST (Nexus7(2013):1920x1200)
-  settings->setScreenHeightOffset(screenHeightOffset);
   int screenWidth = settings->getCurrentScreenWidth();
-  int screenHeight = settings->getCurrentScreenHeight();
-  //  qDebug() << "screenSize = " << settings->getCurrentScreenSize();
+  //  int screenHeight = settings->getCurrentScreenHeight();
   //  qDebug() << "screenHeight = " << screenHeight;
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // setup touchpanel interface
-  // keroremote
-  //int checkHeight = screenHeight * 0.05; // 1/20 of screen height
-  int checkHeight = screenHeight / 25 ; // 1/25 of screen height
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareButtonRect =
-	QRect(0, screenHeight - checkHeight, screenWidth/4, checkHeight);
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareKeyboardRect =
-	QRect(screenWidth/8 * 3, screenHeight - checkHeight, screenWidth/4, checkHeight);
-  // qtbrynhilr
   //int checkWidth = screenWidth * 0.05; // 1/20 of screen width
   int checkWidth = screenWidth / 32; // 1/32 of screen width
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareButtonRect =
-	QRect(0, screenHeight/8 * 3, checkWidth, screenHeight/4);
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
-	QRect(screenWidth - checkWidth, screenHeight/8 * 3, checkWidth, screenHeight/4);
+  touchpanelInterface.softwareButtonRect =
+	QRect(0, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
+  touchpanelInterface.softwareKeyboardRect =
+	QRect(screenWidth - checkWidth, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
 
-  // screen size information
+  // interface check area information
   if (settings->getOutputLog()){
-	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Screen Width : " + QString::number(screenWidth));
-	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Screen Height: " + QString::number(screenHeight));
-	int interfaceType = settings->getTouchpanelInterfaceType();
 	QPoint topLeft =
-	  touchpanelInterface[interfaceType].softwareButtonRect.topLeft();
+	  touchpanelInterface.softwareButtonRect.topLeft();
 	QPoint bottomRight =
-	  touchpanelInterface[interfaceType].softwareButtonRect.bottomRight();
+	  touchpanelInterface.softwareButtonRect.bottomRight();
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "software button check area: (" +
 								 QString::number(topLeft.x()) +
@@ -654,9 +641,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 ")"
 								 );
 	topLeft =
-	  touchpanelInterface[interfaceType].softwareKeyboardRect.topLeft();
+	  touchpanelInterface.softwareKeyboardRect.topLeft();
 	bottomRight =
-	  touchpanelInterface[interfaceType].softwareKeyboardRect.bottomRight();
+	  touchpanelInterface.softwareKeyboardRect.bottomRight();
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "software keyboard check area: (" +
 								 QString::number(topLeft.x()) +
@@ -1575,13 +1562,6 @@ void QtBrynhildr::createActions()
   showStatusBar_Action->setChecked(settings->getOnShowStatusBar());
   connect(showStatusBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowStatusBar()));
 
-  // Show Touchpanel Check Area
-  showTouchpanelCheckArea_Action = new QAction(tr("Show Touchpanel Check Area"), this);
-  showTouchpanelCheckArea_Action->setStatusTip(tr("Show Touchpanel Check Area"));
-  showTouchpanelCheckArea_Action->setCheckable(true);
-  showTouchpanelCheckArea_Action->setChecked(settings->getOnShowTouchpanelCheckArea());
-  connect(showTouchpanelCheckArea_Action, SIGNAL(triggered()), this, SLOT(toggleShowTouchpanelCheckArea()));
-
   // Show FrameRate
   showFrameRate_Action = new QAction(tr("Show Frame Rate"), this);
   showFrameRate_Action->setStatusTip(tr("Show Frame Rate"));
@@ -2030,24 +2010,24 @@ void QtBrynhildr::createActions()
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type
-  touchpanelInterfaceTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
-  touchpanelInterfaceTypeKeroRemote_Action->setEnabled(true);
-  touchpanelInterfaceTypeKeroRemote_Action->setCheckable(true);
-  touchpanelInterfaceTypeKeroRemote_Action->setChecked(
-					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE);
-  touchpanelInterfaceTypeKeroRemote_Action->setStatusTip(tr("KeroRemote Type"));
-  connect(touchpanelInterfaceTypeKeroRemote_Action, SIGNAL(triggered()), this,
-		  SLOT(touchpanelInterfaceTypeKeroRemote()));
+  // touchpanel operation type
+  touchpanelOperationTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
+  touchpanelOperationTypeKeroRemote_Action->setEnabled(true);
+  touchpanelOperationTypeKeroRemote_Action->setCheckable(true);
+  touchpanelOperationTypeKeroRemote_Action->setChecked(
+					settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE);
+  touchpanelOperationTypeKeroRemote_Action->setStatusTip(tr("KeroRemote Type"));
+  connect(touchpanelOperationTypeKeroRemote_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelOperationTypeKeroRemote()));
 
-  touchpanelInterfaceTypeQtBrynhildr_Action = new QAction(tr("Qt Brynhildr Type"), this);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setEnabled(true);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setCheckable(true);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(
-					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setStatusTip(tr("Qt Brynhildr Type"));
-  connect(touchpanelInterfaceTypeQtBrynhildr_Action, SIGNAL(triggered()), this,
-		  SLOT(touchpanelInterfaceTypeQtBrynhildr()));
+  touchpanelOperationTypeQtBrynhildr_Action = new QAction(tr("Qt Brynhildr Type"), this);
+  touchpanelOperationTypeQtBrynhildr_Action->setEnabled(true);
+  touchpanelOperationTypeQtBrynhildr_Action->setCheckable(true);
+  touchpanelOperationTypeQtBrynhildr_Action->setChecked(
+					settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR);
+  touchpanelOperationTypeQtBrynhildr_Action->setStatusTip(tr("Qt Brynhildr Type"));
+  connect(touchpanelOperationTypeQtBrynhildr_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelOperationTypeQtBrynhildr()));
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -2224,9 +2204,6 @@ void QtBrynhildr::createMenus()
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
 #endif // defined(QTB_DEV_DESKTOP)
-#if defined(QTB_DEV_TOUCHPANEL)
-  displayMenu->addAction(showTouchpanelCheckArea_Action);
-#endif // defined(QTB_DEV_TOUCHPANEL)
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showFrameRate_Action);
 #endif // defined(QTB_DEV_DESKTOP)
@@ -2424,10 +2401,10 @@ void QtBrynhildr::createMenus()
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type
-  touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface"));
-  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeKeroRemote_Action);
-  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeQtBrynhildr_Action);
+  // touchpanel operation type
+  touchpanelOperationTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Operation"));
+  touchpanelOperationTypeSubMenu->addAction(touchpanelOperationTypeKeroRemote_Action);
+  touchpanelOperationTypeSubMenu->addAction(touchpanelOperationTypeQtBrynhildr_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 1 // defined(QTB_DEV_DESKTOP)
@@ -2777,7 +2754,7 @@ void QtBrynhildr::connected()
   // refresh menu
   refreshMenu();
 
-#if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // defined(QTB_DEV_TOUCHPANEL)
   // save settings
   settings->writeSettings();
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -3258,8 +3235,8 @@ void QtBrynhildr::connectToServer()
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set touchpanel interface
-  graphicsView->setSoftwareButtonRect(touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareButtonRect);
-  graphicsView->setSoftwareKeyboardRect(touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareKeyboardRect);
+  graphicsView->setSoftwareButtonRect(touchpanelInterface.softwareButtonRect);
+  graphicsView->setSoftwareKeyboardRect(touchpanelInterface.softwareKeyboardRect);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
@@ -3293,6 +3270,11 @@ void QtBrynhildr::connectToServer()
 
   // enabled disconnect to server
   disconnectToServer_Action->setEnabled(true);
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // save settings
+  settings->writeSettings();
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 // reconnect to server
@@ -4245,12 +4227,6 @@ void QtBrynhildr::toggleShowStatusBar()
   refreshWindow();
 }
 
-// toggle show status bar
-void QtBrynhildr::toggleShowTouchpanelCheckArea()
-{
-  settings->setOnShowTouchpanelCheckArea(!settings->getOnShowTouchpanelCheckArea());
-}
-
 // toggle show frame rate
 void QtBrynhildr::toggleShowFrameRate()
 {
@@ -4616,13 +4592,13 @@ void QtBrynhildr::toggleSoftwareButton()
 // get software keyboard check area
 QRect QtBrynhildr::getSoftwareKeyboardCheckArea()
 {
-  return touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareKeyboardRect;
+  return touchpanelInterface.softwareKeyboardRect;
 }
 
 // get software button check area
 QRect QtBrynhildr::getSoftwareButtonCheckArea()
 {
-  return touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareButtonRect;
+  return touchpanelInterface.softwareButtonRect;
 }
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -4754,19 +4730,19 @@ void QtBrynhildr::toggleOnScrollMode()
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-// touchpanel interface type
-void QtBrynhildr::touchpanelInterfaceTypeKeroRemote()
+// touchpanel operation type
+void QtBrynhildr::touchpanelOperationTypeKeroRemote()
 {
-  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE);
-  touchpanelInterfaceTypeKeroRemote_Action->setChecked(true);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(false);
+  settings->setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE);
+  touchpanelOperationTypeKeroRemote_Action->setChecked(true);
+  touchpanelOperationTypeQtBrynhildr_Action->setChecked(false);
 }
 
-void QtBrynhildr::touchpanelInterfaceTypeQtBrynhildr()
+void QtBrynhildr::touchpanelOperationTypeQtBrynhildr()
 {
-  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR);
-  touchpanelInterfaceTypeKeroRemote_Action->setChecked(false);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(true);
+  settings->setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR);
+  touchpanelOperationTypeKeroRemote_Action->setChecked(false);
+  touchpanelOperationTypeQtBrynhildr_Action->setChecked(true);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

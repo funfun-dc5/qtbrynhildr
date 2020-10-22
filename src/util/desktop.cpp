@@ -10,6 +10,7 @@
 
 // Qt Header
 #include <QApplication>
+#include <QDebug>
 
 // Local Header
 #include "util/desktop.h"
@@ -48,6 +49,18 @@ Desktop::Desktop()
 	cout << "[Desktop] width  = " << currentScreen.width() << endl;
 	cout << "[Desktop] height = " << currentScreen.height() << endl;
   }
+
+#if 0 // for TEST
+  qDebug() << "name = " << screens.at(currentScreenNumber)->name();
+  qDebug() << "model = " << screens.at(currentScreenNumber)->model();
+  qDebug() << "geometry = " << screens.at(currentScreenNumber)->geometry();
+  qDebug() << "availableGeometry = " << screens.at(currentScreenNumber)->availableGeometry();
+  qDebug() << "virtualGeometry = " << screens.at(currentScreenNumber)->virtualGeometry();
+  qDebug() << "logicalDotsPerInchX = " << screens.at(currentScreenNumber)->logicalDotsPerInchX();
+  qDebug() << "logicalDotsPerInchY = " << screens.at(currentScreenNumber)->logicalDotsPerInchY();
+  qDebug() << "physicalDotsPerInchX = " << screens.at(currentScreenNumber)->physicalDotsPerInchX();
+  qDebug() << "physicalDotsPerInchY = " << screens.at(currentScreenNumber)->physicalDotsPerInchY();
+#endif // 0 // for TEST
 
 #if defined(Q_OS_LINUX)
 #define LINUX_SHMMAX "/proc/sys/kernel/shmmax"

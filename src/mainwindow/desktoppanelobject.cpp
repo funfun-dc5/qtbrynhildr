@@ -7,8 +7,6 @@
 // System Header
 
 // Qt Header
-#include <QBrush>
-#include <QRect>
 #include <QtGui>
 
 // Local Header
@@ -49,15 +47,7 @@ void DesktopPanelObject::updateDesktop()
 
 QRectF DesktopPanelObject::boundingRect() const
 {
-  //return QRectF(-image.width()/2, -image.height()/2, image.width(), image.height());
-  if (settings->getConnected()){
-    return QRectF(-image.width()/2, -image.height()/2,
-				  settings->getCurrentScreenWidth(),
-				  settings->getCurrentScreenHeight());
-  }
-  else {
-    return QRectF(0, 0, 0, 0);
-  }
+  return QRectF(-image.width()/2, -image.height()/2, image.width(), image.height());
 }
 
 void DesktopPanelObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -83,23 +73,6 @@ void DesktopPanelObject::paint(QPainter *painter, const QStyleOptionGraphicsItem
 	painter->drawArc(x, y, length, length, 0*360, 16*360);
 
 	drawMarkerCounter--;
-  }
-
-  // draw software keyboard/button check area
-  if (settings->getConnected() &&
-	  settings->getOnShowTouchpanelCheckArea()){
-	QRect keyboardCheckArea = qtbrynhildr->getSoftwareKeyboardCheckArea();
-	QRect buttonCheckArea = qtbrynhildr->getSoftwareButtonCheckArea();
-	keyboardCheckArea.translate(-hwidth, -hheight);
-	buttonCheckArea.translate(-hwidth, -hheight);
-#if 0 // for TEST
-	painter->fillRect(keyboardCheckArea, Qt::green);
-	painter->fillRect(buttonCheckArea, Qt::green);
-#else // 0 // for TEST
-	QBrush brush(Qt::green, Qt::Dense6Pattern);
-	painter->fillRect(keyboardCheckArea, brush);
-	painter->fillRect(buttonCheckArea, brush);
-#endif // 0 // for TEST
   }
 }
 

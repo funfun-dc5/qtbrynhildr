@@ -176,8 +176,8 @@ private:
   QMenu *optionMenu;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel Interface Type Sub Menu
-  QMenu *touchpanelInterfaceTypeSubMenu;
+  // touchpanel Operation Type Sub Menu
+  QMenu *touchpanelOperationTypeSubMenu;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // In Testing Sub Menu
@@ -248,9 +248,6 @@ private:
 
   // show status bar
   QAction *showStatusBar_Action;
-
-  // show touchpanel check area
-  QAction *showTouchpanelCheckArea_Action;
 
   // show frame rate
   QAction *showFrameRate_Action;
@@ -372,10 +369,10 @@ private:
   QAction *onScrollMode_Action;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type KeroRemote
-  QAction *touchpanelInterfaceTypeKeroRemote_Action;
-  // touchpanel interface type QtBrynhildr
-  QAction *touchpanelInterfaceTypeQtBrynhildr_Action;
+  // touchpanel operation type KeroRemote
+  QAction *touchpanelOperationTypeKeroRemote_Action;
+  // touchpanel operation type QtBrynhildr
+  QAction *touchpanelOperationTypeQtBrynhildr_Action;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -447,7 +444,7 @@ private:
   struct {
 	QRect softwareButtonRect;
 	QRect softwareKeyboardRect;
-  } touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_NUM];
+  } touchpanelInterface;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -845,9 +842,6 @@ private slots:
   // toggle show status bar
   void toggleShowStatusBar();
 
-  // toggle show touchpanel check area
-  void toggleShowTouchpanelCheckArea();
-
   // toggle show frame rate
   void toggleShowFrameRate();
 
@@ -918,9 +912,9 @@ private slots:
   void toggleOnScrollMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type
-  void touchpanelInterfaceTypeKeroRemote();
-  void touchpanelInterfaceTypeQtBrynhildr();
+  // touchpanel operation type
+  void touchpanelOperationTypeKeroRemote();
+  void touchpanelOperationTypeQtBrynhildr();
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON

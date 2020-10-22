@@ -78,7 +78,6 @@ typedef int PUBLICMODE_VERSION;
 
 // for serverName
 #define QTB_SERVERNAME			"serverName"
-//#define QTB_SERVERNAME_DEFAULT	"192.168.10.12"
 #define QTB_SERVERNAME_DEFAULT	""
 
 // for serverNameListSize
@@ -331,14 +330,6 @@ typedef enum {
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
 
-// for onShowTouchpanelCheckArea
-#define QTB_ONSHOWTOUCHPANELCHECKAREA			"onShowTouchpanelCheckArea"
-#if defined(QTB_DEV_TOUCHPANEL)
-#define QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT	true
-#else // defined(QTB_DEV_TOUCHPANEL)
-#define QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT	false
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -418,12 +409,12 @@ typedef enum {
 #define QTB_CONVERTTHREADCOUNT_DEFAULT		2
 
 #if defined(QTB_DEV_TOUCHPANEL)
-// for touchpanelInterfaceType
-#define QTB_TOUCHPANELINTERFACETYPE				"touchpanelInterfaceType"
-#define QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE	0
-#define QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR	1
-#define QTB_TOUCHPANELINTERFACETYPE_NUM			2
-#define QTB_TOUCHPANELINTERFACETYPE_DEFAULT		QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE
+// for touchpanelOperationType
+#define QTB_TOUCHPANELOPERATIONTYPE				"touchpanelOperationType"
+#define QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE	0
+#define QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR	1
+#define QTB_TOUCHPANELOPERATIONTYPE_NUM			2
+#define QTB_TOUCHPANELOPERATIONTYPE_DEFAULT		QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for outputGraphicsDataToFile
@@ -608,9 +599,6 @@ private:
   // desktop height
   volatile SIZE desktopHeight;
 
-  // screen height offset
-  volatile int screenHeightOffset;
-
   // select monitor
   volatile MONITOR_NO monitorNo;
 
@@ -655,9 +643,6 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
-
-  // show touchpanel check area
-  volatile bool onShowTouchpanelCheckArea;
 
   // full screen
   volatile bool onFullScreenAtConnected;
@@ -725,8 +710,8 @@ private:
   volatile int convertThreadCount;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // for touchpanelInterfaceType
-  volatile int touchpanelInterfaceType;
+  // for touchpanelOperationType
+  volatile int touchpanelOperationType;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // Debug
@@ -1653,23 +1638,13 @@ public:
   // get current screen height
   int getCurrentScreenHeight() const
   {
-	int screenHeight = desktop->getCurrentScreen().height();
-	screenHeight += screenHeightOffset;
-	return screenHeight;
+	return desktop->getCurrentScreen().height();
   }
 
   // get current screen size
   QSize getCurrentScreenSize() const
   {
-	int width = getCurrentScreenWidth();
-	int height = getCurrentScreenHeight();
-	return QSize(width, height);
-  }
-
-  // set screen height offset
-  void setScreenHeightOffset(int screenHeightOffset)
-  {
-	this->screenHeightOffset = screenHeightOffset;
+	return desktop->getCurrentScreen().size();
   }
 
   // get monitor change type
@@ -1879,18 +1854,6 @@ public:
   void setOnShowStatusBar(bool onShowStatusBar)
   {
 	this->onShowStatusBar = onShowStatusBar;
-  }
-
-  // get show touchpanel cheak area flag
-  bool getOnShowTouchpanelCheckArea() const
-  {
-	return onShowTouchpanelCheckArea;
-  }
-
-  // set show touchpanel check area flag
-  void setOnShowTouchpanelCheckArea(bool onShowTouchpanelCheckArea)
-  {
-	this->onShowTouchpanelCheckArea = onShowTouchpanelCheckArea;
   }
 
   // get full screen flag
@@ -2178,16 +2141,16 @@ public:
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // get touchpanelInterfaceType
-  int getTouchpanelInterfaceType() const
+  // get touchpanel operation type
+  int getTouchpanelOperationType() const
   {
-	return touchpanelInterfaceType;
+	return touchpanelOperationType;
   }
 
-  // set convert thread count
-  void setTouchpanelInterfaceType(int touchpanelInterfaceType)
+  // set touchpanel operation type
+  void setTouchpanelOperationType(int touchpanelOperationType)
   {
-	this->touchpanelInterfaceType = touchpanelInterfaceType;
+	this->touchpanelOperationType = touchpanelOperationType;
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

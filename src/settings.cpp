@@ -118,8 +118,6 @@ Settings::Settings(const char *iniFileName)
   setDesktopWidth(QTB_MAX_SERVER_DESKTOP_WIDTH);
   setDesktopHeight(QTB_MAX_SERVER_DESKTOP_WIDTH);
 
-  setScreenHeightOffset(0);
-
   setMonitorNo(QTB_MONITOR_NO_DEFAULT);
 
   setOnOpenConnectToServerDialogAtBootup(QTB_ONOPENCONNECTTOSERVERDIALOGATBOOTUP_DEFAULT);
@@ -144,7 +142,6 @@ Settings::Settings(const char *iniFileName)
 
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
-  setOnShowTouchpanelCheckArea(QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT);
 
   setOnFullScreenAtConnected(QTB_ONFULLSCREENATCONNECTED_DEFAULT);
 
@@ -175,7 +172,7 @@ Settings::Settings(const char *iniFileName)
   setConvertThreadCount(QTB_CONVERTTHREADCOUNT_DEFAULT);
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_DEFAULT);
+  setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_DEFAULT);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   setOutputGraphicsDataToFile(QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT);
@@ -436,10 +433,6 @@ void Settings::readSettings()
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
 									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
 
-  // load onShowTouchpanelCheckArea
-  setOnShowTouchpanelCheckArea(settings->value(QTB_ONSHOWTOUCHPANELCHECKAREA,
-											   QTB_ONSHOWTOUCHPANELCHECKAREA_DEFAULT).toBool());
-
   // load onFullScreenAtConnected
   setOnFullScreenAtConnected(settings->value(QTB_ONFULLSCREENATCONNECTED,
 											 QTB_ONFULLSCREENATCONNECTED_DEFAULT).toBool());
@@ -501,9 +494,9 @@ void Settings::readSettings()
 										   QTB_CONVERTTHREADCOUNT_DEFAULT).toInt());
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // load touchpanelInterfaceType
-  setTouchpanelInterfaceType(settings->value(QTB_TOUCHPANELINTERFACETYPE,
-											 QTB_TOUCHPANELINTERFACETYPE_DEFAULT).toInt());
+  // load touchpanelOperationType
+  setTouchpanelOperationType(settings->value(QTB_TOUCHPANELOPERATIONTYPE,
+											 QTB_TOUCHPANELOPERATIONTYPE_DEFAULT).toInt());
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // load outputGraphicsDataToFile
@@ -705,9 +698,6 @@ void Settings::writeSettings()
   // save onShowStatusBar
   settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
 
-  // save onShowTouchpanelCheckArea
-  settings->setValue(QTB_ONSHOWTOUCHPANELCHECKAREA, onShowTouchpanelCheckArea);
-
   // save onFullScreenAtConnected
   settings->setValue(QTB_ONFULLSCREENATCONNECTED, onFullScreenAtConnected);
 
@@ -753,8 +743,8 @@ void Settings::writeSettings()
   settings->setValue(QTB_CONVERTTHREADCOUNT, convertThreadCount);
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // save touchpanelInterfaceType
-  settings->setValue(QTB_TOUCHPANELINTERFACETYPE, touchpanelInterfaceType);
+  // save touchpanelOperationType
+  settings->setValue(QTB_TOUCHPANELOPERATIONTYPE, touchpanelOperationType);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // save outputGraphicsDataToFile
@@ -862,7 +852,6 @@ void Settings::printSettings() const
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
-  qDebug() << "ShowTouchpanelCheckArea : " << onShowTouchpanelCheckArea;
   qDebug() << "FullScreenAtConnected   : " << onFullScreenAtConnected;
   qDebug() << "HideMenuAndStatusBarAtFullScreen : " << onHideMenuAndStatusBarAtFullScreen;
   qDebug() << "ShowFrameRate           : " << onShowFrameRate;
@@ -887,7 +876,7 @@ void Settings::printSettings() const
   qDebug() << "Double Click Threshold(msecond) : " << doubleClickThreshold;
   qDebug() << "Convert Thread Count         : " << convertThreadCount;
 #if defined(QTB_DEV_TOUCHPANEL)
-  qDebug() << "TouchpanelInterfaceType      : " << touchpanelInterfaceType;
+  qDebug() << "TouchpanelOperationType      : " << touchpanelOperationType;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   qDebug() << "------------------------------------------";

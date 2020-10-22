@@ -182,9 +182,9 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		}
 
 		// -----------------------------------------------------------------------------------
-		// KeroRemote Compatible Interface (1 point tap)
+		// KeroRemote Compatible Operation (1 point tap)
 		// -----------------------------------------------------------------------------------
-		if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE){
+		if (settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE){
 		  // last position of mouse cursor
 		  static QPointF lastPos;
 
@@ -350,9 +350,9 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  }
 		}
 		// -----------------------------------------------------------------------------------
-		// Qt Brynhildr Interface (1 point tap)
+		// Qt Brynhildr Operation (1 point tap)
 		// -----------------------------------------------------------------------------------
-		else if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR){
+		else if (settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR){
 		  // open software panel check flags
 		  static bool inCheckingButtonOpen = false;
 		  static bool inCheckingKeyboardOpen = false;
@@ -461,10 +461,10 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  }
 		}
 		// -----------------------------------------------------------------------------------
-		// Unknown Touchpanel Interface
+		// Unknown Touchpanel Operation
 		// -----------------------------------------------------------------------------------
 		else {
-		  qDebug() << "Unknown Touchpanel Interface!";
+		  qDebug() << "Unknown Touchpanel Operation!";
 		}
 	  }
 	  else if (touchPointCount == 2){ // 2 fingers

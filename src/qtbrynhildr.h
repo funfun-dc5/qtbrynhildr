@@ -178,6 +178,9 @@ private:
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel Operation Type Sub Menu
   QMenu *touchpanelOperationTypeSubMenu;
+
+  // touchpanel Interface Type Sub Menu
+  QMenu *touchpanelInterfaceTypeSubMenu;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // In Testing Sub Menu
@@ -373,6 +376,11 @@ private:
   QAction *touchpanelOperationTypeKeroRemote_Action;
   // touchpanel operation type QtBrynhildr
   QAction *touchpanelOperationTypeQtBrynhildr_Action;
+
+  // touchpanel interface type LeftRight
+  QAction *touchpanelInterfaceTypeLeftRight_Action;
+  // touchpanel interface type TopBottom
+  QAction *touchpanelInterfaceTypeTopBottom_Action;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -444,7 +452,7 @@ private:
   struct {
 	QRect softwareButtonRect;
 	QRect softwareKeyboardRect;
-  } touchpanelInterface;
+  } touchpanelInterfaceLeftRight, touchpanelInterfaceTopBottom;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -915,6 +923,10 @@ private slots:
   // touchpanel operation type
   void touchpanelOperationTypeKeroRemote();
   void touchpanelOperationTypeQtBrynhildr();
+
+  // touchpanel interface type
+  void touchpanelInterfaceTypeLeftRight();
+  void touchpanelInterfaceTypeTopBottom();
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON

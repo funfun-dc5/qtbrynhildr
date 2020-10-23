@@ -85,6 +85,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,optionMenu(0)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,touchpanelOperationTypeSubMenu(0)
+  ,touchpanelInterfaceTypeSubMenu(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,inTestingSubMenu(0)
 #if QTB_DESKTOP_COMPRESS_MODE
@@ -178,6 +179,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,touchpanelOperationTypeKeroRemote_Action(0)
   ,touchpanelOperationTypeQtBrynhildr_Action(0)
+  ,touchpanelInterfaceTypeLeftRight_Action(0)
+  ,touchpanelInterfaceTypeTopBottom_Action(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,sendClipboard_Action(0)
   ,sendFile_Action(0)
@@ -611,24 +614,31 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if defined(QTB_DEV_TOUCHPANEL)
   // set window information
   int screenWidth = settings->getCurrentScreenWidth();
-  //  int screenHeight = settings->getCurrentScreenHeight();
+  int screenHeight = settings->getCurrentScreenHeight();
   //  qDebug() << "screenHeight = " << screenHeight;
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // setup touchpanel interface
-  //int checkWidth = screenWidth * 0.05; // 1/20 of screen width
+  // Left : Button, Right : Keyboard
   int checkWidth = screenWidth / 32; // 1/32 of screen width
-  touchpanelInterface.softwareButtonRect =
+  touchpanelInterfaceLeftRight.softwareButtonRect =
 	QRect(0, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
-  touchpanelInterface.softwareKeyboardRect =
+  touchpanelInterfaceLeftRight.softwareKeyboardRect =
 	QRect(screenWidth - checkWidth, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
+
+  // Top : Button, Bottom : Keyboard
+  int checkHeight = screenHeight / 20; // 1/20 of screen height
+  touchpanelInterfaceTopBottom.softwareButtonRect =
+	QRect(0, 0, QTB_TOUCHPANEL_WIDTH_SUPPORT_MAX, checkHeight);
+  touchpanelInterfaceTopBottom.softwareKeyboardRect =
+	QRect(0, screenHeight - checkHeight, QTB_TOUCHPANEL_WIDTH_SUPPORT_MAX, checkHeight);
 
   // interface check area information
   if (settings->getOutputLog()){
 	QPoint topLeft =
-	  touchpanelInterface.softwareButtonRect.topLeft();
+	  touchpanelInterfaceLeftRight.softwareButtonRect.topLeft();
 	QPoint bottomRight =
-	  touchpanelInterface.softwareButtonRect.bottomRight();
+	  touchpanelInterfaceLeftRight.softwareButtonRect.bottomRight();
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "software button check area: (" +
 								 QString::number(topLeft.x()) +
@@ -641,11 +651,41 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 ")"
 								 );
 	topLeft =
-	  touchpanelInterface.softwareKeyboardRect.topLeft();
+	  touchpanelInterfaceLeftRight.softwareKeyboardRect.topLeft();
 	bottomRight =
-	  touchpanelInterface.softwareKeyboardRect.bottomRight();
+	  touchpanelInterfaceLeftRight.softwareKeyboardRect.bottomRight();
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "software keyboard check area: (" +
+								 QString::number(topLeft.x()) +
+								 ", " +
+								 QString::number(topLeft.y()) +
+								 ") - (" +
+								 QString::number(bottomRight.x()) +
+								 ", " +
+								 QString::number(bottomRight.y()) +
+								 ")"
+								 );
+	topLeft =
+	  touchpanelInterfaceTopBottom.softwareButtonRect.topLeft();
+	bottomRight =
+	  touchpanelInterfaceTopBottom.softwareButtonRect.bottomRight();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "software button check area2: (" +
+								 QString::number(topLeft.x()) +
+								 ", " +
+								 QString::number(topLeft.y()) +
+								 ") - (" +
+								 QString::number(bottomRight.x()) +
+								 ", " +
+								 QString::number(bottomRight.y()) +
+								 ")"
+								 );
+	topLeft =
+	  touchpanelInterfaceTopBottom.softwareKeyboardRect.topLeft();
+	bottomRight =
+	  touchpanelInterfaceTopBottom.softwareKeyboardRect.bottomRight();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "software keyboard check area2: (" +
 								 QString::number(topLeft.x()) +
 								 ", " +
 								 QString::number(topLeft.y()) +
@@ -2028,6 +2068,25 @@ void QtBrynhildr::createActions()
   touchpanelOperationTypeQtBrynhildr_Action->setStatusTip(tr("Qt Brynhildr Type"));
   connect(touchpanelOperationTypeQtBrynhildr_Action, SIGNAL(triggered()), this,
 		  SLOT(touchpanelOperationTypeQtBrynhildr()));
+
+  // touchpanel interface type
+  touchpanelInterfaceTypeLeftRight_Action = new QAction(tr("Left/Right Type"), this);
+  touchpanelInterfaceTypeLeftRight_Action->setEnabled(true);
+  touchpanelInterfaceTypeLeftRight_Action->setCheckable(true);
+  touchpanelInterfaceTypeLeftRight_Action->setChecked(
+					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT);
+  touchpanelInterfaceTypeLeftRight_Action->setStatusTip(tr("Left/Right Type"));
+  connect(touchpanelInterfaceTypeLeftRight_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelInterfaceTypeLeftRight()));
+
+  touchpanelInterfaceTypeTopBottom_Action = new QAction(tr("Top/Bottom Type"), this);
+  touchpanelInterfaceTypeTopBottom_Action->setEnabled(true);
+  touchpanelInterfaceTypeTopBottom_Action->setCheckable(true);
+  touchpanelInterfaceTypeTopBottom_Action->setChecked(
+					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM);
+  touchpanelInterfaceTypeTopBottom_Action->setStatusTip(tr("Top/Bottom Type"));
+  connect(touchpanelInterfaceTypeTopBottom_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelInterfaceTypeTopBottom()));
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -2405,6 +2464,11 @@ void QtBrynhildr::createMenus()
   touchpanelOperationTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Operation"));
   touchpanelOperationTypeSubMenu->addAction(touchpanelOperationTypeKeroRemote_Action);
   touchpanelOperationTypeSubMenu->addAction(touchpanelOperationTypeQtBrynhildr_Action);
+
+  // touchpanel interface type
+  touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface"));
+  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeLeftRight_Action);
+  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeTopBottom_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 1 // defined(QTB_DEV_DESKTOP)
@@ -3235,8 +3299,19 @@ void QtBrynhildr::connectToServer()
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set touchpanel interface
-  graphicsView->setSoftwareButtonRect(touchpanelInterface.softwareButtonRect);
-  graphicsView->setSoftwareKeyboardRect(touchpanelInterface.softwareKeyboardRect);
+  if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT){
+	// Right/Left
+	graphicsView->setSoftwareButtonRect(touchpanelInterfaceLeftRight.softwareButtonRect);
+	graphicsView->setSoftwareKeyboardRect(touchpanelInterfaceLeftRight.softwareKeyboardRect);
+  }
+  else if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM){
+	// Top/Bottom
+	graphicsView->setSoftwareButtonRect(touchpanelInterfaceTopBottom.softwareButtonRect);
+	graphicsView->setSoftwareKeyboardRect(touchpanelInterfaceTopBottom.softwareKeyboardRect);
+  }
+  else {
+	// internal error
+  }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
@@ -4589,18 +4664,6 @@ void QtBrynhildr::toggleSoftwareButton()
   toggleShowSoftwareButton();
 }
 
-// get software keyboard check area
-QRect QtBrynhildr::getSoftwareKeyboardCheckArea()
-{
-  return touchpanelInterface.softwareKeyboardRect;
-}
-
-// get software button check area
-QRect QtBrynhildr::getSoftwareButtonCheckArea()
-{
-  return touchpanelInterface.softwareButtonRect;
-}
-
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 // select frame rate
@@ -4743,6 +4806,21 @@ void QtBrynhildr::touchpanelOperationTypeQtBrynhildr()
   settings->setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR);
   touchpanelOperationTypeKeroRemote_Action->setChecked(false);
   touchpanelOperationTypeQtBrynhildr_Action->setChecked(true);
+}
+
+// touchpanel interface type
+void QtBrynhildr::touchpanelInterfaceTypeLeftRight()
+{
+  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT);
+  touchpanelInterfaceTypeLeftRight_Action->setChecked(true);
+  touchpanelInterfaceTypeTopBottom_Action->setChecked(false);
+}
+
+void QtBrynhildr::touchpanelInterfaceTypeTopBottom()
+{
+  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM);
+  touchpanelInterfaceTypeLeftRight_Action->setChecked(false);
+  touchpanelInterfaceTypeTopBottom_Action->setChecked(true);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

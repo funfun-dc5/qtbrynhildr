@@ -335,13 +335,23 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 
 (2) 「タッチパネル・オペレーション」
 
-   「KeroRemoteタイプ」
+   「KeroRemoteタイプ」(初期値)
 
      KeroRemote互換のタッチパネル操作
 
    「Qt Brynhildrタイプ」
 
      Qt Brynhbildrのタッチパネル操作
+
+(3) 「タッチパネル・インターフェース」
+
+   「左/右タイプ」(初期値)
+
+     左辺(Left Side)でSoftware Button、右辺(Right Side)でSoftware Keyboardを表示
+
+   「上/下タイプ」
+
+     上辺(Top Side)でSoftware Button、下辺(Bottom Size)でSoftware Keyboardを表示
 
 ----------------------------------------------------------------------
 2. Brynhildrサーバの準備 (パブリックモードの有効化)
@@ -795,7 +805,8 @@ graphicsBufferSize=1048576
 soundBufferSize=1048576
 doubleClickThreshold=500
 convertThreadCount=2
-touchpanelOperationType=1
+touchpanelOperationType=0
+touchpanelInterfaceType=0
 outputGraphicsDataToFile=false
 outputSoundDataToFile=false
 outputSoundDataToWavFile=false
@@ -1066,6 +1077,11 @@ Windows版ではランタイムライブラリパッケージが必要な場合�
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
+
+Ver.2.1.9 : 2020/10/xx
+            [新規機能]
+             ・ソフトウェア・キーボード/ボタンの表示インタフェースを左右(Left/Right)か
+               上下(Top/Bottom)を選択できる「インターフェース・タイプ」メニューを追加
 
 Ver.2.1.8 : 2020/10/22
             [新規機能]

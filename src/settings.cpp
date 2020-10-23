@@ -78,6 +78,9 @@ Settings::Settings(const char *iniFileName)
   setPortNo(QTB_PORTNO_DEFAULT);
   setPassword(QTB_PASSWORD_DEFAULT);
   setOnControl(QTB_ONCONTROL_DEFAULT);
+  setOnTaskbarAssist(QTB_ONTASKBARASSIST_DEFAULT);
+  setTaskbarAssistAreaWidth(QTB_TASKBARASSISTAREAWIDTH_DEFAULT);
+  setTaskbarAssistAreaHeight(QTB_TASKBARASSISTAREAHEIGHT_DEFAULT);
 #if QTB_PLUGINS_DISABLE_SUPPORT
   setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
@@ -170,7 +173,7 @@ Settings::Settings(const char *iniFileName)
   setConvertThreadCount(QTB_CONVERTTHREADCOUNT_DEFAULT);
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_DEFAULT);
+  setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_DEFAULT);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   setOutputGraphicsDataToFile(QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT);
@@ -281,6 +284,18 @@ void Settings::readSettings()
   // load onControl
   setOnControl(settings->value(QTB_ONCONTROL,
 							   QTB_ONCONTROL_DEFAULT).toBool());
+
+  // load onTaskbarAssist
+  setOnTaskbarAssist(settings->value(QTB_ONTASKBARASSIST,
+									 QTB_ONTASKBARASSIST_DEFAULT).toBool());
+
+  // load taskbarAssistAreaWidth
+  setTaskbarAssistAreaWidth(settings->value(QTB_TASKBARASSISTAREAWIDTH,
+											QTB_TASKBARASSISTAREAWIDTH_DEFAULT).toInt());
+
+  // load taskbarAssistAreaHeight
+  setTaskbarAssistAreaHeight(settings->value(QTB_TASKBARASSISTAREAHEIGHT,
+											 QTB_TASKBARASSISTAREAHEIGHT_DEFAULT).toInt());
 
   // load onHoldMouseControl
   setOnHoldMouseControl(settings->value(QTB_ONHOLDMOUSECONTROL,
@@ -480,9 +495,9 @@ void Settings::readSettings()
 										   QTB_CONVERTTHREADCOUNT_DEFAULT).toInt());
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // load touchpanelInterfaceType
-  setTouchpanelInterfaceType(settings->value(QTB_TOUCHPANELINTERFACETYPE,
-											 QTB_TOUCHPANELINTERFACETYPE_DEFAULT).toInt());
+  // load touchpanelOperationType
+  setTouchpanelOperationType(settings->value(QTB_TOUCHPANELOPERATIONTYPE,
+											 QTB_TOUCHPANELOPERATIONTYPE_DEFAULT).toInt());
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // load outputGraphicsDataToFile
@@ -569,6 +584,15 @@ void Settings::writeSettings()
 
   // save onControl
   settings->setValue(QTB_ONCONTROL, onControl);
+
+  // save onTaskbarAssist
+  settings->setValue(QTB_ONTASKBARASSIST, onTaskbarAssist);
+
+  // save taskbarAssistAreaWidth
+  settings->setValue(QTB_TASKBARASSISTAREAWIDTH, taskbarAssistAreaWidth);
+
+  // save taskbarAssistAreaHeight
+  settings->setValue(QTB_TASKBARASSISTAREAHEIGHT, taskbarAssistAreaHeight);
 
   // save onHoldMouseControl
   settings->setValue(QTB_ONHOLDMOUSECONTROL, onHoldMouseControl);
@@ -720,8 +744,8 @@ void Settings::writeSettings()
   settings->setValue(QTB_CONVERTTHREADCOUNT, convertThreadCount);
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // save touchpanelInterfaceType
-  settings->setValue(QTB_TOUCHPANELINTERFACETYPE, touchpanelInterfaceType);
+  // save touchpanelOperationType
+  settings->setValue(QTB_TOUCHPANELOPERATIONTYPE, touchpanelOperationType);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // save outputGraphicsDataToFile
@@ -779,6 +803,9 @@ void Settings::printSettings() const
   qDebug() << "Port No       : " << portNo;
   qDebug() << "Password      : " << password;
   qDebug() << "Control       : " << onControl;
+  qDebug() << "Taskbar Assist: " << onTaskbarAssist;
+  qDebug() << "Taskbar Assist Area Width : " << taskbarAssistAreaWidth;
+  qDebug() << "Taskbar Assist Area Height: " << taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
@@ -850,7 +877,7 @@ void Settings::printSettings() const
   qDebug() << "Double Click Threshold(msecond) : " << doubleClickThreshold;
   qDebug() << "Convert Thread Count         : " << convertThreadCount;
 #if defined(QTB_DEV_TOUCHPANEL)
-  qDebug() << "TouchpanelInterfaceType      : " << touchpanelInterfaceType;
+  qDebug() << "TouchpanelOperationType      : " << touchpanelOperationType;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   qDebug() << "------------------------------------------";

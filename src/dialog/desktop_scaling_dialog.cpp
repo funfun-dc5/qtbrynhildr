@@ -79,12 +79,10 @@ void DesktopScalingDialog::setSettingFromSliderPosition()
 void DesktopScalingDialog::resetting()
 {
 #if defined(QTB_DEV_TOUCHPANEL)
-  QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-  int desktopWidth = currentScreen.width();
-  int desktopHeight = currentScreen.height();
-
-  int dialogWidth = desktopWidth * 0.5;
-  int dialogHeight = desktopHeight * 0.5;
+  int screenWidth = settings->getCurrentScreenWidth();
+  int screenHeight = settings->getCurrentScreenHeight();
+  int dialogWidth = screenWidth * 0.5;
+  int dialogHeight = screenHeight * 0.8;
   int fontPointSize = 14;
 
   // resetting dialog window size and font size

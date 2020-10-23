@@ -11,6 +11,7 @@
 
 // Local Header
 #include "mainwindow/desktoppanelobject.h"
+#include "qtbrynhildr.h"
 
 namespace qtbrynhildr {
 

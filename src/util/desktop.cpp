@@ -10,6 +10,7 @@
 
 // Qt Header
 #include <QApplication>
+#include <QDebug>
 
 // Local Header
 #include "util/desktop.h"
@@ -49,6 +50,18 @@ Desktop::Desktop()
 	cout << "[Desktop] height = " << currentScreen.height() << endl;
   }
 
+#if 0 // for TEST
+  qDebug() << "name = " << screens.at(currentScreenNumber)->name();
+  qDebug() << "model = " << screens.at(currentScreenNumber)->model();
+  qDebug() << "geometry = " << screens.at(currentScreenNumber)->geometry();
+  qDebug() << "availableGeometry = " << screens.at(currentScreenNumber)->availableGeometry();
+  qDebug() << "virtualGeometry = " << screens.at(currentScreenNumber)->virtualGeometry();
+  qDebug() << "logicalDotsPerInchX = " << screens.at(currentScreenNumber)->logicalDotsPerInchX();
+  qDebug() << "logicalDotsPerInchY = " << screens.at(currentScreenNumber)->logicalDotsPerInchY();
+  qDebug() << "physicalDotsPerInchX = " << screens.at(currentScreenNumber)->physicalDotsPerInchX();
+  qDebug() << "physicalDotsPerInchY = " << screens.at(currentScreenNumber)->physicalDotsPerInchY();
+#endif // 0 // for TEST
+
 #if defined(Q_OS_LINUX)
 #define LINUX_SHMMAX "/proc/sys/kernel/shmmax"
   // check max image size (for x11)
@@ -69,139 +82,6 @@ Desktop::Desktop()
   }
   //  cout << "[Desktop] maxImageDataSize = " << maxImageDataSize << endl << flush;
 #endif
-
-#if 0 // for TEST
-  // set correct window width and height
-#if defined(Q_OS_WIN)
-  // OS Version
-  QString kernelVersion = QSysInfo::kernelVersion();
-  if (kernelVersion.startsWith("10.")){			// Windows 10
-#if !QTB_NEW_DESKTOPWINDOW
-	correctWindowWidth = 2;
-	correctWindowHeight = 3;
-#endif // !QTB_NEW_DESKTOPWINDOW
-	heightOfMenuBarInHiding = -1;
-	heightOfStatusBarInHiding = 0;
-  }
-  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
-#if !QTB_NEW_DESKTOPWINDOW
-	correctWindowWidth = 2;
-	correctWindowHeight = 3;
-#endif // !QTB_NEW_DESKTOPWINDOW
-	heightOfMenuBarInHiding = -1;
-	heightOfStatusBarInHiding = -2;
-  }
-  else if (kernelVersion.startsWith("6.2")){	// Windows 8
-#if !QTB_NEW_DESKTOPWINDOW
-	correctWindowWidth = 2;
-	correctWindowHeight = 3;
-#endif // !QTB_NEW_DESKTOPWINDOW
-	heightOfMenuBarInHiding = -1;
-	heightOfStatusBarInHiding = -2;
-  }
-  else if (kernelVersion.startsWith("6.1")){	// Windows 7
-#if !QTB_NEW_DESKTOPWINDOW
-	correctWindowWidth = 2;
-	correctWindowHeight = 4;
-#endif // !QTB_NEW_DESKTOPWINDOW
-	heightOfMenuBarInHiding = -1;
-	heightOfStatusBarInHiding = -4;
-  }
-  else {
-	// NOT supported Version
-#if !QTB_NEW_DESKTOPWINDOW
-	correctWindowWidth = 2;
-	correctWindowHeight = 3;
-#endif // !QTB_NEW_DESKTOPWINDOW
-	heightOfMenuBarInHiding = -1;
-	heightOfStatusBarInHiding = -2;
-  }
-#elif defined(Q_OS_LINUX)
-#if defined(Q_OS_ANDROID)
-  // Android
-#if !QTB_NEW_DESKTOPWINDOW
-  correctWindowWidth = 2;
-  correctWindowHeight = 4;
-#endif // !QTB_NEW_DESKTOPWINDOW
-  heightOfMenuBarInHiding = -1;
-  heightOfStatusBarInHiding = 0;
-#else // defined(Q_OS_ANDROID)
-  // Linux Desktop
-#if !QTB_NEW_DESKTOPWINDOW
-  correctWindowWidth = 2;
-  correctWindowHeight = 2;
-#endif // !QTB_NEW_DESKTOPWINDOW
-  heightOfMenuBarInHiding = -1;
-  heightOfStatusBarInHiding = 0;
-#endif // defined(Q_OS_ANDROID)
-#elif defined(Q_OS_CYGWIN)
-  // Cygwin
-#if !QTB_NEW_DESKTOPWINDOW
-  correctWindowWidth = 2;
-  correctWindowHeight = 2;
-#endif // !QTB_NEW_DESKTOPWINDOW
-  heightOfMenuBarInHiding = -1;
-  heightOfStatusBarInHiding = 0;
-#elif defined(Q_OS_FREEBSD)
-  // FreeBSD
-#if !QTB_NEW_DESKTOPWINDOW
-  correctWindowWidth = 0;
-  correctWindowHeight = 0;
-#endif // !QTB_NEW_DESKTOPWINDOW
-  heightOfMenuBarInHiding = -1;
-  heightOfStatusBarInHiding = 0;
-#elif defined(Q_OS_OSX)
-  // Darwin
-#if !QTB_NEW_DESKTOPWINDOW
-  correctWindowWidth = 0;
-  correctWindowHeight = 0;
-#endif // !QTB_NEW_DESKTOPWINDOW
-  heightOfMenuBarInHiding = -1;
-  heightOfStatusBarInHiding = 0;
-#endif
-
-  // environment variables
-  char *envval = 0;
-  envval = getenv("TESTMODE");
-  if (envval != 0){
-	// display current parameters
-	cout << "== DESKTOP TESTMODE ==" << endl;
-#if !QTB_NEW_DESKTOPWINDOW
-	cout << "correctWindowWidth        : " << correctWindowWidth << endl;
-	cout << "correctWindowHeight       : " << correctWindowHeight << endl;
-#endif // !QTB_NEW_DESKTOPWINDOW
-	cout << "heightOfMenuBarInHiding   : " << heightOfMenuBarInHiding << endl;
-	cout << "heightOfStatusBarInHiding : " << heightOfStatusBarInHiding << endl << endl << flush;
-  }
-
-  // set parameters
-#if !QTB_NEW_DESKTOPWINDOW
-  envval = getenv("CORRECT_WINDOW_WIDTH");
-  if (envval != 0){
-	cout << "correctWindowWidth (" << correctWindowWidth << ") -> ";
-	correctWindowWidth = strtol(envval, 0, 10);
-	cout << correctWindowWidth << endl << flush;
-  }
-  envval = getenv("CORRECT_WINDOW_HEIGHT");
-  if (envval != 0){
-	cout << "correctWindowHeight (" << correctWindowHeight << ") -> ";
-	correctWindowHeight = strtol(envval, 0, 10);
-	cout << correctWindowHeight << endl << flush;
-  }
-#endif // !QTB_NEW_DESKTOPWINDOW
-  envval = getenv("HEIGHT_OF_MENU_BAR_IN_HIDING");
-  if (envval != 0){
-	cout << "heightOfMenuBarInHiding (" << heightOfMenuBarInHiding << ") -> ";
-	heightOfMenuBarInHiding = strtol(envval, 0, 10);
-	cout << heightOfMenuBarInHiding << endl << flush;
-  }
-  envval = getenv("HEIGHT_OF_STATUS_BAR_IN_HIDING");
-  if (envval != 0){
-	cout << "heightOfStatusBarInHiding (" << heightOfStatusBarInHiding << ") -> ";
-	heightOfStatusBarInHiding = strtol(envval, 0, 10);
-	cout << heightOfStatusBarInHiding << endl << flush;
-  }
-#endif // 0 // for TEST
 
   // log flush
   if (outputLog){

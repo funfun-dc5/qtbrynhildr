@@ -78,7 +78,17 @@ protected:
   bool event(QEvent *event);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
+protected:
+  // show Event
+  void showEvent(QShowEvent *event);
+
 private:
+  // get from settings
+  void getFromSettings();
+
+  // set to settings
+  bool setToSettings();
+
   // resettings for dialog
   void resetting();
 

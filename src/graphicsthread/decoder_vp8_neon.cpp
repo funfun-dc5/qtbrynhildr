@@ -24,16 +24,6 @@ DecoderVP8NEON::~DecoderVP8NEON()
 {
 }
 
-#if 0
-// pre-process
-bool DecoderVP8NEON::preprocess(char *buffer, int size)
-{
-  cout << "DecoderVP8NEON::preprocess()" << endl << flush;
-
-  return true;
-}
-#endif // 0
-
 // get desktop image
 QImage* DecoderVP8NEON::getDesktopImage(int numOfThread)
 {

@@ -7,8 +7,10 @@
 // System Header
 
 // Qt Header
+//#include <QDebug>
 #include <QDialog>
 #include <QFile>
+#include <QPushButton>
 #include <QRect>
 #include <QTextStream>
 
@@ -33,6 +35,14 @@ LogViewDialog::LogViewDialog(Settings *settings,
   // Read Only
   textEdit->setReadOnly(true);
 
+  // select All button
+  QPushButton *selectAllButton = buttonBox->addButton(tr("Select All"), QDialogButtonBox::ActionRole);
+  connect(selectAllButton, SIGNAL(pressed()), textEdit, SLOT(selectAll()));
+
+  // Copy button
+  QPushButton *copyButton = buttonBox->addButton(tr("Copy"), QDialogButtonBox::ActionRole);
+  connect(copyButton, SIGNAL(pressed()), textEdit, SLOT(copy()));
+
   // resetting
   resetting();
 
@@ -50,11 +60,10 @@ void LogViewDialog::resizeEvent(QResizeEvent *event)
 void LogViewDialog::resetting()
 {
 #if defined(QTB_DEV_TOUCHPANEL)
-  QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-  int desktopWidth = currentScreen.width();
-  int desktopHeight = currentScreen.height();
-  int dialogWidth = desktopWidth-200;
-  int dialogHeight = desktopHeight-200;
+  int screenWidth = settings->getCurrentScreenWidth();
+  int screenHeight = settings->getCurrentScreenHeight();
+  int dialogWidth = screenWidth-200;
+  int dialogHeight = screenHeight-400;
   int fontPointSize = 14;
 
   // resetting dialog window size and font size
@@ -94,23 +103,26 @@ void LogViewDialog::show()
   }
   clear();
   setPlainText(logText);
+  //qDebug() << "topPos : " << topPos;
+  //qDebug() << "lastPos: " << lastPos;
   QDialog::show();
 }
 
 // reset
 void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
-  if (button->text() == tr("Reset")){
+  if (button->text() == tr("Reset") || button->text() == "Reset"){ // for Android(Bug?)
 	// clear log
 	//	cout << "Clear log!" << endl <<flush;
 	topPos = lastPos;
+	//qDebug() << "Reset: topPos: " << lastPos;
 	show();
   }
 #if 0 // for DEBUG
   else {
-	cout << "Other!" << endl <<flush;
+	qDebug()<< "Reset: unknown text! : " << button->text();
   }
-#endif // for DEBUG
+#endif // 0 // for DEBUG
 }
 
 } // end of namespace qtbrynhildr

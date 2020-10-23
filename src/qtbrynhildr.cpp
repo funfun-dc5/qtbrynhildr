@@ -12,9 +12,6 @@
 //#include <iostream>
 
 // Qt Header
-#if 0 // for TEST
-#include <QApplication>
-#endif // for TEST
 #include <QAudioDeviceInfo>
 #include <QByteArray>
 #include <QCloseEvent>
@@ -29,34 +26,13 @@
 #include <QSysInfo>
 
 // Local Header
+#include "graphicsthread/yuv2rgb/yuv2rgb.h"
 #include "qtbrynhildr.h"
 #include "parameters.h"
 #include "settings.h"
 #include "util/cpuinfo.h"
 #include "version.h"
-#if 0 // for TEST
-#include "graphicsthread/yuv2rgb/yuv2rgb.h"
-#endif // 0 // for TEST
 
-// for TEST
-#include "graphicsthread/yuv2rgb/yuv2rgb.h"
-
-// for TEST
-#define QTB_TEST_DESKTOP_IMAGE_CAPTURE1	0
-#define QTB_TEST_DESKTOP_IMAGE_CAPTURE2	0
-
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE1 // for TEST Desktop Image Capture
-#include <QPixmap>
-#include <QScreen>
-#include <QWindow>
-#include <QWidget>
-#endif // for TEST
-
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE2 // for TEST Desktop Image Capture
-// for Desktop Duplication API
-#include <d3d11.h>
-#include <dxgi1_2.h>
-#endif // for TEST
 
 namespace qtbrynhildr {
 
@@ -108,7 +84,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_RECORDER
   ,optionMenu(0)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,touchpanelInterfaceTypeSubMenu(0)
+  ,touchpanelOperationTypeSubMenu(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,inTestingSubMenu(0)
 #if QTB_DESKTOP_COMPRESS_MODE
@@ -123,6 +99,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_BENCHMARK
   ,connectToServer_Action(0)
   ,disconnectToServer_Action(0)
+  ,initializeSettings_Action(0)
   ,outputKeyboardLog_Action(0)
   ,outputLog_Action(0)
   ,exit_Action(0)
@@ -200,8 +177,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onScrollMode_Action(0)
   ,onViewerMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,touchpanelInterfaceTypeKeroRemote_Action(0)
-  ,touchpanelInterfaceTypeQtBrynhildr_Action(0)
+  ,touchpanelOperationTypeKeroRemote_Action(0)
+  ,touchpanelOperationTypeQtBrynhildr_Action(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,sendClipboard_Action(0)
   ,sendFile_Action(0)
@@ -262,9 +239,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,logMessage(new LogMessage(this))
   ,controlThread(0)
   ,graphicsThread(0)
-#if 0 // for TEST
-  ,graphicsBuffer(0)
-#endif // 0 // for TEST
   ,soundThread(0)
 #ifdef USE_KEYLAYOUTFILE
   ,keyLayoutFileManager(0)
@@ -288,10 +262,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,keyBuffer(0)
   ,mouseBuffer(0)
   ,timer(0)
-#if 0 // for TEST
-  ,timer_Graphics(0)
-  ,image(new QImage)
-#endif // 0 // for TEST
+  ,isExecutingToConnect(false)
   ,onClearDesktop(false)
   ,hasSIMDInstruction(false)
   ,onPopUpConnectToServer(false)
@@ -303,52 +274,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // for DEBUG
   ,outputLog(false)
 {
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE1 // for TEST Desktop Image Capture
-  QScreen *screen = QGuiApplication::primaryScreen();
-  if (screen != 0){
-	cout << "primaryScreen(): OK" << endl << flush;
-  }
-  else {
-	cout << "primaryScreen(): NG" << endl << flush;
-  }
-  const QWindow *window = windowHandle();
-  if (window != 0){
-	cout << "windowHandle(): OK" << endl << flush;
-	screen = window->screen();
-  }
-  else {
-	cout << "windowHandle(): NG" << endl << flush;
-  }
-  if (screen == 0){
-	cout << "capture: NG" << endl << flush;
-  }
-  else {
-	cout << "capture: OK" << endl << flush;
-	QDateTime beginTime = QDateTime::currentDateTime();
-	QPixmap pixmap;
-	QImage image;
-	for (int i = 0 ; i < 1000; i++){
-	  pixmap = screen->grabWindow(0);	// 33 (ms)
-	  //	  image = pixmap.toImage();
-	  //	  image.convertToFormat(QImage::Format_RGB888); // 17 (ms)
-	}
-	QDateTime endTime = QDateTime::currentDateTime();
-	qint64 diffSeconds = endTime.toMSecsSinceEpoch() - beginTime.toMSecsSinceEpoch();
-	cout << "diff time = " << diffSeconds << " msecs." << endl << flush;
-	pixmap.save("jpg/desktop.jpg", "jpg", 75);
-  }
-#endif // for TEST
-
-#if QTB_TEST_DESKTOP_IMAGE_CAPTURE2 // for TEST Desktop Image Capture
-#if _MSC_VER
-  // Desktop Duplication API
-  IDXGIResource *DesktopResource = 0;
-  DXGI_OUTDUPL_FRAME_INFO FrameInfo;
-#else // _MSC_VER
-#error "MSVC Only"
-#endif // _MSC_VER
-#endif // for TEST
-
   // bootTime
   bootTime = QDateTime::currentDateTime();
 
@@ -522,7 +447,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 currentPath,
 								 QMessageBox::Ok,
 								 QMessageBox::NoButton);
-#endif
+#endif // for DEBUG
 
   // current system name
   if (settings->getOutputLog()){
@@ -537,22 +462,23 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 settings->getSettings()->fileName());
   }
 
-  // desktop size information
+#if defined(QTB_DEV_DESKTOP)
+  // screen size information
   if (settings->getOutputLog()){
-	QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-	int desktopWidth = currentScreen.width();
-	int desktopHeight = currentScreen.height();
+	int screenWidth = settings->getCurrentScreenWidth();
+	int screenHeight = settings->getCurrentScreenHeight();
 	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Desktop Width  = " + QString::number(desktopWidth));
+								 (QString)"Screen Width : " + QString::number(screenWidth));
 	logMessage->outputLogMessage(PHASE_DEBUG,
-								 (QString)"Desktop Height = " + QString::number(desktopHeight));
+								 (QString)"Screen Height: " + QString::number(screenHeight));
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // Supported Sound Sample Rate List
   {
 	const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
-	QString str = "Supported Sampling Rate (Hz) :";
+	QString str = "Supported Sampling Rate (Hz): ";
 	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
 	  str =  str + " " + QString::number((int)(*i));
 	}
@@ -677,30 +603,60 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "statusBar height = " + QString::number(heightOfStatusBar));
   }
+#if 0 // for TEST
+  qDebug() << "titleBar height = " << heightOfTitleBar;
+  qDebug() << "menuBar height = " << heightOfMenuBar;
+  qDebug() << "statusBar height = " << heightOfStatusBar;
+#endif // for TEST
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set window information
-  int screenWidth = settings->getDesktop()->getCurrentScreen().size().width();
-  int screenHeight = settings->getDesktop()->getCurrentScreen().size().height();
-  //  qDebug() << "screenSize = " << settings->getDesktop()->getCurrentScreen();
-  screenHeight += heightOfTitleBar + heightOfMenuBar + heightOfStatusBar;
-  screenHeight += 20; // for TEST (Nexus7(2013):1920x1200)
+  int screenWidth = settings->getCurrentScreenWidth();
+  //  int screenHeight = settings->getCurrentScreenHeight();
   //  qDebug() << "screenHeight = " << screenHeight;
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // setup touchpanel interface
-  // keroremote
-  int checkHeight = screenHeight * 0.05; // 1/20 of screen height
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareButtonRect =
-	QRect(0, screenHeight - checkHeight, screenWidth/4, checkHeight);
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE].softwareKeyboardRect =
-	QRect(screenWidth/8 * 3, screenHeight - checkHeight, screenWidth/4, checkHeight);
-  // qtbrynhilr
-  int checkWidth = screenWidth * 0.05; // 1/20 of screen width
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareButtonRect =
-	QRect(0, screenHeight/8 * 3, checkWidth, screenHeight/4);
-  touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR].softwareKeyboardRect =
-	QRect(screenWidth - checkWidth, screenHeight/8 * 3, screenWidth, screenHeight/4);
+  //int checkWidth = screenWidth * 0.05; // 1/20 of screen width
+  int checkWidth = screenWidth / 32; // 1/32 of screen width
+  touchpanelInterface.softwareButtonRect =
+	QRect(0, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
+  touchpanelInterface.softwareKeyboardRect =
+	QRect(screenWidth - checkWidth, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
+
+  // interface check area information
+  if (settings->getOutputLog()){
+	QPoint topLeft =
+	  touchpanelInterface.softwareButtonRect.topLeft();
+	QPoint bottomRight =
+	  touchpanelInterface.softwareButtonRect.bottomRight();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "software button check area: (" +
+								 QString::number(topLeft.x()) +
+								 ", " +
+								 QString::number(topLeft.y()) +
+								 ") - (" +
+								 QString::number(bottomRight.x()) +
+								 ", " +
+								 QString::number(bottomRight.y()) +
+								 ")"
+								 );
+	topLeft =
+	  touchpanelInterface.softwareKeyboardRect.topLeft();
+	bottomRight =
+	  touchpanelInterface.softwareKeyboardRect.bottomRight();
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "software keyboard check area: (" +
+								 QString::number(topLeft.x()) +
+								 ", " +
+								 QString::number(topLeft.y()) +
+								 ") - (" +
+								 QString::number(bottomRight.x()) +
+								 ", " +
+								 QString::number(bottomRight.y()) +
+								 ")"
+								 );
+  }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -876,11 +832,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
-#if 0 // for TEST
-  // get buffers
-  graphicsBuffer = graphicsThread->getGraphicsBuffer();
-#endif // 0 // for TEST
-
   // connect
   // all thread
   connect(controlThread,
@@ -972,15 +923,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   timer->start(QTB_WINDOW_UPDATE_DURATION);
 
 #if 0 // for TEST
-  // initialize timer for Graphics
-  timer_Graphics = new QTimer(this);
-  connect(timer_Graphics, SIGNAL(timeout()), SLOT(timerExpired_Graphics()));
-  startTimer_Graphics(settings->getFrameRate());
-
-  init_Graphics();
-#endif // 0 // for TEST
-
-#if 0 // for TEST
   // initialize mouse cursor
   if (settings->getOnDisplayMouseCursor()){
 	menuBar()->setCursor(cursor());
@@ -1050,17 +992,6 @@ QtBrynhildr::~QtBrynhildr()
 	delete timer;
 	timer = 0;
   }
-#if 0 // for TEST
-  if (timer_Graphics != 0){
-	timer_Graphics->stop();
-	delete timer_Graphics;
-	timer_Graphics = 0;
-  }
-  if (image != 0){
-	delete image;
-	image = 0;
-  }
-#endif // 0 // for TEST
   if (settings != 0){
 	// disconnect to server
 	if (settings->getConnected())
@@ -1080,9 +1011,6 @@ QtBrynhildr::~QtBrynhildr()
 	// delete
 	delete graphicsThread;
 	graphicsThread = 0;
-#if 0 // for TEST
-	graphicsBuffer = 0;
-#endif // 0 // for TEST
   }
   if (soundThread != 0){
 	// delete
@@ -1239,12 +1167,12 @@ void QtBrynhildr::refreshWindow()
 // adjust window
 void QtBrynhildr::adjustWindow(const QSize &size)
 {
-  QRect desktop = settings->getDesktop()->getCurrentScreen();
+  QRect desktop = settings->getCurrentScreen();
   QRect newWindow = QRect(pos(), size);
   if (!desktop.contains(newWindow)){
 	const QPoint newPos =
-	  QPoint((settings->getDesktop()->getCurrentScreen().width() - size.width() - 64)/2,
-			 (settings->getDesktop()->getCurrentScreen().height() - size.height() - 64)/2);
+	  QPoint((settings->getCurrentScreenWidth() - size.width() - 64)/2,
+			 (settings->getCurrentScreenHeight() - size.height() - 64)/2);
 	move(newPos);
   }
 }
@@ -1463,7 +1391,7 @@ void QtBrynhildr::drawDesktop(QImage image)
   // set desktop scaling factor for full screen mode
   if (onSetDesktopScalingFactorForFullScreen){
 	onSetDesktopScalingFactorForFullScreen = false;
-	QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+	QSize screenSize = settings->getCurrentScreenSize();
 	setDesktopScalingFactor(screenSize);
 #if QTB_NEW_DESKTOPWINDOW
 	graphicsView->setScalingFactorForFullScreen(settings->getDesktopScalingFactor());
@@ -1574,6 +1502,12 @@ void QtBrynhildr::createActions()
   //  connectToServer_Action->setShortcut(tr("Ctrl+D"));
   disconnectToServer_Action->setEnabled(false);
   connect(disconnectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpDisconnectToServer()));
+
+  //   initialize settings
+  initializeSettings_Action = new QAction(tr("Initialize Settings"), this);
+  initializeSettings_Action->setStatusTip(tr("Initialize Settings"));
+  initializeSettings_Action->setEnabled(true);
+  connect(initializeSettings_Action, SIGNAL(triggered()), this, SLOT(initializeSettings()));
 
   // output keyboardlog Action
   outputKeyboardLog_Action = new QAction(tr("Output Keyboard Log"), this);
@@ -2034,14 +1968,12 @@ void QtBrynhildr::createActions()
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // send key Action
-#if 0 // for TEST
+#if 0 // disable now
   sendKey1_Action = new QAction(tr("Ctrl + Alt + Del"), this);
   sendKey1_Action->setEnabled(false);
   sendKey1_Action->setStatusTip(tr("Send key: Ctrl + Alt + Del"));
   connect(sendKey1_Action, SIGNAL(triggered()), this, SLOT(sendKey_CTRL_ALT_DEL()));
-#else
-  sendKey1_Action = 0;
-#endif
+#endif // disable now
 
   sendKey2_Action = new QAction(tr("Alt + F4"), this);
   sendKey2_Action->setEnabled(false);
@@ -2089,24 +2021,24 @@ void QtBrynhildr::createActions()
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type
-  touchpanelInterfaceTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
-  touchpanelInterfaceTypeKeroRemote_Action->setEnabled(true);
-  touchpanelInterfaceTypeKeroRemote_Action->setCheckable(true);
-  touchpanelInterfaceTypeKeroRemote_Action->setChecked(
-					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE);
-  touchpanelInterfaceTypeKeroRemote_Action->setStatusTip(tr("KeroRemote Type"));
-  connect(touchpanelInterfaceTypeKeroRemote_Action, SIGNAL(triggered()), this,
-		  SLOT(touchpanelInterfaceTypeKeroRemote()));
+  // touchpanel operation type
+  touchpanelOperationTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
+  touchpanelOperationTypeKeroRemote_Action->setEnabled(true);
+  touchpanelOperationTypeKeroRemote_Action->setCheckable(true);
+  touchpanelOperationTypeKeroRemote_Action->setChecked(
+					settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE);
+  touchpanelOperationTypeKeroRemote_Action->setStatusTip(tr("KeroRemote Type"));
+  connect(touchpanelOperationTypeKeroRemote_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelOperationTypeKeroRemote()));
 
-  touchpanelInterfaceTypeQtBrynhildr_Action = new QAction(tr("Qt Brynhildr Type"), this);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setEnabled(true);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setCheckable(true);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(
-					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setStatusTip(tr("Qt Brynhildr Type"));
-  connect(touchpanelInterfaceTypeQtBrynhildr_Action, SIGNAL(triggered()), this,
-		  SLOT(touchpanelInterfaceTypeQtBrynhildr()));
+  touchpanelOperationTypeQtBrynhildr_Action = new QAction(tr("Qt Brynhildr Type"), this);
+  touchpanelOperationTypeQtBrynhildr_Action->setEnabled(true);
+  touchpanelOperationTypeQtBrynhildr_Action->setCheckable(true);
+  touchpanelOperationTypeQtBrynhildr_Action->setChecked(
+					settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR);
+  touchpanelOperationTypeQtBrynhildr_Action->setStatusTip(tr("Qt Brynhildr Type"));
+  connect(touchpanelOperationTypeQtBrynhildr_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelOperationTypeQtBrynhildr()));
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -2257,10 +2189,10 @@ void QtBrynhildr::createMenus()
   if (settings->getOnTransferFileSupport() || settings->getOnTransferClipboardSupport()){
 	fileMenu->addSeparator();
   }
-#if 0 // for TEST
+#if 0 // disable now
   if (settings->getOnTransferClipboardSupport())
 	fileMenu->addAction(sendClipboard_Action);
-#endif
+#endif // disable now
   if (settings->getOnTransferFileSupport()){
 	fileMenu->addAction(sendFile_Action);
 	fileMenu->addAction(cancelFileTransferring_Action);
@@ -2269,16 +2201,17 @@ void QtBrynhildr::createMenus()
   fileMenu->addSeparator();
   fileMenu->addAction(preferences_Action);
 #endif // QTB_PREFERENCE
-#if defined(QTB_DEV_DESKTOP)
+  fileMenu->addAction(initializeSettings_Action);
+#if 1 // defined(QTB_DEV_DESKTOP)
   fileMenu->addSeparator();
   fileMenu->addAction(exit_Action);
 #endif // defined(QTB_DEV_DESKTOP)
 
   // display menu
   displayMenu = menuBar()->addMenu(tr("Display"));
-#if 0 // for TEST
+#if 0 // disable now
   displayMenu->addAction(showMenuBar_Action);
-#endif // if 1
+#endif // disable now
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showStatusBar_Action);
 #endif // defined(QTB_DEV_DESKTOP)
@@ -2380,9 +2313,9 @@ void QtBrynhildr::createMenus()
   controlMenu = menuBar()->addMenu(tr("Control"));
   // for send key
   sendKeySubMenu = controlMenu->addMenu(tr("Send Key"));
-#if 0 // for TEST
+#if 0 // disable now
   sendKeySubMenu->addAction(sendKey1_Action);
-#endif
+#endif // disable now
   sendKeySubMenu->addAction(sendKey2_Action);
   sendKeySubMenu->addAction(sendKey3_Action);
   sendKeySubMenu->addAction(sendKey4_Action);
@@ -2483,13 +2416,13 @@ void QtBrynhildr::createMenus()
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type
-  touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface"));
-  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeKeroRemote_Action);
-  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeQtBrynhildr_Action);
+  // touchpanel operation type
+  touchpanelOperationTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Operation"));
+  touchpanelOperationTypeSubMenu->addAction(touchpanelOperationTypeKeroRemote_Action);
+  touchpanelOperationTypeSubMenu->addAction(touchpanelOperationTypeQtBrynhildr_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if defined(QTB_DEV_DESKTOP)
+#if 1 // defined(QTB_DEV_DESKTOP)
   optionMenu->addSeparator();
   optionMenu->addAction(outputKeyboardLog_Action);
   optionMenu->addAction(outputLog_Action);
@@ -2598,6 +2531,17 @@ void QtBrynhildr::updateConnected()
   // check
   if (connectionLabel == 0){
 	// Nothing to do
+	return;
+  }
+
+  // check executing to connect
+  if (isExecutingToConnect){
+	QString str = QString(tr("Connecting ... : ")+"%1").
+	  arg(settings->getServerName());
+	// set label
+	connectionLabel->setText(str);
+	// set minimum size
+	connectionLabel->setMinimumSize(connectionLabel->sizeHint());
 	return;
   }
 
@@ -2830,6 +2774,11 @@ void QtBrynhildr::connected()
   // refresh menu
   refreshMenu();
 
+#if 0 // defined(QTB_DEV_TOUCHPANEL)
+  // save settings
+  settings->writeSettings();
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // full screen at connected
   fullScreenMode = false;
   onSetDesktopScalingFactorForFullScreen = false;
@@ -2838,10 +2787,12 @@ void QtBrynhildr::connected()
 	onSetDesktopScalingFactorForFullScreen = true;
   }
 
-#if defined(QTB_DEV_TOUCHPANEL)
-  // save settings
-  settings->writeSettings();
-#endif // defined(QTB_DEV_TOUCHPANEL)
+  // try to connect flag
+  isExecutingToConnect = false;
+  updateConnected();
+
+  // disable initialize settings menu
+  initializeSettings_Action->setEnabled(false);
 }
 
 // disconnected
@@ -2950,6 +2901,13 @@ void QtBrynhildr::disconnected()
 
   // reset pop up Connect To Server Dialog flag
   onPopUpConnectToServer = false;
+
+  // try to connect flag
+  isExecutingToConnect = false;
+  updateConnected();
+
+  // disable initialize settings menu
+  initializeSettings_Action->setEnabled(true);
 }
 
 // set desktop scaling factor
@@ -2972,7 +2930,8 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   height -= heightMargin;
 #endif // !QTB_NEW_DESKTOPWINDOW
 
-  QSize screenSize = settings->getDesktop()->getCurrentScreen().size();
+  QSize screenSize = settings->getCurrentScreenSize();
+
   if (desktopPanel->getSize().width() > screenSize.width()){
 	width = desktopPanel->getSize().width();
   }
@@ -2993,7 +2952,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   //cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << endl << flush;
 }
 
-#if 0 // for TEST
+#if 0 // disable now
 // change event
 void QtBrynhildr::changeEvent(QEvent *event)
 {
@@ -3004,7 +2963,7 @@ void QtBrynhildr::changeEvent(QEvent *event)
 	//  OR'ed Qt::WindowNoState, Qt::WindowMaximized, Qt::WindowMinimized, Qt::WindowActive
   }
 }
-#endif // for TEST
+#endif // disable now
 
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
@@ -3115,10 +3074,10 @@ void QtBrynhildr::readSettings()
 	resize(defaultRect.size());
   }
 #else // for all platform
-	QPoint pos = settings->getSettings()->value(QTB_WINDOWPOS, QVariant(QPoint(200, 200))).toPoint();
-	QSize size = settings->getSettings()->value(QTB_WINDOWSIZE, QVariant(QSize(800, 600))).toSize();
-	move(pos);
-	resize(size);
+  QPoint pos = settings->getSettings()->value(QTB_WINDOWPOS, QVariant(QPoint(200, 200))).toPoint();
+  QSize size = settings->getSettings()->value(QTB_WINDOWSIZE, QVariant(QSize(800, 600))).toSize();
+  move(pos);
+  resize(size);
 #endif // for all platform
 
   // restore window state
@@ -3134,8 +3093,8 @@ void QtBrynhildr::writeSettings()
   // save geometry
 #if 0 // for all platform
   settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
-  qDebug() << "frame geometry: " << frameGeometry();
-  qDebug() << "geometry: " << geometry();
+  //qDebug() << "frame geometry: " << frameGeometry();
+  //qDebug() << "geometry: " << geometry();
 #else // for all platform
   settings->getSettings()->setValue(QTB_WINDOWPOS, pos());
   settings->getSettings()->setValue(QTB_WINDOWSIZE, size());
@@ -3208,11 +3167,9 @@ void QtBrynhildr::popUpDisconnectToServer()
 void QtBrynhildr::connectToServer()
 {
   // disconnected
-  if (settings->getConnected()){
-	disconnectToServer();
-	// wait for reconnect to server
-	QThread::sleep(1);
-  }
+  disconnectToServer();
+  // wait for reconnect to server
+  QThread::sleep(1);
 
   // clear desktop
   desktopPanel->clearDesktop();
@@ -3303,8 +3260,8 @@ void QtBrynhildr::connectToServer()
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set touchpanel interface
-  graphicsView->setSoftwareButtonRect(touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareButtonRect);
-  graphicsView->setSoftwareKeyboardRect(touchpanelInterface[settings->getTouchpanelInterfaceType()].softwareKeyboardRect);
+  graphicsView->setSoftwareButtonRect(touchpanelInterface.softwareButtonRect);
+  graphicsView->setSoftwareKeyboardRect(touchpanelInterface.softwareKeyboardRect);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
@@ -3331,6 +3288,18 @@ void QtBrynhildr::connectToServer()
   //graphicsThread->start(QThread::TimeCriticalPriority);
   soundThread->start(QThread::NormalPriority);
 #endif // 1 // for TEST
+
+  // try to connect flag
+  isExecutingToConnect = true;
+  updateConnected();
+
+  // enabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  // save settings
+  settings->writeSettings();
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 // reconnect to server
@@ -3358,10 +3327,10 @@ void QtBrynhildr::reconnectToServer()
   // update status bar
   updateStatusBar();
 
-#if 0 // for TEST
+#if 0 // disable now
   // desktop clear
   onDesktopClear();
-#endif
+#endif // disable now
 }
 
 // disconnect to server
@@ -3382,23 +3351,9 @@ void QtBrynhildr::disconnectToServer()
   graphicsThread->exitThread();
   soundThread->exitThread();
 
-#if 1 // no event loop
   controlThread->wait();
   graphicsThread->wait();
   soundThread->wait();
-#else // 1 // no event loop
-  controlThread->exit();
-  controlThread->wait();
-  graphicsThread->exit();
-  graphicsThread->wait();
-  soundThread->exit();
-  soundThread->wait();
-#endif// 1 // no event loop
-
-#if 0 // for TEST
-  // close socket
-  closeSocket();
-#endif
 
   // disconnected
   disconnected();
@@ -3554,6 +3509,43 @@ void QtBrynhildr::preferences()
   //cout << "leave preferences()" << endl << flush;
 }
 #endif // QTB_PREFERENCE
+
+// initialize settings
+void QtBrynhildr::initializeSettings()
+{
+  //cout << "enter initializeSettings()" << endl << flush;
+
+  int ret = QMessageBox::question(this,
+								  tr("Confirm"),
+								  tr("Do you initialize settings ?"),
+								  QMessageBox::Ok | QMessageBox::Cancel,
+								  QMessageBox::Cancel);
+  if (ret == QMessageBox::Cancel){
+	// cancel
+	return;
+  }
+
+  // remove settings
+  if (settings != 0)
+	delete settings;
+
+  // create setting
+#if QTB_CRYPTOGRAM
+  settinegs = new Settings(iniFileName, cipher);
+#else // QTB_CRYPTGRAM
+  settings = new Settings(iniFileName);
+#endif // QTB_CRYPTGRAM
+
+  // save settings
+  settings->writeSettings();
+
+  // close connect to server dialog
+  if (onPopUpConnectToServer){
+	connectToServerDialog->hide();
+  }
+
+  //cout << "leave initializeSettings()" << endl << flush;
+}
 
 // clear Video Quality check
 void QtBrynhildr::clearVideoQualityCheck()
@@ -4145,7 +4137,7 @@ void QtBrynhildr::stopReplayRecordingControl()
 }
 #endif // QTB_RECORDER
 
-#if 0 // for TEST
+#if 0 // disable now
 // send key for CTRL + ALT + DEL
 void QtBrynhildr::sendKey_CTRL_ALT_DEL()
 {
@@ -4162,7 +4154,7 @@ void QtBrynhildr::sendKey_CTRL_ALT_DEL()
 	keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP); // CTRL key release
   }
 }
-#endif
+#endif // disable now
 
 // send key for ALT + F4
 void QtBrynhildr::sendKey_ALT_F4()
@@ -4287,7 +4279,7 @@ void QtBrynhildr::fullScreen()
   QSize size = desktopPanel->getSize();
   cout << "fullScreen() : width  = " << size.width() << endl << flush;
   cout << "fullScreen() : height = " << size.height() << endl << flush;
-#endif
+#endif // for DEBUG
 
   static qreal originalScalingFactor = 1.0;
 
@@ -4311,8 +4303,8 @@ void QtBrynhildr::fullScreen()
 	//	 << size().width() << "," << size().height() << ")" << endl << flush;
 	//setDesktopScalingFactor(size());
 	originalScalingFactor = settings->getDesktopScalingFactor();
-	QSize size = settings->getDesktop()->getCurrentScreen().size();
-	setDesktopScalingFactor(size);
+	QSize screenSize = settings->getCurrentScreenSize();
+	setDesktopScalingFactor(screenSize);
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -4509,15 +4501,9 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   QSize size = softwareKeyboard->resetSize();
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
 #if !QTB_NEW_DESKTOPWINDOW
-#if 0 // for TEST
-  // correct
-  windowSize.setWidth(windowSize.width() - settings->getDesktop()->getCorrectWindowWidth());
-  windowSize.setHeight(windowSize.height() - settings->getDesktop()->getCorrectWindowHeight());
-#else // 0 // for TEST
   // correct
   windowSize.setWidth(windowSize.width() - widthMargin);
   windowSize.setHeight(windowSize.height() - heightMargin);
-#endif // 0 // for TEST
 #endif // !QTB_NEW_DESKTOPWINDOW
 
   // calc size
@@ -4629,6 +4615,18 @@ void QtBrynhildr::toggleSoftwareKeyboard()
 void QtBrynhildr::toggleSoftwareButton()
 {
   toggleShowSoftwareButton();
+}
+
+// get software keyboard check area
+QRect QtBrynhildr::getSoftwareKeyboardCheckArea()
+{
+  return touchpanelInterface.softwareKeyboardRect;
+}
+
+// get software button check area
+QRect QtBrynhildr::getSoftwareButtonCheckArea()
+{
+  return touchpanelInterface.softwareButtonRect;
 }
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -4774,19 +4772,19 @@ void QtBrynhildr::toggleOnViewerMode()
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-// touchpanel interface type
-void QtBrynhildr::touchpanelInterfaceTypeKeroRemote()
+// touchpanel operation type
+void QtBrynhildr::touchpanelOperationTypeKeroRemote()
 {
-  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE);
-  touchpanelInterfaceTypeKeroRemote_Action->setChecked(true);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(false);
+  settings->setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE);
+  touchpanelOperationTypeKeroRemote_Action->setChecked(true);
+  touchpanelOperationTypeQtBrynhildr_Action->setChecked(false);
 }
 
-void QtBrynhildr::touchpanelInterfaceTypeQtBrynhildr()
+void QtBrynhildr::touchpanelOperationTypeQtBrynhildr()
 {
-  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR);
-  touchpanelInterfaceTypeKeroRemote_Action->setChecked(false);
-  touchpanelInterfaceTypeQtBrynhildr_Action->setChecked(true);
+  settings->setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR);
+  touchpanelOperationTypeKeroRemote_Action->setChecked(false);
+  touchpanelOperationTypeQtBrynhildr_Action->setChecked(true);
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
@@ -5066,7 +5064,7 @@ void QtBrynhildr::finishedDownload()
 #endif // for TEST
 
   QString releasePage(byteArray);
-#if 1
+
   // check latest release
   int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
   if (startIndex > 0) {
@@ -5117,32 +5115,6 @@ void QtBrynhildr::finishedDownload()
   else {
 	cout << "NOT Found tag!" << endl << flush;
   }
-#else // for TEST
-  // display all tag and version in release page
-  int startIndex = 0;
-  while(true){
-	startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH, startIndex);
-	if (startIndex < 0) break;
-
-	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
-	int lastIndex = releasePage.indexOf("\"", startIndex);
-	//  cout << "startIndex = " << startIndex << endl << flush;
-	//  cout << "lastIndex  = " << lastIndex << endl << flush;
-	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString tag;
-	tag.append(tagRef);
-	cout << "Found tag = v" << qPrintable(tag);
-	startIndex = lastIndex;
-
-	startIndex = lastIndex + 2;
-	lastIndex = releasePage.indexOf("<", startIndex);
-	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
-	QString ver;
-	ver.append(verRef);
-	cout << " : ver = " << qPrintable(ver) << endl << flush;
-	startIndex = lastIndex;
-  }
-#endif // for TEST
 
   // clear memory
   httpGetter->clear();
@@ -5189,165 +5161,5 @@ void QtBrynhildr::timerExpired()
 #endif // QTB_BENCHMARK
   }
 }
-
-#if 0 // for TEST
-void QtBrynhildr::timerExpired_Graphics()
-{
-  //  cout << "timerExpired_Graphics()!" << endl << flush;
-
-  if (graphicsBuffer == 0){
-	// Nothing to do
-	return;
-  }
-
-  if (!settings->getConnected()){
-	// Nothing to do
-	return;
-  }
-
-  // draw a desktop image
-  draw_Graphics();
-}
-
-// restart timer graphics
-void QtBrynhildr::startTimer_Graphics(int frameRate)
-{
-  if (frameRate == 0) // MAXIMUM
-	frameRate = 100;
-
-  frameRate *= 1.1;
-  timer_Graphics->stop();
-  timer_Graphics->start(1000/frameRate);
-  //  cout << "interval = " << 1000/frameRate << " (ms)" << endl << flush;
-}
-
-// initialize graphics
-void QtBrynhildr::init_Graphics()
-{
-  initVPX();
-}
-
-// draw graphics
-void QtBrynhildr::draw_Graphics()
-{
-  // draw a desktop image
-  const int bufferSize = 512 * 1024; // 512KB for TEST
-  char buffer[bufferSize];
-  GraphicsBuffer::FrameType type;
-  unsigned int rate;
-
-  int getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-  //  cout << "getSize = " << getSize << endl << flush;
-  //  cout << "type = " << type << endl << flush;
-  if (getSize == 0){
-	// Nothing to do
-	return;
-  }
-  if (getSize > bufferSize){
-	// internal error
-	ABORT();
-  }
-
-  // MODE 5/6 (MJPEG)
-  if (type == GraphicsBuffer::TYPE_JPEG){
-	if (rate != settings->getFrameRate()){
-	  while (rate != settings->getFrameRate()){
-		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-		if (getSize == 0){
-		  return;
-		}
-	  }
-	  // change interval
-	  startTimer_Graphics(settings->getFrameRate());
-	}
-
-	// draw desktop
-	if (settings->getOnGraphics()){
-	  bool result = image->loadFromData((const uchar *)buffer, (uint)getSize, "JPEG");
-	  if (result){
-		//  image->save("jpg/desktop.jpg", "jpg", 75);
-		drawDesktop(*image);
-
-		// clear desktop flag clear
-		onClearDesktop = false;
-	  }
-	  else {
-		// Failed to loadFromData()
-		cout << "Failed to loadFromData()" << endl << flush;
-	  }
-	}
-  }
-  // MODE 7 (VP8)
-  else if (type == GraphicsBuffer::TYPE_VP8){
-	// decode VP8
-	decodeVPX((uchar*)buffer, getSize);
-
-	//	cout << "rate = " << rate <<
-	//	  ", settings->getFrameRate() = " << settings->getFrameRate() << endl << flush;
-
-	if (rate != settings->getFrameRate()){
-	  while (rate != settings->getFrameRate()){
-		getSize = graphicsBuffer->getFrame(buffer, &type, &rate);
-		if (getSize == 0){
-		  return;
-		}
-		decodeVPX((uchar*)buffer, getSize);
-		//	  cout << "skip frame : " << rate << endl << flush;
-		//	  cout << "rate = " << rate <<
-		//		", settings->getFrameRate() = " << settings->getFrameRate() << endl << flush;
-	  }
-	  // change interval
-	  startTimer_Graphics(settings->getFrameRate());
-	}
-
-	// draw desktop
-	if (settings->getOnGraphics()){
-	  // make RGB image
-#if QTB_SIMD_SUPPORT
-	  int rgbImageSize;
-	  if (hasSIMDInstruction && settings->getOnSIMDOperationSupport()){
-		rgbImageSize = makeRGBImage_SIMD(settings->getConvertThreadCount());
-	  }
-	  else {
-		rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
-	  }
-#else // QTB_SIMD_SUPPORT
-	  int rgbImageSize = makeRGBImage(settings->getConvertThreadCount());
-#endif // QTB_SIMD_SUPPORT
-	  //  cout << "rgbImageSize = " << rgbImageSize << endl << flush;
-
-	  if (rgbImageSize == 0){
-		return;
-	  }
-
-	  // create QImage
-	  if (image != 0){
-		delete image;
-	  }
-	  image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
-
-	  // draw image
-	  drawDesktop(*image);
-	  //  image->save("jpg/desktop.jpg", "jpg", 75);
-
-	  // clear desktop flag clear
-	  onClearDesktop = false;
-	}
-  }
-  else {
-	// internal error : unknown type
-	ABORT();
-  }
-
-  // clear desktop
-  if (!settings->getOnGraphics()){
-	// clear desktop only at once
-	if (!onClearDesktop){
-	  onClearDesktop = true;
-	  clearDesktop();
-	}
-  }
-}
-#endif // 0 // for TEST
 
 } // end of namespace qtbrynhildr

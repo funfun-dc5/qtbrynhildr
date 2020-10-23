@@ -54,6 +54,7 @@ public:
   QRect getCurrentScreen()
   {
 	if (currentScreenNumber != desktop->screenNumber()){
+	  currentScreenNumber = desktop->screenNumber();
 	  currentScreen = screens.at(currentScreenNumber)->geometry();
 	}
 	return currentScreen;

@@ -123,13 +123,9 @@ BUILDARCH = android-$(OBJECTS_DIR)
 #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android512
 # 32bit
 #BUILDARCH = android-armeabi-v7a
+#QMAKE_CXXFLAGS += -mfpu=neon
 # 64bit
-#CONFIG += android64
-}
-
-# arm64
-android64 {
-BUILDARCH = android-arm64-v8a
+#BUILDARCH = android-arm64-v8a
 }
 
 # desktop/touchpanel
@@ -234,11 +230,6 @@ SOURCES += graphicsthread/yuv2rgb/yuv2rgb_neon.cpp
 HEADERS += graphicsthread/decoder_vp8_neon.h
 SOURCES += graphicsthread/decoder_vp8_neon.cpp
 DEFINES += QTB_SIMD_SUPPORT=1
-QMAKE_CXXFLAGS += -mfpu=neon
-}
-
-android64:vp8-neon {
-QMAKE_CXXFLAGS -= -mfpu=neon
 }
 
 # multi thread converter

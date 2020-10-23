@@ -51,18 +51,6 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 	serverNameList->append(settings->getServerName());
 	serverNameListIndex = 0;
   }
-#if 0 // for TEST
-  serverNameList->replace(0, QString("1.1.1.0"));
-  serverNameList->replace(1, QString("1.1.1.1"));
-  serverNameList->replace(2, QString("1.1.1.2"));
-  serverNameList->replace(3, QString("1.1.1.3"));
-  serverNameList->replace(4, QString("1.1.1.4"));
-  serverNameList->replace(5, QString("1.1.1.5"));
-  serverNameList->replace(6, QString("1.1.1.6"));
-  serverNameList->replace(7, QString("1.1.1.7"));
-  serverNameList->replace(8, QString("1.1.1.8"));
-  serverNameList->replace(9, QString("1.1.1.9"));
-#endif // 1 // for TEST
 #endif // for DEBUG
 
 #if QTB_AUTO_COMPLETE
@@ -71,6 +59,7 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 
 #if defined(QTB_DEV_TOUCHPANEL) // for TEST
   lineEdit_hostname->insert(settings->getServerName());
+  //lineEdit_hostname->insert("192.168.10.12");
   serverNameListIndex = serverNameList->indexOf(settings->getServerName());
 #if QTB_AUTO_COMPLETE
   lineEdit_hostname->setCompleter(completer);
@@ -92,9 +81,6 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_8_1,	STRING_SERVER_TYPE_WINDOWS_8_1);
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_10,		STRING_SERVER_TYPE_WINDOWS_10);
 
-  // server type field
-  comboBox_hosttype->setCurrentIndex(settings->getServerType());
-
   // keyboard type field
   comboBox_keyboardtype->insertItem(KEYBOARD_TYPE_JP, STRING_KEYBOARD_TYPE_JP);
   comboBox_keyboardtype->insertItem(KEYBOARD_TYPE_US, STRING_KEYBOARD_TYPE_US);
@@ -102,40 +88,10 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   comboBox_keyboardtype->insertItem(KEYBOARD_TYPE_NATIVE, STRING_KEYBOARD_TYPE_NATIVE);
 #endif // defined(Q_OS_WIN)
 
-  // keyboard type field
-  comboBox_keyboardtype->setCurrentIndex(settings->getKeyboardType());
-
-  // port no field
-  spinBox_portno->setValue(settings->getPortNo());
-
-  // password field
-  QString password = settings->getPassword();
-  if (password != ""){
-	lineEdit_password->setText(password);
-	checkBox_showPassword->setEnabled(false);
-  }
-
   // public mode field
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION5 - PUBLICMODE_VERSION5, tr("MODE 5"));
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION6 - PUBLICMODE_VERSION5, tr("MODE 6"));
   comboBox_publicmode->insertItem(PUBLICMODE_VERSION7 - PUBLICMODE_VERSION5, tr("MODE 7"));
-  comboBox_publicmode->setCurrentIndex(settings->getPublicModeVersion() - PUBLICMODE_VERSION5);
-
-  // show password field
-  if (password != ""){
-	checkBox_showPassword->setCheckState(Qt::Unchecked);
-  }
-  else {
-	checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
-  }
-
-  // full screen field
-  if (QTB_DESKTOP_FULL_SCREEN){
-	checkBox_fullScreen->setCheckState(settings->getOnFullScreenAtConnected() ? Qt::Checked : Qt::Unchecked);
-  }
-  else {
-	checkBox_fullScreen->setVisible(false);
-  }
 
   // resetting
   resetting();
@@ -174,6 +130,14 @@ void ConnectToServerDialog::resizeEvent(QResizeEvent *event)
   Q_UNUSED(event);
 }
 
+// show Event
+void ConnectToServerDialog::showEvent(QShowEvent *event)
+{
+  getFromSettings();
+
+  QDialog::showEvent(event);
+}
+
 #if defined(QTB_DEV_TOUCHPANEL)
 // event
 bool ConnectToServerDialog::event(QEvent *event)
@@ -198,8 +162,11 @@ bool ConnectToServerDialog::event(QEvent *event)
 		  }
 		  //qDebug() << "srverNameList->size() : " << serverNameList->size();
 		  //qDebug() << "serverNameListIndex : " << serverNameListIndex;
-		  lineEdit_hostname->clear();
-		  lineEdit_hostname->insert(serverNameList->at(serverNameListIndex));
+		  QString serverName = serverNameList->at(serverNameListIndex);
+		  if (serverName != ""){
+			lineEdit_hostname->clear();
+			lineEdit_hostname->insert(serverName);
+		  }
 		}
 	  }
 	  prevPressedTime = currentTime;
@@ -212,15 +179,117 @@ bool ConnectToServerDialog::event(QEvent *event)
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
+// get from settings
+void ConnectToServerDialog::getFromSettings()
+{
+  // server type field
+  comboBox_hosttype->setCurrentIndex(settings->getServerType());
+
+  // keyboard type field
+  comboBox_keyboardtype->setCurrentIndex(settings->getKeyboardType());
+
+  // port no field
+  spinBox_portno->setValue(settings->getPortNo());
+
+  // password field
+  QString password = settings->getPassword();
+  if (password != ""){
+	lineEdit_password->setText(password);
+	checkBox_showPassword->setEnabled(false);
+  }
+  else {
+	lineEdit_password->setText("");
+  }
+
+  // public mode field
+  comboBox_publicmode->setCurrentIndex(settings->getPublicModeVersion() - PUBLICMODE_VERSION5);
+
+  // show password field
+  if (password != ""){
+	checkBox_showPassword->setCheckState(Qt::Unchecked);
+  }
+  else {
+	checkBox_showPassword->setCheckState(settings->getOnShowPassword() ? Qt::Checked : Qt::Unchecked);
+  }
+
+  // full screen field
+  if (QTB_DESKTOP_FULL_SCREEN){
+	checkBox_fullScreen->setCheckState(settings->getOnFullScreenAtConnected() ? Qt::Checked : Qt::Unchecked);
+  }
+  else {
+	checkBox_fullScreen->setVisible(false);
+  }
+#if defined(QTB_DEV_TOUCHPANEL)
+  checkBox_fullScreen->setVisible(false);
+#endif // defined(QTB_DEV_TOUCHPANEL)
+}
+
+// set to settings
+bool ConnectToServerDialog::setToSettings()
+{
+  // server name
+#if defined(QTB_DEV_TOUCHPANEL)
+  if (lineEdit_hostname->text().size() > 0){
+	QString serverName = lineEdit_hostname->text();
+	settings->setServerName(serverName);
+#if QTB_AUTO_COMPLETE
+	if (!(serverNameList->contains(serverName))){
+	  serverNameList->insert(0, serverName);
+	}
+#endif // QTB_AUTO_COMPLETE
+  }
+  else {
+	// Yet: error
+	return false;
+  }
+#else // defined(QTB_DEV_TOUCHPANEL)
+  if (comboBox_hostname->currentText().size() > 0){
+	QString serverName = comboBox_hostname->currentText();
+	settings->setServerName(serverName);
+#if QTB_AUTO_COMPLETE
+	if (!(serverNameList->contains(serverName))){
+	  serverNameList->insert(0, serverName);
+	}
+#endif // QTB_AUTO_COMPLETE
+  }
+  else {
+	// Yet: error
+	return false;
+  }
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
+  // host type
+  settings->setServerType(comboBox_hosttype->currentIndex());
+
+  // keyboard type
+  settings->setKeyboardType(comboBox_keyboardtype->currentIndex());
+
+  // port no
+  settings->setPortNo(spinBox_portno->value());
+
+  // password
+  settings->setPassword(lineEdit_password->text());
+
+  // public mode
+  settings->setPublicModeVersion(comboBox_publicmode->currentIndex() + PUBLICMODE_VERSION5);
+
+  // show password field
+  settings->setOnShowPassword(checkBox_showPassword->checkState() == Qt::Checked);
+
+  // full screen field
+  settings->setOnFullScreenAtConnected(checkBox_fullScreen->checkState() == Qt::Checked);
+
+  return true;
+}
+
 // settings for Tablet
 void ConnectToServerDialog::resetting()
 {
 #if defined(QTB_DEV_TOUCHPANEL)
-  QRect currentScreen = settings->getDesktop()->getCurrentScreen();
-  int desktopWidth = currentScreen.width();
-  int desktopHeight = currentScreen.height();
-  int dialogWidth = desktopWidth * 0.5;
-  int dialogHeight = desktopHeight * 0.8;
+  int screenWidth = settings->getCurrentScreenWidth();
+  int screenHeight = settings->getCurrentScreenHeight();
+  int dialogWidth = screenWidth * 0.5;
+  int dialogHeight = screenHeight * 0.8;
   int fontPointSize = 14;
 
   // set minimum width
@@ -353,57 +422,8 @@ void ConnectToServerDialog::accept()
   if (outputLog)
 	cout << "accept()." << endl << flush; // for DEBUG
 
-  // server name
-#if defined(QTB_DEV_TOUCHPANEL)
-  if (lineEdit_hostname->text().size() > 0){
-	QString serverName = lineEdit_hostname->text();
-	settings->setServerName(serverName);
-#if QTB_AUTO_COMPLETE
-	if (!(serverNameList->contains(serverName))){
-	  serverNameList->insert(0, serverName);
-	}
-#endif // QTB_AUTO_COMPLETE
-  }
-  else {
-	// Yet: error
-	return;
-  }
-#else // defined(QTB_DEV_TOUCHPANEL)
-  if (comboBox_hostname->currentText().size() > 0){
-	QString serverName = comboBox_hostname->currentText();
-	settings->setServerName(serverName);
-#if QTB_AUTO_COMPLETE
-	if (!(serverNameList->contains(serverName))){
-	  serverNameList->insert(0, serverName);
-	}
-#endif // QTB_AUTO_COMPLETE
-  }
-  else {
-	// Yet: error
-	return;
-  }
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
-  // host type
-  settings->setServerType(comboBox_hosttype->currentIndex());
-
-  // keyboard type
-  settings->setKeyboardType(comboBox_keyboardtype->currentIndex());
-
-  // port no
-  settings->setPortNo(spinBox_portno->value());
-
-  // password
-  settings->setPassword(lineEdit_password->text());
-
-  // public mode
-  settings->setPublicModeVersion(comboBox_publicmode->currentIndex() + PUBLICMODE_VERSION5);
-
-  // show password field
-  settings->setOnShowPassword(checkBox_showPassword->checkState() == Qt::Checked);
-
-  // full screen field
-  settings->setOnFullScreenAtConnected(checkBox_fullScreen->checkState() == Qt::Checked);
+  // set values to settings
+  setToSettings();
 
   // connect to server
   emit connectToServer();

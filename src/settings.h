@@ -78,7 +78,6 @@ typedef int PUBLICMODE_VERSION;
 
 // for serverName
 #define QTB_SERVERNAME			"serverName"
-//#define QTB_SERVERNAME_DEFAULT	"192.168.10.12"
 #define QTB_SERVERNAME_DEFAULT	""
 
 // for serverNameListSize
@@ -131,6 +130,22 @@ typedef int KEYBOARD_TYPE;
 // for onControl
 #define QTB_ONCONTROL			"onControl"
 #define QTB_ONCONTROL_DEFAULT	true
+
+// for onTaskbarAssist
+#define QTB_ONTASKBARASSIST			"onTaskbarAssist"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONTASKBARASSIST_DEFAULT false
+#else // defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONTASKBARASSIST_DEFAULT true
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
+// for taskbarAssistAreaWidth
+#define QTB_TASKBARASSISTAREAWIDTH "taskbarAssistAreaWidth"
+#define QTB_TASKBARASSISTAREAWIDTH_DEFAULT 10
+
+// for taskbarAssistAreaHeight
+#define QTB_TASKBARASSISTAREAHEIGHT "taskbarAssistAreaHeight"
+#define QTB_TASKBARASSISTAREAHEIGHT_DEFAULT 10
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
 // for onPluginsDisable
@@ -309,19 +324,11 @@ typedef enum {
 
 // for onShowMenuBar
 #define QTB_ONSHOWMENUBAR					"onShowMenuBar"
-#if defined(QTB_DEV_TOUCHPANEL)
-#define QTB_ONSHOWMENUBAR_DEFAULT			false
-#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWMENUBAR_DEFAULT			true
-#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowStatusBar
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
-#if defined(QTB_DEV_TOUCHPANEL)
-#define QTB_ONSHOWSTATUSBAR_DEFAULT			false
-#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
-#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
@@ -337,7 +344,11 @@ typedef enum {
 
 // for onShowFrameRate
 #define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_ONSHOWFRAMERATE_DEFAULT			false
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWFRAMERATE_DEFAULT			true
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowPassword
 #define QTB_ONSHOWPASSWORD					"onShowPassword"
@@ -398,12 +409,12 @@ typedef enum {
 #define QTB_CONVERTTHREADCOUNT_DEFAULT		2
 
 #if defined(QTB_DEV_TOUCHPANEL)
-// for touchpanelInterfaceType
-#define QTB_TOUCHPANELINTERFACETYPE				"touchpanelInterfaceType"
-#define QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE	0
-#define QTB_TOUCHPANELINTERFACETYPE_QTBRYNHILDR	1
-#define QTB_TOUCHPANELINTERFACETYPE_NUM			2
-#define QTB_TOUCHPANELINTERFACETYPE_DEFAULT		QTB_TOUCHPANELINTERFACETYPE_KEROREMOTE
+// for touchpanelOperationType
+#define QTB_TOUCHPANELOPERATIONTYPE				"touchpanelOperationType"
+#define QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE	0
+#define QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR	1
+#define QTB_TOUCHPANELOPERATIONTYPE_NUM			2
+#define QTB_TOUCHPANELOPERATIONTYPE_DEFAULT		QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for outputGraphicsDataToFile
@@ -516,6 +527,9 @@ private:
 
   // Control
   volatile bool onControl;
+  volatile bool onTaskbarAssist;
+  volatile int taskbarAssistAreaWidth;
+  volatile int taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   volatile bool onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
@@ -699,8 +713,8 @@ private:
   volatile int convertThreadCount;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // for touchpanelInterfaceType
-  volatile int touchpanelInterfaceType;
+  // for touchpanelOperationType
+  volatile int touchpanelOperationType;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // Debug
@@ -1080,6 +1094,43 @@ public:
   {
 	this->onControl = onControl;
 	return true;
+  }
+
+  // get taskbar assist flag
+  bool getOnTaskbarAssist() const
+  {
+	return onTaskbarAssist;
+  }
+
+  // set taskbar assist flag
+  bool setOnTaskbarAssist(bool onTaskbarAssist)
+  {
+	this->onTaskbarAssist = onTaskbarAssist;
+	return true;
+  }
+
+  // get taskbar assist area width
+  int getTaskbarAssistAreaWidth() const
+  {
+	return this->taskbarAssistAreaWidth;
+  }
+
+  // set taskbar assist area width
+  void setTaskbarAssistAreaWidth(int taskbarAssistAreaWidth)
+  {
+	this->taskbarAssistAreaWidth = taskbarAssistAreaWidth;
+  }
+
+  // get taskbar assist area height
+  int getTaskbarAssistAreaHeight() const
+  {
+	return this->taskbarAssistAreaHeight;
+  }
+
+  // set taskbar assist area height
+  void setTaskbarAssistAreaHeight(int taskbarAssistAreaHeight)
+  {
+	this->taskbarAssistAreaHeight = taskbarAssistAreaHeight;
   }
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
@@ -1573,6 +1624,30 @@ public:
   {
 	this->desktopHeight = desktopHeight;
 	return true;
+  }
+
+  // get current screen
+  QRect getCurrentScreen() const
+  {
+	return desktop->getCurrentScreen();
+  }
+
+  // get current screen width
+  int getCurrentScreenWidth() const
+  {
+	return desktop->getCurrentScreen().width();
+  }
+
+  // get current screen height
+  int getCurrentScreenHeight() const
+  {
+	return desktop->getCurrentScreen().height();
+  }
+
+  // get current screen size
+  QSize getCurrentScreenSize() const
+  {
+	return desktop->getCurrentScreen().size();
   }
 
   // get monitor change type
@@ -2081,16 +2156,16 @@ public:
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // get touchpanelInterfaceType
-  int getTouchpanelInterfaceType() const
+  // get touchpanel operation type
+  int getTouchpanelOperationType() const
   {
-	return touchpanelInterfaceType;
+	return touchpanelOperationType;
   }
 
-  // set convert thread count
-  void setTouchpanelInterfaceType(int touchpanelInterfaceType)
+  // set touchpanel operation type
+  void setTouchpanelOperationType(int touchpanelOperationType)
   {
-	this->touchpanelInterfaceType = touchpanelInterfaceType;
+	this->touchpanelOperationType = touchpanelOperationType;
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

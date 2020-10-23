@@ -58,16 +58,6 @@ bool DecoderVP8::preprocess(char *buffer, int size)
   return true;
 }
 
-#if 0
-// get desktop image
-QImage* DecoderVP8::getDesktopImage(int numOfThread)
-{
-  cout << "DecoderVP8::getDesktopImage()" << endl << flush;
-
-  return nullptr;
-}
-#endif // 0
-
 // get image
 QImage* DecoderVP8::getImage(int rgbImageSize)
 {

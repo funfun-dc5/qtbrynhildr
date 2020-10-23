@@ -16,7 +16,6 @@
 #include "common/netthread.h"
 #include "decoder.h"
 #include "framecounter.h"
-#include "graphicsbuffer.h"
 
 namespace qtbrynhildr {
 
@@ -29,14 +28,6 @@ class GraphicsThread : public NetThread
   // Variable
   //-------------------------------------------------------------------------------
 private:
-#if QTB_TEST_CODE
-  // graphics buffer size
-  int graphicsBufferSize;
-
-  // graphics buffer
-  GraphicsBuffer *graphicsBuffer;
-#endif // QTB_TEST_CODE
-
   // frame counter
   FrameCounter frameCounter;
 
@@ -97,14 +88,6 @@ public:
   {
 	return frameCounter.getTotalFrameCounter();
   }
-
-#if QTB_TEST_CODE
-  // get graphics buffer
-  GraphicsBuffer *getGraphicsBuffer() const
-  {
-	return graphicsBuffer;
-  }
-#endif // QTB_TEST_CODE
 
   // set drawing flag
   void setOnDrawing(bool onDrawing)

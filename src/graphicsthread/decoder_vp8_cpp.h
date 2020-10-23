@@ -38,11 +38,6 @@ public:
 	return "C++";
   }
 
-#if 0
-  // pre-process
-  bool preprocess(char *buffer, int size);
-#endif // 0
-
   // get desktop image
   QImage* getDesktopImage(int numOfThread);
 

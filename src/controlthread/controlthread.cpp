@@ -249,12 +249,12 @@ PROCESS_RESULT ControlThread::processForHeader()
 		!doneCheckPassword && settings->getDesktopScalingFactor() == 1.0){
 	  // cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
 	  // cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
-	  // cout << "[ControlThread] screen width  = " << settings->getDesktop()->getCurrentScreen().width() << endl;
-	  // cout << "[ControlThread] screen height = " << settings->getDesktop()->getCurrentScreen().height() << endl;
+	  // cout << "[ControlThread] screen width  = " << settings->getCurrentScreenWidth() << endl;
+	  // cout << "[ControlThread] screen height = " << settings->getCurrentScreenHeight() << endl;
 	  int server_width = com_data->server_cx * settings->getDesktopScalingFactor();
 	  int server_height = com_data->server_cy * settings->getDesktopScalingFactor();
-	  int client_width = settings->getDesktop()->getCurrentScreen().width();
-	  int client_height = settings->getDesktop()->getCurrentScreen().height();
+	  int client_width = settings->getCurrentScreenWidth();
+	  int client_height = settings->getCurrentScreenHeight();
 
 	  client_width *= settings->getAutoresizeDesktopScalingFactor();
 	  client_height *= settings->getAutoresizeDesktopScalingFactor();
@@ -434,7 +434,7 @@ void ControlThread::setupHeader()
   cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
   cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
   cout.flags(flags);
-#endif
+#endif // for DEBUG
 }
 
 // init protocol header
@@ -747,6 +747,24 @@ void ControlThread::setMouseControl()
 
 	//cout << "com_data->mouse_x = " << com_data->mouse_x << endl;
 	//cout << "com_data->mouse_y = " << com_data->mouse_y << endl;
+
+	// move to xxxx
+	if (mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_MOVE_TOPSIDE) == MOUSE_BUTTON_UP){
+	  com_data->mouse_move = MOUSE_MOVE_ON;
+	  com_data->mouse_y = 0;
+	}
+	else if (mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_MOVE_BOTTOMSIDE) == MOUSE_BUTTON_UP){
+	  com_data->mouse_move = MOUSE_MOVE_ON;
+	  com_data->mouse_y = settings->getDesktopHeight()-1;
+	}
+	else if (mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_MOVE_LEFTSIDE) == MOUSE_BUTTON_UP){
+	  com_data->mouse_move = MOUSE_MOVE_ON;
+	  com_data->mouse_x = 0;
+	}
+	else if (mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_MOVE_RIGHTSIDE) == MOUSE_BUTTON_UP){
+	  com_data->mouse_move = MOUSE_MOVE_ON;
+	  com_data->mouse_x = settings->getDesktopWidth()-1;
+	}
 
 	// save pos
 	prevPos = pos;

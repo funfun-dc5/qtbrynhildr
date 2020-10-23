@@ -227,7 +227,7 @@ private:
 	QRect(252,105, 18, 15),
 
 	// Fn button
-	QRect(  0,  0, 18, 15)
+	QRect(0,  0, 18, 15)
 };
 
   // layout table for keyboard

@@ -62,9 +62,6 @@
 // thread
 #include "controlthread/controlthread.h"
 #include "graphicsthread/graphicsthread.h"
-#if 0 // for TEST
-#include "graphicsthread/graphicsbuffer.h"
-#endif // 0 // for TEST
 #include "soundthread/soundthread.h"
 
 #ifdef USE_KEYLAYOUTFILE
@@ -179,8 +176,8 @@ private:
   QMenu *optionMenu;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel Interface Type Sub Menu
-  QMenu *touchpanelInterfaceTypeSubMenu;
+  // touchpanel Operation Type Sub Menu
+  QMenu *touchpanelOperationTypeSubMenu;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // In Testing Sub Menu
@@ -216,6 +213,9 @@ private:
 
   // disconnect to server
   QAction *disconnectToServer_Action;
+
+  // initialize settings
+  QAction *initializeSettings_Action;
 
   // output keyboard log
   QAction *outputKeyboardLog_Action;
@@ -372,10 +372,10 @@ private:
   QAction *onViewerMode_Action;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type KeroRemote
-  QAction *touchpanelInterfaceTypeKeroRemote_Action;
-  // touchpanel interface type QtBrynhildr
-  QAction *touchpanelInterfaceTypeQtBrynhildr_Action;
+  // touchpanel operation type KeroRemote
+  QAction *touchpanelOperationTypeKeroRemote_Action;
+  // touchpanel operation type QtBrynhildr
+  QAction *touchpanelOperationTypeQtBrynhildr_Action;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -447,7 +447,7 @@ private:
   struct {
 	QRect softwareButtonRect;
 	QRect softwareKeyboardRect;
-  } touchpanelInterface[QTB_TOUCHPANELINTERFACETYPE_NUM];
+  } touchpanelInterface;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -505,11 +505,6 @@ private:
 
   // thread for graphics
   GraphicsThread *graphicsThread;
-
-#if 0 // for TEST
-  // graphics buffer
-  GraphicsBuffer *graphicsBuffer;
-#endif // 0 // for TEST
 
   // thread for sound
   SoundThread *soundThread;
@@ -570,13 +565,8 @@ private:
   // timer for GUI
   QTimer *timer;
 
-#if 0 // for TEST
-  // timer for Graphics
-  QTimer *timer_Graphics;
-
-  // image
-  QImage *image;
-#endif // 0 // for TEST
+  // try to connect flag
+  bool isExecutingToConnect;
 
   // clear desktop flag
   bool onClearDesktop;
@@ -658,6 +648,11 @@ public:
   void toggleSoftwareKeyboard();
   // toggle software button
   void toggleSoftwareButton();
+
+  // get software keyboard check area
+  QRect getSoftwareKeyboardCheckArea();
+  // get software button check area
+  QRect getSoftwareButtonCheckArea();
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 public slots:
@@ -704,10 +699,10 @@ public slots:
   void outputLogMessage(int id, const QString text);
 
 protected:
-#if 0 // for TEST
+#if 0 // disable now
   // change event
   void changeEvent(QEvent *event);
-#endif // for TEST
+#endif // disable now
 
   // window close event
   void closeEvent(QCloseEvent *event);
@@ -771,6 +766,9 @@ private slots:
   void preferences();
 #endif // QTB_PREFERENCE
 
+  // initialize settings
+  void initializeSettings();
+
   // set video quality
   void setVideoQuality_MINIMUM();
   void setVideoQuality_LOW();
@@ -832,9 +830,9 @@ private slots:
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
   // send key
-#if 0 // for TEST
+#if 0 // disable now
   void sendKey_CTRL_ALT_DEL(); // CTRL + ALT + DEL
-#endif
+#endif // disable now
   void sendKey_ALT_F4(); // ALT + F4
   void sendKey_CTRL_ESC(); // CTRL + ESC
   void sendKey_WINDOWS(); // WINDOWS
@@ -920,9 +918,9 @@ private slots:
   void toggleOnViewerMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // touchpanel interface type
-  void touchpanelInterfaceTypeKeroRemote();
-  void touchpanelInterfaceTypeQtBrynhildr();
+  // touchpanel operation type
+  void touchpanelOperationTypeKeroRemote();
+  void touchpanelOperationTypeQtBrynhildr();
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -1046,17 +1044,6 @@ private:
 	this->heightMargin = heightMargin;
   }
 
-#if 0 // for TEST
-  // start timer graphics
-  void startTimer_Graphics(int frameRate);
-
-  // initialize graphics
-  void init_Graphics();
-
-  // draw graphics
-  void draw_Graphics();
-#endif // 0 // for TEST
-
 private slots:
 #if QTB_UPDATECHECK
   // finished download
@@ -1064,10 +1051,6 @@ private slots:
 #endif // QTB_UPDATECHECK
 
   void timerExpired();
-
-#if 0 // for TEST
-  void timerExpired_Graphics();
-#endif // 0 // for TEST
 };
 
 } // end of namespace qtbrynhildr

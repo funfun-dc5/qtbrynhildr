@@ -85,4 +85,4 @@ int main(int argc, char *argv[])
   string plain = cipher.decodeString(encoded);
   cout << "plain  text: " << plain << endl;	
 }
-#endif
+#endif // for DEBUG

@@ -446,7 +446,6 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 // send data
 long NetThread::sendData(SOCKET sock, const char *buf, long size)
 {
-#if 1 // for TEST
   long sent_size = 0;
 
   while(sent_size < size){
@@ -454,7 +453,7 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
 #if 0 // for TEST
 	if (ret < 0)
 	  cout << "errno = " << errno << endl << flush;
-#endif
+#endif // for TEST
 	if (ret > 0){
 	  sent_size += ret;
 	}
@@ -463,10 +462,6 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
 	}
   }
   return sent_size;
-#else // for TEST
-  // send
-  return send_int(sock, buf, size, 0);
-#endif // for TEST
 }
 
 // receive data
@@ -474,39 +469,6 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 {
   long received_size = 0;
 
-#if 0 // from Brynhildr (small block size)
-
-#define BLOCK_SIZE 1024
-
-  while(received_size < size){
-	int remain_size = size - received_size;
-	int request_size = remain_size > BLOCK_SIZE ? BLOCK_SIZE : remain_size;
-	long ret = recv_int(sock, buf + received_size, request_size, 0);
-	if (ret > 0){
-	  received_size += ret;
-	}
-	else {
-	  return -1;
-	}
-  }
-
-#else // for Brynhildr
-
-#if 0 // for TEST
-  int i = 0;
-  while(received_size < size){
-	long ret = recv_int(sock, buf + received_size, size - received_size, 0);
-	if (ret > 0){
-	  received_size += ret;
-	  if (strcmp(name, "GraphicsThread") == 0) // for Graphics
-		cout << "[" << name << "] ret (" << i << ") = " << ret << endl << flush;
-	}
-	else {
-	  return -1;
-	}
-	i++;
-  }
-#else // 1 // for TEST
   while(received_size < size){
 	long ret = recv_int(sock, buf + received_size, size - received_size, 0);
 	if (ret > 0){
@@ -516,9 +478,6 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 	  return -1;
 	}
   }
-#endif // 1 // for TEST
-
-#endif // 1 // for Brynhildr
 
   receivedDataCounter += received_size;
 

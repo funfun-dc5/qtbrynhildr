@@ -52,11 +52,6 @@ public:
   // pre-process
   bool preprocess(char *buffer, int size);
 
-#if 0
-  // get desktop image
-  QImage* getDesktopImage(int numOfThread);
-#endif // 0
-
 protected:
   // get image
   QImage* getImage(int imageSize);

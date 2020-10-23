@@ -24,16 +24,6 @@ DecoderVP8AVX::~DecoderVP8AVX()
 {
 }
 
-#if 0
-// pre-process
-bool DecoderVP8AVX::preprocess(char *buffer, int size)
-{
-  cout << "DecoderVP8AVX::preprocess()" << endl << flush;
-
-  return true;
-}
-#endif // 0
-
 // get desktop image
 QImage* DecoderVP8AVX::getDesktopImage(int numOfThread)
 {

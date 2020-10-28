@@ -174,6 +174,7 @@ Settings::Settings(const char *iniFileName)
 
 #if defined(QTB_DEV_TOUCHPANEL)
   setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_DEFAULT);
+  setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_DEFAULT);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   setOutputGraphicsDataToFile(QTB_OUTPUTGRAPHICSDATATOFILE_DEFAULT);
@@ -498,6 +499,9 @@ void Settings::readSettings()
   // load touchpanelOperationType
   setTouchpanelOperationType(settings->value(QTB_TOUCHPANELOPERATIONTYPE,
 											 QTB_TOUCHPANELOPERATIONTYPE_DEFAULT).toInt());
+  // load touchpanelInterfaceType
+  setTouchpanelInterfaceType(settings->value(QTB_TOUCHPANELINTERFACETYPE,
+											 QTB_TOUCHPANELINTERFACETYPE_DEFAULT).toInt());
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // load outputGraphicsDataToFile
@@ -746,6 +750,8 @@ void Settings::writeSettings()
 #if defined(QTB_DEV_TOUCHPANEL)
   // save touchpanelOperationType
   settings->setValue(QTB_TOUCHPANELOPERATIONTYPE, touchpanelOperationType);
+  // save touchpanelInterfaceType
+  settings->setValue(QTB_TOUCHPANELINTERFACETYPE, touchpanelInterfaceType);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // save outputGraphicsDataToFile
@@ -878,6 +884,7 @@ void Settings::printSettings() const
   qDebug() << "Convert Thread Count         : " << convertThreadCount;
 #if defined(QTB_DEV_TOUCHPANEL)
   qDebug() << "TouchpanelOperationType      : " << touchpanelOperationType;
+  qDebug() << "TouchpanelInterfaceType      : " << touchpanelInterfaceType;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   qDebug() << "------------------------------------------";

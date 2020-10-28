@@ -415,6 +415,12 @@ typedef enum {
 #define QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR	1
 #define QTB_TOUCHPANELOPERATIONTYPE_NUM			2
 #define QTB_TOUCHPANELOPERATIONTYPE_DEFAULT		QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE
+
+// for touchpanelInterfaceType
+#define QTB_TOUCHPANELINTERFACETYPE				"touchpanelInterfaceType"
+#define QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT	0
+#define QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM	1
+#define QTB_TOUCHPANELINTERFACETYPE_DEFAULT		QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 // for outputGraphicsDataToFile
@@ -713,8 +719,11 @@ private:
   volatile int convertThreadCount;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // for touchpanelOperationType
+  // for touchpanel operation type
   volatile int touchpanelOperationType;
+
+  // for touchpanel interface type
+  volatile int touchpanelInterfaceType;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // Debug
@@ -2166,6 +2175,18 @@ public:
   void setTouchpanelOperationType(int touchpanelOperationType)
   {
 	this->touchpanelOperationType = touchpanelOperationType;
+  }
+
+  // get touchpanel interface type
+  int getTouchpanelInterfaceType() const
+  {
+	return touchpanelInterfaceType;
+  }
+
+  // set touchpanel interface type
+  void setTouchpanelInterfaceType(int touchpanelInterfaceType)
+  {
+	this->touchpanelInterfaceType = touchpanelInterfaceType;
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

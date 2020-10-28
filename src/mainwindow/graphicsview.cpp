@@ -15,7 +15,9 @@
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #include <QTransform>
 
+#if defined(QTB_DEBUG)
 #include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 #include "mainwindow/graphicsview.h"

@@ -12,7 +12,9 @@
 // Qt Header
 #include <QString>
 
-//#include <QDebug>
+#if defined(QTB_DEBUG)
+#include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 

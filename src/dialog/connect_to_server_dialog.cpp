@@ -13,7 +13,9 @@
 #include <QFont>
 #include <QRect>
 
-//#include <QDebug>
+#if defined(QTB_DEBUG)
+#include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 #include "connect_to_server_dialog.h"

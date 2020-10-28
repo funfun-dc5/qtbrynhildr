@@ -28,6 +28,7 @@ DEFINES += QTB_LITTLE_ENDIAN
 
 # for DEBUG
 #CONFIG += console
+#DEFINES += QTB_DEBUG
 # for check spec
 # message($$QMAKESPEC)
 

@@ -12,7 +12,9 @@
 #include <QPainter>
 #include <QPen>
 
+#if defined(QTB_DEBUG)
 #include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 #include "software_button.h"

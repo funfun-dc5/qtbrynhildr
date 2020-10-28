@@ -45,7 +45,7 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 	vptop = v1topOrg + (vtop - v2topOrg);
   }
 
-#if 1 // for TEST
+#if 1 // for improvement
 
   // 4) load Uc
   __m256 uc = _mm256_setr_ps(0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0);
@@ -55,7 +55,7 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
   __m256 constMaxV = _mm256_setr_ps(255,255,255,255,255,255,255,255);
   __m256 constMinV = _mm256_setzero_ps();
 
-#else // for TEST
+#else // for improvement
 
   Aligned(16) const float constUc[8] = {0, -0.34, 1.72, 0, 0, -0.34, 1.72, 0};
   Aligned(16) const float constVc[8] = {1.402, -0.714, 0, 0, 1.402, -0.714, 0, 0};
@@ -71,7 +71,7 @@ void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
   __m256 constMaxV = _mm256_broadcast_ss(&constMax);
   __m256 constMinV = _mm256_broadcast_ss(&constMin);
 
-#endif // 1 // for TEST
+#endif // for improvement
 
   // set RC flag
   unsigned long mxcsr = _mm_getcsr();

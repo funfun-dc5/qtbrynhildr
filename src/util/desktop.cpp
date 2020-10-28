@@ -10,7 +10,10 @@
 
 // Qt Header
 #include <QApplication>
+
+#if defined(QTB_DEBUG)
 #include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 #include "util/desktop.h"

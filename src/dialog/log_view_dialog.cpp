@@ -7,12 +7,15 @@
 // System Header
 
 // Qt Header
-//#include <QDebug>
 #include <QDialog>
 #include <QFile>
 #include <QPushButton>
 #include <QRect>
 #include <QTextStream>
+
+#if defined(QTB_DEBUG)
+#include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 #include "log_view_dialog.h"

@@ -9,9 +9,10 @@
 // Qt Header
 #include <QDir>
 #include <QString>
-#if 1 // for qDebug()
-#include <QtCore>
-#endif // for TEST
+
+#if defined(QTB_DEBUG)
+#include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 #include "settings.h"
@@ -795,6 +796,7 @@ void Settings::writeSettings()
   settings->sync();
 }
 
+#if defined(QTB_DEBUG)
 // for log
 void Settings::printSettings() const
 {
@@ -911,6 +913,7 @@ KEYBOARD_TYPE Settings::getDefaultKeyboardType() const
 	return KEYBOARD_TYPE_US;
   }
 }
+#endif // defined(QTB_DEBUG)
 
 // get default output path
 QString Settings::getDefaultOutputPath() const

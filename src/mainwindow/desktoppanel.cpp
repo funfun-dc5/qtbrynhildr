@@ -24,9 +24,9 @@
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #include <QList>
 #include <QUrl>
-#if 1 // for qDebug()
-#include <QtCore>
-#endif
+#if defined(QTB_DEBUG)
+#include <QDebug>
+#endif // defined(QTB_DEBUG)
 
 // Local Header
 #include "config.h"

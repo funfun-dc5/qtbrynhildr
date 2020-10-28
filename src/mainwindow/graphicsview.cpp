@@ -77,7 +77,8 @@ void GraphicsView::setScale(qreal scalingFactor)
 
   transform.scale(scalingFactor, scalingFactor);
   setTransform(transform);
-#if 0 // for TEST
+
+#if defined(QTB_DEBUG)
   // get window size
   QSize windowSize = size();
   QSize desktopImageSize = settings->getDesktopImageSize();
@@ -91,26 +92,8 @@ void GraphicsView::setScale(qreal scalingFactor)
 	qDebug() << "diffSize = " << diffSize;
   }
 #if defined(QTB_DEV_TOUCHPANEL)
-#if 1 // for TEST
-  //  verticalScrollBar()->setRange(1, diffSize.height()-1);
-  //  verticalScrollBar()->setValue(diffSize.height()/2);
-  //  verticalScrollBar()->setPageStep(windowSize.height());
   verticalScrollBar()->setValue(verticalScrollBar()->minimum());
-  //  verticalScrollBar()->setValue(verticalScrollBar()->maximum());
-
-  //  horizontalScrollBar()->setRange(1, diffSize.width()-1);
-  //  horizontalScrollBar()->setValue(diffSize.width()/2);
-  //  horizontalScrollBar()->setPageStep(windowSize.width());
   horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
-  //  horizontalScrollBar()->setValue(horizontalScrollBar()->maximum());
-#else // for TEST
-  verticalScrollBar()->setPageStep(windowSize.height());
-  horizontalScrollBar()->setPageStep(windowSize.width());
-  verticalScrollBar()->setRange(0, currentDesktopSize.height() - windowSize.height());
-  horizontalScrollBar()->setRange(0, currentDesktopSize.width() - windowSize.width());
-  verticalScrollBar()->setValue(0);
-  horizontalScrollBar()->setValue(0);
-#endif // for TEST
   if (outputLog){
 	qDebug() << "verticalScrollBar.minimum   = " << verticalScrollBar()->minimum();
 	qDebug() << "verticalScrollBar.maximum   = " << verticalScrollBar()->maximum();
@@ -120,7 +103,8 @@ void GraphicsView::setScale(qreal scalingFactor)
 	qDebug() << "horizontalScrollBar.value   = " << horizontalScrollBar()->value();
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
-#endif // for TEST
+#endif // defined(QTB_DEBUG)
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // save scaling factor
   this->scalingFactor = scalingFactor;

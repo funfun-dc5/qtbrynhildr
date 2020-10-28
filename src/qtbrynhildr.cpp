@@ -6,10 +6,6 @@
 
 // System Header
 #include <cstring>
-#if 1 // copy for TEST
-#include <cstdio>
-#endif
-//#include <iostream>
 
 // Qt Header
 #include <QAudioDeviceInfo>
@@ -289,12 +285,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if QTB_CRYPTOGRAM
   // create cipher
-#if 1 // simple description
   cipher = new Cipher(qPrintable(bootTime.toString()));
-#else
-  QByteArray bootTimeStr = bootTime.toString().toUtf8();
-  cipher = new Cipher(bootTimeStr.constData());
-#endif
 #endif // QTB_CRYPTOGRAM
 
   // set init file
@@ -326,13 +317,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // open Log File
   if (!logMessage->openLogFile(settings->getLogFile())){
 	// Failed to open log file
-#if 1 // for DEBUG
 	QMessageBox::warning(this,
 						 tr("warning"),
 						 tr("Failed to open log file"),
 						 QMessageBox::Ok,
 						 QMessageBox::Ok);
-#endif
   }
 
   // initialize platform
@@ -3328,16 +3317,9 @@ void QtBrynhildr::connectToServer()
   counter_graphics = 0;
 
   // start all thread
-#if 1 // for TEST
   controlThread->start();
   graphicsThread->start();
   soundThread->start();
-#else // 1 // for TEST
-  controlThread->start(QThread::NormalPriority);
-  graphicsThread->start(QThread::HighestPriority);
-  //graphicsThread->start(QThread::TimeCriticalPriority);
-  soundThread->start(QThread::NormalPriority);
-#endif // 1 // for TEST
 
   // try to connect flag
   isExecutingToConnect = true;
@@ -3429,7 +3411,6 @@ void QtBrynhildr::finishedNetThread()
 // exit process for Application exit
 void QtBrynhildr::exit()
 {
-#if 1 // for TEST
   if (settings->getOnConfirmAtExit()){
 	ConfirmDialog *confirmDialog =
 	  new ConfirmDialog(tr("exit application?"),
@@ -3445,21 +3426,6 @@ void QtBrynhildr::exit()
 	  return;
 	}
   }
-#else // for TEST
-  int ret;
-
-  if (settings->getOnConfirmAtExit()){
-	ret = QMessageBox::question(this,
-								tr("Confirm"),
-								tr("exit application?"),
-								QMessageBox::Ok | QMessageBox::Cancel,
-								QMessageBox::Cancel);
-	if (ret == QMessageBox::Cancel){
-	  // Nothing to do
-	  return;
-	}
-  }
-#endif // for TEST
 
   // disconnected
   disconnectToServer();

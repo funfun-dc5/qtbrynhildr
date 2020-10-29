@@ -51,10 +51,10 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   ,onControlKey(false)
   ,onAltKey(false)
   ,onFnKey(false)
-  ,pushedShiftKey(ID_KEY_0)
-  ,pushedControlKey(ID_KEY_0)
-  ,pushedAltKey(ID_KEY_0)
-  ,pushedFnKey(ID_KEY_0)
+  ,pushedShiftKey(ID_KEY_NULL)
+  ,pushedControlKey(ID_KEY_NULL)
+  ,pushedAltKey(ID_KEY_NULL)
+  ,pushedFnKey(ID_KEY_NULL)
   ,fontSize(32)
   ,alpha(255)
   // for DEBUG
@@ -332,8 +332,8 @@ void SoftwareKeyboard::mousePressEvent(QMouseEvent *event)
 	cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
 
   ID_KEY id = getID(event->pos());
-  pressedKey(id);
-  if (id != ID_KEY_0){
+  if (id != ID_KEY_NULL){
+	pressedKey(id);
 	onButton = true;
   }
   else {
@@ -347,8 +347,8 @@ void SoftwareKeyboard::mouseReleaseEvent(QMouseEvent *event)
 	cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
 
   ID_KEY id = getID(event->pos());
-  releasedKey(id);
-  if (id != ID_KEY_0){
+  if (id != ID_KEY_NULL){
+	releasedKey(id);
 	onButton = true;
   }
   else {
@@ -359,7 +359,7 @@ void SoftwareKeyboard::mouseReleaseEvent(QMouseEvent *event)
 void SoftwareKeyboard::mouseMoveEvent(QMouseEvent *event)
 {
   ID_KEY id = getID(event->pos());
-  if (id != ID_KEY_0){
+  if (id != ID_KEY_NULL){
 	onButton = true;
   }
   else {
@@ -375,7 +375,7 @@ void SoftwareKeyboard::keyDown(uchar key)
 	cout << "DOWN: VK_Code : " << getVKCodeByString(key)  << endl << flush;
   }
 }
-  
+
 // key up
 void SoftwareKeyboard::keyUp(uchar key)
 {
@@ -408,7 +408,7 @@ SoftwareKeyboard::ID_KEY SoftwareKeyboard::getID(QPoint pos) const
 	}
   }
 
-  return ID_KEY_0;
+  return ID_KEY_NULL;
 }
 
 // pressed key

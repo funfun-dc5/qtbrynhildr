@@ -180,7 +180,7 @@ void SoftwareButton::mousePressEvent(QMouseEvent *event)
   if (outputLog)
 	cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
   ID_BUTTON id = getID(event->pos());
-  if (id != ID_BUTTON_0){
+  if (id != ID_BUTTON_NULL){
 	pressedButton(id);
 	onButton = true;
   }
@@ -195,7 +195,7 @@ void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
   if (outputLog)
 	cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
   ID_BUTTON id = getID(event->pos());
-  if (id != ID_BUTTON_0){
+  if (id != ID_BUTTON_NULL){
 	releasedButton(id);
 	onButton = true;
   }
@@ -208,7 +208,7 @@ void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
 void SoftwareButton::mouseMoveEvent(QMouseEvent *event)
 {
   ID_BUTTON id = getID(event->pos());
-  if (id != ID_BUTTON_0){
+  if (id != ID_BUTTON_NULL){
 	onButton = true;
   }
   else {
@@ -444,7 +444,7 @@ SoftwareButton::ID_BUTTON SoftwareButton::getID(QPoint pos)
 	}
   }
 
-  return ID_BUTTON_0;
+  return ID_BUTTON_NULL;
 }
 
 // clear buttons

@@ -65,7 +65,7 @@ protected:
 	ID_BUTTON_37,
 	ID_BUTTON_38,
 	ID_BUTTON_NUM,
-	ID_BUTTON_0 = ID_BUTTON_NUM
+	ID_BUTTON_NULL = ID_BUTTON_NUM
   } ID_BUTTON;
 
   // button top

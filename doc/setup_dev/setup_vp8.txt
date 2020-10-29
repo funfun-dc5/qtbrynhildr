@@ -33,12 +33,13 @@ see `./configure --help`
 
 [additional options]
 
-
 [android]
  configure script option : [common] --disable-runtime-cpu-detect --sdk-path=/opt/android-ndk-r14b
 
  add -mfloat-sbi=softfp -mfpu=neon to CFLAGS, CXXFLAGS
 
+[macOS]
+ add -mmacosx-version-min=10.13 to CFLAGS
 
 3) copy header files and static library
 

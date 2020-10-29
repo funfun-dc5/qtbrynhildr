@@ -110,7 +110,6 @@ bool SK::event(QEvent *event)
 												  Qt::NoModifier);
 		  // left mouse button press
 		  mousePressEvent(newEvent);
-
 		  delete newEvent;
 		}
 		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
@@ -125,7 +124,6 @@ bool SK::event(QEvent *event)
 												  Qt::NoModifier);
 		  // left mouse button release
 		  mouseReleaseEvent(newEvent);
-
 		  delete newEvent;
 		}
 		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move

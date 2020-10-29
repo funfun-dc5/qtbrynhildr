@@ -12,7 +12,6 @@
 
  configure script option : --enable-custom-modes --disable-oggtest
 
-
 [MinGW]
 
 --build=i686-w64-mingw32
@@ -20,6 +19,11 @@
 [MinGW x64]
 
 --build=x86_64-w64-mingw32
+
+[additional options]
+
+[macOS]
+ add -mmacosx-version-min=10.13 to CFLAGS
 
 3) copy header files and static library
 

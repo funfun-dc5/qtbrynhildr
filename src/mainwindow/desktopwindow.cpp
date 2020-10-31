@@ -105,8 +105,17 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
 // widget enter event
 void DesktopWindow::enterEvent(QEvent *event)
 {
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	// taskbar assist
 	if (settings->getOnTaskbarAssist()){
 	  QPoint pos = ((QEnterEvent*)event)->pos();

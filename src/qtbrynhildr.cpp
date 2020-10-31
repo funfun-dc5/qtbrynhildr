@@ -4801,10 +4801,12 @@ void QtBrynhildr::toggleOnViewerMode()
 	desktopScalingDialog_Action->setEnabled(true);
 	// disable sub menus
 	selectPublicModeVersionSubMenu->setEnabled(true);
-	recordAndReplaySubMenu->setEnabled(true);
 	sendKeySubMenu->setEnabled(true);
 	selectMonitorNoSubMenu->setEnabled(true);
+#if defined(QTB_DEV_DESKTOP)
+	recordAndReplaySubMenu->setEnabled(true);
 	desktopCompressModeSubMenu->setEnabled(true);
+#endif // defined(QTB_DEV_DESKTOP)
   }
   else {
 	settings->setOnViewerMode(true);
@@ -4815,10 +4817,12 @@ void QtBrynhildr::toggleOnViewerMode()
 	desktopScalingDialog_Action->setEnabled(false);
 	// disable sub menus
 	selectPublicModeVersionSubMenu->setEnabled(false);
-	recordAndReplaySubMenu->setEnabled(false);
 	sendKeySubMenu->setEnabled(false);
 	selectMonitorNoSubMenu->setEnabled(false);
+#if defined(QTB_DEV_DESKTOP)
+	recordAndReplaySubMenu->setEnabled(false);
 	desktopCompressModeSubMenu->setEnabled(false);
+#endif // defined(QTB_DEV_DESKTOP)
   }
 }
 

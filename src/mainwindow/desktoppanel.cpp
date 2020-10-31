@@ -239,8 +239,17 @@ void DesktopPanel::setOnFullScreen(bool onFullScreen)
 void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 {
 
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	currentMousePos = mousePos;
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
@@ -263,8 +272,17 @@ void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 // mouse move relatively
 void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
 {
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	currentMousePos += mousePos;
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
@@ -389,8 +407,17 @@ void DesktopPanel::mousePressEvent(QMouseEvent *event)
 	printMouseButtonEvent(event);
   }
 
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	if (!settings->getOnShowSoftwareButton()){
 	  setMouseButtonEvent(event, MOUSE_BUTTON_DOWN);
 	}
@@ -406,9 +433,17 @@ void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 	printMouseButtonEvent(event);
   }
 
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
 
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	// check for filedrop
 	if (event->button() == Qt::LeftButton){
 	  QRect window = QRect(0, 0, currentSize.width(), currentSize.height());
@@ -434,8 +469,17 @@ void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 	printMouseButtonEvent(event);
   }
 
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	if (!settings->getOnShowSoftwareButton()){
 #if defined(QTB_DEV_DESKTOP)
   setMouseButtonEvent(event, MOUSE_BUTTON_DOWN);
@@ -476,8 +520,17 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 	mouseWheel *= settings->getDesktopScalingFactor();
   }
 
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	if (!settings->getOnShowSoftwareButton()){
 	  // put into mouse wheel buffer
 	  if (mouseWheel != 0)
@@ -502,8 +555,17 @@ void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 // move mouse cursor
 void DesktopPanel::moveMouseCursor(QMouseEvent *event, bool marker)
 {
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	currentMousePos = event->pos();
 	MOUSE_POS pos;
 	pos.x = currentMousePos.x();
@@ -560,8 +622,17 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	}
   }
 
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	// exit full screen
 	if (onFullScreen && VK_Code == VK_ESCAPE){
 	  qtbrynhildr->exitFullScreen();
@@ -636,8 +707,17 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 	}
   }
 
-  if (settings->getConnected() &&
-	  (settings->getOnControl() && !settings->getOnViewerMode())){
+  // check connected
+  if (!settings->getConnected())
+	return;
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	return;
+  }
+
+  // control
+  if (settings->getOnControl()){
 	// check previous KEYCODE_FLG
 	if (previous_KEYCODE_FLG == KEYCODE_FLG_KEYUP){
 	  // check VK_TAB and VK_SPACE(Eisu and Kana)

@@ -4794,9 +4794,31 @@ void QtBrynhildr::toggleOnViewerMode()
 
   if (settings->getOnViewerMode()){
 	settings->setOnViewerMode(false);
+
+	// enable menu items
+	onControl_Action->setEnabled(true);
+	onGraphics_Action->setEnabled(true);
+	desktopScalingDialog_Action->setEnabled(true);
+	// disable sub menus
+	selectPublicModeVersionSubMenu->setEnabled(true);
+	recordAndReplaySubMenu->setEnabled(true);
+	sendKeySubMenu->setEnabled(true);
+	selectMonitorNoSubMenu->setEnabled(true);
+	desktopCompressModeSubMenu->setEnabled(true);
   }
   else {
 	settings->setOnViewerMode(true);
+
+	// disable menu items
+	onControl_Action->setEnabled(false);
+	onGraphics_Action->setEnabled(false);
+	desktopScalingDialog_Action->setEnabled(false);
+	// disable sub menus
+	selectPublicModeVersionSubMenu->setEnabled(false);
+	recordAndReplaySubMenu->setEnabled(false);
+	sendKeySubMenu->setEnabled(false);
+	selectMonitorNoSubMenu->setEnabled(false);
+	desktopCompressModeSubMenu->setEnabled(false);
   }
 }
 

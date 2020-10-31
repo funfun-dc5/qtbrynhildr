@@ -405,7 +405,7 @@ void ControlThread::setupHeader()
   initHeader();
 
   // for control
-  if (settings->getOnControl()){
+  if (settings->getOnControl() && !settings->getOnViewerMode()){
 	//-------------------------------------------
 	// 1) Mouse Control
 	//-------------------------------------------
@@ -492,7 +492,7 @@ void ControlThread::initHeaderForCommon()
 void ControlThread::initHeaderForControl()
 {
   // for control
-  com_data->control		= settings->getOnControl() ? CONTROL_ON : CONTROL_OFF;
+  com_data->control = (settings->getOnControl() && !settings->getOnViewerMode()) ? CONTROL_ON : CONTROL_OFF;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   // for plugins disable
   com_data->plugins_disable = settings->getOnPluginsDisable() ? PLUGINS_DISABLE_ON : PLUGINS_DISABLE_OFF;

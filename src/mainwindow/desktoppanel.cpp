@@ -238,7 +238,6 @@ void DesktopPanel::setOnFullScreen(bool onFullScreen)
 // mouse move
 void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 {
-
   // check connected
   if (!settings->getConnected())
 	return;

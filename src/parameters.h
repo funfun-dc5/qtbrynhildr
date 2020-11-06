@@ -30,6 +30,12 @@ const int QTB_CONTROL_LOCAL_BUFFER_SIZE = 128 * 1024;
 // local data buffer size for graphics (byte)
 const int QTB_GRAPHICS_LOCAL_BUFFER_SIZE = 1024 * 1024;
 
+// minimum width of area mode
+const int QTB_AREA_MODE_MINIMUM_WIDTH = 64;
+
+// minimum height of area mode
+const int QTB_AREA_MODE_MINIMUM_HEIGHT = 64;
+
 //---------------------------------------------------------------------------
 // for sound
 //---------------------------------------------------------------------------

@@ -15,6 +15,7 @@
 #include <QtGui>
 
 // Local Header
+#include "graphicsthread/yuv2rgb/yuv2rgb.h"
 #include "mainwindow/desktopwindow.h"
 
 namespace qtbrynhildr {
@@ -23,6 +24,8 @@ namespace qtbrynhildr {
 DesktopWindow::DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QWidget(parent)  
   ,DesktopPanel(qtbrynhildr)
+  ,onDraging(false)
+  ,onAreaMode(false)
   // for DEBUG
   ,outputLog(false)
 {
@@ -82,7 +85,10 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
   }
 
   QPainter painter(this);
+
+  // draw desktop image
   painter.drawImage(0, 0, image);
+
   // draw marker for mouse cursor
   if (drawMarkerCounter > 0){
 	int length = drawMarkerCounter*10;
@@ -100,6 +106,25 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
 	drawMarkerCounter = 30;
   }
 #endif // for TEST
+
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	if (onDraging){
+	  static QPoint previousPos;
+	  if (currentPos != previousPos){
+		// draw rectangle firstPos to currentPos
+		painter.setPen(QPen(Qt::black, 1, Qt::DotLine));
+		painter.drawRect(QRect(firstPos, currentPos));
+		previousPos = currentPos;
+	  }
+	}
+  }
+  else {
+	if (onAreaMode){
+	  // leave area mode
+	  leaveAreaMode();
+	}
+  }
 }
 
 // widget enter event
@@ -165,10 +190,56 @@ void DesktopWindow::leaveEvent(QEvent *event)
 // mouse event
 void DesktopWindow::mousePressEvent(QMouseEvent *event)
 {
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	if (event->button() == Qt::LeftButton){
+	  //qDebug() << "Left Button Press : pos = " << event->pos();
+	  if (onAreaMode)
+		return;
+
+	  firstPos = event->pos();
+	  int x = firstPos.x() & ~0x4;
+	  int y = firstPos.y() & ~0x2;
+	  firstPos.setX(x);
+	  firstPos.setY(y);
+	  onDraging = true;
+	}
+	return;
+  }
+
   DesktopPanel::mousePressEvent(event);
 }
 void DesktopWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+  // viewer mode
+  if (settings->getOnViewerMode()){
+	if (event->button() == Qt::LeftButton){
+	  //qDebug() << "Left Button Release : pos = " << event->pos();
+	  if (onAreaMode)
+		return;
+
+	  lastPos = event->pos();
+	  int x = lastPos.x() & ~0x4;
+	  int y = lastPos.y() & ~0x2;
+	  lastPos.setX(x);
+	  lastPos.setY(y);
+	  onDraging = false;
+	  // enter area mode
+	  QRect rect = QRect(firstPos, lastPos).normalized();
+	  if (rect.width() >= QTB_AREA_MODE_MINIMUM_WIDTH &&
+		  rect.height() >= QTB_AREA_MODE_MINIMUM_HEIGHT){
+		enterAreaMode(rect);
+	  }
+	}
+	else if (event->button() == Qt::RightButton){
+	  if (!onAreaMode)
+		return;
+
+	  // leave area mode
+	  leaveAreaMode();
+	}
+	return;
+  }
   DesktopPanel::mouseReleaseEvent(event);
 }
 void DesktopWindow::mouseDoubleClickEvent(QMouseEvent *event)
@@ -177,6 +248,15 @@ void DesktopWindow::mouseDoubleClickEvent(QMouseEvent *event)
 }
 void DesktopWindow::mouseMoveEvent(QMouseEvent *event)
 {
+  if (settings->getOnViewerMode()){
+	//qDebug() << "pos = " << event->pos();
+	currentPos = event->pos();
+	int x = currentPos.x() & ~0x4;
+	int y = currentPos.y() & ~0x2;
+	currentPos.setX(x);
+	currentPos.setY(y);
+	return;
+  }
   DesktopPanel::mouseMoveEvent(event);
 }
 void DesktopWindow::wheelEvent(QWheelEvent *event)
@@ -215,5 +295,24 @@ bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message
   return DesktopPanel::nativeEventFilter(eventType, message, result);
 }
 #endif // defined(Q_OS_WIN)
+
+void DesktopWindow::enterAreaMode(QRect rect)
+{
+  settings->setDesktopOffsetX(rect.topLeft().x());
+  settings->setDesktopOffsetY(rect.topLeft().y());
+  settings->setDesktopImageWidth(rect.width());
+  settings->setDesktopImageHeight(rect.height());
+  onAreaMode = true;
+}
+
+void DesktopWindow::leaveAreaMode()
+{
+  // leave area mode
+  settings->setDesktopOffsetX(QTB_DESKTOPOFFSETX_DEFAULT);
+  settings->setDesktopOffsetY(QTB_DESKTOPOFFSETY_DEFAULT);
+  settings->setDesktopImageWidth(QTB_MAX_SERVER_DESKTOP_WIDTH);
+  settings->setDesktopImageHeight(QTB_MAX_SERVER_DESKTOP_HEIGHT);
+  onAreaMode = false;
+}
 
 } // end of namespace qtbrynhildr

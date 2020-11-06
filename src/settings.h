@@ -263,10 +263,10 @@ typedef int COMPRESS_MODE;
 #define QTB_DESKTOPOFFSETY				"desktopOffsetY"
 #define QTB_DESKTOPOFFSETY_DEFAULT		0
 
-// MAX desktop width for server
-#define QTB_MAX_SERVER_DESKTOP_WIDTH	4096
-// MAX desktop height for server
-#define QTB_MAX_SERVER_DESKTOP_HIGHT	2048
+// MAX desktop width for server (8K)
+#define QTB_MAX_SERVER_DESKTOP_WIDTH	(1920*4)
+// MAX desktop height for server (8K)
+#define QTB_MAX_SERVER_DESKTOP_HEIGHT	(1080*4)
 
 // for monitorChangeType
 typedef enum {
@@ -604,6 +604,12 @@ private:
 
   // desktop height
   volatile SIZE desktopHeight;
+
+  // desktop image width
+  volatile SIZE desktopImageWidth;
+
+  // desktop image height
+  volatile SIZE desktopImageHeight;
 
   // select monitor
   volatile MONITOR_NO monitorNo;
@@ -1632,6 +1638,32 @@ public:
   bool setDesktopHeight(SIZE desktopHeight)
   {
 	this->desktopHeight = desktopHeight;
+	return true;
+  }
+
+  // get desktop image width
+  SIZE getDesktopImageWidth() const
+  {
+	return desktopImageWidth;
+  }
+
+  // set desktop image width
+  bool setDesktopImageWidth(SIZE desktopImageWidth)
+  {
+	this->desktopImageWidth = desktopImageWidth;
+	return true;
+  }
+
+  // get desktop image height
+  SIZE getDesktopImageHeight() const
+  {
+	return desktopImageHeight;
+  }
+
+  // set desktop image height
+  bool setDesktopImageHeight(SIZE desktopImageHeight)
+  {
+	this->desktopImageHeight = desktopImageHeight;
 	return true;
   }
 

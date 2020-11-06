@@ -1089,6 +1089,12 @@ QtBrynhildr::~QtBrynhildr()
   }
 #endif // QTB_RECORDER
 
+  // desktop window
+  if (desktopWindow != 0){
+	delete desktopWindow;
+	desktopWindow = 0;
+  }
+
   // settings
   if (settings != 0){
 	delete settings;
@@ -2639,6 +2645,10 @@ void QtBrynhildr::updateConnected()
 	  arg(settings->getDesktopWidth(), 3).
 	  arg(settings->getDesktopHeight(), 3);
 #endif // QTB_BENCHMARK
+	// viewer mode
+	if (settings->getOnViewerMode()){
+	  str += " [" + tr("Viewer Mode") + "]";
+	}
 	connectionLabel->setText(str);
   }
   else {
@@ -3461,6 +3471,11 @@ void QtBrynhildr::exit()
 	  // to Normal Screen
 	  exitFullScreen();
 	}
+  }
+
+  // desktop window
+  if (settings->getOnViewerMode()){
+	desktopWindow->leaveAreaMode();
   }
 
   // save settings
@@ -4824,6 +4839,8 @@ void QtBrynhildr::toggleOnViewerMode()
 	desktopCompressModeSubMenu->setEnabled(false);
 #endif // defined(QTB_DEV_DESKTOP)
   }
+
+  updateStatusBar();
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)

@@ -125,6 +125,20 @@ GraphicsThread::~GraphicsThread()
 	delete [] buffer;
 	buffer = 0;
   }
+
+  // decoders
+  // mode 5,6
+  if (decoderMode56 != 0){
+	delete decoderMode56;
+	decoderMode56 = 0;
+  }
+  // mode 7
+  QMapIterator<QString, Decoder*> i(decoderMode7Map);
+  while (i.hasNext()){
+	i.next();
+	Decoder *decoder = (Decoder*)i.value();
+	delete decoder;
+  }
 }
 
 //---------------------------------------------------------------------------
@@ -391,6 +405,18 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	else {
 	  // draw this frame
 	  QImage *image = decoder->getDesktopImage(settings->getConvertThreadCount());
+
+	  if (settings->getOnViewerMode()){
+		// copy area in viewer mode
+		qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
+		if (scalingFactor > 1.0){
+		  if (settings->getDesktopOffsetX() != 0)
+			*image = image->copy(settings->getDesktopOffsetX(),
+								 settings->getDesktopOffsetY(),
+								 settings->getDesktopImageWidth(),
+								 settings->getDesktopImageHeight());
+		}
+	  }
 
 #if QTB_BENCHMARK
 	  // check benchmark phase counter

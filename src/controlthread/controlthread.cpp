@@ -537,20 +537,51 @@ void ControlThread::initHeaderForGraphics()
 	com_data->zoom			= (ZOOM)1.0;
   }
 
-  // client scroll
-  // com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
-  // com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
-  // com_data->scroll = 1; // enable scroll (public mode 7)
+  QSize windowSize = desktopPanel->getSize();
+  QSize desktopImageSize = settings->getDesktopImageSize();
+  if (!(windowSize.isValid() && desktopImageSize.isValid())){
+	// client scroll
+	//com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
+	//com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
+	//com_data->scroll = 1; // enable scroll (public mode 7)
 
-  // image size
-  com_data->image_cx		= (SIZE)settings->getDesktopWidth();
-  com_data->image_cy		= (SIZE)settings->getDesktopHeight();
-  // com_data->image_cx		= 640; // (SIZE)settings->getDesktopWidth();
-  // com_data->image_cy		= 400; // (SIZE)settings->getDesktopHeight();
-  // com_data->zoom = 1.0;
-  // com_data->client_scroll_x	= -10;
-  // com_data->client_scroll_y	= -20;
-  // com_data->scroll = 1; // enable scroll (public mode 7)
+	// image size
+	com_data->image_cx		= (SIZE)settings->getDesktopWidth();
+	com_data->image_cy		= (SIZE)settings->getDesktopHeight();
+  }
+  else {
+	qreal scalingFactorOfWidth;
+	qreal scalingFactorOfHeight;
+	qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
+	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+	  if (scalingFactor > 1.0){
+		scalingFactorOfWidth = (qreal)desktopImageSize.width()/windowSize.width() * scalingFactor;
+		scalingFactorOfHeight = (qreal)desktopImageSize.height()/windowSize.height() * scalingFactor;
+		// image size (SF <1.0)
+		com_data->image_cx		= (SIZE)settings->getDesktopWidth() * scalingFactorOfWidth;
+		com_data->image_cy		= (SIZE)settings->getDesktopHeight() * scalingFactorOfHeight;
+	  }
+	  else {
+		scalingFactorOfWidth = (qreal)desktopImageSize.width()/windowSize.width();
+		scalingFactorOfHeight = (qreal)desktopImageSize.height()/windowSize.height();
+		// image size (SF >= 1.0)
+		com_data->image_cx		= (SIZE)settings->getDesktopImageWidth() * scalingFactorOfWidth;
+		com_data->image_cy		= (SIZE)settings->getDesktopImageHeight() * scalingFactorOfHeight;
+	  }
+	}
+	else {
+	  scalingFactorOfWidth = (qreal)desktopImageSize.width()/windowSize.width();
+	  scalingFactorOfHeight = (qreal)desktopImageSize.height()/windowSize.height();
+	  // image size (SF >= 1.0)
+	  com_data->image_cx		= (SIZE)settings->getDesktopImageWidth() * scalingFactorOfWidth;
+	  com_data->image_cy		= (SIZE)settings->getDesktopImageHeight() * scalingFactorOfHeight;
+	}
+
+	// client scroll
+	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX() * scalingFactorOfWidth;
+	com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY() * scalingFactorOfHeight;
+	com_data->scroll = 1; // enable scroll (public mode 7)
+  }
 
 #if QTB_DESKTOP_COMPRESS_MODE
   // desktop compress mode
@@ -718,24 +749,31 @@ void ControlThread::setMouseControl()
   else if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	// set information
 	com_data->mouse_move = MOUSE_MOVE_ON;
+	qreal scalingFactorOfWidth;
+	qreal scalingFactorOfHeight;
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
 	  qreal scalingFactor = settings->getDesktopScalingFactorForZoom();
 	  if (scalingFactor > 1.0){
-		com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width() * scalingFactor;
-		com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height() * scalingFactor;
+		scalingFactorOfWidth = (qreal)desktopImageSize.width()/windowSize.width() * scalingFactor;
+		scalingFactorOfHeight = (qreal)desktopImageSize.height()/windowSize.height() * scalingFactor;
 	  }
 	  else {
-		com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
-		com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
+		scalingFactorOfWidth = (qreal)desktopImageSize.width()/windowSize.width();
+		scalingFactorOfHeight = (qreal)desktopImageSize.height()/windowSize.height();
 	  }
 	}
 	else {
-	  com_data->mouse_x = pos.x * desktopImageSize.width()/windowSize.width();
-	  com_data->mouse_y = pos.y * desktopImageSize.height()/windowSize.height();
+	  scalingFactorOfWidth = (qreal)desktopImageSize.width()/windowSize.width();
+	  scalingFactorOfHeight = (qreal)desktopImageSize.height()/windowSize.height();
 	}
+	// set pos
+	com_data->mouse_x = pos.x * scalingFactorOfWidth;
+	com_data->mouse_y = pos.y * scalingFactorOfHeight;
+
 	// set offset
-	com_data->mouse_x += settings->getDesktopOffsetX();
-	com_data->mouse_y += settings->getDesktopOffsetY();
+	com_data->mouse_x += settings->getDesktopOffsetX() * scalingFactorOfWidth;
+	com_data->mouse_y += settings->getDesktopOffsetY() * scalingFactorOfHeight;
+
 #if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode
 	int desktopCompressMode = settings->getDesktopCompressMode();

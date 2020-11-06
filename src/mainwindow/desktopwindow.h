@@ -15,6 +15,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QRect>
 #include <QWidget>
 
 // Local Header
@@ -37,6 +38,21 @@ class DesktopWindow : public QWidget, public DesktopPanel
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // first pos
+  QPoint firstPos;
+
+  // last pos
+  QPoint lastPos;
+
+  // current pos
+  QPoint currentPos;
+
+  // on draging
+  bool onDraging;
+
+  // on area mode
+  bool onAreaMode;
+
   // output log flag
   bool outputLog;
 
@@ -99,6 +115,12 @@ private:
   // native event filter
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
 #endif // defined(Q_OS_WIN)
+
+  // enter area mode
+  void enterAreaMode(QRect rect);
+public:
+  // leave area mode
+  void leaveAreaMode();
 };
 
 } // end of namespace qtbrynhildr

@@ -118,7 +118,10 @@ Settings::Settings(const char *iniFileName)
   setDesktopOffsetY(QTB_DESKTOPOFFSETY_DEFAULT);
 
   setDesktopWidth(QTB_MAX_SERVER_DESKTOP_WIDTH);
-  setDesktopHeight(QTB_MAX_SERVER_DESKTOP_WIDTH);
+  setDesktopHeight(QTB_MAX_SERVER_DESKTOP_HEIGHT);
+
+  setDesktopImageWidth(QTB_MAX_SERVER_DESKTOP_WIDTH);
+  setDesktopImageHeight(QTB_MAX_SERVER_DESKTOP_HEIGHT);
 
   setMonitorNo(QTB_MONITOR_NO_DEFAULT);
 

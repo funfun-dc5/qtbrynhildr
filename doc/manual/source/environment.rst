@@ -13,8 +13,8 @@
 
 (1) Windows版  [#]_ 
 ^^^^^^^^^^^^^^^^^^^^
-  * Windows XP      (64bit/32bit) (Qt5.6.3でビルドする必要あり)
-  * Windows Vista   (64bit/32bit) (Qt5.6.3でビルドする必要あり)
+  * Windows XP      (64bit/32bit) (Qt5.6.xでビルドする必要あり)
+  * Windows Vista   (64bit/32bit) (Qt5.6.xでビルドする必要あり)
   * Windows 7       (64bit/32bit)
   * Windows 8       (64bit/32bit)
   * Windows 8.1     (64bit/32bit)
@@ -33,4 +33,5 @@
 
 (4) Android版
 ^^^^^^^^^^^^^^
-  * Android 4.4以降
+  * Android 4.4以降 (Qt 5.12.xでビルドする必要あり)
+

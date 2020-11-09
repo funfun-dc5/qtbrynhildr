@@ -99,7 +99,7 @@
 
 * 設定ファイル
 
-  標準では以下のファイルに保存されます。::
+  標準では以下のファイルに保存されます。 ::
 
    C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 

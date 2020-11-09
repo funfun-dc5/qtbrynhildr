@@ -1089,11 +1089,13 @@ QtBrynhildr::~QtBrynhildr()
   }
 #endif // QTB_RECORDER
 
+#if defined(QTB_DEV_DESKTOP)
   // desktop window
   if (desktopWindow != 0){
 	delete desktopWindow;
 	desktopWindow = 0;
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // settings
   if (settings != 0){
@@ -3473,10 +3475,12 @@ void QtBrynhildr::exit()
 	}
   }
 
+#if defined(QTB_DEV_DESKTOP)
   // desktop window
   if (settings->getOnViewerMode()){
 	desktopWindow->leaveAreaMode();
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   // save settings
   if (writeSettingsAtExit || settings->getOnSaveSettingsAtExit()){

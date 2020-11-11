@@ -199,9 +199,9 @@ Settings::Settings(const char *iniFileName)
 Settings::~Settings()
 {
   // delete objects
-  if (desktop != 0){
-	delete desktop;
-	desktop = 0;
+  if (settings != 0){
+	delete settings;
+	settings = 0;
   }
 #if QTB_AUTO_COMPLETE
   if (serverNameList != 0){
@@ -209,6 +209,10 @@ Settings::~Settings()
 	serverNameList = 0;
   }
 #endif // QTB_AUTO_COMPLETE
+  if (desktop != 0){
+	delete desktop;
+	desktop = 0;
+  }
 }
 
 // get settings

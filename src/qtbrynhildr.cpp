@@ -1067,6 +1067,21 @@ QtBrynhildr::~QtBrynhildr()
   }
 #endif // USE_KEYLAYOUTFILE
 
+#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  // Software Button and Keyboard
+  // keyboard
+  if (softwareKeyboard != 0){
+	delete softwareKeyboard;
+	softwareKeyboard = 0;
+  }
+
+  // button
+  if (softwareButton != 0){
+	delete softwareButton;
+	softwareButton = 0;
+  }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
 #if QTB_CRYPTOGRAM
   // delete cipher
   if (cipher != 0){
@@ -1089,13 +1104,56 @@ QtBrynhildr::~QtBrynhildr()
   }
 #endif // QTB_RECORDER
 
-#if defined(QTB_DEV_DESKTOP)
+  // dialogs
+  if (connectToServerDialog != 0){
+	// disconnect
+	disconnect(connectToServerDialog, SIGNAL(connectToServer()), this, SLOT(connectToServer()));
+	delete connectToServerDialog;
+	connectToServerDialog = 0;
+  }
+  if (desktopScalingDialog != 0){
+	delete desktopScalingDialog;
+	desktopScalingDialog = 0;
+  }
+  if (logViewDialog != 0){
+	delete logViewDialog;
+	logViewDialog = 0;
+  }
+#if QTB_PREFERENCE
+  if (preferenceDialog != 0){
+	delete preferenceDialog;
+	preferenceDialog = 0;
+  }
+#endif // QTB_PREFERENCE
+
+  // progress bar
+  if (progressBar != 0){
+	delete progressBar;
+	progressBar = 0;
+  }
+
+#if QTB_NEW_DESKTOPWINDOW
+
+  // desktop panel
+  if (desktopPanel != 0){
+	delete desktopPanel;
+	desktopPanel = 0;
+  }
+
+#else // QTB_NEW_DESKTOPWINDOW
+
   // desktop window
   if (desktopWindow != 0){
 	delete desktopWindow;
 	desktopWindow = 0;
   }
-#endif // defined(QTB_DEV_DESKTOP)
+  // scroll area
+  if (scrollArea != 0){
+	delete scrollArea;
+	scrollArea = 0;
+  }
+
+#endif //QTB_NEW_DESKTOPWINDOW
 
   // settings
   if (settings != 0){
@@ -3286,13 +3344,6 @@ void QtBrynhildr::connectToServer()
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // Software Keyboard and Button
   // software keyboard
-#if 0 // for TEST
-  if (softwareKeyboard != 0){
-	delete softwareKeyboard;
-	softwareKeyboard = 0;
-  }
-  softwareKeyboard = new SK(settings, keyBuffer, this);
-#endif // for TEST
   // TODO: check keyboardType range
   switch(keyboardType){
   case KEYBOARD_TYPE_JP:

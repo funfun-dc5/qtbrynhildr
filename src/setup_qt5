@@ -10,7 +10,7 @@ PATHLIST=
 #------------------
 # Qt 5.12 - 5.14
 #------------------
-QTVERSION=5.14.2
+QTVERSION=5.12.10
 VCVERSION=msvc2017
 MINGWVERSION=mingw73
 #------------------

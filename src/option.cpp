@@ -28,6 +28,7 @@ Option::Option(int argc, char *argv[])
   ,initFlag(false)
   ,debug(0)
   ,fullScreenFlag(false)
+  ,viewerFlag(false)
 #if QTB_CELT_SUPPORT
   ,celtFlag(false)
 #endif // QTB_CELT_SUPPORT
@@ -237,6 +238,9 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  else if (strncmp("fullscreen", optionName, sizeof("fullscreen")) == 0){
 		fullScreenFlag = true;
 	  }
+	  else if (strncmp("viewer", optionName, sizeof("viewer")) == 0){
+		viewerFlag = true;
+	  }
 #if QTB_CELT_SUPPORT
 	  else if (strncmp("celt", optionName, sizeof("celt")) == 0){
 		celtFlag = true;
@@ -382,6 +386,11 @@ void Option::printHelp() const
   // -fullscreen
   cout << "-fullscreen" << endl;
   cout << "        " << "full screen mode." << endl;
+  cout << endl;
+
+  // -viewer
+  cout << "-viewer" << endl;
+  cout << "        " << "viewer mode." << endl;
   cout << endl;
 
   // -debug <on|off>

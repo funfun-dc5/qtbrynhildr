@@ -367,6 +367,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	settings->setOnFullScreenAtConnected(true);
   }
 
+  // viewer mode
+  if (option->getViewerFlag()){
+	settings->setOnViewerAtConnected(true);
+  }
+
 #if QTB_CELT_SUPPORT
   // celt
   if (option->getCELTFlag()){
@@ -2910,6 +2915,11 @@ void QtBrynhildr::connected()
 	onSetDesktopScalingFactorForFullScreen = true;
   }
 
+  // viewer mode at connected
+  if (settings->getOnViewerAtConnected()){
+	toggleOnViewerMode();
+  }
+
   // try to connect flag
   isExecutingToConnect = false;
   updateConnected();
@@ -4894,6 +4904,9 @@ void QtBrynhildr::toggleOnViewerMode()
 	desktopCompressModeSubMenu->setEnabled(false);
 #endif // defined(QTB_DEV_DESKTOP)
   }
+
+  // set checked flag
+  onViewerMode_Action->setChecked(settings->getOnViewerMode());
 
   updateStatusBar();
 }

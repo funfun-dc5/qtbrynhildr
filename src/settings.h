@@ -338,6 +338,10 @@ typedef enum {
 #define QTB_ONFULLSCREENATCONNECTED_DEFAULT			false
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
+// for onViewerAtConnected
+#define QTB_ONVIEWERATCONNECTED				"onViewerAtConnected"
+#define QTB_ONVIEWERATCONNECTED_DEFAULT		false
+
 // for onHideMenuAndStatusBarAtFullScreen
 #define QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN			"onHideMenuAndStatusBarAtFullScreen"
 #define QTB_ONHIDEMENUANDSTATUSBARATFULLSCREEN_DEFAULT	true
@@ -658,6 +662,9 @@ private:
 
   // full screen
   volatile bool onFullScreenAtConnected;
+
+  // viewer
+  volatile bool onViewerAtConnected;
 
   // hide menu and status bar at full screen
   volatile bool onHideMenuAndStatusBarAtFullScreen;
@@ -1900,16 +1907,28 @@ public:
 	this->onShowStatusBar = onShowStatusBar;
   }
 
-  // get full screen flag
+  // get full screen at connected flag
   bool getOnFullScreenAtConnected() const
   {
 	return onFullScreenAtConnected;
   }
 
-  // set full screen flag
+  // set full screen at connected flag
   void setOnFullScreenAtConnected(bool onFullScreenAtConnected)
   {
 	this->onFullScreenAtConnected = onFullScreenAtConnected;
+  }
+
+  // get viewer at connected flag
+  bool getOnViewerAtConnected() const
+  {
+	return onViewerAtConnected;
+  }
+
+  // set viewer at connected flag
+  void setOnViewerAtConnected(bool onViewerAtConnected)
+  {
+	this->onViewerAtConnected = onViewerAtConnected;
   }
 
   // get hide menu and status bar at full screen flag

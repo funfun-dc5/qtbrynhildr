@@ -224,6 +224,14 @@ void ConnectToServerDialog::getFromSettings()
 #if defined(QTB_DEV_TOUCHPANEL)
   checkBox_fullScreen->setVisible(false);
 #endif // defined(QTB_DEV_TOUCHPANEL)
+
+  // viewer field
+  if (QTB_VIEWER_MODE){
+	checkBox_viewer->setCheckState(settings->getOnViewerAtConnected() ? Qt::Checked : Qt::Unchecked);
+  }
+  else {
+	checkBox_viewer->setVisible(false);
+  }
 }
 
 // set to settings
@@ -280,6 +288,9 @@ bool ConnectToServerDialog::setToSettings()
 
   // full screen field
   settings->setOnFullScreenAtConnected(checkBox_fullScreen->checkState() == Qt::Checked);
+
+  // viewer field
+  settings->setOnViewerAtConnected(checkBox_viewer->checkState() == Qt::Checked);
 
   return true;
 }
@@ -414,6 +425,20 @@ void ConnectToServerDialog::on_checkBox_fullScreen_stateChanged(int state)
 	}
 	else {
 	  cout << "full Screen: unchecked" << endl << flush; // for DEBUG
+	}
+  }
+}
+
+// viewer field
+void ConnectToServerDialog::on_checkBox_viewer_stateChanged(int state)
+{
+  if (outputLog){
+	cout << "state Changed : viewer" << endl << flush; // for DEBUG
+	if (state == Qt::Checked){
+	  cout << "viewer: checked" << endl << flush; // for DEBUG
+	}
+	else {
+	  cout << "viewer: unchecked" << endl << flush; // for DEBUG
 	}
   }
 }

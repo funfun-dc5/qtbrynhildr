@@ -42,6 +42,9 @@ private:
   // full screen flag
   bool fullScreenFlag;
 
+  // viewer flag
+  bool viewerFlag;
+
 #if QTB_CELT_SUPPORT
   // CELT flag
   bool celtFlag;
@@ -172,10 +175,16 @@ public:
 	return debug;
   }
 
-  // get full Screen flag
+  // get full screen flag
   bool getFullScreenFlag() const
   {
 	return fullScreenFlag;
+  }
+
+  // get viwer flag
+  bool getViewerFlag() const
+  {
+	return viewerFlag;
   }
 
 #if QTB_CELT_SUPPORT

@@ -111,8 +111,10 @@ private slots:
   void on_comboBox_publicmode_currentIndexChanged(int index);
   // show password field
   void on_checkBox_showPassword_stateChanged(int state);
-  // show password field
+  // fullscreen field
   void on_checkBox_fullScreen_stateChanged(int state);
+  // viwer field
+  void on_checkBox_viewer_stateChanged(int state);
 
   // accept button
   void accept();

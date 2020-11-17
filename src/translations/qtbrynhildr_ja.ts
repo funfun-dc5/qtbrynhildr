@@ -65,14 +65,14 @@
         <location filename="../GUI/connect_to_server_dialog_touchpanel.ui"/>
         <source>Show Password</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>パスワードを表示する</translation>
+        <translation>パスワードを表示</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
         <location filename="../GUI/connect_to_server_dialog_touchpanel.ui"/>
         <source>Full Screen</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>フルスクリーンで接続する</translation>
+        <translation>フルスクリーン</translation>
     </message>
     <message>
         <location filename="../GUI/connect_to_server_dialog.ui"/>
@@ -86,7 +86,7 @@
         <location filename="../GUI/connect_to_server_dialog_touchpanel.ui"/>
         <source>Viewer</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>ビューワーとして接続する</translation>
+        <translation>ビューワー</translation>
     </message>
 </context>
 <context>

@@ -107,6 +107,18 @@ extern void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uch
 #endif // !(defined(__arm__) || defined(__aarch64__))
 #endif // QTB_SIMD_SUPPORT
 
+#if QTB_GRAY_SCALE_MODE
+// YUV convert to RGB (Gray Scale Version)
+extern void convertYUVtoRGB_CPP_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
+// reset YUV buffer
+extern void resetYUVBuffer();
+#endif // QTB_GRAY_SCALE_MODE
+
+#if QTB_GRAY_SCALE_MODE2
+// RGB convert to Gray Scale
+extern void convertRGBtoGS();
+#endif // QTB_GRAY_SCALE_MODE2
+
 } // end of namespace qtbrynhildr
 
 #endif // YUV2RGB_H

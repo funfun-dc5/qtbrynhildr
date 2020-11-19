@@ -41,6 +41,17 @@ QImage* DecoderJPEG::getDesktopImage(int numOfThread)
   bool result = image->loadFromData((const uchar *)buffer,
 									(uint)size,
 									"JPEG");
+#if QTB_GRAY_SCALE_MODE
+  // convert to gray scale
+  if (onGrayScale){
+#if QT_VERSION < 0x050500
+#error "QImage::Format_Grayscale8 NOT support"
+#else // QT_VERSION >= 0x050500
+	*image = image->convertToFormat(QImage::Format_Grayscale8);
+#endif // QT_VERSION >= 0x050500
+  }
+#endif // QTB_GRAY_SCALE_MODE
+
   // return
   return result ? image : nullptr;
 }

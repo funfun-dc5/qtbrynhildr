@@ -145,6 +145,12 @@ const bool QTB_IN_TESTING				= false;
 // sound push mode
 #define QTB_SOUND_PUSH_MODE			1
 
+// gray scale mode
+#define QTB_GRAY_SCALE_MODE			0
+
+// gray scale mode2
+#define QTB_GRAY_SCALE_MODE2		0
+
 // LOAD BITMAP
 #define QTB_LOAD_BITMAP				0
 

@@ -1015,6 +1015,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   preferenceDialog->setDecoderNameList(graphicsThread->getSIMDDecoderNameList());
 #endif // QTB_PREFERENCE
 #endif // QTB_SIMD_SUPPORT
+
+#if QTB_GRAY_SCALE_MODE
+  graphicsThread->setOnGrayScale(true); // for TEST
+#endif // QTB_GRAY_SCALE_MODE
 }
 
 // destructor

@@ -33,6 +33,11 @@ protected:
   int size;
 
 protected:
+#if QTB_GRAY_SCALE_MODE
+  // gray scale
+  static bool onGrayScale;
+#endif // QTB_GRAY_SCALE_MODE
+
   // output log flag
   bool outputLog;
 
@@ -56,6 +61,14 @@ public:
 
   // get desktop image
   virtual QImage* getDesktopImage(int numOfThread) = 0;
+
+#if QTB_GRAY_SCALE_MODE
+  // set gray scale flag
+  void setOnGrayScale(bool onGrayScale)
+  {
+	this->onGrayScale = onGrayScale;
+  }
+#endif // QTB_GRAY_SCALE_MODE
 
   // output data to file
   bool outputDataToFile(char *buf, int len, int frameId);

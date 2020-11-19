@@ -19,6 +19,11 @@ namespace qtbrynhildr {
 // desktop image
 QImage*  Decoder::image = new QImage;
 
+#if QTB_GRAY_SCALE_MODE
+// gray scale flag
+bool Decoder::onGrayScale = false;
+#endif // QTB_GRAY_SCALE_MODE
+
 // constructor
 Decoder::Decoder()
   :buffer(0)

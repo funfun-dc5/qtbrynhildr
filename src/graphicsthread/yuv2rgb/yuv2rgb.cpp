@@ -439,4 +439,82 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   return rgbImageSize;
 }
 
+#if QTB_GRAY_SCALE_MODE
+// reset YUV buffer
+void resetYUVBuffer()
+{
+  int yuvImageSize = width * height + width * height / 2;
+  if (yuvImageSize > 0){
+	// reset yuv/rgb buffer
+	if (yuv1 != 0){
+	  memset(yuv1, 0, yuvImageSize);
+	}
+	if (yuv2 != 0){
+	  memset(yuv2, 1, yuvImageSize);
+	}
+  }
+}
+#endif // QTB_GRAY_SCALE_MODE
+
+#if QTB_GRAY_SCALE_MODE2
+// clip
+inline int clip(int val)
+{
+  if (val < 0) return 0;
+  if (val > 255) return 255;
+  return val;
+}
+
+// RGB convert to Gray Scale macro
+#define GET_GS(R, G, B) (R * 0.299 + G * 0.587 + B * 0.114)
+// RGB convert to Gray Scale
+void convertRGBtoGS()
+{
+#if QTB_LOAD_BITMAP
+  uchar *rgbtop = rgb;
+#else // QTB_LOAD_BITMAP
+  uchar *rgbtop = rgb + width * (height - 1) * IMAGE_FORMAT_SIZE;
+#endif // QTB_LOAD_BITMAP
+
+  for (int yPos = 0; yPos < height; yPos++){
+	for (int xPos = 0; xPos < width; xPos++){
+#if FORMAT_RGB888
+	  // RR(8bit), GG(8bit), BB(8bit)
+	  int r = *rgbtop++;
+	  int g = *rgbtop++;
+	  int b = *rgbtop++;
+#elif FORMAT_RGB32
+	  // 0xaarrggbb (32bit value)
+#if QTB_LITTLE_ENDIAN // Little Endian
+	  int b = *rgbtop++;
+	  int g = *rgbtop++;
+	  int r = *rgbtop++;
+#else // QTB_LITTLE_ENDIAN
+	  rgbtop++;
+	  int r = *rgbtop++;
+	  int g = *rgbtop++;
+	  int b = *rgbtop++;
+#endif // QTB_LITTLE_ENDIAN
+#endif // FORMAT_RGB32
+
+	  int gsv = clip(GET_GS(r, g, b));
+
+	  // RGB to GS
+	  rgbtop -= 3;
+	  *rgbtop++ = (uchar)gsv;
+	  *rgbtop++ = (uchar)gsv;
+	  *rgbtop++ = (uchar)gsv;
+
+#if FORMAT_RGB32 && QTB_LITTLE_ENDIAN // Little Endian
+	  // next pixel
+	  rgbtop++;
+#endif // FORMAT_RGB32 && QTB_LITTLE_ENDIAN // Little Endian
+	}
+#if !QTB_LOAD_BITMAP
+	rgbtop += rgbNext;
+#endif // !QTB_LOAD_BITMAP
+  }
+}
+#endif // QTB_GRAY_SCALE_MODE2
+
 } // end of namespace qtbrynhildr

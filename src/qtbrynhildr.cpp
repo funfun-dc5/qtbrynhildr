@@ -4876,14 +4876,16 @@ void QtBrynhildr::toggleOnViewerMode()
 	settings->setOnViewerMode(false);
 
 	// enable menu items
+#if defined(QTB_DEV_DESKTOP)
 	onControl_Action->setEnabled(true);
 	onGraphics_Action->setEnabled(true);
 	desktopScalingDialog_Action->setEnabled(true);
+#endif // defined(QTB_DEV_DESKTOP)
 	// disable sub menus
 	selectPublicModeVersionSubMenu->setEnabled(true);
 	sendKeySubMenu->setEnabled(true);
-	selectMonitorNoSubMenu->setEnabled(true);
 #if defined(QTB_DEV_DESKTOP)
+	selectMonitorNoSubMenu->setEnabled(true);
 	recordAndReplaySubMenu->setEnabled(true);
 	desktopCompressModeSubMenu->setEnabled(true);
 #endif // defined(QTB_DEV_DESKTOP)
@@ -4892,14 +4894,16 @@ void QtBrynhildr::toggleOnViewerMode()
 	settings->setOnViewerMode(true);
 
 	// disable menu items
+#if defined(QTB_DEV_DESKTOP)
 	onControl_Action->setEnabled(false);
 	onGraphics_Action->setEnabled(false);
 	desktopScalingDialog_Action->setEnabled(false);
+#endif // defined(QTB_DEV_DESKTOP)
 	// disable sub menus
 	selectPublicModeVersionSubMenu->setEnabled(false);
 	sendKeySubMenu->setEnabled(false);
-	selectMonitorNoSubMenu->setEnabled(false);
 #if defined(QTB_DEV_DESKTOP)
+	selectMonitorNoSubMenu->setEnabled(false);
 	recordAndReplaySubMenu->setEnabled(false);
 	desktopCompressModeSubMenu->setEnabled(false);
 #endif // defined(QTB_DEV_DESKTOP)

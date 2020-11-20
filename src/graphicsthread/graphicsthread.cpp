@@ -430,10 +430,10 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		// save desktop image size
 		settings->setDesktopImageSize(image->size());
 
-#if !(defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW)
+#if !(defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW)
 		// rescale image
 		rescaleDesktopImage(image);
-#endif // !(defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW)
+#endif // !(defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW)
 
 #if QTB_BENCHMARK
 		// check benchmark phase counter
@@ -518,11 +518,11 @@ void GraphicsThread::rescaleDesktopImage(QImage *image)
 	  if (scalingFactor != 1.0){
 		// scale
 		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
-#if !QTB_NEW_DESKTOPWINDOW
+#if !QTB_TOUCHPANEL_WINDOW
 		*image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
 		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-#endif // !QTB_NEW_DESKTOPWINDOW
+#endif // !QTB_TOUCHPANEL_WINDOW
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){

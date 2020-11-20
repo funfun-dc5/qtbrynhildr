@@ -14,9 +14,9 @@
 #include "controlthread/mousebuffer.h"
 #include "settings.h"
 #include "software_button.h"
-#if QTB_NEW_DESKTOPWINDOW
+#if QTB_TOUCHPANEL_WINDOW
 #include "mainwindow/graphicsview.h"
-#endif // QTB_NEW_DESKTOPWINDOW
+#endif // QTB_TOUCHPANEL_WINDOW
 
 namespace qtbrynhildr {
 
@@ -52,10 +52,10 @@ private:
   // mouse right button
   bool pressedMouseRightButton;
 
-#if QTB_NEW_DESKTOPWINDOW
+#if QTB_TOUCHPANEL_WINDOW
   // graphics view
   GraphicsView *graphicsView;
-#endif // QTB_NEW_DESKTOPWINDOW
+#endif // QTB_TOUCHPANEL_WINDOW
 
   // output log flag
   bool outputLog;
@@ -82,12 +82,12 @@ protected:
   virtual bool event(QEvent *event) override;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_NEW_DESKTOPWINDOW
+#if QTB_TOUCHPANEL_WINDOW
   // mouse event
   virtual void mousePressEvent(QMouseEvent *event) override;
   virtual void mouseReleaseEvent(QMouseEvent *event) override;
   virtual void mouseMoveEvent(QMouseEvent *event) override;
-#endif // QTB_NEW_DESKTOPWINDOW
+#endif // QTB_TOUCHPANEL_WINDOW
 
   // window show event
   virtual void showEvent(QShowEvent *event) override;

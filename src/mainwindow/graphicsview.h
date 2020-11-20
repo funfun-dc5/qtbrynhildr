@@ -65,12 +65,12 @@ private:
   QRect softwareKeyboardRect;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
   // scaling factor
   qreal scalingFactor;
   // scaling factor for fullscreen
   qreal scalingFactorForFullScreen;
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
 
   // output log flag
   bool outputLog;
@@ -90,14 +90,14 @@ public:
   // scale
   void setScale(qreal scalingFactor);
 
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
+#if defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
   void setScalingFactorForFullScreen(qreal scalingFactorForFullScreen)
   {
 	this->scalingFactorForFullScreen = scalingFactorForFullScreen;
 	// set desktop scaling factor limit
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
   }
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_NEW_DESKTOPWINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // mouse press event software panel

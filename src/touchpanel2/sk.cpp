@@ -25,9 +25,9 @@ SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   ,keyBuffer(keyBuffer)
   ,qtbrynhildr(qtbrynhildr)
   ,settings(qtbrynhildr->getSettings())
-#if QTB_NEW_DESKTOPWINDOW
+#if QTB_TOUCHPANEL_WINDOW
   ,graphicsView(qtbrynhildr->getGraphicsView())
-#endif // QTB_NEW_DESKTOPWINDOW
+#endif // QTB_TOUCHPANEL_WINDOW
   // for DEBUG
   ,outputLog(false)
 {
@@ -160,7 +160,7 @@ bool SK::event(QEvent *event)
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_NEW_DESKTOPWINDOW
+#if QTB_TOUCHPANEL_WINDOW
 // mouse event
 void SK::mousePressEvent(QMouseEvent *event)
 {
@@ -206,7 +206,7 @@ void SK::mouseMoveEvent(QMouseEvent *event)
 	graphicsView->mouseMoveEventForSP(newEvent);
   }
 }
-#endif // QTB_NEW_DESKTOPWINDOW
+#endif // QTB_TOUCHPANEL_WINDOW
 
 //---------------------------------------------------------------------------
 // private

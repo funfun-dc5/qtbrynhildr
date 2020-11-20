@@ -171,11 +171,11 @@ void DesktopPanel::resizeWindow()
 	  if (!(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
 		int width = currentSize.width();
 		int height = currentSize.height() + qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar();
-#if !QTB_NEW_DESKTOPWINDOW
+#if !QTB_TOUCHPANEL_WINDOW
 		// correct
 		width  += widthMargin;
 		height += heightMargin;
-#endif // !QTB_NEW_DESKTOPWINDOW
+#endif // !QTB_TOUCHPANEL_WINDOW
 
 		QSize screenSize = settings->getCurrentScreenSize();
 		if (width > screenSize.width()){
@@ -185,10 +185,10 @@ void DesktopPanel::resizeWindow()
 		  height = screenSize.height();
 		}
 
-#if !QTB_NEW_DESKTOPWINDOW
+#if !QTB_TOUCHPANEL_WINDOW
 		// resize
 		qtbrynhildr->resize(width, height);
-#endif // !QTB_NEW_DESKTOPWINDOW
+#endif // !QTB_TOUCHPANEL_WINDOW
 
 		// update image
 		updateDesktop();

@@ -174,11 +174,11 @@ public:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // for event handling
-#if QTB_NEW_DESKTOPWINDOW
+#if QTB_TOUCHPANEL_WINDOW
 public:
-#else // QTB_NEW_DESKTOPWINDOW
+#else // QTB_TOUCHPANEL_WINDOW
 protected:
-#endif // QTB_NEW_DESKTOPWINDOW
+#endif // QTB_TOUCHPANEL_WINDOW
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // event

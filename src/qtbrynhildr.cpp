@@ -560,6 +560,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   createToolBars();
   createStatusBar();
   // show or hide
+#if defined(QTB_DEV_TOUCHPANEL)
+  // show status bar on touchpanel device
+  settings->setOnShowStatusBar(true);
+#endif // defined(QTB_DEV_TOUCHPANEL)
   menuBar()->setVisible(settings->getOnShowMenuBar());
   statusBar()->setVisible(settings->getOnShowStatusBar());
   statusBar()->setSizeGripEnabled(false);

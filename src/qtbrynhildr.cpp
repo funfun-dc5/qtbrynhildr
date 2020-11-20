@@ -1608,8 +1608,8 @@ void QtBrynhildr::createActions()
   connect(disconnectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpDisconnectToServer()));
 
   //   initialize settings
-  initializeSettings_Action = new QAction(tr("Initialize Settings"), this);
-  initializeSettings_Action->setStatusTip(tr("Initialize Settings"));
+  initializeSettings_Action = new QAction(tr("Initialize Settings..."), this);
+  initializeSettings_Action->setStatusTip(tr("Initialize Settings..."));
   initializeSettings_Action->setEnabled(true);
   connect(initializeSettings_Action, SIGNAL(triggered()), this, SLOT(initializeSettings()));
 

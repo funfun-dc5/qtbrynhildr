@@ -754,9 +754,9 @@
     <message>
         <location filename="../qtbrynhildr.cpp" line="1607"/>
         <location filename="../qtbrynhildr.cpp" line="1608"/>
-        <source>Initialize Settings</source>
+        <source>Initialize Settings...</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
-        <translation>設定の初期化</translation>
+        <translation>初期化...</translation>
     </message>
     <message>
         <location filename="../qtbrynhildr.cpp" line="1797"/>

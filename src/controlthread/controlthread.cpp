@@ -629,6 +629,7 @@ void ControlThread::initHeaderForGraphics()
 	// zoom = 1.0 (original size)
 	com_data->zoom			= (ZOOM)1.0;
 
+#if 0 // disabled now
 	// offset x,y
 	POS client_scroll_x	= (POS)settings->getDesktopOffsetX();
 	POS client_scroll_y	= (POS)settings->getDesktopOffsetY();
@@ -660,6 +661,7 @@ void ControlThread::initHeaderForGraphics()
 		//cout << flush;
 	  }
 	}
+#endif // disabled now
   }
 
   com_data->image_cx = imageWidth;

@@ -1,5 +1,5 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2018 FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2018- FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef MOUSEBUTTON_H
 #define MOUSEBUTTON_H

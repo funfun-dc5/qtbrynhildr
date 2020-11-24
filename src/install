@@ -378,6 +378,7 @@ case $UNAME in
 				# 3) copy doc into the directory
 				# copy document file
 				${INSTALL} ${INSTALLFLAGS} ../doc/ReadMe.txt ${PKGSTRING}/doc
+				${INSTALL} ${INSTALLFLAGS} ../doc/ChangeLog.txt ${PKGSTRING}/doc
 				${INSTALL} ${INSTALLFLAGS} ../doc/LICENSE.txt ${PKGSTRING}/doc
 				# copy manual file
 				cp -r ../doc/manual/* ${PKGSTRING}/doc/manual
@@ -419,6 +420,7 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
 			# copy document file
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
+			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
 			# copy manual file
 			pushd ../doc/manual
@@ -493,6 +495,7 @@ case $UNAME in
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
 		# copy manual file
 		pushd ../doc/manual
@@ -538,6 +541,7 @@ case $UNAME in
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
 		# copy manual file
 		pushd ../doc/manual
@@ -586,6 +590,7 @@ case $UNAME in
 		mkdir -p ${DOCDIR}/manual
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DOCDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DOCDIR}
 		# copy manual file
 		pushd ../doc/manual

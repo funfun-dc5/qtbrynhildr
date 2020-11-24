@@ -107,6 +107,8 @@ english.ManualShortcut=First step of {#Name}(Ver.0.9.4)
 Source: "..\doc\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion touch
 ; ReadMe.txt
 Source: "..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
+; ChangeLog.txt
+Source: "..\doc\ChangeLog.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
 
 [Registry]
 ;（アンインストール時に）動作設定を削除
@@ -118,6 +120,7 @@ Name: "{commondesktop}\{#Name}"; Filename: "{app}\bin\{#Name}.exe"; WorkingDir: 
 Name: "{group}\{#Name}"; Filename: "{app}\bin\{#Name}.exe"; WorkingDir: "{app}";
 
 Name: "{commondesktop}\{#Name} ReadMe.txt"; Filename: "{app}\ReadMe.txt"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\{#Name} ChangeLog.txt"; Filename: "{app}\ChangeLog.txt"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; マニュアル
 Name: "{commondesktop}\{cm:ManualShortcut}"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon

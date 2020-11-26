@@ -162,6 +162,8 @@ private:
 		  (android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_NEON) != 0){
 		hasNEON = true;
 	  }
+#elif defined(QTB_IOS)
+	  hasNEON = false;
 #else // defined(QTB_ANDROID)
 	  hasNEON = true;
 #endif // defined(QTB_ANDROID)

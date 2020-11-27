@@ -590,7 +590,7 @@ case $UNAME in
 		mkdir -p ${DOCDIR}/manual
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DOCDIR}
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DOCDIR}
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DOCDIR}
 		# copy manual file
 		pushd ../docs/manual

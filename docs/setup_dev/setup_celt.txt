@@ -1,0 +1,55 @@
+---------------------------------------------------------------------------
+ Setup CELT
+---------------------------------------------------------------------------
+
+1) download CELT library v0.11.1 source code
+
+ http://downloads.xiph.org/releases/celt/celt-0.11.1.tar.gz
+
+ ( http://www.celt-codec.org/ )
+
+2) build static library (libcelt0.a)
+
+ configure script option : --enable-custom-modes --disable-oggtest --enable-shared=no
+
+[MinGW]
+
+--build=i686-w64-mingw32
+
+[MinGW x64]
+
+--build=x86_64-w64-mingw32
+
+[additional options]
+
+[macOS]
+
+ add -mmacosx-version-min=10.12 to CFLAGS in Makefile
+
+3) edit Makefile (delete "tests tools" subdirs)
+
+SUBDIRS = libcelt tests tools
+
+  to
+
+SUBDIRS = libcelt
+
+4) build
+
+[android armv7]
+
+ make CC="clang --target=armv7a-linux-androideabi23"
+
+[android arm64]
+
+ make CC="clang --target=aarch64-linux-androideabi29"
+
+[others]
+
+ make
+
+5) copy header files and static library
+
+ copy celt.h, celt_types.h to qtbrynhilr/libs/celt/include
+
+ copy libcelt0.a(named "libcelt.a") to qtbrynhilr/libs/celt/<BUILDARCH>

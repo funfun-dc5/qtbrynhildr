@@ -8,10 +8,10 @@
 
 2) build static library (libvpx.a)
 
-see `./configure --help`
+ see `./configure --help`
 
 [common]
- configure script option : --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests --target=xxxx-xxxx-xxxx
+ configure script option : --disable-vp9 --disable-vp8-encoder --disable-webm-io --disable-examples --disable-docs --disable-unit-tests
 
 [MinGW] --target=x86-win32-gcc
 
@@ -27,24 +27,32 @@ see `./configure --help`
 
 [macOS] --target=x86_64-darwin14-gcc
 
+ add -mmacosx-version-min=10.12 to CFLAGS in Makefile
+
 [Cygwin] --target=x86-win32-gcc
 
 [Cygwin x64] --target=x86_64-win64-gcc
 
-[additional options]
+[android armv7] --target=armv7-android-gcc --disable-runtime-cpu-detect --sdk-path=/opt/android-ndk-r15c
 
-[android]
- configure script option : [common] --disable-runtime-cpu-detect --sdk-path=/opt/android-ndk-r14b
+[android arm64] --target=generic-gnu --disable-runtime-cpu-detect --sdk-path=/opt/android-ndk-r15c
 
- add -mfloat-sbi=softfp -mfpu=neon to CFLAGS, CXXFLAGS
+4) build
 
-[macOS]
- add -mmacosx-version-min=10.13 to CFLAGS
+[android armv7]
 
-3) copy header files and static library
+ make CC="clang --target=armv7a-linux-androideabi23"
 
- copy libvpx.a to qtbrynhilr/libs/vpx/<BUILDARCH>
+[android arm64]
+
+ make CC="clang --target=aarch64-linux-androideabi29"
+
+[others]
+
+ make
+
+5) copy header files and static library
 
  copy vp8dx.h,vpx_encoder.h,vpx_integer.h,vp8.h,vpx_codec.h,vpx_frame_buffer.h,svc_context.h,vp8cx.h,vpx_decoder.h, vpx_image.h to qtbrynhilr/libs/vpx/include
 
-4) build Qt Brynhildr
+ copy libvpx.a to qtbrynhilr/libs/vpx/<BUILDARCH>

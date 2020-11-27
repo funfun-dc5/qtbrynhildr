@@ -10,7 +10,7 @@
 
 2) build static library (libcelt0.a)
 
- configure script option : --enable-custom-modes --disable-oggtest
+ configure script option : --enable-custom-modes --disable-oggtest --enable-shared=no
 
 [MinGW]
 
@@ -23,10 +23,33 @@
 [additional options]
 
 [macOS]
- add -mmacosx-version-min=10.13 to CFLAGS
 
-3) copy header files and static library
+ add -mmacosx-version-min=10.12 to CFLAGS in Makefile
 
- copy celt.h, celt_types.h and libcelt0.a(named "libcelt.a") to qtbrynhilr/libs/celt/<BUILDARCH>
+3) edit Makefile (delete "tests tools" subdirs)
 
-4) build Qt Brynhildr
+SUBDIRS = libcelt tests tools
+
+  to
+
+SUBDIRS = libcelt
+
+4) build
+
+[android armv7]
+
+ make CC="clang --target=armv7a-linux-androideabi23"
+
+[android arm64]
+
+ make CC="clang --target=aarch64-linux-androideabi29"
+
+[others]
+
+ make
+
+5) copy header files and static library
+
+ copy celt.h, celt_types.h to qtbrynhilr/libs/celt/include
+
+ copy libcelt0.a(named "libcelt.a") to qtbrynhilr/libs/celt/<BUILDARCH>

@@ -71,7 +71,7 @@ case $UNAME in
 		# delete coverity scan directory
 		rm -rf cov-int
 		# delete manual
-		pushd ../doc/manual
+		pushd ../docs/manual
 		make clean
 		popd
 		rm -rf ../dist/doc/manual/*
@@ -84,7 +84,7 @@ case $UNAME in
 		rm -f "${APP}"
 		# clean key layout file compiler
 		pushd keylayout; make clean; popd
-		pushd ../doc/manual
+		pushd ../docs/manual
 		# delete manual
 		make clean
 		popd
@@ -98,7 +98,7 @@ case $UNAME in
 		rm -f "${APP}"
 		# clean key layout file compiler
 		pushd keylayout; make clean; popd
-		pushd ../doc/manual
+		pushd ../docs/manual
 		# delete manual
 		make clean
 		popd
@@ -112,7 +112,7 @@ case $UNAME in
 		rm -rf "${APP}.app"
 		# clean key layout file compiler
 		pushd keylayout; make clean; popd
-		pushd ../doc/manual
+		pushd ../docs/manual
 		# delete manual
 		make clean
 		popd

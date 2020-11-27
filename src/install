@@ -203,7 +203,7 @@ if [ "$TARGET" = "man" ] ; then
 	case $UNAME in
 		CYGWIN*)
 			# copy manual file
-			pushd ../doc/manual
+			pushd ../docs/manual
 			make html
 			make install
 			popd
@@ -211,7 +211,7 @@ if [ "$TARGET" = "man" ] ; then
 			;;
 		Linux)
 			# copy manual file
-			pushd ../doc/manual
+			pushd ../docs/manual
 			make html
 			make install
 			popd
@@ -219,7 +219,7 @@ if [ "$TARGET" = "man" ] ; then
 			;;
 		FreeBSD)
 			# copy manual file
-			pushd ../doc/manual
+			pushd ../docs/manual
 			make html
 			make install
 			popd
@@ -227,7 +227,7 @@ if [ "$TARGET" = "man" ] ; then
 			;;
 		Darwin)
 			# copy manual file
-			pushd ../doc/manual
+			pushd ../docs/manual
 			make html
 			make install
 			popd
@@ -347,7 +347,7 @@ case $UNAME in
 			mkdir -p ${DISTDIR}/bin/keylayout/sample
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
 			# copy manual file
-			pushd ../doc/manual
+			pushd ../docs/manual
 			make html
 			make install
 			popd
@@ -381,7 +381,7 @@ case $UNAME in
 				${INSTALL} ${INSTALLFLAGS} ../doc/ChangeLog.txt ${PKGSTRING}/doc
 				${INSTALL} ${INSTALLFLAGS} ../doc/LICENSE.txt ${PKGSTRING}/doc
 				# copy manual file
-				cp -r ../doc/manual/* ${PKGSTRING}/doc/manual
+				cp -r ../docs/manual/* ${PKGSTRING}/doc/manual
 				rm -f ${PKGSTRING}/doc/manual/.gitkeep
 				# 4) archive package
 				#zip -9 -r ${PKGSTRING}.zip ${PKGSTRING}
@@ -423,7 +423,7 @@ case $UNAME in
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
 			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
 			# copy manual file
-			pushd ../doc/manual
+			pushd ../docs/manual
 			make html
 			make install
 			popd
@@ -498,7 +498,7 @@ case $UNAME in
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
 		# copy manual file
-		pushd ../doc/manual
+		pushd ../docs/manual
 		make html
 		make install
 		popd
@@ -544,7 +544,7 @@ case $UNAME in
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
 		# copy manual file
-		pushd ../doc/manual
+		pushd ../docs/manual
 		make html
 		make install
 		popd
@@ -590,10 +590,10 @@ case $UNAME in
 		mkdir -p ${DOCDIR}/manual
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DOCDIR}
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
+		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}
 		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DOCDIR}
 		# copy manual file
-		pushd ../doc/manual
+		pushd ../docs/manual
 		make html
 		make install
 		popd

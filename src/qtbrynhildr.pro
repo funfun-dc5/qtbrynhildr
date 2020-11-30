@@ -118,27 +118,31 @@ DEFINES += PLATFORM_LINUX QTB_ANDROID
 # cpufeatures library from android-ndk
 HEADERS += util/android-ndk/cpu-features.h
 SOURCES += util/android-ndk/cpu-features.c
+
 # for Android APK
-DISTFILES += \
-    $$PWD/../dist/android/AndroidManifest.xml \
-    $$PWD/../dist/android/res/values/libs.xml \
-    $$PWD/../dist/android/res/values/style.xml \
-    $$PWD/../dist/android/res/mipmap-ldpi/icon.png \
-    $$PWD/../dist/android/res/mipmap-mdpi/icon.png \
-    $$PWD/../dist/android/res/mipmap-hdpi/icon.png \
-    $$PWD/../dist/android/res/mipmap-xhdpi/icon.png \
-    $$PWD/../dist/android/res/mipmap-xxhdpi/icon.png \
-    $$PWD/../dist/android/res/mipmap-xxxhdpi/icon.png
-# for Qt 5.14
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android514
+# for Qt 5.14-
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 BUILDARCH = android-$(OBJECTS_DIR)
+ANDROID_ABIS = armeabi-v7a arm64-v8a
 # for Qt 5.12
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../dist/android512
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android512
 # 32bit
 #BUILDARCH = android-armeabi-v7a
 #QMAKE_CXXFLAGS += -mfpu=neon
 # 64bit
 #BUILDARCH = android-arm64-v8a
+
+# dist files
+DISTFILES += \
+    $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/values/libs.xml \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/values/style.xml \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/mipmap-ldpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/mipmap-mdpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/mipmap-hdpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/mipmap-xhdpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/mipmap-xxhdpi/icon.png \
+    $$ANDROID_PACKAGE_SOURCE_DIR/res/mipmap-xxxhdpi/icon.png
 }
 
 # desktop/touchpanel
@@ -366,5 +370,3 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 #CONFIG += new_feature
 new_feature {
 }
-
-ANDROID_ABIS = armeabi-v7a arm64-v8a

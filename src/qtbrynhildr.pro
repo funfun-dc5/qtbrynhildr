@@ -104,7 +104,7 @@ CONFIG += touchpanel
 CONFIG -= updatecheck
 DEFINES += PLATFORM_MACOS QTB_IOS
 BUILDARCH = ios-arm64-v8a
-#QMAKE_INFO_PLIST=xxxxxx
+QMAKE_INFO_PLIST=ios/Info.plist
 }
 
 # ------------------------------------------------------------------------------

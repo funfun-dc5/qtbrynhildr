@@ -8,7 +8,7 @@
 
  ( http://www.celt-codec.org/ )
 
-2) build static library (libcelt0.a)
+2) make configuration for static library (libcelt0.a)
 
  configure script option : --enable-custom-modes --disable-oggtest --enable-shared=no
 
@@ -26,13 +26,13 @@
 
  add -mmacosx-version-min=10.12 to CFLAGS in Makefile
 
-3) edit Makefile (delete "tests tools" subdirs)
+[iOS]
 
-SUBDIRS = libcelt tests tools
+--host=x86_64-apple-darwin CC=`xcrun -find clang` CFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
 
-  to
+3) change current directory to libcelt
 
-SUBDIRS = libcelt
+ cd libcelt
 
 4) build
 

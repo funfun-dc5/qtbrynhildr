@@ -1,12 +1,21 @@
 ---------------------------------------------------------------------------
  Setup VP8
 ---------------------------------------------------------------------------
+0) prepare for iOS
+
+set environment variables (CC, CFLAGS, CXX, CXXFLAGS)
+
+export CC=`xcrun -find clang`
+export CFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
+
+export CXX=`xcrun -find clang++`
+export CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
 
 1) download VPX library v1.40 source code
 
  http://downloads.webmproject.org/releases/webm/index.html
 
-2) build static library (libvpx.a)
+2) make configuration for static library (libvpx.a)
 
  see `./configure --help`
 
@@ -36,6 +45,8 @@
 [android armv7] --target=armv7-android-gcc --disable-runtime-cpu-detect --sdk-path=/opt/android-ndk-r15c
 
 [android arm64] --target=generic-gnu --disable-runtime-cpu-detect --sdk-path=/opt/android-ndk-r15c
+
+[iOS] --target=arm64-darwin-gcc
 
 4) build
 

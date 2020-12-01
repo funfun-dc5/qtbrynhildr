@@ -99,11 +99,17 @@ ICON = images/qtbrynhildr.icns
 # iOS
 # ------------------------------------------------------------------------------
 ios {
-CONFIG += touchpanel
+CONFIG += touchpanel vp8-neon
 CONFIG -= updatecheck
 DEFINES += PLATFORM_MACOS QTB_IOS
 BUILDARCH = ios-arm64-v8a
 QMAKE_INFO_PLIST=ios/Info.plist
+# icons
+ios_icon.files = $$files(ios/AppIcon*.png)
+QMAKE_BUNDLE_DATA =+= ios_icon
+# launch images
+app_launch_images.files = ios/Launch.xib $$files(ios/LaunchImage*.png)
+QMAKE_BUNDLE_DATA += app_launch_images
 }
 
 # ------------------------------------------------------------------------------

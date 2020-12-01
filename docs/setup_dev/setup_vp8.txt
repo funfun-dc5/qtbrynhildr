@@ -1,16 +1,6 @@
 ---------------------------------------------------------------------------
  Setup VP8
 ---------------------------------------------------------------------------
-0) prepare for iOS
-
-set environment variables (CC, CFLAGS, CXX, CXXFLAGS)
-
-export CC=`xcrun -find clang`
-export CFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
-
-export CXX=`xcrun -find clang++`
-export CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
-
 1) download VPX library v1.40 source code
 
  http://downloads.webmproject.org/releases/webm/index.html
@@ -52,11 +42,23 @@ export CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path`
 
 [android armv7]
 
+ (*) setup android-ndk
+
  make CC="clang --target=armv7a-linux-androideabi23"
 
 [android arm64]
 
+ (*) setup android-ndk
+
  make CC="clang --target=aarch64-linux-androideabi29"
+
+[iOS]
+
+ (*) edit build/make/configure.sh
+
+ IOS_VERSION_MIN="6.0" --> ISO_VERSION_MIN="13.0"
+
+ make CC=`xcrun -find clang` CFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0" CXX=`xcrun -find clang++` CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
 
 [others]
 
@@ -67,3 +69,16 @@ export CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path`
  copy vp8dx.h,vpx_encoder.h,vpx_integer.h,vp8.h,vpx_codec.h,vpx_frame_buffer.h,svc_context.h,vp8cx.h,vpx_decoder.h, vpx_image.h to qtbrynhilr/libs/vpx/include
 
  copy libvpx.a to qtbrynhilr/libs/vpx/<BUILDARCH>
+
+
+
+
+0) prepare for iOS
+
+set environment variables (CC, CFLAGS, CXX, CXXFLAGS)
+
+export CC=`xcrun -find clang`
+export CFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
+
+export CXX=`xcrun -find clang++`
+export CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"

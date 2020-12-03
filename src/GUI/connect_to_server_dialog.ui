@@ -244,7 +244,7 @@
     <item>
      <widget class="QCheckBox" name="checkBox_viewer">
       <property name="text">
-       <string>Viewer</string>
+       <string>Viewer Mode</string>
       </property>
      </widget>
     </item>

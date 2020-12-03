@@ -2984,6 +2984,10 @@ void QtBrynhildr::disconnected()
   // disabled viewer mode
   if (QTB_VIEWER_MODE){
 	onViewerMode_Action->setEnabled(false);
+	if (settings->getOnViewerMode()){
+	  // viewer mode OFF
+	  toggleOnViewerMode();
+	}
   }
 
   // disabled full screen

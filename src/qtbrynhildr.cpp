@@ -851,7 +851,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   vspace = 0;
 #elif defined(Q_OS_OSX)
   // Darwin
-  hspace = 0;
+  hspace = 1;
   vspace = 0;
 #endif // defined(Q_OS_OSX)
 
@@ -2984,6 +2984,10 @@ void QtBrynhildr::disconnected()
   // disabled viewer mode
   if (QTB_VIEWER_MODE){
 	onViewerMode_Action->setEnabled(false);
+	if (settings->getOnViewerMode()){
+	  // viewer mode OFF
+	  toggleOnViewerMode();
+	}
   }
 
   // disabled full screen

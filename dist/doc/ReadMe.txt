@@ -122,8 +122,8 @@
 
  例)
 
-  chmod 500 ./QtBrynhildr-linux_x64-v2100.run
-  ./QtBrynhildr-linux_x64-v2100.run
+  chmod 500 ./QtBrynhildr-linux_x64-v210.run
+  ./QtBrynhildr-linux_x64-v210.run
 
  (3) 起動確認します。
 
@@ -154,19 +154,19 @@
   sudo yum install qt5-qtmultimedia
 
 ==============================
-[インストール] (Ubuntu-16.10)
+[インストール] (Ubuntu版)
 ==============================
 
  (1) root権限でQt5パッケージをインストールします。(すでにインストール済みの場合はスキップしてください)
 
-   sudo apt-get install qt5-default
+   sudo apt-get install qt5-default libqt5multimedia5-plugins
 
  (2) 自己解凍ファイルを実行してパッケージを展開します。
 
  例)
 
-  chmod 500 ./QtBrynhildr-ubuntu_x64-v100.run
-  ./QtBrynhildr-ubuntu_x64-v100.run
+  chmod 500 ./QtBrynhildr-ubuntu_x64-v210.run
+  ./QtBrynhildr-ubuntu_x64-v210.run
 
  (3) 以降はLinux版と同じ
 
@@ -752,7 +752,7 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 ============================================================
 
 インタフェース検討中の設定はこれらの値を直接変更すれば変更可能です。
-(*)内部保存情報なので直接変更は推奨はしません。
+(*)内部保存情報なので直接変更は推奨しません。
 
 (注意)不正な値を設定すると起動しなくなる可能性があります。
       その場合はファイルを削除するか、-initオプションを指定して再起動すれば
@@ -1106,7 +1106,7 @@ Windows版ではランタイムライブラリパッケージが必要な場合�
 10. 変更履歴
 ----------------------------------------------------------------------
 
-doc/ChangeLog.txtを参照のこと
+doc/ChangeLog.txtを参照してください
 
 ----------------------------------------------------------------------
 11. 情報へのリンク
@@ -1116,7 +1116,7 @@ doc/ChangeLog.txtを参照のこと
 
  [1] 原作者IchiGekiさんのブログ
 
- 「リモートデスクトップを開発してるエンジニアのブログ。」: http://blog.x-row.net/
+ 「リモートデスクトップエンジニアのブログ。」: http://blog.x-row.net/
 
  [2] Brynhildrのページ
 

@@ -128,11 +128,11 @@ SOURCES += util/android-ndk/cpu-features.c
 
 # for Android APK
 # for Qt 5.14-
-ANDROID_PACKAGE_SOURCE_DIR = android
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 BUILDARCH = android-$(OBJECTS_DIR)
 ANDROID_ABIS = armeabi-v7a arm64-v8a
 # for Qt 5.12
-#ANDROID_PACKAGE_SOURCE_DIR = android512
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android512
 # 32bit
 #BUILDARCH = android-armeabi-v7a
 #QMAKE_CXXFLAGS += -mfpu=neon

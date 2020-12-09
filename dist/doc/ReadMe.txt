@@ -64,10 +64,12 @@
       Qt5のサポートする環境(OS)について詳しくは以下のページを御覧ください。
       https://doc.qt.io/QtSupportedPlatforms/index.html
 
- (*3) XP/Vistaで動作する版をビルドするにはバージョンが5.6.3以下のQt5を使ってビルドする必要があります。
+ (*3) XP/Vistaで動作する版をビルドするにはバージョンが5.6.3以下のQt5を使って
+      ビルドする必要があります。
 
  (*4) 全てのデバイスで試したわけではありません。Qt5のサポートする環境に依存します。
-      Qt5.12 LTSでビルドする必要があります。Qt5.14.2以降ではAndroid 5.0以降が対象となります。
+      Qt5.12 LTSでビルドする必要があります。Qt5.14.2以降ではAndroid 5.0以降が
+      対象となります。
 
 ==============================
  [テスト中の環境]
@@ -136,9 +138,8 @@
  (4) 起動して、エラーが出たら、必要なパッケージをインストールして、3)へ戻ります。
      ウィンドウが表示されたらすでに必要なパッケージはインストールされています。
 
-  例えばlibglu1-mesaなどが必要かもしれません。以下のようにインストールしてください。
-
-  [Ubuntuの場合]
+  例えばUbuntuの場合libglu1-mesaなどが必要かもしれません。以下のように
+  インストールしてください。
 
   sudo apt-get install libglu1-mesa
 
@@ -157,7 +158,8 @@
 [インストール] (Ubuntu版)
 ==============================
 
- (1) root権限でQt5パッケージをインストールします。(すでにインストール済みの場合はスキップしてください)
+ (1) root権限でQt5パッケージをインストールします。
+     (すでにインストール済みの場合はスキップしてください)
 
    sudo apt-get install qt5-default libqt5multimedia5-plugins
 
@@ -232,7 +234,7 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 [サーバに接続ダイアログ表示中]
 ---------------------------------------------------------
 
-[1点ダブルタップ] 接続に成功したサーバホストのIP/ホスト名を呼び出す
+[1点ダブルタップ] 接続に成功したサーバホストのIP/ホスト名履歴を呼び出す
 
 ---------------------------------------------------------
 [通常画面]
@@ -362,7 +364,7 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 
    「上/下タイプ」
 
-     上辺(Top Side)でSoftware Button、下辺(Bottom Size)でSoftware Keyboardを表示
+     上辺(Top Side)でSoftware Button、下辺(Bottom Side)でSoftware Keyboardを表示
 
 ----------------------------------------------------------------------
 2. Brynhildrサーバの準備 (パブリックモードの有効化)
@@ -763,13 +765,13 @@ C:\Users\ユーザ名\AppData\Roaming\mcz-xoxo\Qt Brynhildr.ini
 ------------------- ここから -------------------
 [General]
 infoKernelType=winnt
-infoKernelVersion=10.0.17763
+infoKernelVersion=10.0.19042
 infoProductType=windows
 infoProductVersion=10
-infoBuildAbi=i386-little_endian-ilp32
-generatedVersion=168
-currentVersion=168
-publicModeVersion=6
+infoBuildAbi=x86_64-little_endian-llp64
+generatedVersion=2203
+currentVersion=2204
+publicModeVersion=7
 serverName=mcz.world.idol.jp
 serverType=5
 keyboardType=0
@@ -867,6 +869,7 @@ windowState=@ByteArray(xxxxx)
  -mode6 : ファイル転送、クリップボード共有をサポートします。
 
  -mode7 : mode6に加えてVP8によるデスクトップ画像転送を行います。
+          mode5,6に比べて画像データの転送データ量が少なくなります。
 
  (1) -serverオプション
 
@@ -989,7 +992,7 @@ Windows版ではランタイムライブラリパッケージが必要な場合�
 
  (1) フォーカスが無い時もマウスが有効となっています。
 
- (2) アスペクト比保存の調整機構が未実装です。
+ (2) アスペクト比固定リサイズの調整機構が未実装です。
 
  (3) サーバ接続中にパブリックモード6からモード7に変更した場合マウスカーソル形状が
      しばらくの間正しく反映されない場合があります。
@@ -1102,6 +1105,8 @@ Windows版ではランタイムライブラリパッケージが必要な場合�
 
 (5) 不具合再現手順
 
+  (*) 細かく手順を書いていただけると不具合修正が速やかに行なえます
+
 ----------------------------------------------------------------------
 10. 変更履歴
 ----------------------------------------------------------------------
@@ -1122,7 +1127,13 @@ doc/ChangeLog.txtを参照してください
 
  「Brynhildr - 高速度型リモートデスクトップ」: http://blog.x-row.net/?p=2455
 
- [3] KeroKeyboardのページ
+ [3] KeroRemoteのページ
+
+ 「iOS版KeroRemoteからWindowsへの接続方法。」: http://blog.x-row.net/?p=6732
+
+  Android版のインターフェース実装の参考にさせて頂きました。
+
+ [4] KeroKeyboardのページ
 
  「KeroKeyboard - スクリーンキーボード」: http://blog.x-row.net/?p=14018
 
@@ -1158,7 +1169,8 @@ doc/ChangeLog.txtを参照してください
 
       (2) SDL チェックを無効にする。
 
-   3. (おまけ) ビルド時の警告を抑止するためにはソースファイルの先頭に以下の1行を挿入する。
+   3. (おまけ) ビルド時の警告を抑止するためにはソースファイルの先頭に以下の1行を
+      挿入する。
 
       #define _CRT_SECURE_NO_WARNINGS 1
 
@@ -1187,8 +1199,8 @@ doc/ChangeLog.txtを参照してください
 
 また有用なツール、ライブラリを提供くださるQt Projectに感謝します。
 
-最後にGNU, MinGW, Cygwin, CELTライブラリ, OpenSSL, VP8, Inno Setupなどフリーなソフトウェアを
-提供くださるすべての方々に感謝します。
+最後にGNU, MinGW, Cygwin, CELTライブラリ, OpenSSL, VP8, Inno Setupなど
+フリーなソフトウェアを提供くださるすべての方々に感謝します。
 
 ----------------------------------------------------------------------
 

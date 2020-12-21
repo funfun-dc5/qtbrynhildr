@@ -70,10 +70,7 @@
 
  copy libvpx.a to qtbrynhilr/libs/vpx/<BUILDARCH>
 
-
-
-
-0) prepare for iOS
+(*) preparation for iOS
 
 set environment variables (CC, CFLAGS, CXX, CXXFLAGS)
 

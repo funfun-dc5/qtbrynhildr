@@ -12,7 +12,13 @@
 
 * Brynhildrのページ
 
- 「Brynhildr - 高速度型リモートデスクトップ」        <http://blog.x-row.net/?p=2455>
+ 「Brynhildr - 高速度型リモートデスクトップ」<http://blog.x-row.net/?p=2455>
+
+* KeroRemoteのページ
+
+ 「iOS版KeroRemoteからWindowsへの接続方法。」<http://blog.x-row.net/?p=6732>
+
+  Android版のインターフェース実装の参考にさせて頂きました。
 
 * KeroKeyboardのページ
 

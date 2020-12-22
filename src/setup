@@ -3,7 +3,7 @@ UNAME=`uname`
 UNAMEM=`uname -m`
 PRO="qtbrynhildr.pro"
 TARGET=$1
-BUILDARCH=mingw73-x64
+BUILDARCH=mingw81-x64
 
 # TARGET
 if [ -n "$TARGET" ] ; then

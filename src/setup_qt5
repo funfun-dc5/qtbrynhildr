@@ -10,15 +10,15 @@ PATHLIST=
 #------------------
 # Qt 5.12 - 5.14
 #------------------
-QTVERSION=5.12.10
-VCVERSION=msvc2017
-MINGWVERSION=mingw73
+#QTVERSION=5.12.10
+#VCVERSION=msvc2017
+#MINGWVERSION=mingw73
 #------------------
 # Qt 5.15 -
 #------------------
-#QTVERSION=5.15.1
-#VCVERSION=msvc2019
-#MINGWVERSION=mingw81
+QTVERSION=5.15.2
+VCVERSION=msvc2019
+MINGWVERSION=mingw81
 
 case $UNAME in
 	CYGWIN*)

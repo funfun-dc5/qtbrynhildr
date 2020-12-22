@@ -558,44 +558,44 @@
         <translation>タッチパネル・オペレーション</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4121"/>
-        <location filename="../qtbrynhildr.cpp" line="4149"/>
+        <location filename="../qtbrynhildr.cpp" line="4126"/>
+        <location filename="../qtbrynhildr.cpp" line="4154"/>
         <source>Create Image Object</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>イメージオブジェクトの生成</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4131"/>
+        <location filename="../qtbrynhildr.cpp" line="4136"/>
         <source>Draw JPEG Image</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>JPEG イメージの描画</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4144"/>
+        <location filename="../qtbrynhildr.cpp" line="4149"/>
         <source>Decode VP8</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>VP8 デコード</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4159"/>
+        <location filename="../qtbrynhildr.cpp" line="4164"/>
         <source>Draw RGB32 Image</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>RGB32 イメージの描画</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="5267"/>
+        <location filename="../qtbrynhildr.cpp" line="5272"/>
         <source>Found new release. Open release page?</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>新しいバージョンが見つかりました。 リリースページを開きますか？</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="5278"/>
+        <location filename="../qtbrynhildr.cpp" line="5283"/>
         <source>Information</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>情報</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="5279"/>
+        <location filename="../qtbrynhildr.cpp" line="5284"/>
         <source>Up-to-date!</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>最新のバージョンです!</translation>
@@ -1268,47 +1268,47 @@
         <translation>再計算率</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3589"/>
+        <location filename="../qtbrynhildr.cpp" line="3594"/>
         <source>FPS of last session : </source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>最後の接続の平均フレームレート : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3654"/>
+        <location filename="../qtbrynhildr.cpp" line="3659"/>
         <source>Do you initialize settings ?</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>設定を初期化しますか ?</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4112"/>
-        <location filename="../qtbrynhildr.cpp" line="4140"/>
+        <location filename="../qtbrynhildr.cpp" line="4117"/>
+        <location filename="../qtbrynhildr.cpp" line="4145"/>
         <source>Data Communication</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>データ通信</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4126"/>
-        <location filename="../qtbrynhildr.cpp" line="4154"/>
+        <location filename="../qtbrynhildr.cpp" line="4131"/>
+        <location filename="../qtbrynhildr.cpp" line="4159"/>
         <source>Rescale Image</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>イメージの拡大・縮小</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4212"/>
+        <location filename="../qtbrynhildr.cpp" line="4217"/>
         <source>Save file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルに保存</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="4214"/>
-        <location filename="../qtbrynhildr.cpp" line="4242"/>
+        <location filename="../qtbrynhildr.cpp" line="4219"/>
+        <location filename="../qtbrynhildr.cpp" line="4247"/>
         <source>Control Record File (*.qtb)</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>Control Record File (*.qtb)</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3613"/>
-        <location filename="../qtbrynhildr.cpp" line="4240"/>
+        <location filename="../qtbrynhildr.cpp" line="3618"/>
+        <location filename="../qtbrynhildr.cpp" line="4245"/>
         <source>Open file</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>ファイルを開く</translation>
@@ -1546,20 +1546,20 @@
         <translation>接続中 : </translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3653"/>
-        <location filename="../qtbrynhildr.cpp" line="5266"/>
+        <location filename="../qtbrynhildr.cpp" line="3658"/>
+        <location filename="../qtbrynhildr.cpp" line="5271"/>
         <source>Confirm</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>確認</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3527"/>
+        <location filename="../qtbrynhildr.cpp" line="3532"/>
         <source>exit application?</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>アプリケーションを終了しますか?</translation>
     </message>
     <message>
-        <location filename="../qtbrynhildr.cpp" line="3576"/>
+        <location filename="../qtbrynhildr.cpp" line="3581"/>
         <source>Shutdown.</source>
         <translatorcomment>translated by funfun&lt;fu.aba.dc5@gmail.com&gt;</translatorcomment>
         <translation>終了しました。</translation>

@@ -127,6 +127,9 @@ const bool QTB_IN_TESTING				= false;
 // auto complete
 #define QTB_AUTO_COMPLETE			1
 
+// help page
+#define QTB_HELP					0
+
 // update check
 #if 0 // into qtbrynhildr.pro
 #if defined(QTB_DEV_DESKTOP)

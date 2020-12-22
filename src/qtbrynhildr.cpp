@@ -3273,7 +3273,12 @@ void QtBrynhildr::about()
 					 QTB_ORGANIZATION
 					 " powered by MCZ."
 					 "<br><br>"
-					 QTB_BLOG);
+					 "blog : " QTB_BLOG
+#if QTB_HELP
+					 "<br><br>"
+					 "help : " QTB_HELP_PAGE
+#endif // QTB_HELP
+					 );
 }
 
 // popup connect to server dialog

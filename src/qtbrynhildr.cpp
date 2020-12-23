@@ -1603,6 +1603,7 @@ void QtBrynhildr::createActions()
   connectToServer_Action = new QAction(tr("Connect"), this);
   connectToServer_Action->setStatusTip(tr("Connec to Brynhildr Server"));
   //  connectToServer_Action->setShortcut(tr("Ctrl+C"));
+  connectToServer_Action->setEnabled(true);
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
 
   // disconnect to server
@@ -2933,6 +2934,11 @@ void QtBrynhildr::connected()
   isExecutingToConnect = false;
   updateConnected();
 
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(true);
+  // enable disconnect to server menu
+  disconnectToServer_Action->setEnabled(true);
+
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(false);
 }
@@ -3051,6 +3057,11 @@ void QtBrynhildr::disconnected()
   // try to connect flag
   isExecutingToConnect = false;
   updateConnected();
+
+  // enable connect to server menu
+  connectToServer_Action->setEnabled(true);
+  // disable disconnect to server menu
+  disconnectToServer_Action->setEnabled(false);
 
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(true);
@@ -3317,6 +3328,11 @@ void QtBrynhildr::connectToServer()
   // wait for reconnect to server
   QThread::sleep(1);
 
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(false);
+
   // clear desktop
   desktopPanel->clearDesktop();
 
@@ -3436,9 +3452,6 @@ void QtBrynhildr::connectToServer()
   isExecutingToConnect = true;
   updateConnected();
 
-  // enabled disconnect to server
-  disconnectToServer_Action->setEnabled(true);
-
 #if defined(QTB_DEV_TOUCHPANEL)
   // save settings
   settings->writeSettings();
@@ -3488,6 +3501,11 @@ void QtBrynhildr::disconnectToServer()
 	recorder->stopRecording(settings->getRecordingControlFileName());
   }
 #endif // QTB_RECORDER
+
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(false);
 
   // exit all threads
   controlThread->exitThread();

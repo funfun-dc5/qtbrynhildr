@@ -270,6 +270,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,initialBenchmarkPhaseCounter(0)
   ,onBenchmarkMenu(false)
 #endif // QTB_BENCHMARK
+  ,hasSoundDevice(false)
   // for DEBUG
   ,outputLog(false)
 {
@@ -478,8 +479,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	QString str = "Supported Sampling Rate (Hz): ";
 	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
 	  str =  str + " " + QString::number((int)(*i));
+	  hasSoundDevice = true;
 	}
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+  }
+  // sound device check
+  if (!hasSoundDevice){
+	// no sound device
+	settings->setOnSound(false);
   }
 
   // set current onControl/onGraphics/onSound
@@ -970,6 +977,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	changeMouseCursor(Qt::ArrowCursor);
   }
 #endif // for TEST
+
+  // sound device check (output message)
+  if (!hasSoundDevice){
+	// no sound device
+	logMessage->outputMessage(QTB_MSG_NOT_FOUND_SOUND_DEVICE);
+  }
 
   // boot up
   if (option->getBootupFlag()){
@@ -2014,6 +2027,11 @@ void QtBrynhildr::createActions()
   onSound_Action->setChecked(settings->getOnSound());
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
+  // sound device check
+  if (!hasSoundDevice){
+	// no sound device
+	onSound_Action->setEnabled(false);
+  }
 
   // select public mode version Action
   selectPublicModeVersion5_Action = new QAction(tr("MODE 5"), this);
@@ -2423,6 +2441,7 @@ void QtBrynhildr::createMenus()
 
   // sound menu
   soundMenu = menuBar()->addMenu(tr("Sound"));
+  soundMenu->setEnabled(settings->getOnSound());
   soundMenu->addAction(soundQuality_MINIMUM_Action);
   soundMenu->addAction(soundQuality_LOW_Action);
   soundMenu->addAction(soundQuality_STANDARD_Action);

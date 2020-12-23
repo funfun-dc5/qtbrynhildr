@@ -2554,12 +2554,12 @@ void QtBrynhildr::createMenus()
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-  if (QTB_SCROLL_MODE){
-	optionMenu->addAction(onScrollMode_Action);
-  }
-
   if (QTB_VIEWER_MODE){
 	optionMenu->addAction(onViewerMode_Action);
+  }
+
+  if (QTB_SCROLL_MODE){
+	optionMenu->addAction(onScrollMode_Action);
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -4564,8 +4564,14 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	  setMinimumSize(size());
 	  // diable scroll bar
 #if !QTB_TOUCHPANEL_WINDOW
-	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  if (settings->getOnScrollMode()){
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	  }
+	  else {
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  }
 #endif // !QTB_TOUCHPANEL_WINDOW
 	  // disable maximum button
 #if defined(Q_OS_WIN)

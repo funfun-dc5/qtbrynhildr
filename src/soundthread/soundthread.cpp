@@ -424,6 +424,10 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	}
 	cout << endl << flush;
   }
+  if (!settings->getOnSound()){
+	// Sound OFF
+	return true;
+  }
   if (!deviceInfo.isFormatSupported(format)){
 	if (audioOutput != 0){
 	  audioOutput->stop();

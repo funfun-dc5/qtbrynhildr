@@ -596,6 +596,9 @@ private:
   bool onBenchmarkMenu;
 #endif // QTB_BENCHMARK
 
+  // sound device
+  bool hasSoundDevice;
+
   // output log flag
   bool outputLog;
 

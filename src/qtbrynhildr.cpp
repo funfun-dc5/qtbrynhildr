@@ -3350,7 +3350,7 @@ void QtBrynhildr::connectToServer()
   // disable connect to server menu
   connectToServer_Action->setEnabled(false);
   // disabled disconnect to server
-  disconnectToServer_Action->setEnabled(false);
+  disconnectToServer_Action->setEnabled(true);
 
   // clear desktop
   desktopPanel->clearDesktop();
@@ -3483,6 +3483,11 @@ void QtBrynhildr::reconnectToServer()
   if (!settings->getConnected()){
 	return;
   }
+
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
 
   // clear buffer for control
   keyBuffer->clear();

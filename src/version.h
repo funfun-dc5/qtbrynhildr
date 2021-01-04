@@ -20,7 +20,7 @@
 #define QTB_YEAR		"2015-2021"
 
 // URL of blog
-#define QTB_BLOG		"<a href=\"http://mcz-xoxo.cocolog-nifty.com/blog/\">http://mcz-xoxo.cocolog-nifty.com/blog/</a>"
+#define QTB_BLOG		"<a href=\"https://mcz-xoxo.cocolog-nifty.com/blog/\">https://mcz-xoxo.cocolog-nifty.com/blog/</a>"
 
 // URL of release page in GitHub
 #define QTB_URL_FOR_RELEASE		"https://github.com/funfun-dc5/qtbrynhildr/releases"

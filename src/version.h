@@ -17,7 +17,7 @@
 #endif // __x86_64__ || __LP64__ || _WIN64
 
 // year
-#define QTB_YEAR		"2015-2020"
+#define QTB_YEAR		"2015-2021"
 
 // URL of blog
 #define QTB_BLOG		"<a href=\"http://mcz-xoxo.cocolog-nifty.com/blog/\">http://mcz-xoxo.cocolog-nifty.com/blog/</a>"

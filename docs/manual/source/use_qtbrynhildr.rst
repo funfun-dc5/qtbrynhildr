@@ -242,6 +242,10 @@
 
  .. image:: images/use_qtbrynhildr/menu_option_viewermode.jpg
 
+ * スクロールモード
+
+   ウィンドウサイズを固定とした場合にスクロールバー表示のON/OFFを変更します。
+
  * 「キーボードログ出力」
 
    キーボードログ出力のON/OFFを変更します。

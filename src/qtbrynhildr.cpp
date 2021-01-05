@@ -270,6 +270,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,initialBenchmarkPhaseCounter(0)
   ,onBenchmarkMenu(false)
 #endif // QTB_BENCHMARK
+  ,hasSoundDevice(false)
   // for DEBUG
   ,outputLog(false)
 {
@@ -478,8 +479,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	QString str = "Supported Sampling Rate (Hz): ";
 	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
 	  str =  str + " " + QString::number((int)(*i));
+	  hasSoundDevice = true;
 	}
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+  }
+  // sound device check
+  if (!hasSoundDevice){
+	// no sound device
+	settings->setOnSound(false);
   }
 
   // set current onControl/onGraphics/onSound
@@ -970,6 +977,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	changeMouseCursor(Qt::ArrowCursor);
   }
 #endif // for TEST
+
+  // sound device check (output message)
+  if (!hasSoundDevice){
+	// no sound device
+	logMessage->outputMessage(QTB_MSG_NOT_FOUND_SOUND_DEVICE);
+  }
 
   // boot up
   if (option->getBootupFlag()){
@@ -1603,6 +1616,7 @@ void QtBrynhildr::createActions()
   connectToServer_Action = new QAction(tr("Connect"), this);
   connectToServer_Action->setStatusTip(tr("Connec to Brynhildr Server"));
   //  connectToServer_Action->setShortcut(tr("Ctrl+C"));
+  connectToServer_Action->setEnabled(true);
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
 
   // disconnect to server
@@ -2014,6 +2028,11 @@ void QtBrynhildr::createActions()
   onSound_Action->setChecked(settings->getOnSound());
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
+  // sound device check
+  if (!hasSoundDevice){
+	// no sound device
+	onSound_Action->setEnabled(false);
+  }
 
   // select public mode version Action
   selectPublicModeVersion5_Action = new QAction(tr("MODE 5"), this);
@@ -2423,6 +2442,7 @@ void QtBrynhildr::createMenus()
 
   // sound menu
   soundMenu = menuBar()->addMenu(tr("Sound"));
+  soundMenu->setEnabled(settings->getOnSound());
   soundMenu->addAction(soundQuality_MINIMUM_Action);
   soundMenu->addAction(soundQuality_LOW_Action);
   soundMenu->addAction(soundQuality_STANDARD_Action);
@@ -2535,12 +2555,12 @@ void QtBrynhildr::createMenus()
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-  if (QTB_SCROLL_MODE){
-	optionMenu->addAction(onScrollMode_Action);
-  }
-
   if (QTB_VIEWER_MODE){
 	optionMenu->addAction(onViewerMode_Action);
+  }
+
+  if (QTB_SCROLL_MODE){
+	optionMenu->addAction(onScrollMode_Action);
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -2933,6 +2953,11 @@ void QtBrynhildr::connected()
   isExecutingToConnect = false;
   updateConnected();
 
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(true);
+  // enable disconnect to server menu
+  disconnectToServer_Action->setEnabled(true);
+
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(false);
 }
@@ -3051,6 +3076,11 @@ void QtBrynhildr::disconnected()
   // try to connect flag
   isExecutingToConnect = false;
   updateConnected();
+
+  // enable connect to server menu
+  connectToServer_Action->setEnabled(true);
+  // disable disconnect to server menu
+  disconnectToServer_Action->setEnabled(false);
 
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(true);
@@ -3322,6 +3352,11 @@ void QtBrynhildr::connectToServer()
   // wait for reconnect to server
   QThread::sleep(1);
 
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
+
   // clear desktop
   desktopPanel->clearDesktop();
 
@@ -3441,9 +3476,6 @@ void QtBrynhildr::connectToServer()
   isExecutingToConnect = true;
   updateConnected();
 
-  // enabled disconnect to server
-  disconnectToServer_Action->setEnabled(true);
-
 #if defined(QTB_DEV_TOUCHPANEL)
   // save settings
   settings->writeSettings();
@@ -3456,6 +3488,11 @@ void QtBrynhildr::reconnectToServer()
   if (!settings->getConnected()){
 	return;
   }
+
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
 
   // clear buffer for control
   keyBuffer->clear();
@@ -3493,6 +3530,11 @@ void QtBrynhildr::disconnectToServer()
 	recorder->stopRecording(settings->getRecordingControlFileName());
   }
 #endif // QTB_RECORDER
+
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(false);
 
   // exit all threads
   controlThread->exitThread();
@@ -4550,8 +4592,14 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	  setMinimumSize(size());
 	  // diable scroll bar
 #if !QTB_TOUCHPANEL_WINDOW
-	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  if (settings->getOnScrollMode()){
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	  }
+	  else {
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  }
 #endif // !QTB_TOUCHPANEL_WINDOW
 	  // disable maximum button
 #if defined(Q_OS_WIN)

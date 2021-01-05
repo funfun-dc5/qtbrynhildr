@@ -227,6 +227,12 @@ void LogMessage::outputMessage(int msgID)
 					QMessageBox::Ok,
 					QMessageBox::NoButton);
 	break;
+  case QTB_MSG_NOT_FOUND_SOUND_DEVICE:
+	criticalMessage(PHASE_QTBRYNHILDR,
+					tr("Not found sound device!"),
+					QMessageBox::Ok,
+					QMessageBox::NoButton);
+	break;
   case QTB_MSG_NOTSUPPORT_VIDEO_MODE:
 	criticalMessage(PHASE_QTBRYNHILDR,
 					tr("Not support Video Codec!"),

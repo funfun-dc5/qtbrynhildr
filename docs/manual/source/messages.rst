@@ -12,20 +12,25 @@
 
  に変更すれば改善されるかもしれません。
 
-2. 「サーバとの接続に失敗しました！(Failed to connect server!)」
+2. 「サウンドデバイスが見つかりません!(Not found sound device!)」
+
+ サウンドを再生するためのデバイスが見つかりません。
+ サウンド再生が正しくできることを確認してください。サウンド再生は強制的にOFFとなります。
+
+3. 「サーバとの接続に失敗しました！(Failed to connect server!)」
 
  サーバに接続できませんでした。
  サーバ名もしくはIPアドレスが間違えているかもしれません。
 
-3. 「パスワードが違います！(Password Error!)」
+4. 「パスワードが違います！(Password Error!)」
 
  パスワードが間違えているかもしれません。
 
-4. 「すでに他のクライアントが接続しています！(Already connected another client!)」
+5. 「すでに他のクライアントが接続しています！(Already connected another client!)」
 
  すでにサーバに他のクライアントが接続しているかもしれません。
 
-5. 「パブリックモードでサポートしていないビデオコーデックです!(Not support Video Codec!)」
+6. 「パブリックモードでサポートしていないビデオコーデックです!(Not support Video Codec!)」
 
  パブリックモードでサポートしていないビデオコーデックがサーバで指定されています。 [#]_
  brynhildr.iniでvideocodec=2(MotionJPEG)もしくはvideocodec=3(Compress)と指定していること、もしくはvideocodec自体の指定がないことを確認してください。

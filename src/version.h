@@ -22,8 +22,8 @@
 // URL of blog
 #define QTB_BLOG		"<a href=\"https://mcz-xoxo.cocolog-nifty.com/blog/\">https://mcz-xoxo.cocolog-nifty.com/blog/</a>"
 
-// URL of help page
-#define QTB_HELP_PAGE	"<a href=\"http://mcz-xoxo.net/qtbrynhildr/docs/manual/html/\">Help Page</a>"
+// URL of manual
+#define QTB_MANUAL		"<a href=\"https://mcz-xoxo.net/qtbrynhildr/docs/manual/html/\">https://mcz-xoxo.net/qtbrynhildr/docs/manual/html/</a>"
 
 // URL of release page in GitHub
 #define QTB_URL_FOR_RELEASE		"https://github.com/funfun-dc5/qtbrynhildr/releases"

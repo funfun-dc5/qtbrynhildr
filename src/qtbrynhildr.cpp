@@ -3304,10 +3304,10 @@ void QtBrynhildr::about()
 					 " powered by MCZ."
 					 "<br><br>"
 					 "blog : " QTB_BLOG
-#if QTB_HELP
+#if QTB_MANUAL_PAGE
 					 "<br><br>"
-					 "help : " QTB_HELP_PAGE
-#endif // QTB_HELP
+					 "manual : " QTB_MANUAL
+#endif // QTB_MANUAL_PAGE
 					 );
 }
 

@@ -127,8 +127,8 @@ const bool QTB_IN_TESTING				= false;
 // auto complete
 #define QTB_AUTO_COMPLETE			1
 
-// help page
-#define QTB_HELP					0
+// manual page
+#define QTB_MANUAL_PAGE				1
 
 // update check
 #if 0 // into qtbrynhildr.pro

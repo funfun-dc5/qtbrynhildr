@@ -321,7 +321,7 @@ DEFINES += QTB_UPDATECHECK=0
 }
 
 # input files
-HEADERS += version.h config.h parameters.h
+HEADERS += version.h url.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h
 HEADERS += machine/protocols_x86.h machine/protocols_x64.h machine/protocols_common.h
 

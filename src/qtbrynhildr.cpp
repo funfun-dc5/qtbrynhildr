@@ -26,6 +26,7 @@
 #include "qtbrynhildr.h"
 #include "parameters.h"
 #include "settings.h"
+#include "url.h"
 #include "util/cpuinfo.h"
 #include "version.h"
 

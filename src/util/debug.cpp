@@ -69,7 +69,7 @@ bool checkProtocolHeader(bool outputLog)
   // check 3
   if (outputLog)
 	cout << "==== check 3 ====" << endl << flush;
-  int offset;
+  size_t offset;
   offset = offsetof(COM_DATA, dummy1);
   if (outputLog)
 	cout << "dummy1 offset = " << offset;

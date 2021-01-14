@@ -10,15 +10,15 @@ PATHLIST=
 #------------------
 # Qt 5.12 - 5.14
 #------------------
-QTVERSION=5.12.10
-VCVERSION=msvc2017
-MINGWVERSION=mingw73
+#QTVERSION=5.12.10
+#VCVERSION=msvc2017
+#MINGWVERSION=mingw73
 #------------------
 # Qt 5.15 -
 #------------------
-#QTVERSION=5.15.1
-#VCVERSION=msvc2019
-#MINGWVERSION=mingw81
+QTVERSION=5.15.2
+VCVERSION=msvc2019
+MINGWVERSION=mingw81
 
 case $UNAME in
 	CYGWIN*)
@@ -60,6 +60,9 @@ case $UNAME in
 				echo "$0 : Not Support $UNAMEM"
 				return;;
 			esac
+			# Qt5.12 - 5.15
+#			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${MINGWVERSION}_32"
+#			MINGWROOT="/opt/Qt${QTVERSION}/Tools/${MINGWVERSION}0_32"
 			# Qt5.9 - 5.11
 #			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
 #			MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw530_32"

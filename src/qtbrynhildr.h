@@ -564,6 +564,9 @@ private:
   bool onGraphics;
   bool onSound;
 
+  // saved frame rate
+  int savedFrameRate;
+
   // key buffer
   KeyBuffer *keyBuffer;
 

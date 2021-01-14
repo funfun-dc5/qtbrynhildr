@@ -259,6 +259,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onControl(true)
   ,onGraphics(true)
   ,onSound(true)
+  ,savedFrameRate(0)
   ,keyBuffer(0)
   ,mouseBuffer(0)
   ,timer(0)
@@ -3187,13 +3188,13 @@ void QtBrynhildr::hideEvent(QHideEvent *event)
   if (settings->getConnected()){
 	//	cout << "hideEvent()" << endl << flush;
 
-	// save onControl/onGraphics/onSound
-	onControl = settings->getOnControl();
-	onGraphics = settings->getOnGraphics();
-	onSound = settings->getOnSound();
-	// onControl/onGraphics to OFF
-	settings->setOnControl(false);
-	settings->setOnGraphics(false);
+	// set frame rate to 1
+	if (savedFrameRate == 0){
+	  // save current frame rate
+	  savedFrameRate = settings->getFrameRate();
+	  // set temporary frame rate
+	  settings->setFrameRate(1);
+	}
   }
 }
 
@@ -3205,10 +3206,13 @@ void QtBrynhildr::showEvent(QShowEvent *event)
   if (settings->getConnected()){
 	//	cout << "showEvent()" << endl << flush;
 
-	// restore onControl/onGraphics/onSound
-	settings->setOnControl(onControl);
-	settings->setOnGraphics(onGraphics);
-	settings->setOnSound(onSound);
+	// restore frame rate
+	if (savedFrameRate != 0){
+	  // set temporary frame rate
+	  settings->setFrameRate(savedFrameRate);
+	  // reset saved frame rate
+	  savedFrameRate = 0;
+	}
   }
 }
 

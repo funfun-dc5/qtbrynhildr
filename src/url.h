@@ -8,6 +8,7 @@
 #define QTB_BLOG		"<a href=\"https://mcz-xoxo.cocolog-nifty.com/blog/\">https://mcz-xoxo.cocolog-nifty.com/blog/</a>"
 
 // URL of manual
+//#define QTB_MANUAL		"<a href=\"https://mcz-xoxo.net/qtbrynhildr/docs/manual/html/\">https://mcz-xoxo.net/qtbrynhildr/docs/manual/html/</a>"
 #define QTB_MANUAL		"<a href=\"https://mcz-xoxo.net/qtbrynhildr/docs/manual/html/\">Ja</a>"
 
 // URL of release page in GitHub

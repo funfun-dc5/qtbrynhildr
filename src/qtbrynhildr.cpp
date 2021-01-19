@@ -16,6 +16,7 @@
 #include <QFileDialog>
 #include <QLocale>
 #include <QMenuBar>
+#include <QMimeData>
 #include <QMessageBox>
 #include <QRect>
 #include <QStatusBar>
@@ -1560,16 +1561,29 @@ void QtBrynhildr::exitApplication()
 // set clipboard
 void QtBrynhildr::setClipboard(QString clipboardString)
 {
-  if (clipboard != 0){
-	//	cout << "setClipboard = " << qPrintable(clipboardString) << endl << flush;
-	clipboard->setText(clipboardString);
-	//	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
+  // check support
+  if (!settings->getOnTransferClipboardSupport()){
+	// Nothing to do
+	return;
   }
-#if 0 // for TEST
-  else {
-	cout << "clipboard is null" << endl << flush;
+
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
   }
-#endif // for TEST
+
+  // check clipboard
+  if (clipboard == 0){
+	// Nothing to do
+	return;
+  }
+
+  //	cout << "setClipboard = " << qPrintable(clipboardString) << endl << flush;
+  // set clipboard
+  clipboard->setText(clipboardString);
+  //	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
 }
 
 // set progress bar value for transfer file
@@ -3649,11 +3663,65 @@ void QtBrynhildr::exit()
 // send clipboard
 void QtBrynhildr::sendClipboard()
 {
-  QString text = clipboard->text();
+  // check support
+  if (!settings->getOnTransferClipboardSupport()){
+	// Nothing to do
+	return;
+  }
 
-  // send clipboard flag ON
-  settings->setSendClipboardString(text);
-  settings->setOnSendClipboard(true);
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
+  }
+
+  // check clipboard
+  if (clipboard == 0){
+	// Nothing to do
+	return;
+  }
+
+  // get mime data
+  const QMimeData *mimeData = clipboard->mimeData();
+
+  if (mimeData->hasImage()){
+	//qDebug() << "clipboard has aimage!";
+	//qDebug() << "MIME : " << mimeData->text();
+  }
+  else if (mimeData->hasColor()){
+	//qDebug() << "clipboard has a color!";
+	//qDebug() << "MIME : " << mimeData->text();
+  }
+  else if (mimeData->hasUrls()){
+	//qDebug() << "clipboard has a urls!";
+	//qDebug() << "MIME : " << mimeData->text();
+  }
+  else if (mimeData->hasText()){
+	const QString text = clipboard->text();
+	//qDebug() << "clipboard has a text! : " << text;
+	//qDebug() << "MIME : " << mimeData->text();
+
+	// send clipboard flag ON
+	if (!settings->getOnSendClipboard()){
+	  settings->setSendClipboardString(text);
+	  settings->setOnSendClipboard(true);
+	}
+  }
+  else if (mimeData->hasHtml()){
+	const QString text = clipboard->text();
+	//qDebug() << "clipboard has a html! : " << text;
+	//qDebug() << "MIME : " << mimeData->text();
+
+	// send clipboard flag ON
+	if (!settings->getOnSendClipboard()){
+	  settings->setSendClipboardString(text);
+	  settings->setOnSendClipboard(true);
+	}
+  }
+  else {
+	qDebug() << "clipboard has unknown data!";
+  }
 }
 
 // send file

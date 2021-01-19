@@ -766,10 +766,19 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 // drag enter event
 void DesktopPanel::dragEnterEvent(QDragEnterEvent *event)
 {
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
+  }
+
+  // check support
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
 	return;
   }
+
   if (event->mimeData()->hasFormat("text/uri-list")){
 	event->acceptProposedAction();
   }
@@ -778,6 +787,14 @@ void DesktopPanel::dragEnterEvent(QDragEnterEvent *event)
 // drop event
 void DesktopPanel::dropEvent(QDropEvent *event)
 {
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
+  }
+
+  // check support
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
 	return;

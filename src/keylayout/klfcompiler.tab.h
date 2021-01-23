@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.5.3.  */
+/* A Bison parser, made by GNU Bison 3.7.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -31,8 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 #ifndef YY_YY_KLFCOMPILER_TAB_H_INCLUDED
 # define YY_YY_KLFCOMPILER_TAB_H_INCLUDED
@@ -44,20 +45,25 @@
 extern int yydebug;
 #endif
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    STRING = 258,
-    QSTRING = 259,
-    NUMBER = 260,
-    SECTION = 261,
-    KEY_ID = 262,
-    VK_ID = 263,
-    SHIFTKEY = 264,
-    PLATFORM = 265
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    STRING = 258,                  /* STRING  */
+    QSTRING = 259,                 /* QSTRING  */
+    NUMBER = 260,                  /* NUMBER  */
+    SECTION = 261,                 /* SECTION  */
+    KEY_ID = 262,                  /* KEY_ID  */
+    VK_ID = 263,                   /* VK_ID  */
+    SHIFTKEY = 264,                /* SHIFTKEY  */
+    PLATFORM = 265                 /* PLATFORM  */
   };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
@@ -69,7 +75,7 @@ union YYSTYPE
   char *strp;
   int intval;
 
-#line 73 "klfcompiler.tab.h"
+#line 79 "klfcompiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

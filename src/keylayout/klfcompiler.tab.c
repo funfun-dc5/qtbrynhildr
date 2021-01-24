@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.7.4.  */
+/* A Bison parser, made by GNU Bison 3.7.5.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -46,10 +46,10 @@
    USER NAME SPACE" below.  */
 
 /* Identify Bison output, and Bison version.  */
-#define YYBISON 30704
+#define YYBISON 30705
 
 /* Bison version string.  */
-#define YYBISON_VERSION "3.7.4"
+#define YYBISON_VERSION "3.7.5"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -955,6 +955,18 @@ typedef int_least16_t yytype_int16;
 typedef short yytype_int16;
 #endif
 
+/* Work around bug in HP-UX 11.23, which defines these macros
+   incorrectly for preprocessor constants.  This workaround can likely
+   be removed in 2023, as HPE has promised support for HP-UX 11.23
+   (aka HP-UX 11i v2) only through the end of 2022; see Table 2 of
+   <https://h20195.www2.hpe.com/V2/getpdf.aspx/4AA4-7673ENW.pdf>.  */
+#ifdef __hpux
+# undef UINT_LEAST8_MAX
+# undef UINT_LEAST16_MAX
+# define UINT_LEAST8_MAX 255
+# define UINT_LEAST16_MAX 65535
+#endif
+
 #if defined __UINT_LEAST8_MAX__ && __UINT_LEAST8_MAX__ <= __INT_MAX__
 typedef __UINT_LEAST8_TYPE__ yytype_uint8;
 #elif (!defined __UINT_LEAST8_MAX__ && defined YY_STDINT_H \
@@ -1052,9 +1064,9 @@ typedef int yy_state_fast_t;
 
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
-# define YYUSE(E) ((void) (E))
+# define YY_USE(E) ((void) (E))
 #else
-# define YYUSE(E) /* empty */
+# define YY_USE(E) /* empty */
 #endif
 
 #if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
@@ -1357,7 +1369,7 @@ static const yytype_int8 yypgoto[] =
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     9
+       0,     1,     9
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -1476,7 +1488,7 @@ yy_symbol_value_print (FILE *yyo,
                        yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep)
 {
   FILE *yyoutput = yyo;
-  YYUSE (yyoutput);
+  YY_USE (yyoutput);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
@@ -1484,7 +1496,7 @@ yy_symbol_value_print (FILE *yyo,
     YYPRINT (yyo, yytoknum[yykind], *yyvaluep);
 # endif
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YYUSE (yykind);
+  YY_USE (yykind);
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -1598,13 +1610,13 @@ static void
 yydestruct (const char *yymsg,
             yysymbol_kind_t yykind, YYSTYPE *yyvaluep)
 {
-  YYUSE (yyvaluep);
+  YY_USE (yyvaluep);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
 
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-  YYUSE (yykind);
+  YY_USE (yykind);
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 }
 
@@ -1872,7 +1884,7 @@ yyreduce:
 #endif /* DEBUG_YACC */
   section = (yyvsp[0].intval);
 }
-#line 1876 "klfcompiler.tab.c"
+#line 1888 "klfcompiler.tab.c"
     break;
 
   case 6: /* line: STRING '=' QSTRING  */
@@ -1910,7 +1922,7 @@ yyreduce:
 	}
   }
 }
-#line 1914 "klfcompiler.tab.c"
+#line 1926 "klfcompiler.tab.c"
     break;
 
   case 7: /* line: STRING '=' NUMBER  */
@@ -1946,7 +1958,7 @@ yyreduce:
 	}
   }
 }
-#line 1950 "klfcompiler.tab.c"
+#line 1962 "klfcompiler.tab.c"
     break;
 
   case 8: /* line: KEY_ID ',' VK_ID ',' SHIFTKEY  */
@@ -1998,7 +2010,7 @@ yyreduce:
 	}
   }
 }
-#line 2002 "klfcompiler.tab.c"
+#line 2014 "klfcompiler.tab.c"
     break;
 
   case 9: /* line: KEY_ID ',' VK_ID ',' SHIFTKEY ',' PLATFORM  */
@@ -2041,7 +2053,7 @@ yyreduce:
 	}
   }
 }
-#line 2045 "klfcompiler.tab.c"
+#line 2057 "klfcompiler.tab.c"
     break;
 
   case 10: /* line: NUMBER ',' QSTRING ',' QSTRING ',' VK_ID ',' QSTRING ',' VK_ID  */
@@ -2110,7 +2122,7 @@ yyreduce:
 	}
   }
 }
-#line 2114 "klfcompiler.tab.c"
+#line 2126 "klfcompiler.tab.c"
     break;
 
   case 11: /* line: error '\n'  */
@@ -2119,11 +2131,11 @@ yyreduce:
   // error
   error_count++;
 }
-#line 2123 "klfcompiler.tab.c"
+#line 2135 "klfcompiler.tab.c"
     break;
 
 
-#line 2127 "klfcompiler.tab.c"
+#line 2139 "klfcompiler.tab.c"
 
       default: break;
     }

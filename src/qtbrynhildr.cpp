@@ -3686,7 +3686,7 @@ void QtBrynhildr::sendClipboard()
   const QMimeData *mimeData = clipboard->mimeData();
 
   if (mimeData->hasImage()){
-	//qDebug() << "clipboard has aimage!";
+	//qDebug() << "clipboard has a image!";
 	//qDebug() << "MIME : " << mimeData->text();
   }
   else if (mimeData->hasColor()){

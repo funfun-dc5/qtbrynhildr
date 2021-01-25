@@ -4,9 +4,7 @@
 
 1) download CELT library v0.11.1 source code
 
- http://downloads.xiph.org/releases/celt/celt-0.11.1.tar.gz
-
- ( http://www.celt-codec.org/ )
+ https://ftp.osuosl.org/pub/xiph/releases/celt/celt-0.11.1.tar.gz
 
 2) make configuration for static library (libcelt0.a)
 

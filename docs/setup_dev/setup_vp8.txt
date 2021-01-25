@@ -3,7 +3,9 @@
 ---------------------------------------------------------------------------
 1) download VPX library v1.40 source code
 
- http://downloads.webmproject.org/releases/webm/index.html
+ https://github.com/webmproject/libvpx/archive/v1.4.0.tar.gz
+
+ (https://github.com/webmproject/libvpx/releases)
 
 2) make configuration for static library (libvpx.a)
 

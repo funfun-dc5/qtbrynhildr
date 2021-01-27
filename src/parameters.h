@@ -60,6 +60,9 @@ const int QTB_TOUCHPANEL_TAP_TIME_THRESHOLD = 500;
 // move distance thresold for touchpanel
 const int QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD = 40;
 
+// 2 tap distance thresold for touchpanel
+const int QTB_TOUCHPANEL_2TAP_DIST_THRESHOLD = 10;
+
 // touchpanel max screen width
 const int QTB_TOUCHPANEL_WIDTH_SUPPORT_MAX = 3840;
 

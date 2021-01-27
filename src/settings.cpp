@@ -40,6 +40,7 @@ Settings::Settings(const char *iniFileName)
   ,sendFileCount(0)
   ,onGamePadSupport(false)
   ,onBrynhildr2Support(true)
+  ,onSendControlKeyState(false)
   ,monitorCount(0)
   ,onShowSoftwareKeyboard(false)
   ,onShowSoftwareButton(false)
@@ -90,6 +91,7 @@ Settings::Settings(const char *iniFileName)
   setOnExtraButtonSupport(QTB_ONEXTRABUTTONSUPPORT_DEFAULT);
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   setOnControlOffWithGraphicsOff(QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT);
+  setOnSendControlKeyState(QTB_ONSENDCONTROLKEYSTATE_DEFAULT);
   setOnGraphics(QTB_ONGRAPHICS_DEFAULT);
   setVideoQuality(QTB_VIDEOQUALITY_DEFAULT);
   setOnGamePadSupport(QTB_ONGAMEPADSUPPORT_DEFAULT);
@@ -320,6 +322,10 @@ void Settings::readSettings()
   // load onControlOffWithGraphicsOff
   setOnControlOffWithGraphicsOff(settings->value(QTB_ONCONTROLOFFWITHGRAPHICSOFF,
 												 QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT).toBool());
+
+  // load onSendControlKeyState
+  setOnSendControlKeyState(settings->value(QTB_ONSENDCONTROLKEYSTATE,
+										   QTB_ONSENDCONTROLKEYSTATE_DEFAULT).toBool());
 
   // load onGraphics
   setOnGraphics(settings->value(QTB_ONGRAPHICS,
@@ -623,6 +629,9 @@ void Settings::writeSettings()
   // save onControlOffWithGraphicsOff
   settings->setValue(QTB_ONCONTROLOFFWITHGRAPHICSOFF, onControlOffWithGraphicsOff);
 
+  // save onSendControlKeyState
+  settings->setValue(QTB_ONSENDCONTROLKEYSTATE, onSendControlKeyState);
+
   // save onGraphics
   settings->setValue(QTB_ONGRAPHICS, onGraphics);
 
@@ -839,6 +848,7 @@ void Settings::printSettings() const
   qDebug() << "  ExtraButtonSupport : " << onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   qDebug() << "  ControlOffWithGraphicsOff : " << onControlOffWithGraphicsOff;
+  qDebug() << "  SendControlKeyState       : " << onSendControlKeyState;
   qDebug() << "  SendClipboard : " << onSendClipboard;
   qDebug() << "  SendFileCount : " << sendFileCount;
   qDebug() << "Graphics      : " << onGraphics;

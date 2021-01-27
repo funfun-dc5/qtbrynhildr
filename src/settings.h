@@ -167,6 +167,14 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF			"onControlOffWithGraphicsOff"
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT	true
 
+// for onSendControlKeyState
+#define QTB_ONSENDCONTROLKEYSTATE "onSendControlKeyState"
+#if defined(Q_OS_OSX)
+#define QTB_ONSENDCONTROLKEYSTATE_DEFAULT true
+#else // defined(Q_OS_OSX)
+#define QTB_ONSENDCONTROLKEYSTATE_DEFAULT false
+#endif // defined(Q_OS_OSX)
+
 // for onGraphics
 #define QTB_ONGRAPHICS			"onGraphics"
 #define QTB_ONGRAPHICS_DEFAULT	true
@@ -548,6 +556,8 @@ private:
   volatile bool onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onControlOffWithGraphicsOff;
+  // send control key state
+  volatile bool onSendControlKeyState;
   // send clipboard
   volatile bool onSendClipboard;
   // send clipboard string
@@ -1209,6 +1219,18 @@ public:
   {
 	this->onControlOffWithGraphicsOff = onControlOffWithGraphicsOff;
 	return true;
+  }
+
+  // get send control key state flag
+  bool getOnSendControlKeyState()
+  {
+	return onSendControlKeyState;
+  }
+
+  // set send control key state flag
+  void setOnSendControlKeyState(bool onSendControlKeyState)
+  {
+	this->onSendControlKeyState = onSendControlKeyState;
   }
 
   // get send clipboard flag

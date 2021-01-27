@@ -649,6 +649,12 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	  }
 	}
 
+	// check control key status
+	if (key == Qt::Key_Control){
+	  // press control key
+	  qtbrynhildr->setOnControlKey(true);
+	}
+
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
 	// output Keyboard Log
@@ -752,6 +758,12 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
 								 << " => Sent" << QTextStream_endl << QTextStream_flush;
 	  }
+	}
+
+	// check control key status
+	if (key == Qt::Key_Control){
+	  // release control key
+	  qtbrynhildr->setOnControlKey(false);
 	}
 
 	// set previous KEYCODE_FLG

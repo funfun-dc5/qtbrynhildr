@@ -587,6 +587,8 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 
          (5) Alt キー + PrintScreen キー
 
+         (6) Ctrl (ON/OFF) キー
+
      [2] モニタ選択
 
          マルチモニタを利用している場合に操作対象とするモニタを変更します。
@@ -790,6 +792,7 @@ taskbarAssistAreaHeight=10
 onHoldMouseControl=false
 onExtraButtonSupport=true
 onControlOffWithGraphicsOff=true
+onSendControlKeyState=false
 onGraphics=true
 videoQuality=5
 onGamePadSupport=true

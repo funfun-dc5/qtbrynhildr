@@ -262,6 +262,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onSound(true)
   ,savedFrameRate(0)
   ,keyBuffer(0)
+  ,onControlKey(false)
   ,mouseBuffer(0)
   ,timer(0)
   ,isExecutingToConnect(false)
@@ -2144,6 +2145,13 @@ void QtBrynhildr::createActions()
   sendKey6_Action->setStatusTip(tr("Send key: Alt + PrintScreen"));
   connect(sendKey6_Action, SIGNAL(triggered()), this, SLOT(sendKey_ALT_PrintScreen()));
 
+  sendKey7_Action = new QAction(tr("Ctrl (ON/OFF)"), this);
+  sendKey7_Action->setEnabled(false);
+  sendKey7_Action->setStatusTip(tr("Send key: Ctrl (ON/OFF)"));
+  connect(sendKey7_Action, SIGNAL(triggered()), this, SLOT(sendKey_CTRL_Toggle()));
+  sendKey7_Action->setCheckable(true);
+  sendKey7_Action->setChecked(getOnControlKey());
+
   // on Scroll Mode Action
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action = new QAction(tr("Scroll Mode"), this);
@@ -2485,6 +2493,9 @@ void QtBrynhildr::createMenus()
   sendKeySubMenu->addAction(sendKey4_Action);
   sendKeySubMenu->addAction(sendKey5_Action);
   sendKeySubMenu->addAction(sendKey6_Action);
+  if (settings->getOnSendControlKeyState()){
+	sendKeySubMenu->addAction(sendKey7_Action);
+  }
 
 #if defined(QTB_DEV_DESKTOP)
   // for select monitor
@@ -2861,6 +2872,8 @@ void QtBrynhildr::connected()
     sendKey5_Action->setEnabled(true);
   if (sendKey6_Action != 0)
     sendKey6_Action->setEnabled(true);
+  if (sendKey7_Action != 0)
+    sendKey7_Action->setEnabled(true);
 
   // enabled scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
@@ -3006,6 +3019,8 @@ void QtBrynhildr::disconnected()
     sendKey5_Action->setEnabled(false);
   if (sendKey6_Action != 0)
     sendKey6_Action->setEnabled(false);
+  if (sendKey7_Action != 0)
+    sendKey7_Action->setEnabled(false);
 
   // disabled scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
@@ -4478,6 +4493,23 @@ void QtBrynhildr::sendKey_ALT_PrintScreen()
 	// release
 	keyBuffer->put(VK_SNAPSHOT,	KEYCODE_FLG_KEYUP); // PrintScreen key release
 	keyBuffer->put(VK_MENU,	KEYCODE_FLG_KEYUP); // ALT key press
+  }
+}
+
+// send key for CTRL ON/OFF
+void QtBrynhildr::sendKey_CTRL_Toggle()
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	if (!getOnControlKey()){
+	  // press
+	  keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYDOWN); // CTRL key press
+	}
+	else {
+	  // release
+	  keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP); // CTRL key release
+	}
+	setOnControlKey(!getOnControlKey());
   }
 }
 

@@ -2990,6 +2990,9 @@ void QtBrynhildr::connected()
 
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(false);
+
+  // reset control key status
+  onControlKey = false;
 }
 
 // disconnected
@@ -3116,6 +3119,9 @@ void QtBrynhildr::disconnected()
 
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(true);
+
+  // reset control key status
+  onControlKey = false;
 }
 
 // set desktop scaling factor

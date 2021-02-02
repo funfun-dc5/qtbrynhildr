@@ -3562,6 +3562,12 @@ void QtBrynhildr::reconnectToServer()
 // disconnect to server
 void QtBrynhildr::disconnectToServer()
 {
+  // check control key state
+  if (getOnControlKey()){
+	// release control key
+	sendKey_CTRL_Toggle();
+  }
+
 #if QTB_RECORDER
   // stop record and replay
   if (settings->getOnReplayingControl()){

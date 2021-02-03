@@ -72,6 +72,25 @@ private:
   // Function
   //-------------------------------------------------------------------------------
 public:
+  // utilities
+  inline static int calcWidthForMode7(int width)
+  {
+	return (width + 3) & ~3;
+  }
+  inline static int calcHeightForMode7(int height)
+  {
+	return (height + 3) & ~3;
+  }
+  inline static int calcWidth(int width)
+  {
+	return width;
+  }
+  inline static int calcHeight(int height)
+  {
+	return height;
+  }
+
+public:
   // constructor
   GraphicsThread(Settings *settings);
   // destructor

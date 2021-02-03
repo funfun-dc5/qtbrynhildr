@@ -2738,8 +2738,8 @@ void QtBrynhildr::updateConnected()
 		  arg(settings->getDesktopWidth(), 3).
 		  arg(settings->getDesktopHeight(), 3).
 		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
-		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
-		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3).
+		  arg(GraphicsThread::calcWidthForMode7(settings->getDesktopWidth()*settings->getDesktopScalingFactor()), 3).
+		  arg(GraphicsThread::calcHeightForMode7(settings->getDesktopHeight()*settings->getDesktopScalingFactor()), 3).
 		  arg(calcRate, 4, 'f', 2, ' ').
 		  arg(settings->getSIMDOperationTypeName());
 	  }
@@ -2749,8 +2749,8 @@ void QtBrynhildr::updateConnected()
 		  arg(settings->getDesktopWidth(), 3).
 		  arg(settings->getDesktopHeight(), 3).
 		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
-		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
-		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3);
+		  arg(GraphicsThread::calcWidth(settings->getDesktopWidth()*settings->getDesktopScalingFactor()), 3).
+		  arg(GraphicsThread::calcHeight(settings->getDesktopHeight()*settings->getDesktopScalingFactor()), 3);
 	  }
 	  // sample rate (sound)
 	  str += QString(" : Sound %1 Hz").arg(soundThread->getSampleRate());

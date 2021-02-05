@@ -127,17 +127,10 @@ HEADERS += util/android-ndk/cpu-features.h
 SOURCES += util/android-ndk/cpu-features.c
 
 # for Android APK
-# for Qt 5.14-
+# for Qt 5.14- (for Android5.0)
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 BUILDARCH = android-$(OBJECTS_DIR)
 ANDROID_ABIS = armeabi-v7a arm64-v8a
-# for Qt 5.12
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android512
-# 32bit
-#BUILDARCH = android-armeabi-v7a
-#QMAKE_CXXFLAGS += -mfpu=neon
-# 64bit
-#BUILDARCH = android-arm64-v8a
 
 # dist files
 DISTFILES += \

@@ -413,12 +413,14 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
   char key[ENCRYPTION_KEY_LENGTH + 1] = {"@@@@@@@@@@@@@@@@"};
 
   // copy encryption key
-  const char *encryption_key = qPrintable(settings->getPassword());
-  for (int i = 0;i < ENCRYPTION_KEY_LENGTH; i++){
-	if (encryption_key[i] == '\0')
-	  break;
+  if (!settings->getPassword().isEmpty()){
+	const char *encryption_key = qPrintable(settings->getPassword());
+	for (int i = 0;i < ENCRYPTION_KEY_LENGTH; i++){
+	  if (encryption_key[i] == '\0')
+		break;
 
-	key[i] = encryption_key[i];
+	  key[i] = encryption_key[i];
+	}
   }
 
   COM_DATA *com_data = (COM_DATA*)buf;

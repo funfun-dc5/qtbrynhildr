@@ -25,6 +25,9 @@ if [ -n "$1" ] ; then
 		ubuntu)
 			EXTOPT="ubuntu"
 			;;
+		ios)
+			EXTOPT="ios"
+			;;
 		*)
 			echo "Unkown argument1 : $1"
 			exit 1
@@ -107,18 +110,25 @@ case $UNAME in
 		./install clean
 		;;
 	Darwin)
-		make clean
-		# delete executable file
-		rm -rf "${APP}.app"
-		# clean key layout file compiler
-		pushd keylayout; make clean; popd
-		pushd ../docs/manual
-		# delete manual
-		make clean
-		popd
-		rm -rf ../dist/doc/manual/*
-		# delete files for install
-		./install clean
+		if [ "$1" = "" ] ; then
+			# macOS
+			make clean
+			# delete executable file
+			rm -rf "${APP}.app"
+			# clean key layout file compiler
+			pushd keylayout; make clean; popd
+			pushd ../docs/manual
+			# delete manual
+			make clean
+			popd
+			rm -rf ../dist/doc/manual/*
+			# delete files for install
+			./install clean
+		fi
+		if [ "$1" = "ios" ] ; then
+			# iOS
+			echo "for iOS"
+		fi
 		;;
 	*)
 		echo "clean : Not support platform. $UNAME"

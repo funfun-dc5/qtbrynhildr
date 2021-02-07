@@ -57,7 +57,11 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
+				# macOS
 				BUILDARCH=macos-x64
+				if [ "$TARGET" = "ios" ] ; then
+					BUILDARCH=ios-arm64-v8a
+				fi
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
@@ -73,11 +77,17 @@ fi
 
 source ./setup_qt5 $TARGET
 
-./clean $TARGET
-rm -f Makefile Makefile.Release Makefile.Debug
-rm -f object_script.*
-echo RUN : ${QTROOT}/bin/${QMAKE} ${PRO}
-${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+if [ "$TARGET" != "ios" ] ; then
+	# except for iOS
+	./clean $TARGET
+	rm -f Makefile Makefile.Release Makefile.Debug
+	rm -f object_script.*
+	echo RUN : ${QTROOT}/bin/${QMAKE} ${PRO}
+	${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+else
+	# iOS
+	echo "iOS"
+fi
 
 case $UNAME in
 	CYGWIN*)

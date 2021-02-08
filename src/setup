@@ -77,16 +77,19 @@ fi
 
 source ./setup_qt5 $TARGET
 
+./clean $TARGET
 if [ "$TARGET" != "ios" ] ; then
-	# except for iOS
-	./clean $TARGET
+	# for make
+	echo "for make"
 	rm -f Makefile Makefile.Release Makefile.Debug
 	rm -f object_script.*
-	echo RUN : ${QTROOT}/bin/${QMAKE} ${PRO}
+	echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
 	${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
 else
-	# iOS
-	echo "iOS"
+	# for xcode
+	echo "for xcode"
+	echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH}"
+	${QTROOT}/bin/${QMAKE} ${PRO} -spec macx-xcode BUILDARCH=${BUILDARCH}
 fi
 
 case $UNAME in

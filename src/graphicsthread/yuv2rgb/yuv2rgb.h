@@ -97,7 +97,7 @@ extern int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, u
 extern void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 
 #if QTB_SIMD_SUPPORT
-#if !(defined(__arm__) || defined(__aarch64__))
+#if !(defined(__arm__) || defined(__aarch64__) || defined(Q_OS_IOS))
 // YUV convert to RGB (SIMD version)
 extern void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);

@@ -57,7 +57,7 @@
 1. version.hから自動でqtbrynhildr.iss/qtbrynhildr.rcを変更するようにしたい
 
 2. "Q_OS_IOS" はまだ定義されていないようにみえるので今はどこかでdefineする
-   必要がある
+   必要がある -> 5.15.2では定義済み
 
 3. Big Endianサポート
 

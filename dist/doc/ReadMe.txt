@@ -820,6 +820,7 @@ onDesktopAutoresize=true
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true
+displayDataCounterType=1
 onFullScreenAtConnected=false
 onViewerAtConnected=false
 onHideMenuAndStatusBarAtFullScreen=true

@@ -5,7 +5,7 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.3.1"
+#define QTB_VERSION				"2.3.2"
 
 #define QTB_RCNAME				"-rc1"
 #define QTB_VERSION_NUMBER		2301

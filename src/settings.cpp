@@ -150,6 +150,8 @@ Settings::Settings(const char *iniFileName)
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
 
+  setDisplayDataCounterType(QTB_DISPLAYDATACOUNTERTYPE_DEFAULT);
+
   setOnFullScreenAtConnected(QTB_ONFULLSCREENATCONNECTED_DEFAULT);
 
   setOnViewerAtConnected(QTB_ONVIEWERATCONNECTED_DEFAULT);
@@ -451,6 +453,10 @@ void Settings::readSettings()
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
 									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
 
+  // load displayDataCounterType
+  setDisplayDataCounterType(settings->value(QTB_DISPLAYDATACOUNTERTYPE,
+											(qint32)QTB_DISPLAYDATACOUNTERTYPE_DEFAULT).toInt());
+
   // load onFullScreenAtConnected
   setOnFullScreenAtConnected(settings->value(QTB_ONFULLSCREENATCONNECTED,
 											 QTB_ONFULLSCREENATCONNECTED_DEFAULT).toBool());
@@ -726,6 +732,9 @@ void Settings::writeSettings()
   // save onShowStatusBar
   settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
 
+  // save displayDataCounterType
+  settings->setValue(QTB_DISPLAYDATACOUNTERTYPE, (qint32)displayDataCounterType);
+
   // save onFullScreenAtConnected
   settings->setValue(QTB_ONFULLSCREENATCONNECTED, onFullScreenAtConnected);
 
@@ -887,6 +896,7 @@ void Settings::printSettings() const
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
+  qDebug() << "DisplayDataCounterType  : " << displayDataCounterType;
   qDebug() << "FullScreenAtConnected   : " << onFullScreenAtConnected;
   qDebug() << "ViewerAtConnected       : " << onViewerAtConnected;
   qDebug() << "HideMenuAndStatusBarAtFullScreen : " << onHideMenuAndStatusBarAtFullScreen;

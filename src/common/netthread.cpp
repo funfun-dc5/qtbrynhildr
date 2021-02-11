@@ -32,6 +32,7 @@ NetThread::NetThread(const char *name, Settings *settings)
   ,threadSleepTime(QTB_THREAD_SLEEP_TIME)
   ,runThread(true)
   ,receivedDataCounter(0)
+  ,totalReceivedDataCounter(0)
   ,previousGetDataRateTime(0)
   ,startTime(0)
   // for DEBUG
@@ -70,8 +71,15 @@ long NetThread::getDataRate()
 	}
   }
   previousGetDataRateTime = currentTime;
+  totalReceivedDataCounter += receivedDataCounter;
   receivedDataCounter = 0;
   return bps;
+}
+
+// get total received data counter
+qint64 NetThread::getTotalReceivedDataCounter()
+{
+  return totalReceivedDataCounter;
 }
 
 //---------------------------------------------------------------------------
@@ -230,6 +238,7 @@ void NetThread::connectedToServer()
 {
   // reset counter
   receivedDataCounter = 0;
+  totalReceivedDataCounter = 0;
 
   // reset previous get data rate time
   previousGetDataRateTime = 0;

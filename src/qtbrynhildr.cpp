@@ -2827,6 +2827,48 @@ void QtBrynhildr::updateFrameRate()
 	QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps] ").
 	  arg(currentFrameRate, 3).
 	  arg(currentDataRate, 4, 'f', 1, ' ');
+	// total data counter
+	if (settings->getDisplayDataCounterType() != QTB_DISPLAYDATACOUNTERTYPE_NONE){
+	  qreal trd = 0.0;
+	  if (controlThread != 0){
+		switch(settings->getDisplayDataCounterType()){
+		case QTB_DISPLAYDATACOUNTERTYPE_TOTAL:
+		  trd += controlThread->getTotalReceivedDataCounter();
+		  trd += graphicsThread->getTotalReceivedDataCounter();
+		  trd += soundThread->getTotalReceivedDataCounter();
+		  break;
+		case QTB_DISPLAYDATACOUNTERTYPE_CONTROL:
+		  trd += controlThread->getTotalReceivedDataCounter();
+		  break;
+		case QTB_DISPLAYDATACOUNTERTYPE_GRAPHICS:
+		  trd += graphicsThread->getTotalReceivedDataCounter();
+		  break;
+		case QTB_DISPLAYDATACOUNTERTYPE_SOUND:
+		  trd += soundThread->getTotalReceivedDataCounter();
+		  break;
+		default:
+		  // internal error
+		  // Nothing to do
+		  break;
+		}
+
+		trd /= (1024*1024); // MB
+	  }
+	  if (trd > 1024*1024){
+		// display by TB
+		trd /= (1024*1024);
+		str += QString(" (%1 TB) ").arg(trd, 4, 'f', 2, ' ');
+	  }
+	  else if (trd > 1024){
+		// display by GB
+		trd /= 1024;
+		str += QString(" (%1 GB) ").arg(trd, 4, 'f', 2, ' ');
+	  }
+	  else {
+		// display by MB
+		str += QString(" (%1 MB) ").arg(trd, 4, 'f', 2, ' ');
+	  }
+	}
 	frameRateLabel->setText(str);
   }
   else {

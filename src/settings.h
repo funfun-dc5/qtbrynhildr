@@ -338,6 +338,16 @@ typedef enum {
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
 
+// for displayDataCounterType
+#define QTB_DISPLAYDATACOUNTERTYPE			"displayDataCounterType"
+#define QTB_DISPLAYDATACOUNTERTYPE_NONE		0
+#define QTB_DISPLAYDATACOUNTERTYPE_TOTAL	1
+#define QTB_DISPLAYDATACOUNTERTYPE_CONTROL	2
+#define QTB_DISPLAYDATACOUNTERTYPE_GRAPHICS	3
+#define QTB_DISPLAYDATACOUNTERTYPE_SOUND	4
+#define QTB_DISPLAYDATACOUNTERTYPE_NUM		5
+#define QTB_DISPLAYDATACOUNTERTYPE_DEFAULT	QTB_DISPLAYDATACOUNTERTYPE_TOTAL
+
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -669,6 +679,9 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+  // display data counter type
+  volatile int displayDataCounterType;
 
   // full screen
   volatile bool onFullScreenAtConnected;
@@ -1927,6 +1940,21 @@ public:
   void setOnShowStatusBar(bool onShowStatusBar)
   {
 	this->onShowStatusBar = onShowStatusBar;
+  }
+
+  // get display data counter type
+  int getDisplayDataCounterType()
+  {
+	return displayDataCounterType;
+  }
+
+  // set display data counter type
+  void setDisplayDataCounterType(int displayDataCounterType)
+  {
+	if (displayDataCounterType >= QTB_DISPLAYDATACOUNTERTYPE_NONE &&
+		displayDataCounterType < QTB_DISPLAYDATACOUNTERTYPE_NUM){
+	  this->displayDataCounterType = displayDataCounterType;
+	}
   }
 
   // get full screen at connected flag

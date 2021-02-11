@@ -86,6 +86,7 @@ Settings::Settings(const char *iniFileName)
 #if QTB_PLUGINS_DISABLE_SUPPORT
   setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  setOnSoundCriticalMessageDisable(QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT);
   setOnHoldMouseControl(QTB_ONHOLDMOUSECONTROL_DEFAULT);
 #if QTB_EXTRA_BUTTON_SUPPORT
   setOnExtraButtonSupport(QTB_ONEXTRABUTTONSUPPORT_DEFAULT);
@@ -311,6 +312,14 @@ void Settings::readSettings()
   // load taskbarAssistAreaHeight
   setTaskbarAssistAreaHeight(settings->value(QTB_TASKBARASSISTAREAHEIGHT,
 											 QTB_TASKBARASSISTAREAHEIGHT_DEFAULT).toInt());
+
+  // load onPluginsDisable
+  setOnPluginsDisable(settings->value(QTB_ONPLUGINSDISABLE,
+									  QTB_ONPLUGINSDISABLE_DEFAULT).toBool());
+
+  // load onSoundCriticalMessageDisable
+  setOnSoundCriticalMessageDisable(settings->value(QTB_ONSOUNDCRITICALMESSAGEDISABLE,
+												   QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT).toBool());
 
   // load onHoldMouseControl
   setOnHoldMouseControl(settings->value(QTB_ONHOLDMOUSECONTROL,
@@ -624,6 +633,12 @@ void Settings::writeSettings()
   // save taskbarAssistAreaHeight
   settings->setValue(QTB_TASKBARASSISTAREAHEIGHT, taskbarAssistAreaHeight);
 
+  // save onPluginsDisable
+  settings->setValue(QTB_ONPLUGINSDISABLE, onPluginsDisable);
+
+  // save onSoundCriticalMessageDisable
+  settings->setValue(QTB_ONSOUNDCRITICALMESSAGEDISABLE, onSoundCriticalMessageDisable);
+
   // save onHoldMouseControl
   settings->setValue(QTB_ONHOLDMOUSECONTROL, onHoldMouseControl);
 
@@ -850,6 +865,7 @@ void Settings::printSettings() const
   qDebug() << "Taskbar Assist Area Height: " << taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
+  qDebug() << "SoundCriticalMessageDisable: " << onSoundCriticalMessageDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "GamePadSupport: " << onGamePadSupport;
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;

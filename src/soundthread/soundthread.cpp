@@ -435,7 +435,9 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	  audioOutput = 0;
 	}
 	// NOT supported sample rate!
-	emit outputLogMessage(QTB_MSG_NOTSUPPORT_SAMPLE_RATE);
+	if (!settings->getOnSoundCriticalMessageDisable()){
+	  emit outputLogMessage(QTB_MSG_NOTSUPPORT_SAMPLE_RATE);
+	}
 	if (settings->getOutputLog()){
 	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
 	  emit outputLogMessage(PHASE_SOUND, msg);

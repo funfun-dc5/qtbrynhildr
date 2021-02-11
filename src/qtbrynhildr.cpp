@@ -984,7 +984,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // for TEST
 
   // sound device check (output message)
-  if (!hasSoundDevice){
+  if (!hasSoundDevice && !settings->getOnSoundCriticalMessageDisable()){
 	// no sound device
 	logMessage->outputMessage(QTB_MSG_NOT_FOUND_SOUND_DEVICE);
   }

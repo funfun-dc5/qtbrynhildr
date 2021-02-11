@@ -153,6 +153,10 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONPLUGINSDISABLE_DEFAULT	false
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
+// for onSoundCriticalMessageDisable
+#define QTB_ONSOUNDCRITICALMESSAGEDISABLE			"onSoundCriticalMessageDisable"
+#define QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT	false
+
 // for onHoldMouseControl
 #define QTB_ONHOLDMOUSECONTROL			"onHoldMouseControl"
 #define QTB_ONHOLDMOUSECONTROL_DEFAULT	false
@@ -561,6 +565,7 @@ private:
 #if QTB_PLUGINS_DISABLE_SUPPORT
   volatile bool onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  volatile bool onSoundCriticalMessageDisable;
   volatile bool onHoldMouseControl;
 #if QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onExtraButtonSupport;
@@ -1192,6 +1197,19 @@ public:
 	return true;
   }
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+
+  // get sound critical message disable flag
+  bool getOnSoundCriticalMessageDisable() const
+  {
+	return onSoundCriticalMessageDisable;
+  }
+
+  // set sound critical message disable flag
+  bool setOnSoundCriticalMessageDisable(bool onSoundCriticalMessageDisable)
+  {
+	this->onSoundCriticalMessageDisable = onSoundCriticalMessageDisable;
+	return true;
+  }
 
   // get hold mouse control flag
   bool getOnHoldMouseControl() const

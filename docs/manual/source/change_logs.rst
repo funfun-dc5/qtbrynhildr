@@ -11,6 +11,10 @@ Ver.2.3.2 : 2021/02/xx
 
    displayDataCounterType=0とすると非表示となる
 
+2. サウンドに関するクリティカルメッセージを抑止するフラグを追加
+
+   onSoundCriticalMessageDisable=trueで抑止できる
+
 Ver.2.3.1 : 2021/02/07
 ----------------------
 [不具合修正]

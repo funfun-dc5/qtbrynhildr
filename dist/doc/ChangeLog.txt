@@ -6,6 +6,8 @@ Ver.2.3.2 : 2021/02/xx
             [その他変更]
              ・ステータスバーに受信した総データ量を表示できるように変更
                displayDataCounterType=0とすると非表示となる
+             ・サウンドに関するクリティカルメッセージを抑止するフラグを追加
+               onSoundCriticalMessageDisable=trueで抑止できる
 
 Ver.2.3.1 : 2021/02/07
             [不具合修正]

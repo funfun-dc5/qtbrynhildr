@@ -86,6 +86,7 @@ Settings::Settings(const char *iniFileName)
 #if QTB_PLUGINS_DISABLE_SUPPORT
   setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  setOnSoundCriticalMessageDisable(QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT);
   setOnHoldMouseControl(QTB_ONHOLDMOUSECONTROL_DEFAULT);
 #if QTB_EXTRA_BUTTON_SUPPORT
   setOnExtraButtonSupport(QTB_ONEXTRABUTTONSUPPORT_DEFAULT);
@@ -149,6 +150,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
+
+  setDisplayDataCounterType(QTB_DISPLAYDATACOUNTERTYPE_DEFAULT);
 
   setOnFullScreenAtConnected(QTB_ONFULLSCREENATCONNECTED_DEFAULT);
 
@@ -310,6 +313,14 @@ void Settings::readSettings()
   setTaskbarAssistAreaHeight(settings->value(QTB_TASKBARASSISTAREAHEIGHT,
 											 QTB_TASKBARASSISTAREAHEIGHT_DEFAULT).toInt());
 
+  // load onPluginsDisable
+  setOnPluginsDisable(settings->value(QTB_ONPLUGINSDISABLE,
+									  QTB_ONPLUGINSDISABLE_DEFAULT).toBool());
+
+  // load onSoundCriticalMessageDisable
+  setOnSoundCriticalMessageDisable(settings->value(QTB_ONSOUNDCRITICALMESSAGEDISABLE,
+												   QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT).toBool());
+
   // load onHoldMouseControl
   setOnHoldMouseControl(settings->value(QTB_ONHOLDMOUSECONTROL,
 										QTB_ONHOLDMOUSECONTROL_DEFAULT).toBool());
@@ -450,6 +461,10 @@ void Settings::readSettings()
   // load onShowStatusBar
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
 									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
+
+  // load displayDataCounterType
+  setDisplayDataCounterType(settings->value(QTB_DISPLAYDATACOUNTERTYPE,
+											(qint32)QTB_DISPLAYDATACOUNTERTYPE_DEFAULT).toInt());
 
   // load onFullScreenAtConnected
   setOnFullScreenAtConnected(settings->value(QTB_ONFULLSCREENATCONNECTED,
@@ -618,6 +633,12 @@ void Settings::writeSettings()
   // save taskbarAssistAreaHeight
   settings->setValue(QTB_TASKBARASSISTAREAHEIGHT, taskbarAssistAreaHeight);
 
+  // save onPluginsDisable
+  settings->setValue(QTB_ONPLUGINSDISABLE, onPluginsDisable);
+
+  // save onSoundCriticalMessageDisable
+  settings->setValue(QTB_ONSOUNDCRITICALMESSAGEDISABLE, onSoundCriticalMessageDisable);
+
   // save onHoldMouseControl
   settings->setValue(QTB_ONHOLDMOUSECONTROL, onHoldMouseControl);
 
@@ -725,6 +746,9 @@ void Settings::writeSettings()
 
   // save onShowStatusBar
   settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
+
+  // save displayDataCounterType
+  settings->setValue(QTB_DISPLAYDATACOUNTERTYPE, (qint32)displayDataCounterType);
 
   // save onFullScreenAtConnected
   settings->setValue(QTB_ONFULLSCREENATCONNECTED, onFullScreenAtConnected);
@@ -841,6 +865,7 @@ void Settings::printSettings() const
   qDebug() << "Taskbar Assist Area Height: " << taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
+  qDebug() << "SoundCriticalMessageDisable: " << onSoundCriticalMessageDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "GamePadSupport: " << onGamePadSupport;
   qDebug() << "  HoldMouseControl : " << onHoldMouseControl;
@@ -887,6 +912,7 @@ void Settings::printSettings() const
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
+  qDebug() << "DisplayDataCounterType  : " << displayDataCounterType;
   qDebug() << "FullScreenAtConnected   : " << onFullScreenAtConnected;
   qDebug() << "ViewerAtConnected       : " << onViewerAtConnected;
   qDebug() << "HideMenuAndStatusBarAtFullScreen : " << onHideMenuAndStatusBarAtFullScreen;

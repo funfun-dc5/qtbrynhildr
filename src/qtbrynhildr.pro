@@ -132,6 +132,10 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 BUILDARCH = android-$(OBJECTS_DIR)
 ANDROID_ABIS = armeabi-v7a arm64-v8a
 
+# dist files (java code)
+DISTFILES += \
+    $$ANDROID_PACKAGE_SOURCE_DIR/src/org/qtproject/mczxoxo/QtBrynhildr/QTBActivity.java
+
 # dist files
 DISTFILES += \
     $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml \

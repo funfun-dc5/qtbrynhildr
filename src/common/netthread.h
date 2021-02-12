@@ -102,6 +102,9 @@ protected:
   // received data counter
   long receivedDataCounter;
 
+  // total received data counter
+  qint64 totalReceivedDataCounter;
+
   // previous get data rate time
   qint64 previousGetDataRateTime;
 
@@ -125,6 +128,9 @@ public:
 
   // get data rate (bytes/second)
   long getDataRate();
+
+  // get total received data counter
+  qint64 getTotalReceivedDataCounter();
 
 protected:
   // thread body

@@ -2,7 +2,7 @@
  Setup Development Environment for Qt Brynhildr on Cygwin
 ---------------------------------------------------------------------------
 
-1) install Qt5 packages
+1) install Qt5 packages for development
 
  ex.) run setup-x86_x64.exe
 
@@ -14,7 +14,14 @@
 2) run qmake in Cygwin Terminal
 
  $ cd qtbrynhildr/src
- $ ./setup cygwin
+
+ [x64]
+
+ $ ./setup cygwin cygwin-x64
+
+ [x86]
+
+ $ ./setup cygwin cygwin-x86
 
 3) build
 

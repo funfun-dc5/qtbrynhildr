@@ -5,6 +5,7 @@
 #include "common/common.h"
 
 // System Header
+#include <cstddef>
 #include <iostream>
 
 // Local Header
@@ -16,7 +17,6 @@ namespace qtbrynhildr {
 bool checkProtocolHeader(bool outputLog)
 {
   bool result = true;
-  COM_DATA com_data;
 
   // check 1
   if (outputLog){
@@ -69,8 +69,8 @@ bool checkProtocolHeader(bool outputLog)
   // check 3
   if (outputLog)
 	cout << "==== check 3 ====" << endl << flush;
-  int offset;
-  offset = (char*)&(com_data.dummy1[0]) - (char*)&com_data;
+  size_t offset;
+  offset = offsetof(COM_DATA, dummy1);
   if (outputLog)
 	cout << "dummy1 offset = " << offset;
   if (offset == 2){
@@ -82,7 +82,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy2[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy2);
   if (outputLog)
 	cout << "dummy2 offset = " << offset;
   if (offset == 5){
@@ -94,7 +94,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy3[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy3);
   if (outputLog)
 	cout << "dummy3 offset = " << offset;
   if (offset == 61){
@@ -106,7 +106,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy4[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy4);
   if (outputLog)
 	cout << "dummy4 offset = " << offset;
 #if QTB_EXTRA_BUTTON_SUPPORT
@@ -122,7 +122,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy6[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy6);
   if (outputLog)
 	cout << "dummy6 offset = " << offset;
   if (offset == 86){
@@ -134,7 +134,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy16[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy16);
   if (outputLog)
 	cout << "dummy16 offset = " << offset;
   if (offset == 89){
@@ -146,7 +146,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy7[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy7);
   if (outputLog)
 	cout << "dummy7 offset = " << offset;
   if (offset == 93){
@@ -158,7 +158,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy8[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy8);
   if (outputLog)
 	cout << "dummy8 offset = " << offset;
   if (offset == 96){
@@ -170,7 +170,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy9[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy9);
   if (outputLog)
 	cout << "dummy9 offset = " << offset;
   if (offset == 141){
@@ -182,7 +182,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy10[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy10);
   if (outputLog)
 	cout << "dummy10 offset = " << offset;
   if (offset == 145){
@@ -194,7 +194,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy11[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy11);
   if (outputLog)
 	cout << "dummy11 offset = " << offset;
   if (offset == 193){
@@ -206,7 +206,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy17[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy17);
   if (outputLog)
 	cout << "dummy17 offset = " << offset;
   if (offset == 197){
@@ -218,7 +218,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy12[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy12);
   if (outputLog)
 	cout << "dummy12 offset = " << offset;
   if (offset == 224){
@@ -230,7 +230,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy13[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy13);
   if (outputLog)
 	cout << "dummy13 offset = " << offset;
   if (offset == 229){
@@ -242,7 +242,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy14[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy14);
   if (outputLog)
 	cout << "dummy14 offset = " << offset;
   if (offset == 233){
@@ -254,7 +254,7 @@ bool checkProtocolHeader(bool outputLog)
 	  cout << " : ng" << endl;
 	result = false;
   }
-  offset = (char*)&(com_data.dummy15[0]) - (char*)&com_data;
+  offset = offsetof(COM_DATA, dummy15);
   if (outputLog)
 	cout << "dummy15 offset = " << offset;
   if (offset == 237){

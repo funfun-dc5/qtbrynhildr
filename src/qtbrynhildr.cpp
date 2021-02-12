@@ -16,6 +16,7 @@
 #include <QFileDialog>
 #include <QLocale>
 #include <QMenuBar>
+#include <QMimeData>
 #include <QMessageBox>
 #include <QRect>
 #include <QStatusBar>
@@ -26,6 +27,7 @@
 #include "qtbrynhildr.h"
 #include "parameters.h"
 #include "settings.h"
+#include "url.h"
 #include "util/cpuinfo.h"
 #include "version.h"
 
@@ -171,6 +173,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,sendKey4_Action(0)
   ,sendKey5_Action(0)
   ,sendKey6_Action(0)
+  ,sendKey7_Action(0)
   ,onScrollMode_Action(0)
   ,onViewerMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -258,7 +261,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onControl(true)
   ,onGraphics(true)
   ,onSound(true)
+  ,savedFrameRate(0)
   ,keyBuffer(0)
+  ,onControlKey(false)
   ,mouseBuffer(0)
   ,timer(0)
   ,isExecutingToConnect(false)
@@ -270,6 +275,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,initialBenchmarkPhaseCounter(0)
   ,onBenchmarkMenu(false)
 #endif // QTB_BENCHMARK
+  ,hasSoundDevice(false)
   // for DEBUG
   ,outputLog(false)
 {
@@ -478,8 +484,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	QString str = "Supported Sampling Rate (Hz): ";
 	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
 	  str =  str + " " + QString::number((int)(*i));
+	  hasSoundDevice = true;
 	}
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+  }
+  // sound device check
+  if (!hasSoundDevice){
+	// no sound device
+	settings->setOnSound(false);
   }
 
   // set current onControl/onGraphics/onSound
@@ -970,6 +982,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	changeMouseCursor(Qt::ArrowCursor);
   }
 #endif // for TEST
+
+  // sound device check (output message)
+  if (!hasSoundDevice && !settings->getOnSoundCriticalMessageDisable()){
+	// no sound device
+	logMessage->outputMessage(QTB_MSG_NOT_FOUND_SOUND_DEVICE);
+  }
 
   // boot up
   if (option->getBootupFlag()){
@@ -1545,16 +1563,29 @@ void QtBrynhildr::exitApplication()
 // set clipboard
 void QtBrynhildr::setClipboard(QString clipboardString)
 {
-  if (clipboard != 0){
-	//	cout << "setClipboard = " << qPrintable(clipboardString) << endl << flush;
-	clipboard->setText(clipboardString);
-	//	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
+  // check support
+  if (!settings->getOnTransferClipboardSupport()){
+	// Nothing to do
+	return;
   }
-#if 0 // for TEST
-  else {
-	cout << "clipboard is null" << endl << flush;
+
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
   }
-#endif // for TEST
+
+  // check clipboard
+  if (clipboard == 0){
+	// Nothing to do
+	return;
+  }
+
+  //	cout << "setClipboard = " << qPrintable(clipboardString) << endl << flush;
+  // set clipboard
+  clipboard->setText(clipboardString);
+  //	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
 }
 
 // set progress bar value for transfer file
@@ -1603,6 +1634,7 @@ void QtBrynhildr::createActions()
   connectToServer_Action = new QAction(tr("Connect"), this);
   connectToServer_Action->setStatusTip(tr("Connec to Brynhildr Server"));
   //  connectToServer_Action->setShortcut(tr("Ctrl+C"));
+  connectToServer_Action->setEnabled(true);
   connect(connectToServer_Action, SIGNAL(triggered()), this, SLOT(popUpConnectToServer()));
 
   // disconnect to server
@@ -2014,6 +2046,11 @@ void QtBrynhildr::createActions()
   onSound_Action->setChecked(settings->getOnSound());
   onSound_Action->setStatusTip(tr("Sound ON/OFF"));
   connect(onSound_Action, SIGNAL(triggered()), this, SLOT(toggleOnSound()));
+  // sound device check
+  if (!hasSoundDevice){
+	// no sound device
+	onSound_Action->setEnabled(false);
+  }
 
   // select public mode version Action
   selectPublicModeVersion5_Action = new QAction(tr("MODE 5"), this);
@@ -2108,6 +2145,13 @@ void QtBrynhildr::createActions()
   sendKey6_Action->setEnabled(false);
   sendKey6_Action->setStatusTip(tr("Send key: Alt + PrintScreen"));
   connect(sendKey6_Action, SIGNAL(triggered()), this, SLOT(sendKey_ALT_PrintScreen()));
+
+  sendKey7_Action = new QAction(tr("Ctrl (ON/OFF)"), this);
+  sendKey7_Action->setEnabled(false);
+  sendKey7_Action->setStatusTip(tr("Send key: Ctrl (ON/OFF)"));
+  connect(sendKey7_Action, SIGNAL(triggered()), this, SLOT(sendKey_CTRL_Toggle()));
+  sendKey7_Action->setCheckable(true);
+  sendKey7_Action->setChecked(getOnControlKey());
 
   // on Scroll Mode Action
   if (QTB_SCROLL_MODE){
@@ -2423,6 +2467,7 @@ void QtBrynhildr::createMenus()
 
   // sound menu
   soundMenu = menuBar()->addMenu(tr("Sound"));
+  soundMenu->setEnabled(settings->getOnSound());
   soundMenu->addAction(soundQuality_MINIMUM_Action);
   soundMenu->addAction(soundQuality_LOW_Action);
   soundMenu->addAction(soundQuality_STANDARD_Action);
@@ -2449,6 +2494,9 @@ void QtBrynhildr::createMenus()
   sendKeySubMenu->addAction(sendKey4_Action);
   sendKeySubMenu->addAction(sendKey5_Action);
   sendKeySubMenu->addAction(sendKey6_Action);
+  if (settings->getOnSendControlKeyState()){
+	sendKeySubMenu->addAction(sendKey7_Action);
+  }
 
 #if defined(QTB_DEV_DESKTOP)
   // for select monitor
@@ -2535,12 +2583,12 @@ void QtBrynhildr::createMenus()
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-  if (QTB_SCROLL_MODE){
-	optionMenu->addAction(onScrollMode_Action);
-  }
-
   if (QTB_VIEWER_MODE){
 	optionMenu->addAction(onViewerMode_Action);
+  }
+
+  if (QTB_SCROLL_MODE){
+	optionMenu->addAction(onScrollMode_Action);
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -2690,8 +2738,8 @@ void QtBrynhildr::updateConnected()
 		  arg(settings->getDesktopWidth(), 3).
 		  arg(settings->getDesktopHeight(), 3).
 		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
-		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
-		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3).
+		  arg(GraphicsThread::calcWidthForMode7(settings->getDesktopWidth()*settings->getDesktopScalingFactor()), 3).
+		  arg(GraphicsThread::calcHeightForMode7(settings->getDesktopHeight()*settings->getDesktopScalingFactor()), 3).
 		  arg(calcRate, 4, 'f', 2, ' ').
 		  arg(settings->getSIMDOperationTypeName());
 	  }
@@ -2701,8 +2749,8 @@ void QtBrynhildr::updateConnected()
 		  arg(settings->getDesktopWidth(), 3).
 		  arg(settings->getDesktopHeight(), 3).
 		  arg(settings->getDesktopScalingFactor(), 2, 'f', 4, ' ').
-		  arg(settings->getDesktopWidth()*settings->getDesktopScalingFactor(), 3).
-		  arg(settings->getDesktopHeight()*settings->getDesktopScalingFactor(), 3);
+		  arg(GraphicsThread::calcWidth(settings->getDesktopWidth()*settings->getDesktopScalingFactor()), 3).
+		  arg(GraphicsThread::calcHeight(settings->getDesktopHeight()*settings->getDesktopScalingFactor()), 3);
 	  }
 	  // sample rate (sound)
 	  str += QString(" : Sound %1 Hz").arg(soundThread->getSampleRate());
@@ -2779,6 +2827,48 @@ void QtBrynhildr::updateFrameRate()
 	QString str = QString(tr("Frame Rate : ")+"%1  [%2 Mbps] ").
 	  arg(currentFrameRate, 3).
 	  arg(currentDataRate, 4, 'f', 1, ' ');
+	// total data counter
+	if (settings->getDisplayDataCounterType() != QTB_DISPLAYDATACOUNTERTYPE_NONE){
+	  qreal trd = 0.0;
+	  if (controlThread != 0){
+		switch(settings->getDisplayDataCounterType()){
+		case QTB_DISPLAYDATACOUNTERTYPE_TOTAL:
+		  trd += controlThread->getTotalReceivedDataCounter();
+		  trd += graphicsThread->getTotalReceivedDataCounter();
+		  trd += soundThread->getTotalReceivedDataCounter();
+		  break;
+		case QTB_DISPLAYDATACOUNTERTYPE_CONTROL:
+		  trd += controlThread->getTotalReceivedDataCounter();
+		  break;
+		case QTB_DISPLAYDATACOUNTERTYPE_GRAPHICS:
+		  trd += graphicsThread->getTotalReceivedDataCounter();
+		  break;
+		case QTB_DISPLAYDATACOUNTERTYPE_SOUND:
+		  trd += soundThread->getTotalReceivedDataCounter();
+		  break;
+		default:
+		  // internal error
+		  // Nothing to do
+		  break;
+		}
+
+		trd /= (1024*1024); // MB
+	  }
+	  if (trd > 1024*1024){
+		// display by TB
+		trd /= (1024*1024);
+		str += QString(" (%1 TB) ").arg(trd, 4, 'f', 2, ' ');
+	  }
+	  else if (trd > 1024){
+		// display by GB
+		trd /= 1024;
+		str += QString(" (%1 GB) ").arg(trd, 4, 'f', 2, ' ');
+	  }
+	  else {
+		// display by MB
+		str += QString(" (%1 MB) ").arg(trd, 4, 'f', 2, ' ');
+	  }
+	}
 	frameRateLabel->setText(str);
   }
   else {
@@ -2825,6 +2915,8 @@ void QtBrynhildr::connected()
     sendKey5_Action->setEnabled(true);
   if (sendKey6_Action != 0)
     sendKey6_Action->setEnabled(true);
+  if (sendKey7_Action != 0)
+    sendKey7_Action->setEnabled(true);
 
   // enabled scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
@@ -2933,8 +3025,16 @@ void QtBrynhildr::connected()
   isExecutingToConnect = false;
   updateConnected();
 
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(true);
+  // enable disconnect to server menu
+  disconnectToServer_Action->setEnabled(true);
+
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(false);
+
+  // reset control key status
+  onControlKey = false;
 }
 
 // disconnected
@@ -2965,6 +3065,8 @@ void QtBrynhildr::disconnected()
     sendKey5_Action->setEnabled(false);
   if (sendKey6_Action != 0)
     sendKey6_Action->setEnabled(false);
+  if (sendKey7_Action != 0)
+    sendKey7_Action->setEnabled(false);
 
   // disabled scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
@@ -3052,8 +3154,16 @@ void QtBrynhildr::disconnected()
   isExecutingToConnect = false;
   updateConnected();
 
+  // enable connect to server menu
+  connectToServer_Action->setEnabled(true);
+  // disable disconnect to server menu
+  disconnectToServer_Action->setEnabled(false);
+
   // disable initialize settings menu
   initializeSettings_Action->setEnabled(true);
+
+  // reset control key status
+  onControlKey = false;
 }
 
 // set desktop scaling factor
@@ -3156,13 +3266,13 @@ void QtBrynhildr::hideEvent(QHideEvent *event)
   if (settings->getConnected()){
 	//	cout << "hideEvent()" << endl << flush;
 
-	// save onControl/onGraphics/onSound
-	onControl = settings->getOnControl();
-	onGraphics = settings->getOnGraphics();
-	onSound = settings->getOnSound();
-	// onControl/onGraphics to OFF
-	settings->setOnControl(false);
-	settings->setOnGraphics(false);
+	// set frame rate to 1
+	if (savedFrameRate == 0){
+	  // save current frame rate
+	  savedFrameRate = settings->getFrameRate();
+	  // set temporary frame rate
+	  settings->setFrameRate(1);
+	}
   }
 }
 
@@ -3174,10 +3284,13 @@ void QtBrynhildr::showEvent(QShowEvent *event)
   if (settings->getConnected()){
 	//	cout << "showEvent()" << endl << flush;
 
-	// restore onControl/onGraphics/onSound
-	settings->setOnControl(onControl);
-	settings->setOnGraphics(onGraphics);
-	settings->setOnSound(onSound);
+	// restore frame rate
+	if (savedFrameRate != 0){
+	  // set temporary frame rate
+	  settings->setFrameRate(savedFrameRate);
+	  // reset saved frame rate
+	  savedFrameRate = 0;
+	}
   }
 }
 
@@ -3274,10 +3387,10 @@ void QtBrynhildr::about()
 					 " powered by MCZ."
 					 "<br><br>"
 					 "blog : " QTB_BLOG
-#if QTB_HELP
+#if QTB_MANUAL_PAGE
 					 "<br><br>"
-					 "help : " QTB_HELP_PAGE
-#endif // QTB_HELP
+					 "manual : " QTB_MANUAL
+#endif // QTB_MANUAL_PAGE
 					 );
 }
 
@@ -3321,6 +3434,11 @@ void QtBrynhildr::connectToServer()
   disconnectToServer();
   // wait for reconnect to server
   QThread::sleep(1);
+
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
 
   // clear desktop
   desktopPanel->clearDesktop();
@@ -3441,9 +3559,6 @@ void QtBrynhildr::connectToServer()
   isExecutingToConnect = true;
   updateConnected();
 
-  // enabled disconnect to server
-  disconnectToServer_Action->setEnabled(true);
-
 #if defined(QTB_DEV_TOUCHPANEL)
   // save settings
   settings->writeSettings();
@@ -3456,6 +3571,11 @@ void QtBrynhildr::reconnectToServer()
   if (!settings->getConnected()){
 	return;
   }
+
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(true);
 
   // clear buffer for control
   keyBuffer->clear();
@@ -3484,6 +3604,12 @@ void QtBrynhildr::reconnectToServer()
 // disconnect to server
 void QtBrynhildr::disconnectToServer()
 {
+  // check control key state
+  if (getOnControlKey()){
+	// release control key
+	sendKey_CTRL_Toggle();
+  }
+
 #if QTB_RECORDER
   // stop record and replay
   if (settings->getOnReplayingControl()){
@@ -3493,6 +3619,11 @@ void QtBrynhildr::disconnectToServer()
 	recorder->stopRecording(settings->getRecordingControlFileName());
   }
 #endif // QTB_RECORDER
+
+  // disable connect to server menu
+  connectToServer_Action->setEnabled(false);
+  // disabled disconnect to server
+  disconnectToServer_Action->setEnabled(false);
 
   // exit all threads
   controlThread->exitThread();
@@ -3602,11 +3733,65 @@ void QtBrynhildr::exit()
 // send clipboard
 void QtBrynhildr::sendClipboard()
 {
-  QString text = clipboard->text();
+  // check support
+  if (!settings->getOnTransferClipboardSupport()){
+	// Nothing to do
+	return;
+  }
 
-  // send clipboard flag ON
-  settings->setSendClipboardString(text);
-  settings->setOnSendClipboard(true);
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
+  }
+
+  // check clipboard
+  if (clipboard == 0){
+	// Nothing to do
+	return;
+  }
+
+  // get mime data
+  const QMimeData *mimeData = clipboard->mimeData();
+
+  if (mimeData->hasImage()){
+	//qDebug() << "clipboard has a image!";
+	//qDebug() << "MIME : " << mimeData->text();
+  }
+  else if (mimeData->hasColor()){
+	//qDebug() << "clipboard has a color!";
+	//qDebug() << "MIME : " << mimeData->text();
+  }
+  else if (mimeData->hasUrls()){
+	//qDebug() << "clipboard has a urls!";
+	//qDebug() << "MIME : " << mimeData->text();
+  }
+  else if (mimeData->hasText()){
+	const QString text = clipboard->text();
+	//qDebug() << "clipboard has a text! : " << text;
+	//qDebug() << "MIME : " << mimeData->text();
+
+	// send clipboard flag ON
+	if (!settings->getOnSendClipboard()){
+	  settings->setSendClipboardString(text);
+	  settings->setOnSendClipboard(true);
+	}
+  }
+  else if (mimeData->hasHtml()){
+	const QString text = clipboard->text();
+	//qDebug() << "clipboard has a html! : " << text;
+	//qDebug() << "MIME : " << mimeData->text();
+
+	// send clipboard flag ON
+	if (!settings->getOnSendClipboard()){
+	  settings->setSendClipboardString(text);
+	  settings->setOnSendClipboard(true);
+	}
+  }
+  else {
+	qDebug() << "clipboard has unknown data!";
+  }
 }
 
 // send file
@@ -4366,6 +4551,23 @@ void QtBrynhildr::sendKey_ALT_PrintScreen()
   }
 }
 
+// send key for CTRL ON/OFF
+void QtBrynhildr::sendKey_CTRL_Toggle()
+{
+  if (settings->getConnected() &&
+	  settings->getOnControl()){
+	if (!getOnControlKey()){
+	  // press
+	  keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYDOWN); // CTRL key press
+	}
+	else {
+	  // release
+	  keyBuffer->put(VK_CONTROL, KEYCODE_FLG_KEYUP); // CTRL key release
+	}
+	setOnControlKey(!getOnControlKey());
+  }
+}
+
 // toggle show menu bar
 void QtBrynhildr::toggleShowMenuBar()
 {
@@ -4550,8 +4752,14 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	  setMinimumSize(size());
 	  // diable scroll bar
 #if !QTB_TOUCHPANEL_WINDOW
-	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  if (settings->getOnScrollMode()){
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	  }
+	  else {
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	  }
 #endif // !QTB_TOUCHPANEL_WINDOW
 	  // disable maximum button
 #if defined(Q_OS_WIN)

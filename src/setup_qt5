@@ -60,6 +60,9 @@ case $UNAME in
 				echo "$0 : Not Support $UNAMEM"
 				return;;
 			esac
+			# Qt5.12 - 5.15
+#			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${MINGWVERSION}_32"
+#			MINGWROOT="/opt/Qt${QTVERSION}/Tools/${MINGWVERSION}0_32"
 			# Qt5.9 - 5.11
 #			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
 #			MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw530_32"
@@ -70,7 +73,7 @@ case $UNAME in
 			# MinGW
 			PATHLIST=${MINGWROOT}/bin
 			# Coverity Scan
-			PATHLIST=/opt/cov-analysis-win64-2019.03/bin:${PATHLIST}
+			PATHLIST=/opt/cov-analysis-win64-2020.09/bin:${PATHLIST}
 		fi
 	;;
 	Linux)
@@ -78,7 +81,7 @@ case $UNAME in
 			x86_64)
 				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/gcc_64
 				# Coverity Scan
-				PATHLIST=/opt/cov-analysis-linux64-2019.03/bin:${PATHLIST}
+				PATHLIST=/opt/cov-analysis-linux64-2020.09/bin:${PATHLIST}
 				;;
 			i686)
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
@@ -112,7 +115,7 @@ case $UNAME in
 			x86_64)
 				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/clang_64
 				# Coverity Scan
-				PATHLIST=/opt/cov-analysis-macosx-2019.03/bin:${PATHLIST}
+				PATHLIST=/opt/cov-analysis-macosx-2020.09/bin:${PATHLIST}
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

@@ -50,7 +50,7 @@
 
 [Android版]
 
- Android 4.4以降 (*4)
+ Android 5.0以降 (*4)
 
 [iOS版]
 
@@ -68,8 +68,6 @@
       ビルドする必要があります。
 
  (*4) 全てのデバイスで試したわけではありません。Qt5のサポートする環境に依存します。
-      Qt5.12 LTSでビルドする必要があります。Qt5.14.2以降ではAndroid 5.0以降が
-      対象となります。
 
 ==============================
  [テスト中の環境]
@@ -270,6 +268,8 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 [1点ドラッグ(全画面時)] マウスカーソル移動
 
 [1点ドラッグ(拡大時)] 表示領域スクロール
+
+[2点タップ] マウス右ボタン・クリック
 
 [3点タップ] Windowsキーの送出
 
@@ -585,6 +585,8 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 
          (5) Alt キー + PrintScreen キー
 
+         (6) Ctrl (ON/OFF) キー
+
      [2] モニタ選択
 
          マルチモニタを利用している場合に操作対象とするモニタを変更します。
@@ -653,16 +655,20 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
          解除すると通常のモードに戻ります。
          この時左ボタンドラッグで観たいエリアを指定できます。右ボタンクリックで元の状態に戻ります。
 
-     [3] キーボードログ出力
+     [3] スクロールモード
+
+         ウィンドウサイズを固定とした場合にスクロールバー表示のON/OFFを変更します。
+
+     [4] キーボードログ出力
 
          キーボードログ出力のON/OFFを変更します。
 
-     [4] デバッグログ出力
+     [5] デバッグログ出力
 
          デバッグログ出力のON/OFFを変更します。デバッグ用の機能で将来残るかは
          未定です。
 
-     [5] テスト中の機能
+     [6] テスト中の機能
 
          テスト中の機能がない場合メニュー自体存在しない場合があります。
 
@@ -781,9 +787,12 @@ onControl=true
 onTaskbarAssist=true
 taskbarAssistAreaWidth=10
 taskbarAssistAreaHeight=10
+onPluginsDisable=false
+onSoundCriticalMessageDisable=false
 onHoldMouseControl=false
 onExtraButtonSupport=true
 onControlOffWithGraphicsOff=true
+onSendControlKeyState=false
 onGraphics=true
 videoQuality=5
 onGamePadSupport=true
@@ -813,6 +822,7 @@ onDesktopAutoresize=true
 onFrameLessWindow=false
 onShowMenuBar=true
 onShowStatusBar=true
+displayDataCounterType=1
 onFullScreenAtConnected=false
 onViewerAtConnected=false
 onHideMenuAndStatusBarAtFullScreen=true
@@ -964,20 +974,25 @@ Windows版ではランタイムライブラリパッケージが必要な場合�
 
  に変更すれば改善されるかもしれません。
 
- (2) 「サーバとの接続に失敗しました！(Failed to connect server!)」
+ (2) 「サウンドデバイスが見つかりません!(Not found sound device!)」
+
+ サウンドを再生するためのデバイスが見つかりません。
+ サウンド再生が正しくできることを確認してください。サウンド再生は強制的にOFFとなります。
+
+ (3) 「サーバとの接続に失敗しました！(Failed to connect server!)」
 
  サーバに接続できませんでした。
  サーバ名もしくはIPアドレスが間違えているかもしれません。
 
- (3) 「パスワードが違います！(Password Error!)」
+ (4) 「パスワードが違います！(Password Error!)」
 
  パスワードが間違えているかもしれません。
 
- (4) 「すでに他のクライアントが接続しています！(Already connected another client!)」
+ (5) 「すでに他のクライアントが接続しています！(Already connected another client!)」
 
  すでにサーバに他のクライアントが接続しているかもしれません。
 
- (5) 「パブリックモードでサポートしていないビデオコーデックです!(Not support Video Codec!)」
+ (6) 「パブリックモードでサポートしていないビデオコーデックです!(Not support Video Codec!)」
 
  パブリックモードでサポートしていないビデオコーデックがサーバで指定されています。(*)
 
@@ -1041,9 +1056,16 @@ Windows版ではランタイムライブラリパッケージが必要な場合�
 
      Control+クリックは副ボタンに割り当てられるためです。
 
+     「コントロール」メニュー -> 「キーを送信」 -> 「Ctrl (ON/OFF)」を利用して
+     コントロールキーの押下状態を実現できます。
+
  (3) 「フルスクリーンにする」、「検索」メニュー項目が存在します。
 
      システムが標準で用意している同名の項目が有効になっているためです。
+
+ (4) スクロールモードが有効になりません。
+
+     調査中です。
 
 ----------------------------------------------------------------------
 9. 不具合の報告について

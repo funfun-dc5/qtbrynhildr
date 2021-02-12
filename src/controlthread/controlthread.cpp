@@ -517,12 +517,7 @@ void ControlThread::initHeaderForGraphics()
   com_data->video_quality	= settings->getVideoQuality();
   // max fps
   if (onMaxfps){
-	if (settings->getOnGraphics()){
-	  com_data->max_fps		= (char)settings->getFrameRate();
-	}
-	else {
-	  com_data->max_fps		= (char)1;
-	}
+	com_data->max_fps		= (char)settings->getFrameRate();
   }
   // frame_no
   com_data->frame_no = (char)frameNoOfClient;

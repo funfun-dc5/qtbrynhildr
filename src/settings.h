@@ -153,6 +153,10 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONPLUGINSDISABLE_DEFAULT	false
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
+// for onSoundCriticalMessageDisable
+#define QTB_ONSOUNDCRITICALMESSAGEDISABLE			"onSoundCriticalMessageDisable"
+#define QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT	false
+
 // for onHoldMouseControl
 #define QTB_ONHOLDMOUSECONTROL			"onHoldMouseControl"
 #define QTB_ONHOLDMOUSECONTROL_DEFAULT	false
@@ -166,6 +170,14 @@ typedef int KEYBOARD_TYPE;
 // for onControlOffWithGraphicsOff
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF			"onControlOffWithGraphicsOff"
 #define QTB_ONCONTROLOFFWITHGRAPHICSOFF_DEFAULT	true
+
+// for onSendControlKeyState
+#define QTB_ONSENDCONTROLKEYSTATE "onSendControlKeyState"
+#if defined(Q_OS_OSX)
+#define QTB_ONSENDCONTROLKEYSTATE_DEFAULT true
+#else // defined(Q_OS_OSX)
+#define QTB_ONSENDCONTROLKEYSTATE_DEFAULT false
+#endif // defined(Q_OS_OSX)
 
 // for onGraphics
 #define QTB_ONGRAPHICS			"onGraphics"
@@ -330,6 +342,16 @@ typedef enum {
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
 #define QTB_ONSHOWSTATUSBAR_DEFAULT			true
 
+// for displayDataCounterType
+#define QTB_DISPLAYDATACOUNTERTYPE			"displayDataCounterType"
+#define QTB_DISPLAYDATACOUNTERTYPE_NONE		0
+#define QTB_DISPLAYDATACOUNTERTYPE_TOTAL	1
+#define QTB_DISPLAYDATACOUNTERTYPE_CONTROL	2
+#define QTB_DISPLAYDATACOUNTERTYPE_GRAPHICS	3
+#define QTB_DISPLAYDATACOUNTERTYPE_SOUND	4
+#define QTB_DISPLAYDATACOUNTERTYPE_NUM		5
+#define QTB_DISPLAYDATACOUNTERTYPE_DEFAULT	QTB_DISPLAYDATACOUNTERTYPE_TOTAL
+
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -418,7 +440,7 @@ typedef enum {
 #define QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE	0
 #define QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR	1
 #define QTB_TOUCHPANELOPERATIONTYPE_NUM			2
-#define QTB_TOUCHPANELOPERATIONTYPE_DEFAULT		QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE
+#define QTB_TOUCHPANELOPERATIONTYPE_DEFAULT		QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR
 
 // for touchpanelInterfaceType
 #define QTB_TOUCHPANELINTERFACETYPE				"touchpanelInterfaceType"
@@ -543,11 +565,14 @@ private:
 #if QTB_PLUGINS_DISABLE_SUPPORT
   volatile bool onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  volatile bool onSoundCriticalMessageDisable;
   volatile bool onHoldMouseControl;
 #if QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onExtraButtonSupport;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
   volatile bool onControlOffWithGraphicsOff;
+  // send control key state
+  volatile bool onSendControlKeyState;
   // send clipboard
   volatile bool onSendClipboard;
   // send clipboard string
@@ -659,6 +684,9 @@ private:
 
   // show status bar
   volatile bool onShowStatusBar;
+
+  // display data counter type
+  volatile int displayDataCounterType;
 
   // full screen
   volatile bool onFullScreenAtConnected;
@@ -1170,6 +1198,19 @@ public:
   }
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
+  // get sound critical message disable flag
+  bool getOnSoundCriticalMessageDisable() const
+  {
+	return onSoundCriticalMessageDisable;
+  }
+
+  // set sound critical message disable flag
+  bool setOnSoundCriticalMessageDisable(bool onSoundCriticalMessageDisable)
+  {
+	this->onSoundCriticalMessageDisable = onSoundCriticalMessageDisable;
+	return true;
+  }
+
   // get hold mouse control flag
   bool getOnHoldMouseControl() const
   {
@@ -1209,6 +1250,18 @@ public:
   {
 	this->onControlOffWithGraphicsOff = onControlOffWithGraphicsOff;
 	return true;
+  }
+
+  // get send control key state flag
+  bool getOnSendControlKeyState()
+  {
+	return onSendControlKeyState;
+  }
+
+  // set send control key state flag
+  void setOnSendControlKeyState(bool onSendControlKeyState)
+  {
+	this->onSendControlKeyState = onSendControlKeyState;
   }
 
   // get send clipboard flag
@@ -1905,6 +1958,21 @@ public:
   void setOnShowStatusBar(bool onShowStatusBar)
   {
 	this->onShowStatusBar = onShowStatusBar;
+  }
+
+  // get display data counter type
+  int getDisplayDataCounterType()
+  {
+	return displayDataCounterType;
+  }
+
+  // set display data counter type
+  void setDisplayDataCounterType(int displayDataCounterType)
+  {
+	if (displayDataCounterType >= QTB_DISPLAYDATACOUNTERTYPE_NONE &&
+		displayDataCounterType < QTB_DISPLAYDATACOUNTERTYPE_NUM){
+	  this->displayDataCounterType = displayDataCounterType;
+	}
   }
 
   // get full screen at connected flag

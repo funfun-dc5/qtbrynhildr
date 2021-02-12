@@ -268,6 +268,9 @@ case $UNAME in
 			mkdir -p ${DISTDIR}/bin/platforms
 			mkdir -p ${DISTDIR}/bin/imageformats
 			mkdir -p ${DISTDIR}/bin/audio
+			if [ -d ${QTROOT}/plugins/styles ] ; then
+				mkdir -p ${DISTDIR}/bin/styles
+			fi
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Core.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Gui.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
@@ -289,6 +292,9 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
+			if [ -d ${QTROOT}/plugins/styles ] ; then
+				${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/styles/qwindowsvistastyle.dll ${DISTDIR}/bin/styles
+			fi
 			# copy openssl dll
 			# OpenSSL 1.0.2x
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
@@ -474,8 +480,6 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/libqwbmp.so ${DISTDIR}/bin/imageformats
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtmedia_pulse.so ${DISTDIR}/bin/audio
 			#		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtaudio_alsa.so ${DISTDIR}/plugins/audio
-			# std c++ library
-			${INSTALL} ${INSTALLDLLFLAGS} /usr/lib/${UNAMEM}-linux-gnu/libstdc++.so.6 ${DISTDIR}/bin
 			# copy boot script file
 			echo "copy boot script file..."
 			${INSTALL} -m755 "../dist/script/${APP}.sh" ${DISTDIR}/bin

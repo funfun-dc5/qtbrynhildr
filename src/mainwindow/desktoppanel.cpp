@@ -649,6 +649,12 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	  }
 	}
 
+	// check control key status
+	if (key == Qt::Key_Control){
+	  // press control key
+	  qtbrynhildr->setOnControlKey(true);
+	}
+
 	// insert into KeyBuffer
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
 	// output Keyboard Log
@@ -754,6 +760,12 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 	  }
 	}
 
+	// check control key status
+	if (key == Qt::Key_Control){
+	  // release control key
+	  qtbrynhildr->setOnControlKey(false);
+	}
+
 	// set previous KEYCODE_FLG
 	previous_KEYCODE_FLG = KEYCODE_FLG_KEYUP;
   }
@@ -766,10 +778,19 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 // drag enter event
 void DesktopPanel::dragEnterEvent(QDragEnterEvent *event)
 {
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
+  }
+
+  // check support
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
 	return;
   }
+
   if (event->mimeData()->hasFormat("text/uri-list")){
 	event->acceptProposedAction();
   }
@@ -778,6 +799,14 @@ void DesktopPanel::dragEnterEvent(QDragEnterEvent *event)
 // drop event
 void DesktopPanel::dropEvent(QDropEvent *event)
 {
+  // check connected
+  if (!settings->getConnected() ||
+	  !settings->getOnControl()){
+	// Nothing to do
+	return;
+  }
+
+  // check support
   if (!settings->getOnTransferFileSupport() ||
 	  !settings->getOnTransferFileSupportByDragAndDrop()){
 	return;

@@ -4,7 +4,7 @@
 
 1) install Qt5 and MSVC2015
 
- http://download.qt.io/archive/qt/5.9/5.9.0/qt-opensource-windows-x86-5.9.0.exe
+ https://download.qt.io/archive/qt/5.9/5.9.0/qt-opensource-windows-x86-5.9.0.exe
 
 2) run command prompt for Qt5
 
@@ -26,7 +26,3 @@ vcvarsall.bat amd64
 4) make
 
  nmake
-
-(*) src/keylayout/main.c
-
- Rename main.c to main.c.bak for building QtBrynhildr.

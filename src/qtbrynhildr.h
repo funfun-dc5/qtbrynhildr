@@ -367,6 +367,7 @@ private:
   QAction *sendKey4_Action;
   QAction *sendKey5_Action;
   QAction *sendKey6_Action;
+  QAction *sendKey7_Action;
 
   // toggle scroll mode
   QAction *onScrollMode_Action;
@@ -564,8 +565,14 @@ private:
   bool onGraphics;
   bool onSound;
 
+  // saved frame rate
+  int savedFrameRate;
+
   // key buffer
   KeyBuffer *keyBuffer;
+
+  // control key status
+  bool onControlKey;
 
   // mouse buffer
   MouseBuffer *mouseBuffer;
@@ -595,6 +602,9 @@ private:
   // display benchmark menu
   bool onBenchmarkMenu;
 #endif // QTB_BENCHMARK
+
+  // sound device
+  bool hasSoundDevice;
 
   // output log flag
   bool outputLog;
@@ -662,6 +672,21 @@ public:
   // get software button check area
   QRect getSoftwareButtonCheckArea();
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+
+  // get control key status
+  bool getOnControlKey()
+  {
+	return onControlKey;
+  }
+
+  // set control key status
+  void setOnControlKey(bool onControlKey)
+  {
+	this->onControlKey = onControlKey;
+	if (sendKey7_Action != 0){
+	  sendKey7_Action->setChecked(onControlKey);
+	}
+  }
 
 public slots:
   // connect to server
@@ -846,6 +871,7 @@ private slots:
   void sendKey_WINDOWS(); // WINDOWS
   void sendKey_PrintScreen(); // PrintScreen
   void sendKey_ALT_PrintScreen(); // ALT + PrintScreen
+  void sendKey_CTRL_Toggle(); // Control ON/OFF
 
   // toggle show menu bar
   void toggleShowMenuBar();

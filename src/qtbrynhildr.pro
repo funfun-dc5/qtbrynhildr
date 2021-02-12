@@ -127,17 +127,14 @@ HEADERS += util/android-ndk/cpu-features.h
 SOURCES += util/android-ndk/cpu-features.c
 
 # for Android APK
-# for Qt 5.14-
+# for Qt 5.14- (for Android5.0)
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 BUILDARCH = android-$(OBJECTS_DIR)
 ANDROID_ABIS = armeabi-v7a arm64-v8a
-# for Qt 5.12
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android512
-# 32bit
-#BUILDARCH = android-armeabi-v7a
-#QMAKE_CXXFLAGS += -mfpu=neon
-# 64bit
-#BUILDARCH = android-arm64-v8a
+
+# dist files (java code)
+DISTFILES += \
+    $$ANDROID_PACKAGE_SOURCE_DIR/src/org/qtproject/mczxoxo/QtBrynhildr/QTBActivity.java
 
 # dist files
 DISTFILES += \
@@ -321,7 +318,7 @@ DEFINES += QTB_UPDATECHECK=0
 }
 
 # input files
-HEADERS += version.h config.h parameters.h
+HEADERS += version.h url.h config.h parameters.h
 HEADERS += common/common.h common/util.h common/protocols.h
 HEADERS += machine/protocols_x86.h machine/protocols_x64.h machine/protocols_common.h
 

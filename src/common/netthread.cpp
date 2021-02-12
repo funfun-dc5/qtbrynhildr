@@ -32,6 +32,7 @@ NetThread::NetThread(const char *name, Settings *settings)
   ,threadSleepTime(QTB_THREAD_SLEEP_TIME)
   ,runThread(true)
   ,receivedDataCounter(0)
+  ,totalReceivedDataCounter(0)
   ,previousGetDataRateTime(0)
   ,startTime(0)
   // for DEBUG
@@ -70,8 +71,15 @@ long NetThread::getDataRate()
 	}
   }
   previousGetDataRateTime = currentTime;
+  totalReceivedDataCounter += receivedDataCounter;
   receivedDataCounter = 0;
   return bps;
+}
+
+// get total received data counter
+qint64 NetThread::getTotalReceivedDataCounter()
+{
+  return totalReceivedDataCounter;
 }
 
 //---------------------------------------------------------------------------
@@ -230,6 +238,7 @@ void NetThread::connectedToServer()
 {
   // reset counter
   receivedDataCounter = 0;
+  totalReceivedDataCounter = 0;
 
   // reset previous get data rate time
   previousGetDataRateTime = 0;
@@ -413,12 +422,14 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
   char key[ENCRYPTION_KEY_LENGTH + 1] = {"@@@@@@@@@@@@@@@@"};
 
   // copy encryption key
-  const char *encryption_key = qPrintable(settings->getPassword());
-  for (int i = 0;i < ENCRYPTION_KEY_LENGTH; i++){
-	if (encryption_key[i] == '\0')
-	  break;
+  if (!settings->getPassword().isEmpty()){
+	const char *encryption_key = qPrintable(settings->getPassword());
+	for (int i = 0;i < ENCRYPTION_KEY_LENGTH; i++){
+	  if (encryption_key[i] == '\0')
+		break;
 
-	key[i] = encryption_key[i];
+	  key[i] = encryption_key[i];
+	}
   }
 
   COM_DATA *com_data = (COM_DATA*)buf;

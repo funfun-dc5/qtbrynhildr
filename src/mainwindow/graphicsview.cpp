@@ -158,6 +158,9 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
 	  }
 
+	  // flags
+	  static TOP_TYPE topType = TOP_TYPE_UNKNOWN;
+
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
 	  int touchPointCount = touchPoints.count();
 	  if (touchPointCount == 1){ // 1 finger
@@ -187,6 +190,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			if (outputLog){
 			  qDebug() << "GV: 1 Pressed!";
 			}
+			topType = TOP_TYPE_1POINT;
 			if (softwareButtonRect.contains(touchPoint.pos().toPoint())){
 			  if (outputLog){
 				qDebug() << "GV: into software button open area";
@@ -232,7 +236,10 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			if (outputLog){
 			  qDebug() << "GV: 1 Released!";
 			}
-			if (inCheckingButtonOpen || inCheckingKeyboardOpen){
+			if (topType != TOP_TYPE_1POINT){
+			  // Nothing to do
+			}
+			else if (inCheckingButtonOpen || inCheckingKeyboardOpen){
 			  // display software panel check
 			  QPoint currentPos = touchPoint.pos().toPoint();
 			  if (inCheckingButtonOpen &&
@@ -354,6 +361,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			if (outputLog){
 			  qDebug() << "GV: 1 Pressed!";
 			}
+			topType = TOP_TYPE_1POINT;
 			// check for software keyboard/button
 			if (softwareButtonRect.contains(currentPos)){
 			  if (outputLog){
@@ -372,7 +380,10 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			if (outputLog){
 			  qDebug() << "GV: 1 Released!";
 			}
-			if (inCheckingButtonOpen || inCheckingKeyboardOpen){
+			if (topType != TOP_TYPE_1POINT){
+			  // Nothing to do
+			}
+			else if (inCheckingButtonOpen || inCheckingKeyboardOpen){
 			  // display software panel check
 			  if (inCheckingButtonOpen &&
 				  !softwareButtonRect.contains(currentPos, true)){
@@ -464,13 +475,45 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  if (outputLog){
 			qDebug() << "GV: 2 Pressed!";
 		  }
-		  // Nothing to do
+		  topType = TOP_TYPE_2POINT;
 		}
 		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 		  if (outputLog){
 			qDebug() << "GV: 2 Released!";
 		  }
-		  // Nothing to do
+		  if (topType != TOP_TYPE_2POINT){
+			// Nothing to do
+		  }
+		  else {
+			if (settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR){
+			  const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+			  const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+			  int distance0 = QLineF(touchPoint0.startPos(), touchPoint0.pos()).length();
+			  int distance1 = QLineF(touchPoint1.startPos(), touchPoint1.pos()).length();
+			  if (distance0 < QTB_TOUCHPANEL_2TAP_DIST_THRESHOLD &&
+				  distance1 < QTB_TOUCHPANEL_2TAP_DIST_THRESHOLD){
+				if (outputLog){
+				  qDebug() << "GV: 2 Point Tap!!";
+				}
+
+				QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+														  touchPoint0.pos(),
+														  Qt::RightButton,
+														  Qt::RightButton,
+														  Qt::NoModifier);
+				QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+															touchPoint0.pos(),
+															Qt::RightButton,
+															Qt::RightButton,
+															Qt::NoModifier);
+				// R mouse button
+				mousePressEvent(pressEvent);
+				mouseReleaseEvent(releaseEvent);
+				delete pressEvent;
+				delete releaseEvent;
+			  }
+			}
+		  }
 		}
 		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 		  if (outputLog){
@@ -495,14 +538,17 @@ bool GraphicsView::viewportEvent(QEvent *event){
 	  }
 	  else { // touchPointCount >= 3 fingers
 		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
+		  topType = TOP_TYPE_3POINT;
 		  // press
 		  //keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYDOWN); // Windows key press
 		}
 		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
-		  // press
-		  keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYDOWN); // Windows key press
-		  // release
-		  keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYUP); // Windows key release
+		  if (topType == TOP_TYPE_3POINT){
+			// press
+			keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYDOWN); // Windows key press
+			// release
+			keyBuffer->put(VK_LWIN, KEYCODE_FLG_KEYUP); // Windows key release
+		  }
 		}
 		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 		  // Nothing to do

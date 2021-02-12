@@ -6,7 +6,7 @@
 
  for example)
 
- http://download.qt.io/archive/qt/5.9/5.9.0/qt-opensource-windows-5.9.0.exe
+ https://download.qt.io/archive/qt/5.9/5.9.0/qt-opensource-windows-5.9.0.exe
 
 2) set PATH
 
@@ -18,7 +18,7 @@
 
  for example)
 
- http://dl.google.com/android/repository/android-ndk-r11c-windows-x86.zip
+ https://developer.android.com/ndk/downloads?hl=en
 
 4) set ANDROID_NDK_ROOT environment variable
 

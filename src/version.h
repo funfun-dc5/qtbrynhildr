@@ -5,10 +5,10 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.2.5"
+#define QTB_VERSION				"2.3.2"
 
-#define QTB_RCNAME				""
-#define QTB_VERSION_NUMBER		2205
+#define QTB_RCNAME				"-rc1"
+#define QTB_VERSION_NUMBER		2301
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"
@@ -17,18 +17,6 @@
 #endif // __x86_64__ || __LP64__ || _WIN64
 
 // year
-#define QTB_YEAR		"2015-2020"
-
-// URL of blog
-#define QTB_BLOG		"<a href=\"https://mcz-xoxo.cocolog-nifty.com/blog/\">https://mcz-xoxo.cocolog-nifty.com/blog/</a>"
-
-// URL of help page
-#define QTB_HELP_PAGE		"<a href=\"https://mcz-xoxo.cocolog-nifty.com/blog/2020/12/post-23ffa9.html\">Help Page</a>"
-
-// URL of release page in GitHub
-#define QTB_URL_FOR_RELEASE		"https://github.com/funfun-dc5/qtbrynhildr/releases"
-
-// STRINGS for tag search
-#define QTB_STRING_FOR_TAGSEARCH	"/funfun-dc5/qtbrynhildr/releases/tag/v"
+#define QTB_YEAR		"2015-2021"
 
 #endif // VERSION_H

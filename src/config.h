@@ -69,7 +69,7 @@ const bool QTB_DESKTOP_FRAMERATE_CONTROL= true;
 
 // scroll mode
 #if defined(QTB_DEV_DESKTOP)
-const bool QTB_SCROLL_MODE				= false;
+const bool QTB_SCROLL_MODE				= true;
 #else // defined(QTB_DEV_DESKTOP)
 const bool QTB_SCROLL_MODE				= false;
 #endif // defined(QTB_DEV_DESKTOP)
@@ -127,8 +127,8 @@ const bool QTB_IN_TESTING				= false;
 // auto complete
 #define QTB_AUTO_COMPLETE			1
 
-// help page
-#define QTB_HELP					0
+// manual page
+#define QTB_MANUAL_PAGE				1
 
 // update check
 #if 0 // into qtbrynhildr.pro

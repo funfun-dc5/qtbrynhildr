@@ -455,6 +455,8 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	audioOutput = 0;
   }
   audioOutput = new QAudioOutput(deviceInfo, format);
+  // set sound buffer size
+  audioOutput->setBufferSize(QTB_SOUND_LOCAL_BUFFER_SIZE);
 
   // stateChanged
 #if defined(DEBUG)

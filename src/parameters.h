@@ -41,6 +41,8 @@ const int QTB_AREA_MODE_MINIMUM_HEIGHT = 64;
 //---------------------------------------------------------------------------
 // local data buffer size for sound (byte)
 const int QTB_SOUND_LOCAL_BUFFER_SIZE = 512 * 1024;
+// buffer size for sound device (byte)
+const int QTB_SOUND_BUFFER_SIZE = 48000;
 
 //---------------------------------------------------------------------------
 // for GUI

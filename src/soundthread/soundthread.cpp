@@ -455,6 +455,10 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	audioOutput = 0;
   }
   audioOutput = new QAudioOutput(deviceInfo, format);
+  //  cout << "bufferSize: " << audioOutput->bufferSize() << endl << flush;
+  //  cout << "periodSize: " << audioOutput->periodSize() << endl << flush;
+  // set sound buffer size
+  audioOutput->setBufferSize(QTB_SOUND_BUFFER_SIZE);
 
   // stateChanged
 #if defined(DEBUG)
@@ -468,6 +472,16 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 
   // start output
   output = audioOutput->start();
+
+  //  cout << "bufferSize: " << audioOutput->bufferSize() << endl << flush;
+  //  cout << "periodSize: " << audioOutput->periodSize() << endl << flush;
+  if (settings->getOutputLog()){
+	QString str;
+	str = "Sound Device BufferSize : " + QString::number(audioOutput->bufferSize()) + " (bytes)";
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "Sound Device PeriodSize : " + QString::number(audioOutput->periodSize()) + " (bytes)";
+	emit outputLogMessage(PHASE_SOUND, str);
+  }
 
 #if QTB_CELT_SUPPORT
   // setup converter

@@ -30,10 +30,15 @@
 // for DEBUG
 #include "util/debug.h"
 
+#include "util/netutil.h"
+
 //using namespace qtbrynhildr;
 
 int main(int argc, char *argv[])
 {
+  //  qtbrynhildr::NetUtil netUtil; // for TEST
+  //  ::exit(EXIT_SUCCESS); // for TEST
+
   // for TEST and DEBUG
   if (!qtbrynhildr::checkProtocolHeader(false)){
 	cout << "Failed: checkProtocolHeader(). header size or member offset error!" << endl << flush;

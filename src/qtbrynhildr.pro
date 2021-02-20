@@ -86,6 +86,7 @@ DEFINES += PLATFORM_LINUX
 #CONFIG -= vp8-sse vp8-avx2
 #CONFIG += vp8-neon
 #DEFINES += QTB_RPI3
+#QMAKE_CXXFLAGS += -mfpu=neon
 }
 
 # ------------------------------------------------------------------------------

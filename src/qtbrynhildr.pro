@@ -370,7 +370,7 @@ SOURCES += soundthread/soundbuffer.cpp
 SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 
 # for new feature
-CONFIG += new_feature
+#CONFIG += new_feature
 new_feature {
 DEFINES += QTB_BFSH_SUPPORT=1
 INCLUDEPATH += ../libs/blowfish

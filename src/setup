@@ -36,6 +36,10 @@ case $UNAME in
 			i686)
 				BUILDARCH=linux-x86
 				;;
+			armv7l)
+				# Raspberry Pi 3
+				BUILDARCH=linux-armv7l
+				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
 				return;;

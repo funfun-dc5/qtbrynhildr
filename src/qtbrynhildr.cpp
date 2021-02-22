@@ -96,6 +96,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if QTB_BENCHMARK
   ,benchmarkMenu(0)
 #endif // QTB_BENCHMARK
+  ,toolBar(0)
   ,connectToServer_Action(0)
   ,disconnectToServer_Action(0)
   ,initializeSettings_Action(0)

@@ -206,7 +206,8 @@ private:
   QMenu *benchmarkMenu;
 #endif // QTB_BENCHMARK
 
-  // QToolBar *fileToolBar;
+  // Tool Bar
+  QToolBar *toolBar;
 
   // ------------------------------------------------------------
   // Action for Menu
@@ -248,6 +249,9 @@ private:
 
   // show menu bar
   QAction *showMenuBar_Action;
+
+  // show tool bar
+  QAction *showToolBar_Action;
 
   // show status bar
   QAction *showStatusBar_Action;
@@ -538,6 +542,7 @@ private:
 
   // current status
   bool onShowMenuBar;
+  bool onShowToolBar;
   bool onShowStatusBar;
 
   // progress bar
@@ -548,6 +553,12 @@ private:
 
   // height of menu bar
   int heightOfMenuBar;
+
+  // height of tool bar area
+  int heightOfToolBar;
+
+  // width of tool bar area
+  int widthOfToolBar;
 
   // height of status bar
   int heightOfStatusBar;
@@ -624,6 +635,12 @@ public:
 	return settings;
   }
 
+  // get tool bar
+  QToolBar *getToolBar() const
+  {
+	return toolBar;
+  }
+
 #if QTB_TOUCHPANEL_WINDOW
   // get graphics view
   GraphicsView *getGraphicsView() const;
@@ -646,6 +663,12 @@ public:
 
   // get height of menu bar
   int getHeightOfMenuBar();
+
+  // get height of tool bar
+  int getHeightOfToolBar();
+
+  // get width of tool bar
+  int getWidthOfToolBar();
 
   // get height of status bar
   int getHeightOfStatusBar();
@@ -829,6 +852,9 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
+  // for tool bar
+  void topLevelChanged(bool topLevel);
+
 private:
   // setup window title
   void setupWindowTitle();
@@ -875,6 +901,9 @@ private slots:
 
   // toggle show menu bar
   void toggleShowMenuBar();
+
+  // toggle show tool bar
+  void toggleShowToolBar();
 
   // toggle show status bar
   void toggleShowStatusBar();

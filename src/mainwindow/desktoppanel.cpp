@@ -169,8 +169,12 @@ void DesktopPanel::resizeWindow()
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
 	  if (!(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
-		int width = currentSize.width();
-		int height = currentSize.height() + qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar();
+		int width = currentSize.width()
+		  + qtbrynhildr->getWidthOfToolBar();
+		int height = currentSize.height()
+		  + qtbrynhildr->getHeightOfMenuBar()
+		  + qtbrynhildr->getHeightOfToolBar()
+		  + qtbrynhildr->getHeightOfStatusBar();
 #if !QTB_TOUCHPANEL_WINDOW
 		// correct
 		width  += widthMargin;
@@ -218,8 +222,13 @@ QSize DesktopPanel::getWindowSize() const
 {
   QSize windowSize = qtbrynhildr->size();
   QSize diffSize =
-	QSize(widthMargin,
-		  qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar() + heightMargin);
+	QSize(widthMargin
+		  + qtbrynhildr->getWidthOfToolBar()
+		  ,
+		  qtbrynhildr->getHeightOfMenuBar()
+		  + qtbrynhildr->getHeightOfToolBar()
+		  + qtbrynhildr->getHeightOfStatusBar()
+		  + heightMargin);
 
   windowSize -= diffSize;
 
@@ -632,11 +641,20 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 
   // control
   if (settings->getOnControl()){
+#if defined(QTB_DEV_DESKTOP)
 	// exit full screen
 	if (onFullScreen && VK_Code == VK_ESCAPE){
+#if QTB_TOOLBAR
+	  if (!qtbrynhildr->getToolBar()->isVisible()){
+		qtbrynhildr->exitFullScreen();
+		return;
+	  }
+#else // QTB_TOOLBAR
 	  qtbrynhildr->exitFullScreen();
 	  return;
+#endif // QTB_TOOLBAR
 	}
+#endif // defined(QTB_DEV_DESKTOP)
 	// check shift key status
 	if (!onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NEED){
 	  // need shift key

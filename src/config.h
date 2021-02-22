@@ -157,6 +157,13 @@ const bool QTB_IN_TESTING				= false;
 // LOAD BITMAP
 #define QTB_LOAD_BITMAP				0
 
+// ToolBar
+#if defined(QTB_DEV_DESKTOP)
+#define QTB_TOOLBAR					1
+#else // defined(QTB_DEV_DESKTOP)
+#define QTB_TOOLBAR					0
+#endif // defined(QTB_DEV_DESKTOP)
+
 // benchmark
 #define QTB_BENCHMARK				1
 

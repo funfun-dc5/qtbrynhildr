@@ -110,6 +110,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,videoQuality_HIGH_Action(0)
   ,videoQuality_MAXIMUM_Action(0)
   ,showMenuBar_Action(0)
+  ,showToolBar_Action(0)
   ,showStatusBar_Action(0)
   ,showFrameRate_Action(0)
   ,fullScreen_Action(0)
@@ -251,10 +252,13 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,fullScreenMode(false)
   ,onSetDesktopScalingFactorForFullScreen(false)
   ,onShowMenuBar(false)
+  ,onShowToolBar(false)
   ,onShowStatusBar(false)
   ,progressBar(0)
   ,heightOfTitleBar(0)
   ,heightOfMenuBar(0)
+  ,heightOfToolBar(0)
+  ,widthOfToolBar(0)
   ,heightOfStatusBar(0)
   ,widthMargin(0)
   ,heightMargin(0)
@@ -577,10 +581,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   settings->setOnShowStatusBar(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   menuBar()->setVisible(settings->getOnShowMenuBar());
+  toolBar->setVisible(settings->getOnShowToolBar());
   statusBar()->setVisible(settings->getOnShowStatusBar());
   statusBar()->setSizeGripEnabled(false);
   // save onShow* flags
   onShowMenuBar = settings->getOnShowMenuBar();
+  onShowToolBar = settings->getOnShowToolBar();
   onShowStatusBar = settings->getOnShowStatusBar();
 
   // set icon
@@ -609,16 +615,26 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // get window information
   heightOfTitleBar = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight) + 2;
   heightOfMenuBar = menuBar()->sizeHint().height();
+#if QTB_TOOLBAR
+  heightOfToolBar = toolBar->sizeHint().height();
+  widthOfToolBar = toolBar->sizeHint().width();
+#endif // QTB_TOOLBAR
   heightOfStatusBar = statusBar()->sizeHint().height();
   if (settings->getOutputLog()){
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "menuBar height = " + QString::number(heightOfMenuBar));
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "toolBar height = " + QString::number(heightOfToolBar));
+	logMessage->outputLogMessage(PHASE_DEBUG,
+								 "toolBar width = " + QString::number(widthOfToolBar));
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 "statusBar height = " + QString::number(heightOfStatusBar));
   }
 #if 0 // for TEST
   qDebug() << "titleBar height = " << heightOfTitleBar;
   qDebug() << "menuBar height = " << heightOfMenuBar;
+  qDebug() << "toolBar height = " << heightOfToolBar;
+  qDebug() << "toolBar width = " << widthOfToolBar;
   qDebug() << "statusBar height = " << heightOfStatusBar;
 #endif // for TEST
 
@@ -1250,6 +1266,38 @@ int QtBrynhildr::getHeightOfMenuBar()
   }
 }
 
+// get height of tool bar
+int QtBrynhildr::getHeightOfToolBar()
+{
+  if (toolBar == 0)
+	return 0;
+
+  if (settings->getOnShowToolBar() &&
+	  toolBar->orientation() == Qt::Horizontal &&
+	  !toolBar->isFloating()){
+	return toolBar->sizeHint().height();
+  }
+  else {
+	return 0;
+  }
+}
+
+// get width of tool bar
+int QtBrynhildr::getWidthOfToolBar()
+{
+  if (toolBar == 0)
+	return 0;
+
+  if (settings->getOnShowToolBar() &&
+	  toolBar->orientation() == Qt::Vertical &&
+	  !toolBar->isFloating()){
+	return toolBar->sizeHint().width();;
+  }
+  else {
+	return 0;
+  }
+}
+
 // get height of status bar
 int QtBrynhildr::getHeightOfStatusBar()
 {
@@ -1696,6 +1744,14 @@ void QtBrynhildr::createActions()
   showMenuBar_Action->setCheckable(true);
   showMenuBar_Action->setChecked(settings->getOnShowMenuBar());
   connect(showMenuBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowMenuBar()));
+
+  // Show Tool Bar
+  showToolBar_Action = new QAction(tr("Show Tool Bar"), this);
+  showToolBar_Action->setStatusTip(tr("Show Tool Bar"));
+  showToolBar_Action->setEnabled(true);
+  showToolBar_Action->setCheckable(true);
+  showToolBar_Action->setChecked(settings->getOnShowToolBar());
+  connect(showToolBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowToolBar()));
 
   // Show Status Bar
   showStatusBar_Action = new QAction(tr("Show Status Bar"), this);
@@ -2385,6 +2441,9 @@ void QtBrynhildr::createMenus()
   displayMenu->addAction(showMenuBar_Action);
 #endif // disable now
 #if defined(QTB_DEV_DESKTOP)
+#if QTB_TOOLBAR
+  displayMenu->addAction(showToolBar_Action);
+#endif // QTB_TOOLBAR
   displayMenu->addAction(showStatusBar_Action);
 #endif // defined(QTB_DEV_DESKTOP)
 #if defined(QTB_DEV_DESKTOP)
@@ -2669,7 +2728,23 @@ void QtBrynhildr::createContextMenu()
 // create Tool Bar
 void QtBrynhildr::createToolBars()
 {
-  // fileToolBar = addToolBar(tr("File"));
+  toolBar = addToolBar(tr("ToolBar"));
+  toolBar->setObjectName("ToolBar");
+  toolBar->setOrientation(Qt::Horizontal);
+  toolBar->setFloatable(true);
+  toolBar->setMovable(true);
+  toolBar->addAction(fullScreen_Action); // for TEST
+  toolBar->addSeparator(); // for TEST
+  toolBar->addAction(sendKey2_Action); // for TEST
+  toolBar->addAction(sendKey3_Action); // for TEST
+  toolBar->addAction(sendKey4_Action); // for TEST
+  toolBar->addAction(sendKey5_Action); // for TEST
+  toolBar->addAction(sendKey6_Action); // for TEST
+  if (settings->getOnSendControlKeyState()){
+	toolBar->addAction(sendKey7_Action); // for TEST
+  }
+
+  connect(toolBar, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
 }
 
 // create Status Bar
@@ -3180,6 +3255,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 
   int width = windowSize.width();
   int height = windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar();
+  height -= heightOfToolBar;
 #if !QTB_TOUCHPANEL_WINDOW
   // correct
   width  -= widthMargin;
@@ -4128,6 +4204,18 @@ void QtBrynhildr::toggleOnSound()
   refreshOtherMenu();
 }
 
+// for tool bar
+void QtBrynhildr::topLevelChanged(bool topLevel)
+{
+  Q_UNUSED(topLevel);
+
+  //  cout << "topLevel:" << topLevel << endl << flush;
+  // refresh desktop
+  if (settings->getConnected()){
+	desktopPanel->resizeWindow();
+  }
+}
+
 // setup window title
 void QtBrynhildr::setupWindowTitle()
 {
@@ -4575,10 +4663,24 @@ void QtBrynhildr::toggleShowMenuBar()
 	onShowMenuBar = false;
   }
   else {
-	settings->setOnShowMenuBar(true);
+	onShowMenuBar = true;
   }
   settings->setOnShowMenuBar(onShowMenuBar);
   menuBar()->setVisible(onShowMenuBar);
+  refreshWindow();
+}
+
+// toggle show tool bar
+void QtBrynhildr::toggleShowToolBar()
+{
+  if (settings->getOnShowToolBar()){
+	onShowToolBar = false;
+  }
+  else {
+	onShowToolBar = true;
+  }
+  settings->setOnShowToolBar(onShowToolBar);
+  toolBar->setVisible(onShowToolBar);
   refreshWindow();
 }
 
@@ -4847,6 +4949,7 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   QSize windowSize = this->size();
   QSize size = softwareKeyboard->resetSize();
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
+  height -= heightOfToolBar;
 #if !QTB_TOUCHPANEL_WINDOW
   // correct
   windowSize.setWidth(windowSize.width() - widthMargin);
@@ -4876,6 +4979,7 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   QSize windowSize = this->size();
   QSize size = softwareButton->resetSize();
   windowSize.setHeight(windowSize.height() - getHeightOfMenuBar() - getHeightOfStatusBar());
+  height -= heightOfToolBar;
 #if !QTB_TOUCHPANEL_WINDOW
   // correct
   windowSize.setWidth(windowSize.width() - widthMargin);

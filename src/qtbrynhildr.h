@@ -1045,6 +1045,9 @@ private:
   // write settings from user configuration (registry etc.)
   void writeSettings();
 
+  // update tool bar
+  void updateToolBar();
+
   // update status bar
   void updateStatusBar();
 

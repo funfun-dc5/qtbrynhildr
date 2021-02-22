@@ -2743,6 +2743,11 @@ void QtBrynhildr::createToolBars()
   if (settings->getOnSendControlKeyState()){
 	toolBar->addAction(sendKey7_Action); // for TEST
   }
+  toolBar->addSeparator(); // for TEST
+  toolBar->addAction(desktopCompressMode0_Action); // for TEST
+  toolBar->addAction(desktopCompressMode2_Action); // for TEST
+  toolBar->addAction(desktopCompressMode4_Action); // for TEST
+  toolBar->addAction(desktopCompressMode8_Action); // for TEST
 
   connect(toolBar, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
 }
@@ -2769,6 +2774,26 @@ void QtBrynhildr::createStatusBar()
 
   statusBar()->addWidget(connectionLabel);
   statusBar()->addPermanentWidget(frameRateLabel);
+}
+
+// update Tool Bar
+void QtBrynhildr::updateToolBar()
+{
+#if 0 // for TEST
+  if (settings->getConnected()){
+  }
+  else {
+	fullScreen_Action->setEnabled(false); // for TEST
+	sendKey2_Action->setEnabled(false); // for TEST
+	sendKey3_Action->setEnabled(false); // for TEST
+	sendKey4_Action->setEnabled(false); // for TEST
+	sendKey5_Action->setEnabled(false); // for TEST
+	sendKey6_Action->setEnabled(false); // for TEST
+	if (settings->getOnSendControlKeyState()){
+	  sendKey7_Action->setEnabled(false); // for TEST
+	}
+  }
+#endif // 0 // for TEST
 }
 
 // update Status Bar
@@ -3228,6 +3253,9 @@ void QtBrynhildr::disconnected()
   // try to connect flag
   isExecutingToConnect = false;
   updateConnected();
+
+  // update tool bar
+  updateToolBar();
 
   // enable connect to server menu
   connectToServer_Action->setEnabled(true);

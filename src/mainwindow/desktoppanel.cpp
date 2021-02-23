@@ -169,12 +169,15 @@ void DesktopPanel::resizeWindow()
   if (QTB_FIXED_MAINWINDOW_SIZE){
 	if (!onFullScreen){
 	  if (!(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
-		int width = currentSize.width()
-		  + qtbrynhildr->getWidthOfToolBar();
+		int width = currentSize.width();
 		int height = currentSize.height()
 		  + qtbrynhildr->getHeightOfMenuBar()
-		  + qtbrynhildr->getHeightOfToolBar()
 		  + qtbrynhildr->getHeightOfStatusBar();
+#if QTB_TOOLBAR
+		width += qtbrynhildr->getWidthOfToolBar();
+		height += qtbrynhildr->getHeightOfToolBar();
+#endif // QTB_TOOLBAR
+
 #if !QTB_TOUCHPANEL_WINDOW
 		// correct
 		width  += widthMargin;
@@ -222,13 +225,14 @@ QSize DesktopPanel::getWindowSize() const
 {
   QSize windowSize = qtbrynhildr->size();
   QSize diffSize =
-	QSize(widthMargin
-		  + qtbrynhildr->getWidthOfToolBar()
-		  ,
+	QSize(widthMargin,
 		  qtbrynhildr->getHeightOfMenuBar()
-		  + qtbrynhildr->getHeightOfToolBar()
 		  + qtbrynhildr->getHeightOfStatusBar()
 		  + heightMargin);
+#if QTB_TOOLBAR
+  diffSize += QSize(qtbrynhildr->getWidthOfToolBar(),
+					qtbrynhildr->getHeightOfToolBar());
+#endif // QTB_TOOLBAR
 
   windowSize -= diffSize;
 
@@ -242,6 +246,19 @@ void DesktopPanel::setOnFullScreen(bool onFullScreen)
 	this->onFullScreen = onFullScreen;
   }
 }
+
+#if 0 // for TEST
+// check focus
+bool DesktopPanel::hasFocus() const
+{
+  if (qtbrynhildr != 0){
+	return qtbrynhildr->hasFocus();
+  }
+  else {
+	return false;
+  }
+}
+#endif // 0 // for TEST
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 // mouse move

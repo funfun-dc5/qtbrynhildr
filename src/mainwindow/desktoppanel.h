@@ -166,6 +166,11 @@ public:
 	return currentMousePos;
   }
 
+#if 0 // for TEST
+  // check focus
+  bool hasFocus() const;
+#endif // 0 // for TEST
+
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // mouse move
   void mouseMove(QPoint mousePos, bool marker = true);

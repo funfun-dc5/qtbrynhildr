@@ -338,9 +338,11 @@ typedef enum {
 #define QTB_ONSHOWMENUBAR					"onShowMenuBar"
 #define QTB_ONSHOWMENUBAR_DEFAULT			true
 
+#if QTB_TOOLBAR
 // for onShowToolBar
 #define QTB_ONSHOWTOOLBAR					"onShowToolBar"
 #define QTB_ONSHOWTOOLBAR_DEFAULT			false
+#endif // QTB_TOOLBAR
 
 // for onShowStatusBar
 #define QTB_ONSHOWSTATUSBAR					"onShowStatusBar"
@@ -686,8 +688,10 @@ private:
   // show menu bar
   volatile bool onShowMenuBar;
 
+#if QTB_TOOLBAR
   // show tool bar
   volatile bool onShowToolBar;
+#endif // QTB_TOOLBAR
 
   // show status bar
   volatile bool onShowStatusBar;
@@ -1955,6 +1959,7 @@ public:
 	this->onShowMenuBar = onShowMenuBar;
   }
 
+#if QTB_TOOLBAR
   // get show tool bar flag
   bool getOnShowToolBar() const
   {
@@ -1966,6 +1971,7 @@ public:
   {
 	this->onShowToolBar = onShowToolBar;
   }
+#endif // QTB_TOOLBAR
 
   // get show status bar flag
   bool getOnShowStatusBar() const

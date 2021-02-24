@@ -60,5 +60,9 @@ FAQ
       onTaskbarAssist=false
 
 
+6. 「Monochrome」機能はないのでしょうか?
+
+   パブリックモードではMonochrome(モノクロモード)は正式にはサポートされていません。
+
 
 「このようなFAQ情報があるといいかも」など、お知らせ頂けると助かります。

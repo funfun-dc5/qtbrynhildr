@@ -622,4 +622,4 @@ case $UNAME in
 		exit 1;
 		;;
 esac
-echo "$0 : Done."
+echo "$0 : Done. : ${PKGSTRING}"

@@ -77,9 +77,9 @@ HEADERS += common/msvc.h
 }
 
 # ------------------------------------------------------------------------------
-# Linux/FreeBSD/Cygwin
+# Linux/Cygwin
 # ------------------------------------------------------------------------------
-linux-g++-64 | linux-g++ | freebsd-g++ | cygwin-g++ {
+linux-g++-64 | linux-g++ | cygwin-g++ {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_LINUX
 # NEON (RaspberryPi3)
@@ -87,6 +87,15 @@ DEFINES += PLATFORM_LINUX
 #CONFIG += vp8-neon
 #DEFINES += QTB_RPI3
 #QMAKE_CXXFLAGS += -mfpu=neon
+}
+
+# ------------------------------------------------------------------------------
+# FreeBSD
+# ------------------------------------------------------------------------------
+freebsd-g++ | freebsd-clang {
+CONFIG += desktop vp8-sse recorder
+#CONFIG += desktop vp8-sse vp8-avx2 recorder
+DEFINES += PLATFORM_FREEBSD
 }
 
 # ------------------------------------------------------------------------------

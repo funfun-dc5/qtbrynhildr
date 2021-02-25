@@ -16,9 +16,13 @@ if [ -n "$TARGET" ] ; then
 		exit 1;
 	fi
 else
+# BUILDARCH
 case $UNAME in
 	CYGWIN*)
-			case $UNAMEM in
+		if [ -n "$2" ] ; then
+			BUILDARCH=$2
+		fi
+		case $UNAMEM in
 			x86_64)
 				;;
 			i686)

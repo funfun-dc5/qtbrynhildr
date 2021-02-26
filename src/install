@@ -532,7 +532,7 @@ case $UNAME in
 			echo "NOT Found ${KLFC}"
 			exit 1;
 		fi
-		VERSION=`"./${APP}" -vv`
+		VERSION=`"LANG=ja ./${APP}" -notrans -vv`
 		# for freebsd
 		# create directory
 		mkdir -p ${DISTDIR}/bin

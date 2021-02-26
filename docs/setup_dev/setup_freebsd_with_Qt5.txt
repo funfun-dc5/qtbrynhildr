@@ -1,0 +1,13 @@
+---------------------------------------------------------------------------
+ Setup Development Environment for Qt Brynhildr on FreeBSD
+---------------------------------------------------------------------------
+
+1) install packages
+
+pkg install gmake
+
+pkg install qt5-5.15.2
+pkg install pulseaudio-qt-1.2_1
+
+pkg install pavucontrol-qt-0.16.0
+

@@ -2757,7 +2757,11 @@ void QtBrynhildr::createToolBars()
   toolBar->setOrientation(Qt::Horizontal);
   toolBar->setFloatable(true);
   toolBar->setMovable(true);
+
+  // Full Screen button
   toolBar->addAction(fullScreen_Action); // for TEST
+
+  // Send Key button
   toolBar->addSeparator(); // for TEST
   toolBar->addAction(sendKey2_Action); // for TEST
   toolBar->addAction(sendKey3_Action); // for TEST
@@ -2767,11 +2771,28 @@ void QtBrynhildr::createToolBars()
   if (settings->getOnSendControlKeyState()){
 	toolBar->addAction(sendKey7_Action); // for TEST
   }
+
+  // Compress Mode button
   toolBar->addSeparator(); // for TEST
   toolBar->addAction(desktopCompressMode0_Action); // for TEST
   toolBar->addAction(desktopCompressMode2_Action); // for TEST
   toolBar->addAction(desktopCompressMode4_Action); // for TEST
   toolBar->addAction(desktopCompressMode8_Action); // for TEST
+
+  // Select Monitor button
+  toolBar->addSeparator(); // for TEST
+  toolBar->addAction(selectMonitorNo1_Action); // for TEST
+  toolBar->addAction(selectMonitorNo2_Action); // for TEST
+  toolBar->addAction(selectMonitorNo3_Action); // for TEST
+  toolBar->addAction(selectMonitorNo4_Action); // for TEST
+#if 0 // for TEST
+  toolBar->addAction(selectMonitorNo5_Action); // for TEST
+  toolBar->addAction(selectMonitorNo6_Action); // for TEST
+  toolBar->addAction(selectMonitorNo7_Action); // for TEST
+  toolBar->addAction(selectMonitorNo8_Action); // for TEST
+  toolBar->addAction(selectMonitorNo9_Action); // for TEST
+#endif // 0 // for TEST
+  toolBar->addAction(selectMonitorNoAll_Action); // for TEST
 
   connect(toolBar, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
 }

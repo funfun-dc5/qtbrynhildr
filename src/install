@@ -55,8 +55,8 @@ if [ -n "$2" ] ; then
 			PORTABLEVERSION=ON
 			;;
 		*)
-			echo "Unknown argument2 : $2"
-			exit 1
+			VERSION=$2
+			echo "VERSION=$VERSION"
 			;;
 	esac
 fi
@@ -90,6 +90,7 @@ case $UNAME in
 							;;
 					esac
 					DISTDIR="../dist/cygwin/$PKGNAME"
+					INSTALLEXEFLAGS="-s"
 					;;
 				clean)
 					# for Text
@@ -406,11 +407,15 @@ case $UNAME in
 				echo "NOT Found ${KLFC}.exe"
 				exit 1;
 			fi
-			VERSION=`"./${APP}" -vv`
+			if [ ! -n "$VERSION" ] ; then
+				VERSION=`"./${APP}" -vv`
+			fi
 			# for cygwin
 			# create directory
 			mkdir -p ${DISTDIR}/bin
 			mkdir -p ${DISTDIR}/doc/manual
+			# strip
+			#strip "${APP}"
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
@@ -438,7 +443,7 @@ case $UNAME in
 			# make package string
 			#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
 			PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
-			(cd ../dist/cygwin; tar cvfj ${PKGSTRING}.tar.bz2 ${PKGNAME})
+			(cd ../dist/cygwin; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
 		fi
 		;;
 	Linux)
@@ -484,6 +489,8 @@ case $UNAME in
 			echo "copy boot script file..."
 			${INSTALL} -m755 "../dist/script/${APP}.sh" ${DISTDIR}/bin
 		fi
+		# strip
+		#strip "${APP}"
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
@@ -525,11 +532,13 @@ case $UNAME in
 			echo "NOT Found ${KLFC}"
 			exit 1;
 		fi
-		VERSION=`"./${APP}" -vv`
+		VERSION=`"LANG=ja ./${APP}" -notrans -vv`
 		# for freebsd
 		# create directory
 		mkdir -p ${DISTDIR}/bin
 		mkdir -p ${DISTDIR}/doc/manual
+		# strip
+		#strip "${APP}"
 		# copy executable file
 		echo "copy executable file..."
 		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
@@ -613,4 +622,4 @@ case $UNAME in
 		exit 1;
 		;;
 esac
-echo "$0 : Done."
+echo "$0 : Done. : ${PKGSTRING}"

@@ -28,7 +28,9 @@
 #include <QSize>
 #include <QString>
 #include <QTimer>
+#if QTB_TOOLBAR
 #include <QToolBar>
+#endif // QTB_TOOLBAR
 #include <QtGlobal>
 
 // Local Header
@@ -206,7 +208,10 @@ private:
   QMenu *benchmarkMenu;
 #endif // QTB_BENCHMARK
 
-  // QToolBar *fileToolBar;
+#if QTB_TOOLBAR
+  // Tool Bar
+  QToolBar *toolBar;
+#endif // QTB_TOOLBAR
 
   // ------------------------------------------------------------
   // Action for Menu
@@ -248,6 +253,11 @@ private:
 
   // show menu bar
   QAction *showMenuBar_Action;
+
+#if QTB_TOOLBAR
+  // show tool bar
+  QAction *showToolBar_Action;
+#endif // QTB_TOOLBAR
 
   // show status bar
   QAction *showStatusBar_Action;
@@ -538,6 +548,9 @@ private:
 
   // current status
   bool onShowMenuBar;
+#if QTB_TOOLBAR
+  bool onShowToolBar;
+#endif // QTB_TOOLBAR
   bool onShowStatusBar;
 
   // progress bar
@@ -548,6 +561,14 @@ private:
 
   // height of menu bar
   int heightOfMenuBar;
+
+#if QTB_TOOLBAR
+  // height of tool bar area
+  int heightOfToolBar;
+
+  // width of tool bar area
+  int widthOfToolBar;
+#endif // QTB_TOOLBAR
 
   // height of status bar
   int heightOfStatusBar;
@@ -624,6 +645,14 @@ public:
 	return settings;
   }
 
+#if QTB_TOOLBAR
+  // get tool bar
+  QToolBar *getToolBar() const
+  {
+	return toolBar;
+  }
+#endif // QTB_TOOLBAR
+
 #if QTB_TOUCHPANEL_WINDOW
   // get graphics view
   GraphicsView *getGraphicsView() const;
@@ -646,6 +675,14 @@ public:
 
   // get height of menu bar
   int getHeightOfMenuBar();
+
+#if QTB_TOOLBAR
+  // get height of tool bar
+  int getHeightOfToolBar();
+
+  // get width of tool bar
+  int getWidthOfToolBar();
+#endif // QTB_TOOLBAR
 
   // get height of status bar
   int getHeightOfStatusBar();
@@ -829,6 +866,11 @@ private slots:
   void toggleOnGraphics();
   void toggleOnSound();
 
+#if QTB_TOOLBAR
+  // for tool bar
+  void topLevelChanged(bool topLevel);
+#endif // QTB_TOOLBAR
+
 private:
   // setup window title
   void setupWindowTitle();
@@ -875,6 +917,11 @@ private slots:
 
   // toggle show menu bar
   void toggleShowMenuBar();
+
+#if QTB_TOOLBAR
+  // toggle show tool bar
+  void toggleShowToolBar();
+#endif // QTB_TOOLBAR
 
   // toggle show status bar
   void toggleShowStatusBar();
@@ -1007,7 +1054,9 @@ private:
   void createActions();
   void createMenus();
   void createContextMenu();
+#if QTB_TOOLBAR
   void createToolBars();
+#endif // QTB_TOOLBAR
   void createStatusBar();
 
   // settings
@@ -1015,6 +1064,11 @@ private:
   void readSettings();
   // write settings from user configuration (registry etc.)
   void writeSettings();
+
+#if QTB_TOOLBAR
+  // update tool bar
+  void updateToolBar();
+#endif // QTB_TOOLBAR
 
   // update status bar
   void updateStatusBar();

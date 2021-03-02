@@ -16,9 +16,13 @@ if [ -n "$TARGET" ] ; then
 		exit 1;
 	fi
 else
+# BUILDARCH
 case $UNAME in
 	CYGWIN*)
-			case $UNAMEM in
+		if [ -n "$2" ] ; then
+			BUILDARCH=$2
+		fi
+		case $UNAMEM in
 			x86_64)
 				;;
 			i686)
@@ -35,6 +39,10 @@ case $UNAME in
 				;;
 			i686)
 				BUILDARCH=linux-x86
+				;;
+			armv7l)
+				# Raspberry Pi 3
+				BUILDARCH=linux-armv7l
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

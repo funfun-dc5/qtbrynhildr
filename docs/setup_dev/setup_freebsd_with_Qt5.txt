@@ -1,0 +1,28 @@
+---------------------------------------------------------------------------
+ Setup Development Environment for Qt Brynhildr on FreeBSD
+---------------------------------------------------------------------------
+
+1) install packages
+
+ pkg install gmake
+
+ pkg install qt5-5.15.2
+ pkg install pulseaudio-qt-1.2_1
+
+2) delete libvpx-1.9.0 package
+
+ pkg delete libvpx-1.9.0
+
+3) build static libraries (celt-0.11.1 and libvpx-1.4.0)
+
+4) run setup
+
+ ./setup
+
+5) build (GNU make)
+
+ gmake
+
+6) install libvpx-1.9.0
+
+ pkg install libvpx-1.9.0

@@ -38,7 +38,7 @@ yet:
 $(OBJPATH)%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-$(OBJPATH)klfcompiler_lex.o: klfcompiler.tab.h
+$(OBJPATH)klfcompiler_lex.o: klfcompiler.tab.h klfcompiler_lex.c
 
 klfcompiler_lex.c: klfcompiler.l
 	flex -o $@ klfcompiler.l

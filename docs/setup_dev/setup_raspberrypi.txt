@@ -19,7 +19,7 @@
 2) run qmake
 
  $ cd qtbrynhildr/src
- $ /usr/bin/qmake qtbrynhildr.pro
+ $ /usr/bin/qmake qtbrynhildr.pro BUILDARCH=linux-armv7l
 
 3) build
 

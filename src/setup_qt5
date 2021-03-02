@@ -86,9 +86,6 @@ case $UNAME in
 			i686)
 				QTROOT=/opt/Qt5.4.2/5.4/gcc
 				;;
-			armv6l)
-				QTROOT=/usr
-				;;
 			armv7l)
 				QTROOT=/usr
 				;;

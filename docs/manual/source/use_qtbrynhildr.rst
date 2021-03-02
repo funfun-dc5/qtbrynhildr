@@ -80,6 +80,10 @@
 
  .. image:: images/use_qtbrynhildr/menu_display.jpg
 
+ * 「ツールスバーを表示」
+
+   ツールバーの表示のON/OFFを変更します。
+
  * 「ステータスバーを表示」
 
    ステータスバーの表示のON/OFFを変更します。

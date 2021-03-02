@@ -170,7 +170,14 @@ void DesktopPanel::resizeWindow()
 	if (!onFullScreen){
 	  if (!(qtbrynhildr->isMaximized() || qtbrynhildr->isMinimized())){
 		int width = currentSize.width();
-		int height = currentSize.height() + qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar();
+		int height = currentSize.height()
+		  + qtbrynhildr->getHeightOfMenuBar()
+		  + qtbrynhildr->getHeightOfStatusBar();
+#if QTB_TOOLBAR
+		width += qtbrynhildr->getWidthOfToolBar();
+		height += qtbrynhildr->getHeightOfToolBar();
+#endif // QTB_TOOLBAR
+
 #if !QTB_TOUCHPANEL_WINDOW
 		// correct
 		width  += widthMargin;
@@ -219,7 +226,13 @@ QSize DesktopPanel::getWindowSize() const
   QSize windowSize = qtbrynhildr->size();
   QSize diffSize =
 	QSize(widthMargin,
-		  qtbrynhildr->getHeightOfMenuBar() + qtbrynhildr->getHeightOfStatusBar() + heightMargin);
+		  qtbrynhildr->getHeightOfMenuBar()
+		  + qtbrynhildr->getHeightOfStatusBar()
+		  + heightMargin);
+#if QTB_TOOLBAR
+  diffSize += QSize(qtbrynhildr->getWidthOfToolBar(),
+					qtbrynhildr->getHeightOfToolBar());
+#endif // QTB_TOOLBAR
 
   windowSize -= diffSize;
 
@@ -233,6 +246,19 @@ void DesktopPanel::setOnFullScreen(bool onFullScreen)
 	this->onFullScreen = onFullScreen;
   }
 }
+
+#if 0 // for TEST
+// check focus
+bool DesktopPanel::hasFocus() const
+{
+  if (qtbrynhildr != 0){
+	return qtbrynhildr->hasFocus();
+  }
+  else {
+	return false;
+  }
+}
+#endif // 0 // for TEST
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 // mouse move
@@ -632,11 +658,20 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 
   // control
   if (settings->getOnControl()){
+#if defined(QTB_DEV_DESKTOP)
 	// exit full screen
 	if (onFullScreen && VK_Code == VK_ESCAPE){
+#if QTB_TOOLBAR
+	  if (!qtbrynhildr->getToolBar()->isVisible()){
+		qtbrynhildr->exitFullScreen();
+		return;
+	  }
+#else // QTB_TOOLBAR
 	  qtbrynhildr->exitFullScreen();
 	  return;
+#endif // QTB_TOOLBAR
 	}
+#endif // defined(QTB_DEV_DESKTOP)
 	// check shift key status
 	if (!onShiftKey && eventConverter->getShiftKeyControl() == EventConverter::SHIFTKEY_NEED){
 	  // need shift key

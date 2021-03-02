@@ -77,15 +77,25 @@ HEADERS += common/msvc.h
 }
 
 # ------------------------------------------------------------------------------
-# Linux/FreeBSD/Cygwin
+# Linux/Cygwin
 # ------------------------------------------------------------------------------
-linux-g++-64 | linux-g++ | freebsd-g++ | cygwin-g++ {
+linux-g++-64 | linux-g++ | cygwin-g++ {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_LINUX
 # NEON (RaspberryPi3)
 #CONFIG -= vp8-sse vp8-avx2
 #CONFIG += vp8-neon
 #DEFINES += QTB_RPI3
+#QMAKE_CXXFLAGS += -mfpu=neon
+}
+
+# ------------------------------------------------------------------------------
+# FreeBSD
+# ------------------------------------------------------------------------------
+freebsd-g++ | freebsd-clang {
+CONFIG += desktop vp8-sse recorder
+#CONFIG += desktop vp8-sse vp8-avx2 recorder
+DEFINES += PLATFORM_FREEBSD
 }
 
 # ------------------------------------------------------------------------------
@@ -337,7 +347,6 @@ HEADERS += controlthread/controlthread.h
 HEADERS += controlthread/keybuffer.h controlthread/mousebuffer.h
 HEADERS += controlthread/mousebutton.h controlthread/mousewheel.h
 HEADERS += graphicsthread/graphicsthread.h
-#HEADERS += graphicsthread/graphicsbuffer.h
 HEADERS += graphicsthread/decoder.h
 HEADERS += graphicsthread/decoder_jpeg.h
 HEADERS += graphicsthread/framecounter.h
@@ -362,7 +371,6 @@ SOURCES += controlthread/controlthread.cpp
 SOURCES += controlthread/keybuffer.cpp controlthread/mousebuffer.cpp
 SOURCES += controlthread/mousebutton.cpp controlthread/mousewheel.cpp
 SOURCES += graphicsthread/graphicsthread.cpp
-#SOURCES += graphicsthread/graphicsbuffer.cpp
 SOURCES += graphicsthread/decoder.cpp
 SOURCES += graphicsthread/decoder_jpeg.cpp
 SOURCES += graphicsthread/framecounter.cpp
@@ -373,4 +381,12 @@ SOURCES += windows/eventconverter.cpp windows/ntfs.cpp windows/keycodes.cpp
 # for new feature
 #CONFIG += new_feature
 new_feature {
+DEFINES += QTB_BFSH_SUPPORT=1
+INCLUDEPATH += ../libs/blowfish
+LIBS += -L../libs/blowfish/$$BUILDARCH -lbfsh
+
+HEADERS += util/netutil.h
+SOURCES += util/netutil.cpp
+# for windows
+LIBS += -liphlpapi
 }

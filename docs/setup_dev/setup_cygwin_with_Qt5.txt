@@ -2,6 +2,10 @@
  Setup Development Environment for Qt Brynhildr on Cygwin
 ---------------------------------------------------------------------------
 
+0) build celt library and libvpx (static library)
+
+   copy static libraries to qtbrynhildr/libs/{celt,vpx}
+
 1) install Qt5 packages for development
 
  ex.) run setup-x86_x64.exe
@@ -11,7 +15,9 @@
  libQt5X11Extras-devel
  libGL-devel
 
-2) run qmake in Cygwin Terminal
+ (*) pulseaudio packages for sound
+
+2) setup in Cygwin Terminal
 
  $ cd qtbrynhildr/src
 
@@ -23,6 +29,6 @@
 
  $ ./setup cygwin cygwin-x86
 
-3) build
+3) build "Qt Brynhildr.exe"
 
  $ make

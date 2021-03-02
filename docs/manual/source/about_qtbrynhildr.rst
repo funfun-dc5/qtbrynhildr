@@ -43,3 +43,7 @@ Qt Brynhildrとは
  Android版 Qt Brynhildr
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_android.png
+
+ Cygwin版 Qt Brynhildr
+
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_cygwin.jpg

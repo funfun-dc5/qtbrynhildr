@@ -21,6 +21,10 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
+#if defined(Q_OS_FREEBSD)
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#endif // defined(Q_OS_FREEBSD)
 #endif // defined(QTB_NET_UNIX)
 
 // Local Header

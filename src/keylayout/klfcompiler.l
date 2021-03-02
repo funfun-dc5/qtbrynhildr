@@ -42,7 +42,7 @@ section		\[[a-zA-Z]+\]
 key_id		Key_[a-zA-Z0-9_]+
 vk_id		VK_[a-zA-Z0-9_]+
 shiftkey	SHIFTKEY_THROUGH|SHIFTKEY_NEED|SHIFTKEY_NONEED
-platform	Windows|macOS|Linux
+platform	Windows|Linux|macOS||FreeBSD
 string		[a-zA-Z_]+
 number		[0-9]+
 comma		,
@@ -175,6 +175,13 @@ Windows {
   yylval.intval = ID_PLATFORM_WINDOWS;
   return PLATFORM;
 }
+Linux {
+#ifdef DEBUG_LEX
+  printf("platform = %s\n", yytext);
+#endif /* DEBUG_LEX */
+  yylval.intval = ID_PLATFORM_LINUX;
+  return PLATFORM;
+}
 macOS {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
@@ -182,11 +189,11 @@ macOS {
   yylval.intval = ID_PLATFORM_MACOS;
   return PLATFORM;
 }
-Linux {
+FreeBSD {
 #ifdef DEBUG_LEX
   printf("platform = %s\n", yytext);
 #endif /* DEBUG_LEX */
-  yylval.intval = ID_PLATFORM_LINUX;
+  yylval.intval = ID_PLATFORM_FREEBSD;
   return PLATFORM;
 }
 {string}	{

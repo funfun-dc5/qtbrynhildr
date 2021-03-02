@@ -149,6 +149,11 @@ Settings::Settings(const char *iniFileName)
   setOnFrameLessWindow(QTB_ONFRAMELESSWINDOW_DEFAULT);
 
   setOnShowMenuBar(QTB_ONSHOWMENUBAR_DEFAULT);
+
+#if QTB_TOOLBAR
+  setOnShowToolBar(QTB_ONSHOWTOOLBAR_DEFAULT);
+#endif // QTB_TOOLBAR
+
   setOnShowStatusBar(QTB_ONSHOWSTATUSBAR_DEFAULT);
 
   setDisplayDataCounterType(QTB_DISPLAYDATACOUNTERTYPE_DEFAULT);
@@ -458,6 +463,12 @@ void Settings::readSettings()
   setOnShowMenuBar(settings->value(QTB_ONSHOWMENUBAR,
 								   QTB_ONSHOWMENUBAR_DEFAULT).toBool());
 
+#if QTB_TOOLBAR
+  // load onShowToolBar
+  setOnShowToolBar(settings->value(QTB_ONSHOWTOOLBAR,
+								   QTB_ONSHOWTOOLBAR_DEFAULT).toBool());
+#endif // QTB_TOOLBAR
+
   // load onShowStatusBar
   setOnShowStatusBar(settings->value(QTB_ONSHOWSTATUSBAR,
 									 QTB_ONSHOWSTATUSBAR_DEFAULT).toBool());
@@ -744,6 +755,11 @@ void Settings::writeSettings()
   // save onShowMenuBar
   settings->setValue(QTB_ONSHOWMENUBAR, onShowMenuBar);
 
+#if QTB_TOOLBAR
+  // save onShowToolBar
+  settings->setValue(QTB_ONSHOWTOOLBAR, onShowToolBar);
+#endif // QTB_TOOLBAR
+
   // save onShowStatusBar
   settings->setValue(QTB_ONSHOWSTATUSBAR, onShowStatusBar);
 
@@ -911,6 +927,9 @@ void Settings::printSettings() const
   qDebug() << "DesktopAutoresize        : " << onDesktopAutoresize;
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
+#if QTB_TOOLBAR
+  qDebug() << "ShowToolBar             : " << onShowToolBar;
+#endif // QTB_TOOLBAR
   qDebug() << "ShowStatusBar           : " << onShowStatusBar;
   qDebug() << "DisplayDataCounterType  : " << displayDataCounterType;
   qDebug() << "FullScreenAtConnected   : " << onFullScreenAtConnected;

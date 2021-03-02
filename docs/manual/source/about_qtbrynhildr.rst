@@ -47,3 +47,7 @@ Qt Brynhildrとは
  Cygwin版 Qt Brynhildr
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_cygwin.jpg
+
+ FreeBSD版 Qt Brynhildr
+
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_freebsd.jpg

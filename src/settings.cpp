@@ -313,7 +313,7 @@ void Settings::setDefaultValues()
 #else // defined(Q_OS_ANDROID)
   // Linux Desktop
   hspace = 2;
-  vspace = (menuBar()->sizeHint().height() == 0) ? 2 : 8;
+  vspace = 8;
 #endif // defined(Q_OS_ANDROID)
 
 #elif defined(Q_OS_CYGWIN)

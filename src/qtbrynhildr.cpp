@@ -850,6 +850,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if !QTB_TOUCHPANEL_WINDOW
   // set margin
+#if defined(Q_OS_LINUX)
+  if (menuBar()->sizeHint().height() == 0){
+	settings->setVSpace(2);
+  }
+#endif // defined(Q_OS_LINUX)
   int hspace = settings->getHSpace();
   int vspace = settings->getVSpace();
 

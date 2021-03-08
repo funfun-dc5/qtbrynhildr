@@ -508,6 +508,7 @@ void SB::mouseMoveEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	graphicsView->mouseMoveEventForSP(newEvent);
+	//delete newEvent;
   }
 }
 #endif // QTB_TOUCHPANEL_WINDOW

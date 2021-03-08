@@ -17,7 +17,10 @@ namespace qtbrynhildr {
 // constructor
 Converter_CELT::Converter_CELT(int samplerate, int channels)
   :Converter(samplerate, channels)
+  ,frameSize(0)
   ,mode(0)
+  ,decoder(0)
+  ,workBuffer(0)
 {
   int error;
 
@@ -51,7 +54,6 @@ Converter_CELT::~Converter_CELT()
 	celt_mode_destroy(mode);
 	mode = 0;
   }
-
   // 3) work buffer
   if (workBuffer != 0){
 	delete [] workBuffer;

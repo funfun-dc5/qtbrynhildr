@@ -36,6 +36,7 @@ MouseButton::~MouseButton()
   if (buffer != 0){
 	delete [] buffer;
 	buffer = 0;
+	bufferSize = 0;
   }
 }
 

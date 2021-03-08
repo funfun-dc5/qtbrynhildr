@@ -45,6 +45,8 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
   ,settings(qtbrynhildr->getSettings())
   ,eventConverter(0)
   ,onShiftKey(false)
+  ,keyBuffer(0)
+  ,mouseBuffer(0)
   ,onFullScreen(false)
   ,drawMarkerCounter(0)
   ,previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP)
@@ -81,6 +83,14 @@ DesktopPanel::~DesktopPanel()
   if (mouseBuffer != 0){
 	delete mouseBuffer;
 	mouseBuffer = 0;
+  }
+  if (keyboardLogFile != 0){
+	delete keyboardLogFile;
+	keyboardLogFile = 0;
+  }
+  if (keyboardLogFileStream != 0){
+	delete keyboardLogFileStream;
+	keyboardLogFileStream = 0;
   }
 }
 

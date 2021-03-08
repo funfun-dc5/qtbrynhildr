@@ -149,10 +149,14 @@ int main(int argc, char *argv[])
   app.restoreOverrideCursor();
 
   // delete QtBrynhildr
-  delete qtbrynhildr;
+  if (qtbrynhildr != 0){
+	delete qtbrynhildr;
+  }
 
   // delete option
-  delete option;
+  if (option != 0){
+	delete option;
+  }
 
   return result;
 }

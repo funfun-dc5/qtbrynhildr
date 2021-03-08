@@ -850,57 +850,13 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
 #if !QTB_TOUCHPANEL_WINDOW
   // set margin
-  QString kernelVersion = QSysInfo::kernelVersion();
-  int hspace = 0;
-  int vspace = 0;
-
-#if defined(Q_OS_WIN)
-  if (kernelVersion.startsWith("10.")){			// Windows 10
-	hspace = 2;
-	vspace = 3;
+#if defined(Q_OS_LINUX)
+  if (menuBar()->sizeHint().height() == 0){
+	settings->setVSpace(2);
   }
-  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.2")){	// Windows 8
-	hspace = 2;
-	vspace = 3;
-  }
-  else if (kernelVersion.startsWith("6.1")){	// Windows 7
-	hspace = 2;
-	vspace = 4;
-  }
-  else {
-	// NOT supported Version
-	hspace = 2;
-	vspace = 3;
-  }
-#elif defined(Q_OS_LINUX)
-  // Linux base
-#if defined(Q_OS_ANDROID)
-  // Android
-  hspace = 2;
-  vspace = 4;
-#else // defined(Q_OS_ANDROID)
-  // Linux Desktop
-  hspace = 2;
-  vspace = (menuBar()->sizeHint().height() == 0) ? 2 : 8;
-#endif // defined(Q_OS_ANDROID)
-
-#elif defined(Q_OS_CYGWIN)
-  // Cygwin
-  hspace = 2;
-  vspace = 2;
-#elif defined(Q_OS_FREEBSD)
-  // FreeBSD
-  hspace = 0;
-  vspace = 0;
-#elif defined(Q_OS_OSX)
-  // Darwin
-  hspace = 1;
-  vspace = 0;
-#endif // defined(Q_OS_OSX)
+#endif // defined(Q_OS_LINUX)
+  int hspace = settings->getHSpace();
+  int vspace = settings->getVSpace();
 
   setMargins(hspace, vspace);
   desktopPanel->setMargins(hspace, vspace);

@@ -151,11 +151,13 @@ int main(int argc, char *argv[])
   // delete QtBrynhildr
   if (qtbrynhildr != 0){
 	delete qtbrynhildr;
+	qtbrynhildr = 0;
   }
 
   // delete option
   if (option != 0){
 	delete option;
+	option = 0;
   }
 
   return result;

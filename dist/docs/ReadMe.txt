@@ -42,7 +42,7 @@
 [Linux版(x64/x86)]
 
  Ubuntu 14.04 LTS以降 (x64/x86)
- CentOS 7 (x64)
+ CentOS 7 (x64)以降
 
 [Cygwin x64] : 2021.2.25
 

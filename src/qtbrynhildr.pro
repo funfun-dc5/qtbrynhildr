@@ -389,7 +389,7 @@ HEADERS += util/netutil.h
 SOURCES += util/netutil.cpp
 # for windows
 LIBS += -liphlpapi
-}
 
 QMAKE_EXTRA_TARGETS += clear
 clear.commands += @echo test target
+}

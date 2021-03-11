@@ -2389,6 +2389,12 @@ void QtBrynhildr::createActions()
 // create Menus
 void QtBrynhildr::createMenus()
 {
+  // menu bar setting
+  if (settings->getOnNativeMenuBarDisable()){
+	// disable native menu bar
+	menuBar()->setNativeMenuBar(false);
+  }
+
   // file menu
   fileMenu = menuBar()->addMenu(tr("File"));
   fileMenu->addAction(connectToServer_Action);

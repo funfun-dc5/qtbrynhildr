@@ -830,6 +830,7 @@ onTaskbarAssist=true
 taskbarAssistAreaWidth=10
 taskbarAssistAreaHeight=10
 onPluginsDisable=false
+onNativeMenuBarDisable=false
 onSoundCriticalMessageDisable=false
 onHoldMouseControl=false
 onExtraButtonSupport=true

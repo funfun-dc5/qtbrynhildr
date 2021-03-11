@@ -91,6 +91,7 @@ Settings::Settings(const char *iniFileName)
 #if QTB_PLUGINS_DISABLE_SUPPORT
   setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  setOnNativeMenuBarDisable(QTB_ONNATIVEMENUBARDISABLE_DEFAULT);
   setOnSoundCriticalMessageDisable(QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT);
   setOnHoldMouseControl(QTB_ONHOLDMOUSECONTROL_DEFAULT);
 #if QTB_EXTRA_BUTTON_SUPPORT
@@ -395,6 +396,10 @@ void Settings::readSettings()
   // load onPluginsDisable
   setOnPluginsDisable(settings->value(QTB_ONPLUGINSDISABLE,
 									  QTB_ONPLUGINSDISABLE_DEFAULT).toBool());
+
+  // load onNativeMenuBarDisable
+  setOnNativeMenuBarDisable(settings->value(QTB_ONNATIVEMENUBARDISABLE,
+											QTB_ONNATIVEMENUBARDISABLE_DEFAULT).toBool());
 
   // load onSoundCriticalMessageDisable
   setOnSoundCriticalMessageDisable(settings->value(QTB_ONSOUNDCRITICALMESSAGEDISABLE,
@@ -730,6 +735,9 @@ void Settings::writeSettings()
   // save onPluginsDisable
   settings->setValue(QTB_ONPLUGINSDISABLE, onPluginsDisable);
 
+  // save onNativeMenuBarDisable
+  settings->setValue(QTB_ONNATIVEMENUBARDISABLE, onNativeMenuBarDisable);
+
   // save onSoundCriticalMessageDisable
   settings->setValue(QTB_ONSOUNDCRITICALMESSAGEDISABLE, onSoundCriticalMessageDisable);
 
@@ -967,6 +975,7 @@ void Settings::printSettings() const
   qDebug() << "Taskbar Assist Area Height: " << taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
+  qDebug() << "NativeMenuBarDisable: " << onNativeMenuBarDisable;
   qDebug() << "SoundCriticalMessageDisable: " << onSoundCriticalMessageDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "GamePadSupport: " << onGamePadSupport;

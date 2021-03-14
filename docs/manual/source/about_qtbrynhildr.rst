@@ -40,6 +40,10 @@ Qt Brynhildrとは
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_centos.jpg
 
+ Linux(Fedora)版 Qt Brynhildr
+
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_fedora.jpg
+
  Mac版 Qt Brynhildr
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_macosx.png

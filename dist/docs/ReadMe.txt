@@ -43,6 +43,7 @@
 
  Ubuntu 14.04 LTS以降 (x64/x86)
  CentOS 7 (x64)以降
+ Fedora 33 (x64)以降
 
 [Cygwin x64] : 2021.2.25
 

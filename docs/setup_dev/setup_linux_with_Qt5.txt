@@ -2,6 +2,10 @@
  Setup Development Environment for Qt Brynhildr on Linux
 ---------------------------------------------------------------------------
 
+0) build celt library and libvpx (static library)
+
+   copy static libraries to qtbrynhildr/libs/{celt,vpx}
+
 1) install Qt5 and g++
 
  Qt5: https://www1.qt.io/developers/

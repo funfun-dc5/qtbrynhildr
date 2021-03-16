@@ -140,7 +140,6 @@ bool SK::event(QEvent *event)
 
 		  // move
 		  mouseMoveEvent(newEvent);
-
 		  delete newEvent;
 		}
 	  }
@@ -176,6 +175,7 @@ void SK::mousePressEvent(QMouseEvent *event)
 	graphicsView->mouseMoveEventForSP(newEvent);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 	graphicsView->mousePressEventForSP(newEvent);
+	//delete newEvent;
   }
 }
 
@@ -190,6 +190,7 @@ void SK::mouseReleaseEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	graphicsView->mouseReleaseEventForSP(newEvent);
+	//delete newEvent;
   }
 }
 
@@ -204,6 +205,7 @@ void SK::mouseMoveEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	graphicsView->mouseMoveEventForSP(newEvent);
+	//delete newEvent;
   }
 }
 #endif // QTB_TOUCHPANEL_WINDOW

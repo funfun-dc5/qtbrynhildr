@@ -77,7 +77,7 @@ case $UNAME in
 		pushd ../docs/manual
 		make clean
 		popd
-		rm -rf ../dist/doc/manual/*
+		rm -rf ../dist/docs/manual/*
 		# delete files for install
 		./install $EXTOPT clean
 		;;
@@ -91,7 +91,7 @@ case $UNAME in
 		# delete manual
 		make clean
 		popd
-		rm -rf ../dist/doc/manual/*
+		rm -rf ../dist/docs/manual/*
 		# delete files for install
 		./install $EXTOPT clean
 		;;
@@ -105,7 +105,7 @@ case $UNAME in
 		# delete manual
 		make clean
 		popd
-		rm -rf ../dist/doc/manual/*
+		rm -rf ../dist/docs/manual/*
 		# delete files for install
 		./install clean
 		;;
@@ -121,7 +121,7 @@ case $UNAME in
 			# delete manual
 			make clean
 			popd
-			rm -rf ../dist/doc/manual/*
+			rm -rf ../dist/docs/manual/*
 			# delete files for install
 			./install clean
 		fi

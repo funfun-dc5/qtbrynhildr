@@ -177,7 +177,7 @@ if [ "$TARGET" = "clean" -o "$2" = "clean" ] ; then
 		CYGWIN*)
 			# clean
 			\rm -rf ${DISTDIR}/bin
-			\rm -rf ${DISTDIR}/doc
+			\rm -rf ${DISTDIR}/docs
 			\rm -rf ${DISTDIR}/${ISS}
 			;;
 		Linux)
@@ -368,7 +368,7 @@ case $UNAME in
 				echo "create .iss file"
 				find bin -type f -print | sed -f ../script/iss.sed | awk -F: -f ../script/iss.awk > tmp_bin.iss
 				cd ..
-				find doc/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss_manual.awk > tmp.iss
+				find docs/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss_manual.awk > tmp.iss
 				cat windows/${ISS}.template | sed -f script/buildtool${TARGET}.sed > new_template.iss
 				cat new_template.iss windows/tmp_bin.iss tmp.iss > windows/${ISS}
 				rm -f windows/tmp_bin.iss tmp.iss new_template.iss
@@ -379,17 +379,17 @@ case $UNAME in
 				PKGSTRING="${APPS}${APPSUFIX}-${PKGNAME}-v${VERSION}-Portable"
 				# 1) make top directory
 				mkdir ${PKGSTRING}
-				mkdir -p ${PKGSTRING}/doc/manual
+				mkdir -p ${PKGSTRING}/docs/manual
 				# 2) move bin into the directory
 				mv bin ${PKGSTRING}
 				# 3) copy doc into the directory
 				# copy document file
-				${INSTALL} ${INSTALLFLAGS} ../doc/ReadMe.txt ${PKGSTRING}/doc
-				${INSTALL} ${INSTALLFLAGS} ../doc/ChangeLog.txt ${PKGSTRING}/doc
-				${INSTALL} ${INSTALLFLAGS} ../doc/LICENSE.txt ${PKGSTRING}/doc
+				${INSTALL} ${INSTALLFLAGS} ../docs/ReadMe.txt ${PKGSTRING}/doc
+				${INSTALL} ${INSTALLFLAGS} ../docs/ChangeLog.txt ${PKGSTRING}/doc
+				${INSTALL} ${INSTALLFLAGS} ../docs/LICENSE.txt ${PKGSTRING}/doc
 				# copy manual file
-				cp -r ../docs/manual/* ${PKGSTRING}/doc/manual
-				rm -f ${PKGSTRING}/doc/manual/.gitkeep
+				cp -r ../docs/manual/* ${PKGSTRING}/docs/manual
+				rm -f ${PKGSTRING}/docs/manual/.gitkeep
 				# 4) archive package
 				#zip -9 -r ${PKGSTRING}.zip ${PKGSTRING}
 				7z a -r -sfx ${PKGSTRING}.exe ${PKGSTRING}
@@ -413,7 +413,7 @@ case $UNAME in
 			# for cygwin
 			# create directory
 			mkdir -p ${DISTDIR}/bin
-			mkdir -p ${DISTDIR}/doc/manual
+			mkdir -p ${DISTDIR}/docs/manual
 			# strip
 			#strip "${APP}"
 			# copy executable file
@@ -430,16 +430,16 @@ case $UNAME in
 			mkdir -p ${DISTDIR}/bin/keylayout/sample
 			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
 			# copy document file
-			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
-			${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
-			${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+			${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DISTDIR}/docs
+			${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DISTDIR}/docs
+			${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DISTDIR}/docs
 			# copy manual file
 			pushd ../docs/manual
 			make html
 			make install
 			popd
-			cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
-			rm -f ${DISTDIR}/doc/manual/.gitkeep
+			cp -r ../dist/docs/manual/* ${DISTDIR}/docs/manual
+			rm -f ${DISTDIR}/docs/manual/.gitkeep
 			# make package string
 			#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
 			PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
@@ -461,7 +461,7 @@ case $UNAME in
 		# for linux
 		# create directory
 		mkdir -p ${DISTDIR}/bin
-		mkdir -p ${DISTDIR}/doc/manual
+		mkdir -p ${DISTDIR}/docs/manual
 		# with Qt files
 		if [ "${WITHQT}" = "ON" ] ; then
 			# for Qt dynamic link files
@@ -505,16 +505,16 @@ case $UNAME in
 		mkdir -p ${DISTDIR}/bin/keylayout/sample
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
 		# copy document file
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DISTDIR}/docs
 		# copy manual file
 		pushd ../docs/manual
 		make html
 		make install
 		popd
-		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
-		rm -f ${DISTDIR}/doc/manual/.gitkeep
+		cp -r ../dist/docs/manual/* ${DISTDIR}/docs/manual
+		rm -f ${DISTDIR}/docs/manual/.gitkeep
 		# make package string
 		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
 		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
@@ -536,7 +536,7 @@ case $UNAME in
 		# for freebsd
 		# create directory
 		mkdir -p ${DISTDIR}/bin
-		mkdir -p ${DISTDIR}/doc/manual
+		mkdir -p ${DISTDIR}/docs/manual
 		# strip
 		#strip "${APP}"
 		# copy executable file
@@ -553,16 +553,16 @@ case $UNAME in
 		mkdir -p ${DISTDIR}/bin/keylayout/sample
 		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
 		# copy document file
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DISTDIR}/doc
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DISTDIR}/doc
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DISTDIR}/doc
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DISTDIR}/docs
 		# copy manual file
 		pushd ../docs/manual
 		make html
 		make install
 		popd
-		cp -r ../dist/doc/manual/* ${DISTDIR}/doc/manual
-		rm -f ${DISTDIR}/doc/manual/.gitkeep
+		cp -r ../dist/docs/manual/* ${DISTDIR}/docs/manual
+		rm -f ${DISTDIR}/docs/manual/.gitkeep
 		# make package string
 		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
 		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
@@ -602,15 +602,15 @@ case $UNAME in
 		DOCDIR="${APP}.app/Contents/Doc"
 		mkdir -p ${DOCDIR}/manual
 		# copy document file
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ReadMe.txt ${DOCDIR}
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/ChangeLog.txt ${DOCDIR}
-		${INSTALL} ${INSTALLFLAGS} ../dist/doc/LICENSE.txt ${DOCDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DOCDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DOCDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DOCDIR}
 		# copy manual file
 		pushd ../docs/manual
 		make html
 		make install
 		popd
-		cp -r ../dist/doc/manual/* ${DOCDIR}/manual
+		cp -r ../dist/docs/manual/* ${DOCDIR}/manual
 		rm -f ${DOCDIR}/manual/.gitkeep
 		# make dmg
 		${QTROOT}/bin/macdeployqt "${APP}.app" -dmg

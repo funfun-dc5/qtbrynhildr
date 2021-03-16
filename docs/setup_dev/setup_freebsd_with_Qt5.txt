@@ -2,6 +2,10 @@
  Setup Development Environment for Qt Brynhildr on FreeBSD
 ---------------------------------------------------------------------------
 
+0) build celt library and libvpx (static library)
+
+   copy static libraries to qtbrynhildr/libs/{celt,vpx}
+
 1) install packages
 
  pkg install gmake
@@ -13,16 +17,14 @@
 
  pkg delete libvpx-1.9.0
 
-3) build static libraries (celt-0.11.1 and libvpx-1.4.0)
-
-4) run setup
+3) run setup
 
  ./setup
 
-5) build (GNU make)
+4) build (GNU make)
 
  gmake
 
-6) install libvpx-1.9.0
+5) install libvpx-1.9.0
 
  pkg install libvpx-1.9.0

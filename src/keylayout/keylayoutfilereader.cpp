@@ -116,6 +116,12 @@ void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 
 	// append to keyboard type list
 	keyboardTypeList << QString(header.name);
+
+	// delete KLF image
+	if (klfImage != 0){
+	  delete [] klfImage;
+	  klfImage = 0;
+	}
   }
   else {
 	if (outputLog)

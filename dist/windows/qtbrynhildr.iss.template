@@ -5,7 +5,7 @@
 #define AppExeName "Qt Brynhildr.exe"
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
-#define AppVer "2.3.3"
+#define AppVer "2.3.4"
 #define RCName ""
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
@@ -61,12 +61,12 @@ ShowLanguageDialog=yes
 ;----------------------------------------------------------------------
 ; インストール前に
 ;----------------------------------------------------------------------
-;;InfoBeforeFile="..\doc\NEED.txt"
+;;InfoBeforeFile="..\docs\NEED.txt"
 
 ;----------------------------------------------------------------------
 ; ライセンス
 ;----------------------------------------------------------------------
-LicenseFile="..\doc\LICENSE.txt"
+LicenseFile="..\docs\LICENSE.txt"
 
 ;----------------------------------------------------------------------
 ;「プログラムの追加と削除」ダイアログ情報
@@ -104,11 +104,11 @@ english.ManualShortcut=First step of {#Name}(Ver.0.9.4)
 ; ランタイム
 ;; Source: "vcredist\vcredist_x86.exe"; DestDir: "{app}\vcredist"; Flags: ignoreversion touch
 ; LICENSE.txt
-Source: "..\doc\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion touch
+Source: "..\docs\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion touch
 ; ReadMe.txt
-Source: "..\doc\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
+Source: "..\docs\ReadMe.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
 ; ChangeLog.txt
-Source: "..\doc\ChangeLog.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
+Source: "..\docs\ChangeLog.txt"; DestDir: "{app}"; Flags: isreadme ignoreversion touch
 
 [Registry]
 ;（アンインストール時に）動作設定を削除
@@ -123,7 +123,7 @@ Name: "{commondesktop}\{#Name} ReadMe.txt"; Filename: "{app}\ReadMe.txt"; Workin
 Name: "{commondesktop}\{#Name} ChangeLog.txt"; Filename: "{app}\ChangeLog.txt"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; マニュアル
-Name: "{commondesktop}\{cm:ManualShortcut}"; Filename: "{app}\doc\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\{cm:ManualShortcut}"; Filename: "{app}\docs\manual\html\index.html"; WorkingDir: "{app}"; Tasks: desktopicon
 
 ; ランタイム
 ;;Name: "{commondesktop}\vcredist"; Filename: "{app}\vcredist\vcredist_x86.exe"; WorkingDir: "{app}"; Tasks: desktopicon

@@ -89,6 +89,14 @@ SoundThread::~SoundThread()
 	audioOutput = 0;
   }
 
+#if QTB_CELT_SUPPORT
+  // converter
+  if (converter != 0){
+	delete converter;
+	converter = 0;
+  }
+#endif // QTB_CELT_SUPPORT
+
   // output wav file
   if (settings->getOutputSoundDataToFile() && settings->getOutputSoundDataToWavFile()){
 	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);

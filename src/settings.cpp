@@ -26,6 +26,8 @@ Settings::Settings(const char *iniFileName, Cipher *cipher)
 Settings::Settings(const char *iniFileName)
 #endif // QTB_CRYPTGRAM
   :desktop(new Desktop())
+  ,hSpace(0)
+  ,vSpace(0)
   ,bootupFlag(false)
   ,shutdownFlag(false)
 #if QTB_CRYPTOGRAM
@@ -67,6 +69,9 @@ Settings::Settings(const char *iniFileName)
 #endif // !QTB_PORTABLE_VERSION
   }
 
+  // set default values
+  setDefaultValues();
+
   // set version information
   setGeneratedVersion(QTB_GENERATEDVERSION_DEFAULT);
   setCurrentVersion(QTB_CURRENTVERSION_DEFAULT);
@@ -86,6 +91,7 @@ Settings::Settings(const char *iniFileName)
 #if QTB_PLUGINS_DISABLE_SUPPORT
   setOnPluginsDisable(QTB_ONPLUGINSDISABLE_DEFAULT);
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  setOnNativeMenuBarDisable(QTB_ONNATIVEMENUBARDISABLE_DEFAULT);
   setOnSoundCriticalMessageDisable(QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT);
   setOnHoldMouseControl(QTB_ONHOLDMOUSECONTROL_DEFAULT);
 #if QTB_EXTRA_BUTTON_SUPPORT
@@ -268,9 +274,78 @@ void Settings::writeServerNameList()
 }
 #endif // QTB_AUTO_COMPLETE
 
+// set default values
+void Settings::setDefaultValues()
+{
+  // set margin (hspace, vspace)
+  QString kernelVersion = QSysInfo::kernelVersion();
+  int hspace = 0;
+  int vspace = 0;
+
+#if !QTB_TOUCHPANEL_WINDOW
+#if defined(Q_OS_WIN)
+  if (kernelVersion.startsWith("10.")){			// Windows 10
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.3")){	// Windows 8.1
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.2")){	// Windows 8
+	hspace = 2;
+	vspace = 3;
+  }
+  else if (kernelVersion.startsWith("6.1")){	// Windows 7
+	hspace = 2;
+	vspace = 4;
+  }
+  else {
+	// NOT supported Version
+	hspace = 2;
+	vspace = 3;
+  }
+#elif defined(Q_OS_LINUX)
+  // Linux base
+#if defined(Q_OS_ANDROID)
+  // Android
+  hspace = 2;
+  vspace = 4;
+#else // defined(Q_OS_ANDROID)
+  // Linux Desktop
+  hspace = 2;
+  vspace = 8;
+#endif // defined(Q_OS_ANDROID)
+
+#elif defined(Q_OS_CYGWIN)
+  // Cygwin
+  hspace = 2;
+  vspace = 2;
+#elif defined(Q_OS_FREEBSD)
+  // FreeBSD
+  hspace = 0;
+  vspace = 0;
+#elif defined(Q_OS_OSX)
+  // Darwin
+  hspace = 1;
+  vspace = 0;
+#endif // defined(Q_OS_OSX)
+#endif // !QTB_TOUCHPANEL_WINDOW
+
+  // set hSpace, vSpace
+  setHSpace(hspace);
+  setVSpace(vspace);
+}
+
 // load settings from setting files or registry
 void Settings::readSettings()
 {
+  // load hSpace
+  setHSpace(settings->value(QTB_HSPACE, 0).toInt());
+
+  // load vSpace
+  setVSpace(settings->value(QTB_VSPACE, 0).toInt());
+
   // load version information
   setGeneratedVersion(settings->value(QTB_GENERATEDVERSION,
 									  (qint32)QTB_GENERATEDVERSION_DEFAULT).toInt());
@@ -321,6 +396,10 @@ void Settings::readSettings()
   // load onPluginsDisable
   setOnPluginsDisable(settings->value(QTB_ONPLUGINSDISABLE,
 									  QTB_ONPLUGINSDISABLE_DEFAULT).toBool());
+
+  // load onNativeMenuBarDisable
+  setOnNativeMenuBarDisable(settings->value(QTB_ONNATIVEMENUBARDISABLE,
+											QTB_ONNATIVEMENUBARDISABLE_DEFAULT).toBool());
 
   // load onSoundCriticalMessageDisable
   setOnSoundCriticalMessageDisable(settings->value(QTB_ONSOUNDCRITICALMESSAGEDISABLE,
@@ -539,7 +618,7 @@ void Settings::readSettings()
 
   // load convertThreadCount
   setConvertThreadCount(settings->value(QTB_CONVERTTHREADCOUNT,
-										   QTB_CONVERTTHREADCOUNT_DEFAULT).toInt());
+										QTB_CONVERTTHREADCOUNT_DEFAULT).toInt());
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // load touchpanelOperationType
@@ -601,6 +680,15 @@ void Settings::readSettings()
 // save settings to setting file or registry
 void Settings::writeSettings()
 {
+  // save hSpace
+  settings->setValue(QTB_HSPACE, (qint32)hSpace);
+
+  // save vSpace
+  settings->setValue(QTB_VSPACE, (qint32)vSpace);
+
+  // save vSpace
+  setVSpace(settings->value(QTB_VSPACE, 0).toInt());
+
   // save informations (write only)
   settings->setValue(QTB_INFOKERNELTYPE,		QSysInfo::kernelType());
   settings->setValue(QTB_INFOKERNELVERSION,		QSysInfo::kernelVersion());
@@ -646,6 +734,9 @@ void Settings::writeSettings()
 
   // save onPluginsDisable
   settings->setValue(QTB_ONPLUGINSDISABLE, onPluginsDisable);
+
+  // save onNativeMenuBarDisable
+  settings->setValue(QTB_ONNATIVEMENUBARDISABLE, onNativeMenuBarDisable);
 
   // save onSoundCriticalMessageDisable
   settings->setValue(QTB_ONSOUNDCRITICALMESSAGEDISABLE, onSoundCriticalMessageDisable);
@@ -866,6 +957,9 @@ void Settings::writeSettings()
 void Settings::printSettings() const
 {
   qDebug() << "---------------- Settings ----------------";
+  qDebug() << "hSpace        : " << hSpace;
+  qDebug() << "vSpace        : " << vSpace;
+  qDebug() << "------------------------------------------";
   qDebug() << "Generated Version : " << generatedVersion;
   qDebug() << "Current Version   : " << currentVersion;
   qDebug() << "Public Mode Version: " << getPublicModeVersionByString();
@@ -881,6 +975,7 @@ void Settings::printSettings() const
   qDebug() << "Taskbar Assist Area Height: " << taskbarAssistAreaHeight;
 #if QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "PluginsDisable: " << onPluginsDisable;
+  qDebug() << "NativeMenuBarDisable: " << onNativeMenuBarDisable;
   qDebug() << "SoundCriticalMessageDisable: " << onSoundCriticalMessageDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
   qDebug() << "GamePadSupport: " << onGamePadSupport;

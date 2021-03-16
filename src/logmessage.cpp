@@ -46,6 +46,15 @@ LogMessage::LogMessage(QWidget *parent)
 // destructor
 LogMessage::~LogMessage()
 {
+  // delete objects
+  if (logFile != 0){
+	delete logFile;
+	logFile = 0;
+  }
+  if (logFileStream != 0){
+	delete logFileStream;
+	logFileStream = 0;
+  }
 }
 
 // open log file

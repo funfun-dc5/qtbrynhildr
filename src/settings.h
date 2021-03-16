@@ -153,6 +153,10 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONPLUGINSDISABLE_DEFAULT	false
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
+// for onNativeMenuBarDisable
+#define QTB_ONNATIVEMENUBARDISABLE			"onNativeMenuBarDisable"
+#define QTB_ONNATIVEMENUBARDISABLE_DEFAULT	false
+
 // for onSoundCriticalMessageDisable
 #define QTB_ONSOUNDCRITICALMESSAGEDISABLE			"onSoundCriticalMessageDisable"
 #define QTB_ONSOUNDCRITICALMESSAGEDISABLE_DEFAULT	false
@@ -500,6 +504,10 @@ typedef enum {
 #define QTB_GEOMETRY			"geometry"
 // for window state
 #define QTB_WINDOWSTATE			"windowState"
+// for hspace
+#define QTB_HSPACE				"hSpace"
+// for vspace
+#define QTB_VSPACE				"vSpace"
 
 namespace qtbrynhildr {
 
@@ -515,6 +523,12 @@ private:
 
   // desktop information
   Desktop *desktop;
+
+  // hspace
+  volatile int hSpace;
+
+  // vspace
+  volatile int vSpace;
 
   // bootup flag
   volatile bool bootupFlag;
@@ -571,6 +585,7 @@ private:
 #if QTB_PLUGINS_DISABLE_SUPPORT
   volatile bool onPluginsDisable;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
+  volatile bool onNativeMenuBarDisable;
   volatile bool onSoundCriticalMessageDisable;
   volatile bool onHoldMouseControl;
 #if QTB_EXTRA_BUTTON_SUPPORT
@@ -836,6 +851,34 @@ public:
   Desktop *getDesktop() const
   {
 	return desktop;
+  }
+
+  // get hspace
+  int getHSpace() const
+  {
+	return hSpace;
+  }
+
+  // set hspace
+  void setHSpace(int hSpace)
+  {
+	if (hSpace != 0){
+	  this->hSpace = hSpace;
+	}
+  }
+
+  // get vspace
+  int getVSpace() const
+  {
+	return vSpace;
+  }
+
+  // set Vspace
+  void setVSpace(int vSpace)
+  {
+	if (vSpace != 0){
+	  this->vSpace = vSpace;
+	}
   }
 
   // get generated version
@@ -1209,6 +1252,19 @@ public:
   }
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
 
+  // get native menu bar disable flag
+  bool getOnNativeMenuBarDisable() const
+  {
+	return onNativeMenuBarDisable;
+  }
+
+  // set native menu bar disable flag
+  bool setOnNativeMenuBarDisable(bool onNativeMenuBarDisable)
+  {
+	this->onNativeMenuBarDisable = onNativeMenuBarDisable;
+	return true;
+  }
+
   // get sound critical message disable flag
   bool getOnSoundCriticalMessageDisable() const
   {
@@ -1527,6 +1583,9 @@ public:
   }
 
 private:
+  // set default values
+  void setDefaultValues();
+
   // set sound capture
   void setSoundCapture(SOUND_CAPTURE soundCapture)
   {

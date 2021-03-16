@@ -34,18 +34,22 @@
 
     パッケージとして配布されているQt5.9.4でビルドしたもので確認(要pulseaudioパッケージ)
 
-(4) Mac版
+(4) Raspberry Pi 3版
+^^^^^^^^^^^^^^^^^^^^^
+  * Debian with Raspberry Pi Desktop (2021-01-11:32bit:armv7l)以降
+
+(5) Mac版
 ^^^^^^^^^^
   * Mac OS X 10.10 (Yosemite)以降
 
-(5) FreeBSD版
+(6) FreeBSD版
 ^^^^^^^^^^^^^^
   * FreeBSD (x64) 12.2-RELEASE 以降
 
-(6) Android版
+(7) Android版
 ^^^^^^^^^^^^^^
   * Android 4.4以降 (Qt 5.12.xでビルドする必要あり)
 
-(7) iOS版
+(8) iOS版
 ^^^^^^^^^^
   * iOS 13以降

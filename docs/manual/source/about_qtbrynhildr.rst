@@ -36,6 +36,14 @@ Qt Brynhildrとは
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_ubuntu.png
 
+ Linux(CentOS)版 Qt Brynhildr
+
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_centos.jpg
+
+ Linux(Fedora)版 Qt Brynhildr
+
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_fedora.jpg
+
  Mac版 Qt Brynhildr
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_macosx.png
@@ -47,3 +55,7 @@ Qt Brynhildrとは
  Cygwin版 Qt Brynhildr
 
  .. image:: images/about_qtbrynhildr/qtbrynhildr_on_cygwin.jpg
+
+ FreeBSD版 Qt Brynhildr
+
+ .. image:: images/about_qtbrynhildr/qtbrynhildr_on_freebsd.jpg

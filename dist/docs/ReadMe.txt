@@ -42,11 +42,19 @@
 [Linux版(x64/x86)]
 
  Ubuntu 14.04 LTS以降 (x64/x86)
- CentOS 7 (x64)
+ CentOS 7 (x64)以降
+ Fedora 33 (x64)以降
+
+(*)今の所X.org推奨
 
 [Cygwin x64] : 2021.2.25
 
  3.1.7 (0.340/5/3)以降 (*5)
+
+[Raspberry Pi 3] : 2021.3.15
+
+ Debian with Raspberry Pi Desktop (2021-01-11)以降
+ (32bit:armv7l)
 
 [Mac版]
 
@@ -59,10 +67,6 @@
 [Android版]
 
  Android 5.0以降 (*4)
-
-[iOS版]
-
- iOS 13以降
 
  (*1) 全てのエディションで試したわけではありません。
 
@@ -82,8 +86,9 @@
 ==============================
  [テスト中の環境]
 ==============================
- Raspberry Pi3 : Debian with Raspberry Pi Desktop (2020-02-13)で動作確認
-                 (libvpx, Qt5はパッケージで提供されるものを利用)
+[iOS版]
+
+ iOS 13以降
 
 ----------------------------------------------------------------------
 1-1. インストール (Windows版)
@@ -830,6 +835,7 @@ onTaskbarAssist=true
 taskbarAssistAreaWidth=10
 taskbarAssistAreaHeight=10
 onPluginsDisable=false
+onNativeMenuBarDisable=false
 onSoundCriticalMessageDisable=false
 onHoldMouseControl=false
 onExtraButtonSupport=true

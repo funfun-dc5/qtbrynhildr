@@ -589,6 +589,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	desktopPanel->mousePressEvent(newEvent);
+	// delete newEvent;
   }
 }
 
@@ -605,6 +606,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	desktopPanel->mouseReleaseEvent(newEvent);
+	// delete newEvent;
   }
 }
 
@@ -621,6 +623,7 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	desktopPanel->mouseDoubleClickEvent(newEvent);
+	// delete newEvent;
   }
 }
 
@@ -637,6 +640,7 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 	desktopPanel->mouseMoveEvent(newEvent);
+	// delete newEvent;
   }
   else {
 	QGraphicsView::mouseMoveEvent(event);

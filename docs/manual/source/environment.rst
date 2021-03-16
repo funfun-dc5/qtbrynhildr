@@ -25,18 +25,31 @@
 (2) Linux版
 ^^^^^^^^^^^^^
   * Ubuntu 14.04 LTS (x64/x86)以降
-  * CentOS 7 (x64)
+  * CentOS 7 (x64)以降
+  * Fedora 33 (x64)以降
 
-(3) Mac版
-^^^^^^^^^^
-  * Mac OS X 10.10 (Yosemite)以降
-
-(4) Android版
-^^^^^^^^^^^^^^
-  * Android 4.4以降 (Qt 5.12.xでビルドする必要あり)
-
-(5) Cygwin(x64)版
+(3) Cygwin(x64)版
 ^^^^^^^^^^^^^^^^^^
   * 3.1.7 (0.340/5/3)以降
 
     パッケージとして配布されているQt5.9.4でビルドしたもので確認(要pulseaudioパッケージ)
+
+(4) Raspberry Pi 3版
+^^^^^^^^^^^^^^^^^^^^^
+  * Debian with Raspberry Pi Desktop (2021-01-11:32bit:armv7l)以降
+
+(5) Mac版
+^^^^^^^^^^
+  * Mac OS X 10.10 (Yosemite)以降
+
+(6) FreeBSD版
+^^^^^^^^^^^^^^
+  * FreeBSD (x64) 12.2-RELEASE 以降
+
+(7) Android版
+^^^^^^^^^^^^^^
+  * Android 4.4以降 (Qt 5.12.xでビルドする必要あり)
+
+(8) iOS版
+^^^^^^^^^^
+  * iOS 13以降

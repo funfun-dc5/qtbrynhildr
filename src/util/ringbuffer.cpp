@@ -14,7 +14,10 @@ namespace qtbrynhildr {
 
 // constructor
 RingBuffer::RingBuffer(int size)
-  :topPos(0)
+  :buffer(0)
+  ,pairBuffer(0)
+  ,bufferSize(0)
+  ,topPos(0)
   ,nextPos(0)
   // for DEBUG
   ,outputLog(false)
@@ -38,6 +41,7 @@ RingBuffer::~RingBuffer()
 	delete [] pairBuffer;
 	pairBuffer = 0;
   }
+  bufferSize = 0;
 }
 
 // put data to ring buffer

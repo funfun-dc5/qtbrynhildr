@@ -2,9 +2,13 @@
  Setup Development Environment for Qt Brynhildr on MacOSX (10.10 or later)
 ---------------------------------------------------------------------------
 
-1) install Xcode
+0) install Xcode
 
-Install Xcode at App Store.
+ Install Xcode at App Store.
+
+1) build celt library and libvpx (static library)
+
+  copy static libraries to qtbrynhildr/libs/{celt,vpx}
 
 2) install Qt5
 
@@ -19,4 +23,6 @@ for example)
  cd qtbrynhildr/src
  ./setup
 
-5) make
+5) build
+
+ make

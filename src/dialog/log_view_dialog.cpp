@@ -103,11 +103,18 @@ void LogViewDialog::show()
 	  // save last position for Reset
 	  lastPos = logFileStream->pos();
 	  logFile->close();
+	  if (logFileStream != 0){
+		delete logFileStream;
+	  }
   }
   clear();
   setPlainText(logText);
   //qDebug() << "topPos : " << topPos;
   //qDebug() << "lastPos: " << lastPos;
+  if (logFile != 0){
+	delete logFile;
+	logFile = 0;
+  }
   QDialog::show();
 }
 

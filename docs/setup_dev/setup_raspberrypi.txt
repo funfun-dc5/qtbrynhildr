@@ -2,6 +2,10 @@
  Setup Development Environment for Qt Brynhildr on Raspberry Pi
 ---------------------------------------------------------------------------
 
+0) build celt library and libvpx (static library)
+
+   copy static libraries to qtbrynhildr/libs/{celt,vpx}
+
 1) install Qt5 packages
 
  $ sudo apt-get install <packages>

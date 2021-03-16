@@ -47,9 +47,14 @@ void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])
 // get cpuid
 void CPUInfo::getCPUID(int function_id, int data[4])
 {
+#if 1 // for gcc 5.0
+  // NEED : gcc 5.0
   __asm__ volatile ("cpuid"
 					:"=a"(data[0]), "=b"(data[1]), "=c"(data[2]), "=d"(data[3])
 					: "a" (function_id), "c" (0));
+#else // for gcc 5.0
+  // Nothing to do
+#endif // for gcc 5.0
 }
 // get cpuidex
 void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])

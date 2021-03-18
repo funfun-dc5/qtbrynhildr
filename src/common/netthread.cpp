@@ -337,31 +337,40 @@ SOCKET NetThread::socketToServer()
 #endif
 	if (result == SOCKET_TIMEOUT || sock == TIMEOUT_SOCKET){
 	  //cout << "TimeOut!" << endl << flush;
-	  return TIMEOUT_SOCKET;
+	  closesocket(sock);
+	  sock = TIMEOUT_SOCKET;
+	  break;
 	}
 	break;
   }
-  // free all addrinfo
-  while(topAddrinfo != NULL){
-	addrinfo = topAddrinfo;
-	topAddrinfo = addrinfo->ai_next;
-	freeaddrinfo(addrinfo);
-  }
 
-  // for socket option
-  if (sock != INVALID_SOCKET){
+  if (sock == INVALID_SOCKET){
+	// INVALID_SOCKET
+	if (settings->getOutputLog()){
+	  const QString text = "socketToServer() : sock = INVALID_SOCKET";
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+  }
+  else if (sock == TIMEOUT_SOCKET){
+	// TIMEOUT_SOCKET
+	if (settings->getOutputLog()){
+	  const QString text = "socketToServer() : sock = TIMEOUT_SOCKET";
+	  emit outputLogMessage(PHASE_DEBUG, text);
+	}
+  }
+  else {
 	// set socket option
 	setSocketOption(sock);
 	// check socket option
 	if (outputLog)
 	  checkSocketOption(sock);
   }
-  else {
-	// INVALID_SOCKET
-	if (settings->getOutputLog()){
-	  const QString text = "socketToServer() : sock = INVALID_SOCKET";
-	  emit outputLogMessage(PHASE_DEBUG, text);
-	}
+
+  // free all addrinfo
+  while(topAddrinfo != NULL){
+	addrinfo = topAddrinfo;
+	topAddrinfo = addrinfo->ai_next;
+	freeaddrinfo(addrinfo);
   }
 
   return sock;

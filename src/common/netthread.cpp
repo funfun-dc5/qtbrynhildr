@@ -769,17 +769,16 @@ void NetThread::checkSocketOption(SOCKET sock)
   cout << flush;
 }
 
-// set socket attribute
-void NetThread::setSocketAttribute(SOCKET sockfd, int socket_type, bool enable)
+// setup interruptable
+void NetThread::setupInterruptable(SOCKET sockfd, bool enable)
 {
+  // non blocking mode
 #if defined(Q_OS_WIN)
-  u_long val = enable ? 1 : 0;
-
-  ioctlsocket(sockfd, socket_type, &val);
+  u_long val = enable ? 1L : 0L;
+  ioctlsocket(sockfd, FIONBIO, &val);
 #else // defined(Q_OS_WIN)
   int val = enable ? 1 : 0;
-
-  ioctl(sockfd, socket_type, &val);
+  ioctl(sockfd, FIONBIO, &val);
 #endif // defined(Q_OS_WIN)
 }
 
@@ -857,8 +856,8 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 {
   int result = SOCKET_OK;
 
-  // set attribute(Non Blocking)
-  setSocketAttribute(sockfd, FIONBIO, true);
+  // set attribute
+  setupInterruptable(sockfd, true);
 
   // start connect
   if (timeoutsec < 0){
@@ -877,6 +876,8 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 		// error
 		//cout << "errno != EINPROGRESS" << endl << flush;
 		//cout << "errno = " << errno << endl << flush;
+		// set attribute
+		setupInterruptable(sockfd, false);
 		return SOCKET_ERROR;
 	  }
 	}
@@ -889,6 +890,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	else {
 	  // unknown return value
 	  //cout << "unknown return value" << endl << flush;
+	  setupInterruptable(sockfd, false);
 	  return SOCKET_ERROR;
 	}
 
@@ -920,6 +922,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 		if (errno != EINTR){
 		  // error
 		  //cout << "select_result == -1 : errno != EINTR" << endl << flush;
+		  setupInterruptable(sockfd, false);
 		  return SOCKET_ERROR;
 		}
 	  }
@@ -930,6 +933,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 		//cout << "timecounter = " << timecounter << endl << flush;
 		if (timecounter > timeoutsec){
 		  //cout << "timeout!!" << endl << flush;
+		  setupInterruptable(sockfd, false);
 		  return SOCKET_TIMEOUT;
 		}
 	  }
@@ -956,12 +960,14 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 			else {
 			  // connect error
 			  //cout << "connect error : val.i_val != 0" << endl << flush;
+			  setupInterruptable(sockfd, false);
 			  return SOCKET_ERROR;
 			}
 		  }
 		  else {
 			// getsockopt error
 			//cout << "getsockopt error : getsockopt_result == -1" << endl << flush;
+			setupInterruptable(sockfd, false);
 			return SOCKET_ERROR;
 		  }
 		}

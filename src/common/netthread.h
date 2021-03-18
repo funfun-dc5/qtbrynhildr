@@ -54,9 +54,9 @@ typedef struct addrinfo ADDRINFO;
 enum CONNECT_RESULT {
   CONNECT_SUCCEEDED = 0,
   CONNECT_FAILED,
+  CONNECT_FAILED_TIMEOUT,
   CONNECT_WAITED_COUNT,
-  CONNECT_FAILED_RETRY,
-  CONNECT_FAILED_TIMEOUT
+  CONNECT_FAILED_RETRY
 };
 
 // result of processForHeader()
@@ -194,8 +194,8 @@ private:
   // check socket option
   void checkSocketOption(SOCKET sock);
 
-  // set socket attribute
-  void setSocketAttribute(SOCKET sockfd, int socket_type, bool enable);
+  // setup interruptable
+  void setupInterruptable(SOCKET sockfd, bool enable);
 
   // interruptable version send
   long send_int(SOCKET sock, const char *buf, long size, int flags);

@@ -149,6 +149,9 @@ CONNECT_RESULT ControlThread::connectToServer()
   if (sock_control == INVALID_SOCKET){
 	return CONNECT_FAILED;
   }
+  if (sock_control == TIMEOUT_SOCKET){
+	return CONNECT_FAILED_TIMEOUT;
+  }
 
   // connected
   connectedToServer();

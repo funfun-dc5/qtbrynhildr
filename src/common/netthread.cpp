@@ -120,6 +120,15 @@ void NetThread::run()
 		runThread = false;
 		break;
 	  }
+	  if (result_connect == CONNECT_FAILED_TIMEOUT){
+		if (settings->getOutputLog())
+		  cout << "[" << name << "]" << " connect Timeout: connectToServer()" << endl << flush; // error
+		shutdownConnection();
+		emit networkError(false);
+		emit outputLogMessage(QTB_MSG_CONNECT_TIMEOUT);
+		runThread = false;
+		break;
+	  }
 	}
 
 	// process header (send and receive)
@@ -319,12 +328,17 @@ SOCKET NetThread::socketToServer()
 	if (sock == INVALID_SOCKET){
 	  continue;
 	}
-	if (connect_retry(sock, addrinfo->ai_addr, (int)addrinfo->ai_addrlen) == SOCKET_ERROR){
+	int result = connect_retry(sock, addrinfo->ai_addr, (int)addrinfo->ai_addrlen);
+	if (result == SOCKET_ERROR){
 	  closesocket(sock);
 	  sock = INVALID_SOCKET;
 	  continue;
 	}
 #endif
+	if (result == SOCKET_TIMEOUT || sock == TIMEOUT_SOCKET){
+	  //cout << "TimeOut!" << endl << flush;
+	  return TIMEOUT_SOCKET;
+	}
 	break;
   }
   // free all addrinfo
@@ -390,7 +404,7 @@ SOCKET NetThread::socketToServer()
 
   sock = socket(AF_INET, SOCK_STREAM, 0);
 
-  result = connect_int(sock, (struct sockaddr *)&addr, sizeof(addr));
+  result = connect_int(sock, (struct sockaddr *)&addr, sizeof(addr), -1);
   if (result == SOCKET_ERROR){
 	sock = INVALID_SOCKET;
   }
@@ -755,16 +769,17 @@ void NetThread::checkSocketOption(SOCKET sock)
   cout << flush;
 }
 
-// setup interruptable
-void NetThread::setupInterruptable(SOCKET sockfd)
+// set socket attribute
+void NetThread::setSocketAttribute(SOCKET sockfd, int socket_type, bool enable)
 {
-  // non blocking mode
 #if defined(Q_OS_WIN)
-  u_long val = 1L;
-  ioctlsocket(sockfd, FIONBIO, &val);
+  u_long val = enable ? 1 : 0;
+
+  ioctlsocket(sockfd, socket_type, &val);
 #else // defined(Q_OS_WIN)
-  int val = 1;
-  ioctl(sockfd, FIONBIO, &val);
+  int val = enable ? 1 : 0;
+
+  ioctl(sockfd, socket_type, &val);
 #endif // defined(Q_OS_WIN)
 }
 
@@ -838,73 +853,149 @@ long NetThread::recv_int(SOCKET sockfd, char *buf, long size, int flags)
 }
 
 // interruptable version connect
-int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen, int timeoutsec)
 {
-  // set attribute
-  setupInterruptable(sockfd);
+  int result = SOCKET_OK;
+
+  // set attribute(Non Blocking)
+  setSocketAttribute(sockfd, FIONBIO, true);
 
   // start connect
-  (void)::connect(sockfd, addr, addrlen);
+  if (timeoutsec < 0){
+	// no timeout
+	result = ::connect(sockfd, addr, addrlen);
+	//cout << "result = " << result << endl << flush;
+	//cout << "errno = " << errno << endl << flush;
+	return SOCKET_OK;
+  }
+  else {
+	// timeout
+	result = ::connect(sockfd, addr, addrlen);
 
-  return 0;
-}
-
-// connect with retry
-#define MAXSLEEP 128
-#if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
-int NetThread::connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen)
-{
-  for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
-	int fd = socket(domain, type, protocol);
-	if (fd < 0){
-	  break;
+	if (result == -1){
+	  if (errno != EINPROGRESS && errno != 0){
+		// error
+		//cout << "errno != EINPROGRESS" << endl << flush;
+		//cout << "errno = " << errno << endl << flush;
+		return SOCKET_ERROR;
+	  }
 	}
-	if (connect_int(fd, addr, addrlen) == 0){
-	  return fd;
+	else if (result == 0){
+	  // connect
+	  //cout << "result == 0" << endl << flush;
+	  //cout << "errno = " << errno << endl << flush;
+	  return SOCKET_OK;
 	}
-	closesocket(fd);
-
-	// check exit
-	if (!runThread){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
-	  return INVALID_SOCKET;
+	else {
+	  // unknown return value
+	  //cout << "unknown return value" << endl << flush;
+	  return SOCKET_ERROR;
 	}
 
-	// sleep for next try
-	if (numsec <= MAXSLEEP/2){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
-	  QThread::sleep(numsec);
+	// select
+	struct timeval timeout;
+	fd_set mask;
+	fd_set write_mask, read_mask;
+	int width = sockfd + 1;
+	long timecounter = 0;
+
+	// setup bitmap
+	FD_ZERO(&mask);
+	FD_SET(sockfd, &mask);
+
+	// set timeout
+	timeout.tv_sec = 1; // 1 sec.
+	timeout.tv_usec = 0;
+
+	while(true){
+	  read_mask = mask;
+	  write_mask = mask;
+	  int select_result = ::select(width, &read_mask, &write_mask, 0, &timeout);
+	  if (!runThread){
+		//cout << "return from select()" << endl << flush;
+		//cout << "timecounter = " << timecounter << endl << flush;
+		return SOCKET_OK;
+	  }
+	  if (select_result == -1){
+		if (errno != EINTR){
+		  // error
+		  //cout << "select_result == -1 : errno != EINTR" << endl << flush;
+		  return SOCKET_ERROR;
+		}
+	  }
+	  else if (select_result == 0){
+		// time out
+		//cout << "timeout : select_result == 0" << endl << flush;
+		timecounter++;
+		//cout << "timecounter = " << timecounter << endl << flush;
+		if (timecounter > timeoutsec){
+		  //cout << "timeout!!" << endl << flush;
+		  return SOCKET_TIMEOUT;
+		}
+	  }
+	  else {
+		if (FD_ISSET(sockfd, &read_mask) || FD_ISSET(sockfd, &write_mask)){
+		  // return value
+		  union {
+			int		i_val;
+			long	l_val;
+			char	c_val[10];
+			struct linger linger_val;
+			struct timeval timeval_val;
+		  } val;
+		  socklen_t len;
+
+		  len = sizeof(len);
+		  int getsockopt_result = ::getsockopt(sockfd, SOL_SOCKET, SO_ERROR, (VAL_TYPE*)&val, &len);
+		  if (getsockopt_result != -1){
+			if (val.i_val == 0){
+			  // connect
+			  //cout << "connect : val.i_val == 0" << endl << flush;
+			  return SOCKET_OK;
+			}
+			else {
+			  // connect error
+			  //cout << "connect error : val.i_val != 0" << endl << flush;
+			  return SOCKET_ERROR;
+			}
+		  }
+		  else {
+			// getsockopt error
+			//cout << "getsockopt error : getsockopt_result == -1" << endl << flush;
+			return SOCKET_ERROR;
+		  }
+		}
+	  }
 	}
   }
 
-  return INVALID_SOCKET;
+  //cout << "last result = " << result << endl << flush;
+  return SOCKET_OK;
+}
+
+// connect with retry
+#if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
+int NetThread::connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen)
+{
+  int timeout = settings->getTimeoutTime();
+  int fd = socket(domain, type, protocol);
+  if (fd < 0){
+	return SOCKET_ERROR;
+  }
+  if (connect_int(fd, addr, addrlen, timeout) == SOCKET_OK){
+	return fd;
+  }
+  closesocket(fd);
+
+  return TIMEOUT_SOCKET;
 }
 #else // !defined(Q_OS_WIN)
 int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
 {
-  for (int numsec = 1; numsec <= MAXSLEEP; numsec <<= 1){
-	if (connect_int(sockfd, addr, addrlen) == 0){
-	  return 0;
-	}
+  int timeout = settings->getTimeoutTime();
+  int result = connect_int(sockfd, addr, addrlen, timeout);
 
-	// check exit
-	if (!runThread){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : Failed" << endl << flush;
-	  return SOCKET_ERROR;
-	}
-
-	// sleep for next try
-	if (numsec <= MAXSLEEP/2){
-	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " connect_retry() : sleep " << numsec << " sec" << endl << flush;
-	  QThread::sleep(numsec);
-	}
-  }
-
-  return SOCKET_ERROR;
+  return result;
 }
 #endif // !defined(Q_OS_WIN)
 

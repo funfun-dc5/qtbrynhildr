@@ -444,6 +444,10 @@ typedef enum {
 #define QTB_CONVERTTHREADCOUNT				"convertThreadCount"
 #define QTB_CONVERTTHREADCOUNT_DEFAULT		2
 
+// for timeoutTime
+#define QTB_TIMEOUTTIME						"timeoutTime"
+#define QTB_TIMEOUTTIME_DEFAULT				-1
+
 #if defined(QTB_DEV_TOUCHPANEL)
 // for touchpanelOperationType
 #define QTB_TOUCHPANELOPERATIONTYPE				"touchpanelOperationType"
@@ -784,6 +788,9 @@ private:
 
   // convert thread count
   volatile int convertThreadCount;
+
+  // timeout time
+  volatile int timeoutTime;
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // for touchpanel operation type
@@ -2365,6 +2372,18 @@ public:
 	  convertThreadCount = 1;
 #endif // QTB_VERSION_NUMBER > 2017
 	this->convertThreadCount = convertThreadCount;
+  }
+
+  // get timeout time
+  int getTimeoutTime() const
+  {
+	return timeoutTime;
+  }
+
+  // set timeout time
+  void setTimeoutTime(int timeoutTime)
+  {
+	this->timeoutTime = timeoutTime;
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)

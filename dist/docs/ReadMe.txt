@@ -887,6 +887,7 @@ graphicsBufferSize=1048576
 soundBufferSize=1048576
 doubleClickThreshold=500
 convertThreadCount=2
+timeoutTime=-1
 touchpanelOperationType=0
 touchpanelInterfaceType=0
 outputGraphicsDataToFile=false

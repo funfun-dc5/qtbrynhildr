@@ -874,6 +874,8 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	result = ::connect(sockfd, addr, addrlen);
 	//cout << "result = " << result << endl << flush;
 	//cout << "errno = " << errno << endl << flush;
+	// wait 100 ms
+	QThread::msleep(100);
 
 	if (result < 0 && errno != EINPROGRESS && errno != 0){
 	  return SOCKET_ERROR;

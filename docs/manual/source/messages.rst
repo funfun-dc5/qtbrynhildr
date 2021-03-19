@@ -36,3 +36,8 @@
  brynhildr.iniでvideocodec=2(MotionJPEG)もしくはvideocodec=3(Compress)と指定していること、もしくはvideocodec自体の指定がないことを確認してください。
 
  .. [#] 現在のところvideocodec=0(Speed)/1(Hybrid)はサポートしていません。
+
+7. 「サーバとの接続にタイムアウトしました！(Timeout to connect server!)」
+
+ "Qt Brynhildr.ini"のtimeoutTimeで設定されている時間だけ待ちましたがサーバに接続できませんでした。
+ サーバ名もしくはIPアドレスが間違えているかもしれません。

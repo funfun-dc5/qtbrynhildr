@@ -874,7 +874,13 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	result = ::connect(sockfd, addr, addrlen);
 	//cout << "result = " << result << endl << flush;
 	//cout << "errno = " << errno << endl << flush;
-	return SOCKET_OK;
+
+	if (result < 0 && errno != EINPROGRESS && errno != 0){
+	  return SOCKET_ERROR;
+	}
+	else {
+	  return SOCKET_OK;
+	}
   }
   else {
 	// timeout
@@ -997,12 +1003,18 @@ int NetThread::connect_retry(int domain, int type, int protocol, const struct so
   if (fd < 0){
 	return SOCKET_ERROR;
   }
-  if (connect_int(fd, addr, addrlen, timeout) == SOCKET_OK){
+  int result = connect_int(fd, addr, addrlen, timeout);
+  if (result == SOCKET_OK){
 	return fd;
   }
   closesocket(fd);
 
-  return TIMEOUT_SOCKET;
+  if (result == SOCKET_TIMEOUT){
+	return TIMEOUT_SOCKET;
+  }
+  else {
+	return INVALID_SOCKET;
+  }
 }
 #else // !defined(Q_OS_WIN)
 int NetThread::connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen)

@@ -863,6 +863,7 @@ long NetThread::recv_int(SOCKET sockfd, char *buf, long size, int flags)
 // interruptable version connect
 int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen, int timeoutsec)
 {
+#if 0 // for TEST (new)
   int result = SOCKET_OK;
 
   // set attribute
@@ -992,6 +993,128 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 
   //cout << "last result = " << result << endl << flush;
   return SOCKET_OK;
+#else // 0 // for TEST
+  // set attribute
+  setupInterruptable(sockfd, true);
+
+  // start connect
+  int result_connect = ::connect(sockfd, addr, addrlen);
+
+  // check result of connect()
+  if (result_connect == -1){
+	if (errno != EINPROGRESS && errno != 0){
+		// error
+		//cout << "errno != EINPROGRESS" << endl << flush;
+		//cout << "errno = " << errno << endl << flush;
+		// set attribute
+		setupInterruptable(sockfd, false);
+		return SOCKET_ERROR;
+	}
+	// inprogress
+  }
+  else if (result_connect == 0){
+	// connect OK
+	//cout << "result_connect == 0" << endl << flush;
+	//cout << "errno = " << errno << endl << flush;
+	return SOCKET_OK;
+  }
+  else {
+	// unknown return value
+	cout << "unknown return value of connect() = " << result_connect << endl << flush;
+	setupInterruptable(sockfd, false);
+	return SOCKET_ERROR;
+  }
+
+  // check socket file descriptor
+  struct timeval timeout;
+  fd_set mask;
+  fd_set write_mask, read_mask;
+  int width = sockfd + 1;
+  long timecounter = 0;
+
+  // setup bitmap
+  FD_ZERO(&mask);
+  FD_SET(sockfd, &mask);
+
+  // set timeout
+  timeout.tv_sec = 1; // 1 sec.
+  timeout.tv_usec = 0;
+
+  while(runThread){
+	// set initial masks
+	read_mask = mask;
+	write_mask = mask;
+	// select
+	int select_result = ::select(width, &read_mask, &write_mask, 0, &timeout);
+
+	// check result of select()
+	if (select_result == -1){
+	  if (errno != EINTR){
+		// error
+		//cout << "select_result == -1 : errno != EINTR" << endl << flush;
+		setupInterruptable(sockfd, false);
+		return SOCKET_ERROR;
+	  }
+	}
+	else if (select_result == 0){
+	  //cout << "timeout : select_result == 0" << endl << flush;
+	  // timeout
+	  if (timeoutsec < 0){
+		// no timeout
+		continue;
+	  }
+	  else {
+		// check timeout
+		timecounter++;
+		//cout << "timecounter = " << timecounter << endl << flush;
+		if (timecounter > timeoutsec){
+		  //cout << "timeout!!" << endl << flush;
+		  setupInterruptable(sockfd, false);
+		  return SOCKET_TIMEOUT;
+		}
+	  }
+	}
+	else {
+	  // check socket
+	  if (FD_ISSET(sockfd, &read_mask) || FD_ISSET(sockfd, &write_mask)){
+		// return value
+		union {
+		  int		i_val;
+		  long	l_val;
+		  char	c_val[10];
+		  struct linger linger_val;
+		  struct timeval timeval_val;
+		} val;
+		socklen_t len;
+
+		len = sizeof(len);
+		int getsockopt_result = ::getsockopt(sockfd, SOL_SOCKET, SO_ERROR, (VAL_TYPE*)&val, &len);
+		if (getsockopt_result != -1){
+		  if (val.i_val == 0){
+			// connect
+			//cout << "connect : val.i_val == 0" << endl << flush;
+			return SOCKET_OK;
+		  }
+		  else {
+			// connect error
+			//cout << "connect error : val.i_val != 0" << endl << flush;
+			setupInterruptable(sockfd, false);
+			return SOCKET_ERROR;
+		  }
+		}
+		else {
+		  // getsockopt error
+		  //cout << "getsockopt error : getsockopt_result == -1" << endl << flush;
+		  setupInterruptable(sockfd, false);
+		  return SOCKET_ERROR;
+		}
+	  }
+	}
+  } // while-loop
+
+  //cout << "last result = " << result << endl << flush;
+  return SOCKET_OK;
+#endif // 0 // for TEST
 }
 
 // connect with retry

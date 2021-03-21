@@ -446,7 +446,11 @@ typedef enum {
 
 // for timeoutTime
 #define QTB_TIMEOUTTIME						"timeoutTime"
+#if defined(QTB_DEV_TOUCHPANEL)
+#define QTB_TIMEOUTTIME_DEFAULT				10
+#else // defined(QTB_DEV_TOUCHPANEL)
 #define QTB_TIMEOUTTIME_DEFAULT				-1
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if defined(QTB_DEV_TOUCHPANEL)
 // for touchpanelOperationType

@@ -5680,12 +5680,7 @@ void QtBrynhildr::timerExpired()
 	long soundDataRate = soundThread->getDataRate();
 	// Mbps
 	currentDataRate = ((double)(controlDataRate + graphicsDataRate + soundDataRate) * 8 / (1024*1024));
-	updateFrameRate();
-#if QTB_BENCHMARK
-	if (onBenchmarkMenu){
-	  updateConnected();
-	}
-#endif // QTB_BENCHMARK
+	updateStatusBar();
   }
 
 #if 0 // for TEST

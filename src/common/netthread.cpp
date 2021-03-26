@@ -1002,6 +1002,10 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 
   // check result of connect()
   if (result_connect == -1){
+#if 0 // for TEST
+	cout << "errno   = " << errno << endl << flush;
+	cout << "sockfd  = " << sockfd << endl << flush;
+	cout << "addrlen = " << addrlen << endl << flush;
 	if (errno != EINPROGRESS && errno != 0){
 		// error
 		//cout << "errno != EINPROGRESS" << endl << flush;
@@ -1010,6 +1014,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 		setupInterruptable(sockfd, false);
 		return SOCKET_ERROR;
 	}
+#endif // 0 // for TEST
 	// inprogress
   }
   else if (result_connect == 0){

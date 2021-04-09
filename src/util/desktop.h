@@ -71,6 +71,18 @@ public:
   {
 	return maxImageDataSize;
   }
+
+  // get logical dots per inch x
+  int getLogicalDotsPerInchX() const
+  {
+	return screens.at(currentScreenNumber)->logicalDotsPerInchX();
+  }
+
+  // get logical dots per inch y
+  int getLogicalDotsPerInchY() const
+  {
+	return screens.at(currentScreenNumber)->logicalDotsPerInchY();
+  }
 };
 
 } // end of namespace qtbrynhildr

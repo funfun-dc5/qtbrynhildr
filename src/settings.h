@@ -1832,6 +1832,18 @@ public:
 	return desktop->getCurrentScreen().size();
   }
 
+  // get check area width
+  int getCheckAreaWidth() const
+  {
+	return desktop->getLogicalDotsPerInchX()/2;
+  }
+
+  // get check area height
+  int getCheckAreaHeight() const
+  {
+	return desktop->getLogicalDotsPerInchY()/2;
+  }
+
   // get monitor change type
   MONITOR_CHANGE_TYPE getMonitorChangeType() const
   {

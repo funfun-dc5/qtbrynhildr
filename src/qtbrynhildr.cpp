@@ -666,14 +666,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // setup touchpanel interface
   // Left : Button, Right : Keyboard
-  int checkWidth = screenWidth / 32; // 1/32 of screen width
+  int checkWidth = settings->getCheckAreaWidth();
   touchpanelInterfaceLeftRight.softwareButtonRect =
 	QRect(0, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
   touchpanelInterfaceLeftRight.softwareKeyboardRect =
 	QRect(screenWidth - checkWidth, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
 
   // Top : Button, Bottom : Keyboard
-  int checkHeight = screenHeight / 20; // 1/20 of screen height
+  int checkHeight = settings->getCheckAreaHeight();
   touchpanelInterfaceTopBottom.softwareButtonRect =
 	QRect(0, 0, QTB_TOUCHPANEL_WIDTH_SUPPORT_MAX, checkHeight);
   touchpanelInterfaceTopBottom.softwareKeyboardRect =

@@ -6,6 +6,7 @@
 
 // System Header
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iomanip>
@@ -446,12 +447,15 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
 
   // copy encryption key
   if (!settings->getPassword().isEmpty()){
-	const char *encryption_key = qPrintable(settings->getPassword());
+	char *encryption_key = strdup(qPrintable(settings->getPassword()));
 	for (int i = 0;i < ENCRYPTION_KEY_LENGTH; i++){
 	  if (encryption_key[i] == '\0')
 		break;
 
 	  key[i] = encryption_key[i];
+	}
+	if (encryption_key != 0){
+	  free(encryption_key);
 	}
   }
 

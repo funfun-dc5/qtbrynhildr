@@ -478,7 +478,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 settings->getSettings()->fileName());
   }
 
-#if defined(QTB_DEV_DESKTOP)
   // screen size information
   if (settings->getOutputLog()){
 	int screenWidth = settings->getCurrentScreenWidth();
@@ -488,7 +487,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 (QString)"Screen Height: " + QString::number(screenHeight));
   }
-#endif // defined(QTB_DEV_DESKTOP)
 
   // Supported Sound Sample Rate List
   {

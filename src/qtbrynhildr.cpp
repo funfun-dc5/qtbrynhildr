@@ -4993,6 +4993,16 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   int width = windowSize.width() * 0.98;
   int height = size.height() * ((double)width / size.width());
 
+  // check screen size
+  if (width > settings->getCurrentScreenWidth()){
+	height = height * (double)settings->getCurrentScreenWidth()/width;
+	width = settings->getCurrentScreenWidth();
+  }
+  if (height > settings->getCurrentScreenHeight()){
+	width = width * (double)settings->getCurrentScreenHeight()/height;
+	height = settings->getCurrentScreenHeight();
+  }
+
   // calc position
   int x = (windowSize.width() - width) * 0.5;
   int y = (windowSize.height() - height) * 0.8;
@@ -5026,6 +5036,16 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   int width = windowSize.width() * 0.95;
   int height = size.height() * ((double)width / size.width());
 
+  // check screen size
+  if (width > settings->getCurrentScreenWidth()){
+	height = height * (double)settings->getCurrentScreenWidth()/width;
+	width = settings->getCurrentScreenWidth();
+  }
+  if (height > settings->getCurrentScreenHeight()){
+	width = width * (double)settings->getCurrentScreenHeight()/height;
+	height = settings->getCurrentScreenHeight();
+  }
+
   // calc position
   int x = (windowSize.width() - width) * 0.5;
   int y = (windowSize.height() - height) * 0.8;
@@ -5034,7 +5054,6 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   //  cout << "height = " << height << endl << flush;
   //  cout << "x = " << x << endl;
   //  cout << "y = " << y << endl << flush;
-
 
   return QRect(x, y, width, height);
 }

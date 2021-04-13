@@ -79,6 +79,7 @@ typedef int PUBLICMODE_VERSION;
 // for serverName
 #define QTB_SERVERNAME			"serverName"
 #define QTB_SERVERNAME_DEFAULT	""
+//#define QTB_SERVERNAME_DEFAULT	"192.168.10.13"
 
 // for serverNameListSize
 #define QTB_SERVERNAMELISTSIZE			"serverNameListSize"
@@ -238,11 +239,7 @@ typedef int KEYBOARD_TYPE;
 // for desktopScalingFactor
 #define QTB_DESKTOPSCALINGFACTOR	"desktopScalingFactor"
 #define QTB_DESKTOPSCALINGFACTOR_DEFAULT 1.0
-#if defined(QTB_DEV_TOUCHPANEL)
-#define QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT 1.0
-#else // defined(QTB_DEV_TOUCHPANEL)
-#define QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT 0.1
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#define QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT 0.0
 #define QTB_AUTORESIZEDESKTOPSCALINGFACTOR_DEFAULT 0.95
 
 // for desktopScaringQuality
@@ -1646,11 +1643,22 @@ public:
   // set desktop scaling factor
   void setDesktopScalingFactor(qreal desktopScalingFactor)
   {
-	if (desktopScalingFactor < desktopScalingFactorLimit){
-	  desktopScalingFactor = desktopScalingFactorLimit;
+	if (desktopScalingFactorLimit != 0.0){
+	  if (desktopScalingFactor >= desktopScalingFactorLimit){
+		this->desktopScalingFactor = desktopScalingFactor;
+		this->desktopScalingFactorForZoom = 1.0/desktopScalingFactor;
+	  }
 	}
-	this->desktopScalingFactor = desktopScalingFactor;
-	this->desktopScalingFactorForZoom = 1.0/desktopScalingFactor;
+	else {
+	  this->desktopScalingFactor = desktopScalingFactor;
+	  this->desktopScalingFactorForZoom = 1.0/desktopScalingFactor;
+	}
+  }
+
+  // get desktop scaling factor limit
+  qreal getDesktopScalingFactorLimit() const
+  {
+	return desktopScalingFactorLimit;
   }
 
   // set desktop scaling factor limit

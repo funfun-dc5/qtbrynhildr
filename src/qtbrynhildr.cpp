@@ -1525,7 +1525,9 @@ void QtBrynhildr::drawDesktop(QImage image)
 #if QTB_TOUCHPANEL_WINDOW
   static qreal previousScalingFactor = 1.0;
   if (previousScalingFactor != settings->getDesktopScalingFactor()){
+#if 0 // for TEST
 	graphicsView->setScale(settings->getDesktopScalingFactor());
+#endif // 0 // for TEST
 	previousScalingFactor = settings->getDesktopScalingFactor();
   }
 #endif // QTB_TOUCHPANEL_WINDOW
@@ -1543,8 +1545,9 @@ void QtBrynhildr::drawDesktop(QImage image)
 	onSetDesktopScalingFactorForFullScreen = false;
 	QSize screenSize = settings->getCurrentScreenSize();
 	setDesktopScalingFactor(screenSize);
+
 #if QTB_TOUCHPANEL_WINDOW
-	graphicsView->setScalingFactorForFullScreen(settings->getDesktopScalingFactor());
+	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
 #endif // QTB_TOUCHPANEL_WINDOW
   }
 }
@@ -3308,6 +3311,16 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	settings->setDesktopScalingFactor(heightFactor);
   }
   //cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << endl << flush;
+#if 0 // for TEST
+  qDebug() << "screenSize = " << screenSize;
+  qDebug() << "width = " << width;
+  qDebug() << "height = " << height;
+  qDebug() << "desktopWidth = " << desktopWidth;
+  qDebug() << "desktopHeight = " << desktopHeight;
+  qDebug() << "widthFactor = " << widthFactor;
+  qDebug() << "heightFactor = " << heightFactor;
+  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
+#endif // 0 // for TEST
 }
 
 #if 0 // disable now

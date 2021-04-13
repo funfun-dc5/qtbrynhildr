@@ -102,15 +102,6 @@ public:
   // scale
   void setScale(qreal scalingFactor);
 
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
-  void setScalingFactorForFullScreen(qreal scalingFactorForFullScreen)
-  {
-	this->scalingFactorForFullScreen = scalingFactorForFullScreen;
-	// set desktop scaling factor limit
-	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
-  }
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
-
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // mouse press event software panel
   void mousePressEventForSP(QMouseEvent *event);
@@ -169,6 +160,12 @@ protected:
   QSize viewportSizeHint() const;
 
 private:
+  // get scaling factor for full screen
+  inline qreal getScalingFactorForFullScreen() const
+  {
+	return settings->getDesktopScalingFactorLimit();
+  }
+
   // convert to desktop
   bool convertToDesktop(QPoint &point);
 

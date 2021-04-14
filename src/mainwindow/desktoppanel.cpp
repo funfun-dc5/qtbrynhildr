@@ -530,6 +530,7 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 {
   MOUSE_WHEEL mouseWheel = 0;
 
+#if QT_VERSION >= 0x050500 // Qt 5.5.0
   if(event->source() == Qt::MouseEventNotSynthesized){
 	//cout << "[WheelEvent] source() : " << event->source() << endl << flush;
 	QPoint degrees = event->angleDelta() / 8;
@@ -554,6 +555,17 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 	// adjust
 	mouseWheel *= settings->getDesktopScalingFactor();
   }
+#else // QT_VERSION >= 0x050500 // Qt 5.5.0
+  //cout << "[WheelEvent] source() : " << event->source() << endl << flush;
+  QPoint degrees = event->angleDelta() / 8;
+  mouseWheel = degrees.y();
+
+  // for DEBUG
+  if (outputLogForMouse){
+	int ticks = mouseWheel/15;
+	cout << "[DesktopPanel] wheelEvent(degrees): " << mouseWheel << " (ticks = " << ticks << ")" << endl << flush; // for DEBUG
+  }
+#endif // QT_VERSION >= 0x050500 // Qt 5.5.0
 
   // check connected
   if (!settings->getConnected())

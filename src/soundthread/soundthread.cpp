@@ -126,6 +126,9 @@ CONNECT_RESULT SoundThread::connectToServer()
   if (sock_sound == INVALID_SOCKET){
 	return CONNECT_FAILED;
   }
+  if (sock_sound == TIMEOUT_SOCKET){
+	return CONNECT_FAILED_TIMEOUT;
+  }
 
   // connected
   connectedToServer();

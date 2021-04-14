@@ -111,10 +111,9 @@ void LogViewDialog::show()
   setPlainText(logText);
   //qDebug() << "topPos : " << topPos;
   //qDebug() << "lastPos: " << lastPos;
-  if (logFile != 0){
-	delete logFile;
-	logFile = 0;
-  }
+  delete logFile;
+  logFile = 0;
+
   QDialog::show();
 }
 

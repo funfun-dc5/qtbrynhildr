@@ -82,6 +82,8 @@ HEADERS += common/msvc.h
 linux-g++-64 | linux-g++ | cygwin-g++ {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_LINUX
+# x86
+#CONFIG -= vp8-avx2
 # NEON (RaspberryPi3)
 #CONFIG -= vp8-sse vp8-avx2
 #CONFIG += vp8-neon

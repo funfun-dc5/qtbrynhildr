@@ -224,6 +224,12 @@ void LogMessage::outputMessage(int msgID)
 					QMessageBox::Ok,
 					QMessageBox::NoButton);
 	break;
+  case QTB_MSG_CONNECT_TIMEOUT:
+	criticalMessage(PHASE_QTBRYNHILDR,
+					tr("Timeout to connect server!"),
+					QMessageBox::Ok,
+					QMessageBox::NoButton);
+	break;
   case QTB_MSG_PASSWORD_ERROR:
 	criticalMessage(PHASE_QTBRYNHILDR,
 					tr("Password Error!"),

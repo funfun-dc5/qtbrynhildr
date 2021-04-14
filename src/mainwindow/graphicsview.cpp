@@ -34,7 +34,6 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   ,keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer())
 #if defined(QTB_DEV_TOUCHPANEL)
   ,scalingFactor(1.0)
-  ,scalingFactorForFullScreen(1.0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
   ,outputLog(false)
@@ -75,7 +74,8 @@ void GraphicsView::setScale(qreal scalingFactor)
 {
   QTransform transform;
 
-  transform.scale(scalingFactor, scalingFactor);
+  qreal tmpScalingFactor = scalingFactor/getScalingFactorForFullScreen();
+  transform.scale(tmpScalingFactor, tmpScalingFactor);
   setTransform(transform);
 
 #if defined(QTB_DEBUG)
@@ -308,7 +308,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			// reset open software panel check flags
 			inCheckingButtonOpen = false;
 			inCheckingKeyboardOpen = false;
-			inZooming = settings->getDesktopScalingFactor() > scalingFactorForFullScreen;
+			inZooming = settings->getDesktopScalingFactor() > getScalingFactorForFullScreen();
 		  }
 		  else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 			if (outputLog){
@@ -429,7 +429,7 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			// reset open software panel check flags
 			inCheckingButtonOpen = false;
 			inCheckingKeyboardOpen = false;
-			inZooming = settings->getDesktopScalingFactor() > scalingFactorForFullScreen;
+			inZooming = settings->getDesktopScalingFactor() > getScalingFactorForFullScreen();
 		  }
 		  else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 			if (outputLog){
@@ -527,6 +527,10 @@ bool GraphicsView::viewportEvent(QEvent *event){
 			QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
 		  if (currentScalingFactor < 1.0){
 			scalingFactor -= 0.02;
+			qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
+			if (scalingFactor < scalingFactorForFullScreen){
+			  scalingFactor = scalingFactorForFullScreen;
+			}
 		  }
 		  else {
 			scalingFactor += 0.02;

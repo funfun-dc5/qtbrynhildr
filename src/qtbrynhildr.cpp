@@ -478,7 +478,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 								 settings->getSettings()->fileName());
   }
 
-#if defined(QTB_DEV_DESKTOP)
   // screen size information
   if (settings->getOutputLog()){
 	int screenWidth = settings->getCurrentScreenWidth();
@@ -488,7 +487,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	logMessage->outputLogMessage(PHASE_DEBUG,
 								 (QString)"Screen Height: " + QString::number(screenHeight));
   }
-#endif // defined(QTB_DEV_DESKTOP)
 
   // Supported Sound Sample Rate List
   {
@@ -666,14 +664,14 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // setup touchpanel interface
   // Left : Button, Right : Keyboard
-  int checkWidth = screenWidth / 32; // 1/32 of screen width
+  int checkWidth = settings->getCheckAreaWidth();
   touchpanelInterfaceLeftRight.softwareButtonRect =
 	QRect(0, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
   touchpanelInterfaceLeftRight.softwareKeyboardRect =
 	QRect(screenWidth - checkWidth, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
 
   // Top : Button, Bottom : Keyboard
-  int checkHeight = screenHeight / 20; // 1/20 of screen height
+  int checkHeight = settings->getCheckAreaHeight();
   touchpanelInterfaceTopBottom.softwareButtonRect =
 	QRect(0, 0, QTB_TOUCHPANEL_WIDTH_SUPPORT_MAX, checkHeight);
   touchpanelInterfaceTopBottom.softwareKeyboardRect =
@@ -1527,7 +1525,9 @@ void QtBrynhildr::drawDesktop(QImage image)
 #if QTB_TOUCHPANEL_WINDOW
   static qreal previousScalingFactor = 1.0;
   if (previousScalingFactor != settings->getDesktopScalingFactor()){
+#if 0 // for TEST
 	graphicsView->setScale(settings->getDesktopScalingFactor());
+#endif // 0 // for TEST
 	previousScalingFactor = settings->getDesktopScalingFactor();
   }
 #endif // QTB_TOUCHPANEL_WINDOW
@@ -1545,8 +1545,9 @@ void QtBrynhildr::drawDesktop(QImage image)
 	onSetDesktopScalingFactorForFullScreen = false;
 	QSize screenSize = settings->getCurrentScreenSize();
 	setDesktopScalingFactor(screenSize);
+
 #if QTB_TOUCHPANEL_WINDOW
-	graphicsView->setScalingFactorForFullScreen(settings->getDesktopScalingFactor());
+	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
 #endif // QTB_TOUCHPANEL_WINDOW
   }
 }
@@ -3310,6 +3311,16 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 	settings->setDesktopScalingFactor(heightFactor);
   }
   //cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << endl << flush;
+#if 0 // for TEST
+  qDebug() << "screenSize = " << screenSize;
+  qDebug() << "width = " << width;
+  qDebug() << "height = " << height;
+  qDebug() << "desktopWidth = " << desktopWidth;
+  qDebug() << "desktopHeight = " << desktopHeight;
+  qDebug() << "widthFactor = " << widthFactor;
+  qDebug() << "heightFactor = " << heightFactor;
+  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
+#endif // 0 // for TEST
 }
 
 #if 0 // disable now
@@ -4995,6 +5006,16 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   int width = windowSize.width() * 0.98;
   int height = size.height() * ((double)width / size.width());
 
+  // check screen size
+  if (width > settings->getCurrentScreenWidth()){
+	height = height * (double)settings->getCurrentScreenWidth()/width;
+	width = settings->getCurrentScreenWidth();
+  }
+  if (height > settings->getCurrentScreenHeight()){
+	width = width * (double)settings->getCurrentScreenHeight()/height;
+	height = settings->getCurrentScreenHeight();
+  }
+
   // calc position
   int x = (windowSize.width() - width) * 0.5;
   int y = (windowSize.height() - height) * 0.8;
@@ -5028,6 +5049,16 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   int width = windowSize.width() * 0.95;
   int height = size.height() * ((double)width / size.width());
 
+  // check screen size
+  if (width > settings->getCurrentScreenWidth()){
+	height = height * (double)settings->getCurrentScreenWidth()/width;
+	width = settings->getCurrentScreenWidth();
+  }
+  if (height > settings->getCurrentScreenHeight()){
+	width = width * (double)settings->getCurrentScreenHeight()/height;
+	height = settings->getCurrentScreenHeight();
+  }
+
   // calc position
   int x = (windowSize.width() - width) * 0.5;
   int y = (windowSize.height() - height) * 0.8;
@@ -5036,7 +5067,6 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   //  cout << "height = " << height << endl << flush;
   //  cout << "x = " << x << endl;
   //  cout << "y = " << y << endl << flush;
-
 
   return QRect(x, y, width, height);
 }

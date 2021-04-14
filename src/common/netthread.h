@@ -34,6 +34,11 @@
 
 namespace qtbrynhildr {
 
+// for connect_int()
+#define SOCKET_OK		0
+#define SOCKET_TIMEOUT	-2
+#define TIMEOUT_SOCKET	(SOCKET)-2
+
 #if defined(QTB_NET_UNIX)
 typedef int SOCKET;
 typedef struct addrinfo ADDRINFO;
@@ -49,6 +54,7 @@ typedef struct addrinfo ADDRINFO;
 enum CONNECT_RESULT {
   CONNECT_SUCCEEDED = 0,
   CONNECT_FAILED,
+  CONNECT_FAILED_TIMEOUT,
   CONNECT_WAITED_COUNT,
   CONNECT_FAILED_RETRY
 };
@@ -188,8 +194,8 @@ private:
   // check socket option
   void checkSocketOption(SOCKET sock);
 
-  // setup interruptable version
-  void setupInterruptable(SOCKET sock);
+  // setup interruptable
+  void setupInterruptable(SOCKET sockfd, bool enable);
 
   // interruptable version send
   long send_int(SOCKET sock, const char *buf, long size, int flags);
@@ -198,7 +204,7 @@ private:
   long recv_int(SOCKET sock, char *buf, long size, int flags);
 
   // interruptable version connect
-  int connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+  int connect_int(int sockfd, const struct sockaddr *addr, socklen_t addrlen, int timeoutsec);
 
   // connect with retry
 #if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)

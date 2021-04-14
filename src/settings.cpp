@@ -194,6 +194,8 @@ Settings::Settings(const char *iniFileName)
 
   setConvertThreadCount(QTB_CONVERTTHREADCOUNT_DEFAULT);
 
+  setTimeoutTime(QTB_TIMEOUTTIME_DEFAULT);
+
 #if defined(QTB_DEV_TOUCHPANEL)
   setTouchpanelOperationType(QTB_TOUCHPANELOPERATIONTYPE_DEFAULT);
   setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_DEFAULT);
@@ -620,6 +622,10 @@ void Settings::readSettings()
   setConvertThreadCount(settings->value(QTB_CONVERTTHREADCOUNT,
 										QTB_CONVERTTHREADCOUNT_DEFAULT).toInt());
 
+  // load timeoutTime
+  setTimeoutTime(settings->value(QTB_TIMEOUTTIME,
+								 QTB_TIMEOUTTIME_DEFAULT).toInt());
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // load touchpanelOperationType
   setTouchpanelOperationType(settings->value(QTB_TOUCHPANELOPERATIONTYPE,
@@ -904,6 +910,9 @@ void Settings::writeSettings()
   // save convertThreadCount
   settings->setValue(QTB_CONVERTTHREADCOUNT, convertThreadCount);
 
+  // save timeoutTime
+  settings->setValue(QTB_TIMEOUTTIME, timeoutTime);
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // save touchpanelOperationType
   settings->setValue(QTB_TOUCHPANELOPERATIONTYPE, touchpanelOperationType);
@@ -1051,6 +1060,7 @@ void Settings::printSettings() const
 
   qDebug() << "Double Click Threshold(msecond) : " << doubleClickThreshold;
   qDebug() << "Convert Thread Count         : " << convertThreadCount;
+  qDebug() << "Timeout Time                 : " << timeoutTime;
 #if defined(QTB_DEV_TOUCHPANEL)
   qDebug() << "TouchpanelOperationType      : " << touchpanelOperationType;
   qDebug() << "TouchpanelInterfaceType      : " << touchpanelInterfaceType;

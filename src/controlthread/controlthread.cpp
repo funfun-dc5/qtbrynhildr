@@ -149,6 +149,9 @@ CONNECT_RESULT ControlThread::connectToServer()
   if (sock_control == INVALID_SOCKET){
 	return CONNECT_FAILED;
   }
+  if (sock_control == TIMEOUT_SOCKET){
+	return CONNECT_FAILED_TIMEOUT;
+  }
 
   // connected
   connectedToServer();
@@ -610,61 +613,17 @@ void ControlThread::initHeaderForGraphics()
   com_data->frame_no = (char)frameNoOfClient;
 
   // image size and zoom
-  SIZE imageWidth = settings->getDesktopWidth();
-  SIZE imageHeight = settings->getDesktopHeight();
-
-  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
-	  settings->getDesktopScalingFactor() < 1.0){
-	// scale down on server : zoom > 1.0
-	com_data->zoom = (ZOOM)settings->getDesktopScalingFactorForZoom();
-	// com_data->client_scroll_x	= 0;
-	// com_data->client_scroll_y	= 0;
+  if (settings->getDesktopScalingFactorLimit() == 0.0){
+	// only first time
+	com_data->zoom = (ZOOM)1.001;
   }
   else {
-	// zoom = 1.0 (original size)
-	com_data->zoom			= (ZOOM)1.0;
-
-#if 0 // disabled now
-	// offset x,y
-	POS client_scroll_x	= (POS)settings->getDesktopOffsetX();
-	POS client_scroll_y	= (POS)settings->getDesktopOffsetY();
-	com_data->client_scroll_x	= client_scroll_x;
-	com_data->client_scroll_y	= client_scroll_y;
-	com_data->scroll = 1; // enable scroll (public mode 7)
-
-    // set initial image size
-	imageWidth -= client_scroll_x;
-	imageHeight -= client_scroll_y;
-
-	// setup image size
-	if (settings->getOnWindowSizeFixed()){
-	  qreal scalingFactor = settings->getDesktopScalingFactor();
-	  QSize windowSize = desktopPanel->getWindowSize();
-	  //QSize windowSize = QSize(640, 400); // for TEST
-
-	  if (windowSize.isValid()){
-		if (windowSize.width() < imageWidth*scalingFactor ||
-			windowSize.height() < imageHeight*scalingFactor){
-		  imageWidth = windowSize.width()/scalingFactor;
-		  imageHeight = windowSize.height()/scalingFactor;
-		}
-
-		//cout << "scaling Factor = " << scalingFactor << endl;
-		//cout << "windowSize = (" << windowSize.width() << ", " << windowSize.height() << ")" << endl;
-		//cout << "(scroll_x, scroll_y) = (" << client_scroll_x << ", " << client_scroll_y << ")" << endl;
-		//cout << "(imageWidth, imageHeight) = (" << imageWidth << ", " << imageHeight << ")" << endl;
-		//cout << flush;
-	  }
-	}
-#endif // disabled now
+	com_data->zoom = (ZOOM)1.0/settings->getDesktopScalingFactorLimit();
   }
-
-  com_data->image_cx = imageWidth;
-  com_data->image_cy = imageHeight;
-
-  //cout << "(imageWidth, imageHeight) = (" << imageWidth << ", " << imageHeight << ")" << endl << flush;
+  com_data->image_cx = settings->getCurrentScreenWidth();
+  com_data->image_cy = settings->getCurrentScreenHeight();
 }
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // 0 // for TEST
 
 // initialize protocol header for graphics
 void ControlThread::initHeaderForGraphics_test()

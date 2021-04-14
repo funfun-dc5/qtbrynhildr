@@ -159,6 +159,9 @@ CONNECT_RESULT GraphicsThread::connectToServer()
   if (sock_graphics == INVALID_SOCKET){
 	return CONNECT_FAILED;
   }
+  if (sock_graphics == TIMEOUT_SOCKET){
+	return CONNECT_FAILED_TIMEOUT;
+  }
 
   // connected
   connectedToServer();

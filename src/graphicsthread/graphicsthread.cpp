@@ -401,6 +401,15 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	// adjust frame time
 	//adjustFrame();
 
+#if QTB_GRAY_SCALE_MODE
+	// set gray scale
+	static bool previousOnGrayScale = false;
+	if (previousOnGrayScale != settings->getOnMonochromeMode()){
+	  decoder->setOnGrayScale(settings->getOnMonochromeMode());
+	  previousOnGrayScale = settings->getOnMonochromeMode();
+	}
+#endif // QTB_GRAY_SCALE_MODE
+
 	// check frame skip
 	if (doSkipFrame(com_data->frame_no)){
 	  // skip this frame

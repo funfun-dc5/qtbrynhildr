@@ -266,6 +266,10 @@ typedef int COMPRESS_MODE;
 #define QTB_DESKTOPCOMPRESSMODE_DEFAULT	1
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+// for onMonochromeMode
+#define QTB_ONMONOCHROMEMODE				"onMonochromeMode"
+#define QTB_ONMONOCHROMEMODE_DEFAULT		false
+
 // for onCutDesktopBlankArea
 #define QTB_ONCUTDESKTOPBLANKAREA				"onCutDesktopBlankArea"
 #define QTB_ONCUTDESKTOPBLANKAREA_DEFAULT		false
@@ -644,6 +648,9 @@ private:
   // compress mode
   volatile COMPRESS_MODE desktopCompressMode;
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+  // monochrome mode
+  volatile bool onMonochromeMode;
 
   // cut desktop blank area flag
   volatile bool onCutDesktopBlankArea;
@@ -1725,6 +1732,18 @@ public:
 	this->desktopCompressMode = desktopCompressMode;
   }
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+  // get monochrome mode flag
+  bool getOnMonochromeMode() const
+  {
+	return onMonochromeMode;
+  }
+
+  // set monochrome mode flag
+  void setOnMonochromeMode(bool onMonochromeMode)
+  {
+	this->onMonochromeMode = onMonochromeMode;
+  }
 
   // get cut desktop blank area flag
   bool getOnCutDesktopBlankArea() const

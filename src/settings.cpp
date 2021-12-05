@@ -123,6 +123,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnCutDesktopBlankArea(QTB_ONCUTDESKTOPBLANKAREA_DEFAULT);
 
+  setOnMonochromeMode(QTB_ONMONOCHROMEMODE_DEFAULT);
+
   setDesktopOffsetX(QTB_DESKTOPOFFSETX_DEFAULT);
   setDesktopOffsetY(QTB_DESKTOPOFFSETY_DEFAULT);
 
@@ -488,6 +490,10 @@ void Settings::readSettings()
   setOnCutDesktopBlankArea(settings->value(QTB_ONCUTDESKTOPBLANKAREA,
 										   QTB_ONCUTDESKTOPBLANKAREA_DEFAULT).toBool());
 
+  // load onMonochromeMode
+  setOnMonochromeMode(settings->value(QTB_ONMONOCHROMEMODE,
+									  QTB_ONMONOCHROMEMODE_DEFAULT).toBool());
+
   // load desktopOffsetX
   setDesktopOffsetX(settings->value(QTB_DESKTOPOFFSETX,
 							   (qint32)QTB_DESKTOPOFFSETX_DEFAULT).toInt());
@@ -810,6 +816,9 @@ void Settings::writeSettings()
   // save onCutDesktopBlankArea
   settings->setValue(QTB_ONCUTDESKTOPBLANKAREA, onCutDesktopBlankArea);
 
+  // save onMonochromeMode
+  settings->setValue(QTB_ONMONOCHROMEMODE, onMonochromeMode);
+
   // save desktop offset X
   settings->setValue(QTB_DESKTOPOFFSETX, (qint32)desktopOffsetX);
 
@@ -1015,6 +1024,8 @@ void Settings::printSettings() const
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
   qDebug() << "CutDesktopBlankArea     : " << onCutDesktopBlankArea;
+
+  qDebug() << "MonochromeMode          : " << onMonochromeMode;
 
   qDebug() << "DesktopOffsetX          : " << desktopOffsetX;
   qDebug() << "DesktopOffsetY          : " << desktopOffsetY;

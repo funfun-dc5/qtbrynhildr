@@ -385,6 +385,9 @@ private:
   // toggle viewer mode
   QAction *onViewerMode_Action;
 
+  // monochrome mode
+  QAction *onMonochromeMode_Action;
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type KeroRemote
   QAction *touchpanelOperationTypeKeroRemote_Action;
@@ -997,6 +1000,9 @@ private slots:
 
   // viewer mode
   void toggleOnViewerMode();
+
+  // monochrome mode
+  void toggleOnMonochromeMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type

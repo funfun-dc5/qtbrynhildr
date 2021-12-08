@@ -466,7 +466,7 @@ inline int clip(int val)
 }
 
 // RGB convert to Gray Scale macro
-#define GET_GS(R, G, B) (R * 0.299 + G * 0.587 + B * 0.114)
+#define GET_GS(R, G, B) (R * 0.298912 + G * 0.586611 + B * 0.114578)
 // RGB convert to Gray Scale
 void convertRGBtoGS()
 {

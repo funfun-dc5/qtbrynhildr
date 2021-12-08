@@ -535,6 +535,11 @@ void ControlThread::initHeaderForGraphics()
 	com_data->zoom			= (ZOOM)1.0;
   }
 
+#if QTB_GRAY_SCALE_MODE2
+  // monochrome mode
+  com_data->monochrome = settings->getOnMonochromeMode()? 1 : 0;
+#endif // QTB_GRAY_SCALE_MODE2
+
   QSize windowSize = desktopPanel->getSize();
   QSize desktopImageSize = settings->getDesktopImageSize();
   if (!(windowSize.isValid() && desktopImageSize.isValid())){

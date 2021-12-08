@@ -47,6 +47,9 @@ public:
   // get desktop image
   QImage* getDesktopImage(int numOfThread);
 
+  // set gray scale flag
+  virtual void setOnGrayScale(bool onGrayScale);
+
 protected:
 
 private:

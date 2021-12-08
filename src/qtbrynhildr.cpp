@@ -182,6 +182,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,sendKey7_Action(0)
   ,onScrollMode_Action(0)
   ,onViewerMode_Action(0)
+  ,onMonochromeMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,touchpanelOperationTypeKeroRemote_Action(0)
   ,touchpanelOperationTypeQtBrynhildr_Action(0)
@@ -1026,10 +1027,6 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   preferenceDialog->setDecoderNameList(graphicsThread->getSIMDDecoderNameList());
 #endif // QTB_PREFERENCE
 #endif // QTB_SIMD_SUPPORT
-
-#if QTB_GRAY_SCALE_MODE
-  graphicsThread->setOnGrayScale(true); // for TEST
-#endif // QTB_GRAY_SCALE_MODE
 }
 
 // destructor
@@ -2209,6 +2206,16 @@ void QtBrynhildr::createActions()
 	connect(onViewerMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnViewerMode()));
   }
 
+#if QTB_GRAY_SCALE_MODE
+  // Monochrome Mode
+  onMonochromeMode_Action = new QAction(tr("Monochrome Mode"), this);
+  onMonochromeMode_Action->setStatusTip(tr("Monochrome Mode"));
+  onMonochromeMode_Action->setEnabled(false);
+  onMonochromeMode_Action->setCheckable(true);
+  onMonochromeMode_Action->setChecked(settings->getOnMonochromeMode());
+  connect(onMonochromeMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnMonochromeMode()));
+#endif // QTB_GRAY_SCALE_MODE
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type
   touchpanelOperationTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
@@ -2636,6 +2643,11 @@ void QtBrynhildr::createMenus()
 	optionMenu->addAction(onScrollMode_Action);
   }
 
+#if QTB_GRAY_SCALE_MODE
+  // monochrome mode
+  optionMenu->addAction(onMonochromeMode_Action);
+#endif // QTB_GRAY_SCALE_MODE
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type
   touchpanelOperationTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Operation"));
@@ -3034,6 +3046,11 @@ void QtBrynhildr::connected()
 	onViewerMode_Action->setEnabled(true);
   }
 
+#if QTB_GRAY_SCALE_MODE
+  // monochrome mode
+  onMonochromeMode_Action->setEnabled(true);
+#endif // QTB_GRAY_SCALE_MODE
+
   // enable full screen
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -3178,6 +3195,10 @@ void QtBrynhildr::disconnected()
   if (QTB_SCROLL_MODE){
 	onScrollMode_Action->setEnabled(false);
   }
+
+#if QTB_GRAY_SCALE_MODE
+  onMonochromeMode_Action->setEnabled(false);
+#endif // QTB_GRAY_SCALE_MODE
 
   // disabled viewer mode
   if (QTB_VIEWER_MODE){
@@ -4387,6 +4408,11 @@ void QtBrynhildr::refreshOtherMenu()
 	onViewerMode_Action->setEnabled(flag);
   }
 
+#if QTB_GRAY_SCALE_MODE
+  // monochrome mode
+  onMonochromeMode_Action->setEnabled(flag);
+#endif // QTB_GRAY_SCALE_MODE
+
   // enable/disable menu for sound
   flag = settings->getOnSound();
   soundMenu->setEnabled(flag);
@@ -4937,6 +4963,12 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	  refreshWindow();
 	}
   }
+}
+
+// monochrome mode
+void QtBrynhildr::toggleOnMonochromeMode()
+{
+  settings->setOnMonochromeMode(!settings->getOnMonochromeMode());
 }
 
 // desktop scaling

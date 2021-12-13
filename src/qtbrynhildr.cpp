@@ -2210,7 +2210,7 @@ void QtBrynhildr::createActions()
   // Monochrome Mode
   onMonochromeMode_Action = new QAction(tr("Monochrome Mode"), this);
   onMonochromeMode_Action->setStatusTip(tr("Monochrome Mode"));
-  onMonochromeMode_Action->setEnabled(false);
+  onMonochromeMode_Action->setEnabled(true);
   onMonochromeMode_Action->setCheckable(true);
   onMonochromeMode_Action->setChecked(settings->getOnMonochromeMode());
   connect(onMonochromeMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnMonochromeMode()));
@@ -3046,7 +3046,7 @@ void QtBrynhildr::connected()
 	onViewerMode_Action->setEnabled(true);
   }
 
-#if QTB_GRAY_SCALE_MODE
+#if 0 //QTB_GRAY_SCALE_MODE
   // monochrome mode
   onMonochromeMode_Action->setEnabled(true);
 #endif // QTB_GRAY_SCALE_MODE
@@ -3196,7 +3196,7 @@ void QtBrynhildr::disconnected()
 	onScrollMode_Action->setEnabled(false);
   }
 
-#if QTB_GRAY_SCALE_MODE
+#if 0 //QTB_GRAY_SCALE_MODE
   onMonochromeMode_Action->setEnabled(false);
 #endif // QTB_GRAY_SCALE_MODE
 
@@ -4408,7 +4408,7 @@ void QtBrynhildr::refreshOtherMenu()
 	onViewerMode_Action->setEnabled(flag);
   }
 
-#if QTB_GRAY_SCALE_MODE
+#if 0 //QTB_GRAY_SCALE_MODE
   // monochrome mode
   onMonochromeMode_Action->setEnabled(flag);
 #endif // QTB_GRAY_SCALE_MODE

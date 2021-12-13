@@ -746,25 +746,25 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
-  connectToServerDialog = new ConnectToServerDialog(settings, nullptr);
+  connectToServerDialog = new ConnectToServerDialog(settings, this);
   connectToServerDialog->setModal(true);
   connect(connectToServerDialog, SIGNAL(connectToServer()), SLOT(connectToServer()));
 
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog = new DesktopScalingDialog(settings, nullptr);
+	desktopScalingDialog = new DesktopScalingDialog(settings, this);
 	desktopScalingDialog->setModal(true);
   }
 
   // set up log view dialog
   if (QTB_LOG_VIEW){
-	logViewDialog = new LogViewDialog(settings, nullptr);
+	logViewDialog = new LogViewDialog(settings, this);
 	logViewDialog->setModal(true);
   }
 
 #if QTB_PREFERENCE
   // preference dialog
-  preferenceDialog = new PreferenceDialog(settings, nullptr);
+  preferenceDialog = new PreferenceDialog(settings, this);
   preferenceDialog->setModal(true);
 #endif // QTB_PREFERENCE
 

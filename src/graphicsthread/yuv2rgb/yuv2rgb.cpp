@@ -356,6 +356,11 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	(*convert)(ytop, utop, vtop, rgbtop, height);
   }
   else { // numOfThread >= 2
+	// numOfThread == 4 --> need (height % 8 == 0)
+	if ((numOfThread >= 4) && (height % 8 != 0)){
+	  numOfThread = 2;
+	}
+
 	int linesOfThread = height / numOfThread;
 #if QTB_LOAD_BITMAP
 	int rgbtopNextThread = width * linesOfThread * IMAGE_FORMAT_SIZE;

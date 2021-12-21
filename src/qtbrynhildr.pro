@@ -107,6 +107,71 @@ macx {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_MACOS
 ICON = images/qtbrynhildr.icns
+
+# pkg for App Store
+# [RUN] make pkg
+CONFIG += sdk_no_version_check
+QMAKE_EXTRA_TARGETS = pkg
+
+APPCERT = "3rd Party Mac Developer Application: Masaaki Funama (92896J4N4L)"
+INSTALLERCERT = "3rd Party Mac Developer Installer: Masaaki Funama (92896J4N4L)"
+BUNDLEID = net.mcz-xoxo.QtBrynhildr
+
+ENTITLEMENTS = macos/Entitlements.plist
+INFO = macos/Info.plist
+
+# correct files
+
+# for Qt
+pkg.commands += macdeployqt \"$${TARGET}.app\";
+pkg.commands += mkdir -p \"$${TARGET}.app/Contents/MacOS/translations\";
+pkg.commands += cp -r translations/*.qm \"$${TARGET}.app/Contents/MacOS/translations\";
+
+# for App Store
+pkg.commands += cp $${ENTITLEMENTS} \"$${TARGET}.app/Contents/Entitlements.plist\";
+pkg.commands += cp $${INFO} \"$${TARGET}.app/Contents/Info.plist\";
+
+# codesign framework
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtConcurrent.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtCore.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtDBus.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtGui.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtMultimedia.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtMultimediaWidgets.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtNetwork.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtOpenGL.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtPrintSupport.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtSvg.framework\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtWidgets.framework\";
+
+# codesign dylib
+
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/audio/libqtaudio_coreaudio.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/bearer/libqgenericbearer.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/iconengines/libqsvgicon.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqgif.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqicns.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqico.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqjpeg.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqmacheif.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqmacjp2.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqsvg.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqtga.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqtiff.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqwbmp.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqwebp.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/mediaservice/libqavfcamera.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/mediaservice/libqavfmediaplayer.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/mediaservice/libqtmedia_audioengine.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/platforms/libqcocoa.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/printsupport/libcocoaprintersupport.dylib\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/styles/libqmacstyle.dylib\";
+
+# Qt Brynhildr.app
+pkg.commands += codesign -f -s \"$${APPCERT}\" -v --entitlements $${ENTITLEMENTS} \"$${TARGET}.app\";
+
+# package build
+pkg.commands += productbuild --component \"$${TARGET}.app\" /Applications --sign \"$${INSTALLERCERT}\" \"../dist/macosx/$${TARGET}.pkg\";
 }
 
 # ------------------------------------------------------------------------------

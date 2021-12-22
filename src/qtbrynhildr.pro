@@ -171,7 +171,7 @@ pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/
 pkg.commands += codesign -f -s \"$${APPCERT}\" -v --entitlements $${ENTITLEMENTS} \"$${TARGET}.app\";
 
 # package build
-pkg.commands += productbuild --component \"$${TARGET}.app\" /Applications --sign \"$${INSTALLERCERT}\" \"../dist/macosx/$${TARGET}.pkg\";
+pkg.commands += productbuild --component \"$${TARGET}.app\" /Applications --sign \"$${INSTALLERCERT}\" \"$${TARGET}.pkg\";
 }
 
 # ------------------------------------------------------------------------------

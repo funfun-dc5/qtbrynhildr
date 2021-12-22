@@ -122,15 +122,33 @@ INFO = macos/Info.plist
 
 # correct files
 
-# for Qt
+# for Qt Brynhidr
 pkg.commands += macdeployqt \"$${TARGET}.app\";
 pkg.commands += mkdir -p \"$${TARGET}.app/Contents/MacOS/translations\";
 pkg.commands += cp -r translations/*.qm \"$${TARGET}.app/Contents/MacOS/translations\";
+# and codesign
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/MacOS/translations/qt_ja.qm\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/MacOS/translations/qt_en.qm\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/MacOS/translations/qtbrynhildr_ja.qm\";
+
+# keylayout
+pkg.commands += cp keylayout/klfc \"$${TARGET}.app/Contents/MacOS\";
+pkg.commands += mkdir -p \"$${TARGET}.app/Contents/MacOS/keylayout/sample\";
+pkg.commands += cp keylayout/Japanese109.kl \"$${TARGET}.app/Contents/MacOS/keylayout/sample\";
+pkg.commands += cp keylayout/US101.kl \"$${TARGET}.app/Contents/MacOS/keylayout/sample\";
+# and codesign
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/MacOS/klfc\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/MacOS/keylayout/sample/Japanese109.kl\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/MacOS/keylayout/sample/US101.kl\";
 
 # for App Store
 pkg.commands += cp $${ENTITLEMENTS} \"$${TARGET}.app/Contents/Entitlements.plist\";
 pkg.commands += cp $${INFO} \"$${TARGET}.app/Contents/Info.plist\";
+# and codesign
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/Entitlements.plist\";
+pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/Info.plist\";
 
+# for Qt5
 # codesign framework
 pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtConcurrent.framework\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtCore.framework\";
@@ -145,7 +163,6 @@ pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Framewo
 pkg.commands += codesign -f -s \"$${APPCERT}\" \"$${TARGET}.app/Contents/Frameworks/QtWidgets.framework\";
 
 # codesign dylib
-
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/audio/libqtaudio_coreaudio.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/bearer/libqgenericbearer.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/iconengines/libqsvgicon.dylib\";
@@ -155,7 +172,6 @@ pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqjpeg.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqmacheif.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqmacjp2.dylib\";
-pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqsvg.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqtga.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqtiff.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/imageformats/libqwbmp.dylib\";
@@ -167,7 +183,7 @@ pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/printsupport/libcocoaprintersupport.dylib\";
 pkg.commands += codesign -f -s \"$${APPCERT}\" -i $${BUNDLEID} \"$${TARGET}.app/Contents/PlugIns/styles/libqmacstyle.dylib\";
 
-# Qt Brynhildr.app
+# codesign Qt Brynhildr.app
 pkg.commands += codesign -f -s \"$${APPCERT}\" -v --entitlements $${ENTITLEMENTS} \"$${TARGET}.app\";
 
 # package build

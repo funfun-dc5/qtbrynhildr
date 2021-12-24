@@ -612,6 +612,9 @@ case $UNAME in
 		popd
 		cp -r ../dist/docs/manual/* ${DOCDIR}/manual
 		rm -f ${DOCDIR}/manual/.gitkeep
+		# copy plist file
+		cp macos/Entitlements.plist  "${APP}.app/Contents/Entitlements.plist";
+		cp macos/Info.plist  "${APP}.app/Contents/Info.plist";
 		# make dmg
 		${QTROOT}/bin/macdeployqt "${APP}.app" -dmg
 		# mv dist directory

@@ -7,7 +7,7 @@
 IDI_ICON1	ICON	DISCARDABLE	"images/qtbrynhildr48.ico"
 
 VS_VERSION_INFO VERSIONINFO
-	FILEVERSION 2,3,9,3
+	FILEVERSION 2,3,9,4
 	PRODUCTVERSION 2,3,9,0
 	FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -25,7 +25,7 @@ VS_VERSION_INFO VERSIONINFO
 			BEGIN
 				VALUE "CompanyName", "mcz-xoxo"
 				VALUE "FileDescription", "Qt Brynhildr : A client software for Brynhildr"
-				VALUE "FileVersion", "2.3.9.3"
+				VALUE "FileVersion", "2.3.9.4"
 				VALUE "LegalCopyright", "FunFun @ mcz-xoxo"
 				VALUE "OriginalFilename", "qtbrynhildr.exe"
 				VALUE "ProductName", "Qt Brynhildr"

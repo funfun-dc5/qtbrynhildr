@@ -33,8 +33,8 @@ DEFINES += QTB_LITTLE_ENDIAN
 # message($$QMAKESPEC)
 
 # configuration for Qt Brynhildr
-#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter recorder updatecheck gprof portable
-CONFIG += celt vp8 multi_thread_converter updatecheck
+#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter recorder updatecheck help_browser gprof portable
+CONFIG += celt vp8 multi_thread_converter updatecheck help_browser
 # for XP/Vista
 #CONFIG -= updatecheck
 
@@ -330,6 +330,15 @@ SOURCES += util/httpgetter.cpp
 }
 else {
 DEFINES += QTB_UPDATECHECK=0
+}
+
+help_browser {
+HEADERS += util/helpbrowser.h
+SOURCES += util/helpbrowser.cpp
+DEFINES += QTB_HELP_BROWSER=1
+}
+else {
+DEFINES += QTB_HELP_BROWSER=0
 }
 
 # input files

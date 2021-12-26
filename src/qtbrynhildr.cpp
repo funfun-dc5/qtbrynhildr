@@ -31,6 +31,9 @@
 #include "util/cpuinfo.h"
 #include "version.h"
 
+#if QTB_HELP_BROWSER
+#include "util/helpbrowser.h"
+#endif // QTB_HELP_BROWSER
 
 namespace qtbrynhildr {
 
@@ -107,6 +110,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,exit_Action(0)
   ,about_Action(0)
   ,checkUpdate_Action(0)
+#if QTB_HELP_BROWSER
+  ,helpBrowser_Action(0)
+#endif // QTB_HELP_BROWSER
   ,videoQuality_MINIMUM_Action(0)
   ,videoQuality_LOW_Action(0)
   ,videoQuality_STANDARD_Action(0)
@@ -1708,6 +1714,14 @@ void QtBrynhildr::createActions()
   connect(checkUpdate_Action, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 #endif // QTB_UPDATECHECK
 
+#if QTB_HELP_BROWSER
+  // help browser
+  helpBrowser_Action = new QAction(tr("Help Browser"), this);
+  helpBrowser_Action->setStatusTip(tr("Help Browser"));
+  helpBrowser_Action->setEnabled(httpGetter->supportsSsl());
+  connect(helpBrowser_Action, SIGNAL(triggered()), this, SLOT(helpBrowser()));
+#endif // QTB_HELP_BROWSER
+
   // Show Menu Bar
   showMenuBar_Action = new QAction(tr("Show Menu Bar"), this);
   showMenuBar_Action->setStatusTip(tr("Show Menu Bar"));
@@ -2686,6 +2700,10 @@ void QtBrynhildr::createMenus()
   helpMenu->addAction(checkUpdate_Action);
   helpMenu->addSeparator();
 #endif // QTB_UPDATECHECK
+#if QTB_HELP_BROWSER
+  helpMenu->addAction(helpBrowser_Action);
+  helpMenu->addSeparator();
+#endif // QTB_HELP_BROWSER
   helpMenu->addAction(about_Action);
 
   // test mode menu
@@ -3555,6 +3573,14 @@ void QtBrynhildr::checkUpdate()
   //  cout << "leave checkUpdate()" << endl << flush;
 }
 #endif // QTB_UPDATECHECK
+
+#if QTB_HELP_BROWSER
+// help browser
+void QtBrynhildr::helpBrowser()
+{
+  HelpBrowser::showPage("index.html");
+}
+#endif // QTB_HELP_BROWSER
 
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()

@@ -599,7 +599,7 @@ case $UNAME in
 		# for darwin
 		# create directory
 		mkdir -p "${DISTDIR}"
-		DOCDIR="${APP}.app/Contents/Doc"
+		DOCDIR="${APP}.app/Contents/docs"
 		mkdir -p ${DOCDIR}/manual
 		# copy document file
 		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DOCDIR}

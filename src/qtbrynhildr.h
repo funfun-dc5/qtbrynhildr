@@ -240,6 +240,11 @@ private:
   // check update
   QAction *checkUpdate_Action;
 
+#if QTB_HELP_BROWSER
+  // help browser
+  QAction *helpBrowser_Action;
+#endif // QTB_HELP_BROWSER
+
   // video Quality MINIMUM
   QAction *videoQuality_MINIMUM_Action;
   // video Quality LOW
@@ -821,6 +826,11 @@ private slots:
   // check update
   void checkUpdate();
 #endif // QTB_UPDATECHECK
+
+#if QTB_HELP_BROWSER
+  // help browser
+  void helpBrowser();
+#endif // QTB_HELP_BROWSER
 
   // exit from QtBynhildr
   void exit();

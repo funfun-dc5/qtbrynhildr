@@ -117,7 +117,7 @@ CONFIG += sdk_no_version_check
 # ------------------------------------------------------------------------------
 ios {
 CONFIG += touchpanel vp8-neon
-CONFIG -= updatecheck
+CONFIG -= updatecheck help_browser
 DEFINES += PLATFORM_MACOS QTB_IOS
 BUILDARCH = ios-arm64-v8a
 QMAKE_INFO_PLIST=ios/Info.plist
@@ -135,7 +135,7 @@ QMAKE_BUNDLE_DATA += app_launch_images
 android-g++ | android-clang {
 TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
-CONFIG -= updatecheck
+CONFIG -= updatecheck help_browser
 DEFINES += PLATFORM_LINUX QTB_ANDROID
 # cpufeatures library from android-ndk
 HEADERS += util/android-ndk/cpu-features.h

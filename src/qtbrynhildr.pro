@@ -33,10 +33,10 @@ DEFINES += QTB_LITTLE_ENDIAN
 # message($$QMAKESPEC)
 
 # configuration for Qt Brynhildr
-#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter recorder updatecheck gprof portable
-CONFIG += celt vp8 multi_thread_converter updatecheck
+#CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter recorder updatecheck help_browser gprof portable
+CONFIG += celt vp8 multi_thread_converter updatecheck help_browser
 # for XP/Vista
-#CONFIG -= updatecheck
+#CONFIG -= updatecheck help_browser
 
 # gprof
 gprof {
@@ -109,6 +109,9 @@ CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_MACOS
 BUILDARCH = macos-x64
 ICON = images/qtbrynhildr.icns
+
+# for warnings
+CONFIG += sdk_no_version_check
 }
 
 # ------------------------------------------------------------------------------
@@ -116,7 +119,7 @@ ICON = images/qtbrynhildr.icns
 # ------------------------------------------------------------------------------
 ios {
 CONFIG += touchpanel vp8-neon
-CONFIG -= updatecheck
+CONFIG -= updatecheck help_browser
 DEFINES += PLATFORM_MACOS QTB_IOS
 BUILDARCH = ios-arm64-v8a
 QMAKE_INFO_PLIST=ios/Info.plist
@@ -134,7 +137,7 @@ QMAKE_BUNDLE_DATA += app_launch_images
 android-g++ | android-clang {
 TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
-CONFIG -= updatecheck
+CONFIG -= updatecheck help_browser
 DEFINES += PLATFORM_LINUX QTB_ANDROID
 # cpufeatures library from android-ndk
 HEADERS += util/android-ndk/cpu-features.h
@@ -329,6 +332,16 @@ SOURCES += util/httpgetter.cpp
 }
 else {
 DEFINES += QTB_UPDATECHECK=0
+}
+
+# help browser
+help_browser {
+HEADERS += util/helpbrowser.h
+SOURCES += util/helpbrowser.cpp
+DEFINES += QTB_HELP_BROWSER=1
+}
+else {
+DEFINES += QTB_HELP_BROWSER=0
 }
 
 # input files

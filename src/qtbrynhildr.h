@@ -240,6 +240,11 @@ private:
   // check update
   QAction *checkUpdate_Action;
 
+#if QTB_HELP_BROWSER
+  // help browser
+  QAction *helpBrowser_Action;
+#endif // QTB_HELP_BROWSER
+
   // video Quality MINIMUM
   QAction *videoQuality_MINIMUM_Action;
   // video Quality LOW
@@ -384,6 +389,9 @@ private:
 
   // toggle viewer mode
   QAction *onViewerMode_Action;
+
+  // monochrome mode
+  QAction *onMonochromeMode_Action;
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type KeroRemote
@@ -819,6 +827,11 @@ private slots:
   void checkUpdate();
 #endif // QTB_UPDATECHECK
 
+#if QTB_HELP_BROWSER
+  // help browser
+  void helpBrowser();
+#endif // QTB_HELP_BROWSER
+
   // exit from QtBynhildr
   void exit();
 
@@ -997,6 +1010,9 @@ private slots:
 
   // viewer mode
   void toggleOnViewerMode();
+
+  // monochrome mode
+  void toggleOnMonochromeMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type

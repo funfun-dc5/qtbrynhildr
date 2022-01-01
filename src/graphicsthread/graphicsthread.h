@@ -128,13 +128,6 @@ public:
   }
 #endif // QTB_SIMD_SUPPORT
 
-#if QTB_GRAY_SCALE_MODE
-  void setOnGrayScale(bool onGrayScale)
-  {
-	decoder->setOnGrayScale(onGrayScale);
-  }
-#endif // QTB_GRAY_SCALE_MODE
-
 #if QTB_BENCHMARK
   void setInitialBenchmarkPhaseCounter(int initialBenchmarkPhaseCounter)
   {

@@ -32,10 +32,10 @@ case $UNAME in
 					# ignore
 					;;
 				msvc)
-					QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${VCVERSION}"
+					QTROOT="/opt/Qt/${QTVERSION}/${VCVERSION}"
 					;;
 				msvc64)
-					QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${VCVERSION}_64"
+					QTROOT="/opt/Qt/${QTVERSION}/${VCVERSION}_64"
 					;;
 				xp)
 					QTVERSION=5.6.3
@@ -49,12 +49,12 @@ case $UNAME in
 		else
 			case $UNAMEM in
 			x86_64)
-				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${MINGWVERSION}_64"
-				MINGWROOT="/opt/Qt${QTVERSION}/Tools/${MINGWVERSION}0_64"
+				QTROOT="/opt/Qt/${QTVERSION}/${MINGWVERSION}_64"
+				MINGWROOT="/opt/Qt/Tools/${MINGWVERSION}0_64"
 				;;
 			i686)
-				QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${MINGWVERSION}_32"
-				MINGWROOT="/opt/Qt${QTVERSION}/Tools/${MINGWVERSION}0_32"
+				QTROOT="/opt/Qt/${QTVERSION}/${MINGWVERSION}_32"
+				MINGWROOT="/opt/Qt/Tools/${MINGWVERSION}0_32"
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
@@ -79,7 +79,7 @@ case $UNAME in
 	Linux)
 		case $UNAMEM in
 			x86_64)
-				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/gcc_64
+				QTROOT=/opt/Qt/${QTVERSION}/gcc_64
 				# Coverity Scan
 				PATHLIST=/opt/cov-analysis-linux64-2020.09/bin:${PATHLIST}
 				;;
@@ -110,7 +110,7 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
-				QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/clang_64
+				QTROOT=/opt/Qt/${QTVERSION}/clang_64
 				# Coverity Scan
 				PATHLIST=/opt/cov-analysis-macosx-2020.09/bin:${PATHLIST}
 				;;

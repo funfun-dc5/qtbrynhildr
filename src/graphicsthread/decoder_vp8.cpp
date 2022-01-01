@@ -89,4 +89,13 @@ QImage* DecoderVP8::getImage(int rgbImageSize)
   return result ? image : nullptr;
 }
 
+// set gray scale flag
+void DecoderVP8::setOnGrayScale(bool onGrayScale)
+{
+  if (this->onGrayScale != onGrayScale){
+	this->onGrayScale = onGrayScale;
+	resetYUVBuffer();
+  }
+}
+
 } // end of namespace qtbrynhildr

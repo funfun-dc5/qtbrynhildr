@@ -36,7 +36,7 @@ DEFINES += QTB_LITTLE_ENDIAN
 #CONFIG += desktop/touchpanel celt vp8 vp8-sse vp8-avx2 vp8-neon multi_thread_converter recorder updatecheck help_browser gprof portable
 CONFIG += celt vp8 multi_thread_converter updatecheck help_browser
 # for XP/Vista
-#CONFIG -= updatecheck help_browser
+#CONFIG += xp
 
 # gprof
 gprof {
@@ -53,6 +53,11 @@ DEFINES += QTB_PORTABLE_VERSION=1
 # ------------------------------------------------------------------------------
 # Windows (MinGW, MSVC)
 # ------------------------------------------------------------------------------
+# for XP/Vista
+xp {
+CONFIG -= updatecheck help_browser
+}
+
 win32 {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += QWT_DLL PLATFORM_WINDOWS
@@ -64,6 +69,7 @@ LIBS += -lws2_32 -limm32 -limagehlp -lwinmm # for WinSock2
 
 # MinGW
 win32-g++ {
+BUILDARCH = mingw81-x64
 # for DEBUG
 CONFIG += console
 }

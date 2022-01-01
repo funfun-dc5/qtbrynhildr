@@ -53,11 +53,6 @@ DEFINES += QTB_PORTABLE_VERSION=1
 # ------------------------------------------------------------------------------
 # Windows (MinGW, MSVC)
 # ------------------------------------------------------------------------------
-# for XP/Vista
-xp {
-CONFIG -= updatecheck help_browser
-}
-
 win32 {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += QWT_DLL PLATFORM_WINDOWS
@@ -76,10 +71,22 @@ CONFIG += console
 
 # MSVC
 win32-msvc* {
+BUILDARCH = vs2019-x64
 QMAKE_CXXFLAGS += /wd4819
 QMAKE_LFLAGS += /LTCG
 DEFINES += YY_NO_UNISTD_H
 HEADERS += common/msvc.h
+}
+
+# for x86
+x86 {
+BUILDARCH = vs2019-x86
+}
+
+# for XP/Vista
+xp {
+CONFIG -= updatecheck help_browser
+BUILDARCH = vs2015-x86
 }
 
 # ------------------------------------------------------------------------------

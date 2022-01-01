@@ -98,6 +98,7 @@ freebsd-g++ | freebsd-clang {
 CONFIG += desktop vp8-sse recorder
 #CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_FREEBSD
+BUILDARCH = freebsd-x64
 }
 
 # ------------------------------------------------------------------------------
@@ -106,6 +107,7 @@ DEFINES += PLATFORM_FREEBSD
 macx {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_MACOS
+BUILDARCH = macos-x64
 ICON = images/qtbrynhildr.icns
 }
 

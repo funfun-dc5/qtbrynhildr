@@ -77,11 +77,23 @@ HEADERS += common/msvc.h
 }
 
 # ------------------------------------------------------------------------------
-# Linux/Cygwin
+# Cygwin
 # ------------------------------------------------------------------------------
-linux-g++-64 | linux-g++ | cygwin-g++ {
+cygwin-g++ {
 CONFIG += desktop vp8-sse vp8-avx2 recorder
 DEFINES += PLATFORM_LINUX
+BUILDARCH = cygwin-x64
+# x86
+#CONFIG -= vp8-avx2
+}
+
+# ------------------------------------------------------------------------------
+# Linux
+# ------------------------------------------------------------------------------
+linux-g++-64 | linux-g++ {
+CONFIG += desktop vp8-sse vp8-avx2 recorder
+DEFINES += PLATFORM_LINUX
+BUILDARCH = linux-x64
 # x86
 #CONFIG -= vp8-avx2
 # NEON (RaspberryPi3)

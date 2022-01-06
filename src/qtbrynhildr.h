@@ -300,6 +300,7 @@ private:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // frame rate
+  QAction *selectFrameRateMinimum_Action;
   QAction *selectFrameRate5_Action;
   QAction *selectFrameRate10_Action;
   QAction *selectFrameRate20_Action;
@@ -984,6 +985,7 @@ private slots:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // select frame rate
+  void selectFrameRateMinimum();
   void selectFrameRate5();
   void selectFrameRate10();
   void selectFrameRate20();

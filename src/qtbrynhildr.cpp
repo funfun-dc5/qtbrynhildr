@@ -135,6 +135,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,showSoftwareKeyboard_Action(0)
   ,showSoftwareButton_Action(0)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  ,selectFrameRateMinimum_Action(0)
   ,selectFrameRate5_Action(0)
   ,selectFrameRate10_Action(0)
   ,selectFrameRate20_Action(0)
@@ -1878,6 +1879,13 @@ void QtBrynhildr::createActions()
   }
 
   // select frame rate Action
+  selectFrameRateMinimum_Action = new QAction(tr("Minimum FPS"), this);
+  //  selectFrameRateMinimum_Action->setEnabled(false);
+  selectFrameRateMinimum_Action->setCheckable(true);
+  selectFrameRateMinimum_Action->setChecked(settings->getFrameRate() == FRAMERATE_MINIMUM);
+  selectFrameRateMinimum_Action->setStatusTip(tr("maxfps Minimum FPS"));
+  connect(selectFrameRateMinimum_Action, SIGNAL(triggered()), this, SLOT(selectFrameRateMinimum()));
+
   selectFrameRate5_Action = new QAction(tr("5 FPS"), this);
   //  selectFrameRate5_Action->setEnabled(false);
   selectFrameRate5_Action->setCheckable(true);
@@ -1930,7 +1938,7 @@ void QtBrynhildr::createActions()
   selectFrameRateMaximum_Action = new QAction(tr("Maximum FPS"), this);
   //  selectFrameRateMaximum_Action->setEnabled(false);
   selectFrameRateMaximum_Action->setCheckable(true);
-  selectFrameRateMaximum_Action->setChecked(settings->getFrameRate() == 0);
+  selectFrameRateMaximum_Action->setChecked(settings->getFrameRate() == FRAMERATE_MAXIMUM);
   selectFrameRateMaximum_Action->setStatusTip(tr("maxfps Maximum"));
   connect(selectFrameRateMaximum_Action, SIGNAL(triggered()), this, SLOT(selectFrameRateMaximum()));
 
@@ -2510,6 +2518,7 @@ void QtBrynhildr::createMenus()
   // for select frame rate
   videoMenu->addSeparator();
   selectFrameRateSubMenu = videoMenu->addMenu(tr("Select Frame Rate"));
+  selectFrameRateSubMenu->addAction(selectFrameRateMinimum_Action);
   selectFrameRateSubMenu->addAction(selectFrameRate5_Action);
   selectFrameRateSubMenu->addAction(selectFrameRate10_Action);
   selectFrameRateSubMenu->addAction(selectFrameRate20_Action);
@@ -4067,6 +4076,7 @@ void QtBrynhildr::clearSoundCacheCheck()
 // clear Select Frame Rate
 void QtBrynhildr::clearSelectFrameRateCheck()
 {
+  selectFrameRateMinimum_Action->setChecked(false);
   selectFrameRate5_Action->setChecked(false);
   selectFrameRate10_Action->setChecked(false);
   selectFrameRate20_Action->setChecked(false);
@@ -5197,6 +5207,12 @@ void QtBrynhildr::toggleSoftwareButton()
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 // select frame rate
+void QtBrynhildr::selectFrameRateMinimum()
+{
+  settings->setFrameRate(FRAMERATE_MINIMUM);
+  clearSelectFrameRateCheck();
+  selectFrameRateMinimum_Action->setChecked(true);
+}
 void QtBrynhildr::selectFrameRate5()
 {
   settings->setFrameRate(5);
@@ -5762,6 +5778,7 @@ void QtBrynhildr::timerExpired()
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 	// frame rate
 	currentFrameRate = graphicsThread->getFrameRate();
+	if (currentFrameRate < 1) currentFrameRate = 1;
 	// data rate
 	long controlDataRate = controlThread->getDataRate();
 	long graphicsDataRate = graphicsThread->getDataRate();

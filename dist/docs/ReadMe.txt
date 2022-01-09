@@ -737,9 +737,9 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 
        新しいバージョンがリリースされていないかを確認します。
 
-     [3] ヘルプ ブラウザ
+     [3] ヘルプ ブラウザ (デスクトップ版のみ)
 
-       はじめてのQt Brynhildr」を簡易ブラウザで開きます。
+       「はじめてのQt Brynhildr」を簡易ブラウザで開きます。
 
      [4] Qt Brynhildr について
 

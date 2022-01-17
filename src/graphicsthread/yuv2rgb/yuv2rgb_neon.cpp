@@ -410,7 +410,7 @@ inline int clip(int val)
 #define GET_GS(R, G, B) (R * 0.298912 + G * 0.586611 + B * 0.114578)
 
 // YUV convert to RGB (SIMD version) (Gray Scale Version)
-void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
+void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
 {
   Aligned(16) int result[4];
 

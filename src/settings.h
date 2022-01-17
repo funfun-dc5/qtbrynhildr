@@ -194,6 +194,7 @@ typedef int KEYBOARD_TYPE;
 
 // for frameRate
 #define QTB_FRAMERATE			"frameRate"
+#define FRAMERATE_MINIMUM		1
 #define FRAMERATE_MAXIMUM		0
 #define QTB_FRAMERATE_DEFAULT	30
 

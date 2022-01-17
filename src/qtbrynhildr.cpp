@@ -31,6 +31,9 @@
 #include "util/cpuinfo.h"
 #include "version.h"
 
+#if QTB_HELP_BROWSER
+#include "util/helpbrowser.h"
+#endif // QTB_HELP_BROWSER
 
 namespace qtbrynhildr {
 
@@ -107,6 +110,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,exit_Action(0)
   ,about_Action(0)
   ,checkUpdate_Action(0)
+#if QTB_HELP_BROWSER
+  ,helpBrowser_Action(0)
+#endif // QTB_HELP_BROWSER
   ,videoQuality_MINIMUM_Action(0)
   ,videoQuality_LOW_Action(0)
   ,videoQuality_STANDARD_Action(0)
@@ -129,6 +135,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,showSoftwareKeyboard_Action(0)
   ,showSoftwareButton_Action(0)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  ,selectFrameRateMinimum_Action(0)
   ,selectFrameRate5_Action(0)
   ,selectFrameRate10_Action(0)
   ,selectFrameRate20_Action(0)
@@ -746,25 +753,25 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
-  connectToServerDialog = new ConnectToServerDialog(settings, nullptr);
+  connectToServerDialog = new ConnectToServerDialog(settings, this);
   connectToServerDialog->setModal(true);
   connect(connectToServerDialog, SIGNAL(connectToServer()), SLOT(connectToServer()));
 
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog = new DesktopScalingDialog(settings, nullptr);
+	desktopScalingDialog = new DesktopScalingDialog(settings, this);
 	desktopScalingDialog->setModal(true);
   }
 
   // set up log view dialog
   if (QTB_LOG_VIEW){
-	logViewDialog = new LogViewDialog(settings, nullptr);
+	logViewDialog = new LogViewDialog(settings, this);
 	logViewDialog->setModal(true);
   }
 
 #if QTB_PREFERENCE
   // preference dialog
-  preferenceDialog = new PreferenceDialog(settings, nullptr);
+  preferenceDialog = new PreferenceDialog(settings, this);
   preferenceDialog->setModal(true);
 #endif // QTB_PREFERENCE
 
@@ -1708,6 +1715,14 @@ void QtBrynhildr::createActions()
   connect(checkUpdate_Action, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 #endif // QTB_UPDATECHECK
 
+#if QTB_HELP_BROWSER
+  // help browser
+  helpBrowser_Action = new QAction(tr("Help Browser"), this);
+  helpBrowser_Action->setStatusTip(tr("Help Browser"));
+  helpBrowser_Action->setEnabled(httpGetter->supportsSsl());
+  connect(helpBrowser_Action, SIGNAL(triggered()), this, SLOT(helpBrowser()));
+#endif // QTB_HELP_BROWSER
+
   // Show Menu Bar
   showMenuBar_Action = new QAction(tr("Show Menu Bar"), this);
   showMenuBar_Action->setStatusTip(tr("Show Menu Bar"));
@@ -1864,6 +1879,13 @@ void QtBrynhildr::createActions()
   }
 
   // select frame rate Action
+  selectFrameRateMinimum_Action = new QAction(tr("Minimum FPS"), this);
+  //  selectFrameRateMinimum_Action->setEnabled(false);
+  selectFrameRateMinimum_Action->setCheckable(true);
+  selectFrameRateMinimum_Action->setChecked(settings->getFrameRate() == FRAMERATE_MINIMUM);
+  selectFrameRateMinimum_Action->setStatusTip(tr("maxfps Minimum FPS"));
+  connect(selectFrameRateMinimum_Action, SIGNAL(triggered()), this, SLOT(selectFrameRateMinimum()));
+
   selectFrameRate5_Action = new QAction(tr("5 FPS"), this);
   //  selectFrameRate5_Action->setEnabled(false);
   selectFrameRate5_Action->setCheckable(true);
@@ -1916,7 +1938,7 @@ void QtBrynhildr::createActions()
   selectFrameRateMaximum_Action = new QAction(tr("Maximum FPS"), this);
   //  selectFrameRateMaximum_Action->setEnabled(false);
   selectFrameRateMaximum_Action->setCheckable(true);
-  selectFrameRateMaximum_Action->setChecked(settings->getFrameRate() == 0);
+  selectFrameRateMaximum_Action->setChecked(settings->getFrameRate() == FRAMERATE_MAXIMUM);
   selectFrameRateMaximum_Action->setStatusTip(tr("maxfps Maximum"));
   connect(selectFrameRateMaximum_Action, SIGNAL(triggered()), this, SLOT(selectFrameRateMaximum()));
 
@@ -2210,7 +2232,7 @@ void QtBrynhildr::createActions()
   // Monochrome Mode
   onMonochromeMode_Action = new QAction(tr("Monochrome Mode"), this);
   onMonochromeMode_Action->setStatusTip(tr("Monochrome Mode"));
-  onMonochromeMode_Action->setEnabled(false);
+  onMonochromeMode_Action->setEnabled(true);
   onMonochromeMode_Action->setCheckable(true);
   onMonochromeMode_Action->setChecked(settings->getOnMonochromeMode());
   connect(onMonochromeMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnMonochromeMode()));
@@ -2496,6 +2518,7 @@ void QtBrynhildr::createMenus()
   // for select frame rate
   videoMenu->addSeparator();
   selectFrameRateSubMenu = videoMenu->addMenu(tr("Select Frame Rate"));
+  selectFrameRateSubMenu->addAction(selectFrameRateMinimum_Action);
   selectFrameRateSubMenu->addAction(selectFrameRate5_Action);
   selectFrameRateSubMenu->addAction(selectFrameRate10_Action);
   selectFrameRateSubMenu->addAction(selectFrameRate20_Action);
@@ -2686,6 +2709,10 @@ void QtBrynhildr::createMenus()
   helpMenu->addAction(checkUpdate_Action);
   helpMenu->addSeparator();
 #endif // QTB_UPDATECHECK
+#if QTB_HELP_BROWSER
+  helpMenu->addAction(helpBrowser_Action);
+  helpMenu->addSeparator();
+#endif // QTB_HELP_BROWSER
   helpMenu->addAction(about_Action);
 
   // test mode menu
@@ -3046,7 +3073,7 @@ void QtBrynhildr::connected()
 	onViewerMode_Action->setEnabled(true);
   }
 
-#if QTB_GRAY_SCALE_MODE
+#if 0 //QTB_GRAY_SCALE_MODE
   // monochrome mode
   onMonochromeMode_Action->setEnabled(true);
 #endif // QTB_GRAY_SCALE_MODE
@@ -3196,7 +3223,7 @@ void QtBrynhildr::disconnected()
 	onScrollMode_Action->setEnabled(false);
   }
 
-#if QTB_GRAY_SCALE_MODE
+#if 0 //QTB_GRAY_SCALE_MODE
   onMonochromeMode_Action->setEnabled(false);
 #endif // QTB_GRAY_SCALE_MODE
 
@@ -3555,6 +3582,14 @@ void QtBrynhildr::checkUpdate()
   //  cout << "leave checkUpdate()" << endl << flush;
 }
 #endif // QTB_UPDATECHECK
+
+#if QTB_HELP_BROWSER
+// help browser
+void QtBrynhildr::helpBrowser()
+{
+  HelpBrowser::showPage("index.html");
+}
+#endif // QTB_HELP_BROWSER
 
 // popup disconnect to server
 void QtBrynhildr::popUpDisconnectToServer()
@@ -4041,6 +4076,7 @@ void QtBrynhildr::clearSoundCacheCheck()
 // clear Select Frame Rate
 void QtBrynhildr::clearSelectFrameRateCheck()
 {
+  selectFrameRateMinimum_Action->setChecked(false);
   selectFrameRate5_Action->setChecked(false);
   selectFrameRate10_Action->setChecked(false);
   selectFrameRate20_Action->setChecked(false);
@@ -4408,7 +4444,7 @@ void QtBrynhildr::refreshOtherMenu()
 	onViewerMode_Action->setEnabled(flag);
   }
 
-#if QTB_GRAY_SCALE_MODE
+#if 0 //QTB_GRAY_SCALE_MODE
   // monochrome mode
   onMonochromeMode_Action->setEnabled(flag);
 #endif // QTB_GRAY_SCALE_MODE
@@ -5171,6 +5207,12 @@ void QtBrynhildr::toggleSoftwareButton()
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 // select frame rate
+void QtBrynhildr::selectFrameRateMinimum()
+{
+  settings->setFrameRate(FRAMERATE_MINIMUM);
+  clearSelectFrameRateCheck();
+  selectFrameRateMinimum_Action->setChecked(true);
+}
 void QtBrynhildr::selectFrameRate5()
 {
   settings->setFrameRate(5);
@@ -5736,6 +5778,7 @@ void QtBrynhildr::timerExpired()
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 	// frame rate
 	currentFrameRate = graphicsThread->getFrameRate();
+	if (currentFrameRate < 1) currentFrameRate = 1;
 	// data rate
 	long controlDataRate = controlThread->getDataRate();
 	long graphicsDataRate = graphicsThread->getDataRate();

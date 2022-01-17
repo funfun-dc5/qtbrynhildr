@@ -240,6 +240,11 @@ private:
   // check update
   QAction *checkUpdate_Action;
 
+#if QTB_HELP_BROWSER
+  // help browser
+  QAction *helpBrowser_Action;
+#endif // QTB_HELP_BROWSER
+
   // video Quality MINIMUM
   QAction *videoQuality_MINIMUM_Action;
   // video Quality LOW
@@ -295,6 +300,7 @@ private:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // frame rate
+  QAction *selectFrameRateMinimum_Action;
   QAction *selectFrameRate5_Action;
   QAction *selectFrameRate10_Action;
   QAction *selectFrameRate20_Action;
@@ -822,6 +828,11 @@ private slots:
   void checkUpdate();
 #endif // QTB_UPDATECHECK
 
+#if QTB_HELP_BROWSER
+  // help browser
+  void helpBrowser();
+#endif // QTB_HELP_BROWSER
+
   // exit from QtBynhildr
   void exit();
 
@@ -974,6 +985,7 @@ private slots:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // select frame rate
+  void selectFrameRateMinimum();
   void selectFrameRate5();
   void selectFrameRate10();
   void selectFrameRate20();

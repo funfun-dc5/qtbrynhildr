@@ -3,10 +3,10 @@ UNAME=`uname`
 UNAMEM=`uname -m`
 PRO="qtbrynhildr.pro"
 TARGET=$1
-# Qt5.15.2
-#BUILDARCH=mingw81-x64
 # Qt6.2.2
 BUILDARCH=mingw90-x64
+# CONFIG
+#CONFIG=portable
 
 # TARGET
 if [ -n "$TARGET" ] ; then
@@ -87,8 +87,13 @@ source ./setup_qt6 $TARGET
 ./clean $TARGET
 rm -f Makefile Makefile.Release Makefile.Debug
 rm -f object_script.*
-echo RUN : ${QTROOT}/bin/${QMAKE} ${PRO}
-${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+if [ -z $CONFIG ] ; then
+	echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
+	${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+else
+	echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
+	${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+fi
 
 case $UNAME in
 	CYGWIN*)

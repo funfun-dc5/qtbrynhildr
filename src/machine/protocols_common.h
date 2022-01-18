@@ -85,7 +85,13 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   VIDEO_MODE		video_mode;
   BYTE				dummy11[3];			// padding 3 bytes
   char				scroll;				// scroll enable flag (public mode 7 only)
+#if QTB_GRAY_SCALE_MODE2
+  BYTE				dummy17[3];			// padding 3 bytes
+  char				monochrome;
+  BYTE				dummy99[11];		// padding 11 bytes
+#else // QTB_GRAY_SCALE_MODE2
   BYTE				dummy17[15];		// padding 15 bytes
+#endif // QTB_GRAY_SCALE_MODE2
   SERVER_VERSION	server_version;		// version of server
   ZOOM				zoom;
   BYTE				dummy12[4];			// padding 4 bytes

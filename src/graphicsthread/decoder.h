@@ -64,10 +64,7 @@ public:
 
 #if QTB_GRAY_SCALE_MODE
   // set gray scale flag
-  void setOnGrayScale(bool onGrayScale)
-  {
-	this->onGrayScale = onGrayScale;
-  }
+  virtual void setOnGrayScale(bool onGrayScale) = 0;
 #endif // QTB_GRAY_SCALE_MODE
 
   // output data to file

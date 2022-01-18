@@ -149,10 +149,15 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_SOUND_PUSH_MODE			1
 
 // gray scale mode
-#define QTB_GRAY_SCALE_MODE			0
+#define QTB_GRAY_SCALE_MODE			1
 
 // gray scale mode2
 #define QTB_GRAY_SCALE_MODE2		0
+
+#if QTB_GRAY_SCALE_MODE2
+#undef QTB_GRAY_SCALE_MODE
+#define QTB_GRAY_SCALE_MODE			1
+#endif // QTB_GRAY_SCALE_MODE2
 
 // LOAD BITMAP
 #define QTB_LOAD_BITMAP				0

@@ -56,4 +56,10 @@ QImage* DecoderJPEG::getDesktopImage(int numOfThread)
   return result ? image : nullptr;
 }
 
+// set gray scale flag
+void DecoderJPEG::setOnGrayScale(bool onGrayScale)
+{
+  this->onGrayScale = onGrayScale;
+}
+
 } // end of namespace qtbrynhildr

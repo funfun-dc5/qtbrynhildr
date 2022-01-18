@@ -110,6 +110,12 @@ protected:
   void dropEvent(QDropEvent *event);
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
+#if QTB_MOUSE_TRACKING_FOCUS_MODE
+  // focus in and out
+  void focusInEvent(QFocusEvent *event);
+  void focusOutEvent(QFocusEvent *event);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
 private:
 #if defined(Q_OS_WIN)
   // native event filter

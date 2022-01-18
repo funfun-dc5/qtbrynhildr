@@ -32,7 +32,10 @@
 
 #include "util/netutil.h"
 
+#if defined(Q_OS_ANDROID)
+  // for TEST (JNI)
 #include "controlthread/android/nativebridge.h"
+#endif // defined(Q_OS_ANDROID)
 
 //using namespace qtbrynhildr;
 
@@ -41,7 +44,10 @@ int main(int argc, char *argv[])
   //  qtbrynhildr::NetUtil netUtil; // for TEST
   //  ::exit(EXIT_SUCCESS); // for TEST
 
-  qtbrynhildr::registerNativeMethods(); // for TEST (JNI)
+#if defined(Q_OS_ANDROID)
+  // for TEST (JNI)
+  qtbrynhildr::registerNativeMethods();
+#endif // defined(Q_OS_ANDROID)
 
   // for TEST and DEBUG
   if (!qtbrynhildr::checkProtocolHeader(false)){

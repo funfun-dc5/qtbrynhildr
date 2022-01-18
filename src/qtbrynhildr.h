@@ -394,6 +394,9 @@ private:
   // monochrome mode
   QAction *onMonochromeMode_Action;
 
+  // mouse tracking mode
+  QAction *onMouseTrackingMode_Action;
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type KeroRemote
   QAction *touchpanelOperationTypeKeroRemote_Action;
@@ -1015,6 +1018,9 @@ private slots:
 
   // monochrome mode
   void toggleOnMonochromeMode();
+
+  // mouse tracking mode
+  void toggleOnMouseTrackingMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type

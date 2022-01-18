@@ -190,6 +190,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onScrollMode_Action(0)
   ,onViewerMode_Action(0)
   ,onMonochromeMode_Action(0)
+  ,onMouseTrackingMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,touchpanelOperationTypeKeroRemote_Action(0)
   ,touchpanelOperationTypeQtBrynhildr_Action(0)
@@ -2238,6 +2239,16 @@ void QtBrynhildr::createActions()
   connect(onMonochromeMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnMonochromeMode()));
 #endif // QTB_GRAY_SCALE_MODE
 
+#if QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action = new QAction(tr("Mouse Tracking Mode"), this);
+  onMouseTrackingMode_Action->setStatusTip(tr("Mouse Tracking Mode"));
+  onMouseTrackingMode_Action->setEnabled(true);
+  onMouseTrackingMode_Action->setCheckable(true);
+  onMouseTrackingMode_Action->setChecked(settings->getOnMouseTrackingMode());
+  connect(onMouseTrackingMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnMouseTrackingMode()));
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type
   touchpanelOperationTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
@@ -2671,6 +2682,11 @@ void QtBrynhildr::createMenus()
   optionMenu->addAction(onMonochromeMode_Action);
 #endif // QTB_GRAY_SCALE_MODE
 
+#if QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  optionMenu->addAction(onMouseTrackingMode_Action);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type
   touchpanelOperationTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Operation"));
@@ -3078,6 +3094,11 @@ void QtBrynhildr::connected()
   onMonochromeMode_Action->setEnabled(true);
 #endif // QTB_GRAY_SCALE_MODE
 
+#if 0 //QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action->setEnabled(true);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
   // enable full screen
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -3226,6 +3247,11 @@ void QtBrynhildr::disconnected()
 #if 0 //QTB_GRAY_SCALE_MODE
   onMonochromeMode_Action->setEnabled(false);
 #endif // QTB_GRAY_SCALE_MODE
+
+#if 0 //QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action->setEnabled(false);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
 
   // disabled viewer mode
   if (QTB_VIEWER_MODE){
@@ -4449,6 +4475,11 @@ void QtBrynhildr::refreshOtherMenu()
   onMonochromeMode_Action->setEnabled(flag);
 #endif // QTB_GRAY_SCALE_MODE
 
+#if 0 //QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action->setEnabled(flag);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
   // enable/disable menu for sound
   flag = settings->getOnSound();
   soundMenu->setEnabled(flag);
@@ -5005,6 +5036,12 @@ void QtBrynhildr::toggleWindowSizeFixed()
 void QtBrynhildr::toggleOnMonochromeMode()
 {
   settings->setOnMonochromeMode(!settings->getOnMonochromeMode());
+}
+
+// mouse tracking mode
+void QtBrynhildr::toggleOnMouseTrackingMode()
+{
+  settings->setOnMouseTrackingMode(!settings->getOnMouseTrackingMode());
 }
 
 // desktop scaling

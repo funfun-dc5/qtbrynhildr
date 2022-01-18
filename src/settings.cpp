@@ -125,6 +125,8 @@ Settings::Settings(const char *iniFileName)
 
   setOnMonochromeMode(QTB_ONMONOCHROMEMODE_DEFAULT);
 
+  setOnMouseTrackingMode(QTB_ONMOUSETRACKINGMODE_DEFAULT);
+
   setDesktopOffsetX(QTB_DESKTOPOFFSETX_DEFAULT);
   setDesktopOffsetY(QTB_DESKTOPOFFSETY_DEFAULT);
 
@@ -494,6 +496,10 @@ void Settings::readSettings()
   setOnMonochromeMode(settings->value(QTB_ONMONOCHROMEMODE,
 									  QTB_ONMONOCHROMEMODE_DEFAULT).toBool());
 
+  // load onMouseTrackingMode
+  setOnMouseTrackingMode(settings->value(QTB_ONMOUSETRACKINGMODE,
+										 QTB_ONMOUSETRACKINGMODE_DEFAULT).toBool());
+
   // load desktopOffsetX
   setDesktopOffsetX(settings->value(QTB_DESKTOPOFFSETX,
 							   (qint32)QTB_DESKTOPOFFSETX_DEFAULT).toInt());
@@ -819,6 +825,9 @@ void Settings::writeSettings()
   // save onMonochromeMode
   settings->setValue(QTB_ONMONOCHROMEMODE, onMonochromeMode);
 
+  // save onMouseTrackingMode
+  settings->setValue(QTB_ONMOUSETRACKINGMODE, onMouseTrackingMode);
+
   // save desktop offset X
   settings->setValue(QTB_DESKTOPOFFSETX, (qint32)desktopOffsetX);
 
@@ -1027,6 +1036,8 @@ void Settings::printSettings() const
 
   qDebug() << "MonochromeMode          : " << onMonochromeMode;
 
+  qDebug() << "MouseTrackingMode       : " << onMouseTrackingMode;
+
   qDebug() << "DesktopOffsetX          : " << desktopOffsetX;
   qDebug() << "DesktopOffsetY          : " << desktopOffsetY;
 
@@ -1039,7 +1050,7 @@ void Settings::printSettings() const
   qDebug() << "StaysOnTop              : " << onStaysOnTop;
   qDebug() << "DesktopScaleFixed       : " << onDesktopScaleFixed;
   qDebug() << "WindowSizeFixed         : " << onWindowSizeFixed;
-  qDebug() << "DesktopAutoresize        : " << onDesktopAutoresize;
+  qDebug() << "DesktopAutoresize       : " << onDesktopAutoresize;
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
 #if QTB_TOOLBAR

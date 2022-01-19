@@ -628,7 +628,7 @@ void ControlThread::initHeaderForGraphics()
   com_data->image_cx = settings->getCurrentScreenWidth();
   com_data->image_cy = settings->getCurrentScreenHeight();
 }
-#endif // 0 // for TEST
+#endif // defined(QTB_DEV_DESKTOP)
 
 // initialize protocol header for graphics
 void ControlThread::initHeaderForGraphics_test()

@@ -32,7 +32,8 @@ DesktopWindow::DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent)
   //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setFocusPolicy(Qt::StrongFocus);
-  setMouseTracking(true); // mouse tracking mode on
+  //setMouseTracking(true); // mouse tracking mode on
+  setMouseTracking(settings->getOnMouseTrackingMode());
 }
 
 // destructor

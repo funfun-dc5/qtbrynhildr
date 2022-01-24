@@ -617,6 +617,7 @@ void ControlThread::initHeaderForGraphics()
   // frame_no
   com_data->frame_no = (char)frameNoOfClient;
 
+#if 0 //for TEST
   // image size and zoom
   if (settings->getDesktopScalingFactorLimit() == 0.0){
 	// only first time
@@ -627,6 +628,12 @@ void ControlThread::initHeaderForGraphics()
   }
   com_data->image_cx = settings->getCurrentScreenWidth();
   com_data->image_cy = settings->getCurrentScreenHeight();
+#else // 0 //for TEST
+  // image size and zoom
+  com_data->zoom = (ZOOM)1.0;
+  com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
+  com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+#endif // 0 //for TEST
 }
 #endif // defined(QTB_DEV_DESKTOP)
 

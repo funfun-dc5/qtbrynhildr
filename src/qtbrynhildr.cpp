@@ -754,25 +754,25 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
-  connectToServerDialog = new ConnectToServerDialog(settings, this);
+  connectToServerDialog = new ConnectToServerDialog(settings, nullptr);
   connectToServerDialog->setModal(true);
   connect(connectToServerDialog, SIGNAL(connectToServer()), SLOT(connectToServer()));
 
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog = new DesktopScalingDialog(settings, this);
+	desktopScalingDialog = new DesktopScalingDialog(settings, nullptr);
 	desktopScalingDialog->setModal(true);
   }
 
   // set up log view dialog
   if (QTB_LOG_VIEW){
-	logViewDialog = new LogViewDialog(settings, this);
+	logViewDialog = new LogViewDialog(settings, nullptr);
 	logViewDialog->setModal(true);
   }
 
 #if QTB_PREFERENCE
   // preference dialog
-  preferenceDialog = new PreferenceDialog(settings, this);
+  preferenceDialog = new PreferenceDialog(settings, nullptr);
   preferenceDialog->setModal(true);
 #endif // QTB_PREFERENCE
 
@@ -3589,6 +3589,8 @@ void QtBrynhildr::popUpConnectToServer()
   onPopUpConnectToServer = true;
 
   // pop up connect to server dialog
+  QPoint pos = getInitialDialogPos(connectToServerDialog);
+  connectToServerDialog->move(pos);
   connectToServerDialog->show();
 }
 
@@ -4025,6 +4027,8 @@ void QtBrynhildr::preferences()
 {
   //cout << "enter preferences()" << endl << flush;
 
+  QPoint pos = getInitialDialogPos(preferenceDialog);
+  preferenceDialog->move(pos);
   preferenceDialog->show();
 
   //cout << "leave preferences()" << endl << flush;
@@ -5050,6 +5054,8 @@ void QtBrynhildr::desktopScaling()
   // display desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
 	desktopScalingDialog->setSliderPositionFromSetting();
+	QPoint pos = getInitialDialogPos(desktopScalingDialog);
+	desktopScalingDialog->move(pos);
 	desktopScalingDialog->show();
   }
 }
@@ -5069,6 +5075,8 @@ void QtBrynhildr::logView()
 {
   // display log view dialog
   if (QTB_LOG_VIEW){
+	QPoint pos = getInitialDialogPos(logViewDialog);
+	logViewDialog->move(pos);
 	logViewDialog->show();
   }
 }

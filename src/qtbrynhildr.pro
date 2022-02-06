@@ -235,8 +235,8 @@ QMAKE_EXTRA_TARGETS += clear
 clear.commands += @echo test target
 }
 
-android-g++ | android-clang {
-QT += androidextras
-HEADERS += controlthread/android/nativebridge.h
-SOURCES += controlthread/android/nativebridge.cpp
-}
+#android-g++ | android-clang {
+#QT += androidextras
+#HEADERS += controlthread/android/nativebridge.h
+#SOURCES += controlthread/android/nativebridge.cpp
+#}

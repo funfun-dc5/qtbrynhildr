@@ -1548,8 +1548,10 @@ void QtBrynhildr::drawDesktop(QImage image)
   // set desktop scaling factor for full screen mode
   if (onSetDesktopScalingFactorForFullScreen){
 	onSetDesktopScalingFactorForFullScreen = false;
+#if !QTB_GV_NEW
 	QSize screenSize = settings->getCurrentScreenSize();
 	setDesktopScalingFactor(screenSize);
+#endif // !QTB_GV_NEW
 
 #if QTB_TOUCHPANEL_WINDOW
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
@@ -3395,6 +3397,10 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   qDebug() << "heightFactor = " << heightFactor;
   qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
 #endif // 0 // for TEST
+
+#if defined(QTB_DEV_TOUCHPANEL) && QTB_GV_NEW // for TEST
+	graphicsView->setScale(settings->getDesktopScalingFactor());
+#endif // defined(QTB_DEV_TOUCHPANEL) && QTB_GV_NEW // for TEST
 }
 
 #if 0 // disable now

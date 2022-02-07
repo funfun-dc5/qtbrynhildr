@@ -6,7 +6,7 @@
 #define ArchName "%ARCHNAME%"
 #define BuildTool "%BUILDTOOL%"
 #define AppVer "2.4.0"
-#define RCName "-android-gv"
+#define RCName "-rc1"
 #define AppVerNum StringChange(AppVer, ".", "")
 #define AppDateString GetDateTimeString("yyyymmdd", "", "")
 #define AuthName "mcz-xoxo"

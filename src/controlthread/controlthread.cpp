@@ -617,23 +617,10 @@ void ControlThread::initHeaderForGraphics()
   // frame_no
   com_data->frame_no = (char)frameNoOfClient;
 
-#if !QTB_GV_NEW
-  // image size and zoom
-  if (settings->getDesktopScalingFactorLimit() == 0.0){
-	// only first time
-	com_data->zoom = (ZOOM)1.001;
-  }
-  else {
-	com_data->zoom = (ZOOM)1.0/settings->getDesktopScalingFactorLimit();
-  }
-  com_data->image_cx = settings->getCurrentScreenWidth();
-  com_data->image_cy = settings->getCurrentScreenHeight();
-#else // !QTB_GV_NEW
   // image size and zoom
   com_data->zoom = (ZOOM)1.0;
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
   com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
-#endif // !QTB_GV_NEW
 }
 #endif // defined(QTB_DEV_DESKTOP)
 
@@ -717,7 +704,7 @@ void ControlThread::setMouseControl()
   else if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	// set information
 	com_data->mouse_move = MOUSE_MOVE_ON;
-#if !QTB_GV_NEW
+#if defined(QTB_DEV_DESKTOP)
 	qreal scalingFactorOfWidth;
 	qreal scalingFactorOfHeight;
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
@@ -742,7 +729,7 @@ void ControlThread::setMouseControl()
 	// set offset
 	com_data->mouse_x += settings->getDesktopOffsetX() * scalingFactorOfWidth;
 	com_data->mouse_y += settings->getDesktopOffsetY() * scalingFactorOfHeight;
-#else // !QTB_GV_NEW
+#else // defined(QTB_DEV_DESKTOP)
 	// set pos
 	com_data->mouse_x = pos.x;
 	com_data->mouse_y = pos.y;
@@ -750,7 +737,7 @@ void ControlThread::setMouseControl()
 	// set offset
 	com_data->mouse_x += settings->getDesktopOffsetX();
 	com_data->mouse_y += settings->getDesktopOffsetY();
-#endif // !QTB_GV_NEW
+#endif // defined(QTB_DEV_DESKTOP)
 
 #if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode

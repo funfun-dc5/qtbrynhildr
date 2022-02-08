@@ -182,9 +182,6 @@ const bool QTB_IN_TESTING				= false;
 // debug
 #define QTB_DEBUG					1
 
-// new Android Graphics View TEST
-#define QTB_GV_NEW					1
-
 } // end of namespace qtbrynhildr
 
 #endif // CONFIG_H

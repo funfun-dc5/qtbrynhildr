@@ -74,12 +74,7 @@ void GraphicsView::setScale(qreal scalingFactor)
 {
   QTransform transform;
 
-#if !QTB_GV_NEW
-  qreal tmpScalingFactor = scalingFactor/getScalingFactorForFullScreen();
-  transform.scale(tmpScalingFactor, tmpScalingFactor);
-#else // !QTB_GV_NEW
   transform.scale(scalingFactor, scalingFactor);
-#endif // !QTB_GV_NEW
   setTransform(transform);
 
 #if defined(QTB_DEBUG)

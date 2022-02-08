@@ -1530,9 +1530,6 @@ void QtBrynhildr::drawDesktop(QImage image)
 #if QTB_TOUCHPANEL_WINDOW
   static qreal previousScalingFactor = 1.0;
   if (previousScalingFactor != settings->getDesktopScalingFactor()){
-#if 0 // for TEST
-	graphicsView->setScale(settings->getDesktopScalingFactor());
-#endif // 0 // for TEST
 	previousScalingFactor = settings->getDesktopScalingFactor();
   }
 #endif // QTB_TOUCHPANEL_WINDOW
@@ -1548,10 +1545,6 @@ void QtBrynhildr::drawDesktop(QImage image)
   // set desktop scaling factor for full screen mode
   if (onSetDesktopScalingFactorForFullScreen){
 	onSetDesktopScalingFactorForFullScreen = false;
-#if !QTB_GV_NEW
-	QSize screenSize = settings->getCurrentScreenSize();
-	setDesktopScalingFactor(screenSize);
-#endif // !QTB_GV_NEW
 
 #if QTB_TOUCHPANEL_WINDOW
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
@@ -3398,9 +3391,9 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
 #endif // 0 // for TEST
 
-#if defined(QTB_DEV_TOUCHPANEL) && QTB_GV_NEW // for TEST
-	graphicsView->setScale(settings->getDesktopScalingFactor());
-#endif // defined(QTB_DEV_TOUCHPANEL) && QTB_GV_NEW // for TEST
+#if defined(QTB_DEV_TOUCHPANEL)
+  graphicsView->setScale(settings->getDesktopScalingFactor());
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 #if 0 // disable now

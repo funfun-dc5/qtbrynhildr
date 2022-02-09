@@ -394,6 +394,9 @@ private:
   // monochrome mode
   QAction *onMonochromeMode_Action;
 
+  // mouse tracking mode
+  QAction *onMouseTrackingMode_Action;
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type KeroRemote
   QAction *touchpanelOperationTypeKeroRemote_Action;
@@ -899,6 +902,16 @@ private:
   void refreshBenchmarkMenu();
 #endif // QTB_BENCHMARK
 
+  // get initial position for dialog
+  QPoint getInitialDialogPos(QDialog *dialog)
+  {
+	QPoint pos = this->pos();
+	QSize size = this->size();
+	int x = pos.x() + size.width()/2 - dialog->width()/2;
+	int y = pos.y() + size.height()/2 - dialog->height()/2;
+	return QPoint(x,y);
+  }
+
 private slots:
   // select public mode version
   void selectPublicModeVersion5();
@@ -1015,6 +1028,9 @@ private slots:
 
   // monochrome mode
   void toggleOnMonochromeMode();
+
+  // mouse tracking mode
+  void toggleOnMouseTrackingMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type

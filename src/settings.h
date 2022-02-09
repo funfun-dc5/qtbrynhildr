@@ -268,12 +268,16 @@ typedef int COMPRESS_MODE;
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
 // for onMonochromeMode
-#define QTB_ONMONOCHROMEMODE				"onMonochromeMode"
-#define QTB_ONMONOCHROMEMODE_DEFAULT		false
+#define QTB_ONMONOCHROMEMODE			"onMonochromeMode"
+#define QTB_ONMONOCHROMEMODE_DEFAULT	false
+
+// for onMouseTrackingMode
+#define QTB_ONMOUSETRACKINGMODE			"onMouseTrackingMode"
+#define QTB_ONMOUSETRACKINGMODE_DEFAULT	true
 
 // for onCutDesktopBlankArea
-#define QTB_ONCUTDESKTOPBLANKAREA				"onCutDesktopBlankArea"
-#define QTB_ONCUTDESKTOPBLANKAREA_DEFAULT		false
+#define QTB_ONCUTDESKTOPBLANKAREA			"onCutDesktopBlankArea"
+#define QTB_ONCUTDESKTOPBLANKAREA_DEFAULT	false
 
 // for desktopOffsetX/Y
 #define QTB_DESKTOPOFFSETX				"desktopOffsetX"
@@ -652,6 +656,9 @@ private:
 
   // monochrome mode
   volatile bool onMonochromeMode;
+
+  // mouse tracking mode
+  volatile bool onMouseTrackingMode;
 
   // cut desktop blank area flag
   volatile bool onCutDesktopBlankArea;
@@ -1744,6 +1751,18 @@ public:
   void setOnMonochromeMode(bool onMonochromeMode)
   {
 	this->onMonochromeMode = onMonochromeMode;
+  }
+
+  // get mouse tracking mode flag
+  bool getOnMouseTrackingMode() const
+  {
+	return onMouseTrackingMode;
+  }
+
+  // set mouse tracking mode flag
+  void setOnMouseTrackingMode(bool onMouseTrackingMode)
+  {
+	this->onMouseTrackingMode = onMouseTrackingMode;
   }
 
   // get cut desktop blank area flag

@@ -169,6 +169,13 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_TOOLBAR					0
 #endif // defined(QTB_DEV_DESKTOP)
 
+// mouse tracking focus mode
+#if defined(QTB_DEV_DESKTOP)
+#define QTB_MOUSE_TRACKING_FOCUS_MODE	1
+#else // defined(QTB_DEV_DESKTOP)
+#define QTB_MOUSE_TRACKING_FOCUS_MODE	0
+#endif // defined(QTB_DEV_DESKTOP)
+
 // benchmark
 #define QTB_BENCHMARK				1
 

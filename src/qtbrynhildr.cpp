@@ -190,6 +190,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onScrollMode_Action(0)
   ,onViewerMode_Action(0)
   ,onMonochromeMode_Action(0)
+  ,onMouseTrackingMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,touchpanelOperationTypeKeroRemote_Action(0)
   ,touchpanelOperationTypeQtBrynhildr_Action(0)
@@ -753,25 +754,25 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set up connect to server dialog
-  connectToServerDialog = new ConnectToServerDialog(settings, this);
+  connectToServerDialog = new ConnectToServerDialog(settings, nullptr);
   connectToServerDialog->setModal(true);
   connect(connectToServerDialog, SIGNAL(connectToServer()), SLOT(connectToServer()));
 
   // set up desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
-	desktopScalingDialog = new DesktopScalingDialog(settings, this);
+	desktopScalingDialog = new DesktopScalingDialog(settings, nullptr);
 	desktopScalingDialog->setModal(true);
   }
 
   // set up log view dialog
   if (QTB_LOG_VIEW){
-	logViewDialog = new LogViewDialog(settings, this);
+	logViewDialog = new LogViewDialog(settings, nullptr);
 	logViewDialog->setModal(true);
   }
 
 #if QTB_PREFERENCE
   // preference dialog
-  preferenceDialog = new PreferenceDialog(settings, this);
+  preferenceDialog = new PreferenceDialog(settings, nullptr);
   preferenceDialog->setModal(true);
 #endif // QTB_PREFERENCE
 
@@ -1529,9 +1530,6 @@ void QtBrynhildr::drawDesktop(QImage image)
 #if QTB_TOUCHPANEL_WINDOW
   static qreal previousScalingFactor = 1.0;
   if (previousScalingFactor != settings->getDesktopScalingFactor()){
-#if 0 // for TEST
-	graphicsView->setScale(settings->getDesktopScalingFactor());
-#endif // 0 // for TEST
 	previousScalingFactor = settings->getDesktopScalingFactor();
   }
 #endif // QTB_TOUCHPANEL_WINDOW
@@ -1547,8 +1545,6 @@ void QtBrynhildr::drawDesktop(QImage image)
   // set desktop scaling factor for full screen mode
   if (onSetDesktopScalingFactorForFullScreen){
 	onSetDesktopScalingFactorForFullScreen = false;
-	QSize screenSize = settings->getCurrentScreenSize();
-	setDesktopScalingFactor(screenSize);
 
 #if QTB_TOUCHPANEL_WINDOW
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
@@ -2238,6 +2234,16 @@ void QtBrynhildr::createActions()
   connect(onMonochromeMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnMonochromeMode()));
 #endif // QTB_GRAY_SCALE_MODE
 
+#if QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action = new QAction(tr("Mouse Tracking Mode"), this);
+  onMouseTrackingMode_Action->setStatusTip(tr("Mouse Tracking Mode"));
+  onMouseTrackingMode_Action->setEnabled(true);
+  onMouseTrackingMode_Action->setCheckable(true);
+  onMouseTrackingMode_Action->setChecked(settings->getOnMouseTrackingMode());
+  connect(onMouseTrackingMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnMouseTrackingMode()));
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type
   touchpanelOperationTypeKeroRemote_Action = new QAction(tr("KeroRemote Type"), this);
@@ -2671,6 +2677,11 @@ void QtBrynhildr::createMenus()
   optionMenu->addAction(onMonochromeMode_Action);
 #endif // QTB_GRAY_SCALE_MODE
 
+#if QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  optionMenu->addAction(onMouseTrackingMode_Action);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type
   touchpanelOperationTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Operation"));
@@ -3078,6 +3089,11 @@ void QtBrynhildr::connected()
   onMonochromeMode_Action->setEnabled(true);
 #endif // QTB_GRAY_SCALE_MODE
 
+#if 0 //QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action->setEnabled(true);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
   // enable full screen
 #if defined(QTB_DEV_DESKTOP)
   if (QTB_DESKTOP_FULL_SCREEN){
@@ -3227,6 +3243,11 @@ void QtBrynhildr::disconnected()
   onMonochromeMode_Action->setEnabled(false);
 #endif // QTB_GRAY_SCALE_MODE
 
+#if 0 //QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action->setEnabled(false);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
+
   // disabled viewer mode
   if (QTB_VIEWER_MODE){
 	onViewerMode_Action->setEnabled(false);
@@ -3369,6 +3390,10 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   qDebug() << "heightFactor = " << heightFactor;
   qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
 #endif // 0 // for TEST
+
+#if defined(QTB_DEV_TOUCHPANEL)
+  graphicsView->setScale(settings->getDesktopScalingFactor());
+#endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
 #if 0 // disable now
@@ -3563,6 +3588,8 @@ void QtBrynhildr::popUpConnectToServer()
   onPopUpConnectToServer = true;
 
   // pop up connect to server dialog
+  QPoint pos = getInitialDialogPos(connectToServerDialog);
+  connectToServerDialog->move(pos);
   connectToServerDialog->show();
 }
 
@@ -3999,6 +4026,8 @@ void QtBrynhildr::preferences()
 {
   //cout << "enter preferences()" << endl << flush;
 
+  QPoint pos = getInitialDialogPos(preferenceDialog);
+  preferenceDialog->move(pos);
   preferenceDialog->show();
 
   //cout << "leave preferences()" << endl << flush;
@@ -4448,6 +4477,11 @@ void QtBrynhildr::refreshOtherMenu()
   // monochrome mode
   onMonochromeMode_Action->setEnabled(flag);
 #endif // QTB_GRAY_SCALE_MODE
+
+#if 0 //QTB_MOUSE_TRACKING_FOCUS_MODE
+  // mouse tracking mode
+  onMouseTrackingMode_Action->setEnabled(flag);
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
 
   // enable/disable menu for sound
   flag = settings->getOnSound();
@@ -5007,12 +5041,20 @@ void QtBrynhildr::toggleOnMonochromeMode()
   settings->setOnMonochromeMode(!settings->getOnMonochromeMode());
 }
 
+// mouse tracking mode
+void QtBrynhildr::toggleOnMouseTrackingMode()
+{
+  settings->setOnMouseTrackingMode(!settings->getOnMouseTrackingMode());
+}
+
 // desktop scaling
 void QtBrynhildr::desktopScaling()
 {
   // display desktop scaling dialog
   if (QTB_DESKTOP_IMAGE_SCALING){
 	desktopScalingDialog->setSliderPositionFromSetting();
+	QPoint pos = getInitialDialogPos(desktopScalingDialog);
+	desktopScalingDialog->move(pos);
 	desktopScalingDialog->show();
   }
 }
@@ -5032,6 +5074,8 @@ void QtBrynhildr::logView()
 {
   // display log view dialog
   if (QTB_LOG_VIEW){
+	QPoint pos = getInitialDialogPos(logViewDialog);
+	logViewDialog->move(pos);
 	logViewDialog->show();
   }
 }

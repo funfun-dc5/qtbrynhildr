@@ -32,7 +32,8 @@ DesktopWindow::DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent)
   //  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setFocusPolicy(Qt::StrongFocus);
-  setMouseTracking(true); // mouse tracking mode on
+  //setMouseTracking(true); // mouse tracking mode on
+  setMouseTracking(settings->getOnMouseTrackingMode());
 }
 
 // destructor
@@ -285,6 +286,31 @@ void DesktopWindow::dropEvent(QDropEvent *event)
   DesktopPanel::dropEvent(event);
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
+
+#if QTB_MOUSE_TRACKING_FOCUS_MODE
+void DesktopWindow::focusInEvent(QFocusEvent *event)
+{
+  //cout << "Focus In" << endl << flush;
+  if (!settings->getOnMouseTrackingMode()){
+	QWidget::focusInEvent(event);
+	setMouseTracking(true); // mouse tracking mode on
+  }
+  else {
+	QWidget::focusInEvent(event);
+  }
+}
+void DesktopWindow::focusOutEvent(QFocusEvent *event)
+{
+  //cout << "Focus Out" << endl << flush;
+  if (!settings->getOnMouseTrackingMode()){
+	QWidget::focusOutEvent(event);
+	setMouseTracking(false); // mouse tracking mode off
+  }
+  else {
+	QWidget::focusOutEvent(event);
+  }
+}
+#endif // QTB_MOUSE_TRACKING_FOCUS_MODE
 
 //----------------------------------------------------------------------
 // native event filter

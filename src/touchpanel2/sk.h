@@ -13,9 +13,9 @@
 #include "controlthread/keybuffer.h"
 #include "settings.h"
 #include "software_keyboard.h"
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/graphicsview.h"
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 namespace qtbrynhildr {
 
@@ -37,10 +37,10 @@ private:
   // settings
   Settings *settings;
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   // graphics view
   GraphicsView *graphicsView;
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // output log flag
   bool outputLog;
@@ -73,12 +73,12 @@ protected:
   bool event(QEvent *event) override;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   // mouse event
   virtual void mousePressEvent(QMouseEvent *event) override;
   virtual void mouseReleaseEvent(QMouseEvent *event) override;
   virtual void mouseMoveEvent(QMouseEvent *event) override;
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 };
 
 } // end of namespace qtbrynhildr

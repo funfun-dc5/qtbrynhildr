@@ -288,7 +288,7 @@ void Settings::setDefaultValues()
   int hspace = 0;
   int vspace = 0;
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 #if defined(Q_OS_WIN)
   if (kernelVersion.startsWith("10.")){			// Windows 10
 	hspace = 2;
@@ -312,17 +312,9 @@ void Settings::setDefaultValues()
 	vspace = 3;
   }
 #elif defined(Q_OS_LINUX)
-  // Linux base
-#if defined(Q_OS_ANDROID)
-  // Android
-  hspace = 2;
-  vspace = 4;
-#else // defined(Q_OS_ANDROID)
   // Linux Desktop
   hspace = 2;
   vspace = 8;
-#endif // defined(Q_OS_ANDROID)
-
 #elif defined(Q_OS_CYGWIN)
   // Cygwin
   hspace = 2;
@@ -336,7 +328,7 @@ void Settings::setDefaultValues()
   hspace = 1;
   vspace = 0;
 #endif // defined(Q_OS_OSX)
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // set hSpace, vSpace
   setHSpace(hspace);

@@ -19,11 +19,11 @@
 #include <QPalette>
 #include <QProgressBar>
 #include <QRect>
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 #include <QGraphicsScene>
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 #include <QScrollArea>
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #include <QShowEvent>
 #include <QSize>
 #include <QString>
@@ -46,12 +46,12 @@
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
 #include "mainwindow/desktoppanel.h"
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/graphicsview.h"
 #include "mainwindow/desktoppanelobject.h"
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktopwindow.h"
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #include "option.h"
 #if QTB_RECORDER
 #include "function/recorder.h"
@@ -116,19 +116,19 @@ private:
   // desktop panel
   DesktopPanel *desktopPanel;
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   // view
   GraphicsView *graphicsView;
   // scene
   QGraphicsScene *graphicsScene;
   // desktop panel object
   DesktopPanelObject *desktopPanelObject;
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   // scroll area
   QScrollArea *scrollArea;
   // desktop window
   DesktopWindow *desktopWindow;
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // connection label
   QLabel *connectionLabel;
@@ -665,13 +665,13 @@ public:
   }
 #endif // QTB_TOOLBAR
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   // get graphics view
   GraphicsView *getGraphicsView() const;
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   // get desktop window
   DesktopWindow *getDesktopWindow() const;
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // get desktop panel
   DesktopPanel *getDesktopPanel() const;

@@ -130,11 +130,11 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_WIN)
   // install native event filter
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   app.installNativeEventFilter(qtbrynhildr->getGraphicsView());
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   app.installNativeEventFilter(qtbrynhildr->getDesktopWindow());
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // defined(Q_OS_WIN)
 
   // set attribute

@@ -115,11 +115,11 @@ const bool QTB_IN_TESTING				= false;
 #endif // defined(QTB_DEV_DESKTOP)
 
 // desktop compress mode
-#if QTB_TOUCHPANEL_WINDOW
-#define QTB_DESKTOP_COMPRESS_MODE	0
-#else // QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_DESKTOP)
 #define QTB_DESKTOP_COMPRESS_MODE	1
-#endif // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_DESKTOP)
+#define QTB_DESKTOP_COMPRESS_MODE	0
+#endif // defined(QTB_DEV_DESKTOP)
 
 // disable plugins support
 #define QTB_PLUGINS_DISABLE_SUPPORT	1

@@ -179,11 +179,11 @@ public:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // for event handling
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 public:
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 protected:
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // event

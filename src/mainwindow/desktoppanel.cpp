@@ -188,11 +188,11 @@ void DesktopPanel::resizeWindow()
 		height += qtbrynhildr->getHeightOfToolBar();
 #endif // QTB_TOOLBAR
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 		// correct
 		width  += widthMargin;
 		height += heightMargin;
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 		QSize screenSize = settings->getCurrentScreenSize();
 		if (width > screenSize.width()){
@@ -202,10 +202,10 @@ void DesktopPanel::resizeWindow()
 		  height = screenSize.height();
 		}
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 		// resize
 		qtbrynhildr->resize(width, height);
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 		// update image
 		updateDesktop();

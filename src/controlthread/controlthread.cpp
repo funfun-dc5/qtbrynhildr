@@ -621,6 +621,11 @@ void ControlThread::initHeaderForGraphics()
   com_data->zoom = (ZOOM)1.0;
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
   com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+
+#if QTB_GRAY_SCALE_MODE2
+  // monochrome mode
+  com_data->monochrome = settings->getOnMonochromeMode()? 1 : 0;
+#endif // QTB_GRAY_SCALE_MODE2
 }
 #endif // defined(QTB_DEV_DESKTOP)
 

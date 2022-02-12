@@ -1527,13 +1527,6 @@ void QtBrynhildr::drawDesktop(QImage image)
   if (!settings->getConnected())
 	return;
 
-#if defined(QTB_DEV_TOUCHPANEL)
-  static qreal previousScalingFactor = 1.0;
-  if (previousScalingFactor != settings->getDesktopScalingFactor()){
-	previousScalingFactor = settings->getDesktopScalingFactor();
-  }
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
   // update desktop
   desktopPanel->refreshDesktop(image);
 

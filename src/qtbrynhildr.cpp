@@ -1540,6 +1540,7 @@ void QtBrynhildr::drawDesktop(QImage image)
 	onSetDesktopScalingFactorForFullScreen = false;
 
 #if defined(QTB_DEV_TOUCHPANEL)
+	// set desktop scaling limit for touchpanel
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }

@@ -30,8 +30,8 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 											 QWidget *parent)
   :QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
   ,settings(settings)
-#if QTB_AUTO_COMPLETE
   ,serverNameList(0)
+#if QTB_AUTO_COMPLETE
   ,completer(0)
 #endif // QTB_AUTO_COMPLETE
 #if defined(QTB_DEV_TOUCHPANEL)

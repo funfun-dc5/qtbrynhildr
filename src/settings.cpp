@@ -33,10 +33,8 @@ Settings::Settings(const char *iniFileName)
 #if QTB_CRYPTOGRAM
   ,cipher(cipher)
 #endif // QTB_CRYPTGRAM
-#if QTB_AUTO_COMPLETE
   ,serverNameListSize(QTB_SERVERNAMELISTSIZE_DEFAULT)
   ,serverNameList(new QStringList)
-#endif // QTB_AUTO_COMPLETE
   ,connected(false)
   ,onSendControlKeyState(false)
   ,onSendClipboard(false)
@@ -227,12 +225,10 @@ Settings::~Settings()
 	delete settings;
 	settings = 0;
   }
-#if QTB_AUTO_COMPLETE
   if (serverNameList != 0){
 	delete serverNameList;
 	serverNameList = 0;
   }
-#endif // QTB_AUTO_COMPLETE
   if (desktop != 0){
 	delete desktop;
 	desktop = 0;
@@ -245,7 +241,6 @@ QSettings *Settings::getSettings() const
   return settings;
 }
 
-#if QTB_AUTO_COMPLETE
 // read server name list
 void Settings::readServerNameList()
 {
@@ -278,7 +273,6 @@ void Settings::writeServerNameList()
 	}
   }
 }
-#endif // QTB_AUTO_COMPLETE
 
 // set default values
 void Settings::setDefaultValues()
@@ -681,10 +675,8 @@ void Settings::readSettings()
   setDesktopCaptureFormat(settings->value(QTB_DESKTOPCAPTUREFORMAT,
 										  QTB_DESKTOPCAPTUREFORMAT_DEFAULT).toString());
 
-#if QTB_AUTO_COMPLETE
   // read server name list
   readServerNameList();
-#endif // QTB_AUTO_COMPLETE
 }
 
 // save settings to setting file or registry
@@ -962,10 +954,8 @@ void Settings::writeSettings()
   // save desktopCaptureFormat
   settings->setValue(QTB_DESKTOPCAPTUREFORMAT, desktopCaptureFormat);
 
-#if QTB_AUTO_COMPLETE
   // write server name list
   writeServerNameList();
-#endif // QTB_AUTO_COMPLETE
 
   // sync
   settings->sync();

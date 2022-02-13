@@ -1539,6 +1539,9 @@ void QtBrynhildr::drawDesktop(QImage image)
   if (onSetDesktopScalingFactorForFullScreen){
 	onSetDesktopScalingFactorForFullScreen = false;
 
+	QSize screenSize = settings->getCurrentScreenSize();
+	setDesktopScalingFactor(screenSize);
+
 #if defined(QTB_DEV_TOUCHPANEL)
 	// set desktop scaling limit for touchpanel
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
@@ -3354,6 +3357,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   height -= heightMargin;
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 
+#if defined(QTB_DEV_DESKTOP)
   QSize screenSize = settings->getCurrentScreenSize();
 
   if (desktopPanel->getSize().width() > screenSize.width()){
@@ -3362,6 +3366,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   if (desktopPanel->getSize().height() > screenSize.height()){
 	height = desktopPanel->getSize().height();
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   int desktopWidth = settings->getDesktopWidth();
   int desktopHeight = settings->getDesktopHeight();

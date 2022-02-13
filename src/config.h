@@ -124,8 +124,10 @@ const bool QTB_IN_TESTING				= false;
 // disable plugins support
 #define QTB_PLUGINS_DISABLE_SUPPORT	1
 
+#if 0 // into qtbrynhildr.pro
 // auto complete
 #define QTB_AUTO_COMPLETE			1
+#endif // into qtbrynhildr.pro
 
 // manual page
 #define QTB_MANUAL_PAGE				1

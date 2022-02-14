@@ -16,7 +16,7 @@ GNU GPL v2.0として公開し、著作権はふんふん(FunFun\<fu.aba.dc5@gma
 
 開発ブログは以下にあります。
 
-「ふんふんのブログ」: http://mcz-xoxo.cocolog-nifty.com/blog/
+「ふんふんのブログ」: https://mcz-xoxo.cocolog-nifty.com/blog/
 
 -----------------------------------------------------------------------------------------------
 #Brynhildr について (About Brynhildr)

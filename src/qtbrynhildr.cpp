@@ -2872,8 +2872,8 @@ void QtBrynhildr::updateConnected()
   // set label
   if (settings->getConnected()){
 	// connection
-#if QTB_BENCHMARK
 	QString str;
+#if QTB_BENCHMARK
 	if (onBenchmarkMenu){
 	  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
 		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ "+tr("ReCalc Rate")+" :  %7 % : %8]").
@@ -2899,16 +2899,60 @@ void QtBrynhildr::updateConnected()
 	  str += QString(" : Sound %1 Hz").arg(soundThread->getSampleRate());
 	}
 	else {
+	  if (settings->getDesktopScalingFactor() == 1.0 && settings->getDesktopCompressMode() == 1){
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+		  arg(settings->getServerName()).
+		  arg(settings->getDesktopWidth(), 3).
+		  arg(settings->getDesktopHeight(), 3);
+	  }
+	  else {
+		int width = settings->getDesktopImageSize().width();
+		int height = settings->getDesktopImageSize().height();
+		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+		  if (settings->getDesktopScalingFactor() > 1.0){
+			width *= settings->getDesktopScalingFactor();
+			height *= settings->getDesktopScalingFactor();
+		  }
+		}
+		else {
+			width *= settings->getDesktopScalingFactor();
+			height *= settings->getDesktopScalingFactor();
+		}
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] >> [ %4x%5 ]").
+		  arg(settings->getServerName()).
+		  arg(settings->getDesktopWidth(), 3).
+		  arg(settings->getDesktopHeight(), 3).
+		  arg(width, 3).
+		  arg(height, 3);
+	  }
+	}
+#else // QTB_BENCHMARK
+	if (settings->getDesktopScalingFactor() == 1.0 && settings->getDesktopCompressMode() == 1){
 	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
 		arg(settings->getServerName()).
 		arg(settings->getDesktopWidth(), 3).
 		arg(settings->getDesktopHeight(), 3);
 	}
-#else // QTB_BENCHMARK
-	QString str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
-	  arg(settings->getServerName()).
-	  arg(settings->getDesktopWidth(), 3).
-	  arg(settings->getDesktopHeight(), 3);
+	else {
+	  int width = settings->getDesktopImageSize().width();
+	  int height = settings->getDesktopImageSize().height();
+	  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+		if (settings->getDesktopScalingFactor() > 1.0){
+		  width *= settings->getDesktopScalingFactor();
+		  height *= settings->getDesktopScalingFactor();
+		}
+	  }
+	  else {
+		width *= settings->getDesktopScalingFactor();
+		height *= settings->getDesktopScalingFactor();
+	  }
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ] >> [ %4x%5 ]").
+		arg(settings->getServerName()).
+		arg(settings->getDesktopWidth(), 3).
+		arg(settings->getDesktopHeight(), 3).
+		arg(width, 3).
+		arg(height, 3);
+	}
 #endif // QTB_BENCHMARK
 	// viewer mode
 	if (settings->getOnViewerMode()){

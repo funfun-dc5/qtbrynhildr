@@ -22,7 +22,6 @@ if [ -n "$1" ] ; then
 			;;
 		msvc64)
 			ARCH=x86_64
-			APPSUFIX=64
 			;;
 		msvc)
 			ARCH=x86
@@ -376,7 +375,7 @@ case $UNAME in
 				# portable version package
 				echo "create portable version package"
 				# make package string
-				PKGSTRING="${APPS}${APPSUFIX}-${PKGNAME}-v${VERSION}-Portable"
+				PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${TARGET}-Portable"
 				# 1) make top directory
 				mkdir ${PKGSTRING}
 				mkdir -p ${PKGSTRING}/docs/manual
@@ -384,9 +383,9 @@ case $UNAME in
 				mv bin ${PKGSTRING}
 				# 3) copy doc into the directory
 				# copy document file
-				${INSTALL} ${INSTALLFLAGS} ../docs/ReadMe.txt ${PKGSTRING}/doc
-				${INSTALL} ${INSTALLFLAGS} ../docs/ChangeLog.txt ${PKGSTRING}/doc
-				${INSTALL} ${INSTALLFLAGS} ../docs/LICENSE.txt ${PKGSTRING}/doc
+				${INSTALL} ${INSTALLFLAGS} ../docs/ReadMe.txt ${PKGSTRING}/docs
+				${INSTALL} ${INSTALLFLAGS} ../docs/ChangeLog.txt ${PKGSTRING}/docs
+				${INSTALL} ${INSTALLFLAGS} ../docs/LICENSE.txt ${PKGSTRING}/docs
 				# copy manual file
 				cp -r ../docs/manual/* ${PKGSTRING}/docs/manual
 				rm -f ${PKGSTRING}/docs/manual/.gitkeep

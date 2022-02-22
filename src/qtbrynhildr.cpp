@@ -2899,6 +2899,7 @@ void QtBrynhildr::updateConnected()
 	  str += QString(" : Sound %1 Hz").arg(soundThread->getSampleRate());
 	}
 	else {
+#if defined(QTB_DEV_DESKTOP)
 	  if (settings->getDesktopScalingFactor() == 1.0 && settings->getDesktopCompressMode() == 1){
 		str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
 		  arg(settings->getServerName()).
@@ -2925,6 +2926,12 @@ void QtBrynhildr::updateConnected()
 		  arg(width, 3).
 		  arg(height, 3);
 	  }
+#else // defined(QTB_DEV_DESKTOP)
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+		arg(settings->getServerName()).
+		arg(settings->getDesktopWidth(), 3).
+		arg(settings->getDesktopHeight(), 3);
+#endif // defined(QTB_DEV_DESKTOP)
 	}
 #else // QTB_BENCHMARK
 	if (settings->getDesktopScalingFactor() == 1.0 && settings->getDesktopCompressMode() == 1){

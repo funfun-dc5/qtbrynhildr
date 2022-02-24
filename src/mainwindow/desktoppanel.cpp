@@ -52,8 +52,6 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
   ,previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP)
   ,widthMargin(0)
   ,heightMargin(0)
-  ,keyboardLogFile(0)
-  ,keyboardLogFileStream(0)
   // for DEBUG
   ,outputLogForKeyboard(false)
   ,outputLogForMouse(false)
@@ -64,17 +62,11 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
 
   // create mouse buffer
   mouseBuffer = new MouseBuffer(QTB_MOUSE_BUFFER_SIZE);
-
-  // open keyboard log file
-  openKeyboardLogFile(settings->getKeyboardLogFile());
 }
 
 // destructor
 DesktopPanel::~DesktopPanel()
 {
-  // close keyboard log file
-  closeKeyboardLogFile();
-
   // delete objects
   if (keyBuffer != 0){
 	delete keyBuffer;
@@ -83,14 +75,6 @@ DesktopPanel::~DesktopPanel()
   if (mouseBuffer != 0){
 	delete mouseBuffer;
 	mouseBuffer = 0;
-  }
-  if (keyboardLogFile != 0){
-	delete keyboardLogFile;
-	keyboardLogFile = 0;
-  }
-  if (keyboardLogFileStream != 0){
-	delete keyboardLogFileStream;
-	keyboardLogFileStream = 0;
   }
 }
 
@@ -700,9 +684,7 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYDOWN);
 	  // output Keyboard Log
 	  if (settings->getOutputKeyboardLog()){
-		(*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
-								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
-								 << " => Sent" << QTextStream_endl << QTextStream_flush;
+		outputKeyboardLog("Press", (Qt::Key)event->key(), VK_SHIFT);
 	  }
 	}
 
@@ -716,9 +698,7 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 	keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
 	// output Keyboard Log
 	if (settings->getOutputKeyboardLog()){
-	  (*keyboardLogFileStream) << "Press   - Qt : " << (Qt::Key)event->key()
-							   << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
-							   << " => Sent" << QTextStream_endl << QTextStream_flush;
+	  outputKeyboardLog("Press", (Qt::Key)event->key(), VK_Code);
 	}
 
 	// set shift key status
@@ -757,9 +737,7 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 
   // output Keyboard Log
   if (settings->getOutputKeyboardLog()){
-	(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
-							 << ", Windows: " << eventConverter->getVKCodeByString(VK_Code)
-							 << " => Sent" << QTextStream_endl << QTextStream_flush;
+	outputKeyboardLog("Release", (Qt::Key)event->key(), VK_Code);
   }
 
   // on Scroll Mode
@@ -811,9 +789,7 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 	  keyBuffer->put(VK_SHIFT, KEYCODE_FLG_KEYUP);
 	  // output Keyboard Log
 	  if (settings->getOutputKeyboardLog()){
-		(*keyboardLogFileStream) << "Release - Qt : " << (Qt::Key)event->key()
-								 << ", Windows: " << eventConverter->getVKCodeByString(VK_SHIFT)
-								 << " => Sent" << QTextStream_endl << QTextStream_flush;
+		outputKeyboardLog("Release", (Qt::Key)event->key(), VK_SHIFT);
 	  }
 	}
 
@@ -1096,49 +1072,37 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
 //----------------------------------------------------------------------
 // keyboard log file
 //----------------------------------------------------------------------
-// open keyboard log file
-bool DesktopPanel::openKeyboardLogFile(QString filename)
+
+//
+bool DesktopPanel::outputKeyboardLog(QString name, Qt::Key key, uchar keycode)
 {
-  if (keyboardLogFile != 0)
-	return false;
+  // keyboard log file
+  QFile	*keyboardLogFile = new QFile(settings->getKeyboardLogFile());
 
-  keyboardLogFile = new QFile(filename);
-
-  // check
+  // open keyboard log file
   if (!keyboardLogFile->open(QFile::WriteOnly | QFile::Append)) {
 	return false;
   }
 
   // create QTextStrem
-  keyboardLogFileStream = new QTextStream(keyboardLogFile);
+  QTextStream *keyboardLogFileStream = new QTextStream(keyboardLogFile);
   keyboardLogFileStream->setCodec("UTF-8");
 
-  return true;
-}
-
-// close keyboard log file
-bool DesktopPanel::closeKeyboardLogFile()
-{
-  if (keyboardLogFile == 0)
-	return false;
-
-  if (keyboardLogFileStream == 0)
-	return false;
+  // output log
+  (*keyboardLogFileStream) << name
+						   << "- Qt : " << key
+						   << ", Windows: " << eventConverter->getVKCodeByString(keycode)
+						   << " => Sent" << QTextStream_endl << QTextStream_flush;
 
   // flush
   keyboardLogFileStream->flush();
 
   // close
-  if (keyboardLogFile->isOpen()){
-	keyboardLogFile->close();
-  }
+  keyboardLogFile->close();
 
-  // delete object
+  // delete objects
   delete keyboardLogFileStream;
-  keyboardLogFileStream = 0;
-
   delete keyboardLogFile;
-  keyboardLogFile = 0;
 
   return true;
 }

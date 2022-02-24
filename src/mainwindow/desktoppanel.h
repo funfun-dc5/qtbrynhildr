@@ -87,12 +87,6 @@ protected:
   int widthMargin;
   int heightMargin;
 
-  // keyboard log file
-  QFile	*keyboardLogFile;
-
-  // keyboard log file stream
-  QTextStream *keyboardLogFileStream;
-
   // output log flag for keyboard
   bool outputLogForKeyboard;
 
@@ -216,11 +210,8 @@ protected:
 #endif // defined(Q_OS_WIN)
 
 private:
-  // open keyboard log file
-  bool openKeyboardLogFile(QString filename);
-
-  // close keyboard log file
-  bool closeKeyboardLogFile();
+  //
+  bool outputKeyboardLog(QString name, Qt::Key key, uchar keycode);
 
   // print mouse button event
   void printMouseButtonEvent(QMouseEvent *event);

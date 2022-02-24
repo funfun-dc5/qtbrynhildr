@@ -15,6 +15,7 @@
 #include <QTextStream>
 
 // Local Header
+#include "settings.h"
 
 using namespace std;
 
@@ -51,6 +52,9 @@ class LogMessage : public QMessageBox
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // settings
+  Settings *settings;
+
   // log file
   QFile	*logFile;
 
@@ -67,10 +71,16 @@ public:
   ~LogMessage();
 
   // open log file
-  bool openLogFile(QString filename);
+  bool openLogFile();
 
   // close log file
   bool closeLogFile();
+
+  // set settings
+  void setSettings(Settings *settings)
+  {
+	this->settings = settings;
+  }
 
   // critical message dialog and log message
   int criticalMessage(PHASE_ID id,

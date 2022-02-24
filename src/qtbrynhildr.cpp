@@ -343,15 +343,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // restore settings
   readSettings();
 
-  // open Log File
-  if (!logMessage->openLogFile(settings->getLogFile())){
-	// Failed to open log file
-	QMessageBox::warning(this,
-						 tr("warning"),
-						 tr("Failed to open log file"),
-						 QMessageBox::Ok,
-						 QMessageBox::Ok);
-  }
+  // set settings
+  logMessage->setSettings(settings);
 
   // initialize platform
   if (!initPlatform()){
@@ -1192,9 +1185,6 @@ QtBrynhildr::~QtBrynhildr()
 	// Failed to shutdown platform
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "error: shutdownPlatform()");
   }
-
-  // close Log File
-  logMessage->closeLogFile();
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)

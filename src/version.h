@@ -5,9 +5,9 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.4.2"
+#define QTB_VERSION				"2.4.3"
 
-#define QTB_RCNAME				""
+#define QTB_RCNAME				"-rc1"
 #define QTB_VERSION_NUMBER		2402
 
 #if __x86_64__ || __LP64__ || _WIN64

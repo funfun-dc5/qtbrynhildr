@@ -87,12 +87,6 @@ protected:
   int widthMargin;
   int heightMargin;
 
-  // keyboard log file
-  QFile	*keyboardLogFile;
-
-  // keyboard log file stream
-  QTextStream *keyboardLogFileStream;
-
   // output log flag for keyboard
   bool outputLogForKeyboard;
 
@@ -179,11 +173,11 @@ public:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // for event handling
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 public:
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 protected:
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // event
@@ -216,11 +210,8 @@ protected:
 #endif // defined(Q_OS_WIN)
 
 private:
-  // open keyboard log file
-  bool openKeyboardLogFile(QString filename);
-
-  // close keyboard log file
-  bool closeKeyboardLogFile();
+  //
+  bool outputKeyboardLog(QString name, Qt::Key key, uchar keycode);
 
   // print mouse button event
   void printMouseButtonEvent(QMouseEvent *event);

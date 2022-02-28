@@ -11,7 +11,6 @@
 
 // Local Header
 #include "logmessage.h"
-#include "settings.h"
 
 namespace qtbrynhildr {
 
@@ -38,6 +37,7 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 // constructor
 LogMessage::LogMessage(QWidget *parent)
   :QMessageBox(parent)
+  ,settings(0)
   ,logFile(0)
   ,logFileStream(0)
 {
@@ -58,12 +58,12 @@ LogMessage::~LogMessage()
 }
 
 // open log file
-bool LogMessage::openLogFile(QString filename)
+bool LogMessage::openLogFile()
 {
   if (logFile != 0)
 	return false;
 
-  logFile = new QFile(filename);
+  logFile = new QFile(settings->getLogFile());
 
   // check
   if (!logFile->open(QFile::WriteOnly | QFile::Append)) {
@@ -119,12 +119,20 @@ int LogMessage::criticalMessage(PHASE_ID id,
 				 buttons,
 				 defaultButton);
 
+  // open log file
+  if (!openLogFile()){
+	return ret;
+  }
+
   // output log file
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
 	(*logFileStream) << phaseName[id] << KIND_OF_CRITICAL;
 	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
+
+  // close log file
+  closeLogFile();
 
   return ret;
 }
@@ -144,12 +152,20 @@ int LogMessage::warningMessage(PHASE_ID id,
 				buttons,
 				defaultButton);
 
+  // open log file
+  if (!openLogFile()){
+	return ret;
+  }
+
   // output log file
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
 	(*logFileStream) << phaseName[id] << KIND_OF_WARNING;
 	(*logFileStream) << dateTime.toString(dateFormat)   << " : " << text << QTextStream_endl << QTextStream_flush;
   }
+
+  // close log file
+  closeLogFile();
 
   return ret;
 }
@@ -169,12 +185,20 @@ int LogMessage::informationMessage(PHASE_ID id,
 					buttons,
 					defaultButton);
 
+  // open log file
+  if (!openLogFile()){
+	return ret;
+  }
+
   // output log file
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
 	(*logFileStream) << phaseName[id] << KIND_OF_INFORMATION;
 	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
+
+  // close log file
+  closeLogFile();
 
   return ret;
 }
@@ -194,6 +218,11 @@ int LogMessage::questionMessage(PHASE_ID id,
 				 buttons,
 				 defaultButton);
 
+  // open log file
+  if (!openLogFile()){
+	return ret;
+  }
+
   // output log file
   if (hasValidLogFileStream()){
 	QDateTime dateTime = QDateTime::currentDateTime();
@@ -201,17 +230,28 @@ int LogMessage::questionMessage(PHASE_ID id,
 	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
 
+  // close log file
+  closeLogFile();
+
   return ret;
 }
 
 // normal log message
 void LogMessage::outputLogMessage(PHASE_ID id, const QString text)
 {
+  // open log file
+  if (!openLogFile()){
+	return;
+  }
+
   QDateTime dateTime = QDateTime::currentDateTime();
   if (hasValidLogFileStream()){
 	(*logFileStream) << phaseName[id] << KIND_OF_NORMAL;
 	(*logFileStream) << dateTime.toString(dateFormat) << " : " << text << QTextStream_endl << QTextStream_flush;
   }
+
+  // close log file
+  closeLogFile();
 }
 
 // output message

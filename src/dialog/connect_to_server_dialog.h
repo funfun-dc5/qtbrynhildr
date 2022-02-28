@@ -38,10 +38,10 @@ private:
   // settings
   Settings *settings;
 
-#if QTB_AUTO_COMPLETE
   // server name list
   QStringList *serverNameList;
 
+#if QTB_AUTO_COMPLETE
   // completer
   QCompleter *completer;
 #endif // QTB_AUTO_COMPLETE

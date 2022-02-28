@@ -60,7 +60,7 @@
 
  IOS_VERSION_MIN="6.0" --> ISO_VERSION_MIN="13.0"
 
- make CC=`xcrun -find clang` CFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0" CXX=`xcrun -find clang++` CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0"
+ make CC=`xcrun -find clang` CFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0" CXX=`xcrun -find clang++` CXXFLAGS="-O3 -arch arm64 -isysroot `xcrun -sdk iphoneos --show-sdk-path` -fembed-bitcode -mios-version-min=13.0 -I."
 
 [others]
 

@@ -133,14 +133,14 @@ desktop {
 CONFIG += preference
 HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
-DEFINES += QTB_TOUCHPANEL_WINDOW=0
+DEFINES += QTB_AUTO_COMPLETE=1
 }
 
 touchpanel {
 CONFIG += software_keyboard_button
 HEADERS += mainwindow/desktoppanel.h mainwindow/desktoppanelobject.h mainwindow/graphicsview.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktoppanelobject.cpp mainwindow/graphicsview.cpp
-DEFINES += QTB_TOUCHPANEL_WINDOW=1
+DEFINES += QTB_AUTO_COMPLETE=0
 }
 # config error
 !desktop : !touchpanel {

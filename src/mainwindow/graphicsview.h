@@ -77,12 +77,12 @@ private:
   QRect softwareKeyboardRect;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   // scaling factor
   qreal scalingFactor;
   // scaling factor for fullscreen
   qreal scalingFactorForFullScreen;
-#endif // defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // output log flag
   bool outputLog;

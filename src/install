@@ -22,12 +22,11 @@ if [ -n "$1" ] ; then
 			;;
 		msvc64)
 			ARCH=x86_64
-			APPSUFIX=64
 			;;
 		msvc)
 			ARCH=x86
 			;;
-		xp)
+		msvc-xp)
 			ARCH=x86
 			;;
 		ubuntu64)
@@ -248,7 +247,7 @@ fi
 case $UNAME in
 	CYGWIN*)
 		# check
-		if [ "$TARGET" = "" -o "$TARGET" = "msvc" -o "$TARGET" = "msvc64" -o "$TARGET" = "xp" ] ; then
+		if [ "$TARGET" = "" -o "$TARGET" = "msvc" -o "$TARGET" = "msvc64" -o "$TARGET" = "msvc-xp" ] ; then
 			echo "Installing for windows..."
 			if [ ! -x "release/${APP}.exe" ] ; then
 				echo "NOT Found ${APP}.exe"
@@ -325,7 +324,7 @@ case $UNAME in
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
 					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
 					;;
-				xp)
+				msvc-xp)
 					# OpenSSL 1.0.2x
 #					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
 #					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
@@ -376,23 +375,29 @@ case $UNAME in
 				# portable version package
 				echo "create portable version package"
 				# make package string
-				PKGSTRING="${APPS}${APPSUFIX}-${PKGNAME}-v${VERSION}-Portable"
+				PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${TARGET}-Portable"
+				PKGDIR=QtBrynhildr
 				# 1) make top directory
-				mkdir ${PKGSTRING}
-				mkdir -p ${PKGSTRING}/docs/manual
+				mkdir ${PKGDIR}
+				mkdir -p ${PKGDIR}/docs/manual
 				# 2) move bin into the directory
-				mv bin ${PKGSTRING}
+				mv bin ${PKGDIR}
 				# 3) copy doc into the directory
 				# copy document file
-				${INSTALL} ${INSTALLFLAGS} ../docs/ReadMe.txt ${PKGSTRING}/doc
-				${INSTALL} ${INSTALLFLAGS} ../docs/ChangeLog.txt ${PKGSTRING}/doc
-				${INSTALL} ${INSTALLFLAGS} ../docs/LICENSE.txt ${PKGSTRING}/doc
+				${INSTALL} ${INSTALLFLAGS} ../docs/ReadMe.txt ${PKGDIR}/docs
+				${INSTALL} ${INSTALLFLAGS} ../docs/ChangeLog.txt ${PKGDIR}/docs
+				${INSTALL} ${INSTALLFLAGS} ../docs/LICENSE.txt ${PKGDIR}/docs
 				# copy manual file
-				cp -r ../docs/manual/* ${PKGSTRING}/docs/manual
-				rm -f ${PKGSTRING}/docs/manual/.gitkeep
+				cp -r ../docs/manual/* ${PKGDIR}/docs/manual
+				rm -f ${PKGDIR}/docs/manual/.gitkeep
 				# 4) archive package
-				#zip -9 -r ${PKGSTRING}.zip ${PKGSTRING}
-				7z a -r -sfx ${PKGSTRING}.exe ${PKGSTRING}
+				# for zip
+				#zip -9 -r ${PKGSTRING}.zip ${PKGDIR}
+				# for 7-Zip (21.07)
+				7z a -r -mx9 ${PKGDIR}.7z ${PKGDIR}
+				# for 7-Zip sfx (21.07)
+				cat 7-Zip/7z.sfx ${PKGDIR}.7z > ${PKGSTRING}.exe
+				rm -rf ${PKGDIR} ${PKGDIR}.7z
 			fi
 			popd
 		fi

@@ -29,9 +29,9 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   ,previousClickTime(QDateTime::currentDateTime())
   ,pressedMouseLeftButton(false)
   ,pressedMouseRightButton(false)
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   ,graphicsView(qtbrynhildr->getGraphicsView())
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
   ,outputLog(false)
 {
@@ -485,7 +485,7 @@ bool SB::event(QEvent *event)
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 // mouse event
 void SB::mousePressEvent(QMouseEvent *event)
 {
@@ -511,7 +511,7 @@ void SB::mouseMoveEvent(QMouseEvent *event)
 	//delete newEvent;
   }
 }
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // window show event
 void SB::showEvent(QShowEvent *event)

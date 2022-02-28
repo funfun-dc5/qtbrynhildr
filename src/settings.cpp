@@ -33,10 +33,8 @@ Settings::Settings(const char *iniFileName)
 #if QTB_CRYPTOGRAM
   ,cipher(cipher)
 #endif // QTB_CRYPTGRAM
-#if QTB_AUTO_COMPLETE
   ,serverNameListSize(QTB_SERVERNAMELISTSIZE_DEFAULT)
   ,serverNameList(new QStringList)
-#endif // QTB_AUTO_COMPLETE
   ,connected(false)
   ,onSendControlKeyState(false)
   ,onSendClipboard(false)
@@ -227,12 +225,10 @@ Settings::~Settings()
 	delete settings;
 	settings = 0;
   }
-#if QTB_AUTO_COMPLETE
   if (serverNameList != 0){
 	delete serverNameList;
 	serverNameList = 0;
   }
-#endif // QTB_AUTO_COMPLETE
   if (desktop != 0){
 	delete desktop;
 	desktop = 0;
@@ -245,7 +241,6 @@ QSettings *Settings::getSettings() const
   return settings;
 }
 
-#if QTB_AUTO_COMPLETE
 // read server name list
 void Settings::readServerNameList()
 {
@@ -278,7 +273,6 @@ void Settings::writeServerNameList()
 	}
   }
 }
-#endif // QTB_AUTO_COMPLETE
 
 // set default values
 void Settings::setDefaultValues()
@@ -288,7 +282,7 @@ void Settings::setDefaultValues()
   int hspace = 0;
   int vspace = 0;
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 #if defined(Q_OS_WIN)
   if (kernelVersion.startsWith("10.")){			// Windows 10
 	hspace = 2;
@@ -312,17 +306,9 @@ void Settings::setDefaultValues()
 	vspace = 3;
   }
 #elif defined(Q_OS_LINUX)
-  // Linux base
-#if defined(Q_OS_ANDROID)
-  // Android
-  hspace = 2;
-  vspace = 4;
-#else // defined(Q_OS_ANDROID)
   // Linux Desktop
   hspace = 2;
   vspace = 8;
-#endif // defined(Q_OS_ANDROID)
-
 #elif defined(Q_OS_CYGWIN)
   // Cygwin
   hspace = 2;
@@ -336,7 +322,7 @@ void Settings::setDefaultValues()
   hspace = 1;
   vspace = 0;
 #endif // defined(Q_OS_OSX)
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // set hSpace, vSpace
   setHSpace(hspace);
@@ -689,10 +675,8 @@ void Settings::readSettings()
   setDesktopCaptureFormat(settings->value(QTB_DESKTOPCAPTUREFORMAT,
 										  QTB_DESKTOPCAPTUREFORMAT_DEFAULT).toString());
 
-#if QTB_AUTO_COMPLETE
   // read server name list
   readServerNameList();
-#endif // QTB_AUTO_COMPLETE
 }
 
 // save settings to setting file or registry
@@ -970,10 +954,8 @@ void Settings::writeSettings()
   // save desktopCaptureFormat
   settings->setValue(QTB_DESKTOPCAPTUREFORMAT, desktopCaptureFormat);
 
-#if QTB_AUTO_COMPLETE
   // write server name list
   writeServerNameList();
-#endif // QTB_AUTO_COMPLETE
 
   // sync
   settings->sync();

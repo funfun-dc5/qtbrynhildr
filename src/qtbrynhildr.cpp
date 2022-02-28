@@ -62,12 +62,12 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 // constructor
 QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   :desktopPanel(0)
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   ,graphicsView(0)
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   ,scrollArea(0)
   ,desktopWindow(0)
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   ,connectionLabel(0)
   ,frameRateLabel(0)
   ,fileMenu(0)
@@ -343,15 +343,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // restore settings
   readSettings();
 
-  // open Log File
-  if (!logMessage->openLogFile(settings->getLogFile())){
-	// Failed to open log file
-	QMessageBox::warning(this,
-						 tr("warning"),
-						 tr("Failed to open log file"),
-						 QMessageBox::Ok,
-						 QMessageBox::Ok);
-  }
+  // set settings
+  logMessage->setSettings(settings);
 
   // initialize platform
   if (!initPlatform()){
@@ -522,7 +515,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   //------------------------------------------------------------
   // create window
   //------------------------------------------------------------
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 
   // Desktop Panel Object
   desktopPanelObject = new DesktopPanelObject(this);
@@ -546,7 +539,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // for full screen
   fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
 
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 
   // Desktop Window Widget
   desktopWindow = new DesktopWindow(this);
@@ -579,7 +572,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // for full screen
   fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
 
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // set key/mouse buffer
   keyBuffer = desktopPanel->getKeyBuffer();
@@ -779,11 +772,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // set up Software Button and Keyboard
   // keyboard
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard = new SK(keyBuffer, this, graphicsView);
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard = new SK(keyBuffer, this, desktopWindow);
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
   softwareKeyboard->setGeometry(40,350,1120,300);
@@ -791,11 +784,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // for TEST
 
   // button
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   softwareButton = new SB(mouseBuffer, this, graphicsView);
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   softwareButton = new SB(mouseBuffer, this, desktopWindow);
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 0 // for TEST
@@ -855,7 +848,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	connect(clipboard, SIGNAL(dataChanged()), SLOT(sendClipboard()));
   }
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
   // set margin
 #if defined(Q_OS_LINUX)
   if (menuBar()->sizeHint().height() == 0){
@@ -867,7 +860,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
   setMargins(hspace, vspace);
   desktopPanel->setMargins(hspace, vspace);
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   //------------------------------------------------------------
   // create threads
@@ -1157,7 +1150,7 @@ QtBrynhildr::~QtBrynhildr()
 	progressBar = 0;
   }
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 
   // desktop panel
   if (desktopPanel != 0){
@@ -1165,7 +1158,7 @@ QtBrynhildr::~QtBrynhildr()
 	desktopPanel = 0;
   }
 
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 
   // desktop window
   if (desktopWindow != 0){
@@ -1179,7 +1172,7 @@ QtBrynhildr::~QtBrynhildr()
 	scrollArea = 0;
   }
 
-#endif //QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // settings
   if (settings != 0){
@@ -1192,24 +1185,21 @@ QtBrynhildr::~QtBrynhildr()
 	// Failed to shutdown platform
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, "error: shutdownPlatform()");
   }
-
-  // close Log File
-  logMessage->closeLogFile();
 }
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 // get graphics view
 GraphicsView *QtBrynhildr::getGraphicsView() const
 {
   return graphicsView;
 }
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 // get desktop window
 DesktopWindow *QtBrynhildr::getDesktopWindow() const
 {
   return desktopWindow;
 }
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // get desktop panel
 DesktopPanel *QtBrynhildr::getDesktopPanel() const
@@ -1527,13 +1517,6 @@ void QtBrynhildr::drawDesktop(QImage image)
   if (!settings->getConnected())
 	return;
 
-#if QTB_TOUCHPANEL_WINDOW
-  static qreal previousScalingFactor = 1.0;
-  if (previousScalingFactor != settings->getDesktopScalingFactor()){
-	previousScalingFactor = settings->getDesktopScalingFactor();
-  }
-#endif // QTB_TOUCHPANEL_WINDOW
-
   // update desktop
   desktopPanel->refreshDesktop(image);
 
@@ -1546,9 +1529,13 @@ void QtBrynhildr::drawDesktop(QImage image)
   if (onSetDesktopScalingFactorForFullScreen){
 	onSetDesktopScalingFactorForFullScreen = false;
 
-#if QTB_TOUCHPANEL_WINDOW
+	QSize screenSize = settings->getCurrentScreenSize();
+	setDesktopScalingFactor(screenSize);
+
+#if defined(QTB_DEV_TOUCHPANEL)
+	// set desktop scaling limit for touchpanel
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   }
 }
 
@@ -2875,8 +2862,8 @@ void QtBrynhildr::updateConnected()
   // set label
   if (settings->getConnected()){
 	// connection
-#if QTB_BENCHMARK
 	QString str;
+#if QTB_BENCHMARK
 	if (onBenchmarkMenu){
 	  if (settings->getPublicModeVersion() == PUBLICMODE_VERSION7){
 		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] [ SF : %4 : %5x%6 ] [ "+tr("ReCalc Rate")+" :  %7 % : %8]").
@@ -2902,16 +2889,67 @@ void QtBrynhildr::updateConnected()
 	  str += QString(" : Sound %1 Hz").arg(soundThread->getSampleRate());
 	}
 	else {
+#if defined(QTB_DEV_DESKTOP)
+	  if (settings->getDesktopScalingFactor() == 1.0 && settings->getDesktopCompressMode() == 1){
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+		  arg(settings->getServerName()).
+		  arg(settings->getDesktopWidth(), 3).
+		  arg(settings->getDesktopHeight(), 3);
+	  }
+	  else {
+		int width = settings->getDesktopImageSize().width();
+		int height = settings->getDesktopImageSize().height();
+		if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+		  if (settings->getDesktopScalingFactor() > 1.0){
+			width *= settings->getDesktopScalingFactor();
+			height *= settings->getDesktopScalingFactor();
+		  }
+		}
+		else {
+			width *= settings->getDesktopScalingFactor();
+			height *= settings->getDesktopScalingFactor();
+		}
+		str = QString(tr("Connected : ")+"%1 [ %2x%3 ] >> [ %4x%5 ]").
+		  arg(settings->getServerName()).
+		  arg(settings->getDesktopWidth(), 3).
+		  arg(settings->getDesktopHeight(), 3).
+		  arg(width, 3).
+		  arg(height, 3);
+	  }
+#else // defined(QTB_DEV_DESKTOP)
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
+		arg(settings->getServerName()).
+		arg(settings->getDesktopWidth(), 3).
+		arg(settings->getDesktopHeight(), 3);
+#endif // defined(QTB_DEV_DESKTOP)
+	}
+#else // QTB_BENCHMARK
+	if (settings->getDesktopScalingFactor() == 1.0 && settings->getDesktopCompressMode() == 1){
 	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
 		arg(settings->getServerName()).
 		arg(settings->getDesktopWidth(), 3).
 		arg(settings->getDesktopHeight(), 3);
 	}
-#else // QTB_BENCHMARK
-	QString str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
-	  arg(settings->getServerName()).
-	  arg(settings->getDesktopWidth(), 3).
-	  arg(settings->getDesktopHeight(), 3);
+	else {
+	  int width = settings->getDesktopImageSize().width();
+	  int height = settings->getDesktopImageSize().height();
+	  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
+		if (settings->getDesktopScalingFactor() > 1.0){
+		  width *= settings->getDesktopScalingFactor();
+		  height *= settings->getDesktopScalingFactor();
+		}
+	  }
+	  else {
+		width *= settings->getDesktopScalingFactor();
+		height *= settings->getDesktopScalingFactor();
+	  }
+	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ] >> [ %4x%5 ]").
+		arg(settings->getServerName()).
+		arg(settings->getDesktopWidth(), 3).
+		arg(settings->getDesktopHeight(), 3).
+		arg(width, 3).
+		arg(height, 3);
+	}
 #endif // QTB_BENCHMARK
 	// viewer mode
 	if (settings->getOnViewerMode()){
@@ -3117,11 +3155,11 @@ void QtBrynhildr::connected()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(true);
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(true);
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   }
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
@@ -3280,11 +3318,11 @@ void QtBrynhildr::disconnected()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(false);
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(false);
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -3354,12 +3392,13 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   width -= getWidthOfToolBar();
   height -= getHeightOfToolBar();
 #endif // QTB_TOOLBAR
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
   // correct
   width  -= widthMargin;
   height -= heightMargin;
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
+#if defined(QTB_DEV_DESKTOP)
   QSize screenSize = settings->getCurrentScreenSize();
 
   if (desktopPanel->getSize().width() > screenSize.width()){
@@ -3368,6 +3407,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   if (desktopPanel->getSize().height() > screenSize.height()){
 	height = desktopPanel->getSize().height();
   }
+#endif // defined(QTB_DEV_DESKTOP)
 
   int desktopWidth = settings->getDesktopWidth();
   int desktopHeight = settings->getDesktopHeight();
@@ -3424,7 +3464,7 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 
   //cout << "resizeEvent()" << endl << flush;
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
   // rescaling desktop
 #if 0 // for TEST
   cout << "resizeEvent() : Rescaling for (width, height) = ("
@@ -3443,7 +3483,7 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 	softwareButton->setGeometry(rect);
   }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 }
 
 // window hide event
@@ -4347,11 +4387,11 @@ void QtBrynhildr::topLevelChanged(bool topLevel)
 void QtBrynhildr::setupWindowTitle()
 {
 #if !QTB_PORTABLE_VERSION
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [TOUCHPANEL]");
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #else // !QTB_PORTABLE_VERSION
   setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" -");
 #endif // !QTB_PORTABLE_VERSION
@@ -4376,11 +4416,11 @@ void QtBrynhildr::refreshPublicMode()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(true);
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(true);
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   }
   else {
 	// send clipboard
@@ -4393,11 +4433,11 @@ void QtBrynhildr::refreshPublicMode()
 	cancelFileTransferring_Action->setEnabled(false);
 
 	// drag and drop
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(false);
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(false);
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
   }
 
   // set window title
@@ -4874,11 +4914,11 @@ void QtBrynhildr::fullScreen()
 	  menuBar()->setVisible(false);
 	  statusBar()->setVisible(false);
 	}
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea->setPalette(fullScreenBackgroundPalette); // change QPalette::Window to black
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->setOnFullScreen(true);
 	showFullScreen();
 	//cout << "size(width, height) = ("
@@ -4896,11 +4936,11 @@ void QtBrynhildr::fullScreen()
 	  menuBar()->setVisible(settings->getOnShowMenuBar());
 	  statusBar()->setVisible(settings->getOnShowStatusBar());
 	}
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 	//scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	//scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setPalette(backgroundPalette); // restore original QPalette::Window
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->setOnFullScreen(false);
 	showNormal();
 	//cout << "size(width, height) = ("
@@ -4960,7 +5000,7 @@ void QtBrynhildr::toggleDesktopScaleFixed()
 	  //	  desktopScalingDialog->hide();
 	}
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 	if (checked){
 	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -4969,7 +5009,7 @@ void QtBrynhildr::toggleDesktopScaleFixed()
 	  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	}
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   }
 }
@@ -4982,17 +5022,17 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	settings->setOnWindowSizeFixed(checked);
 	static QSize orgMaximumSize = maximumSize();
 	static QSize orgMinimumSize = minimumSize();
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 	static Qt::ScrollBarPolicy hpolicy = scrollArea->horizontalScrollBarPolicy();
 	static Qt::ScrollBarPolicy vpolicy = scrollArea->horizontalScrollBarPolicy();
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 	if (checked){
 	  // set maximum size (current size)
 	  setMaximumSize(size());
 	  // set minimum size (current size)
 	  setMinimumSize(size());
 	  // diable scroll bar
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 	  if (settings->getOnScrollMode()){
 		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -5001,7 +5041,7 @@ void QtBrynhildr::toggleWindowSizeFixed()
 		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	  }
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 	  // disable maximum button
 #if defined(Q_OS_WIN)
 	  bool visible = isVisible();
@@ -5016,10 +5056,10 @@ void QtBrynhildr::toggleWindowSizeFixed()
 	  setMaximumSize(orgMaximumSize);
 	  setMinimumSize(orgMinimumSize);
 	  // enable scroll bar
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 	  scrollArea->setHorizontalScrollBarPolicy(hpolicy);
 	  scrollArea->setVerticalScrollBarPolicy(vpolicy);
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 	  // restore window flags
 #if defined(Q_OS_WIN)
 	  bool visible = isVisible();
@@ -5108,11 +5148,11 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   width -= getWidthOfToolBar();
   height -= getHeightOfToolBar();
 #endif // QTB_TOOLBAR
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
   // correct
   windowSize.setWidth(windowSize.width() - widthMargin);
   windowSize.setHeight(windowSize.height() - heightMargin);
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // calc size
   int width = windowSize.width() * 0.98;
@@ -5151,11 +5191,11 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   width -= getWidthOfToolBar();
   height -= getHeightOfToolBar();
 #endif // QTB_TOOLBAR
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
   // correct
   windowSize.setWidth(windowSize.width() - widthMargin);
   windowSize.setHeight(windowSize.height() - heightMargin);
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // calc size
   int width = windowSize.width() * 0.95;

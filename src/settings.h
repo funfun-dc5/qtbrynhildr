@@ -14,9 +14,7 @@
 #include <QSettings>
 #include <QSize>
 #include <QString>
-#if QTB_AUTO_COMPLETE
 #include <QStringList>
-#endif // QTB_AUTO_COMPLETE
 
 // Local Header
 #if QTB_CRYPTOGRAM

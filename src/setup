@@ -5,6 +5,8 @@ PRO="qtbrynhildr.pro"
 TARGET=$1
 # Qt5.15.2
 BUILDARCH=mingw81-x64
+# CONFIG
+#CONFIG=portable
 
 # TARGET
 if [ -n "$TARGET" ] ; then
@@ -86,18 +88,29 @@ fi
 source ./setup_qt5 $TARGET
 
 ./clean $TARGET
+
 if [ "$TARGET" != "ios" ] ; then
 	# for make
 	echo "for make"
 	rm -f Makefile Makefile.Release Makefile.Debug
 	rm -f object_script.*
-	echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
-	${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+	if [ -z $CONFIG ] ; then
+		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
+		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+	else
+		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
+		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+	fi
 else
 	# for xcode
 	echo "for xcode"
-	echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH}"
-	${QTROOT}/bin/${QMAKE} ${PRO} -spec macx-xcode BUILDARCH=${BUILDARCH}
+	if [ -z $CONFIG ] ; then
+		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
+		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+	else
+		echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
+		${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+	fi
 fi
 
 case $UNAME in

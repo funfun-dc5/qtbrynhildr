@@ -19,11 +19,11 @@
 #include <QPalette>
 #include <QProgressBar>
 #include <QRect>
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 #include <QGraphicsScene>
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 #include <QScrollArea>
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #include <QShowEvent>
 #include <QSize>
 #include <QString>
@@ -46,12 +46,12 @@
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
 #include "mainwindow/desktoppanel.h"
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/graphicsview.h"
 #include "mainwindow/desktoppanelobject.h"
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktopwindow.h"
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #include "option.h"
 #if QTB_RECORDER
 #include "function/recorder.h"
@@ -116,19 +116,19 @@ private:
   // desktop panel
   DesktopPanel *desktopPanel;
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   // view
   GraphicsView *graphicsView;
   // scene
   QGraphicsScene *graphicsScene;
   // desktop panel object
   DesktopPanelObject *desktopPanelObject;
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   // scroll area
   QScrollArea *scrollArea;
   // desktop window
   DesktopWindow *desktopWindow;
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // connection label
   QLabel *connectionLabel;
@@ -240,6 +240,11 @@ private:
   // check update
   QAction *checkUpdate_Action;
 
+#if QTB_HELP_BROWSER
+  // help browser
+  QAction *helpBrowser_Action;
+#endif // QTB_HELP_BROWSER
+
   // video Quality MINIMUM
   QAction *videoQuality_MINIMUM_Action;
   // video Quality LOW
@@ -295,6 +300,7 @@ private:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // frame rate
+  QAction *selectFrameRateMinimum_Action;
   QAction *selectFrameRate5_Action;
   QAction *selectFrameRate10_Action;
   QAction *selectFrameRate20_Action;
@@ -384,6 +390,12 @@ private:
 
   // toggle viewer mode
   QAction *onViewerMode_Action;
+
+  // monochrome mode
+  QAction *onMonochromeMode_Action;
+
+  // mouse tracking mode
+  QAction *onMouseTrackingMode_Action;
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type KeroRemote
@@ -653,13 +665,13 @@ public:
   }
 #endif // QTB_TOOLBAR
 
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   // get graphics view
   GraphicsView *getGraphicsView() const;
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   // get desktop window
   DesktopWindow *getDesktopWindow() const;
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // get desktop panel
   DesktopPanel *getDesktopPanel() const;
@@ -819,6 +831,11 @@ private slots:
   void checkUpdate();
 #endif // QTB_UPDATECHECK
 
+#if QTB_HELP_BROWSER
+  // help browser
+  void helpBrowser();
+#endif // QTB_HELP_BROWSER
+
   // exit from QtBynhildr
   void exit();
 
@@ -884,6 +901,16 @@ private:
   // refresh benchmark menu
   void refreshBenchmarkMenu();
 #endif // QTB_BENCHMARK
+
+  // get initial position for dialog
+  QPoint getInitialDialogPos(QDialog *dialog)
+  {
+	QPoint pos = this->pos();
+	QSize size = this->size();
+	int x = pos.x() + size.width()/2 - dialog->width()/2;
+	int y = pos.y() + size.height()/2 - dialog->height()/2;
+	return QPoint(x,y);
+  }
 
 private slots:
   // select public mode version
@@ -971,6 +998,7 @@ private slots:
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // select frame rate
+  void selectFrameRateMinimum();
   void selectFrameRate5();
   void selectFrameRate10();
   void selectFrameRate20();
@@ -997,6 +1025,12 @@ private slots:
 
   // viewer mode
   void toggleOnViewerMode();
+
+  // monochrome mode
+  void toggleOnMonochromeMode();
+
+  // mouse tracking mode
+  void toggleOnMouseTrackingMode();
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // touchpanel operation type

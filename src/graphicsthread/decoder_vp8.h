@@ -51,6 +51,9 @@ public:
   // pre-process
   bool preprocess(char *buffer, int size);
 
+  // set gray scale flag
+  virtual void setOnGrayScale(bool onGrayScale);
+
 protected:
   // get image
   QImage* getImage(int imageSize);

@@ -295,7 +295,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 
 #if QTB_GRAY_SCALE_MODE
 // RGB convert to Gray Scale macro
-#define GET_GS(R, G, B) (R * 0.299 + G * 0.587 + B * 0.114)
+#define GET_GS(R, G, B) (R * 0.298912 + G * 0.586611 + B * 0.114578)
 
 // YUV convert to RGB (qtbrynhildr::convertYUVtoRGB()) (Gray Scale Version)
 void convertYUVtoRGB_CPP_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)

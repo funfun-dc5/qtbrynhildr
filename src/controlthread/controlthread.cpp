@@ -535,6 +535,11 @@ void ControlThread::initHeaderForGraphics()
 	com_data->zoom			= (ZOOM)1.0;
   }
 
+#if QTB_GRAY_SCALE_MODE2
+  // monochrome mode
+  com_data->monochrome = settings->getOnMonochromeMode()? 1 : 0;
+#endif // QTB_GRAY_SCALE_MODE2
+
   QSize windowSize = desktopPanel->getSize();
   QSize desktopImageSize = settings->getDesktopImageSize();
   if (!(windowSize.isValid() && desktopImageSize.isValid())){
@@ -613,17 +618,16 @@ void ControlThread::initHeaderForGraphics()
   com_data->frame_no = (char)frameNoOfClient;
 
   // image size and zoom
-  if (settings->getDesktopScalingFactorLimit() == 0.0){
-	// only first time
-	com_data->zoom = (ZOOM)1.001;
-  }
-  else {
-	com_data->zoom = (ZOOM)1.0/settings->getDesktopScalingFactorLimit();
-  }
-  com_data->image_cx = settings->getCurrentScreenWidth();
-  com_data->image_cy = settings->getCurrentScreenHeight();
+  com_data->zoom = (ZOOM)1.0;
+  com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
+  com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+
+#if QTB_GRAY_SCALE_MODE2
+  // monochrome mode
+  com_data->monochrome = settings->getOnMonochromeMode()? 1 : 0;
+#endif // QTB_GRAY_SCALE_MODE2
 }
-#endif // 0 // for TEST
+#endif // defined(QTB_DEV_DESKTOP)
 
 // initialize protocol header for graphics
 void ControlThread::initHeaderForGraphics_test()
@@ -705,6 +709,7 @@ void ControlThread::setMouseControl()
   else if (prevPos.x != pos.x || prevPos.y != pos.y || settings->getOnHoldMouseControl()){
 	// set information
 	com_data->mouse_move = MOUSE_MOVE_ON;
+#if defined(QTB_DEV_DESKTOP)
 	qreal scalingFactorOfWidth;
 	qreal scalingFactorOfHeight;
 	if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER){
@@ -729,6 +734,15 @@ void ControlThread::setMouseControl()
 	// set offset
 	com_data->mouse_x += settings->getDesktopOffsetX() * scalingFactorOfWidth;
 	com_data->mouse_y += settings->getDesktopOffsetY() * scalingFactorOfHeight;
+#else // defined(QTB_DEV_DESKTOP)
+	// set pos
+	com_data->mouse_x = pos.x;
+	com_data->mouse_y = pos.y;
+
+	// set offset
+	com_data->mouse_x += settings->getDesktopOffsetX();
+	com_data->mouse_y += settings->getDesktopOffsetY();
+#endif // defined(QTB_DEV_DESKTOP)
 
 #if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode

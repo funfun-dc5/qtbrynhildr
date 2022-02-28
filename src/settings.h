@@ -14,9 +14,7 @@
 #include <QSettings>
 #include <QSize>
 #include <QString>
-#if QTB_AUTO_COMPLETE
 #include <QStringList>
-#endif // QTB_AUTO_COMPLETE
 
 // Local Header
 #if QTB_CRYPTOGRAM
@@ -194,6 +192,7 @@ typedef int KEYBOARD_TYPE;
 
 // for frameRate
 #define QTB_FRAMERATE			"frameRate"
+#define FRAMERATE_MINIMUM		1
 #define FRAMERATE_MAXIMUM		0
 #define QTB_FRAMERATE_DEFAULT	30
 
@@ -266,9 +265,17 @@ typedef int COMPRESS_MODE;
 #define QTB_DESKTOPCOMPRESSMODE_DEFAULT	1
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
+// for onMonochromeMode
+#define QTB_ONMONOCHROMEMODE			"onMonochromeMode"
+#define QTB_ONMONOCHROMEMODE_DEFAULT	false
+
+// for onMouseTrackingMode
+#define QTB_ONMOUSETRACKINGMODE			"onMouseTrackingMode"
+#define QTB_ONMOUSETRACKINGMODE_DEFAULT	true
+
 // for onCutDesktopBlankArea
-#define QTB_ONCUTDESKTOPBLANKAREA				"onCutDesktopBlankArea"
-#define QTB_ONCUTDESKTOPBLANKAREA_DEFAULT		false
+#define QTB_ONCUTDESKTOPBLANKAREA			"onCutDesktopBlankArea"
+#define QTB_ONCUTDESKTOPBLANKAREA_DEFAULT	false
 
 // for desktopOffsetX/Y
 #define QTB_DESKTOPOFFSETX				"desktopOffsetX"
@@ -357,7 +364,7 @@ typedef enum {
 #define QTB_DISPLAYDATACOUNTERTYPE_GRAPHICS	3
 #define QTB_DISPLAYDATACOUNTERTYPE_SOUND	4
 #define QTB_DISPLAYDATACOUNTERTYPE_NUM		5
-#define QTB_DISPLAYDATACOUNTERTYPE_DEFAULT	QTB_DISPLAYDATACOUNTERTYPE_TOTAL
+#define QTB_DISPLAYDATACOUNTERTYPE_DEFAULT	QTB_DISPLAYDATACOUNTERTYPE_NONE
 
 // for onFullScreenAtConnected
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
@@ -644,6 +651,12 @@ private:
   // compress mode
   volatile COMPRESS_MODE desktopCompressMode;
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+  // monochrome mode
+  volatile bool onMonochromeMode;
+
+  // mouse tracking mode
+  volatile bool onMouseTrackingMode;
 
   // cut desktop blank area flag
   volatile bool onCutDesktopBlankArea;
@@ -1725,6 +1738,30 @@ public:
 	this->desktopCompressMode = desktopCompressMode;
   }
 #endif // QTB_DESKTOP_COMPRESS_MODE
+
+  // get monochrome mode flag
+  bool getOnMonochromeMode() const
+  {
+	return onMonochromeMode;
+  }
+
+  // set monochrome mode flag
+  void setOnMonochromeMode(bool onMonochromeMode)
+  {
+	this->onMonochromeMode = onMonochromeMode;
+  }
+
+  // get mouse tracking mode flag
+  bool getOnMouseTrackingMode() const
+  {
+	return onMouseTrackingMode;
+  }
+
+  // set mouse tracking mode flag
+  void setOnMouseTrackingMode(bool onMouseTrackingMode)
+  {
+	this->onMouseTrackingMode = onMouseTrackingMode;
+  }
 
   // get cut desktop blank area flag
   bool getOnCutDesktopBlankArea() const

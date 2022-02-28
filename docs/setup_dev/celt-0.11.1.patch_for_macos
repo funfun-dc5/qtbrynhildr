@@ -1,0 +1,19 @@
+--- celt-0.11.1.org/libcelt/entcode.h	2011-02-10 10:34:21.000000000 +0900
++++ celt-0.11.1/libcelt/entcode.h	2020-10-07 21:44:39.000000000 +0900
+@@ -109,6 +109,8 @@
+   return _this->error;
+ }
+ 
++int ec_ilog(ec_uint32 _v);
++
+ /*Returns the number of bits "used" by the encoded or decoded symbols so far.
+   This same number can be computed in either the encoder or the decoder, and is
+    suitable for making coding decisions.
+@@ -127,6 +129,6 @@
+            rounding error is in the positive direction).*/
+ ec_uint32 ec_tell_frac(ec_ctx *_this);
+ 
+-int ec_ilog(ec_uint32 _v);
++//int ec_ilog(ec_uint32 _v);
+ 
+ #endif

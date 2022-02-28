@@ -33,10 +33,8 @@ Settings::Settings(const char *iniFileName)
 #if QTB_CRYPTOGRAM
   ,cipher(cipher)
 #endif // QTB_CRYPTGRAM
-#if QTB_AUTO_COMPLETE
   ,serverNameListSize(QTB_SERVERNAMELISTSIZE_DEFAULT)
   ,serverNameList(new QStringList)
-#endif // QTB_AUTO_COMPLETE
   ,connected(false)
   ,onSendControlKeyState(false)
   ,onSendClipboard(false)
@@ -122,6 +120,10 @@ Settings::Settings(const char *iniFileName)
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
   setOnCutDesktopBlankArea(QTB_ONCUTDESKTOPBLANKAREA_DEFAULT);
+
+  setOnMonochromeMode(QTB_ONMONOCHROMEMODE_DEFAULT);
+
+  setOnMouseTrackingMode(QTB_ONMOUSETRACKINGMODE_DEFAULT);
 
   setDesktopOffsetX(QTB_DESKTOPOFFSETX_DEFAULT);
   setDesktopOffsetY(QTB_DESKTOPOFFSETY_DEFAULT);
@@ -223,12 +225,10 @@ Settings::~Settings()
 	delete settings;
 	settings = 0;
   }
-#if QTB_AUTO_COMPLETE
   if (serverNameList != 0){
 	delete serverNameList;
 	serverNameList = 0;
   }
-#endif // QTB_AUTO_COMPLETE
   if (desktop != 0){
 	delete desktop;
 	desktop = 0;
@@ -241,7 +241,6 @@ QSettings *Settings::getSettings() const
   return settings;
 }
 
-#if QTB_AUTO_COMPLETE
 // read server name list
 void Settings::readServerNameList()
 {
@@ -274,7 +273,6 @@ void Settings::writeServerNameList()
 	}
   }
 }
-#endif // QTB_AUTO_COMPLETE
 
 // set default values
 void Settings::setDefaultValues()
@@ -284,7 +282,7 @@ void Settings::setDefaultValues()
   int hspace = 0;
   int vspace = 0;
 
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 #if defined(Q_OS_WIN)
   if (kernelVersion.startsWith("10.")){			// Windows 10
 	hspace = 2;
@@ -308,17 +306,9 @@ void Settings::setDefaultValues()
 	vspace = 3;
   }
 #elif defined(Q_OS_LINUX)
-  // Linux base
-#if defined(Q_OS_ANDROID)
-  // Android
-  hspace = 2;
-  vspace = 4;
-#else // defined(Q_OS_ANDROID)
   // Linux Desktop
   hspace = 2;
   vspace = 8;
-#endif // defined(Q_OS_ANDROID)
-
 #elif defined(Q_OS_CYGWIN)
   // Cygwin
   hspace = 2;
@@ -332,7 +322,7 @@ void Settings::setDefaultValues()
   hspace = 1;
   vspace = 0;
 #endif // defined(Q_OS_OSX)
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // set hSpace, vSpace
   setHSpace(hspace);
@@ -487,6 +477,14 @@ void Settings::readSettings()
   // load onCutDesktopBlankArea
   setOnCutDesktopBlankArea(settings->value(QTB_ONCUTDESKTOPBLANKAREA,
 										   QTB_ONCUTDESKTOPBLANKAREA_DEFAULT).toBool());
+
+  // load onMonochromeMode
+  setOnMonochromeMode(settings->value(QTB_ONMONOCHROMEMODE,
+									  QTB_ONMONOCHROMEMODE_DEFAULT).toBool());
+
+  // load onMouseTrackingMode
+  setOnMouseTrackingMode(settings->value(QTB_ONMOUSETRACKINGMODE,
+										 QTB_ONMOUSETRACKINGMODE_DEFAULT).toBool());
 
   // load desktopOffsetX
   setDesktopOffsetX(settings->value(QTB_DESKTOPOFFSETX,
@@ -677,10 +675,8 @@ void Settings::readSettings()
   setDesktopCaptureFormat(settings->value(QTB_DESKTOPCAPTUREFORMAT,
 										  QTB_DESKTOPCAPTUREFORMAT_DEFAULT).toString());
 
-#if QTB_AUTO_COMPLETE
   // read server name list
   readServerNameList();
-#endif // QTB_AUTO_COMPLETE
 }
 
 // save settings to setting file or registry
@@ -809,6 +805,12 @@ void Settings::writeSettings()
 
   // save onCutDesktopBlankArea
   settings->setValue(QTB_ONCUTDESKTOPBLANKAREA, onCutDesktopBlankArea);
+
+  // save onMonochromeMode
+  settings->setValue(QTB_ONMONOCHROMEMODE, onMonochromeMode);
+
+  // save onMouseTrackingMode
+  settings->setValue(QTB_ONMOUSETRACKINGMODE, onMouseTrackingMode);
 
   // save desktop offset X
   settings->setValue(QTB_DESKTOPOFFSETX, (qint32)desktopOffsetX);
@@ -952,10 +954,8 @@ void Settings::writeSettings()
   // save desktopCaptureFormat
   settings->setValue(QTB_DESKTOPCAPTUREFORMAT, desktopCaptureFormat);
 
-#if QTB_AUTO_COMPLETE
   // write server name list
   writeServerNameList();
-#endif // QTB_AUTO_COMPLETE
 
   // sync
   settings->sync();
@@ -1016,6 +1016,10 @@ void Settings::printSettings() const
 
   qDebug() << "CutDesktopBlankArea     : " << onCutDesktopBlankArea;
 
+  qDebug() << "MonochromeMode          : " << onMonochromeMode;
+
+  qDebug() << "MouseTrackingMode       : " << onMouseTrackingMode;
+
   qDebug() << "DesktopOffsetX          : " << desktopOffsetX;
   qDebug() << "DesktopOffsetY          : " << desktopOffsetY;
 
@@ -1028,7 +1032,7 @@ void Settings::printSettings() const
   qDebug() << "StaysOnTop              : " << onStaysOnTop;
   qDebug() << "DesktopScaleFixed       : " << onDesktopScaleFixed;
   qDebug() << "WindowSizeFixed         : " << onWindowSizeFixed;
-  qDebug() << "DesktopAutoresize        : " << onDesktopAutoresize;
+  qDebug() << "DesktopAutoresize       : " << onDesktopAutoresize;
   qDebug() << "FrameLessWindow         : " << onFrameLessWindow;
   qDebug() << "ShowMenuBar             : " << onShowMenuBar;
 #if QTB_TOOLBAR

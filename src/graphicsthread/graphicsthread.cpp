@@ -401,6 +401,15 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	// adjust frame time
 	//adjustFrame();
 
+#if QTB_GRAY_SCALE_MODE
+	// set gray scale
+	static bool previousOnGrayScale = false;
+	if (previousOnGrayScale != settings->getOnMonochromeMode()){
+	  decoder->setOnGrayScale(settings->getOnMonochromeMode());
+	  previousOnGrayScale = settings->getOnMonochromeMode();
+	}
+#endif // QTB_GRAY_SCALE_MODE
+
 	// check frame skip
 	if (doSkipFrame(com_data->frame_no)){
 	  // skip this frame
@@ -433,10 +442,10 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		// save desktop image size
 		settings->setDesktopImageSize(image->size());
 
-#if !(defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW)
+#if !defined(QTB_DEV_TOUCHPANEL)
 		// rescale image
 		rescaleDesktopImage(image);
-#endif // !(defined(QTB_DEV_TOUCHPANEL) || QTB_TOUCHPANEL_WINDOW)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_BENCHMARK
 		// check benchmark phase counter
@@ -521,11 +530,11 @@ void GraphicsThread::rescaleDesktopImage(QImage *image)
 	  if (scalingFactor != 1.0){
 		// scale
 		currentSize = getSizeForCurrentMode(currentSize * scalingFactor);
-#if !QTB_TOUCHPANEL_WINDOW
+#if !defined(QTB_DEV_TOUCHPANEL)
 		*image = image->scaled(currentSize, Qt::KeepAspectRatio, settings->getDesktopScaringQuality());
 		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::FastTransformation);
 		//*image = image->scaled(currentSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-#endif // !QTB_TOUCHPANEL_WINDOW
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 	  }
 	  // save scaling factor
 	  if (scalingFactor != settings->getDesktopScalingFactor()){

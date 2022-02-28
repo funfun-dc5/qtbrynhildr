@@ -22,7 +22,7 @@
 
 [macOS]
 
- add -mmacosx-version-min=10.12 to CFLAGS in Makefile
+ add -mmacosx-version-min=10.xx to CFLAGS in Makefile
 
 [iOS]
 

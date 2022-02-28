@@ -32,12 +32,22 @@
 
 #include "util/netutil.h"
 
+#if 0 //defined(Q_OS_ANDROID)
+  // for TEST (JNI)
+#include "controlthread/android/nativebridge.h"
+#endif // defined(Q_OS_ANDROID)
+
 //using namespace qtbrynhildr;
 
 int main(int argc, char *argv[])
 {
   //  qtbrynhildr::NetUtil netUtil; // for TEST
   //  ::exit(EXIT_SUCCESS); // for TEST
+
+#if 0 //defined(Q_OS_ANDROID)
+  // for TEST (JNI)
+  qtbrynhildr::registerNativeMethods();
+#endif // defined(Q_OS_ANDROID)
 
   // for TEST and DEBUG
   if (!qtbrynhildr::checkProtocolHeader(false)){
@@ -120,11 +130,11 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_WIN)
   // install native event filter
-#if QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_TOUCHPANEL)
   app.installNativeEventFilter(qtbrynhildr->getGraphicsView());
-#else // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_TOUCHPANEL)
   app.installNativeEventFilter(qtbrynhildr->getDesktopWindow());
-#endif // QTB_TOUCHPANEL_WINDOW
+#endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // defined(Q_OS_WIN)
 
   // set attribute

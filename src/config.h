@@ -115,17 +115,19 @@ const bool QTB_IN_TESTING				= false;
 #endif // defined(QTB_DEV_DESKTOP)
 
 // desktop compress mode
-#if QTB_TOUCHPANEL_WINDOW
-#define QTB_DESKTOP_COMPRESS_MODE	0
-#else // QTB_TOUCHPANEL_WINDOW
+#if defined(QTB_DEV_DESKTOP)
 #define QTB_DESKTOP_COMPRESS_MODE	1
-#endif // QTB_TOUCHPANEL_WINDOW
+#else // defined(QTB_DEV_DESKTOP)
+#define QTB_DESKTOP_COMPRESS_MODE	0
+#endif // defined(QTB_DEV_DESKTOP)
 
 // disable plugins support
 #define QTB_PLUGINS_DISABLE_SUPPORT	1
 
+#if 0 // into qtbrynhildr.pro
 // auto complete
 #define QTB_AUTO_COMPLETE			1
+#endif // into qtbrynhildr.pro
 
 // manual page
 #define QTB_MANUAL_PAGE				1
@@ -149,10 +151,15 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_SOUND_PUSH_MODE			1
 
 // gray scale mode
-#define QTB_GRAY_SCALE_MODE			0
+#define QTB_GRAY_SCALE_MODE			1
 
 // gray scale mode2
 #define QTB_GRAY_SCALE_MODE2		0
+
+#if QTB_GRAY_SCALE_MODE2
+#undef QTB_GRAY_SCALE_MODE
+#define QTB_GRAY_SCALE_MODE			1
+#endif // QTB_GRAY_SCALE_MODE2
 
 // LOAD BITMAP
 #define QTB_LOAD_BITMAP				0
@@ -162,6 +169,13 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_TOOLBAR					1
 #else // defined(QTB_DEV_DESKTOP)
 #define QTB_TOOLBAR					0
+#endif // defined(QTB_DEV_DESKTOP)
+
+// mouse tracking focus mode
+#if defined(QTB_DEV_DESKTOP)
+#define QTB_MOUSE_TRACKING_FOCUS_MODE	1
+#else // defined(QTB_DEV_DESKTOP)
+#define QTB_MOUSE_TRACKING_FOCUS_MODE	0
 #endif // defined(QTB_DEV_DESKTOP)
 
 // benchmark

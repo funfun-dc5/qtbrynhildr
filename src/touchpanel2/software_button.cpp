@@ -12,10 +12,6 @@
 #include <QPainter>
 #include <QPen>
 
-#if defined(QTB_DEBUG)
-#include <QDebug>
-#endif // defined(QTB_DEBUG)
-
 // Local Header
 #include "software_button.h"
 
@@ -40,6 +36,7 @@ SoftwareButton::SoftwareButton(QWidget *parent)
   ,currentFrameRate(0.0)
   ,currentDataRate(0.0)
   ,fontSize(32)
+  ,penWidth(2)
   ,alpha(255)
   // for DEBUG
   ,outputLog(false)
@@ -94,11 +91,13 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
   QColor panelColor = QColor::fromRgb(0, 0, 0, alpha);
   // pen color
   QColor penColor = QColor::fromRgb(61, 124, 250, alpha);
+  // create pen
   QPen pen = QPen(penColor);
-  pen.setWidth(5);
+  pen.setWidth(penWidth);
 
   // painter
   QPainter painter(this);
+
   // change font size
   QFont font = painter.font();
   font.setPixelSize(fontSize);
@@ -429,7 +428,12 @@ void SoftwareButton::calculateLayout(qreal xFactor, qreal yFactor)
 	layout[i].rect.setHeight(rect.height()*yFactor);
   }
   buttonSize = QSize(WIDTH * xFactor, HEIGHT * yFactor);
-  //cout << "layout! : (W, H) = (" << buttonSize.width() << "," << buttonSize.height() << ")" << endl << flush;
+  //  cout << "Button Layout! : (W, H) = (" << buttonSize.width() << "," << buttonSize.height() << ")" << endl << flush;;
+  // font ,pen, etc
+  //  setFontSize(32);
+  setFontSize((int)((double)buttonSize.height()/1080*32));
+  setPenWidth(1);
+  setOpacity(0.8);
 }
 
  // get ID

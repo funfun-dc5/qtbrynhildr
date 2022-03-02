@@ -65,8 +65,8 @@ void ConfirmDialog::resetting()
 #if defined(QTB_DEV_TOUCHPANEL)
   int screenWidth = settings->getCurrentScreenWidth();
   int screenHeight = settings->getCurrentScreenHeight();
-  int dialogWidth = screenWidth*0.5;
-  int dialogHeight = screenHeight*0.8;
+  int dialogWidth = screenWidth * 0.5;
+  int dialogHeight = screenHeight * 0.8;
   int fontPointSize = 14;
 
   // resetting dialog window size and font size

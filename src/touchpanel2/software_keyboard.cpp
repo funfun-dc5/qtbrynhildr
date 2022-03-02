@@ -56,6 +56,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
   ,pushedAltKey(ID_KEY_NULL)
   ,pushedFnKey(ID_KEY_NULL)
   ,fontSize(32)
+  ,penWidth(2)
   ,alpha(255)
   // for DEBUG
   ,outputLog(false)
@@ -234,12 +235,16 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
   //QColor panelColor = QColor::fromRgb(30, 30, 30, alpha);
   QColor penColor = QColor::fromRgb(61, 124, 250, 255);
   //QColor penColor = QColor::fromRgb(192, 192, 192, alpha);
+  // create pen
+  QPen pen = QPen(penColor);
+  pen.setWidth(penWidth);
 
   // painter
   QPainter painter(this);
 
-  // change color for Pen
-  painter.setPen(penColor);
+  // change pen
+  painter.setPen(pen);
+
   // change font size
   QFont font = painter.font();
   font.setFamily("Courier");
@@ -395,7 +400,12 @@ void SoftwareKeyboard::calculateLayout(qreal xFactor, qreal yFactor)
 	layout[i].rect.setHeight(rect.height()*yFactor);
   }
   keyboardSize = QSize(WIDTH * xFactor, HEIGHT * yFactor);
-  //cout << "layout! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
+  cout << "Keyborad Layout! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
+  // font ,pen, etc
+  //  setFontSize(32);
+  setFontSize((int)((double)keyboardSize.height()/1080*32));
+  setPenWidth(1);
+  setOpacity(0.8);
 }
 
 // get ID

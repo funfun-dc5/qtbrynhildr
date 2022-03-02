@@ -10,6 +10,7 @@
 // Qt Header
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QPen>
 #include <QPoint>
 #include <QRect>
 #include <QResizeEvent>
@@ -450,6 +451,9 @@ private:
   // font size
   int fontSize;
 
+  // pen width
+  int penWidth;
+
   // alpha
   int alpha;
 
@@ -493,6 +497,12 @@ public:
   void setFontSize(int fontSize)
   {
 	this->fontSize = fontSize;
+  }
+
+  // set pen Width
+  void setPenWidth(int penWidth)
+  {
+	this->penWidth = penWidth;
   }
 
   // set opacity

@@ -305,17 +305,20 @@ void ConnectToServerDialog::resetting()
   int dialogHeight = screenHeight * 0.8;
   int fontPointSize = 14;
 
+  // calc minimum width
+  int minimumWidth = dialogWidth * 0.5;
+
   // set minimum width
 #if defined(QTB_DEV_TOUCHPANEL)
-  lineEdit_hostname->setMinimumWidth(300);
+  lineEdit_hostname->setMinimumWidth(minimumWidth);
 #else // defined(QTB_DEV_TOUCHPANEL)
-  comboBox_hostname->setMinimumWidth(300);
+  comboBox_hostname->setMinimumWidth(minimumWidth);
 #endif // defined(QTB_DEV_TOUCHPANEL)
-  comboBox_hosttype->setMinimumWidth(300);
-  comboBox_keyboardtype->setMinimumWidth(300);
-  spinBox_portno->setMinimumWidth(300);
-  lineEdit_password->setMinimumWidth(300);
-  comboBox_publicmode->setMinimumWidth(300);
+  comboBox_hosttype->setMinimumWidth(minimumWidth);
+  comboBox_keyboardtype->setMinimumWidth(minimumWidth);
+  spinBox_portno->setMinimumWidth(minimumWidth);
+  lineEdit_password->setMinimumWidth(minimumWidth);
+  comboBox_publicmode->setMinimumWidth(minimumWidth);
 
   // resetting dialog window size and font size
   resize(dialogWidth, dialogHeight);
@@ -324,17 +327,22 @@ void ConnectToServerDialog::resetting()
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
 #else // defined(QTB_DEV_TOUCHPANEL)
+
+  // calc minimum width
+  int dialogWidth = size().width();
+  int minimumWidth = dialogWidth * 0.5;
+
   // set minimum width
 #if defined(QTB_DEV_TOUCHPANEL)
-  lineEdit_hostname->setMinimumWidth(180);
+  lineEdit_hostname->setMinimumWidth(minimumWidth);
 #else // defined(QTB_DEV_TOUCHPANEL)
-  comboBox_hostname->setMinimumWidth(180);
+  comboBox_hostname->setMinimumWidth(minimumWidth);
 #endif // defined(QTB_DEV_TOUCHPANEL)
-  comboBox_hosttype->setMinimumWidth(180);
-  comboBox_keyboardtype->setMinimumWidth(180);
-  spinBox_portno->setMinimumWidth(180);
-  lineEdit_password->setMinimumWidth(180);
-  comboBox_publicmode->setMinimumWidth(180);
+  comboBox_hosttype->setMinimumWidth(minimumWidth);
+  comboBox_keyboardtype->setMinimumWidth(minimumWidth);
+  spinBox_portno->setMinimumWidth(minimumWidth);
+  lineEdit_password->setMinimumWidth(minimumWidth);
+  comboBox_publicmode->setMinimumWidth(minimumWidth);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 }
 

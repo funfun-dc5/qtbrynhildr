@@ -1373,7 +1373,7 @@ doc/ChangeLog.txtを参照してください
 
 また有用なツール、ライブラリを提供くださるQt Projectに感謝します。
 
-最後にGNU, MinGW, Cygwin, CELTライブラリ, OpenSSL, VP8, Inno Setupなど
+最後にGNU, MinGW, Cygwin, CELTライブラリ, OpenSSL, VP8, Inno Setup, 7-Zipなど
 フリーなソフトウェアを提供くださるすべての方々に感謝します。
 
 ----------------------------------------------------------------------

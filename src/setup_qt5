@@ -117,7 +117,7 @@ case $UNAME in
 				PATHLIST=/opt/cov-analysis-macosx-${COVVERSION}/bin:${PATHLIST}
 				if [ "$TARGET" = "ios" ] ; then
 				   # iOS
-				   QTROOT=/opt/Qt${QTVERSION}/${QTVERSION}/ios
+				   QTROOT=/opt/Qt/${QTVERSION}/ios
 				fi
 				;;
 			*)

@@ -77,7 +77,6 @@ void GraphicsView::setScale(qreal scalingFactor)
   transform.scale(scalingFactor, scalingFactor);
   setTransform(transform);
 
-#if defined(QTB_DEBUG)
   // get window size
   QSize windowSize = size();
   QSize desktopImageSize = settings->getDesktopImageSize();
@@ -102,7 +101,6 @@ void GraphicsView::setScale(qreal scalingFactor)
 	qDebug() << "horizontalScrollBar.value   = " << horizontalScrollBar()->value();
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
-#endif // defined(QTB_DEBUG)
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // save scaling factor

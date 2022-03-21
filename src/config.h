@@ -182,7 +182,7 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_BENCHMARK				1
 
 // debug
-#define QTB_DEBUG					1
+#define QTB_DEBUG					0
 
 } // end of namespace qtbrynhildr
 

@@ -375,7 +375,7 @@ case $UNAME in
 				# portable version package
 				echo "create portable version package"
 				# make package string
-				PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${TARGET}-Portable"
+				PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-Portable-${TARGET}"
 				PKGDIR=QtBrynhildr
 				# 1) make top directory
 				mkdir ${PKGDIR}

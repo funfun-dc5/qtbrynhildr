@@ -38,7 +38,7 @@ case $UNAME in
 				msvc64)
 					QTROOT="/opt/Qt/${QTVERSION}/${VCVERSION}_64"
 					;;
-				xp)
+				msvc-xp)
 					QTVERSION=5.6.3
 					QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/msvc2015"
 					;;

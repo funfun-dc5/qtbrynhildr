@@ -796,13 +796,19 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   softwareButton->setVisible(true);
 #endif // for TEST
 
+#if 0 // for TEST
   // set default font size
   softwareKeyboard->setFontSize(32);
   softwareButton->setFontSize(32);
 
+  // set default pen width
+  softwareKeyboard->setPenWidth(1);
+  softwareButton->setPenWidth(1);
+
   // set default opacity
   softwareKeyboard->setOpacity(0.80);
   softwareButton->setOpacity(0.80);
+#endif // 0 // for TEST
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 

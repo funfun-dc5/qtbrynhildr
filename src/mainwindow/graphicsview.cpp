@@ -54,7 +54,13 @@ GraphicsView::GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWid
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 #endif // defined(QTB_DEV_TOUCHPANEL)
+#if QTB_TEST
+  //setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
   setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+  //setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
+#else // QTB_TEST
+  setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+#endif // QTB_TEST
   setViewportMargins(0, 0, 0, 0);
 }
 
@@ -74,31 +80,58 @@ void GraphicsView::setScale(qreal scalingFactor)
 {
   QTransform transform;
 
+#if QTB_TEST
+  if (scalingFactor > 1.0){
+	transform.scale(scalingFactor, scalingFactor);
+  }
+  else {
+	transform.scale(1.0, 1.0);
+  }
+#else // QTB_TEST
   transform.scale(scalingFactor, scalingFactor);
+#endif // QTB_TEST
   setTransform(transform);
 
   // get window size
   QSize windowSize = size();
   QSize desktopImageSize = settings->getDesktopImageSize();
+#if QTB_TEST
+  QSize currentDesktopSize = (scalingFactor > 1.0) ? desktopImageSize * scalingFactor : desktopImageSize;
+#else // QTB_TEST
   QSize currentDesktopSize = desktopImageSize * scalingFactor;
+#endif // QTB_TEST
   QSize diffSize = currentDesktopSize - windowSize;
   if (outputLog){
-	qDebug() << "--- setScale() ---";
-	qDebug() << "windowSize = " << windowSize;
-	qDebug() << "desktopPanel->getDesktopSize() = " << desktopImageSize;
-	qDebug() << "currentDesktopSize = " << currentDesktopSize;
-	qDebug() << "diffSize = " << diffSize;
+	qDebug() << "NOW: --- setScale() ---";
+	qDebug() << "NOW: scalingFactor = " << scalingFactor;
+	qDebug() << "NOW: windowSize = " << windowSize;
+	qDebug() << "NOW: desktopPanel->getDesktopSize() = " << desktopImageSize;
+	qDebug() << "NOW: currentDesktopSize = " << currentDesktopSize;
+	qDebug() << "NOW: diffSize = " << diffSize;
   }
 #if defined(QTB_DEV_TOUCHPANEL)
+#if QTB_TEST
+  verticalScrollBar()->setMinimum(-desktopImageSize.height()/2);
+  verticalScrollBar()->setMaximum(verticalScrollBar()->minimum()+
+								  desktopImageSize.height()-720+2);
+
+  horizontalScrollBar()->setMinimum(-desktopImageSize.width()/2);
+  horizontalScrollBar()->setMaximum(horizontalScrollBar()->minimum()+
+									desktopImageSize.width()-1280+2);
+
   verticalScrollBar()->setValue(verticalScrollBar()->minimum());
   horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
+#else // QTB_TEST
+  verticalScrollBar()->setValue(verticalScrollBar()->minimum());
+  horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
+#endif // QTB_TEST
   if (outputLog){
-	qDebug() << "verticalScrollBar.minimum   = " << verticalScrollBar()->minimum();
-	qDebug() << "verticalScrollBar.maximum   = " << verticalScrollBar()->maximum();
-	qDebug() << "verticalScrollBar.value     = " << verticalScrollBar()->value();
-	qDebug() << "horizontalScrollBar.minimum = " << horizontalScrollBar()->minimum();
-	qDebug() << "horizontalScrollBar.maximum = " << horizontalScrollBar()->maximum();
-	qDebug() << "horizontalScrollBar.value   = " << horizontalScrollBar()->value();
+	qDebug() << "NOW: verticalScrollBar.minimum   = " << verticalScrollBar()->minimum();
+	qDebug() << "NOW: verticalScrollBar.maximum   = " << verticalScrollBar()->maximum();
+	qDebug() << "NOW: verticalScrollBar.value     = " << verticalScrollBar()->value();
+	qDebug() << "NOW: horizontalScrollBar.minimum = " << horizontalScrollBar()->minimum();
+	qDebug() << "NOW: horizontalScrollBar.maximum = " << horizontalScrollBar()->maximum();
+	qDebug() << "NOW: horizontalScrollBar.value   = " << horizontalScrollBar()->value();
   }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
@@ -531,6 +564,9 @@ bool GraphicsView::viewportEvent(QEvent *event){
 		  }
 		  else {
 			scalingFactor += 0.02;
+#if QTB_TEST
+			if (scalingFactor > 1.0) scalingFactor = 1.0;
+#endif // QTB_TEST
 		  }
 		  settings->setDesktopScalingFactor(scalingFactor);
 		  scalingFactor = settings->getDesktopScalingFactor();

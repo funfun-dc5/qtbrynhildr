@@ -618,9 +618,24 @@ void ControlThread::initHeaderForGraphics()
   com_data->frame_no = (char)frameNoOfClient;
 
   // image size and zoom
+#if QTB_TEST
+  // zoom
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
+	  settings->getDesktopScalingFactor() < 1.0){
+	// scale down on server : zoom > 1.0
+	com_data->zoom			= (ZOOM)settings->getDesktopScalingFactorForZoom();
+  }
+  else {
+	com_data->zoom			= (ZOOM)1.0;
+  }
+  com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
+  com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+  //  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
+#else // QTB_TEST
   com_data->zoom = (ZOOM)1.0;
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
   com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+#endif // QTB_TEST
 
 #if QTB_GRAY_SCALE_MODE2
   // monochrome mode

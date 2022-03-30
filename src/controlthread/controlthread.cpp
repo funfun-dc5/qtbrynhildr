@@ -1,7 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015- FunFun <fu.aba.dc5@gmail.com>
 
-#define QTB_TEST 0
+#define QTB_TEST_LOCAL 0
 
 // Common Header
 #include "common/common.h"
@@ -454,11 +454,11 @@ void ControlThread::initHeader()
 
   initHeaderForControl();
 
-#if QTB_TEST
+#if QTB_TEST_LOCAL
   initHeaderForGraphics_test();
-#else // QTB_TEST
+#else // QTB_TEST_LOCAL
   initHeaderForGraphics();
-#endif // QTB_TEST
+#endif // QTB_TEST_LOCAL
 
   initHeaderForSound();
 }

@@ -3557,6 +3557,7 @@ void QtBrynhildr::readSettings()
 	settings->readSettings();
   }
 
+#if defined(QTB_DEV_DESKTOP)
   // restore geometry
 #if 0 // for all platform
   QRect defaultRect = QRect(200, 200, 800, 600);
@@ -3575,6 +3576,7 @@ void QtBrynhildr::readSettings()
 
   // restore window state
   restoreState(settings->getSettings()->value(QTB_WINDOWSTATE).toByteArray());
+#endif // defined(QTB_DEV_DESKTOP)
 }
 
 // save settings to setting file or registry
@@ -3583,6 +3585,7 @@ void QtBrynhildr::writeSettings()
   // write global settings
   settings->writeSettings();
 
+#if defined(QTB_DEV_DESKTOP)
   // save geometry
 #if 0 // for all platform
   settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
@@ -3595,6 +3598,7 @@ void QtBrynhildr::writeSettings()
 
   // save window state
   settings->getSettings()->setValue(QTB_WINDOWSTATE, saveState());
+#endif // defined(QTB_DEV_DESKTOP)
 
   // sync
   settings->getSettings()->sync();

@@ -4038,7 +4038,7 @@ void QtBrynhildr::sendClipboard()
 	}
   }
   else {
-	qDebug() << "clipboard has unknown data!";
+	cout << "clipboard has unknown data!";
   }
 }
 

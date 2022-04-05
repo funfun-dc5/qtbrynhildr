@@ -472,9 +472,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   audioOutput->setBufferSize(QTB_SOUND_BUFFER_SIZE);
 
   // stateChanged
-#if defined(DEBUG)
   connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
-#endif // defined(DEBUG)
 
 #if 0 // for TEST
   audioOutput->setNotifyInterval(1000); // 1000 (ms)
@@ -597,13 +595,16 @@ void SoundThread::createWavFile(int pcmFileSize)
   }
 }
 
-#if defined(DEBUG)
+
 // audio state change event
 void SoundThread::handleStateChanged(QAudio::State state)
 {
+#if defined(DEBUG)
   cout << "state = " << state << endl << flush;
-}
+#else // defined(DEBUG)
+  Q_UNUSED(state);
 #endif // defined(DEBUG)
+}
 
 #if 0 // for TEST
 void SoundThread::notify()

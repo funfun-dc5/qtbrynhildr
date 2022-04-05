@@ -141,6 +141,12 @@ const bool QTB_IN_TESTING				= false;
 #endif // defined(QTB_DEV_DESKTOP)
 #endif // into qtbrynhildr.pro
 
+// help browser (need SSL)
+#if QTB_HELP_BROWSER && !QTB_UPDATECHECK
+#undef QTB_HELP_BROWSER
+#define QTB_HELP_BROWSER 0
+#endif // QTB_HELP_BROWSER && !QTB_UPDATECHECK
+
 // preference dialog
 //#define QTB_PREFERENCE				1
 

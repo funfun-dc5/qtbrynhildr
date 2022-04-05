@@ -474,6 +474,13 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // stateChanged
   connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
 
+#if defined(Q_OS_LINUX)
+  // for Runtime Message of QAudio::State (Qt Static Library Version)
+  // QObject::connect: Cannot queue arguments of type 'QAudio::State'
+  // (Make sure 'QAudio::State' is registered using qRegisterMetaType().)
+  qRegisterMetaType<QAudio::State>("QAudio::State");
+#endif // defined(Q_OS_LINUX)
+
 #if 0 // for TEST
   audioOutput->setNotifyInterval(1000); // 1000 (ms)
   connect(audioOutput, SIGNAL(notify()), SLOT(notify()));

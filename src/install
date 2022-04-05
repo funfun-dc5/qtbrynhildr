@@ -523,8 +523,8 @@ case $UNAME in
 		# make package string
 		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
 		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
-#		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
-		(cd ../dist/linux; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
+		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
+#		(cd ../dist/linux; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
 		;;
 	FreeBSD)
 		# check

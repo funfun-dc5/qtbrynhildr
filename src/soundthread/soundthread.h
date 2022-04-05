@@ -115,10 +115,8 @@ private:
 #endif // defined(Q_OS_ANDROID)
 
 private slots:
-#if defined(DEBUG)
   // stateCanged
   void handleStateChanged(QAudio::State state);
-#endif // defined(DEBUG)
 
 #if 0 // for TEST
   void notify();

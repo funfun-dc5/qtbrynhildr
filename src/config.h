@@ -132,7 +132,7 @@ const bool QTB_IN_TESTING				= false;
 // manual page
 #define QTB_MANUAL_PAGE				1
 
-// update check
+// update check (need SSL)
 #if 0 // into qtbrynhildr.pro
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				1

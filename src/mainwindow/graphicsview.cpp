@@ -108,9 +108,12 @@ void GraphicsView::setScale(qreal scalingFactor)
 	qDebug() << "NOW: desktopPanel->getDesktopSize() = " << desktopImageSize;
 	qDebug() << "NOW: currentDesktopSize = " << currentDesktopSize;
 	qDebug() << "NOW: diffSize = " << diffSize;
+	qDebug() << "NOW: size() = " << size();
+	qDebug() << "NOW: maximumViewportSize() = " << maximumViewportSize();
   }
 #if defined(QTB_DEV_TOUCHPANEL)
 #if QTB_TEST
+#if 0 // for TEST
   verticalScrollBar()->setMinimum(-desktopImageSize.height()/2);
   verticalScrollBar()->setMaximum(verticalScrollBar()->minimum()+
 								  desktopImageSize.height()-720+2);
@@ -121,6 +124,7 @@ void GraphicsView::setScale(qreal scalingFactor)
 
   verticalScrollBar()->setValue(verticalScrollBar()->minimum());
   horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
+#endif // 0 // for TEST
 #else // QTB_TEST
   verticalScrollBar()->setValue(verticalScrollBar()->minimum());
   horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());

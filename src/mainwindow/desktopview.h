@@ -9,14 +9,23 @@
 // System Header
 
 // Qt Header
+#include <QEvent>
+#include <QPaintEvent>
 #include <QScrollArea>
+#include <QWidget>
 
 // Local Header
+#include "controlthread/keybuffer.h"
+#include "mainwindow/desktoppanel.h"
+#include "qtbrynhildr.h"
+#include "settings.h"
 
 
 namespace qtbrynhildr {
 
-class DesktopView : public QScrollArea
+//class QtBrynhildr;
+
+class DesktopView : public QScrollArea, public DesktopPanel
 {
   Q_OBJECT
 
@@ -44,9 +53,16 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopView();
+  DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
   // destructor
   virtual ~DesktopView();
+
+protected:
+  // paint event
+  void paintEvent(QPaintEvent *event);
+
+  // viewport event for event handling (touchpanel)
+  bool viewportEvent(QEvent *event);
 };
 
 } // end of namespace qtbrynhildr

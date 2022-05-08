@@ -14,16 +14,50 @@
 namespace qtbrynhildr {
 
 // constructor
-DesktopView::DesktopView()
-  :
+DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
+  :QScrollArea(parent)
+  ,DesktopPanel(qtbrynhildr)
   // for DEBUG
-  outputLog(true)
+  ,outputLog(true)
 {
 }
 
 // destructor
 DesktopView::~DesktopView()
 {
+}
+
+// paint event
+void DesktopView::paintEvent(QPaintEvent *event)
+{
+}
+
+// viewport event for event handling (touchpanel)
+bool DesktopView::viewportEvent(QEvent *event)
+{
+  switch(event->type()){
+  case QEvent::TouchBegin:
+  case QEvent::TouchUpdate:
+  case QEvent::TouchEnd:
+	{
+	  // touch event
+	  switch(settings->getTouchpanelOperationType()){
+	  case QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR:
+		break;
+	  case QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE:
+		break;
+	  default:
+		// Illegal TouchpanelOperationType
+		break;
+	  }
+	}
+	break;
+  default:
+	// Nothing to do
+	break;
+  }
+
+  return QScrollArea::viewportEvent(event);
 }
 
 } // end of namespace qtbrynhildr

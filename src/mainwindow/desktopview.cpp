@@ -7,6 +7,7 @@
 // System Header
 
 // Qt Header
+#include <QPainter>
 
 // Local Header
 #include "desktopview.h"
@@ -30,6 +31,29 @@ DesktopView::~DesktopView()
 // paint event
 void DesktopView::paintEvent(QPaintEvent *event)
 {
+  Q_UNUSED(event);
+
+  if (image.isNull()){
+	return;
+  }
+
+  QPainter painter(this);
+
+  // draw desktop image
+  painter.drawImage(0, 0, image);
+
+  // draw marker for mouse cursor
+  if (drawMarkerCounter > 0){
+	int length = drawMarkerCounter*10;
+	int x = currentMousePos.x() - length/2;
+	int y = currentMousePos.y() - length/2;
+
+	painter.setRenderHint(QPainter::Antialiasing, false);
+	painter.setPen(QPen(Qt::green, 4));
+	painter.drawArc(x, y, length, length, 0*360, 16*360);
+
+	drawMarkerCounter--;
+  }
 }
 
 // viewport event for event handling (touchpanel)

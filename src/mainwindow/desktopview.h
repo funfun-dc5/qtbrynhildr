@@ -45,6 +45,9 @@ private:
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // flags
+  TOP_TYPE topType;
+
   // output log flag
   bool outputLog;
 
@@ -63,6 +66,26 @@ protected:
 
   // viewport event for event handling (touchpanel)
   bool viewportEvent(QEvent *event);
+
+  // -----------------------------------------------------------------------------------
+  // KeroRemote Compatible Operation (1 finger)
+  // -----------------------------------------------------------------------------------
+  bool oneFingerEventForKeroRemote(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // QtBrynhildr Operation (1 finger)
+  // -----------------------------------------------------------------------------------
+  bool oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // 2 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool twoFingerEvent(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // 3 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool threeFingerEvent(QTouchEvent *touchEvent);
 };
 
 } // end of namespace qtbrynhildr

@@ -10,6 +10,7 @@
 
 // Qt Header
 #include <QEvent>
+#include <QMouseEvent>
 #include <QPaintEvent>
 #include <QScrollArea>
 #include <QWidget>
@@ -45,6 +46,9 @@ private:
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // scaling factor
+  qreal scalingFactor;
+
   // flags
   TOP_TYPE topType;
 
@@ -60,6 +64,9 @@ public:
   // destructor
   virtual ~DesktopView();
 
+  // scale
+  void setScale(qreal scalingFactor);
+
 protected:
   // paint event
   void paintEvent(QPaintEvent *event);
@@ -68,24 +75,43 @@ protected:
   bool viewportEvent(QEvent *event);
 
   // -----------------------------------------------------------------------------------
-  // KeroRemote Compatible Operation (1 finger)
+  // KeroRemote 1 Finger Operation
   // -----------------------------------------------------------------------------------
   bool oneFingerEventForKeroRemote(QTouchEvent *touchEvent);
 
   // -----------------------------------------------------------------------------------
-  // QtBrynhildr Operation (1 finger)
+  // QtBrynhildr 1 Finger Operation
   // -----------------------------------------------------------------------------------
   bool oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent);
 
   // -----------------------------------------------------------------------------------
-  // 2 Finger Operation
+  // KeroRemote 2 Finger Operation
   // -----------------------------------------------------------------------------------
-  bool twoFingerEvent(QTouchEvent *touchEvent);
+  bool twoFingerEventForKeroRemote(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // QtBrynhildr 2 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent);
 
   // -----------------------------------------------------------------------------------
   // 3 Finger Operation
   // -----------------------------------------------------------------------------------
   bool threeFingerEvent(QTouchEvent *touchEvent);
+
+private:
+  // get scaling factor for full screen
+  inline qreal getScalingFactorForFullScreen() const
+  {
+	return settings->getDesktopScalingFactorLimit();
+  }
+
+  // mouse event 
+  void mousePressEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
+  void mouseDoubleClickEvent(QMouseEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void wheelEvent(QWheelEvent *event);
 };
 
 } // end of namespace qtbrynhildr

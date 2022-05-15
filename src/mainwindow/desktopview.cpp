@@ -18,6 +18,7 @@ namespace qtbrynhildr {
 DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
   ,DesktopPanel(qtbrynhildr)
+  ,scalingFactor(1.0)
   ,topType(TOP_TYPE_UNKNOWN)
   // for DEBUG
   ,outputLog(true)
@@ -26,6 +27,11 @@ DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
 
 // destructor
 DesktopView::~DesktopView()
+{
+}
+
+// scale
+void DesktopView::setScale(qreal scalingFactor)
 {
 }
 
@@ -74,33 +80,49 @@ bool DesktopView::viewportEvent(QEvent *event)
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
 	  int touchPointCount = touchPoints.count();
 
-	  switch(touchPointCount){
-	  case 1: // 1 finger operation
-		// touch event
-		switch(settings->getTouchpanelOperationType()){
-		case QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR:
-		  return oneFingerEventForQtBrynhildr(touchEvent);
-		  break;
-		case QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE:
+	  // -----------------------------------------------------------------------------------
+	  // KeroRemote Compatible Operation
+	  // -----------------------------------------------------------------------------------
+	  if (settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_KEROREMOTE){
+		switch(touchPointCount){
+		case 1: // 1 finger operation
 		  return oneFingerEventForKeroRemote(touchEvent);
 		  break;
+		case 2: // 2 fingers operation
+		  return twoFingerEventForKeroRemote(touchEvent);
+		  break;
+		case 3: // 3 fingers operation
+		  return threeFingerEvent(touchEvent);
+		  break;
 		default:
-		  // Illegal TouchpanelOperationType
+		  // Nothing to do
 		  break;
 		}
-		break;
-	  case 2: // 2 fingers operation
-		return twoFingerEvent(touchEvent);
-		break;
-	  case 3: // 3 fingers operation
-		return threeFingerEvent(touchEvent);
-		break;
-	  default:
-		// Nothing to do
-		break;
+	  }
+	  // -----------------------------------------------------------------------------------
+	  // Qt Brynhildr Operation
+	  // -----------------------------------------------------------------------------------
+	  else if (settings->getTouchpanelOperationType() == QTB_TOUCHPANELOPERATIONTYPE_QTBRYNHILDR){
+		switch(touchPointCount){
+		case 1: // 1 finger operation
+		  return oneFingerEventForQtBrynhildr(touchEvent);
+		  break;
+		case 2: // 2 fingers operation
+		  return twoFingerEventForQtBrynhildr(touchEvent);
+		  break;
+		case 3: // 3 fingers operation
+		  return threeFingerEvent(touchEvent);
+		  break;
+		default:
+		  // Nothing to do
+		  break;
+		}
+	  }
+	  else {
+		// Unknown Touchpanel Operation Type
+		qDebug() << "DV: Unknown Touchpanel Operation!";
 	  }
 	}
-	break;
   default:
 	// Nothing to do
 	break;
@@ -109,6 +131,9 @@ bool DesktopView::viewportEvent(QEvent *event)
   return QScrollArea::viewportEvent(event);
 }
 
+// -----------------------------------------------------------------------------------
+// 1 Finger Operation
+// -----------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------
 // KeroRemote Compatible Operation (1 finger)
 // -----------------------------------------------------------------------------------
@@ -183,7 +208,10 @@ bool DesktopView::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 // -----------------------------------------------------------------------------------
 // 2 Finger Operation
 // -----------------------------------------------------------------------------------
-bool DesktopView::twoFingerEvent(QTouchEvent *touchEvent)
+// -----------------------------------------------------------------------------------
+// KeroRemote Compatible Operation (2 finger)
+// -----------------------------------------------------------------------------------
+bool DesktopView::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 {
   // check software panel
   if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton()){
@@ -191,20 +219,132 @@ bool DesktopView::twoFingerEvent(QTouchEvent *touchEvent)
 	return true;
   }
 
+  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+
   if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 	if (outputLog){
-	  qDebug() << "DV: 2 fingers Pressed!";
+	  qDebug() << "DV: Kero 2 fingers Pressed!";
 	}
+	topType = TOP_TYPE_2POINT;
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 	if (outputLog){
-	  qDebug() << "DV: 2 fingers Released!";
+	  qDebug() << "DV: Kero 2 fingers Released!";
+	}
+	// Nothing to do
+  }
+  else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
+	if (outputLog){
+	  qDebug() << "DV: Kero 2 finger Moved!";
+	}
+	// change scaling factor
+	const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+	const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+	qreal currentScalingFactor =
+	  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
+	  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+	if (currentScalingFactor < 1.0){
+	  scalingFactor -= 0.02;
+	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
+	  if (scalingFactor < scalingFactorForFullScreen){
+		scalingFactor = scalingFactorForFullScreen;
+	  }
+	}
+	else {
+	  scalingFactor += 0.02;
+#if QTB_TEST
+	  if (scalingFactor > 1.0) scalingFactor = 1.0;
+#endif // QTB_TEST
+	}
+	settings->setDesktopScalingFactor(scalingFactor);
+	scalingFactor = settings->getDesktopScalingFactor();
+	setScale(scalingFactor);
+  }
+
+  return true;
+}
+
+// -----------------------------------------------------------------------------------
+// QtBrynhildr Operation (2 finger)
+// -----------------------------------------------------------------------------------
+bool DesktopView::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
+{
+  // check software panel
+  if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton()){
+	// Nothing to do
+	return true;
+  }
+
+  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+
+  if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
+	if (outputLog){
+	  qDebug() << "DV: Qt 2 fingers Pressed!";
+	}
+	topType = TOP_TYPE_2POINT;
+  }
+  else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
+	if (outputLog){
+	  qDebug() << "DV: Qt 2 fingers Released!";
+	}
+	if (topType != TOP_TYPE_2POINT){
+	  // Nothing to do
+	}
+	else {
+	  const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+	  const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+	  int distance0 = QLineF(touchPoint0.startPos(), touchPoint0.pos()).length();
+	  int distance1 = QLineF(touchPoint1.startPos(), touchPoint1.pos()).length();
+	  if (distance0 < QTB_TOUCHPANEL_2TAP_DIST_THRESHOLD &&
+		  distance1 < QTB_TOUCHPANEL_2TAP_DIST_THRESHOLD){
+		if (outputLog){
+		  qDebug() << "GV: 2 Point Tap!!";
+		}
+
+		QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+												  touchPoint0.pos(),
+												  Qt::RightButton,
+												  Qt::RightButton,
+												  Qt::NoModifier);
+		QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													touchPoint0.pos(),
+													Qt::RightButton,
+													Qt::RightButton,
+													Qt::NoModifier);
+		// R mouse button
+		mousePressEvent(pressEvent);
+		mouseReleaseEvent(releaseEvent);
+		delete pressEvent;
+		delete releaseEvent;
+	  }	  
 	}
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 	if (outputLog){
-	  qDebug() << "DV: 2 finger Moved!";
+	  qDebug() << "DV: Qt 2 finger Moved!";
 	}
+	// change scaling factor
+	const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
+	const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+	qreal currentScalingFactor =
+	  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
+	  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+	if (currentScalingFactor < 1.0){
+	  scalingFactor -= 0.02;
+	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
+	  if (scalingFactor < scalingFactorForFullScreen){
+		scalingFactor = scalingFactorForFullScreen;
+	  }
+	}
+	else {
+	  scalingFactor += 0.02;
+#if QTB_TEST
+	  if (scalingFactor > 1.0) scalingFactor = 1.0;
+#endif // QTB_TEST
+	}
+	settings->setDesktopScalingFactor(scalingFactor);
+	scalingFactor = settings->getDesktopScalingFactor();
+	setScale(scalingFactor);
   }
 
   return true;
@@ -242,6 +382,27 @@ bool DesktopView::threeFingerEvent(QTouchEvent *touchEvent)
   }
 
   return true;
+}
+
+// mouse event 
+void DesktopView::mousePressEvent(QMouseEvent *event)
+{
+}
+
+void DesktopView::mouseReleaseEvent(QMouseEvent *event)
+{
+}
+
+void DesktopView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+}
+
+void DesktopView::mouseMoveEvent(QMouseEvent *event)
+{
+}
+
+void DesktopView::wheelEvent(QWheelEvent *event)
+{
 }
 
 } // end of namespace qtbrynhildr

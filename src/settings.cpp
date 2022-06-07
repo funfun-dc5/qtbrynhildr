@@ -53,6 +53,7 @@ Settings::Settings(const char *iniFileName)
   ,onDesktopCapture(false)
   ,onScrollMode(false)
   ,onViewerMode(false)
+  ,onFulFulMode(false)
 {
   if (iniFileName != 0){
 	settings = new QSettings(iniFileName, QSettings::IniFormat);

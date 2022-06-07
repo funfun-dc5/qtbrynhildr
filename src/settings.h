@@ -769,6 +769,9 @@ private:
   // viewer mode
   volatile bool onViewerMode;
 
+  // fulful mode
+  volatile bool onFulFulMode;
+
   // show password
   volatile bool onShowPassword;
 
@@ -2247,6 +2250,18 @@ public:
   void setOnViewerMode(bool onViewerMode)
   {
 	this->onViewerMode = onViewerMode;
+  }
+
+  // get on fulful mode flag
+  bool getOnFulFulMode() const
+  {
+	return onFulFulMode;
+  }
+
+  // set on fulful mode flag
+  void setOnFulFulMode(bool onFulFulMode)
+  {
+	this->onFulFulMode = onFulFulMode;
   }
 
   // get on desktop capture flag

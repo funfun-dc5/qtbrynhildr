@@ -82,6 +82,8 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   keydownCONTROL= KEYDOWN_OFF;
   prevPos.x = 0;
   prevPos.y = 0;
+  sentPos.x = 0;
+  sentPos.y = 0;
 
   // done check password flag
   doneCheckPassword = false;

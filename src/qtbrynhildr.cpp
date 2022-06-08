@@ -2220,11 +2220,11 @@ void QtBrynhildr::createActions()
 
   // on FulFul Mode Action
   if (QTB_VIEWER_MODE){
-	onFulFulMode_Action = new QAction(tr("FulFul Mode"), this);
+	onFulFulMode_Action = new QAction(tr("Viewer Mode (FulFul)"), this);
 	onFulFulMode_Action->setEnabled(false);
 	onFulFulMode_Action->setCheckable(true);
 	onFulFulMode_Action->setChecked(settings->getOnViewerMode());
-	onFulFulMode_Action->setStatusTip(tr("FulFul Mode"));
+	onFulFulMode_Action->setStatusTip(tr("Viewer Mode (FulFul)"));
 	connect(onFulFulMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnFulFulMode()));
   }
 

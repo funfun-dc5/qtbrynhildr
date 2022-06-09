@@ -5516,6 +5516,11 @@ void QtBrynhildr::toggleOnFulFulMode()
   else {
 	settings->setOnFulFulMode(true);
   }
+
+  // set checked flag
+  onFulFulMode_Action->setChecked(settings->getOnFulFulMode());
+
+  updateStatusBar();
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)

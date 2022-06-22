@@ -246,6 +246,10 @@
 
  .. image:: images/use_qtbrynhildr/menu_option_viewermode.jpg
 
+ * ふるふるモード
+
+   マウスを少しずつ動かします。スリープやスクリーンセーバーの起動を抑止できます。
+
  * スクロールモード
 
    ウィンドウサイズを固定とした場合にスクロールバー表示のON/OFFを変更します。

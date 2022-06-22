@@ -63,6 +63,7 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   ,onMaxfps(true)
   ,clipboardTop(0)
   ,buffer(0)
+  ,onFulFul(false)
 {
   //outputLog = true; // for DEBUG
 
@@ -81,6 +82,8 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   keydownCONTROL= KEYDOWN_OFF;
   prevPos.x = 0;
   prevPos.y = 0;
+  sentPos.x = 0;
+  sentPos.y = 0;
 
   // done check password flag
   doneCheckPassword = false;
@@ -712,6 +715,39 @@ void ControlThread::setMouseControl()
 	com_data->mouse_wheel = mouseBuffer->getWheel();
   }
 
+  // FulFul Mode
+  if (settings->getOnFulFulMode() || onFulFul){
+	static int step = 0;
+	step++;
+
+	if (settings->getOnFulFulMode() && (step % 100 != 0))
+	  return;
+
+	//cout << "FulFul Mode : step " << step << endl << flush;
+	com_data->mouse_move = MOUSE_MOVE_ON;
+	com_data->mouse_y = sentPos.y;
+	if (onFulFul){
+	  // return mouse position
+	  //cout << "FulFul Mode : Return!" << endl << flush;
+	  com_data->mouse_x = sentPos.x;
+	}
+	else {
+	  // move mouse position
+	  //cout << "FulFul Mode : Move!" << endl << flush;
+	  if (step % 2 == 0){
+		// right FulFul
+		com_data->mouse_x = sentPos.x > 5 ? sentPos.x - 5 : 0;
+	  }
+	  else {
+		// left FulFul
+		com_data->mouse_x = sentPos.x + 5;
+	  }
+	}
+	onFulFul = !onFulFul;
+
+	return;
+  }
+
   // setup mouse position
   MOUSE_POS pos = mouseBuffer->getPos();
   // if mouse cursor is moved.
@@ -791,6 +827,9 @@ void ControlThread::setMouseControl()
 
 	// save pos
 	prevPos = pos;
+	// save sent pos
+	sentPos.x = com_data->mouse_x;
+	sentPos.y = com_data->mouse_y;
   }
 }
 

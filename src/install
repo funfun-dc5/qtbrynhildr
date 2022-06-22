@@ -329,6 +329,13 @@ case $UNAME in
 #					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
 #					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
 #					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
+					# for JVNVU#92669710
+					if [ -x "${QTROOT}/bin/Qt5Core_patched.dll" ] ; then
+						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Core_patched.dll ${DISTDIR}/bin/Qt5Core.dll
+					else
+						echo "NOT Found Qt5Core_patched.dll file!!"
+						exit 1;
+					fi
 					;;
 				*)
 					echo "$0 : Not support platform."

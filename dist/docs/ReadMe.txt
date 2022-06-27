@@ -19,6 +19,9 @@
  Brynhildr2が必要になります。古いサーバについて、これらの機能が必要な場合はBrynhildrの
  クライアントモードをご利用ください。
 
+ 一部機能にはOpenSSLのダイナミックリンクライブラリを必要とするものがあります。
+ 各プラットフォーム用のOpenSSLをご自分で用意してください。(*3)
+
  (*1) Brynhildrの標準のクライアントモードに対して大きなアドバンテージのある
       クライアントではありませんのでご承知おきください。
       このソフトウェアはより多くの環境(OS)でBrynhildrのリモートコントロール機能を
@@ -30,6 +33,14 @@
 
  (*2) このドキュメントはすでに最新のBrynhildr(Ver.2.x.x)によるリモートデスクトップ環境を
       構築済みの方の利用を想定しています。
+
+ (*3) 下記ページを参照ください。
+
+      [OpenSSL]
+      https://www.openssl.org/
+
+      [Win32/Win64 OpenSSL Installer for Windows - Shining Light Productions]
+      http://slproweb.com/products/Win32OpenSSL.html
 
 ==============================
  [対応OS]
@@ -741,11 +752,11 @@ QtBrynhildr-android-v210.apk [32bit/64bit同梱版]
 
        Qt Brynhildr のログを表示します。
 
-     [2] アップデートを確認
+     [2] アップデートを確認(要OpenSSL)
 
        新しいバージョンがリリースされていないかを確認します。
 
-     [3] ヘルプ ブラウザ (デスクトップ版のみ)
+     [3] ヘルプ ブラウザ (デスクトップ版のみ:要OpenSSL)
 
        「はじめてのQt Brynhildr」を簡易ブラウザで開きます。
 

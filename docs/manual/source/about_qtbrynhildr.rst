@@ -22,6 +22,15 @@ Qt Brynhildrとは
  重要な操作を行うような場合は通信路の暗号化などの対策を検討したほうがよいかも
  しれません。
 
+ 一部機能にはOpenSSLのダイナミックリンクライブラリを必要とするものがあります。
+ 各プラットフォーム用のOpenSSLをご自分で用意してください。
+ 詳しくは下記ページを参照ください。
+
+ [OpenSSL]
+ https://www.openssl.org/
+
+ [Win32/Win64 OpenSSL Installer for Windows - Shining Light Productions]
+ http://slproweb.com/products/Win32OpenSSL.html
 
  .. [#] 簡単に言うと「目の前にないWindowsのPCを他のPCなどから操作できる」ようにするための
         ソフトウェアです。操作したいPCに別途サーバソフトウェアをインストールする必要があります。

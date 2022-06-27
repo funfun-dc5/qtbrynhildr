@@ -20,7 +20,6 @@
 #include <QProgressBar>
 #include <QRect>
 #if defined(QTB_DEV_TOUCHPANEL)
-#include <QGraphicsScene>
 #else // defined(QTB_DEV_TOUCHPANEL)
 #include <QScrollArea>
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -47,8 +46,7 @@
 #include "logmessage.h"
 #include "mainwindow/desktoppanel.h"
 #if defined(QTB_DEV_TOUCHPANEL)
-#include "mainwindow/graphicsview.h"
-#include "mainwindow/desktoppanelobject.h"
+#include "mainwindow/desktopview.h"
 #else // defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktopwindow.h"
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -102,6 +100,8 @@ extern int frameNoOfServer;
 // frame_no of client
 extern int frameNoOfClient;
 
+class SK;
+class SB;
 
 // QtBrynhildr
 class QtBrynhildr : public QMainWindow
@@ -117,12 +117,7 @@ private:
   DesktopPanel *desktopPanel;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // view
-  GraphicsView *graphicsView;
-  // scene
-  QGraphicsScene *graphicsScene;
-  // desktop panel object
-  DesktopPanelObject *desktopPanelObject;
+  DesktopView *desktopView;
 #else // defined(QTB_DEV_TOUCHPANEL)
   // scroll area
   QScrollArea *scrollArea;
@@ -669,8 +664,12 @@ public:
 #endif // QTB_TOOLBAR
 
 #if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // for TEST
   // get graphics view
   GraphicsView *getGraphicsView() const;
+#else // 0 // for TEST
+  DesktopView *getDesktopView() const;
+#endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
   // get desktop window
   DesktopWindow *getDesktopWindow() const;

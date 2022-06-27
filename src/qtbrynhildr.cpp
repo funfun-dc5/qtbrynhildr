@@ -63,7 +63,7 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   :desktopPanel(0)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,graphicsView(0)
+  ,desktopView(0)
 #else // defined(QTB_DEV_TOUCHPANEL)
   ,scrollArea(0)
   ,desktopWindow(0)
@@ -518,25 +518,18 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   //------------------------------------------------------------
 #if defined(QTB_DEV_TOUCHPANEL)
 
-  // Desktop Panel Object
-  desktopPanelObject = new DesktopPanelObject(this);
-  desktopPanel = desktopPanelObject;
+  // Desktop View Widget
+  desktopView = new DesktopView(this);
+  desktopPanel = desktopView;
 
-  // scene
-  graphicsScene = new QGraphicsScene(this);
-  graphicsScene->setItemIndexMethod(QGraphicsScene::NoIndex);
-  graphicsScene->addItem(desktopPanelObject);
-  // view
-  graphicsView = new GraphicsView(graphicsScene, this);
-  graphicsView->setBackgroundRole(QPalette::Window);
-  graphicsView->setAutoFillBackground(true);
   // set Widget
-  setCentralWidget(graphicsView);
+  setCentralWidget(desktopView);
+
   // initialize palette
-  backgroundPalette = fullScreenBackgroundPalette = graphicsView->palette();
+  backgroundPalette = fullScreenBackgroundPalette = desktopView->palette();
   // for background of desktop
   backgroundPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
-  graphicsView->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
+  desktopView->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
   fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
 
@@ -774,7 +767,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // set up Software Button and Keyboard
   // keyboard
 #if defined(QTB_DEV_TOUCHPANEL)
-  softwareKeyboard = new SK(keyBuffer, this, graphicsView);
+  softwareKeyboard = new SK(keyBuffer, this, desktopView);
 #else // defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard = new SK(keyBuffer, this, desktopWindow);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -786,7 +779,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
   // button
 #if defined(QTB_DEV_TOUCHPANEL)
-  softwareButton = new SB(mouseBuffer, this, graphicsView);
+  softwareButton = new SB(mouseBuffer, this, desktopView);
 #else // defined(QTB_DEV_TOUCHPANEL)
   softwareButton = new SB(mouseBuffer, this, desktopWindow);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -1195,10 +1188,10 @@ QtBrynhildr::~QtBrynhildr()
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-// get graphics view
-GraphicsView *QtBrynhildr::getGraphicsView() const
+// get desktop view
+DesktopView *QtBrynhildr::getDesktopView() const
 {
-  return graphicsView;
+  return desktopView;
 }
 #else // defined(QTB_DEV_TOUCHPANEL)
 // get desktop window
@@ -3178,7 +3171,9 @@ void QtBrynhildr::connected()
 
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // for TEST
 	desktopPanelObject->setAcceptDrops(true);
+#endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -3347,7 +3342,9 @@ void QtBrynhildr::disconnected()
 
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // for TEST
 	desktopPanelObject->setAcceptDrops(false);
+#endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(false);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -3460,7 +3457,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 #endif // 0 // for TEST
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  graphicsView->setScale(settings->getDesktopScalingFactor());
+  desktopView->setScale(settings->getDesktopScalingFactor());
 #endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
@@ -3794,13 +3791,13 @@ void QtBrynhildr::connectToServer()
   // set touchpanel interface
   if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT){
 	// Right/Left
-	graphicsView->setSoftwareButtonRect(touchpanelInterfaceLeftRight.softwareButtonRect);
-	graphicsView->setSoftwareKeyboardRect(touchpanelInterfaceLeftRight.softwareKeyboardRect);
+	desktopView->setSoftwareButtonRect(touchpanelInterfaceLeftRight.softwareButtonRect);
+	desktopView->setSoftwareKeyboardRect(touchpanelInterfaceLeftRight.softwareKeyboardRect);
   }
   else if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM){
 	// Top/Bottom
-	graphicsView->setSoftwareButtonRect(touchpanelInterfaceTopBottom.softwareButtonRect);
-	graphicsView->setSoftwareKeyboardRect(touchpanelInterfaceTopBottom.softwareKeyboardRect);
+	desktopView->setSoftwareButtonRect(touchpanelInterfaceTopBottom.softwareButtonRect);
+	desktopView->setSoftwareKeyboardRect(touchpanelInterfaceTopBottom.softwareKeyboardRect);
   }
   else {
 	// internal error
@@ -4449,7 +4446,9 @@ void QtBrynhildr::refreshPublicMode()
 
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // for TEST
 	desktopPanelObject->setAcceptDrops(true);
+#endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -4466,7 +4465,9 @@ void QtBrynhildr::refreshPublicMode()
 
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
+#if 0 // for TEST
 	desktopPanelObject->setAcceptDrops(false);
+#endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(false);
 #endif // defined(QTB_DEV_TOUCHPANEL)

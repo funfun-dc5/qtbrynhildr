@@ -30,7 +30,7 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   ,pressedMouseLeftButton(false)
   ,pressedMouseRightButton(false)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,graphicsView(qtbrynhildr->getGraphicsView())
+  ,desktopView(qtbrynhildr->getDesktopView())
 #endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
   ,outputLog(false)
@@ -368,7 +368,7 @@ bool SB::event(QEvent *event)
 			qDebug() << "move = " << move;
 		  }
 		  if (move != QPoint(0,0))
-			graphicsView->mouseMoveRelatively(move);
+			desktopView->mouseMoveRelatively(move);
 		}
 	  }
 	  else if (touchPointCount == 2){ // 2 fingers
@@ -444,7 +444,7 @@ bool SB::event(QEvent *event)
 			  qDebug() << "move = " << move;
 			}
 			if (move != QPoint(0,0))
-			  graphicsView->mouseMoveRelatively(move);
+			  desktopView->mouseMoveRelatively(move);
 		  }
 		  else {
 			// pinch in/out
@@ -468,7 +468,7 @@ bool SB::event(QEvent *event)
 			if (outputLog){
 			  qDebug() << "scalingFactor = " << scalingFactor;
 			}
-			graphicsView->setScale(scalingFactor);
+			desktopView->setScale(scalingFactor);
 		  }
 		}
 	  }
@@ -507,7 +507,7 @@ void SB::mouseMoveEvent(QMouseEvent *event)
 											event->button(),
 											event->buttons(),
 											event->modifiers());
-	graphicsView->mouseMoveEventForSP(newEvent);
+	desktopView->mouseMoveEventForSP(newEvent);
 	//delete newEvent;
   }
 }

@@ -24,7 +24,7 @@
 
 namespace qtbrynhildr {
 
-//class QtBrynhildr;
+class QtBrynhildr;
 
 class DesktopView : public QScrollArea, public DesktopPanel
 {
@@ -46,8 +46,29 @@ private:
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
+
+  // settings
+  Settings *settings;
+
+  // desktop panel
+  DesktopPanel *desktopPanel;
+
+  // key buffer
+  KeyBuffer *keyBuffer;
+
+  // for software button
+  QRect softwareButtonRect;
+
+  // for software keyboard
+  QRect softwareKeyboardRect;
+
   // scaling factor
   qreal scalingFactor;
+
+  // scaling factor for fullscreen
+  qreal scalingFactorForFullScreen;
 
   // flags
   TOP_TYPE topType;
@@ -66,6 +87,35 @@ public:
 
   // scale
   void setScale(qreal scalingFactor);
+
+  // resize desktop
+  void resizeDesktop(int width, int height);
+
+  // update desktop
+  void updateDesktop();
+
+  // mouse press event software panel
+  void mousePressEventForSP(QMouseEvent *event);
+  // mouse release event software panel
+  void mouseReleaseEventForSP(QMouseEvent *event);
+  // mouse move event software panel
+  void mouseMoveEventForSP(QMouseEvent *event);
+  // mouse move
+  void mouseMove(QPoint mousePos, bool marker = true);
+  // mouse move relatively
+  void mouseMoveRelatively(QPoint mousePos, bool marker = true);
+
+  // for software button
+  void setSoftwareButtonRect(QRect rect)
+  {
+	softwareButtonRect = rect;
+  }
+
+  // for software keyboard
+  void setSoftwareKeyboardRect(QRect rect)
+  {
+	softwareKeyboardRect = rect;
+  }
 
 protected:
   // paint event

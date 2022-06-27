@@ -35,6 +35,47 @@ void DesktopView::setScale(qreal scalingFactor)
 {
 }
 
+// resize desktop
+void DesktopView::resizeDesktop(int width, int height)
+{
+}
+
+// update desktop
+void DesktopView::updateDesktop()
+{
+}
+
+// mouse press event software panel
+void DesktopView::mousePressEventForSP(QMouseEvent *event)
+{
+  mousePressEvent(event);
+}
+
+// mouse release event software panel
+void DesktopView::mouseReleaseEventForSP(QMouseEvent *event)
+{
+  mouseReleaseEvent(event);
+}
+
+// mouse move event software panel
+void DesktopView::mouseMoveEventForSP(QMouseEvent *event)
+{
+  mouseMoveEvent(event);
+}
+
+// mouse move
+void DesktopView::mouseMove(QPoint mousePos, bool marker)
+{
+  desktopPanel->mouseMove(mousePos, marker);
+}
+
+// mouse move relatively
+void DesktopView::mouseMoveRelatively(QPoint mousePos, bool marker)
+{
+  mousePos /= scalingFactor;
+  desktopPanel->mouseMoveRelatively(mousePos, marker);
+}
+
 // paint event
 void DesktopView::paintEvent(QPaintEvent *event)
 {

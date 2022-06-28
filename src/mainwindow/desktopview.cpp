@@ -18,6 +18,9 @@ namespace qtbrynhildr {
 DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
   ,DesktopPanel(qtbrynhildr)
+  ,qtbrynhildr(qtbrynhildr)
+  ,settings(qtbrynhildr->getSettings())
+  ,keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer())
   ,scalingFactor(1.0)
   ,topType(TOP_TYPE_UNKNOWN)
   // for DEBUG
@@ -33,16 +36,20 @@ DesktopView::~DesktopView()
 // scale
 void DesktopView::setScale(qreal scalingFactor)
 {
+  this->scalingFactor = scalingFactor;
 }
 
 // resize desktop
 void DesktopView::resizeDesktop(int width, int height)
 {
+  Q_UNUSED(width);
+  Q_UNUSED(height);
 }
 
 // update desktop
 void DesktopView::updateDesktop()
 {
+  update();
 }
 
 // mouse press event software panel
@@ -66,14 +73,14 @@ void DesktopView::mouseMoveEventForSP(QMouseEvent *event)
 // mouse move
 void DesktopView::mouseMove(QPoint mousePos, bool marker)
 {
-  desktopPanel->mouseMove(mousePos, marker);
+  DesktopPanel::mouseMove(mousePos, marker);
 }
 
 // mouse move relatively
 void DesktopView::mouseMoveRelatively(QPoint mousePos, bool marker)
 {
   mousePos /= scalingFactor;
-  desktopPanel->mouseMoveRelatively(mousePos, marker);
+  DesktopPanel::mouseMoveRelatively(mousePos, marker);
 }
 
 // paint event

@@ -52,17 +52,8 @@ private:
   // settings
   Settings *settings;
 
-  // desktop panel
-  DesktopPanel *desktopPanel;
-
   // key buffer
   KeyBuffer *keyBuffer;
-
-  // for software button
-  QRect softwareButtonRect;
-
-  // for software keyboard
-  QRect softwareKeyboardRect;
 
   // scaling factor
   qreal scalingFactor;
@@ -72,6 +63,12 @@ private:
 
   // flags
   TOP_TYPE topType;
+
+  // for software button
+  QRect softwareButtonRect;
+
+  // for software keyboard
+  QRect softwareKeyboardRect;
 
   // output log flag
   bool outputLog;

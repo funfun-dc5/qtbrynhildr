@@ -76,8 +76,8 @@ typedef int PUBLICMODE_VERSION;
 
 // for serverName
 #define QTB_SERVERNAME			"serverName"
-#define QTB_SERVERNAME_DEFAULT	""
-//#define QTB_SERVERNAME_DEFAULT	"192.168.10.13"
+//#define QTB_SERVERNAME_DEFAULT	""
+#define QTB_SERVERNAME_DEFAULT	"192.168.10.101"
 
 // for serverNameListSize
 #define QTB_SERVERNAMELISTSIZE			"serverNameListSize"

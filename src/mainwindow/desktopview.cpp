@@ -18,14 +18,27 @@ namespace qtbrynhildr {
 DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
   ,DesktopPanel(qtbrynhildr)
-  ,qtbrynhildr(qtbrynhildr)
-  ,settings(qtbrynhildr->getSettings())
-  ,keyBuffer(qtbrynhildr->getDesktopPanel()->getKeyBuffer())
   ,scalingFactor(1.0)
   ,topType(TOP_TYPE_UNKNOWN)
   // for DEBUG
   ,outputLog(true)
 {
+  // focus
+  setFocusPolicy(Qt::StrongFocus);
+
+  // enable touch event
+  setAttribute(Qt::WA_AcceptTouchEvents, true);
+
+  setWidgetResizable(true);
+  setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+  setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
+  //setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+  //setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
+
+  // scrollbar Always Off
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 // destructor
@@ -81,6 +94,18 @@ void DesktopView::mouseMoveRelatively(QPoint mousePos, bool marker)
 {
   mousePos /= scalingFactor;
   DesktopPanel::mouseMoveRelatively(mousePos, marker);
+}
+
+// size hint
+QSize DesktopView::sizeHint() const
+{
+  return currentSize;
+}
+
+// viewport size hint
+QSize DesktopView::viewportSizeHint() const
+{
+  return QSize(1280, 800);
 }
 
 // paint event

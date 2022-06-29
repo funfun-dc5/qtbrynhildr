@@ -46,15 +46,6 @@ private:
   // Variable
   //-------------------------------------------------------------------------------
 private:
-  // qtbrynhildr
-  QtBrynhildr *qtbrynhildr;
-
-  // settings
-  Settings *settings;
-
-  // key buffer
-  KeyBuffer *keyBuffer;
-
   // scaling factor
   qreal scalingFactor;
 
@@ -114,7 +105,13 @@ public:
 	softwareKeyboardRect = rect;
   }
 
+  // size hint
+  QSize sizeHint() const;
+
 protected:
+  // viewport size hint
+  QSize viewportSizeHint() const;
+
   // paint event
   void paintEvent(QPaintEvent *event);
 

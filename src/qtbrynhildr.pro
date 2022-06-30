@@ -146,6 +146,8 @@ touchpanel {
 CONFIG += software_keyboard_button
 HEADERS += mainwindow/desktoppanel.h mainwindow/desktopview.h
 SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopview.cpp
+HEADERS += mainwindow/desktopwidget.h
+SOURCES += mainwindow/desktopwidget.cpp
 DEFINES += QTB_AUTO_COMPLETE=0
 }
 # config error

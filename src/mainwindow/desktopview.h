@@ -17,7 +17,7 @@
 
 // Local Header
 #include "controlthread/keybuffer.h"
-#include "mainwindow/desktoppanel.h"
+#include "mainwindow/desktopwidget.h"
 #include "qtbrynhildr.h"
 #include "settings.h"
 
@@ -26,7 +26,7 @@ namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-class DesktopView : public QScrollArea, public DesktopPanel
+class DesktopView : public QScrollArea
 {
   Q_OBJECT
 
@@ -46,13 +46,19 @@ private:
   // Variable
   //-------------------------------------------------------------------------------
 private:
-  // scaling factor
-  qreal scalingFactor;
+  // qtbrynhildr
+  QtBrynhildr *qtbrynhildr;
 
-  // scaling factor for fullscreen
-  qreal scalingFactorForFullScreen;
+  // settings
+  Settings *settings;
 
-  // flags
+  // desktop widget
+  DesktopWidget *desktopWidget;
+
+  // key buffer
+  KeyBuffer *keyBuffer;
+
+  // Touch Operation Type
   TOP_TYPE topType;
 
   // for software button
@@ -60,6 +66,12 @@ private:
 
   // for software keyboard
   QRect softwareKeyboardRect;
+
+  // scaling factor
+  qreal scalingFactor;
+
+  // scaling factor for fullscreen
+  qreal scalingFactorForFullScreen;
 
   // output log flag
   bool outputLog;

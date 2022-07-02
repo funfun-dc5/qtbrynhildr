@@ -17,7 +17,6 @@ namespace qtbrynhildr {
 // constructor
 DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
-  ,DesktopPanel(qtbrynhildr)
   ,scalingFactor(1.0)
   ,topType(TOP_TYPE_UNKNOWN)
   // for DEBUG

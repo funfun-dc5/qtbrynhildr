@@ -44,7 +44,7 @@
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
 #include "logmessage.h"
-#include "mainwindow/desktoppanel.h"
+#include "mainwindow/desktopframe.h"
 #if defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktopview.h"
 #else // defined(QTB_DEV_TOUCHPANEL)
@@ -113,8 +113,8 @@ class QtBrynhildr : public QMainWindow
   //-------------------------------------------------------------------------------
 private:
   // GUI
-  // desktop panel
-  DesktopPanel *desktopPanel;
+  // desktop frame
+  DesktopFrame *desktopFrame;
 
 #if defined(QTB_DEV_TOUCHPANEL)
   DesktopView *desktopView;
@@ -675,8 +675,8 @@ public:
   DesktopWindow *getDesktopWindow() const;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
-  // get desktop panel
-  DesktopPanel *getDesktopPanel() const;
+  // get desktop frame
+  DesktopFrame *getDesktopFrame() const;
 
   // shutdown flag
   bool getShutdownFlag() const;

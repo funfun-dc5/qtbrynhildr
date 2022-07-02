@@ -14,7 +14,7 @@
 #include "function/recorder.h"
 #endif // QTB_RECORDER
 #include "keybuffer.h"
-#include "mainwindow/desktoppanel.h"
+#include "mainwindow/desktopframe.h"
 #include "mousebuffer.h"
 #include "settings.h"
 #include "parameters.h"
@@ -42,8 +42,8 @@ class ControlThread : public NetThread
   // Variable
   //-------------------------------------------------------------------------------
 private:
-  // desktop panel
-  DesktopPanel *desktopPanel;
+  // desktop frame
+  DesktopFrame *desktopFrame;
 
   // server version
   SERVER_VERSION serverVersion;
@@ -122,9 +122,9 @@ private:
 public:
   // constructor
 #if QTB_RECORDER
-  ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder);
+  ControlThread(Settings *settings, DesktopFrame *desktopFrame, Recorder *recorder);
 #else  // QTB_RECORDER
-  ControlThread(Settings *settings, DesktopPanel *desktopPanel);
+  ControlThread(Settings *settings, DesktopFrame *desktopFrame);
 #endif // QTB_RECORDER
   // destructor
   ~ControlThread();

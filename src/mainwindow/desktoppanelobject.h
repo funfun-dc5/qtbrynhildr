@@ -1,8 +1,8 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2017- FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef DESKTOPPANELOBJECT_H
-#define DESKTOPPANELOBJECT_H
+#ifndef DESKTOPFRAMEOBJECT_H
+#define DESKTOPFRAMEOBJECT_H
 // Common Header
 #include "common/common.h"
 
@@ -17,14 +17,14 @@
 #include <QWidget>
 
 // Local Header
-#include "mainwindow/desktoppanel.h"
+#include "mainwindow/desktopframe.h"
 #include "settings.h"
 
 namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-class DesktopPanelObject : public QGraphicsObject, public DesktopPanel
+class DesktopPanelObject : public QGraphicsObject, public DesktopFrame
 {
   Q_OBJECT
 
@@ -54,4 +54,4 @@ protected:
 
 } // end of namespace qtbrynhildr
 
-#endif // DESKTOPPANELOBJECT_H
+#endif // DESKTOPFRAMEOBJECT_H

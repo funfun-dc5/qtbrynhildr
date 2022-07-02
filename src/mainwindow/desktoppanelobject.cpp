@@ -18,7 +18,7 @@ namespace qtbrynhildr {
 // constructor
 DesktopPanelObject::DesktopPanelObject(QtBrynhildr *qtbrynhildr, QGraphicsItem *parent)
   :QGraphicsObject(parent)  
-  ,DesktopPanel(qtbrynhildr)
+  ,DesktopFrame(qtbrynhildr)
 {
   setCacheMode(QGraphicsItem::ItemCoordinateCache);
 }

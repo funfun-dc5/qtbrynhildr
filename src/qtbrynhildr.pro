@@ -137,17 +137,15 @@ include (pro/os_android.pro)
 # desktop/touchpanel
 desktop {
 CONFIG += preference
-HEADERS += mainwindow/desktoppanel.h mainwindow/desktopwindow.h
-SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopwindow.cpp
+HEADERS += mainwindow/desktopframe.h mainwindow/desktopwindow.h
+SOURCES += mainwindow/desktopframe.cpp mainwindow/desktopwindow.cpp
 DEFINES += QTB_AUTO_COMPLETE=1
 }
 
 touchpanel {
 CONFIG += software_keyboard_button
-HEADERS += mainwindow/desktoppanel.h mainwindow/desktopview.h
-SOURCES += mainwindow/desktoppanel.cpp mainwindow/desktopview.cpp
-HEADERS += mainwindow/desktopwidget.h
-SOURCES += mainwindow/desktopwidget.cpp
+HEADERS += mainwindow/desktopframe.h mainwindow/desktopview.h
+SOURCES += mainwindow/desktopframe.cpp mainwindow/desktopview.cpp
 DEFINES += QTB_AUTO_COMPLETE=0
 }
 # config error

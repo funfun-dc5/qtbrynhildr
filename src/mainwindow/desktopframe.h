@@ -1,8 +1,8 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015- FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef DESKTOPPANEL_H
-#define DESKTOPPANEL_H
+#ifndef DESKTOPFRAME_H
+#define DESKTOPFRAME_H
 // Common Header
 #include "common/common.h"
 
@@ -37,8 +37,8 @@ namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-// DesktopPanel
-class DesktopPanel
+// DesktopFrame
+class DesktopFrame
 {
   //-------------------------------------------------------------------------------
   // Variable
@@ -101,9 +101,9 @@ protected:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopPanel(QtBrynhildr *qtbrynhildr);
+  DesktopFrame(QtBrynhildr *qtbrynhildr);
   // destructor
-  virtual ~DesktopPanel();
+  virtual ~DesktopFrame();
 
   // set event converter
   void setEventConverter(EventConverter *eventConverter);
@@ -225,4 +225,4 @@ private:
 
 } // end of namespace qtbrynhildr
 
-#endif // DESKTOPPANEL_H
+#endif // DESKTOPFRAME_H

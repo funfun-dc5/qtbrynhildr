@@ -26,7 +26,7 @@
 
 // Local Header
 #include "controlthread/keybuffer.h"
-#include "mainwindow/desktoppanel.h"
+#include "mainwindow/desktopframe.h"
 #include "settings.h"
 
 namespace qtbrynhildr {
@@ -63,8 +63,8 @@ private:
   // settings
   Settings *settings;
 
-  // desktop panel
-  DesktopPanel *desktopPanel;
+  // desktop frame
+  DesktopFrame *desktopFrame;
 
   // key buffer
   KeyBuffer *keyBuffer;

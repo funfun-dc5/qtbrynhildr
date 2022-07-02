@@ -41,12 +41,12 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 #if QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder)
+ControlThread::ControlThread(Settings *settings, DesktopFrame *desktopFrame, Recorder *recorder)
 #else  // QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
+ControlThread::ControlThread(Settings *settings, DesktopFrame *desktopFrame)
 #endif // QTB_RECORDER
   :NetThread("ControlThread", settings)
-  ,desktopPanel(desktopPanel)
+  ,desktopFrame(desktopFrame)
   ,serverVersion(SERVER_VERSION_BRYNHILDR2)
   ,currentMode(0)
   ,keyBuffer(0)
@@ -71,10 +71,10 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   //threadSleepTime = 10;
 
   // keyboard buffer
-  keyBuffer = desktopPanel->getKeyBuffer();
+  keyBuffer = desktopFrame->getKeyBuffer();
 
   // mouse buffer
-  mouseBuffer = desktopPanel->getMouseBuffer();
+  mouseBuffer = desktopFrame->getMouseBuffer();
 
   // initialize key and mouse information
   keydownSHIFT	= KEYDOWN_OFF;
@@ -348,7 +348,7 @@ void ControlThread::connectedToServer()
 #if 0 // defined(QTB_DEV_TOUCHPANEL)
   // set initial mouse position
   mouseBuffer->setPos(400, 400);
-  desktopPanel->setMousePos(400, 400);
+  desktopFrame->setMousePos(400, 400);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   NetThread::connectedToServer();
@@ -543,7 +543,7 @@ void ControlThread::initHeaderForGraphics()
   com_data->monochrome = settings->getOnMonochromeMode()? 1 : 0;
 #endif // QTB_GRAY_SCALE_MODE2
 
-  QSize windowSize = desktopPanel->getSize();
+  QSize windowSize = desktopFrame->getSize();
   QSize desktopImageSize = settings->getDesktopImageSize();
   if (!(windowSize.isValid() && desktopImageSize.isValid())){
 	// client scroll
@@ -751,7 +751,7 @@ void ControlThread::setMouseControl()
   // setup mouse position
   MOUSE_POS pos = mouseBuffer->getPos();
   // if mouse cursor is moved.
-  QSize windowSize = desktopPanel->getSize();
+  QSize windowSize = desktopFrame->getSize();
   QSize desktopImageSize = settings->getDesktopImageSize();
   if (!(windowSize.isValid() && desktopImageSize.isValid())){
 	// Nothing to do

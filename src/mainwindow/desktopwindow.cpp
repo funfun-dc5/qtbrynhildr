@@ -23,7 +23,7 @@ namespace qtbrynhildr {
 // constructor
 DesktopWindow::DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QWidget(parent)  
-  ,DesktopPanel(qtbrynhildr)
+  ,DesktopFrame(qtbrynhildr)
   ,onDraging(false)
   ,onAreaMode(false)
   // for DEBUG
@@ -69,7 +69,7 @@ QSize DesktopWindow::sizeHint() const
 #if defined(QTB_DEV_TOUCHPANEL)
   // event
 bool DesktopWindow::event(QEvent *event){
-  if (DesktopPanel::event(event))
+  if (DesktopFrame::event(event))
 	return true;
   else
 	return QWidget::event(event);
@@ -208,7 +208,7 @@ void DesktopWindow::mousePressEvent(QMouseEvent *event)
 	return;
   }
 
-  DesktopPanel::mousePressEvent(event);
+  DesktopFrame::mousePressEvent(event);
 }
 void DesktopWindow::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -241,11 +241,11 @@ void DesktopWindow::mouseReleaseEvent(QMouseEvent *event)
 	}
 	return;
   }
-  DesktopPanel::mouseReleaseEvent(event);
+  DesktopFrame::mouseReleaseEvent(event);
 }
 void DesktopWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  DesktopPanel::mouseDoubleClickEvent(event);
+  DesktopFrame::mouseDoubleClickEvent(event);
 }
 void DesktopWindow::mouseMoveEvent(QMouseEvent *event)
 {
@@ -258,32 +258,32 @@ void DesktopWindow::mouseMoveEvent(QMouseEvent *event)
 	currentPos.setY(y);
 	return;
   }
-  DesktopPanel::mouseMoveEvent(event);
+  DesktopFrame::mouseMoveEvent(event);
 }
 void DesktopWindow::wheelEvent(QWheelEvent *event)
 {
-  DesktopPanel::wheelEvent(event);
+  DesktopFrame::wheelEvent(event);
 }
 
 // keyboard event
 void DesktopWindow::keyPressEvent(QKeyEvent *event)
 {
-  DesktopPanel::keyPressEvent(event);
+  DesktopFrame::keyPressEvent(event);
 }
 void DesktopWindow::keyReleaseEvent(QKeyEvent *event)
 {
-  DesktopPanel::keyReleaseEvent(event);
+  DesktopFrame::keyReleaseEvent(event);
 }
 
 #if QTB_DRAG_AND_DROP_SUPPORT
 // drag and drop
 void DesktopWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-  DesktopPanel::dragEnterEvent(event);
+  DesktopFrame::dragEnterEvent(event);
 }
 void DesktopWindow::dropEvent(QDropEvent *event)
 {
-  DesktopPanel::dropEvent(event);
+  DesktopFrame::dropEvent(event);
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
@@ -318,7 +318,7 @@ void DesktopWindow::focusOutEvent(QFocusEvent *event)
 #if defined(Q_OS_WIN)
 bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
-  return DesktopPanel::nativeEventFilter(eventType, message, result);
+  return DesktopFrame::nativeEventFilter(eventType, message, result);
 }
 #endif // defined(Q_OS_WIN)
 

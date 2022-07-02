@@ -78,6 +78,9 @@
 
 namespace qtbrynhildr {
 
+// class alias
+using DesktopWindow = QScrollArea;
+
 // ----------------------------------------------
 // global objects
 // ----------------------------------------------
@@ -121,8 +124,8 @@ private:
 #else // defined(QTB_DEV_TOUCHPANEL)
   // desktop window widget
   DesktopWindowWidget *desktopWindowWidget;
-  // scroll area
-  QScrollArea *scrollArea;
+  // desktop window
+  DesktopWindow *desktopWindow;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // connection label

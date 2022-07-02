@@ -119,10 +119,10 @@ private:
 #if defined(QTB_DEV_TOUCHPANEL)
   DesktopView *desktopView;
 #else // defined(QTB_DEV_TOUCHPANEL)
-  // scroll area
-  QScrollArea *scrollArea;
   // desktop window
   DesktopWindow *desktopWindow;
+  // scroll area
+  QScrollArea *scrollArea;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // connection label

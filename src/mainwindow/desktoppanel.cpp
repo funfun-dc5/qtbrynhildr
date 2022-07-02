@@ -10,12 +10,12 @@
 #include <QPainter>
 
 // Local Header
-#include "desktopview.h"
+#include "desktoppanel.h"
 
 namespace qtbrynhildr {
 
 // constructor
-DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
+DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
   ,scalingFactor(1.0)
   ,topType(TOP_TYPE_UNKNOWN)
@@ -41,74 +41,74 @@ DesktopView::DesktopView(QtBrynhildr *qtbrynhildr, QWidget *parent)
 }
 
 // destructor
-DesktopView::~DesktopView()
+DesktopPanel::~DesktopPanel()
 {
 }
 
 // scale
-void DesktopView::setScale(qreal scalingFactor)
+void DesktopPanel::setScale(qreal scalingFactor)
 {
   this->scalingFactor = scalingFactor;
 }
 
 // resize desktop
-void DesktopView::resizeDesktop(int width, int height)
+void DesktopPanel::resizeDesktop(int width, int height)
 {
   Q_UNUSED(width);
   Q_UNUSED(height);
 }
 
 // update desktop
-void DesktopView::updateDesktop()
+void DesktopPanel::updateDesktop()
 {
   update();
 }
 
 // mouse press event software panel
-void DesktopView::mousePressEventForSP(QMouseEvent *event)
+void DesktopPanel::mousePressEventForSP(QMouseEvent *event)
 {
   mousePressEvent(event);
 }
 
 // mouse release event software panel
-void DesktopView::mouseReleaseEventForSP(QMouseEvent *event)
+void DesktopPanel::mouseReleaseEventForSP(QMouseEvent *event)
 {
   mouseReleaseEvent(event);
 }
 
 // mouse move event software panel
-void DesktopView::mouseMoveEventForSP(QMouseEvent *event)
+void DesktopPanel::mouseMoveEventForSP(QMouseEvent *event)
 {
   mouseMoveEvent(event);
 }
 
 // mouse move
-void DesktopView::mouseMove(QPoint mousePos, bool marker)
+void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 {
   DesktopPanel::mouseMove(mousePos, marker);
 }
 
 // mouse move relatively
-void DesktopView::mouseMoveRelatively(QPoint mousePos, bool marker)
+void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
 {
   mousePos /= scalingFactor;
   DesktopPanel::mouseMoveRelatively(mousePos, marker);
 }
 
 // size hint
-QSize DesktopView::sizeHint() const
+QSize DesktopPanel::sizeHint() const
 {
   return currentSize;
 }
 
 // viewport size hint
-QSize DesktopView::viewportSizeHint() const
+QSize DesktopPanel::viewportSizeHint() const
 {
   return QSize(1280, 800);
 }
 
 // paint event
-void DesktopView::paintEvent(QPaintEvent *event)
+void DesktopPanel::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
 
@@ -136,7 +136,7 @@ void DesktopView::paintEvent(QPaintEvent *event)
 }
 
 // viewport event for event handling (touchpanel)
-bool DesktopView::viewportEvent(QEvent *event)
+bool DesktopPanel::viewportEvent(QEvent *event)
 {
   switch(event->type()){
   case QEvent::TouchBegin:
@@ -209,7 +209,7 @@ bool DesktopView::viewportEvent(QEvent *event)
 // -----------------------------------------------------------------------------------
 // KeroRemote Compatible Operation (1 finger)
 // -----------------------------------------------------------------------------------
-bool DesktopView::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
+bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 {
   // last position of mouse cursor
   static QPointF lastPos;
@@ -245,7 +245,7 @@ bool DesktopView::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 // -----------------------------------------------------------------------------------
 // QtBrynhildr Operation (1 finger)
 // -----------------------------------------------------------------------------------
-bool DesktopView::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
+bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 {
   // open software panel check flags
   static bool inCheckingButtonOpen = false;
@@ -283,7 +283,7 @@ bool DesktopView::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 // -----------------------------------------------------------------------------------
 // KeroRemote Compatible Operation (2 finger)
 // -----------------------------------------------------------------------------------
-bool DesktopView::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
+bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 {
   // check software panel
   if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton()){
@@ -339,7 +339,7 @@ bool DesktopView::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 // -----------------------------------------------------------------------------------
 // QtBrynhildr Operation (2 finger)
 // -----------------------------------------------------------------------------------
-bool DesktopView::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
+bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 {
   // check software panel
   if (settings->getOnShowSoftwareKeyboard() || settings->getOnShowSoftwareButton()){
@@ -425,7 +425,7 @@ bool DesktopView::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 // -----------------------------------------------------------------------------------
 // 3 Finger Operation
 // -----------------------------------------------------------------------------------
-bool DesktopView::threeFingerEvent(QTouchEvent *touchEvent)
+bool DesktopPanel::threeFingerEvent(QTouchEvent *touchEvent)
 {
   if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 	if (outputLog){
@@ -457,23 +457,23 @@ bool DesktopView::threeFingerEvent(QTouchEvent *touchEvent)
 }
 
 // mouse event 
-void DesktopView::mousePressEvent(QMouseEvent *event)
+void DesktopPanel::mousePressEvent(QMouseEvent *event)
 {
 }
 
-void DesktopView::mouseReleaseEvent(QMouseEvent *event)
+void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 {
 }
 
-void DesktopView::mouseDoubleClickEvent(QMouseEvent *event)
+void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 {
 }
 
-void DesktopView::mouseMoveEvent(QMouseEvent *event)
+void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 {
 }
 
-void DesktopView::wheelEvent(QWheelEvent *event)
+void DesktopPanel::wheelEvent(QWheelEvent *event)
 {
 }
 

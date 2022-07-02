@@ -16,12 +16,12 @@
 
 // Local Header
 #include "graphicsthread/yuv2rgb/yuv2rgb.h"
-#include "mainwindow/desktopwindow.h"
+#include "mainwindow/desktopwindowwidget.h"
 
 namespace qtbrynhildr {
 
 // constructor
-DesktopWindow::DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent)
+DesktopWindowWidget::DesktopWindowWidget(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QWidget(parent)  
   ,DesktopFrame(qtbrynhildr)
   ,onDraging(false)
@@ -37,30 +37,30 @@ DesktopWindow::DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent)
 }
 
 // destructor
-DesktopWindow::~DesktopWindow()
+DesktopWindowWidget::~DesktopWindowWidget()
 {
 }
 
 // resize desktop
-void DesktopWindow::resizeDesktop(int width, int height)
+void DesktopWindowWidget::resizeDesktop(int width, int height)
 {
   resize(width, height);
 }
 
 // refresh desktop
-void DesktopWindow::updateDesktop()
+void DesktopWindowWidget::updateDesktop()
 {
   update();
 }
 
 // minimum size hint
-QSize DesktopWindow::minimumSizeHint() const
+QSize DesktopWindowWidget::minimumSizeHint() const
 {
   return currentSize;
 }
 
 // size hint
-QSize DesktopWindow::sizeHint() const
+QSize DesktopWindowWidget::sizeHint() const
 {
   return currentSize;
 }
@@ -68,7 +68,7 @@ QSize DesktopWindow::sizeHint() const
 // for event handling
 #if defined(QTB_DEV_TOUCHPANEL)
   // event
-bool DesktopWindow::event(QEvent *event){
+bool DesktopWindowWidget::event(QEvent *event){
   if (DesktopFrame::event(event))
 	return true;
   else
@@ -77,7 +77,7 @@ bool DesktopWindow::event(QEvent *event){
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 // paint event
-void DesktopWindow::paintEvent(QPaintEvent *event)
+void DesktopWindowWidget::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
 
@@ -129,7 +129,7 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
 }
 
 // widget enter event
-void DesktopWindow::enterEvent(QEvent *event)
+void DesktopWindowWidget::enterEvent(QEvent *event)
 {
   // check connected
   if (!settings->getConnected())
@@ -179,7 +179,7 @@ void DesktopWindow::enterEvent(QEvent *event)
 }
 
 // widget leave event
-void DesktopWindow::leaveEvent(QEvent *event)
+void DesktopWindowWidget::leaveEvent(QEvent *event)
 {
   Q_UNUSED(event);
 
@@ -189,7 +189,7 @@ void DesktopWindow::leaveEvent(QEvent *event)
 }
 
 // mouse event
-void DesktopWindow::mousePressEvent(QMouseEvent *event)
+void DesktopWindowWidget::mousePressEvent(QMouseEvent *event)
 {
   // viewer mode
   if (settings->getOnViewerMode()){
@@ -210,7 +210,7 @@ void DesktopWindow::mousePressEvent(QMouseEvent *event)
 
   DesktopFrame::mousePressEvent(event);
 }
-void DesktopWindow::mouseReleaseEvent(QMouseEvent *event)
+void DesktopWindowWidget::mouseReleaseEvent(QMouseEvent *event)
 {
   // viewer mode
   if (settings->getOnViewerMode()){
@@ -243,11 +243,11 @@ void DesktopWindow::mouseReleaseEvent(QMouseEvent *event)
   }
   DesktopFrame::mouseReleaseEvent(event);
 }
-void DesktopWindow::mouseDoubleClickEvent(QMouseEvent *event)
+void DesktopWindowWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
   DesktopFrame::mouseDoubleClickEvent(event);
 }
-void DesktopWindow::mouseMoveEvent(QMouseEvent *event)
+void DesktopWindowWidget::mouseMoveEvent(QMouseEvent *event)
 {
   if (settings->getOnViewerMode()){
 	//qDebug() << "pos = " << event->pos();
@@ -260,35 +260,35 @@ void DesktopWindow::mouseMoveEvent(QMouseEvent *event)
   }
   DesktopFrame::mouseMoveEvent(event);
 }
-void DesktopWindow::wheelEvent(QWheelEvent *event)
+void DesktopWindowWidget::wheelEvent(QWheelEvent *event)
 {
   DesktopFrame::wheelEvent(event);
 }
 
 // keyboard event
-void DesktopWindow::keyPressEvent(QKeyEvent *event)
+void DesktopWindowWidget::keyPressEvent(QKeyEvent *event)
 {
   DesktopFrame::keyPressEvent(event);
 }
-void DesktopWindow::keyReleaseEvent(QKeyEvent *event)
+void DesktopWindowWidget::keyReleaseEvent(QKeyEvent *event)
 {
   DesktopFrame::keyReleaseEvent(event);
 }
 
 #if QTB_DRAG_AND_DROP_SUPPORT
 // drag and drop
-void DesktopWindow::dragEnterEvent(QDragEnterEvent *event)
+void DesktopWindowWidget::dragEnterEvent(QDragEnterEvent *event)
 {
   DesktopFrame::dragEnterEvent(event);
 }
-void DesktopWindow::dropEvent(QDropEvent *event)
+void DesktopWindowWidget::dropEvent(QDropEvent *event)
 {
   DesktopFrame::dropEvent(event);
 }
 #endif // QTB_DRAG_AND_DROP_SUPPORT
 
 #if QTB_MOUSE_TRACKING_FOCUS_MODE
-void DesktopWindow::focusInEvent(QFocusEvent *event)
+void DesktopWindowWidget::focusInEvent(QFocusEvent *event)
 {
   //cout << "Focus In" << endl << flush;
   if (!settings->getOnMouseTrackingMode()){
@@ -299,7 +299,7 @@ void DesktopWindow::focusInEvent(QFocusEvent *event)
 	QWidget::focusInEvent(event);
   }
 }
-void DesktopWindow::focusOutEvent(QFocusEvent *event)
+void DesktopWindowWidget::focusOutEvent(QFocusEvent *event)
 {
   //cout << "Focus Out" << endl << flush;
   if (!settings->getOnMouseTrackingMode()){
@@ -316,13 +316,13 @@ void DesktopWindow::focusOutEvent(QFocusEvent *event)
 // native event filter
 //----------------------------------------------------------------------
 #if defined(Q_OS_WIN)
-bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+bool DesktopWindowWidget::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
   return DesktopFrame::nativeEventFilter(eventType, message, result);
 }
 #endif // defined(Q_OS_WIN)
 
-void DesktopWindow::enterAreaMode(QRect rect)
+void DesktopWindowWidget::enterAreaMode(QRect rect)
 {
   settings->setDesktopOffsetX(rect.topLeft().x());
   settings->setDesktopOffsetY(rect.topLeft().y());
@@ -331,7 +331,7 @@ void DesktopWindow::enterAreaMode(QRect rect)
   onAreaMode = true;
 }
 
-void DesktopWindow::leaveAreaMode()
+void DesktopWindowWidget::leaveAreaMode()
 {
   // leave area mode
   settings->setDesktopOffsetX(QTB_DESKTOPOFFSETX_DEFAULT);

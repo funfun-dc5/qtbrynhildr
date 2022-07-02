@@ -137,8 +137,8 @@ include (pro/os_android.pro)
 # desktop/touchpanel
 desktop {
 CONFIG += preference
-HEADERS += mainwindow/desktopframe.h mainwindow/desktopwindow.h
-SOURCES += mainwindow/desktopframe.cpp mainwindow/desktopwindow.cpp
+HEADERS += mainwindow/desktopframe.h mainwindow/desktopwindowwidget.h
+SOURCES += mainwindow/desktopframe.cpp mainwindow/desktopwindowwidget.cpp
 DEFINES += QTB_AUTO_COMPLETE=1
 }
 

@@ -65,7 +65,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,desktopView(0)
 #else // defined(QTB_DEV_TOUCHPANEL)
-  ,desktopWindow(0)
+  ,desktopWindowWidget(0)
   ,scrollArea(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,connectionLabel(0)
@@ -536,8 +536,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #else // defined(QTB_DEV_TOUCHPANEL)
 
   // Desktop Window Widget
-  desktopWindow = new DesktopWindow(this);
-  desktopFrame = desktopWindow;
+  desktopWindowWidget = new DesktopWindowWidget(this);
+  desktopFrame = desktopWindowWidget;
 
   // Scroll Area
   scrollArea = new QScrollArea;
@@ -553,8 +553,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   }
   // set Widget
-  scrollArea->setWidget(desktopWindow);
-  scrollArea->setFocusProxy(desktopWindow);
+  scrollArea->setWidget(desktopWindowWidget);
+  scrollArea->setFocusProxy(desktopWindowWidget);
   scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
   setCentralWidget(scrollArea);
 
@@ -769,7 +769,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard = new SK(keyBuffer, this, desktopView);
 #else // defined(QTB_DEV_TOUCHPANEL)
-  softwareKeyboard = new SK(keyBuffer, this, desktopWindow);
+  softwareKeyboard = new SK(keyBuffer, this, desktopWindowWidget);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
@@ -781,7 +781,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if defined(QTB_DEV_TOUCHPANEL)
   softwareButton = new SB(mouseBuffer, this, desktopView);
 #else // defined(QTB_DEV_TOUCHPANEL)
-  softwareButton = new SB(mouseBuffer, this, desktopWindow);
+  softwareButton = new SB(mouseBuffer, this, desktopWindowWidget);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
@@ -1160,10 +1160,10 @@ QtBrynhildr::~QtBrynhildr()
 
 #else // defined(QTB_DEV_TOUCHPANEL)
 
-  // desktop window
-  if (desktopWindow != 0){
-	delete desktopWindow;
-	desktopWindow = 0;
+  // desktop window widget
+  if (desktopWindowWidget != 0){
+	delete desktopWindowWidget;
+	desktopWindowWidget = 0;
 	desktopFrame = 0;
   }
   // scroll area
@@ -1194,10 +1194,10 @@ DesktopView *QtBrynhildr::getDesktopView() const
   return desktopView;
 }
 #else // defined(QTB_DEV_TOUCHPANEL)
-// get desktop window
-DesktopWindow *QtBrynhildr::getDesktopWindow() const
+// get desktop window widget
+DesktopWindowWidget *QtBrynhildr::getDesktopWindowWidget() const
 {
-  return desktopWindow;
+  return desktopWindowWidget;
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
@@ -3175,7 +3175,7 @@ void QtBrynhildr::connected()
 	desktopFrameObject->setAcceptDrops(true);
 #endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
-	desktopWindow->setAcceptDrops(true);
+	desktopWindowWidget->setAcceptDrops(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }
 
@@ -3346,7 +3346,7 @@ void QtBrynhildr::disconnected()
 	desktopFrameObject->setAcceptDrops(false);
 #endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
-	desktopWindow->setAcceptDrops(false);
+	desktopWindowWidget->setAcceptDrops(false);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }
 
@@ -3953,9 +3953,9 @@ void QtBrynhildr::exit()
   }
 
 #if defined(QTB_DEV_DESKTOP)
-  // desktop window
+  // desktop window widget
   if (settings->getOnViewerMode()){
-	desktopWindow->leaveAreaMode();
+	desktopWindowWidget->leaveAreaMode();
   }
 #endif // defined(QTB_DEV_DESKTOP)
 
@@ -4450,7 +4450,7 @@ void QtBrynhildr::refreshPublicMode()
 	desktopFrameObject->setAcceptDrops(true);
 #endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
-	desktopWindow->setAcceptDrops(true);
+	desktopWindowWidget->setAcceptDrops(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }
   else {
@@ -4469,7 +4469,7 @@ void QtBrynhildr::refreshPublicMode()
 	desktopFrameObject->setAcceptDrops(false);
 #endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
-	desktopWindow->setAcceptDrops(false);
+	desktopWindowWidget->setAcceptDrops(false);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }
 

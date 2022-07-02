@@ -48,7 +48,7 @@
 #if defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktopview.h"
 #else // defined(QTB_DEV_TOUCHPANEL)
-#include "mainwindow/desktopwindow.h"
+#include "mainwindow/desktopwindowwidget.h"
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #include "option.h"
 #if QTB_RECORDER
@@ -119,8 +119,8 @@ private:
 #if defined(QTB_DEV_TOUCHPANEL)
   DesktopView *desktopView;
 #else // defined(QTB_DEV_TOUCHPANEL)
-  // desktop window
-  DesktopWindow *desktopWindow;
+  // desktop window widget
+  DesktopWindowWidget *desktopWindowWidget;
   // scroll area
   QScrollArea *scrollArea;
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -672,7 +672,7 @@ public:
 #endif // 0 // for TEST
 #else // defined(QTB_DEV_TOUCHPANEL)
   // get desktop window
-  DesktopWindow *getDesktopWindow() const;
+  DesktopWindowWidget *getDesktopWindowWidget() const;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // get desktop frame

@@ -1,8 +1,8 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015- FunFun <fu.aba.dc5@gmail.com>
 
-#ifndef DESKTOPWINDOW_H
-#define DESKTOPWINDOW_H
+#ifndef DESKTOPWINDOWWIDGET_H
+#define DESKTOPWINDOWWIDGET_H
 // Common Header
 #include "common/common.h"
 
@@ -25,11 +25,11 @@ namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-// DesktopWindow
+// DesktopWindowWidget
 #if defined(Q_OS_WIN)
-class DesktopWindow : public QWidget, public DesktopFrame, public QAbstractNativeEventFilter
+class DesktopWindowWidget : public QWidget, public DesktopFrame, public QAbstractNativeEventFilter
 #else // defined(Q_OS_WIN)
-class DesktopWindow : public QWidget, public DesktopFrame
+class DesktopWindowWidget : public QWidget, public DesktopFrame
 #endif // defined(Q_OS_WIN)
 {
   Q_OBJECT
@@ -61,9 +61,9 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
+  DesktopWindowWidget(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
   // destructor
-  ~DesktopWindow();
+  ~DesktopWindowWidget();
 
   // resize desktop
   void resizeDesktop(int width, int height);
@@ -131,4 +131,4 @@ public:
 
 } // end of namespace qtbrynhildr
 
-#endif // DESKTOPWINDOW_H
+#endif // DESKTOPWINDOWWIDGET_H

@@ -17,8 +17,13 @@ namespace qtbrynhildr {
 // constructor
 DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
-  ,scalingFactor(1.0)
+  ,qtbrynhildr(qtbrynhildr)
+  ,desktopPanelWidget(new DesktopPanelWidget(qtbrynhildr))
+  ,keyBuffer(desktopPanelWidget->getKeyBuffer())
   ,topType(TOP_TYPE_UNKNOWN)
+  ,scalingFactor(1.0)
+  ,scalingFactorForFullScreen(1.0)
+  ,screenSize(settings->getCurrentScreen().size())
   // for DEBUG
   ,outputLog(true)
 {
@@ -43,6 +48,11 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
 // destructor
 DesktopPanel::~DesktopPanel()
 {
+  // delete objects
+  if (desktopPanelWidget != 0){
+	delete desktopPanelWidget;
+	desktopPanelWidget = 0;
+  }
 }
 
 // scale
@@ -85,20 +95,14 @@ void DesktopPanel::mouseMoveEventForSP(QMouseEvent *event)
 // mouse move
 void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 {
-  DesktopPanel::mouseMove(mousePos, marker);
+  desktopPanelWidget->mouseMove(mousePos, marker);
 }
 
 // mouse move relatively
 void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
 {
   mousePos /= scalingFactor;
-  DesktopPanel::mouseMoveRelatively(mousePos, marker);
-}
-
-// size hint
-QSize DesktopPanel::sizeHint() const
-{
-  return currentSize;
+  desktopPanelWidget->mouseMoveRelatively(mousePos, marker);
 }
 
 // viewport size hint
@@ -106,35 +110,6 @@ QSize DesktopPanel::viewportSizeHint() const
 {
   return QSize(1280, 800);
 }
-
-// paint event
-void DesktopPanel::paintEvent(QPaintEvent *event)
-{
-  Q_UNUSED(event);
-
-  if (image.isNull()){
-	return;
-  }
-
-  QPainter painter(this);
-
-  // draw desktop image
-  painter.drawImage(0, 0, image);
-
-  // draw marker for mouse cursor
-  if (drawMarkerCounter > 0){
-	int length = drawMarkerCounter*10;
-	int x = currentMousePos.x() - length/2;
-	int y = currentMousePos.y() - length/2;
-
-	painter.setRenderHint(QPainter::Antialiasing, false);
-	painter.setPen(QPen(Qt::green, 4));
-	painter.drawArc(x, y, length, length, 0*360, 16*360);
-
-	drawMarkerCounter--;
-  }
-}
-
 // viewport event for event handling (touchpanel)
 bool DesktopPanel::viewportEvent(QEvent *event)
 {
@@ -459,22 +434,27 @@ bool DesktopPanel::threeFingerEvent(QTouchEvent *touchEvent)
 // mouse event 
 void DesktopPanel::mousePressEvent(QMouseEvent *event)
 {
+  // Yet
 }
 
 void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 {
+  // Yet
 }
 
 void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 {
+  // Yet
 }
 
 void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 {
+  // Yet
 }
 
 void DesktopPanel::wheelEvent(QWheelEvent *event)
 {
+  // Yet
 }
 
 } // end of namespace qtbrynhildr

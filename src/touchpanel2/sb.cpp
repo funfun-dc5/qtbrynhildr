@@ -25,13 +25,13 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   ,mouseBuffer(mouseBuffer)
   ,qtbrynhildr(qtbrynhildr)
   ,settings(qtbrynhildr->getSettings())
+#if defined(QTB_DEV_TOUCHPANEL)
+  ,desktopPanel(qtbrynhildr->getDesktopPanel())
+#endif // defined(QTB_DEV_TOUCHPANEL)
   ,previousClickButton(MouseBuffer::MOUSE_BUTTON_INVALID)
   ,previousClickTime(QDateTime::currentDateTime())
   ,pressedMouseLeftButton(false)
   ,pressedMouseRightButton(false)
-#if defined(QTB_DEV_TOUCHPANEL)
-  ,desktopView(qtbrynhildr->getDesktopView())
-#endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
   ,outputLog(false)
 {
@@ -368,7 +368,7 @@ bool SB::event(QEvent *event)
 			qDebug() << "move = " << move;
 		  }
 		  if (move != QPoint(0,0))
-			desktopView->mouseMoveRelatively(move);
+			desktopPanel->mouseMoveRelatively(move);
 		}
 	  }
 	  else if (touchPointCount == 2){ // 2 fingers
@@ -444,7 +444,7 @@ bool SB::event(QEvent *event)
 			  qDebug() << "move = " << move;
 			}
 			if (move != QPoint(0,0))
-			  desktopView->mouseMoveRelatively(move);
+			  desktopPanel->mouseMoveRelatively(move);
 		  }
 		  else {
 			// pinch in/out
@@ -468,7 +468,7 @@ bool SB::event(QEvent *event)
 			if (outputLog){
 			  qDebug() << "scalingFactor = " << scalingFactor;
 			}
-			desktopView->setScale(scalingFactor);
+			desktopPanel->setScale(scalingFactor);
 		  }
 		}
 	  }
@@ -507,7 +507,7 @@ void SB::mouseMoveEvent(QMouseEvent *event)
 											event->button(),
 											event->buttons(),
 											event->modifiers());
-	desktopView->mouseMoveEventForSP(newEvent);
+	desktopPanel->mouseMoveEventForSP(newEvent);
 	//delete newEvent;
   }
 }

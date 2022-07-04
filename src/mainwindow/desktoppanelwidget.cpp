@@ -108,8 +108,7 @@ void DesktopPanelWidget::paintEvent(QPaintEvent *event)
 #endif // for TEST
 }
 
-#if 0 // for TEST
-  // mouse event
+// mouse event
 void DesktopPanelWidget::mousePressEvent(QMouseEvent *event)
 {
   DesktopFrame::mousePressEvent(event);
@@ -140,6 +139,5 @@ void DesktopPanelWidget::keyReleaseEvent(QKeyEvent *event)
 {
   DesktopFrame::keyReleaseEvent(event);
 }
-#endif // 0 // for TEST
 
 } // end of namespace qtbrynhildr

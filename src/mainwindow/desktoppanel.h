@@ -61,17 +61,20 @@ private:
   // Touch Operation Type
   TOP_TYPE topType;
 
-  // for software button
-  QRect softwareButtonRect;
-
-  // for software keyboard
-  QRect softwareKeyboardRect;
-
   // scaling factor
   qreal scalingFactor;
 
   // scaling factor for fullscreen
   qreal scalingFactorForFullScreen;
+
+  // for screen size
+  QSize screenSize;
+
+  // for software button
+  QRect softwareButtonRect;
+
+  // for software keyboard
+  QRect softwareKeyboardRect;
 
   // output log flag
   bool outputLog;
@@ -94,6 +97,12 @@ public:
   // update desktop
   void updateDesktop();
 
+  // get desktop panel widget
+  DesktopPanelWidget *getDesktopPanelWidget() const
+  {
+	return desktopPanelWidget;
+  }
+  
   // mouse press event software panel
   void mousePressEventForSP(QMouseEvent *event);
   // mouse release event software panel
@@ -117,15 +126,9 @@ public:
 	softwareKeyboardRect = rect;
   }
 
-  // size hint
-  QSize sizeHint() const;
-
 protected:
   // viewport size hint
   QSize viewportSizeHint() const;
-
-  // paint event
-  void paintEvent(QPaintEvent *event);
 
   // viewport event for event handling (touchpanel)
   bool viewportEvent(QEvent *event);

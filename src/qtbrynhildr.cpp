@@ -63,7 +63,7 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   :desktopFrame(0)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,desktopView(0)
+  ,desktopPanel(0)
 #else // defined(QTB_DEV_TOUCHPANEL)
   ,desktopWindowWidget(0)
   ,desktopWindow(0)
@@ -518,18 +518,18 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   //------------------------------------------------------------
 #if defined(QTB_DEV_TOUCHPANEL)
 
-  // Desktop View Widget
-  desktopView = new DesktopView(this);
-  desktopFrame = desktopView;
+  // Desktop Panel
+  desktopPanel = new DesktopPanel(this);
+  desktopFrame = desktopPanel->getDesktopPanelWidget();
 
   // set Widget
-  setCentralWidget(desktopView);
+  setCentralWidget(desktopPanel);
 
   // initialize palette
-  backgroundPalette = fullScreenBackgroundPalette = desktopView->palette();
+  backgroundPalette = fullScreenBackgroundPalette = desktopPanel->palette();
   // for background of desktop
   backgroundPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
-  desktopView->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
+  desktopPanel->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
   fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
 
@@ -767,7 +767,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // set up Software Button and Keyboard
   // keyboard
 #if defined(QTB_DEV_TOUCHPANEL)
-  softwareKeyboard = new SK(keyBuffer, this, desktopView);
+  softwareKeyboard = new SK(keyBuffer, this, desktopPanel);
 #else // defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard = new SK(keyBuffer, this, desktopWindowWidget);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -779,7 +779,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 
   // button
 #if defined(QTB_DEV_TOUCHPANEL)
-  softwareButton = new SB(mouseBuffer, this, desktopView);
+  softwareButton = new SB(mouseBuffer, this, desktopPanel);
 #else // defined(QTB_DEV_TOUCHPANEL)
   softwareButton = new SB(mouseBuffer, this, desktopWindowWidget);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -1188,10 +1188,10 @@ QtBrynhildr::~QtBrynhildr()
 }
 
 #if defined(QTB_DEV_TOUCHPANEL)
-// get desktop view
-DesktopView *QtBrynhildr::getDesktopView() const
+// get desktop panel
+DesktopPanel *QtBrynhildr::getDesktopPanel() const
 {
-  return desktopView;
+  return desktopPanel;
 }
 #else // defined(QTB_DEV_TOUCHPANEL)
 // get desktop window widget
@@ -3457,7 +3457,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
 #endif // 0 // for TEST
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  desktopView->setScale(settings->getDesktopScalingFactor());
+  desktopPanel->setScale(settings->getDesktopScalingFactor());
 #endif // defined(QTB_DEV_TOUCHPANEL)
 }
 
@@ -3791,13 +3791,13 @@ void QtBrynhildr::connectToServer()
   // set touchpanel interface
   if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT){
 	// Right/Left
-	desktopView->setSoftwareButtonRect(touchpanelInterfaceLeftRight.softwareButtonRect);
-	desktopView->setSoftwareKeyboardRect(touchpanelInterfaceLeftRight.softwareKeyboardRect);
+	desktopPanel->setSoftwareButtonRect(touchpanelInterfaceLeftRight.softwareButtonRect);
+	desktopPanel->setSoftwareKeyboardRect(touchpanelInterfaceLeftRight.softwareKeyboardRect);
   }
   else if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM){
 	// Top/Bottom
-	desktopView->setSoftwareButtonRect(touchpanelInterfaceTopBottom.softwareButtonRect);
-	desktopView->setSoftwareKeyboardRect(touchpanelInterfaceTopBottom.softwareKeyboardRect);
+	desktopPanel->setSoftwareButtonRect(touchpanelInterfaceTopBottom.softwareButtonRect);
+	desktopPanel->setSoftwareKeyboardRect(touchpanelInterfaceTopBottom.softwareKeyboardRect);
   }
   else {
 	// internal error

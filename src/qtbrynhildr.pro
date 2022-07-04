@@ -144,8 +144,8 @@ DEFINES += QTB_AUTO_COMPLETE=1
 
 touchpanel {
 CONFIG += software_keyboard_button
-HEADERS += mainwindow/desktopframe.h mainwindow/desktoppanelwidget.h
-SOURCES += mainwindow/desktopframe.cpp mainwindow/desktoppanelwidget.cpp
+HEADERS += mainwindow/desktopframe.h mainwindow/desktoppanelwidget.h mainwindow/desktoppanel.h
+SOURCES += mainwindow/desktopframe.cpp mainwindow/desktoppanelwidget.cpp mainwindow/desktoppanel.cpp
 DEFINES += QTB_AUTO_COMPLETE=0
 }
 # config error

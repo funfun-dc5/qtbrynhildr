@@ -14,13 +14,12 @@
 #include "settings.h"
 #include "software_keyboard.h"
 #if defined(QTB_DEV_TOUCHPANEL)
-#include "mainwindow/desktopview.h"
+#include "mainwindow/desktoppanel.h"
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 namespace qtbrynhildr {
 
-class QtBrynhildr;
-class DesktopView;
+class DesktopPanel;
 
 // SoftwareKeyboard
 class SK : public SoftwareKeyboard
@@ -39,8 +38,8 @@ private:
   Settings *settings;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // desktop view
-  DesktopView *desktopView;
+  // desktop panel
+  DesktopPanel *desktopPanel;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // output log flag

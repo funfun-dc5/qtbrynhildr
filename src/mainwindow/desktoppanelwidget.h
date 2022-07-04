@@ -64,7 +64,6 @@ protected:
   // window event
   void paintEvent(QPaintEvent *event);
 
-#if 0 // for TEST
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
@@ -75,7 +74,6 @@ protected:
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
-#endif // 0 // for TEST
 };
 
 } // end of namespace qtbrynhildr

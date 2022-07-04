@@ -46,7 +46,7 @@
 #include "logmessage.h"
 #include "mainwindow/desktopframe.h"
 #if defined(QTB_DEV_TOUCHPANEL)
-#include "mainwindow/desktopview.h"
+#include "mainwindow/desktoppanel.h"
 #else // defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktopwindowwidget.h"
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -120,7 +120,8 @@ private:
   DesktopFrame *desktopFrame;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  DesktopView *desktopView;
+  // desktop panel
+  DesktopPanel *desktopPanel;
 #else // defined(QTB_DEV_TOUCHPANEL)
   // desktop window widget
   DesktopWindowWidget *desktopWindowWidget;
@@ -667,14 +668,10 @@ public:
 #endif // QTB_TOOLBAR
 
 #if defined(QTB_DEV_TOUCHPANEL)
-#if 0 // for TEST
-  // get graphics view
-  GraphicsView *getGraphicsView() const;
-#else // 0 // for TEST
-  DesktopView *getDesktopView() const;
-#endif // 0 // for TEST
+  // get desktop panel
+  DesktopPanel *getDesktopPanel() const;
 #else // defined(QTB_DEV_TOUCHPANEL)
-  // get desktop window
+  // get desktop window widget
   DesktopWindowWidget *getDesktopWindowWidget() const;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

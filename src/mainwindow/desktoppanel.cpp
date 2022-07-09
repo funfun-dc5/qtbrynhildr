@@ -10,7 +10,7 @@
 #include <QPainter>
 
 // Local Header
-#include "desktoppanel.h"
+#include "mainwindow/desktoppanel.h"
 
 namespace qtbrynhildr {
 
@@ -18,8 +18,8 @@ namespace qtbrynhildr {
 DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
   ,qtbrynhildr(qtbrynhildr)
-  ,desktopPanelWidget(new DesktopPanelWidget(qtbrynhildr))
-  ,keyBuffer(desktopPanelWidget->getKeyBuffer())
+  ,desktopPanelWidget(0)
+  ,keyBuffer(0)
   ,topType(TOP_TYPE_UNKNOWN)
   ,scalingFactor(1.0)
   ,scalingFactorForFullScreen(1.0)
@@ -43,6 +43,11 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   // scrollbar Always Off
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  // desktop panel widget
+  desktopPanelWidget = new DesktopPanelWidget(qtbrynhildr, this);
+  // key buffer
+  keyBuffer = desktopPanelWidget->getKeyBuffer();
 }
 
 // destructor
@@ -110,6 +115,7 @@ QSize DesktopPanel::viewportSizeHint() const
 {
   return QSize(1280, 800);
 }
+
 // viewport event for event handling (touchpanel)
 bool DesktopPanel::viewportEvent(QEvent *event)
 {

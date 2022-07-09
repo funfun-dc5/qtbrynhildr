@@ -38,7 +38,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopPanelWidget(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
+  DesktopPanelWidget(QtBrynhildr *qtbrynhildr, QWidget *parent);
   // destructor
   ~DesktopPanelWidget();
 

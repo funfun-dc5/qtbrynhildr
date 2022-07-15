@@ -18,12 +18,13 @@ namespace qtbrynhildr {
 DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   :QScrollArea(parent)
   ,qtbrynhildr(qtbrynhildr)
+  ,settings(qtbrynhildr->getSettings())
   ,desktopPanelWidget(0)
   ,keyBuffer(0)
   ,topType(TOP_TYPE_UNKNOWN)
   ,scalingFactor(1.0)
   ,scalingFactorForFullScreen(1.0)
-  ,screenSize(settings->getCurrentScreen().size())
+  ,screenSize(settings->getCurrentScreenSize())
   // for DEBUG
   ,outputLog(true)
 {

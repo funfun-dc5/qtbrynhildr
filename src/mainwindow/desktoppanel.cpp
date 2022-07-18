@@ -34,8 +34,10 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   // enable touch event
   setAttribute(Qt::WA_AcceptTouchEvents, true);
 
-  setWidgetResizable(true);
+  //setWidgetResizable(true);
+  setWidgetResizable(false);
   setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  //setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
   setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
   //setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -49,6 +51,8 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   desktopPanelWidget = new DesktopPanelWidget(qtbrynhildr, this);
   // key buffer
   keyBuffer = desktopPanelWidget->getKeyBuffer();
+
+  setScale(0.33); // for TEST
 }
 
 // destructor
@@ -65,6 +69,7 @@ DesktopPanel::~DesktopPanel()
 void DesktopPanel::setScale(qreal scalingFactor)
 {
   this->scalingFactor = scalingFactor;
+  settings->setDesktopScalingFactor(scalingFactor);
 }
 
 // resize desktop
@@ -111,14 +116,14 @@ void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
   desktopPanelWidget->mouseMoveRelatively(mousePos, marker);
 }
 
-// viewport size hint
-QSize DesktopPanel::viewportSizeHint() const
+// size hint
+QSize DesktopPanel::sizeHint() const
 {
-  return QSize(1280, 800);
+  return QSize(1280, 736);
 }
 
-// viewport event for event handling (touchpanel)
-bool DesktopPanel::viewportEvent(QEvent *event)
+// scrollarea event for event handling (touchpanel)
+bool DesktopPanel::event(QEvent *event)
 {
   switch(event->type()){
   case QEvent::TouchBegin:
@@ -174,7 +179,7 @@ bool DesktopPanel::viewportEvent(QEvent *event)
 	  }
 	  else {
 		// Unknown Touchpanel Operation Type
-		qDebug() << "DV: Unknown Touchpanel Operation!";
+		qDebug() << "DP: Unknown Touchpanel Operation!";
 	  }
 	}
   default:
@@ -182,7 +187,7 @@ bool DesktopPanel::viewportEvent(QEvent *event)
 	break;
   }
 
-  return QScrollArea::viewportEvent(event);
+  return QScrollArea::event(event);
 }
 
 // -----------------------------------------------------------------------------------
@@ -207,17 +212,17 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 
   if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 	if (outputLog){
-	  qDebug() << "DV: Kero 1 fingers Pressed!";
+	  qDebug() << "DP: Kero 1 fingers Pressed!";
 	}
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 	if (outputLog){
-	  qDebug() << "DV: Kero 1 fingers Released!";
+	  qDebug() << "DP: Kero 1 fingers Released!";
 	}
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 	if (outputLog){
-	  qDebug() << "DV: Kero 1 finger Moved!";
+	  qDebug() << "DP: Kero 1 finger Moved!";
 	}
   }
 
@@ -242,17 +247,17 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 
   if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 	if (outputLog){
-	  qDebug() << "DV: Qt 1 fingers Pressed!";
+	  qDebug() << "DP: Qt 1 fingers Pressed!";
 	}
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 	if (outputLog){
-	  qDebug() << "DV: Qt 1 fingers Released!";
+	  qDebug() << "DP: Qt 1 fingers Released!";
 	}
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 	if (outputLog){
-	  qDebug() << "DV: Qt 1 finger Moved!";
+	  qDebug() << "DP: Qt 1 finger Moved!";
 	}
   }
 
@@ -277,19 +282,19 @@ bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 
   if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 	if (outputLog){
-	  qDebug() << "DV: Kero 2 fingers Pressed!";
+	  qDebug() << "DP: Kero 2 fingers Pressed!";
 	}
 	topType = TOP_TYPE_2POINT;
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 	if (outputLog){
-	  qDebug() << "DV: Kero 2 fingers Released!";
+	  qDebug() << "DP: Kero 2 fingers Released!";
 	}
 	// Nothing to do
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 	if (outputLog){
-	  qDebug() << "DV: Kero 2 finger Moved!";
+	  qDebug() << "DP: Kero 2 finger Moved!";
 	}
 	// change scaling factor
 	const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
@@ -333,13 +338,13 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 
   if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 	if (outputLog){
-	  qDebug() << "DV: Qt 2 fingers Pressed!";
+	  qDebug() << "DP: Qt 2 fingers Pressed!";
 	}
 	topType = TOP_TYPE_2POINT;
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 	if (outputLog){
-	  qDebug() << "DV: Qt 2 fingers Released!";
+	  qDebug() << "DP: Qt 2 fingers Released!";
 	}
 	if (topType != TOP_TYPE_2POINT){
 	  // Nothing to do
@@ -375,7 +380,7 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 	if (outputLog){
-	  qDebug() << "DV: Qt 2 finger Moved!";
+	  qDebug() << "DP: Qt 2 finger Moved!";
 	}
 	// change scaling factor
 	const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
@@ -411,7 +416,7 @@ bool DesktopPanel::threeFingerEvent(QTouchEvent *touchEvent)
 {
   if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 	if (outputLog){
-	  qDebug() << "DV: 3 fingers Pressed!";
+	  qDebug() << "DP: 3 fingers Pressed!";
 	}
 	topType = TOP_TYPE_3POINT;
 	// press
@@ -419,7 +424,7 @@ bool DesktopPanel::threeFingerEvent(QTouchEvent *touchEvent)
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 	if (outputLog){
-	  qDebug() << "DV: 3 fingers Released!";
+	  qDebug() << "DP: 3 fingers Released!";
 	}
 	if (topType == TOP_TYPE_3POINT){
 	  // press
@@ -430,7 +435,7 @@ bool DesktopPanel::threeFingerEvent(QTouchEvent *touchEvent)
   }
   else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 	if (outputLog){
-	  qDebug() << "DV: 3 finger Moved!";
+	  qDebug() << "DP: 3 finger Moved!";
 	}
 	// Nothing to do
   }

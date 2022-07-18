@@ -127,11 +127,11 @@ public:
   }
 
 protected:
-  // viewport size hint
-  QSize viewportSizeHint() const;
+  // size hint
+  QSize sizeHint() const;
 
-  // viewport event for event handling (touchpanel)
-  bool viewportEvent(QEvent *event);
+  // scrollarea event for event handling (touchpanel)
+  bool event(QEvent *event);
 
   // -----------------------------------------------------------------------------------
   // KeroRemote 1 Finger Operation

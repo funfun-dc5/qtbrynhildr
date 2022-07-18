@@ -191,7 +191,7 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_DEBUG					0
 
   // test
-#define QTB_TEST					0
+#define QTB_TEST					1
 } // end of namespace qtbrynhildr
 
 #endif // CONFIG_H

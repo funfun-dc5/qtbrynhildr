@@ -64,16 +64,46 @@ QSize DesktopPanelWidget::sizeHint() const
   return currentSize;
 }
 
+// mouse event
+void DesktopPanelWidget::mousePressEvent(QMouseEvent *event)
+{
+  DesktopFrame::mousePressEvent(event);
+}
+void DesktopPanelWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+  DesktopFrame::mouseReleaseEvent(event);
+}
+void DesktopPanelWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  DesktopFrame::mouseDoubleClickEvent(event);
+}
+void DesktopPanelWidget::mouseMoveEvent(QMouseEvent *event)
+{
+  DesktopFrame::mouseMoveEvent(event);
+}
+void DesktopPanelWidget::wheelEvent(QWheelEvent *event)
+{
+  DesktopFrame::wheelEvent(event);
+}
+
+// keyboard event
+void DesktopPanelWidget::keyPressEvent(QKeyEvent *event)
+{
+  DesktopFrame::keyPressEvent(event);
+}
+void DesktopPanelWidget::keyReleaseEvent(QKeyEvent *event)
+{
+  DesktopFrame::keyReleaseEvent(event);
+}
+
 // for event handling
-#if defined(QTB_DEV_TOUCHPANEL)
-  // event
+// event
 bool DesktopPanelWidget::event(QEvent *event){
   if (DesktopFrame::event(event))
 	return true;
   else
 	return QWidget::event(event);
 }
-#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // paint event
 void DesktopPanelWidget::paintEvent(QPaintEvent *event)
@@ -106,38 +136,6 @@ void DesktopPanelWidget::paintEvent(QPaintEvent *event)
 	drawMarkerCounter = 30;
   }
 #endif // for TEST
-}
-
-// mouse event
-void DesktopPanelWidget::mousePressEvent(QMouseEvent *event)
-{
-  DesktopFrame::mousePressEvent(event);
-}
-void DesktopPanelWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-  DesktopFrame::mouseReleaseEvent(event);
-}
-void DesktopPanelWidget::mouseDoubleClickEvent(QMouseEvent *event)
-{
-  DesktopFrame::mouseDoubleClickEvent(event);
-}
-void DesktopPanelWidget::mouseMoveEvent(QMouseEvent *event)
-{
-  DesktopFrame::mouseMoveEvent(event);
-}
-void DesktopPanelWidget::wheelEvent(QWheelEvent *event)
-{
-  DesktopFrame::wheelEvent(event);
-}
-
-// keyboard event
-void DesktopPanelWidget::keyPressEvent(QKeyEvent *event)
-{
-  DesktopFrame::keyPressEvent(event);
-}
-void DesktopPanelWidget::keyReleaseEvent(QKeyEvent *event)
-{
-  DesktopFrame::keyReleaseEvent(event);
 }
 
 } // end of namespace qtbrynhildr

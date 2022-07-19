@@ -171,6 +171,13 @@ private:
   void mouseDoubleClickEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
   void wheelEvent(QWheelEvent *event);
+
+  // keyboard event
+  void keyPressEvent(QKeyEvent *event);
+  void keyReleaseEvent(QKeyEvent *event);
+
+  // convert to desktop
+  bool convertToDesktop(QPoint &point);
 };
 
 } // end of namespace qtbrynhildr

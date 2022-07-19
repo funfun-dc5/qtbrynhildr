@@ -54,16 +54,6 @@ public:
   // size hint
   QSize sizeHint() const;
 
-protected:
-  // for event handling
-#if defined(QTB_DEV_TOUCHPANEL)
-  // event
-  bool event(QEvent *event);
-#endif // defined(QTB_DEV_TOUCHPANEL)
-
-  // window event
-  void paintEvent(QPaintEvent *event);
-
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
@@ -74,6 +64,14 @@ protected:
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
+
+protected:
+  // for event handling
+  // event
+  bool event(QEvent *event);
+
+  // window event
+  void paintEvent(QPaintEvent *event);
 };
 
 } // end of namespace qtbrynhildr

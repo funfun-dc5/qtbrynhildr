@@ -360,10 +360,10 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  QPoint currentPos = touchPoint.pos().toPoint();
 	  QPoint lastPos = touchPoint.lastPos().toPoint();
 	  QPoint move = lastPos - currentPos;
-#if 0 // TODO
+#if 0 // Yet
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 	  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
-#endif //0 // TODO
+#endif //0 // Yet
 	}
 	else {
 	  // move mouse cursor
@@ -558,10 +558,10 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	else if (inZooming){
 	  // scroll graphics view
 	  QPoint move = lastPos - currentPos;
-#if 0 // TODO
+#if 0 // Yet
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 	  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
-#endif //0 // TODO
+#endif //0 // Yet
 	}
 	else {
 	  // move mouse cursor
@@ -794,25 +794,88 @@ bool DesktopPanel::threeFingerEvent(QTouchEvent *touchEvent)
 // mouse event 
 void DesktopPanel::mousePressEvent(QMouseEvent *event)
 {
-  // Yet
+  QPoint pos = event->pos();
+  if (convertToDesktop(pos)){
+	//	qDebug() << "DP: mousePressEvent: pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanelWidget->mousePressEvent(newEvent);
+	// delete newEvent;
+  }
 }
 
 void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 {
-  // Yet
+  QPoint pos = event->pos();
+  if (convertToDesktop(pos)){
+	//	qDebug() << "DP: mouseReleaseEvent: pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanelWidget->mouseReleaseEvent(newEvent);
+	// delete newEvent;
+  }
 }
 
 void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  // Yet
+  QPoint pos = event->pos();
+  if (convertToDesktop(pos)){
+	//	qDebug() << "DP: mouseDoubleClickEvent: pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanelWidget->mouseDoubleClickEvent(newEvent);
+	// delete newEvent;
+  }
 }
 
 void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 {
-  // Yet
+  QPoint pos = event->pos();
+  if (convertToDesktop(pos)){
+	//	qDebug() << "DP: mouseMoveEvent: pos of desktop = " << pos;
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											QPointF(pos),
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+	desktopPanelWidget->mouseMoveEvent(newEvent);
+	// delete newEvent;
+  }
+  else {
+	QScrollArea::mouseMoveEvent(event);
+  }
 }
 
 void DesktopPanel::wheelEvent(QWheelEvent *event)
+{
+  //qDebug() << "DP: wheelEvent : " << event;
+  desktopPanelWidget->wheelEvent(event);
+}
+
+// keyboard event
+void DesktopPanel::keyPressEvent(QKeyEvent *event)
+{
+  //qDebug() << "DP: KeyPress : " << event;
+  desktopPanelWidget->keyPressEvent(event);
+}
+
+void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
+{
+  //qDebug() << "DP: KeyRelease : " << event;
+  desktopPanelWidget->keyReleaseEvent(event);
+}
+
+// convert to desktop
+bool DesktopPanel::convertToDesktop(QPoint &point)
 {
   // Yet
 }

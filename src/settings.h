@@ -1078,7 +1078,7 @@ public:
 	  "7",
 	  "8",
 	  "8.1",
-	  "10"
+	  "10",
 	  "11"
 	};
 	for(int i = 0; i < SERVER_TYPE_NUM; i++){

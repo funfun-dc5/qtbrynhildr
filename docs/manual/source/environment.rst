@@ -19,6 +19,7 @@
   * Windows 8       (64bit/32bit)
   * Windows 8.1     (64bit/32bit)
   * Windows 10      (64bit/32bit)
+  * Windows 11      (64bit)
 
  .. [#] すべてのエディションで確認したわけではありません。
 

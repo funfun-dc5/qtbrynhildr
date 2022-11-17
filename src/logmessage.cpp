@@ -16,7 +16,7 @@ namespace qtbrynhildr {
 
 // phase name
 const QString phaseName[PHASE_NUM] = {
-  "[QtBrynhildr] ",
+  "[main]     ",
   "[control]  ",
   "[graphics] ",
   "[sound]    ",

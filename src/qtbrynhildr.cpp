@@ -189,6 +189,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,sendKey7_Action(0)
   ,onScrollMode_Action(0)
   ,onViewerMode_Action(0)
+  ,onFulFulMode_Action(0)
   ,onMonochromeMode_Action(0)
   ,onMouseTrackingMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -2217,6 +2218,16 @@ void QtBrynhildr::createActions()
 	connect(onViewerMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnViewerMode()));
   }
 
+  // on FulFul Mode Action
+  if (QTB_VIEWER_MODE){
+	onFulFulMode_Action = new QAction(tr("Viewer Mode (FulFul)"), this);
+	onFulFulMode_Action->setEnabled(false);
+	onFulFulMode_Action->setCheckable(true);
+	onFulFulMode_Action->setChecked(settings->getOnViewerMode());
+	onFulFulMode_Action->setStatusTip(tr("Viewer Mode (FulFul)"));
+	connect(onFulFulMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnFulFulMode()));
+  }
+
 #if QTB_GRAY_SCALE_MODE
   // Monochrome Mode
   onMonochromeMode_Action = new QAction(tr("Monochrome Mode"), this);
@@ -2659,6 +2670,7 @@ void QtBrynhildr::createMenus()
 
   if (QTB_VIEWER_MODE){
 	optionMenu->addAction(onViewerMode_Action);
+	optionMenu->addAction(onFulFulMode_Action);
   }
 
   if (QTB_SCROLL_MODE){
@@ -2961,6 +2973,9 @@ void QtBrynhildr::updateConnected()
 	if (settings->getOnViewerMode()){
 	  str += " [" + tr("Viewer Mode") + "]";
 	}
+	if (settings->getOnFulFulMode()){
+	  str += " [" + tr("FulFul Mode") + "]";
+	}
 	connectionLabel->setText(str);
   }
   else {
@@ -3126,6 +3141,7 @@ void QtBrynhildr::connected()
   // enable viewer mode
   if (QTB_VIEWER_MODE){
 	onViewerMode_Action->setEnabled(true);
+	onFulFulMode_Action->setEnabled(true);
   }
 
 #if 0 //QTB_GRAY_SCALE_MODE
@@ -3298,6 +3314,12 @@ void QtBrynhildr::disconnected()
 	if (settings->getOnViewerMode()){
 	  // viewer mode OFF
 	  toggleOnViewerMode();
+	}
+
+  	onFulFulMode_Action->setEnabled(false);
+	if (settings->getOnFulFulMode()){
+	  // viewer mode OFF
+	  toggleOnFulFulMode();
 	}
   }
 
@@ -3557,6 +3579,7 @@ void QtBrynhildr::readSettings()
 	settings->readSettings();
   }
 
+#if defined(QTB_DEV_DESKTOP)
   // restore geometry
 #if 0 // for all platform
   QRect defaultRect = QRect(200, 200, 800, 600);
@@ -3575,6 +3598,7 @@ void QtBrynhildr::readSettings()
 
   // restore window state
   restoreState(settings->getSettings()->value(QTB_WINDOWSTATE).toByteArray());
+#endif // defined(QTB_DEV_DESKTOP)
 }
 
 // save settings to setting file or registry
@@ -3583,6 +3607,7 @@ void QtBrynhildr::writeSettings()
   // write global settings
   settings->writeSettings();
 
+#if defined(QTB_DEV_DESKTOP)
   // save geometry
 #if 0 // for all platform
   settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
@@ -3595,6 +3620,7 @@ void QtBrynhildr::writeSettings()
 
   // save window state
   settings->getSettings()->setValue(QTB_WINDOWSTATE, saveState());
+#endif // defined(QTB_DEV_DESKTOP)
 
   // sync
   settings->getSettings()->sync();
@@ -4034,7 +4060,7 @@ void QtBrynhildr::sendClipboard()
 	}
   }
   else {
-	qDebug() << "clipboard has unknown data!";
+	cout << "clipboard has unknown data!";
   }
 }
 
@@ -4517,6 +4543,7 @@ void QtBrynhildr::refreshOtherMenu()
   }
   if (QTB_VIEWER_MODE){
 	onViewerMode_Action->setEnabled(flag);
+	onFulFulMode_Action->setEnabled(flag);
   }
 
 #if 0 //QTB_GRAY_SCALE_MODE
@@ -5473,6 +5500,25 @@ void QtBrynhildr::toggleOnViewerMode()
 
   // set checked flag
   onViewerMode_Action->setChecked(settings->getOnViewerMode());
+
+  updateStatusBar();
+}
+
+// toggle fulful mode
+void QtBrynhildr::toggleOnFulFulMode()
+{
+  if (!QTB_VIEWER_MODE)
+	return;
+
+  if (settings->getOnFulFulMode()){
+	settings->setOnFulFulMode(false);
+  }
+  else {
+	settings->setOnFulFulMode(true);
+  }
+
+  // set checked flag
+  onFulFulMode_Action->setChecked(settings->getOnFulFulMode());
 
   updateStatusBar();
 }

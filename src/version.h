@@ -5,10 +5,10 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.4.4"
+#define QTB_VERSION				"2.4.8"
 
-#define QTB_RCNAME				"-rc1"
-#define QTB_VERSION_NUMBER		2404
+#define QTB_RCNAME				""
+#define QTB_VERSION_NUMBER		2408
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"
@@ -17,6 +17,6 @@
 #endif // __x86_64__ || __LP64__ || _WIN64
 
 // year
-#define QTB_YEAR		"2015-2022"
+#define QTB_YEAR				"2015-2022"
 
 #endif // VERSION_H

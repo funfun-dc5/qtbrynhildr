@@ -1,7 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2015- FunFun <fu.aba.dc5@gmail.com>
 
-#define QTB_TEST 0
+#define QTB_TEST_LOCAL 0
 
 // Common Header
 #include "common/common.h"
@@ -63,6 +63,7 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   ,onMaxfps(true)
   ,clipboardTop(0)
   ,buffer(0)
+  ,onFulFul(false)
 {
   //outputLog = true; // for DEBUG
 
@@ -81,6 +82,8 @@ ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
   keydownCONTROL= KEYDOWN_OFF;
   prevPos.x = 0;
   prevPos.y = 0;
+  sentPos.x = 0;
+  sentPos.y = 0;
 
   // done check password flag
   doneCheckPassword = false;
@@ -454,11 +457,11 @@ void ControlThread::initHeader()
 
   initHeaderForControl();
 
-#if QTB_TEST
+#if QTB_TEST_LOCAL
   initHeaderForGraphics_test();
-#else // QTB_TEST
+#else // QTB_TEST_LOCAL
   initHeaderForGraphics();
-#endif // QTB_TEST
+#endif // QTB_TEST_LOCAL
 
   initHeaderForSound();
 }
@@ -618,9 +621,24 @@ void ControlThread::initHeaderForGraphics()
   com_data->frame_no = (char)frameNoOfClient;
 
   // image size and zoom
+#if QTB_TEST
+  // zoom
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
+	  settings->getDesktopScalingFactor() < 1.0){
+	// scale down on server : zoom > 1.0
+	com_data->zoom			= (ZOOM)settings->getDesktopScalingFactorForZoom();
+  }
+  else {
+	com_data->zoom			= (ZOOM)1.0;
+  }
+  com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
+  com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+  //  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
+#else // QTB_TEST
   com_data->zoom = (ZOOM)1.0;
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
   com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+#endif // QTB_TEST
 
 #if QTB_GRAY_SCALE_MODE2
   // monochrome mode
@@ -695,6 +713,39 @@ void ControlThread::setMouseControl()
 #endif // QTB_EXTRA_BUTTON_SUPPORT
 	// setup mouse wheel
 	com_data->mouse_wheel = mouseBuffer->getWheel();
+  }
+
+  // FulFul Mode
+  if (settings->getOnFulFulMode() || onFulFul){
+	static int step = 0;
+	step++;
+
+	if (settings->getOnFulFulMode() && (step % 100 != 0))
+	  return;
+
+	//cout << "FulFul Mode : step " << step << endl << flush;
+	com_data->mouse_move = MOUSE_MOVE_ON;
+	com_data->mouse_y = sentPos.y;
+	if (onFulFul){
+	  // return mouse position
+	  //cout << "FulFul Mode : Return!" << endl << flush;
+	  com_data->mouse_x = sentPos.x;
+	}
+	else {
+	  // move mouse position
+	  //cout << "FulFul Mode : Move!" << endl << flush;
+	  if (step % 2 == 0){
+		// right FulFul
+		com_data->mouse_x = sentPos.x > 5 ? sentPos.x - 5 : 0;
+	  }
+	  else {
+		// left FulFul
+		com_data->mouse_x = sentPos.x + 5;
+	  }
+	}
+	onFulFul = !onFulFul;
+
+	return;
   }
 
   // setup mouse position
@@ -776,6 +827,9 @@ void ControlThread::setMouseControl()
 
 	// save pos
 	prevPos = pos;
+	// save sent pos
+	sentPos.x = com_data->mouse_x;
+	sentPos.y = com_data->mouse_y;
   }
 }
 

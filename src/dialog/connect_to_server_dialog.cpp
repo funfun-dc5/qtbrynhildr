@@ -82,6 +82,7 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_8,		STRING_SERVER_TYPE_WINDOWS_8);
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_8_1,	STRING_SERVER_TYPE_WINDOWS_8_1);
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_10,		STRING_SERVER_TYPE_WINDOWS_10);
+  comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_11,		STRING_SERVER_TYPE_WINDOWS_11);
 
   // keyboard type field
   comboBox_keyboardtype->insertItem(KEYBOARD_TYPE_JP, STRING_KEYBOARD_TYPE_JP);

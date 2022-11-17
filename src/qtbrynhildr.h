@@ -391,6 +391,9 @@ private:
   // toggle viewer mode
   QAction *onViewerMode_Action;
 
+  // toggle fulful mode
+  QAction *onFulFulMode_Action;
+
   // monochrome mode
   QAction *onMonochromeMode_Action;
 
@@ -1025,6 +1028,9 @@ private slots:
 
   // viewer mode
   void toggleOnViewerMode();
+
+  // fulful mode
+  void toggleOnFulFulMode();
 
   // monochrome mode
   void toggleOnMonochromeMode();

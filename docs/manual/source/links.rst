@@ -19,6 +19,7 @@
  「iOS版KeroRemoteからWindowsへの接続方法。」<http://blog.x-row.net/?p=6732>
 
   Android版のインターフェース実装の参考にさせて頂きました。
+  残念ながら、KeroRemoteは2022年4月24日に配布終了となりました。
 
 * KeroKeyboardのページ
 

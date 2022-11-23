@@ -24,7 +24,8 @@
   brynhildr.dll
   readme.txt
 
- .. [#] Program Files の下に展開するといろいろ面倒かもしれません。C:\\brynhildr 下などがいいかもしれません。
+ .. [#] Program Filesや個人の"ダウンロード"の下に展開するといろいろ面倒かもしれません。
+        C:\\brynhildr 下などがいいかもしれません。
 
  .. [#] 設定ファイルである *brynhildr.ini* は最初の起動時に同じフォルダ下に作成されますので、
          この時点では存在しません。

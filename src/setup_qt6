@@ -9,7 +9,7 @@ COVVERSION=2022.6.0
 LOCALPATH=
 PATHLIST=
 #------------------
-# Qt 6.2 -
+# Qt 6.4 -
 #------------------
 QTVERSION=6.4.1
 VCVERSION=msvc2019

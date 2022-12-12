@@ -923,6 +923,7 @@ outputGraphicsDataToFile=false
 outputSoundDataToFile=false
 outputSoundDataToWavFile=false
 outputLog=false
+outputKeyboardLog=false
 outputPath=C:\\Users\\funfun\\
 keylayoutPath=C:\\Users\\funfun\\AppData\\Roaming\\mcz-xoxo\\keylayout
 logFile=D:\\tmp\\qtbrynhildr.log

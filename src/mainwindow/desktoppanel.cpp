@@ -882,45 +882,70 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 	// KEY
 	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
 	  // send All key event in nativeEventFilter
+#if 0 // VK_XXXX -> VK_LXXXX/RXXXX
+	  static uchar pressedShiftKey;
+	  static uchar pressedControlKey;
+#endif // 0 // // VK_XXXX -> VK_LXXXX/RXXXX
 	  if (msg->message == WM_KEYDOWN){
-#if 0 // for TEST
-		// VK_LXXXX/RXXXX -> VK_XXXX
+#if 0 // VK_XXXX -> VK_LXXXX/RXXXX
+		// CONTROL/SHIFT
+		// VK_XXXX -> VK_LXXXX/RXXXX
 		switch(msg->wParam){
-		case VK_LSHIFT:
-		case VK_RSHIFT:
-		  msg->wParam = VK_SHIFT;
+		case VK_CONTROL:
+		  if (GetAsyncKeyState(VK_RCONTROL) & 0x01){
+			msg->wParam = VK_RCONTROL;
+			pressedControlKey = VK_RCONTROL;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Control, VK_RCONTROL);
+			}
+		  }
+		  else {
+			msg->wParam = VK_LCONTROL;
+			pressedControlKey = VK_LCONTROL;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Control, VK_LCONTROL);
+			}
+		  }
 		  break;
-		case VK_LCONTROL:
-		case VK_RCONTROL:
-		  msg->wParam = VK_CONTROL;
-		  break;
-		case VK_LMENU:
-		case VK_RMENU:
-		  msg->wParam = VK_MENU;
+		case VK_SHIFT:
+		  if (GetAsyncKeyState(VK_RSHIFT) & 0x01){
+			msg->wParam = VK_RSHIFT;
+			pressedShiftKey = VK_RSHIFT;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Shift, VK_RSHIFT);
+			}
+		  }
+		  else {
+			msg->wParam = VK_LSHIFT;
+			pressedShiftKey = VK_LSHIFT;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Shift, VK_LSHIFT);
+			}
+		  }
 		  break;
 		}
-#endif // for TEST
+#endif // 0 // VK_XXXX -> VK_LXXXX/RXXXX
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
 	  }
 	  else if (msg->message == WM_KEYUP){
-#if 0 // for TEST
-		// VK_LXXXX/RXXXX -> VK_XXXX
+#if 0 // VK_XXXX -> VK_LXXXX/RXXXX
+		// CONTROL/SHIFT
 		switch(msg->wParam){
-		case VK_LSHIFT:
-		case VK_RSHIFT:
-		  msg->wParam = VK_SHIFT;
+		case VK_CONTROL:
+		  msg->wParam = pressedControlKey;
+		  if (settings->getOutputKeyboardLog()){
+			outputKeyboardLog("Release", Qt::Key_Control, pressedControlKey);
+		  }
 		  break;
-		case VK_LCONTROL:
-		case VK_RCONTROL:
-		  msg->wParam = VK_CONTROL;
-		  break;
-		case VK_LMENU:
-		case VK_RMENU:
-		  msg->wParam = VK_MENU;
+		case VK_SHIFT:
+		  msg->wParam = pressedShiftKey;
+		  if (settings->getOutputKeyboardLog()){
+			outputKeyboardLog("Release", Qt::Key_Shift, pressedShiftKey);
+		  }
 		  break;
 		}
-#endif // for TEST
+#endif // 0 // VK_XXXX -> VK_LXXXX/RXXXX
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
 	  }

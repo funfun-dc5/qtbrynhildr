@@ -652,8 +652,8 @@ void Settings::readSettings()
 							   QTB_OUTPUTLOG_DEFAULT).toBool());
 
   // load outputKeyboardLog
-  //  setOutputKeyboardLog(settings->value(QTB_OUTPUTKEYBOARDLOG,
-  //									   QTB_OUTPUTKEYBOARDLOG_DEFAULT).toBool());
+  setOutputKeyboardLog(settings->value(QTB_OUTPUTKEYBOARDLOG,
+									   QTB_OUTPUTKEYBOARDLOG_DEFAULT).toBool());
 
 #if !QTB_PORTABLE_VERSION
   // load output path
@@ -937,7 +937,7 @@ void Settings::writeSettings()
   settings->setValue(QTB_OUTPUTLOG, outputLog);
 
   // save outputKeyboardLog
-  //  settings->setValue(QTB_OUTPUTKEYBOARDLOG, outputKeyboardLog);
+  settings->setValue(QTB_OUTPUTKEYBOARDLOG, outputKeyboardLog);
 
 #if !QTB_PORTABLE_VERSION
   // save outputPath

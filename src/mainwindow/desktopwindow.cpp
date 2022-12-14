@@ -144,7 +144,13 @@ void DesktopWindow::enterEvent(QEvent *event)
   if (settings->getOnControl()){
 	// taskbar assist
 	if (settings->getOnTaskbarAssist()){
+#if QT_VERSION >= 0x060000
+	  // QEnterEvent::position():QPointF
+	  QPoint pos = ((QEnterEvent*)event)->position().toPoint();
+#else // QT_VERSION < 0x060000
+	  // QEnterEvent::pos():QPoint
 	  QPoint pos = ((QEnterEvent*)event)->pos();
+#endif // QT_VERSION < 0x060000
 	  const int areaWidth = settings->getTaskbarAssistAreaWidth(); // width()/100;
 	  const int areaHeight = settings->getTaskbarAssistAreaHeight(); // height()/100;
 	  int windowWidth = width();

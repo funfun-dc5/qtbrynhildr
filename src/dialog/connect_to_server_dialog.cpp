@@ -355,13 +355,13 @@ void ConnectToServerDialog::resetting()
 void ConnectToServerDialog::on_lineEdit_hostname_textChanged()
 {
   if (outputLog)
-	cout << "text Changed : hostname : " << endl << flush; // for DEBUG
+	std::cout << "text Changed : hostname : " << std::endl << std::flush; // for DEBUG
 }
 #else // defined(QTB_DEV_TOUCHPANEL)
 void ConnectToServerDialog::on_comboBox_hostname_currentIndexChanged(int index)
 {
   if (outputLog)
-	cout << "index Changed : hostname : index = " << index << endl << flush; // for DEBUG
+	std::cout << "index Changed : hostname : index = " << index << std::endl << std::flush; // for DEBUG
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
@@ -369,28 +369,28 @@ void ConnectToServerDialog::on_comboBox_hostname_currentIndexChanged(int index)
 void ConnectToServerDialog::on_comboBox_hosttype_currentIndexChanged(int index)
 {
   if (outputLog)
-	cout << "index Changed : hosttype : index = " << index << endl << flush; // for DEBUG
+	std::cout << "index Changed : hosttype : index = " << index << std::endl << std::flush; // for DEBUG
 }
 
 // keyboard type field
 void ConnectToServerDialog::on_comboBox_keyboardtype_currentIndexChanged(int index)
 {
   if (outputLog)
-	cout << "index Changed : keyboardtype : index = " << index << endl << flush; // for DEBUG
+	std::cout << "index Changed : keyboardtype : index = " << index << std::endl << std::flush; // for DEBUG
 }
 
 // port no field
 void ConnectToServerDialog::on_spinBox_portno_valueChanged(int i)
 {
   if (outputLog)
-	cout << "value Changed : portno : value = " << i << endl << flush; // for DEBUG
+	std::cout << "value Changed : portno : value = " << i << std::endl << std::flush; // for DEBUG
 }
 
 // password field
 void ConnectToServerDialog::on_lineEdit_password_textChanged()
 {
   if (outputLog)
-	cout << "text Changed : password" << endl << flush; // for DEBUG
+	std::cout << "text Changed : password" << std::endl << std::flush; // for DEBUG
 
   // check
   QString password = lineEdit_password->text();
@@ -399,7 +399,7 @@ void ConnectToServerDialog::on_lineEdit_password_textChanged()
   }
   if (password.size() > ENCRYPTION_KEY_LENGTH){
 	// error
-	cout << "password is too long : " << password.size() << endl << flush;
+	std::cout << "password is too long : " << password.size() << std::endl << std::flush;
   }
 }
 
@@ -407,14 +407,14 @@ void ConnectToServerDialog::on_lineEdit_password_textChanged()
 void ConnectToServerDialog::on_comboBox_publicmode_currentIndexChanged(int index)
 {
   if (outputLog)
-	cout << "index Changed : publicmode : index = " << index << endl << flush; // for DEBUG
+	std::cout << "index Changed : publicmode : index = " << index << std::endl << std::flush; // for DEBUG
 }
 
 // show password field
 void ConnectToServerDialog::on_checkBox_showPassword_stateChanged(int state)
 {
   if (outputLog)
-	cout << "state Changed : show Password" << endl << flush; // for DEBUG
+	std::cout << "state Changed : show Password" << std::endl << std::flush; // for DEBUG
 
   if (state == Qt::Checked){
 	lineEdit_password->setEchoMode(QLineEdit::Normal);
@@ -428,12 +428,12 @@ void ConnectToServerDialog::on_checkBox_showPassword_stateChanged(int state)
 void ConnectToServerDialog::on_checkBox_fullScreen_stateChanged(int state)
 {
   if (outputLog){
-	cout << "state Changed : full Screen" << endl << flush; // for DEBUG
+	std::cout << "state Changed : full Screen" << std::endl << std::flush; // for DEBUG
 	if (state == Qt::Checked){
-	  cout << "full Screen: checked" << endl << flush; // for DEBUG
+	  std::cout << "full Screen: checked" << std::endl << std::flush; // for DEBUG
 	}
 	else {
-	  cout << "full Screen: unchecked" << endl << flush; // for DEBUG
+	  std::cout << "full Screen: unchecked" << std::endl << std::flush; // for DEBUG
 	}
   }
 }
@@ -442,12 +442,12 @@ void ConnectToServerDialog::on_checkBox_fullScreen_stateChanged(int state)
 void ConnectToServerDialog::on_checkBox_viewer_stateChanged(int state)
 {
   if (outputLog){
-	cout << "state Changed : viewer" << endl << flush; // for DEBUG
+	std::cout << "state Changed : viewer" << std::endl << std::flush; // for DEBUG
 	if (state == Qt::Checked){
-	  cout << "viewer: checked" << endl << flush; // for DEBUG
+	  std::cout << "viewer: checked" << std::endl << std::flush; // for DEBUG
 	}
 	else {
-	  cout << "viewer: unchecked" << endl << flush; // for DEBUG
+	  std::cout << "viewer: unchecked" << std::endl << std::flush; // for DEBUG
 	}
   }
 }
@@ -456,7 +456,7 @@ void ConnectToServerDialog::on_checkBox_viewer_stateChanged(int state)
 void ConnectToServerDialog::accept()
 {
   if (outputLog)
-	cout << "accept()." << endl << flush; // for DEBUG
+	std::cout << "accept()." << std::endl << std::flush; // for DEBUG
 
   // set values to settings
   setToSettings();
@@ -471,7 +471,7 @@ void ConnectToServerDialog::accept()
 void ConnectToServerDialog::reject()
 {
   if (outputLog)
-	cout << "reject()." << endl << flush; // for DEBUG
+	std::cout << "reject()." << std::endl << std::flush; // for DEBUG
   hide();
 }
 

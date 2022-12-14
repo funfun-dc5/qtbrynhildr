@@ -149,7 +149,7 @@ PROCESS_RESULT SoundThread::processForHeader()
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
-	cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << endl << flush; // error
+	std::cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << std::endl << std::flush; // error
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
@@ -164,7 +164,7 @@ PROCESS_RESULT SoundThread::processForHeader()
 	if (result){
 	  // new samplerate
 	  samplerate = com_data->samplerate;
-	  //	  cout << "samplerate: " << samplerate << endl << flush;
+	  //	  std::cout << "samplerate: " << samplerate << std::endl << std::flush;
 	}
 	else {
 	  // Yet: error
@@ -192,7 +192,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   }
   if (dataSize > QTB_SOUND_LOCAL_BUFFER_SIZE){
 	if (outputLog){
-	  cout << "[" << name << "] dataSize = " << dataSize << endl << flush; // error
+	  std::cout << "[" << name << "] dataSize = " << dataSize << std::endl << std::flush; // error
 	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
@@ -262,7 +262,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
   }
 
-  //cout << "[" << name << "]  receivedDataSize = " << receivedDataSize << endl << flush; // error
+  //std::cout << "[" << name << "]  receivedDataSize = " << receivedDataSize << std::endl << std::flush; // error
 
 #if QTB_SOUND_PUSH_MODE
   // put PCM data into sound device
@@ -347,7 +347,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	soundCacheSize = (long)(samplerate * 2 * 2 * (qreal)soundCacheTime/1000);
 	soundCacheSizeForLog = soundCacheSize;
 	if (settings->getOutputLog()){
-	  cout << "soundCacheSize = " << soundCacheSize << endl << flush;
+	  std::cout << "soundCacheSize = " << soundCacheSize << std::endl << std::flush;
 	}
   }
 
@@ -355,7 +355,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	double cacheRate = 0;
 	if (soundCacheSizeForLog != 0)
 	  cacheRate = (double)(soundBuffer->getSize())/soundCacheSizeForLog * 100.0;
-	cout << "[SoundThread] Sound Cache Rate : " << cacheRate << endl << flush;
+	std::cout << "[SoundThread] Sound Cache Rate : " << cacheRate << std::endl << std::flush;
   }
 
   // write into sound buffer
@@ -401,7 +401,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 {
   if (settings->getOutputLog()){
-	cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << endl << flush;
+	std::cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << std::endl << std::flush;
   }
 
   // audio format
@@ -429,11 +429,11 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // supported Sample Rates
   if (settings->getOutputLog()){
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
-	cout << "supported Sample Rates : ";
+	std::cout << "supported Sample Rates : ";
 	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
-	  cout << (int)(*i) << " ";
+	  std::cout << (int)(*i) << " ";
 	}
-	cout << endl << flush;
+	std::cout << std::endl << std::flush;
   }
   if (!settings->getOnSound()){
 	// Sound OFF
@@ -466,8 +466,8 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	audioOutput = 0;
   }
   audioOutput = new QAudioOutput(deviceInfo, format);
-  //  cout << "bufferSize: " << audioOutput->bufferSize() << endl << flush;
-  //  cout << "periodSize: " << audioOutput->periodSize() << endl << flush;
+  //  std::cout << "bufferSize: " << audioOutput->bufferSize() << std::endl << std::flush;
+  //  std::cout << "periodSize: " << audioOutput->periodSize() << std::endl << std::flush;
   // set sound buffer size
   audioOutput->setBufferSize(QTB_SOUND_BUFFER_SIZE);
 
@@ -489,8 +489,8 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // start output
   output = audioOutput->start();
 
-  //  cout << "bufferSize: " << audioOutput->bufferSize() << endl << flush;
-  //  cout << "periodSize: " << audioOutput->periodSize() << endl << flush;
+  //  std::cout << "bufferSize: " << audioOutput->bufferSize() << std::endl << std::flush;
+  //  std::cout << "periodSize: " << audioOutput->periodSize() << std::endl << std::flush;
   if (settings->getOutputLog()){
 	QString str;
 	str = "Sound Device BufferSize : " + QString::number(audioOutput->bufferSize()) + " (bytes)";
@@ -522,8 +522,8 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 // output received data
 void SoundThread::outputReceivedData(long receivedDataSize, const char *filename)
 {
-  fstream file;
-  file.open(filename, ios::out | ios::binary | ios::app);
+  std::fstream file;
+  file.open(filename, std::ios::out | std::ios::binary | std::ios::app);
   if (file.is_open()){
 	file.write(buffer, receivedDataSize);
 	file.close();
@@ -537,9 +537,9 @@ void SoundThread::createWavFile(int pcmFileSize)
   if (pcmFileSize <= 0)
 	return;
 
-  fstream file;
+  std::fstream file;
   char filename[] = "pcm/" QTB_SOUND_OUTPUT_WAV_FILENAME;
-  file.open(filename, ios::out | ios::binary);
+  file.open(filename, std::ios::out | std::ios::binary);
   if (file.is_open()){
 	// 1) Riff Header
 	RiffHeader riffHeader;
@@ -584,8 +584,8 @@ void SoundThread::createWavFile(int pcmFileSize)
 
 	// copy PCM raw data to DataChunk(waveformData[])
 	char in_filename[] = "pcm/" QTB_SOUND_OUTPUT_FILENAME;
-	fstream in_file;
-	in_file.open(in_filename, ios::in | ios::binary);
+	std::fstream in_file;
+	in_file.open(in_filename, std::ios::in | std::ios::binary);
 	if (in_file.is_open()){
 	  while(pcmFileSize > 0){
 		char buf[512*1024]; // 512KB buffer
@@ -607,7 +607,7 @@ void SoundThread::createWavFile(int pcmFileSize)
 void SoundThread::handleStateChanged(QAudio::State state)
 {
 #if defined(DEBUG)
-  cout << "state = " << state << endl << flush;
+  std::cout << "state = " << state << std::endl << std::flush;
 #else // defined(DEBUG)
   Q_UNUSED(state);
 #endif // defined(DEBUG)
@@ -616,7 +616,7 @@ void SoundThread::handleStateChanged(QAudio::State state)
 #if 0 // for TEST
 void SoundThread::notify()
 {
-  cout << "called notify" << endl << flush;
+  std::cout << "called notify" << std::endl << std::flush;
 }
 #endif // 0 // for TEST
 

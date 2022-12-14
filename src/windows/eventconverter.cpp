@@ -87,7 +87,7 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 
 #ifdef USE_KEYLAYOUTFILE
 #if 0 // for TEST
-  fstream file;
+  std::fstream file;
   file.open("keyEventTable_JP.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
 	file.write((char *)keyEventTable_JP, sizeof(KeyEvent)*TABLE_SIZE_JP);

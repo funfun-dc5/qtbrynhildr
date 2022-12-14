@@ -40,7 +40,7 @@ HttpGetter::~HttpGetter()
 bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
 {
   if (outputLog){
-	cout << "enter startDownload()" << endl << flush;
+	std::cout << "enter startDownload()" << std::endl << std::flush;
   }
 
   // check SSL support
@@ -62,7 +62,7 @@ bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
   startRequest(newUrl);
 
   if (outputLog){
-	cout << "leave startDownload()" << endl << flush;
+	std::cout << "leave startDownload()" << std::endl << std::flush;
   }
 
   return true;
@@ -72,7 +72,7 @@ bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
 bool HttpGetter::startDownload(const QString &urlSpec)
 {
   if (outputLog){
-	cout << "enter startDownload()" << endl << flush;
+	std::cout << "enter startDownload()" << std::endl << std::flush;
   }
 
   // check SSL support
@@ -92,7 +92,7 @@ bool HttpGetter::startDownload(const QString &urlSpec)
   startRequest(newUrl);
 
   if (outputLog){
-	cout << "leave startDownload()" << endl << flush;
+	std::cout << "leave startDownload()" << std::endl << std::flush;
   }
 
   return true;
@@ -102,7 +102,7 @@ bool HttpGetter::startDownload(const QString &urlSpec)
 void HttpGetter::cancelDownload()
 {
   if (outputLog){
-	cout << "enter cancelDownload()" << endl << flush;
+	std::cout << "enter cancelDownload()" << std::endl << std::flush;
   }
 
   httpRequestAborted = true;
@@ -112,7 +112,7 @@ void HttpGetter::cancelDownload()
 	byteArray.clear();
 
   if (outputLog){
-	cout << "leave cancelDownload()" << endl << flush;
+	std::cout << "leave cancelDownload()" << std::endl << std::flush;
   }
 }
 
@@ -138,7 +138,7 @@ void HttpGetter::clear()
 QFile *HttpGetter::openFileForWrite(const QString &fileName)
 {
   if (outputLog){
-	cout << "enter openFileForWrite()" << endl << flush;
+	std::cout << "enter openFileForWrite()" << std::endl << std::flush;
   }
 
   QScopedPointer<QFile> file(new QFile(fileName));
@@ -147,7 +147,7 @@ QFile *HttpGetter::openFileForWrite(const QString &fileName)
   }
 
   if (outputLog){
-	cout << "leave openFileForWrite()" << endl << flush;
+	std::cout << "leave openFileForWrite()" << std::endl << std::flush;
   }
 
   return file.take();
@@ -157,7 +157,7 @@ QFile *HttpGetter::openFileForWrite(const QString &fileName)
 void HttpGetter::startRequest(const QUrl &url)
 {
   if (outputLog){
-	cout << "enter startRequest()" << endl << flush;
+	std::cout << "enter startRequest()" << std::endl << std::flush;
   }
 
   this->url = url;
@@ -168,14 +168,14 @@ void HttpGetter::startRequest(const QUrl &url)
   connect(reply, &QIODevice::readyRead, this, &HttpGetter::httpReadyRead);
 
   if (outputLog){
-	cout << "leave startRequest()" << endl << flush;
+	std::cout << "leave startRequest()" << std::endl << std::flush;
   }
 }
 
 void HttpGetter::httpFinished()
 {
   if (outputLog){
-	cout << "enter httpFinished()" << endl << flush;
+	std::cout << "enter httpFinished()" << std::endl << std::flush;
   }
 
   QFileInfo fi;
@@ -206,14 +206,14 @@ void HttpGetter::httpFinished()
   emit finished();
 
   if (outputLog){
-	cout << "leave httpFinished()" << endl << flush;
+	std::cout << "leave httpFinished()" << std::endl << std::flush;
   }
 }
 
 void HttpGetter::httpReadyRead()
 {
   if (outputLog){
-	cout << "enter httpReadyRead()" << endl << flush;
+	std::cout << "enter httpReadyRead()" << std::endl << std::flush;
   }
 
   if (file != Q_NULLPTR){
@@ -224,7 +224,7 @@ void HttpGetter::httpReadyRead()
   }
 
   if (outputLog){
-	cout << "leave httpReadyRead()" << endl << flush;
+	std::cout << "leave httpReadyRead()" << std::endl << std::flush;
   }
 }
 
@@ -234,10 +234,10 @@ void HttpGetter::slotAuthenticationRequired(QNetworkReply *reply, QAuthenticator
   Q_UNUSED(authenthicator);
 
   if (outputLog){
-	cout << "enter slotAuthenticationRequired()!" << endl << flush;
+	std::cout << "enter slotAuthenticationRequired()!" << std::endl << std::flush;
   }
   if (outputLog){
-	cout << "leave slotAuthenticationRequired()!" << endl << flush;
+	std::cout << "leave slotAuthenticationRequired()!" << std::endl << std::flush;
   }
 }
 
@@ -245,7 +245,7 @@ void HttpGetter::slotAuthenticationRequired(QNetworkReply *reply, QAuthenticator
 void HttpGetter::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 {
   if (outputLog){
-	cout << "enter sslErrors()" << endl << flush;
+	std::cout << "enter sslErrors()" << std::endl << std::flush;
   }
 
   QString errorString;
@@ -261,7 +261,7 @@ void HttpGetter::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
   reply->ignoreSslErrors();
 
   if (outputLog){
-	cout << "leave sslErrors()" << endl << flush;
+	std::cout << "leave sslErrors()" << std::endl << std::flush;
   }
 }
 

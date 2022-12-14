@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
   // for TEST and DEBUG
   if (!qtbrynhildr::checkProtocolHeader(false)){
-	cout << "Failed: checkProtocolHeader(). header size or member offset error!" << endl << flush;
+	std::cout << "Failed: checkProtocolHeader(). header size or member offset error!" << std::endl << std::flush;
 	::exit(EXIT_FAILURE);
   }
 
@@ -79,11 +79,11 @@ int main(int argc, char *argv[])
 						 //					   qApp->applicationDirPath());
 						 app.applicationDirPath());
 	if (result){
-	  //	  cout << "Found translation file." << endl << flush;
+	  //	  std::cout << "Found translation file." << std::endl << std::flush;
 	  app.installTranslator(&appTranslator);
 	}
 	else {
-	  cout << "Not found translation file. qtbrynhildr_*.qm" << endl << flush;
+	  std::cout << "Not found translation file. qtbrynhildr_*.qm" << std::endl << std::flush;
 	}
   }
   // for Translation Qt
@@ -96,11 +96,11 @@ int main(int argc, char *argv[])
 						   //					   qApp->applicationDirPath());
 						   app.applicationDirPath());
 	if (result){
-	  //	  cout << "Found translation file." << endl << flush;
+	  //	  std::cout << "Found translation file." << std::endl << std::flush;
 	  app.installTranslator(&appTranslatorQt);
 	}
 	else {
-	  cout << "Not found translation file. qt_*.qm" << endl << flush;
+	  std::cout << "Not found translation file. qt_*.qm" << std::endl << std::flush;
 	}
   }
 

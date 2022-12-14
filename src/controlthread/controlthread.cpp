@@ -435,7 +435,7 @@ void ControlThread::setupHeader()
   }
 
 #if 0 // for DEBUG
-  ios::fmtflags flags = cout.flags();
+  std::ios::fmtflags flags = cout.flags();
   cout << "keycode     = " << hex << (int)com_data->keycode << endl;
   cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
   cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
@@ -1224,8 +1224,8 @@ bool ControlThread::sendFile()
   sentDataSize = sendData(fileTimeStamp, QTB_TIMESTAMP_IMAGE_SIZE);
 
   // send file image
-  fstream file;
-  file.open(qPrintable(fileName), ios::in | ios::binary);
+  std::fstream file;
+  file.open(qPrintable(fileName), std::ios::in | std::ios::binary);
   if (file.is_open()){
 	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
 	  // read to buffer
@@ -1323,9 +1323,9 @@ bool ControlThread::receiveFile()
   receivedDataSize = receiveData(fileTimeStamp, QTB_TIMESTAMP_IMAGE_SIZE);
 
   // get file image
-  fstream file;
+  std::fstream file;
   QString localFilename = settings->getOutputPath() + filename;
-  file.open(qPrintable(localFilename), ios::out | ios::binary);
+  file.open(qPrintable(localFilename), std::ios::out | std::ios::binary);
   if (file.is_open()){
 	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
 	  receivedDataSize = receiveData(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
@@ -1387,8 +1387,8 @@ bool ControlThread::receiveMouseCursorImage()
   }
 #if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
-	fstream file;
-	file.open("jpg/andMaskImage.bin", ios::out | ios::binary | ios::trunc);
+	std::fstream file;
+	file.open("jpg/andMaskImage.bin", std::ios::out | std::ios::binary | std::ios::trunc);
 	if (file.is_open()){
 	  file.write((char*)andMaskImage, receivedDataSize);
 	  file.close();
@@ -1406,8 +1406,8 @@ bool ControlThread::receiveMouseCursorImage()
   }
 #if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
-	fstream file;
-	file.open("jpg/xorMaskImage.bin", ios::out | ios::binary | ios::trunc);
+	std::fstream file;
+	file.open("jpg/xorMaskImage.bin", std::ios::out | std::ios::binary | std::ios::trunc);
 	if (file.is_open()){
 	  file.write((char*)xorMaskImage, receivedDataSize);
 	  file.close();

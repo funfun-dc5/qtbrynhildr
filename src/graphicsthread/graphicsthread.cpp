@@ -183,7 +183,7 @@ PROCESS_RESULT GraphicsThread::processForHeader()
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
-	cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << endl << flush; // error
+	std::cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << std::endl << std::flush; // error
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
@@ -224,7 +224,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
   }
   if (dataSize > QTB_GRAPHICS_LOCAL_BUFFER_SIZE){
 	if (outputLog){
-	  cout << "[" << name << "] dataSize = " << dataSize << endl << flush; // error
+	  std::cout << "[" << name << "] dataSize = " << dataSize << std::endl << std::flush; // error
 	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
@@ -242,8 +242,8 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #endif // TEST_THREAD
 
 #if 0 // for TEST
-  cout << "[" << name << "] frame no = " << (int)com_data->frame_no << endl;
-  cout << "[" << name << "] receivedDataSize = " << receivedDataSize << endl << flush;
+  std::cout << "[" << name << "] frame no = " << (int)com_data->frame_no << std::endl;
+  std::cout << "[" << name << "] receivedDataSize = " << receivedDataSize << std::endl << std::flush;
 #endif // for TEST
 
   // == VIDEO_MODE_MJPEG ==
@@ -272,7 +272,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
 #if 0 // for TEST
   {
-	fstream file;
+	std::fstream file;
 
 	file.open("test.vp8", ios::out | ios::binary | ios::app);
 	if (file.is_open()){
@@ -307,7 +307,7 @@ void GraphicsThread::connectedToServer()
   decoderMode7 = decoderMode7Map.value(settings->getSIMDOperationTypeName());
 #if 0 // for TEST
   if (decoderMode7 != 0){
-	cout << "decoder : " << decoderMode7->name() << endl << flush;
+	std::cout << "decoder : " << decoderMode7->name() << std::endl << std::flush;
   }
   else {
 	qDebug() << "decoderMode7 == 0 for " << settings->getSIMDOperationTypeName();
@@ -581,7 +581,7 @@ qreal GraphicsThread::getDesktopScalingFactor(QSize size)
 	unsigned long maxImageDataSize = settings->getDesktop()->getMaxImageDataSize();
 	if (maxImageDataSize == 0){
 	  if (settings->getOutputLog()){
-		cout << "[DesktopPanel] scaled... maxImageDataSize = " << maxImageDataSize << endl << flush;
+		std::cout << "[DesktopPanel] scaled... maxImageDataSize = " << maxImageDataSize << std::endl << std::flush;
 	  }
 	  return scalingFactor;
 	}
@@ -611,8 +611,8 @@ qreal GraphicsThread::getDesktopScalingFactor(QSize size)
 		else {
 		  // Can't shmget() in QXcbShmImage::QXcbShmImage() in qxcbbackingstore.cpp
 		  if (settings->getOutputLog()){
-			cout << "[DesktopPanel] Can't scale... imageDataSize    = " << imageDataSize << endl;
-			cout << "[DesktopPanel] Can't scale... maxImageDataSize = " << maxImageDataSize << endl << flush;
+			std::cout << "[DesktopPanel] Can't scale... imageDataSize    = " << imageDataSize << std::endl;
+			std::cout << "[DesktopPanel] Can't scale... maxImageDataSize = " << maxImageDataSize << std::endl << std::flush;
 		  }
 		  // scale down
 		  scalingFactor -= unitFactor;
@@ -642,7 +642,7 @@ qreal GraphicsThread::getDesktopScalingFactor(QSize size)
 // check skip frame
 bool GraphicsThread::doSkipFrame(char frame_no)
 {
-  //cout << "[" << name << "] frame_no : " << (int)(uchar)frame_no << endl << flush;
+  //std::cout << "[" << name << "] frame_no : " << (int)(uchar)frame_no << std::endl << std::flush;
 
   int currentFrameNo = (uchar)frame_no;
 
@@ -652,8 +652,8 @@ bool GraphicsThread::doSkipFrame(char frame_no)
 
   // check skip frame
   int frameNo = frameNoOfServer;
-  //cout << "frameNo : " << frameNo << endl << flush;
-  //cout << "currentFrameNo : " << currentFrameNo << endl << flush;
+  //std::cout << "frameNo : " << frameNo << std::endl << std::flush;
+  //std::cout << "currentFrameNo : " << currentFrameNo << std::endl << std::flush;
   if (frameNo < currentFrameNo){
 	 frameNo += 255;
   }
@@ -663,7 +663,7 @@ bool GraphicsThread::doSkipFrame(char frame_no)
 
   if (delay > threshold){
 	// need skip frame
-	//cout << "doSkipFrame! delay =  " << delay << endl << flush;
+	//std::cout << "doSkipFrame! delay =  " << delay << std::endl << std::flush;
 	return true;
   }
   else {

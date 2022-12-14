@@ -43,7 +43,7 @@ bool DecoderVP8::preprocess(char *buffer, int size)
   if (outputLog){
 	static bool flag = true;
 	if (flag){
-	  cout << "DecoderVP8::preprocess()" << endl << flush;
+	  std::cout << "DecoderVP8::preprocess()" << std::endl << std::flush;
 	  flag = false;
 	}
   }

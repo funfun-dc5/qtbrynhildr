@@ -78,7 +78,7 @@ int KeyLayoutFileReader::getIndexOfKeyboardType(QString keyboardTypeName)
 // read a key layout file
 void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 {
-  fstream file;
+  std::fstream file;
   char fullname[QTB_MAXPATHLEN+1];
   snprintf(fullname, QTB_MAXPATHLEN, "%s/%s", path, filename);
 

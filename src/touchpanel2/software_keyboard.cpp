@@ -82,7 +82,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 
 #ifdef USE_KEYLAYOUTFILE
 #if 0 // for TEST
-  fstream file;
+  std::fstream file;
   file.open("keyTopTable_JP.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
 	file.write((char *)&keyTopTable_JP[1], sizeof(KeyTop)*(ID_KEY_NUM-1));

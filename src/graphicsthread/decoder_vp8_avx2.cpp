@@ -30,7 +30,7 @@ QImage* DecoderVP8AVX2::getDesktopImage(int numOfThread)
   if (outputLog){
 	static bool flag = true;
 	if (flag){
-	  cout << "DecoderVP8AVX2::getDesktopImage()" << endl << flush;
+	  std::cout << "DecoderVP8AVX2::getDesktopImage()" << std::endl << std::flush;
 	  flag = false;
 	}
   }

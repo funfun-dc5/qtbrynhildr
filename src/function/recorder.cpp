@@ -41,7 +41,7 @@ Recorder::Recorder(Settings *settings)
   QString tempFileName = QDir::toNativeSeparators(QDir::tempPath() + QDir::separator() +
 												  RECORDER_TMP_FILENAME);
   filename = qPrintable(tempFileName);
-  //  cout << "filename = " << filename << endl << flush;
+  //  std::cout << "filename = " << filename << std::endl << std::flush;
 }
 
 // destructor
@@ -57,12 +57,12 @@ Recorder::~Recorder()
 // start recording
 void Recorder::startRecording()
 {
-  file.open(filename, ios::out | ios::binary);
+  file.open(filename, std::ios::out | std::ios::binary);
   if (file.is_open()){
 	dataSize = checkSum = 0;
 	settings->setOnRecordingControl(true);
 	if (outputLog)
-	  cout << "open : " << filename  << endl << flush;
+	  std::cout << "open : " << filename  << std::endl << std::flush;
   }
 }
 
@@ -72,16 +72,16 @@ void Recorder::stopRecording(const char* saveFileName)
   if (file.is_open()){
 	file.close();
 	if (outputLog)
-	  cout << "close : " << endl << flush;
+	  std::cout << "close : " << std::endl << std::flush;
   }
   settings->setOnRecordingControl(false);
 
   // make fileName (header + raw)
 #if 0 // copy for TEST
-  fstream in_file;
-  fstream out_file;
-  in_file.open(filename, ios::in | ios::binary);
-  out_file.open(saveFileName, ios::out | ios::binary);
+  std::fstream in_file;
+  std::fstream out_file;
+  in_file.open(filename, std::ios::in | std::ios::binary);
+  out_file.open(saveFileName, std::ios::out | std::ios::binary);
   // write FileHeader
   makeFileHeader();
   out_file.write((char*)header, sizeof(FileHeader));
@@ -98,10 +98,10 @@ void Recorder::stopRecording(const char* saveFileName)
 #else // copy for TEST
   if (rename(filename, saveFileName) == 0){
 	if (outputLog)
-	  cout << "succeeded to rename()." << endl << flush;
+	  std::cout << "succeeded to rename()." << std::endl << std::flush;
   }
   else {
-	cout << "failed to rename()." << endl << flush;
+	std::cout << "failed to rename()." << std::endl << std::flush;
   }
 #endif // copy for TEST
 }
@@ -124,7 +124,7 @@ void Recorder::putCOM_DATA(COM_DATA *com_data)
 		checkSum += sizeof(BodyEntry); // for TEST
 		counter++;
 		if (outputLog)
-		  cout << "Write : " << bodyEntry.counter << " : com_data" << endl << flush;
+		  std::cout << "Write : " << bodyEntry.counter << " : com_data" << std::endl << std::flush;
 	  }
 	}
 	// set new com_data
@@ -138,7 +138,7 @@ void Recorder::startReplaying()
 {
   char loadFileName[QTB_MAXPATHLEN+1];
   snprintf(loadFileName, QTB_MAXPATHLEN, "%s", settings->getReplayingControlFileName());
-  file.open(loadFileName, ios::in | ios::binary);
+  file.open(loadFileName, std::ios::in | std::ios::binary);
   if (file.is_open()){
 	// read FileHeader and check
 	file.read((char*)header, sizeof(FileHeader));
@@ -152,11 +152,11 @@ void Recorder::startReplaying()
 	settings->setOnReplayingControl(true);
 	bodyEntry.counter = 0;
 	if (outputLog)
-	  cout << "succeded top open : " << loadFileName  << endl << flush;
+	  std::cout << "succeded top open : " << loadFileName  << std::endl << std::flush;
   }
   else {
 	if (outputLog)
-	  cout << " failed to open : " << loadFileName  << endl << flush;
+	  std::cout << " failed to open : " << loadFileName  << std::endl << std::flush;
   }
 }
 
@@ -166,7 +166,7 @@ void Recorder::stopReplaying()
   if (file.is_open()){
 	file.close();
 	if (outputLog)
-	  cout << "close : " << endl << flush;
+	  std::cout << "close : " << std::endl << std::flush;
   }
 }
 
@@ -182,7 +182,7 @@ COM_DATA *Recorder::getCOM_DATA()
 	  checkSum += sizeof(BodyEntry); // for TEST
 	  counter++;
 	  if (outputLog)
-		cout << "read next entry! : " << counter << endl << flush;
+		std::cout << "read next entry! : " << counter << std::endl << std::flush;
 	  if (file.eof()){
 		stopReplaying();
 	  }
@@ -240,20 +240,20 @@ bool Recorder::checkFileHeader()
 {
   // magic
   if (memcmp(header->magic, QTB_RECORDER_MAGIC, QTB_RECORDER_MAGIC_LENGTH) != 0){
-	cout << "illegal magic!" << endl << flush;
+	std::cout << "illegal magic!" << std::endl << std::flush;
 	return false;
   }
 
   // server name
   if (strncmp(header->server, qPrintable(settings->getServerName()), 63) != 0){
 	// different server name
-	cout << "illegal server!" << endl << flush;
+	std::cout << "illegal server!" << std::endl << std::flush;
 	return false;
   }
 
   // type of server OS
   if (header->serverType != settings->getServerType()){
-	cout << "illegal server type!" << endl << flush;
+	std::cout << "illegal server type!" << std::endl << std::flush;
 	return false;
   }
 

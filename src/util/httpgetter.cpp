@@ -135,6 +135,7 @@ void HttpGetter::clear()
 }
 
 // open file for download
+#if QT_VERSION < 0x060000
 QFile *HttpGetter::openFileForWrite(const QString &fileName)
 {
   if (outputLog){
@@ -152,7 +153,25 @@ QFile *HttpGetter::openFileForWrite(const QString &fileName)
 
   return file.take();
 }
+#else // QT_VERSION >= 0x060000
+QFile *HttpGetter::openFileForWrite(const QString &fileName)
+{
+  if (outputLog){
+	std::cout << "enter openFileForWrite()" << std::endl << std::flush;
+  }
 
+  std::unique_ptr<QFile> file(new QFile(fileName));
+  if (!file->open(QIODevice::WriteOnly)){
+	return Q_NULLPTR;
+  }
+
+  if (outputLog){
+	std::cout << "leave openFileForWrite()" << std::endl << std::flush;
+  }
+
+  return file.release();
+}
+#endif // QT_VERSION >= 0x060000
 // start request
 void HttpGetter::startRequest(const QUrl &url)
 {

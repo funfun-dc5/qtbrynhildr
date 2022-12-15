@@ -8,7 +8,13 @@
 #include <cstring>
 
 // Qt Header
+#if QT_VERSION < 0x060000
 #include <QAudioDeviceInfo>
+#else // QT_VERSION >= 0x060000
+#include <QAudioDevice>
+#include <QMediaDevices>
+#include <QStringRef>
+#endif // QT_VERSION >= 0x060000
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
@@ -492,6 +498,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 
   // Supported Sound Sample Rate List
+#if QT_VERSION < 0x060000
   {
 	const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
@@ -502,6 +509,23 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	}
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
   }
+#else // QT_VERSION >= 0x060000
+  {
+	QAudioDevice defaultAudioOutput = QMediaDevices::defaultAudioOutput();
+	QString str = "Supported Sampling Rate (Hz): ";
+	if (defaultAudioOutput.isNull()){
+	  str =  str + " None";
+	  hasSoundDevice = false;
+	}
+	else {
+	  str = str +
+		QString::number(defaultAudioOutput.minimumSampleRate()) + " -  " +
+		QString::number(defaultAudioOutput.maximumSampleRate());
+	  hasSoundDevice = true;
+	}
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+  }
+#endif // QT_VERSION >= 0x060000
   // sound device check
   if (!hasSoundDevice){
 	// no sound device
@@ -3984,6 +4008,7 @@ void QtBrynhildr::exit()
   // output average of frame rate
   // get total frame counter
   totalFrameCounter = graphicsThread->getTotalFrameCounter();
+#if QT_VERSION < 0x060000
   if (totalFrameCounter != 0){
 	//	std::cout << "totalFrameCounter = " << totalFrameCounter << std::endl << std::flush;
 	uint diffSeconds = shutdownTime.toTime_t() - bootTime.toTime_t();
@@ -3995,6 +4020,19 @@ void QtBrynhildr::exit()
 	  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("FPS of last session : ") + averageFrameRateString + " FPS");
 	}
   }
+#else // QT_VERSION >= 0x060000
+  if (totalFrameCounter != 0){
+	//	std::cout << "totalFrameCounter = " << totalFrameCounter << std::endl << std::flush;
+	uint diffSeconds = shutdownTime.toSecsSinceEpoch() - bootTime.toSecsSinceEpoch();
+	if (diffSeconds != 0){
+	  float averageFrameRate = (float)totalFrameCounter/diffSeconds;
+	  //	  std::cout << "FPS of last session: " << averageFrameRate << std::endl << std::flush;
+	  QString averageFrameRateString;
+	  averageFrameRateString.setNum(averageFrameRate);
+	  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("FPS of last session : ") + averageFrameRateString + " FPS");
+	}
+  }
+#endif // QT_VERSION >= 0x060000
 
   // quit
   qApp->quit();
@@ -5837,26 +5875,24 @@ void QtBrynhildr::finishedDownload()
   if (startIndex > 0) {
 	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
 	int lastIndex = releasePage.indexOf("\"", startIndex);
-	//  std::cout << "startIndex = " << startIndex << std::endl << std::flush;
-	//  std::cout << "lastIndex  = " << lastIndex << std::endl << std::flush;
+	//std::cout << "startIndex = " << startIndex << std::endl << std::flush;
+	//std::cout << "lastIndex  = " << lastIndex << std::endl << std::flush;
 	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
 	QString latestTag;
 	latestTag.append(tagRef);
-	//	std::cout << "latest tag = v" << qPrintable(latestTag) << std::endl;
+	//std::cout << "latest tag = v" << qPrintable(latestTag) << std::endl;
 
 	startIndex = lastIndex + 2;
 	lastIndex = releasePage.indexOf("<", startIndex);
 	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
 	QString ver;
 	ver.append(verRef);
-	//	  std::cout << " : ver = " << qPrintable(ver) << std::endl << std::flush;
+	//std::cout << " : ver = " << qPrintable(ver) << std::endl << std::flush;
 
 	QString tag(option->getVersionString());
-	//	  tag = "169";
-	//	std::cout << "current tag = v" <<  qPrintable(tag) << std::endl << std::flush;
 	if (tag != latestTag){
 	  // Found new version
-	  //		std::cout << "Found new version" << std::endl << std::flush;
+	  //std::cout << "Found new version" << std::endl << std::flush;
 	  int ret = QMessageBox::question(this,
 									  tr("Confirm"),
 									  tr("Found new release. Open release page?"),

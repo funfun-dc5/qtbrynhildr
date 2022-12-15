@@ -869,7 +869,11 @@ void DesktopPanel::dropEvent(QDropEvent *event)
 
 #if defined(Q_OS_WIN)
 // native event filter
+#if QT_VERSION < 0x060000
 bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+#else // QT_VERSION >= 0x060000
+bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
+#endif // QT_VERSION >= 0x060000
 {
   Q_UNUSED(result);
 

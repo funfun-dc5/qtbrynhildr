@@ -11,7 +11,12 @@
 
 // Qt Header
 #include <QAudio>
+#if QT_VERSION < 0x060000
 #include <QAudioDeviceInfo>
+#else // QT_VERSION >= 0x060000
+#include <QMediaDevices>
+#include <QAudioSink>
+#endif // QT_VERSION >= 0x060000
 
 // Local Header
 #include "soundthread.h"
@@ -363,6 +368,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	if (audioOutput->state() != QAudio::StoppedState){
 	  //	  soundCacheSize = 0;
 
+#if 0 // for TEST
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 	  while(chunks){
@@ -385,6 +391,18 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 
 		--chunks;
 	  }
+#else // 0 // for TEST
+	  // get free size of buffer
+	  int len = audioOutput->bytesFree();
+	  // write PCM data
+	  if (len != 0){
+		qint64 result = output->write(soundBuffer->get(len), len);
+		if (result != len){
+		  // Failed to write
+		  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
+		}
+	  }
+#endif // 0 // for TEST
 	}
 #if 0 // for TEST
 	else {
@@ -398,6 +416,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 }
 
 // change samplerate
+#if QT_VERSION < 0x060000
 bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 {
   if (settings->getOutputLog()){
@@ -518,6 +537,134 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 
   return true;
 }
+#else // QT_VERSION >= 0x060000
+bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
+{
+  if (settings->getOutputLog()){
+	std::cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << std::endl << std::flush;
+  }
+
+  // audio device information
+  const QAudioDevice defaultAudioOutput = QMediaDevices::defaultAudioOutput();
+
+  // audio format
+  QAudioFormat format = defaultAudioOutput.preferredFormat();
+
+  // setting for sound format
+  format.setSampleRate((int)samplerate);
+  format.setChannelCount(2); // channel
+  format.setSampleFormat(QAudioFormat::Int16); // 16bits
+#if 0 // for TEST
+  format.setCodec("audio/pcm"); // PCM
+  format.setByteOrder(QAudioFormat::LittleEndian);
+  format.setSampleType(QAudioFormat::SignedInt);
+#endif // 0 // for TEST
+
+  {
+	QString str;
+	str = "SoundType : " + QString::number(settings->getSoundType());
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SoundCacheTime : " + QString::number(settings->getSoundCacheTime()) + " (ms)";
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SampleRate : " + QString::number(samplerate) + " (Hz)";
+	emit outputLogMessage(PHASE_SOUND, str);
+  }
+  // supported Sample Rates
+  if (settings->getOutputLog()){
+	QString str = "Supported Sampling Rate (Hz): ";
+	if (defaultAudioOutput.isNull()){
+	  str =  str + " None";
+	}
+	else {
+	  str = str +
+		QString::number(defaultAudioOutput.minimumSampleRate()) + " -  " +
+		QString::number(defaultAudioOutput.maximumSampleRate());
+	}
+	std::cout << qPrintable(str) << std::endl << std::flush;
+  }
+  if (!settings->getOnSound()){
+	// Sound OFF
+	return true;
+  }
+  if (!defaultAudioOutput.isFormatSupported(format)){
+	if (audioOutput != 0){
+	  audioOutput->stop();
+	  delete audioOutput;
+	  audioOutput = 0;
+	}
+	// NOT supported sample rate!
+	if (!settings->getOnSoundCriticalMessageDisable()){
+	  emit outputLogMessage(QTB_MSG_NOTSUPPORT_SAMPLE_RATE);
+	}
+	if (settings->getOutputLog()){
+	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
+	  emit outputLogMessage(PHASE_SOUND, msg);
+	}
+	return true; // NOT supported sample rate
+  }
+
+  // clean sound buffer
+  soundBuffer->clear();
+
+  // create Audio Output
+  if (audioOutput != 0){
+	audioOutput->stop();
+	delete audioOutput;
+	audioOutput = 0;
+  }
+  audioOutput = new QAudioSink(defaultAudioOutput, format);
+  audioOutput->setBufferSize(QTB_SOUND_BUFFER_SIZE);
+
+  // stateChanged
+  connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
+
+#if defined(Q_OS_LINUX)
+  // for Runtime Message of QAudio::State (Qt Static Library Version)
+  // QObject::connect: Cannot queue arguments of type 'QAudio::State'
+  // (Make sure 'QAudio::State' is registered using qRegisterMetaType().)
+  qRegisterMetaType<QAudio::State>("QAudio::State");
+#endif // defined(Q_OS_LINUX)
+
+#if 0 // for TEST
+  audioOutput->setNotifyInterval(1000); // 1000 (ms)
+  connect(audioOutput, SIGNAL(notify()), SLOT(notify()));
+#endif // 0 // for TEST
+
+  // start output
+  output = audioOutput->start();
+
+  //  std::cout << "bufferSize: " << audioOutput->bufferSize() << std::endl << std::flush;
+  //  std::cout << "periodSize: " << audioOutput->periodSize() << std::endl << std::flush;
+  if (settings->getOutputLog()){
+	QString str;
+	str = "Sound Device BufferSize : " + QString::number(audioOutput->bufferSize()) + " (bytes)";
+	emit outputLogMessage(PHASE_SOUND, str);
+#if 0 // for TEST
+	str = "Sound Device PeriodSize : " + QString::number(audioOutput->periodSize()) + " (bytes)";
+	emit outputLogMessage(PHASE_SOUND, str);
+#endif // 0 // for TEST
+  }
+
+#if QTB_CELT_SUPPORT
+  // setup converter
+  if (converter != 0){
+	delete converter;
+	converter = 0;
+  }
+  if (com_data->sound_type == SOUND_TYPE_CELT){
+	converter = new Converter_CELT(samplerate, 2);
+  }
+#endif // QTB_CELT_SUPPORT
+
+  // delete files
+  if (settings->getOutputSoundDataToFile()){
+	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
+	pcmFile.remove();
+  }
+
+  return true;
+}
+#endif // QT_VERSION >= 0x060000
 
 // output received data
 void SoundThread::outputReceivedData(long receivedDataSize, const char *filename)

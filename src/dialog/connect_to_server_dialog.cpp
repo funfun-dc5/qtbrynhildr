@@ -12,6 +12,9 @@
 #include <QDialog>
 #include <QFont>
 #include <QRect>
+#if QT_VERSION >= 0x060000
+#include <QRegularExpression>
+#endif // QT_VERSION >= 0x060000
 
 #if defined(QTB_DEBUG)
 #include <QDebug>
@@ -71,7 +74,11 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   comboBox_hostname->setCompleter(completer);
 #endif // QTB_AUTO_COMPLETE
   comboBox_hostname->addItems(*serverNameList);
+#if QT_VERSION < 0x060000
   comboBox_hostname->setCurrentIndex(serverNameList->indexOf(QRegExp(settings->getServerName())));
+#else // QT_VERSION >= 0x060000
+  comboBox_hostname->setCurrentIndex(serverNameList->indexOf(QRegularExpression(settings->getServerName())));
+#endif // QT_VERSION >= 0x060000
   comboBox_hostname->setEditable(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

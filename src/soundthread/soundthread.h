@@ -9,6 +9,9 @@
 // Qt Header
 #include <QAudioFormat>
 #include <QAudioOutput>
+#if QT_VERSION >= 0x060000
+#include <QAudioSink>
+#endif // QT_VERSION >= 0x060000
 #include <QIODevice>
 
 // Local Header
@@ -37,7 +40,11 @@ private:
   SAMPLERATE samplerate;
 
   // audio output
+#if QT_VERSION < 0x060000
   QAudioOutput *audioOutput;
+#else // QT_VERSION >= 0x060000
+  QAudioSink *audioOutput;
+#endif // QT_VERSION >= 0x060000
 
   // IO device
   QIODevice *output;

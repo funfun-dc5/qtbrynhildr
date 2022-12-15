@@ -322,7 +322,11 @@ void DesktopWindow::focusOutEvent(QFocusEvent *event)
 // native event filter
 //----------------------------------------------------------------------
 #if defined(Q_OS_WIN)
+#if QT_VERSION < 0x060000
 bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+#else // QT_VERSION >= 0x060000
+bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
+#endif // QT_VERSION >= 0x060000
 {
   return DesktopPanel::nativeEventFilter(eventType, message, result);
 }

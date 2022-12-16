@@ -1,0 +1,131 @@
+#!/bin/bash
+APP="Qt Brynhildr"
+
+# check arg1
+EXTOPT=""
+if [ -n "$1" ] ; then
+	case $1 in
+		clean)
+			;;
+		cygwin)
+			EXTOPT="cygwin"
+			;;
+		msvc64)
+			EXTOPT="msvc"
+			;;
+		msvc)
+			EXTOPT="msvc64"
+			;;
+		xp)
+			EXTOPT="xp"
+			;;
+		ubuntu64)
+			EXTOPT="ubuntu64"
+			;;
+		ubuntu)
+			EXTOPT="ubuntu"
+			;;
+		*)
+			echo "Unkown argument1 : $1"
+			exit 1
+			;;
+	esac
+fi
+
+# check arg2
+if [ -n "$2" ] ; then
+	case $2 in
+		clean)
+			;;
+		*)
+			echo "Unkown argument2 : $2"
+			exit 1
+			;;
+	esac
+fi
+
+case $UNAME in
+	CYGWIN*)
+		if [ "$1" = "" ] ; then
+			mingw32-make clean
+			rm -f .qmake.stash
+			# delete executable file
+			rm -f "${APP}.exe"
+			rm -f "release/${APP}.exe" "debug/${APP}.exe"
+			rm -f "release/${APP}.exp" "debug/${APP}.exp"
+			rm -f "release/${APP}.lib" "debug/${APP}.lib"
+			# other files
+			rm -f release/*.o debug/*.o release/*.cpp debug/*.cpp
+			# delete executable file for Android
+			rm -f "lib${APP}.so"
+		fi
+		if [ "$1" = "cygwin" ] ; then
+			make clean
+			# delete executable file
+			rm -f "${APP}.exe"
+			# other files
+			rm -f *.o
+		fi
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
+		# delete coverity scan directory
+		rm -rf cov-int
+		# delete manual
+		pushd ../docs/manual
+		make clean
+		popd
+		rm -rf ../dist/docs/manual/*
+		# delete files for install
+		./install $EXTOPT clean
+		;;
+	Linux)
+		make clean
+		# delete executable file
+		rm -f "${APP}"
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
+		pushd ../docs/manual
+		# delete manual
+		make clean
+		popd
+		rm -rf ../dist/docs/manual/*
+		# delete files for install
+		./install $EXTOPT clean
+		;;
+	FreeBSD)
+		make clean
+		# delete executable file
+		rm -f "${APP}"
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
+		pushd ../docs/manual
+		# delete manual
+		make clean
+		popd
+		rm -rf ../dist/docs/manual/*
+		# delete files for install
+		./install clean
+		;;
+	Darwin)
+		make clean
+		# delete executable file
+		rm -rf "${APP}.app"
+		# clean key layout file compiler
+		pushd keylayout; make clean; popd
+		pushd ../docs/manual
+		# delete manual
+		make clean
+		popd
+		rm -rf ../dist/docs/manual/*
+		# delete files for install
+		./install clean
+		;;
+	*)
+		echo "clean : Not support platform. $UNAME"
+		exit 1;
+		;;
+esac
+
+echo "$0 : Done."
+
+rm -f "${APP}.log"

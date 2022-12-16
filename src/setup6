@@ -83,7 +83,7 @@ case $UNAME in
 esac
 fi
 
-source ./setup_qt5 $TARGET
+source ./setup_qt6 $TARGET
 
 ./clean $TARGET
 rm -f Makefile Makefile.Release Makefile.Debug

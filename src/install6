@@ -1,0 +1,642 @@
+#!/bin/bash
+UNAME=`uname`
+UNAMEM=`uname -m`
+ARCH=x86
+PORTABLEVERSION=OFF
+# available only for LINUX
+WITHQT=OFF
+export TARGET=$1
+
+# check arg1
+if [ -n "$1" ] ; then
+	case $1 in
+		clean)
+			;;
+		man)
+			;;
+		portable)
+			PORTABLEVERSION=ON
+			TARGET=
+			;;
+		cygwin)
+			;;
+		msvc64)
+			ARCH=x86_64
+			;;
+		msvc)
+			ARCH=x86
+			;;
+		msvc-xp)
+			ARCH=x86
+			;;
+		ubuntu64)
+			;;
+		ubuntu)
+			;;
+		withqt)
+			WITHQT=ON
+			;;
+		*)
+			echo "Unknown argument1 : $1"
+			exit 1
+			;;
+	esac
+fi
+
+source ./setup_qt6
+
+# check arg2
+if [ -n "$2" ] ; then
+	case $2 in
+		clean)
+			;;
+		portable)
+			PORTABLEVERSION=ON
+			;;
+		*)
+			VERSION=$2
+			echo "VERSION=$VERSION"
+			;;
+	esac
+fi
+
+# setting
+APP="Qt Brynhildr"
+APPS="QtBrynhildr"
+KLFC="klfc"
+ISS="${APPS}.iss"
+INSTALL="/usr/bin/install"
+INSTALLFLAGS="-m444"
+INSTALLEXEFLAGS="-C"
+INSTALLDLLFLAGS="-C"
+DATE=`date +%Y%m%d`
+
+# check environment
+case $UNAME in
+	CYGWIN*)
+		PKGNAME="windows"
+		if [ -n "$TARGET" ] ; then
+			case $TARGET in
+				cygwin)
+					case $UNAMEM in
+						x86_64)
+							PKGNAME="cygwin_x64"
+							echo "Installing for Cygwin x64..."
+							;;
+						x86)
+							PKGNAME="cygwin_x86"
+							echo "Installing for Cygwin x86..."
+							;;
+					esac
+					DISTDIR="../dist/cygwin/$PKGNAME"
+					INSTALLEXEFLAGS="-s"
+					;;
+				clean)
+					# for Text
+					DISTDIR="../dist/windows"
+					;;
+				*)
+					DISTDIR="../dist/windows"
+					;;
+			esac
+		else
+			DISTDIR="../dist/windows"
+		fi
+		;;
+	Linux)
+		case $UNAMEM in
+			x86_64)
+				PKGNAME="linux_x64"
+				echo "Installing for Linux x64..."
+				;;
+			i686)
+				PKGNAME="linux_x86"
+				echo "Installing for Linux x86..."
+				;;
+			armv6l)
+				PKGNAME="linux_armv6l"
+				echo "Installing for Linux armv6l..."
+				;;
+			armv7l)
+				PKGNAME="linux_armv7l"
+				echo "Installing for Linux armv7l..."
+				;;
+		esac
+		if [ -n "$TARGET" ] ; then
+			case $TARGET in
+				ubuntu64)
+					PKGNAME="ubuntu_x64"
+					;;
+				ubuntu)
+					PKGNAME="ubuntu_x86"
+					;;
+			esac
+			DISTDIR="../dist/linux/$PKGNAME"
+		fi
+		DISTDIR="../dist/linux/$PKGNAME"
+		INSTALLEXEFLAGS="-s"
+		;;
+	FreeBSD)
+		case $UNAMEM in
+			amd64)
+				PKGNAME="freebsd_x64"
+				echo "Installing for FreeBSD x64..."
+				;;
+			i386)
+				PKGNAME="freebsd_x86"
+				echo "Installing for FreeBSD x86..."
+				;;
+		esac
+		DISTDIR="../dist/freebsd/$PKGNAME"
+		INSTALLEXEFLAGS="-s"
+		;;
+	Darwin)
+		case $UNAMEM in
+			x86_64)
+				DISTDIR="../dist/macosx"
+				PKGNAME="macosx_x64"
+				echo "Installing for Darwin x64..."
+				;;
+		esac
+		;;
+	*)
+		echo "$0 : Not support platform. $UNAME"
+		exit 1;
+		;;
+esac
+
+# clean
+if [ "$TARGET" = "clean" -o "$2" = "clean" ] ; then
+	echo "Cleaning..."
+	if [ "${DISTDIR}" = "" ] ; then
+		echo "DISTDIR is empty!! Please check!"
+		exit 1;
+	fi
+	case $UNAME in
+		CYGWIN*)
+			# clean
+			\rm -rf ${DISTDIR}/bin
+			\rm -rf ${DISTDIR}/docs
+			\rm -rf ${DISTDIR}/${ISS}
+			;;
+		Linux)
+			# clean
+			\rm -rf ${DISTDIR}
+			;;
+		Darwin)
+			# clean
+			\rm -rf ${DISTDIR}/*
+			;;
+		*)
+			echo "$0 : Not support platform."
+			exit 1;
+			;;
+	esac
+
+	echo "$0 : Done."
+	exit 0;
+fi
+
+# man
+if [ "$TARGET" = "man" ] ; then
+	echo "Installing manual..."
+	case $UNAME in
+		CYGWIN*)
+			# copy manual file
+			pushd ../docs/manual
+			make html
+			make install
+			popd
+			exit 0;
+			;;
+		Linux)
+			# copy manual file
+			pushd ../docs/manual
+			make html
+			make install
+			popd
+			exit 0;
+			;;
+		FreeBSD)
+			# copy manual file
+			pushd ../docs/manual
+			make html
+			make install
+			popd
+			exit 0;
+			;;
+		Darwin)
+			# copy manual file
+			pushd ../docs/manual
+			make html
+			make install
+			popd
+			exit 0;
+			;;
+		*)
+			echo "$0 : Not support platform."
+			exit 1;
+			;;
+	esac
+
+	echo "$0 : Done."
+	exit 0;
+fi
+
+# install
+case $UNAME in
+	CYGWIN*)
+		# check
+		if [ "$TARGET" = "" -o "$TARGET" = "msvc" -o "$TARGET" = "msvc64" -o "$TARGET" = "msvc-xp" ] ; then
+			echo "Installing for windows..."
+			if [ ! -x "release/${APP}.exe" ] ; then
+				echo "NOT Found ${APP}.exe"
+				exit 1;
+			fi
+			if [ ! -x keylayout/${KLFC}.exe ] ; then
+				echo "NOT Found ${KLFC}.exe"
+				exit 1;
+			fi
+			VERSION=`"release/${APP}.exe" -vv`
+			# for windows
+			# remove all binary files
+			rm -rf ${DISTDIR}/bin
+			# create directory
+			mkdir -p ${DISTDIR}/bin
+			echo "copy DLL files..."
+			# for Qt DLL
+			mkdir -p ${DISTDIR}/bin/platforms
+			mkdir -p ${DISTDIR}/bin/imageformats
+			mkdir -p ${DISTDIR}/bin/audio
+			if [ -d ${QTROOT}/plugins/styles ] ; then
+				mkdir -p ${DISTDIR}/bin/styles
+			fi
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Gui.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Multimedia.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Network.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Widgets.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Concurrent.dll ${DISTDIR}/bin
+			if [ "$TARGET" = "" ] ; then
+			case $UNAMEM in
+				x86_64)
+					${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_seh-1.dll ${DISTDIR}/bin
+					;;
+				x86)
+					${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libgcc_s_dw2-1.dll ${DISTDIR}/bin
+					;;
+			esac
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libstdc++-6.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/libwinpthread-1.dll ${DISTDIR}/bin
+			fi
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
+			if [ -d ${QTROOT}/plugins/styles ] ; then
+				${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/styles/qwindowsvistastyle.dll ${DISTDIR}/bin/styles
+			fi
+			# copy openssl dll
+			# OpenSSL 1.0.2x
+#			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
+#			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
+#			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
+			# OpenSSL 1.1.1x
+			if [ "$2" = "openssl" -o "$3" = "openssl" ] ; then
+			case $UNAMEM in
+				x86_64)
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+					;;
+				x86)
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+					;;
+			esac
+			else
+			case $TARGET in
+				msvc64)
+					# OpenSSL 1.1.1x
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+					;;
+				msvc)
+					# OpenSSL 1.1.1x
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+					;;
+				msvc-xp)
+					# OpenSSL 1.0.2x
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
+					;;
+				*)
+					echo "$0 : Not support platform."
+					exit 1;
+					;;
+			esac
+			fi
+			if [ "$TARGET" = "msvc-xp" ] ; then
+					# for JVNVU#92669710
+					if [ -x "${QTROOT}/bin/Qt6Core_patched.dll" ] ; then
+						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core_patched.dll ${DISTDIR}/bin/Qt6Core.dll
+					else
+						echo "NOT Found Qt6Core_patched.dll file!!"
+						exit 1;
+					fi
+			fi
+			# copy executable file
+			echo "copy executable file..."
+			${INSTALL} ${INSTALLEXEFLAGS} "release/${APP}.exe" ${DISTDIR}/bin
+			# copy translation files for Qt
+			mkdir -p ${DISTDIR}/bin/translations
+			${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
+			# install key layout file compiler
+			echo "install klfcompiler..."
+			if [ "$TARGET" = "" ] ; then
+				(cd keylayout; make)
+			fi
+			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
+			# copy key layout file sample
+			echo "copy key layout file sample..."
+			mkdir -p ${DISTDIR}/bin/keylayout/sample
+			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
+			# copy manual file
+			pushd ../docs/manual
+			make html
+			make install
+			popd
+			pushd ../dist
+			cd windows
+			if [ "${PORTABLEVERSION}" = "OFF" ] ; then
+				if [ "${TARGET}" = "" -a "${UNAMEM}" = "x86_64" ] ; then
+					TARGET=mingw64
+				fi
+				# create .iss
+				echo "create .iss file"
+				find bin -type f -print | sed -f ../script/iss.sed | awk -F: -f ../script/iss.awk > tmp_bin.iss
+				cd ..
+				find docs/manual -type f -print | grep -v git | sed -f script/iss.sed | awk -f script/iss_manual.awk > tmp.iss
+				cat windows/${ISS}.template | sed -f script/buildtool${TARGET}.sed > new_template.iss
+				cat new_template.iss windows/tmp_bin.iss tmp.iss > windows/${ISS}
+				rm -f windows/tmp_bin.iss tmp.iss new_template.iss
+			else
+				# portable version package
+				echo "create portable version package"
+				# make package string
+				PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-Portable-${TARGET}"
+				PKGDIR=QtBrynhildr
+				# 1) make top directory
+				mkdir ${PKGDIR}
+				mkdir -p ${PKGDIR}/docs/manual
+				# 2) move bin into the directory
+				mv bin ${PKGDIR}
+				# 3) copy doc into the directory
+				# copy document file
+				${INSTALL} ${INSTALLFLAGS} ../docs/ReadMe.txt ${PKGDIR}/docs
+				${INSTALL} ${INSTALLFLAGS} ../docs/ChangeLog.txt ${PKGDIR}/docs
+				${INSTALL} ${INSTALLFLAGS} ../docs/LICENSE.txt ${PKGDIR}/docs
+				# copy manual file
+				cp -r ../docs/manual/* ${PKGDIR}/docs/manual
+				rm -f ${PKGDIR}/docs/manual/.gitkeep
+				# 4) archive package
+				# for zip
+				#zip -9 -r ${PKGSTRING}.zip ${PKGDIR}
+				# for 7-Zip (21.07)
+				7z a -r -mx9 ${PKGDIR}.7z ${PKGDIR}
+				# for 7-Zip sfx (21.07)
+				cat 7-Zip/7z.sfx ${PKGDIR}.7z > ${PKGSTRING}.exe
+				rm -rf ${PKGDIR} ${PKGDIR}.7z
+			fi
+			popd
+		fi
+		if [ "$TARGET" = "cygwin" ] ; then
+			# check
+			echo "Installing for cygwin..."
+			if [ ! -x "./${APP}.exe" ] ; then
+				echo "NOT Found ${APP}.exe"
+				exit 1;
+			fi
+			if [ ! -x keylayout/${KLFC}.exe ] ; then
+				echo "NOT Found ${KLFC}.exe"
+				exit 1;
+			fi
+			if [ ! -n "$VERSION" ] ; then
+				VERSION=`"./${APP}" -vv`
+			fi
+			# for cygwin
+			# create directory
+			mkdir -p ${DISTDIR}/bin
+			mkdir -p ${DISTDIR}/docs/manual
+			# strip
+			#strip "${APP}"
+			# copy executable file
+			echo "copy executable file..."
+			${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
+			# copy translation files for Qt
+			mkdir -p ${DISTDIR}/bin/translations
+			${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
+			# install key layout file compiler
+			echo "install klfcompiler..."
+			${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC}.exe ${DISTDIR}/bin
+			# copy key layout file sample
+			echo "copy key layout file sample..."
+			mkdir -p ${DISTDIR}/bin/keylayout/sample
+			${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
+			# copy document file
+			${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DISTDIR}/docs
+			${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DISTDIR}/docs
+			${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DISTDIR}/docs
+			# copy manual file
+			pushd ../docs/manual
+			make html
+			make install
+			popd
+			cp -r ../dist/docs/manual/* ${DISTDIR}/docs/manual
+			rm -f ${DISTDIR}/docs/manual/.gitkeep
+			# make package string
+			#PKGSTRING="${APP}-${PKGNAME}-v${VERSION}-${DATE}"
+			PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
+			(cd ../dist/cygwin; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
+		fi
+		;;
+	Linux)
+		# check
+		echo "Installing for linux..."
+		if [ ! -x "./${APP}" ] ; then
+			echo "NOT Found ${APP}"
+			exit 1;
+		fi
+		if [ ! -x keylayout/${KLFC} ] ; then
+			echo "NOT Found ${KLFC}"
+			exit 1;
+		fi
+		VERSION=`"./${APP}" -vv`
+		# for linux
+		# create directory
+		mkdir -p ${DISTDIR}/bin
+		mkdir -p ${DISTDIR}/docs/manual
+		# with Qt files
+		if [ "${WITHQT}" = "ON" ] ; then
+			# for Qt dynamic link files
+			echo "copy dynamic link files..."
+			mkdir -p ${DISTDIR}/bin/platforms
+			mkdir -p ${DISTDIR}/bin/imageformats
+			mkdir -p ${DISTDIR}/bin/audio
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Core.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Gui.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Multimedia.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Network.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Widgets.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Concurrent.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6XcbQpa.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6DBus.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicui18n.so.56 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicuuc.so.56 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicudata.so.56 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/libqxcb.so ${DISTDIR}/bin/platforms
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/libqjpeg.so ${DISTDIR}/bin/imageformats
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/libqwbmp.so ${DISTDIR}/bin/imageformats
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtmedia_pulse.so ${DISTDIR}/bin/audio
+			#		${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/libqtaudio_alsa.so ${DISTDIR}/plugins/audio
+			# copy boot script file
+			echo "copy boot script file..."
+			${INSTALL} -m755 "../dist/script/${APP}.sh" ${DISTDIR}/bin
+		fi
+		# strip
+		#strip "${APP}"
+		# copy executable file
+		echo "copy executable file..."
+		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
+		# copy translation files for Qt
+		mkdir -p ${DISTDIR}/bin/translations
+		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
+		# install key layout file compiler
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
+		# copy key layout file sample
+		echo "copy key layout file sample..."
+		mkdir -p ${DISTDIR}/bin/keylayout/sample
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
+		# copy document file
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DISTDIR}/docs
+		# copy manual file
+		pushd ../docs/manual
+		make html
+		make install
+		popd
+		cp -r ../dist/docs/manual/* ${DISTDIR}/docs/manual
+		rm -f ${DISTDIR}/docs/manual/.gitkeep
+		# make package string
+		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
+		(cd ../dist/linux; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
+#		(cd ../dist/linux; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
+		;;
+	FreeBSD)
+		# check
+		echo "Installing for freebsd..."
+		if [ ! -x "./${APP}" ] ; then
+			echo "NOT Found ${APP}"
+			exit 1;
+		fi
+		if [ ! -x keylayout/${KLFC} ] ; then
+			echo "NOT Found ${KLFC}"
+			exit 1;
+		fi
+		VERSION=`"LANG=ja ./${APP}" -notrans -vv`
+		# for freebsd
+		# create directory
+		mkdir -p ${DISTDIR}/bin
+		mkdir -p ${DISTDIR}/docs/manual
+		# strip
+		#strip "${APP}"
+		# copy executable file
+		echo "copy executable file..."
+		${INSTALL} ${INSTALLEXEFLAGS} "${APP}" ${DISTDIR}/bin
+		# copy translation files for Qt
+		mkdir -p ${DISTDIR}/bin/translations
+		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm ${DISTDIR}/bin/translations
+		# install key layout file compiler
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} ${DISTDIR}/bin
+		# copy key layout file sample
+		echo "copy key layout file sample..."
+		mkdir -p ${DISTDIR}/bin/keylayout/sample
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl ${DISTDIR}/bin/keylayout/sample
+		# copy document file
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DISTDIR}/docs
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DISTDIR}/docs
+		# copy manual file
+		pushd ../docs/manual
+		make html
+		make install
+		popd
+		cp -r ../dist/docs/manual/* ${DISTDIR}/docs/manual
+		rm -f ${DISTDIR}/docs/manual/.gitkeep
+		# make package string
+		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
+		(cd ../dist/freebsd; tar cvfJ ${PKGSTRING}.tar.xz ${PKGNAME})
+#		(cd ../dist/freebsd; zip -r -9 ${PKGSTRING}_tmp.zip ${PKGNAME}; cat /usr/bin/unzipsfx ${PKGSTRING}_tmp.zip > ${PKGSTRING}.run; zip -A ${PKGSTRING}.run; \rm ${PKGSTRING}_tmp.zip)
+		;;
+	Darwin)
+		echo "Installing for Darwin..."
+		if [ ! -x "./${APP}.app" ] ; then
+			echo "NOT Found ${APP}.app"
+			exit 1;
+		fi
+		if [ ! -x keylayout/${KLFC} ] ; then
+			echo "NOT Found ${KLFC}"
+			exit 1;
+		fi
+		# strip
+		strip "${APP}.app/Contents/MacOS/${APP}"
+		# copy translation files for Qt
+		echo "copy translations files for Qt..."
+		mkdir -p "${APP}.app/Contents/MacOS/translations"
+		${INSTALL} ${INSTALLFLAGS} translations/qt_*.qm "${APP}.app/Contents/MacOS/translations"
+		# install key layout file compiler
+		echo "install klfcompiler..."
+		${INSTALL} ${INSTALLEXEFLAGS} keylayout/${KLFC} "${APP}.app/Contents/MacOS/"
+		# copy key layout file sample
+		echo "copy key layout file sample..."
+		mkdir -p "${APP}.app/Contents/MacOS/keylayout/sample"
+		${INSTALL} ${INSTALLFLAGS} keylayout/*.kl "${APP}.app/Contents/MacOS/keylayout/sample"
+		VERSION=`"${APP}.app/Contents/MacOS/${APP}" -vv`
+		# make package string
+		#PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}-${DATE}"
+		PKGSTRING="${APPS}-${PKGNAME}-v${VERSION}"
+		# for darwin
+		# create directory
+		mkdir -p "${DISTDIR}"
+		DOCDIR="${APP}.app/Contents/docs"
+		mkdir -p ${DOCDIR}/manual
+		# copy document file
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ReadMe.txt ${DOCDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/ChangeLog.txt ${DOCDIR}
+		${INSTALL} ${INSTALLFLAGS} ../dist/docs/LICENSE.txt ${DOCDIR}
+		# copy manual file
+		pushd ../docs/manual
+		make html
+		make install
+		popd
+		cp -r ../dist/docs/manual/* ${DOCDIR}/manual
+		rm -f ${DOCDIR}/manual/.gitkeep
+		# copy plist file
+		cp macos/Entitlements.plist  "${APP}.app/Contents/Entitlements.plist";
+		cp macos/Info.plist  "${APP}.app/Contents/Info.plist";
+		# make dmg
+		${QTROOT}/bin/macdeployqt "${APP}.app" -dmg
+		# mv dist directory
+		mv "${APP}.dmg" ${DISTDIR}/${PKGSTRING}.dmg
+		;;
+	*)
+		echo "$0 : Not support platform. $UNAME"
+		exit 1;
+		;;
+esac
+echo "$0 : Done. : ${PKGSTRING}"

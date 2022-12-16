@@ -15,7 +15,9 @@ QT += gui
 QT += widgets
 QT += multimedia
 # for Qt6
+greaterThan(QT_MAJOR_VERSION, 5){
 QT += core5compat
+}
 
 # UI
 FORMS += GUI/connect_to_server_dialog.ui

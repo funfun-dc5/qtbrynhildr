@@ -178,6 +178,7 @@ void DesktopPanel::resizeWindow()
 		height += heightMargin;
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 
+#if 0 // for TEST
 		QSize screenSize = settings->getCurrentScreenSize();
 		if (width > screenSize.width()){
 		  width = screenSize.width();
@@ -185,6 +186,7 @@ void DesktopPanel::resizeWindow()
 		if (height > screenSize.height()){
 		  height = screenSize.height();
 		}
+#endif // 0 // for TEST
 
 #if !defined(QTB_DEV_TOUCHPANEL)
 		// resize

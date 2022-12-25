@@ -3504,7 +3504,7 @@ void QtBrynhildr::changeEvent(QEvent *event)
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
 {
-  event->ignore();
+  Q_UNUSED(event);
 
   exit();
 }
@@ -3952,6 +3952,10 @@ void QtBrynhildr::finishedNetThread()
 // exit process for Application exit
 void QtBrynhildr::exit()
 {
+  // execute once
+  static bool doneExit = false;
+  if (doneExit) return;
+
   if (settings->getOnConfirmAtExit()){
 	ConfirmDialog *confirmDialog =
 	  new ConfirmDialog(tr("exit application?"),
@@ -3967,6 +3971,9 @@ void QtBrynhildr::exit()
 	  return;
 	}
   }
+
+  // execute once
+  doneExit = true;
 
   // disconnected
   disconnectToServer();

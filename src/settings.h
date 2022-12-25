@@ -1664,11 +1664,9 @@ public:
   // set desktop scaling factor
   void setDesktopScalingFactor(qreal desktopScalingFactor)
   {
-	if (desktopScalingFactorLimit != 0.0){
-	  if (desktopScalingFactor >= desktopScalingFactorLimit){
-		this->desktopScalingFactor = desktopScalingFactor;
-		this->desktopScalingFactorForZoom = 1.0/desktopScalingFactor;
-	  }
+	if ((desktopScalingFactorLimit != 0.0) && (desktopScalingFactor >= desktopScalingFactorLimit)){
+	  this->desktopScalingFactor = desktopScalingFactorLimit;
+	  this->desktopScalingFactorForZoom = 1.0/desktopScalingFactorLimit;
 	}
 	else {
 	  this->desktopScalingFactor = desktopScalingFactor;

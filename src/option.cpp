@@ -19,7 +19,8 @@ namespace qtbrynhildr {
 
 // constructor
 Option::Option(int argc, char *argv[])
-  :serverName(0)
+  :versionString(0)
+  ,serverName(0)
   ,portNo(0)
   ,password(0)
   ,hostType(0)
@@ -44,6 +45,13 @@ Option::Option(int argc, char *argv[])
   ,testModeFlag(false)
   ,benchmarkFlag(false)
 {
+  // versionString
+  static string str = QTB_VERSION QTB_RCNAME;
+  for (string::size_type pos = str.find(".") ; pos != string::npos; pos = str.find(".")){
+       str.erase(pos,1);
+  }
+  versionString = str.c_str();
+
   // analysis options
   if (analyzeOptions(argc, argv)){
 	// error
@@ -290,16 +298,6 @@ bool Option::analyzeOptions(int argc, char *argv[])
   return true;
 }
 
-// get version string
-const char *Option::getVersionString() const
-{
-  static string str = QTB_VERSION QTB_RCNAME;
-  for (string::size_type pos = str.find(".") ; pos != string::npos; pos = str.find(".")){
-	str.erase(pos,1);
-  }
-  return str.c_str();
-}
-
 // print version
 void Option::printVersion() const
 {
@@ -311,11 +309,7 @@ void Option::printVersion() const
 // print version string
 void Option::printVersionString() const
 {
-  string str = QTB_VERSION QTB_RCNAME;
-  for (string::size_type pos = str.find(".") ; pos != string::npos; pos = str.find(".")){
-	str.erase(pos,1);
-  }
-  cout << str << flush;
+  cout << getVersionString() << flush;
 }
 
 // print spec

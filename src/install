@@ -331,8 +331,18 @@ case $UNAME in
 #					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
 					;;
 				*)
-					echo "$0 : Not support platform."
-					exit 1;
+					echo "$0 : Not support platform for OpenSSL. Ignored."
+					# for windows
+					case $UNAMEM in
+						x86_64)
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+							;;
+						x86)
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+							;;
+					esac
 					;;
 			esac
 			fi

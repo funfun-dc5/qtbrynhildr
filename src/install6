@@ -267,7 +267,8 @@ case $UNAME in
 			# for Qt DLL
 			mkdir -p ${DISTDIR}/bin/platforms
 			mkdir -p ${DISTDIR}/bin/imageformats
-			mkdir -p ${DISTDIR}/bin/audio
+#			mkdir -p ${DISTDIR}/bin/audio
+			mkdir -p ${DISTDIR}/bin/tls
 			if [ -d ${QTROOT}/plugins/styles ] ; then
 				mkdir -p ${DISTDIR}/bin/styles
 			fi
@@ -291,10 +292,11 @@ case $UNAME in
 			fi
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
+#			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
 			if [ -d ${QTROOT}/plugins/styles ] ; then
 				${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/styles/qwindowsvistastyle.dll ${DISTDIR}/bin/styles
 			fi
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/tls/qopensslbackend.dll ${DISTDIR}/bin/tls
 			# copy openssl dll
 			# OpenSSL 1.0.2x
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
@@ -331,8 +333,18 @@ case $UNAME in
 #					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
 					;;
 				*)
-					echo "$0 : Not support platform."
-					exit 1;
+					echo "$0 : Not support platform for OpenSSL. Ignored."
+					# for windows
+					case $UNAMEM in
+						x86_64)
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+							;;
+						x86)
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+							;;
+					esac
 					;;
 			esac
 			fi

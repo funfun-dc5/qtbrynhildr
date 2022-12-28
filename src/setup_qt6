@@ -95,7 +95,7 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
-				QTROOT=/opt/Qt/${QTVERSION}/clang_64
+				QTROOT=/opt/Qt/${QTVERSION}/macos
 				# Coverity Scan
 				PATHLIST=/opt/cov-analysis-macosx-${COVVERSION}/bin:${PATHLIST}
 				;;

@@ -73,7 +73,7 @@ Desktop::Desktop()
   if (QSysInfo::kernelType() == "linux"){
 	std::fstream file;
 	char sizeStr[100];
-	file.open(LINUX_SHMMAX, ios::in);
+	file.open(LINUX_SHMMAX, std::ios::in);
 	if (file.is_open()){
 	  file.getline(sizeStr, 100);
 	  maxImageDataSize = strtoul(sizeStr, 0, 10);
@@ -144,7 +144,7 @@ Desktop::Desktop()
   if (QSysInfo::kernelType() == "linux"){
 	std::fstream file;
 	char sizeStr[100];
-	file.open(LINUX_SHMMAX, ios::in);
+	file.open(LINUX_SHMMAX, std::ios::in);
 	if (file.is_open()){
 	  file.getline(sizeStr, 100);
 	  maxImageDataSize = strtoul(sizeStr, 0, 10);

@@ -4,9 +4,7 @@ UNAMEM=`uname -m`
 PRO="qtbrynhildr.pro"
 TARGET=$1
 # Qt5.15.2
-#BUILDARCH=mingw81-x64
-# Qt6.4.1
-BUILDARCH=mingw112-x64
+BUILDARCH=mingw81-x64
 # CONFIG
 #CONFIG=portable
 

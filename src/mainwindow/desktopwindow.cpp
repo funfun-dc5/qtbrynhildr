@@ -129,7 +129,11 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
 }
 
 // widget enter event
+#if QT_VERSION < 0x060000
 void DesktopWindow::enterEvent(QEvent *event)
+#else // QT_VERSION >= 0x060000
+void DesktopWindow::enterEvent(QEnterEvent *event)
+#endif // QT_VERSION >= 0x060000
 {
   // check connected
   if (!settings->getConnected())

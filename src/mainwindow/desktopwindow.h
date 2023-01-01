@@ -88,7 +88,11 @@ protected:
   void paintEvent(QPaintEvent *event);
 
   // widget enter event
+#if QT_VERSION < 0x060000
   void enterEvent(QEvent *event);
+#else // QT_VERSION >= 0x060000
+  void enterEvent(QEnterEvent *event);
+#endif // QT_VERSION >= 0x060000
 
   // widget leave event
   void leaveEvent(QEvent *event);

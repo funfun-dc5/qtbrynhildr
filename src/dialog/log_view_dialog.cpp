@@ -124,7 +124,7 @@ void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
   if (button->text() == tr("Reset") || button->text() == "Reset"){ // for Android(Bug?)
 	// clear log
-	//	cout << "Clear log!" << endl <<flush;
+	//	std::cout << "Clear log!" << std::endl << std::flush;
 	topPos = lastPos;
 	//qDebug() << "Reset: topPos: " << lastPos;
 	show();

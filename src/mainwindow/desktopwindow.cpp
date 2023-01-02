@@ -300,7 +300,7 @@ void DesktopWindow::dropEvent(QDropEvent *event)
 #if QTB_MOUSE_TRACKING_FOCUS_MODE
 void DesktopWindow::focusInEvent(QFocusEvent *event)
 {
-  //cout << "Focus In" << endl << flush;
+  //std::cout << "Focus In" << std::endl << std::flush;
   if (!settings->getOnMouseTrackingMode()){
 	QWidget::focusInEvent(event);
 	setMouseTracking(true); // mouse tracking mode on
@@ -311,7 +311,7 @@ void DesktopWindow::focusInEvent(QFocusEvent *event)
 }
 void DesktopWindow::focusOutEvent(QFocusEvent *event)
 {
-  //cout << "Focus Out" << endl << flush;
+  //std::cout << "Focus Out" << std::endl << std::flush;
   if (!settings->getOnMouseTrackingMode()){
 	QWidget::focusOutEvent(event);
 	setMouseTracking(false); // mouse tracking mode off

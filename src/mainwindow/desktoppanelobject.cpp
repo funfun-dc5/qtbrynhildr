@@ -34,14 +34,14 @@ void DesktopPanelObject::resizeDesktop(int width, int height)
   Q_UNUSED(width);
   Q_UNUSED(height);
 
-  //  cout << "resizeDesktop()" << endl << flush;
-  //  cout << "(width, height) = (" << width << ", " << height << ")" << endl << flush;
+  // std::cout << "resizeDesktop()" << std::endl << std::flush;
+  // std::cout << "(width, height) = (" << width << ", " << height << ")" << std::endl << std::flush;
 }
 
 // refresh desktop
 void DesktopPanelObject::updateDesktop()
 {
-  //  cout << "updateDesktop()" << endl << flush;
+  // std::cout << "updateDesktop()" << std::endl << std::flush;
   update();
 }
 

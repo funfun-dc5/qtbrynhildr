@@ -240,9 +240,9 @@ QString EventConverter::getVKCodeByString(uchar vkcode)
 #if QTB_DEBUG
 void EventConverter::printKeyEvent(KeyEvent *keyEvent)
 {
-  cout << "key             : " << keyEvent->key << endl;
-  cout << "VK_Code         : " << stringTableOfVKCode[(int)(keyEvent->VK_Code)] << endl;
-  cout << "shiftKeyControl : " << keyEvent->shiftKeyControl << endl << flush;
+  std::cout << "key             : " << keyEvent->key << std::endl;
+  std::cout << "VK_Code         : " << stringTableOfVKCode[(int)(keyEvent->VK_Code)] << std::endl;
+  std::cout << "shiftKeyControl : " << keyEvent->shiftKeyControl << std::endl << std::flush;
 }
 #endif // QTB_DEBUG
 

@@ -30,7 +30,7 @@ QImage* DecoderVP8NEON::getDesktopImage(int numOfThread)
   if (outputLog){
 	static bool flag = true;
 	if (flag){
-	  cout << "DecoderVP8NEON::getDesktopImage()" << endl << flush;
+	  std::cout << "DecoderVP8NEON::getDesktopImage()" << std::endl << std::flush;
 	  flag = false;
 	}
   }

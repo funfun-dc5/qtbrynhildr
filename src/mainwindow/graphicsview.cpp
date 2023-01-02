@@ -619,7 +619,7 @@ void GraphicsView::leaveEvent(QEvent *event)
 // mouse event
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
-  //  cout << "mousePressEvent" << endl << flush;
+  //  std::cout << "mousePressEvent" << std::endl << std::flush;
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -636,7 +636,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 
 void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
-  //  cout << "mouseReleaseEvent" << endl << flush;
+  //  std::cout << "mouseReleaseEvent" << std::endl << std::flush;
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -653,7 +653,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 
 void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-  //  cout << "mouseDoubleClicEvent" << endl << flush;
+  //  std::cout << "mouseDoubleClicEvent" << std::endl << std::flush;
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -670,7 +670,7 @@ void GraphicsView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
-  //  cout << "mouseMoveEvent" << endl << flush;
+  //  std::cout << "mouseMoveEvent" << std::endl << std::flush;
   QPoint pos = mapToScene(event->pos()).toPoint();
   //  qDebug() << "pos of scene = " << pos;
   if (convertToDesktop(pos)){
@@ -690,21 +690,21 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
 
 void GraphicsView::wheelEvent(QWheelEvent *event)
 {
-  //  cout << "wheelEvent" << endl << flush;
+  //  std::cout << "wheelEvent" << std::endl << std::flush;
   desktopPanel->wheelEvent(event);
 }
 
 // keyboard event
 void GraphicsView::keyPressEvent(QKeyEvent *event)
 {
-  //  cout << "keyPressEvent" << endl << flush;
+  //  std::cout << "keyPressEvent" << std::endl << std::flush;
   //qDebug() << "KeyPress : " << event;
   desktopPanel->keyPressEvent(event);
 }
 
 void GraphicsView::keyReleaseEvent(QKeyEvent *event)
 {
-  //  cout << "keyReleaseEvent" << endl << flush;
+  //  std::cout << "keyReleaseEvent" << std::endl << std::flush;
   //qDebug() << "KeyRelease : " << event;
   desktopPanel->keyReleaseEvent(event);
 }

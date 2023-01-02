@@ -1499,7 +1499,7 @@ bool ControlThread::isColorMouseCursorImage(uchar *image, int size)
 QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 {
 #if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
-  std::cout << std::hex << uppercase << setfill('0');
+  std::cout << std::hex << std::uppercase << std::setfill('0');
   std::cout << std::endl << "======= image - R" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
@@ -1587,7 +1587,7 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 {
 #if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
-  std::cout << std::hex << uppercase << setfill('0');
+  std::cout << std::hex << std::uppercase << std::setfill('0');
   std::cout << std::endl << "======= image - R" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))

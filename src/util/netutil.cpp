@@ -77,7 +77,7 @@ bool NetUtil::getMacAddress()
 	  if (adr->IfType != IF_TYPE_SOFTWARE_LOOPBACK){
 		// get a mac address
 		if (adr->PhysicalAddressLength > 0){
-		  std::cout << "MAC:" << std::hex << setfill('0');
+		  std::cout << "MAC:" << std::hex << std::setfill('0');
 		  for (ULONG i = 0; i < adr->PhysicalAddressLength; ++ i) {
 			std::cout << std::setw(2) << (int)adr->PhysicalAddress[i];
 		  }

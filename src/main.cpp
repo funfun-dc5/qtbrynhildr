@@ -62,6 +62,11 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
+#if QT_VERSION >= 0x060000
+  // for Qt6 (Qt::HighDpiScaleFactorRoundingPolicy::PassThrough)
+  app.setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
+#endif // QT_VERSION >= 0x060000
+
   // analyze options
   qtbrynhildr::Option *option = new qtbrynhildr::Option(argc, argv);
 

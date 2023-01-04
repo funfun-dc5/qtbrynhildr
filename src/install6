@@ -273,6 +273,7 @@ case $UNAME in
 				mkdir -p ${DISTDIR}/bin/styles
 			fi
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core5Compat.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Gui.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Multimedia.dll ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Network.dll ${DISTDIR}/bin
@@ -496,6 +497,7 @@ case $UNAME in
 			mkdir -p ${DISTDIR}/bin/imageformats
 			mkdir -p ${DISTDIR}/bin/audio
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Core.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Core5Compat.so.5 ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Gui.so.5 ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Multimedia.so.5 ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Network.so.5 ${DISTDIR}/bin

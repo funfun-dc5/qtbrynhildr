@@ -5880,7 +5880,7 @@ void QtBrynhildr::finishedDownload()
   // check latest release
   int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
   if (startIndex > 0) {
-	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
+	startIndex += (int)qstrlen(QTB_STRING_FOR_TAGSEARCH);
 	int lastIndex = releasePage.indexOf("\"", startIndex);
 	//std::cout << "startIndex = " << startIndex << std::endl << std::flush;
 	//std::cout << "lastIndex  = " << lastIndex << std::endl << std::flush;

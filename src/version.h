@@ -17,6 +17,6 @@
 #endif // __x86_64__ || __LP64__ || _WIN64
 
 // year
-#define QTB_YEAR				"2015-2022"
+#define QTB_YEAR				"2015-2023"
 
 #endif // VERSION_H

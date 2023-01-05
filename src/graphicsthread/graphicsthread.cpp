@@ -231,6 +231,19 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 
   // receive data for image
   long receivedDataSize = receiveData(buffer, dataSize);
+
+#if 0 // for TEST
+  std::cout << "[" << name << "] image_cx = " << (int)com_data->image_cx << std::endl;
+  std::cout << "[" << name << "] image_cy = " << (int)com_data->image_cy << std::endl;
+  std::cout << "[" << name << "] client_scroll_x = " << (int)com_data->client_scroll_x << std::endl;
+  std::cout << "[" << name << "] client_scroll_y = " << (int)com_data->client_scroll_y << std::endl;
+  std::cout << "[" << name << "] server_cx = " << (int)com_data->server_cx << std::endl;
+  std::cout << "[" << name << "] server_cy = " << (int)com_data->server_cy << std::endl;
+  std::cout << "[" << name << "] frame no = " << (int)com_data->frame_no << std::endl;
+  std::cout << "[" << name << "] data_size = " << (int)com_data->data_size << std::endl;
+  std::cout << "[" << name << "] receivedDataSize = " << receivedDataSize << std::endl << std::flush;
+#endif // for TEST
+
   // size check
   if (receivedDataSize != dataSize){
 	// error
@@ -240,11 +253,6 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 #if TEST_THREAD
   printTimeInfo("got data");
 #endif // TEST_THREAD
-
-#if 0 // for TEST
-  std::cout << "[" << name << "] frame no = " << (int)com_data->frame_no << std::endl;
-  std::cout << "[" << name << "] receivedDataSize = " << receivedDataSize << std::endl << std::flush;
-#endif // for TEST
 
   // == VIDEO_MODE_MJPEG ==
   // buffer[]         : JPEG File Image

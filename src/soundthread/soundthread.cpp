@@ -249,12 +249,10 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	outputReceivedData(receivedDataSize, "pcm/" QTB_SOUND_OUTPUT_FILENAME);
   }
 
-#if 0 // defined(Q_OS_ANDROID)
   // no sound output check
   if (!hasSoundData(buffer, receivedDataSize)){
 	return TRANSMIT_SUCCEEDED;
   }
-#endif // defined(Q_OS_ANDROID)
 
   // put PCM data into sound buffer
   if (settings->getOnSound()){

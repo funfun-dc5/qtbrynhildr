@@ -110,7 +110,6 @@ private:
   // create .wav file
   void createWavFile(int dataSize);
 
-#if 0 // defined(Q_OS_ANDROID)
   // sound data check
   inline bool hasSoundData(char *buf, long len)
   {
@@ -119,7 +118,6 @@ private:
 	}
 	return false;
   }
-#endif // defined(Q_OS_ANDROID)
 
 private slots:
   // stateCanged

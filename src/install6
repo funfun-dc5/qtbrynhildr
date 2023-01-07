@@ -319,13 +319,13 @@ case $UNAME in
 			case $TARGET in
 				msvc64)
 					# OpenSSL 1.1.1x
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
 					;;
 				msvc)
 					# OpenSSL 1.1.1x
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
 					;;
 				msvc-xp)
 					# OpenSSL 1.0.2x

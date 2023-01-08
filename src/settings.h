@@ -1981,7 +1981,11 @@ public:
   // get check update at bootup flag
   bool getOnCheckUpdateAtBootup() const
   {
+#if defined(QTB_DEV_TOUCHPANEL)
+	return false;
+#else // !defined(QTB_DEV_TOUCHPANEL)
 	return onCheckUpdateAtBootup;
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   }
 
   // set check update at bootup flag

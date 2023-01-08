@@ -4,7 +4,7 @@
 android {
 TARGET = "QtBrynhildr"
 CONFIG += touchpanel vp8-neon
-CONFIG -= updatecheck help_browser
+CONFIG -= help_browser
 DEFINES += PLATFORM_LINUX QTB_ANDROID
 # cpufeatures library from android-ndk
 HEADERS += util/android-ndk/cpu-features.h
@@ -15,6 +15,9 @@ SOURCES += util/android-ndk/cpu-features.c
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
 BUILDARCH = android-$(OBJECTS_DIR)
 ANDROID_ABIS = armeabi-v7a arm64-v8a
+
+# for OpenSSL
+include(C:/Tools/develop/android-sdk-windows/android_openssl/openssl.pri)
 
 # dist files (java code)
 DISTFILES += \

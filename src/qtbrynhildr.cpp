@@ -5900,6 +5900,7 @@ void QtBrynhildr::finishedDownload()
 	if (tag != latestTag){
 	  // Found new version
 	  //std::cout << "Found new version" << std::endl << std::flush;
+#if defined(QTB_DEV_DESKTOP)
 	  int ret = QMessageBox::question(this,
 									  tr("Confirm"),
 									  tr("Found new release. Open release page?"),
@@ -5908,6 +5909,10 @@ void QtBrynhildr::finishedDownload()
 	  if (ret == QMessageBox::Ok){
 		QDesktopServices::openUrl(QUrl(QTB_URL_FOR_RELEASE));
 	  }
+#else // !defined(QTB_DEV_DESKTOP)
+	  QMessageBox::information(this, tr("Information"),
+							   tr("Found new release."));
+#endif // !defined(QTB_DEV_DESKTOP)
 	}
 	else {
 	  if (!onCheckUpdateInBackground){

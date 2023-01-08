@@ -27,7 +27,7 @@ KeyLayoutFileReader::KeyLayoutFileReader(const char *layoutfilepath)
   ,outputLog(false)
 {
   if (outputLog)
-	cout << "Created KeyLayoutFileReader! layoutfilepath = " << layoutfilepath << endl << flush;
+	std::cout << "Created KeyLayoutFileReader! layoutfilepath = " << layoutfilepath << std::endl << std::flush;
 
   QDir dir(layoutfilepath);
   QFileInfoList list = dir.entryInfoList();
@@ -37,7 +37,7 @@ KeyLayoutFileReader::KeyLayoutFileReader(const char *layoutfilepath)
 	QString filename = fileInfo.fileName();
 	if (filename.endsWith(QTB_KEYLAYOUT_FILE_SUFFIXX)){
 	  if (outputLog)
-		cout << "Found : " << qPrintable(filename) << endl << flush;
+		std::cout << "Found : " << qPrintable(filename) << std::endl << std::flush;
 	  readKeyLayoutFile(qPrintable(filename));
 	}
   }
@@ -54,7 +54,7 @@ KeyLayoutFileReader::~KeyLayoutFileReader()
   }
 
   if (outputLog)
-	cout << "Deleted KeyLayoutFileReader!" << endl << flush;
+	std::cout << "Deleted KeyLayoutFileReader!" << std::endl << std::flush;
 }
 
 // get key layout file
@@ -78,27 +78,27 @@ int KeyLayoutFileReader::getIndexOfKeyboardType(QString keyboardTypeName)
 // read a key layout file
 void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 {
-  fstream file;
+  std::fstream file;
   char fullname[QTB_MAXPATHLEN+1];
   snprintf(fullname, QTB_MAXPATHLEN, "%s/%s", path, filename);
 
-  file.open(fullname, ios::in | ios::binary);
+  file.open(fullname, std::ios::in | std::ios::binary);
   if (file.is_open()){
 	if (outputLog)
-	  cout << "Opened file : " << fullname << endl << flush;
+	  std::cout << "Opened file : " << fullname << std::endl << std::flush;
 
 	KLFHeader header;
 	file.read((char*)&header, sizeof(KLFHeader));
 	if (outputLog) {
-	  cout << "[File Header]" << endl;
-	  cout << "magic      = \"" << header.magic << '\"' << endl;
-	  cout << "spec       = " << header.spec << endl;
-	  cout << "size       = " << header.size << endl;
-	  cout << "keynum     = " << header.keynum << endl;
-	  cout << "softkeynum = " << header.softkeynum << endl;
-	  cout << "[General]" << endl;
-	  cout << "Name       = " << header.name << endl;
-	  cout << "Author     = " << header.author << endl << flush;
+	  std::cout << "[File Header]" << std::endl;
+	  std::cout << "magic      = \"" << header.magic << '\"' << std::endl;
+	  std::cout << "spec       = " << header.spec << std::endl;
+	  std::cout << "size       = " << header.size << std::endl;
+	  std::cout << "keynum     = " << header.keynum << std::endl;
+	  std::cout << "softkeynum = " << header.softkeynum << std::endl;
+	  std::cout << "[General]" << std::endl;
+	  std::cout << "Name       = " << header.name << std::endl;
+	  std::cout << "Author     = " << header.author << std::endl << std::flush;
 	}
 
 	// rewind and read all KLF image
@@ -112,7 +112,7 @@ void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 
 	file.close();
 	if (outputLog)
-	  cout << "Closed file : " << fullname << endl << flush;
+	  std::cout << "Closed file : " << fullname << std::endl << std::flush;
 
 	// append to keyboard type list
 	keyboardTypeList << QString(header.name);
@@ -125,7 +125,7 @@ void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
   }
   else {
 	if (outputLog)
-	  cout << "Error: Failed to open file" << endl << flush;
+	  std::cout << "Error: Failed to open file" << std::endl << std::flush;
   }
 }
 

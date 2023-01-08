@@ -41,6 +41,7 @@ Settings::Settings(const char *iniFileName)
   ,sendFileCount(0)
   ,onGamePadSupport(false)
   ,onBrynhildr2Support(true)
+  ,monitorNo(QTB_MONITOR_NO_DEFAULT)
   ,monitorCount(0)
   ,onShowSoftwareKeyboard(false)
   ,onShowSoftwareButton(false)
@@ -53,6 +54,7 @@ Settings::Settings(const char *iniFileName)
   ,onDesktopCapture(false)
   ,onScrollMode(false)
   ,onViewerMode(false)
+  ,onFulFulMode(false)
 {
   if (iniFileName != 0){
 	settings = new QSettings(iniFileName, QSettings::IniFormat);
@@ -109,8 +111,8 @@ Settings::Settings(const char *iniFileName)
   setSoundQuality(QTB_SOUNDQUALITY_DEFAULT);
   setSoundCacheTime(QTB_SOUNDCACHETIME_DEFAULT);
 
-  setDesktopScalingFactor(QTB_DESKTOPSCALINGFACTOR_DEFAULT);
   setDesktopScalingFactorLimit(QTB_DESKTOPSCALINGFACTORLIMIT_DEFAULT);
+  setDesktopScalingFactor(QTB_DESKTOPSCALINGFACTOR_DEFAULT);
   setDesktopScalingQuality(QTB_DESKTOPSCALINGQUALITY_DEFAULT);
   setDesktopScalingType(QTB_DESKTOPSCALINGTYPE_DEFAULT);
   setAutoresizeDesktopScalingFactor(QTB_AUTORESIZEDESKTOPSCALINGFACTOR_DEFAULT);
@@ -650,8 +652,8 @@ void Settings::readSettings()
 							   QTB_OUTPUTLOG_DEFAULT).toBool());
 
   // load outputKeyboardLog
-  //  setOutputKeyboardLog(settings->value(QTB_OUTPUTKEYBOARDLOG,
-  //									   QTB_OUTPUTKEYBOARDLOG_DEFAULT).toBool());
+  setOutputKeyboardLog(settings->value(QTB_OUTPUTKEYBOARDLOG,
+									   QTB_OUTPUTKEYBOARDLOG_DEFAULT).toBool());
 
 #if !QTB_PORTABLE_VERSION
   // load output path
@@ -935,7 +937,7 @@ void Settings::writeSettings()
   settings->setValue(QTB_OUTPUTLOG, outputLog);
 
   // save outputKeyboardLog
-  //  settings->setValue(QTB_OUTPUTKEYBOARDLOG, outputKeyboardLog);
+  settings->setValue(QTB_OUTPUTKEYBOARDLOG, outputKeyboardLog);
 
 #if !QTB_PORTABLE_VERSION
   // save outputPath

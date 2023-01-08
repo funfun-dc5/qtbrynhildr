@@ -40,7 +40,7 @@ Makefile
 # for Qt
 build-*/
 *.pro.user*
-src/.qmake.*
+.qmake.*
 src/object_script.*
 # for windows
 *.exe

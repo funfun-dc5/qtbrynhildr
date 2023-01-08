@@ -55,7 +55,7 @@ NetThread::~NetThread()
 // exit thread
 void NetThread::exitThread()
 {
-  //  cout << "[" << name << "]" << " exitThread()" << endl << flush;
+  //  std::cout << "[" << name << "]" << " exitThread()" << std::endl << std::flush;
   runThread = false;
 }
 
@@ -90,7 +90,7 @@ qint64 NetThread::getTotalReceivedDataCounter()
 void NetThread::run()
 {
   if (settings->getOutputLog())
-	cout << "[" << name << "]" << " start thread...start run()" << endl << flush;
+	std::cout << "[" << name << "]" << " start thread...start run()" << std::endl << std::flush;
 
   // start thread
   runThread = true;
@@ -109,7 +109,7 @@ void NetThread::run()
 		continue;
 	  }
 	  if (result_connect == CONNECT_FAILED){
-		//cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
+		//std::cout << "[" << name << "]" << " connect Error: connectToServer()" << std::endl << std::flush; // error
 		shutdownConnection();
 		emit networkError(true);
 		//emit outputLogMessage(QTB_MSG_CONNECT_ERROR);
@@ -117,13 +117,13 @@ void NetThread::run()
 	  }
 	  if (result_connect == CONNECT_FAILED_RETRY){
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " connect Error: connectToServer()" << endl << flush; // error
+		  std::cout << "[" << name << "]" << " connect Error: connectToServer()" << std::endl << std::flush; // error
 		runThread = false;
 		break;
 	  }
 	  if (result_connect == CONNECT_FAILED_TIMEOUT){
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " connect Timeout: connectToServer()" << endl << flush; // error
+		  std::cout << "[" << name << "]" << " connect Timeout: connectToServer()" << std::endl << std::flush; // error
 		shutdownConnection();
 		emit networkError(false);
 		emit outputLogMessage(QTB_MSG_CONNECT_TIMEOUT);
@@ -146,7 +146,7 @@ void NetThread::run()
 	  if (result_process == PROCESS_NETWORK_ERROR){
 		// error
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " Network Error: processForHeader()" << endl << flush; // error
+		  std::cout << "[" << name << "]" << " Network Error: processForHeader()" << std::endl << std::flush; // error
 		shutdownConnection();
 		emit networkError(true);
 		continue;
@@ -154,7 +154,7 @@ void NetThread::run()
 	  if (result_process == PROCESS_PASSWORD_ERROR){
 		// error
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " Password Error: processForHeader()" << endl << flush; // error
+		  std::cout << "[" << name << "]" << " Password Error: processForHeader()" << std::endl << std::flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);
@@ -164,7 +164,7 @@ void NetThread::run()
 	  if (result_process == PROCESS_CONNECT_ERROR){
 		// error
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
+		  std::cout << "[" << name << "]" << " Connect Error: processForHeader()" << std::endl << std::flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);
@@ -174,7 +174,7 @@ void NetThread::run()
 	  if (result_process == PROCESS_VIDEO_MODE_ERROR){
 		// error
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " Connect Error: processForHeader()" << endl << flush; // error
+		  std::cout << "[" << name << "]" << " Connect Error: processForHeader()" << std::endl << std::flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);
@@ -184,7 +184,7 @@ void NetThread::run()
 	  if (result_process == PROCESS_UNKNOWN_ERROR){
 		// error
 		if (settings->getOutputLog())
-		  cout << "[" << name << "]" << " Unknown Error: processForHeader()" << endl << flush; // error
+		  std::cout << "[" << name << "]" << " Unknown Error: processForHeader()" << std::endl << std::flush; // error
 		shutdownConnection();
 		runThread = false;
 		emit networkError(false);
@@ -208,26 +208,26 @@ void NetThread::run()
 	  break;
 	case TRANSMIT_NETWORK_ERROR:
 	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << endl << flush; // error
+		std::cout << "[" << name << "]" << " Failed: transmitBuffer(): network error" << std::endl << std::flush; // error
 	  shutdownConnection();
 	  emit networkError(true);
 	  continue;
 	  break;
 	case TRANSMIT_DATASIZE_ERROR:
 	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " Failed: transmitBuffer(): data size" << endl << flush; // error
+		std::cout << "[" << name << "]" << " Failed: transmitBuffer(): data size" << std::endl << std::flush; // error
 	  break;
 	case TRANSMIT_FAILED_PUT_BUFFER:
 	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " Failed: transmitBuffer(): put buffer." << endl << flush; // error
+		std::cout << "[" << name << "]" << " Failed: transmitBuffer(): put buffer." << std::endl << std::flush; // error
 	  break;
 	case TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER:
 	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " Failed: transmitBuffer(): transmit device buffer." << endl << flush; // error
+		std::cout << "[" << name << "]" << " Failed: transmitBuffer(): transmit device buffer." << std::endl << std::flush; // error
 	  break;
 	case TRANSMIT_FAILED_IMAGE_DRAW:
 	  if (settings->getOutputLog())
-		cout << "[" << name << "]" << " Failed: transmitBuffer(): image draw." << endl << flush; // error
+		std::cout << "[" << name << "]" << " Failed: transmitBuffer(): image draw." << std::endl << std::flush; // error
 	  break;
 	default:
 	  // error
@@ -240,7 +240,7 @@ void NetThread::run()
   shutdownConnection();
 
   if (settings->getOutputLog())
-	cout << "[" << name << "]" << " stop thread...exit run()" << endl << flush;
+	std::cout << "[" << name << "]" << " stop thread...exit run()" << std::endl << std::flush;
 }
 
 // connected
@@ -337,7 +337,7 @@ SOCKET NetThread::socketToServer()
 	}
 #endif
 	if (result == SOCKET_TIMEOUT || sock == TIMEOUT_SOCKET){
-	  //cout << "TimeOut!" << endl << flush;
+	  //std::cout << "TimeOut!" << std::endl << std::flush;
 	  closesocket(sock);
 	  sock = TIMEOUT_SOCKET;
 	  break;
@@ -486,7 +486,7 @@ long NetThread::sendData(SOCKET sock, const char *buf, long size)
 	long ret = send_int(sock, buf + sent_size, size - sent_size, 0);
 #if 0 // for TEST
 	if (ret < 0)
-	  cout << "errno = " << errno << endl << flush;
+	  std::cout << "errno = " << errno << std::endl << std::flush;
 #endif // for TEST
 	if (ret > 0){
 	  sent_size += ret;
@@ -521,87 +521,87 @@ long NetThread::receiveData(SOCKET sock, char *buf, long size)
 // print protocol header
 void NetThread::printHeader(COM_DATA *com_data)
 {
-  cout << "============================== HEADER ==============================" << endl;
-  cout << "com_data->data_type      :" << (int)com_data->data_type << endl;
-  cout << "com_data->thread         :" << (int)com_data->thread << endl;
-  cout << "com_data->sound_type     :" << (int)com_data->sound_type << endl;
-  cout << "com_data->encryption     :" << (int)com_data->encryption << endl;
-  cout << "com_data->data_size      :" << com_data->data_size << endl;
+  std::cout << "============================== HEADER ==============================" << std::endl;
+  std::cout << "com_data->data_type      :" << (int)com_data->data_type << std::endl;
+  std::cout << "com_data->thread         :" << (int)com_data->thread << std::endl;
+  std::cout << "com_data->sound_type     :" << (int)com_data->sound_type << std::endl;
+  std::cout << "com_data->encryption     :" << (int)com_data->encryption << std::endl;
+  std::cout << "com_data->data_size      :" << com_data->data_size << std::endl;
 
-  ios::fmtflags flags = cout.flags();
+  std::ios::fmtflags flags = std::cout.flags();
 
-  cout << "com_data->check_digit_enc:" << hex << uppercase << setfill('0');
+  std::cout << "com_data->check_digit_enc:" << std::hex << std::uppercase << std::setfill('0');
   for (int i = 0; i < ENCRYPTION_KEY_LENGTH; i++){
-	cout << setw(2) << (int)(com_data->check_digit_enc[i] & 0xff);
+	std::cout << std::setw(2) << (int)(com_data->check_digit_enc[i] & 0xff);
   }
-  cout << endl;
-  cout << "com_data->check_digit    :"	<< (int)(com_data->check_digit & 0xffff) << endl;
+  std::cout << std::endl;
+  std::cout << "com_data->check_digit    :"	<< (int)(com_data->check_digit & 0xffff) << std::endl;
 
-  cout.setf(flags);
+  std::cout.setf(flags);
 
-  cout << "com_data->ver            :\"" << com_data->ver[0]
+  std::cout << "com_data->ver            :\"" << com_data->ver[0]
 										 << com_data->ver[1]
 										 << com_data->ver[2]
-										 << com_data->ver[3] << "\"" << endl;
-  cout << "com_data->samplerate     :"  << com_data->samplerate << endl;
-  cout << "com_data->image_cx       :"  << com_data->image_cx << endl;
-  cout << "com_data->image_cy       :"  << com_data->image_cy << endl;
-  cout << "com_data->server_cx      :"  << com_data->server_cx << endl;
-  cout << "com_data->server_cy      :"  << com_data->server_cy << endl;
-  cout << "com_data->control        :"	<< (int)com_data->control << endl;
+										 << com_data->ver[3] << "\"" << std::endl;
+  std::cout << "com_data->samplerate     :"  << com_data->samplerate << std::endl;
+  std::cout << "com_data->image_cx       :"  << com_data->image_cx << std::endl;
+  std::cout << "com_data->image_cy       :"  << com_data->image_cy << std::endl;
+  std::cout << "com_data->server_cx      :"  << com_data->server_cx << std::endl;
+  std::cout << "com_data->server_cy      :"  << com_data->server_cy << std::endl;
+  std::cout << "com_data->control        :"	<< (int)com_data->control << std::endl;
 #if QTB_PLUGINS_DISABLE_SUPPORT
-  cout << "com_data->plugins_disable:"	<< (int)com_data->plugins_disable << endl;
+  std::cout << "com_data->plugins_disable:"	<< (int)com_data->plugins_disable << std::endl;
 #endif // QTB_PLUGINS_DISABLE_SUPPORT
-  cout << "com_data->filedrop       :"	<< (int)com_data->filedrop << endl;
-  cout << "com_data->mouse_move     :"	<< (int)com_data->mouse_move << endl;
+  std::cout << "com_data->filedrop       :"	<< (int)com_data->filedrop << std::endl;
+  std::cout << "com_data->mouse_move     :"	<< (int)com_data->mouse_move << std::endl;
 #if QTB_EXTRA_BUTTON_SUPPORT
-  cout << "com_data->mouse_x1       :"  << (int)com_data->mouse_x1 << endl;
-  cout << "com_data->mouse_x2       :"  << (int)com_data->mouse_x2 << endl;
+  std::cout << "com_data->mouse_x1       :"  << (int)com_data->mouse_x1 << std::endl;
+  std::cout << "com_data->mouse_x2       :"  << (int)com_data->mouse_x2 << std::endl;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
-  cout << "com_data->mouse_x        :"  << com_data->mouse_x << endl;
-  cout << "com_data->mouse_y        :"  << com_data->mouse_y << endl;
-  cout << "com_data->mouse_left     :"  << (int)com_data->mouse_left << endl;
-  cout << "com_data->mouse_right    :"  << (int)com_data->mouse_right << endl;
+  std::cout << "com_data->mouse_x        :"  << com_data->mouse_x << std::endl;
+  std::cout << "com_data->mouse_y        :"  << com_data->mouse_y << std::endl;
+  std::cout << "com_data->mouse_left     :"  << (int)com_data->mouse_left << std::endl;
+  std::cout << "com_data->mouse_right    :"  << (int)com_data->mouse_right << std::endl;
 #if QTB_EXTRA_BUTTON_SUPPORT
-  cout << "com_data->mouse_middle   :"  << (int)com_data->mouse_middle << endl;
+  std::cout << "com_data->mouse_middle   :"  << (int)com_data->mouse_middle << std::endl;
 #endif // QTB_EXTRA_BUTTON_SUPPORT
-  cout << "com_data->mouse_wheel    :"  << (int)com_data->mouse_wheel << endl;
-  cout << "com_data->keycode        :"  << (int)com_data->keycode << endl;
-  cout << "com_data->keycode_flg    :"  << (int)com_data->keycode_flg << endl;
-  cout << "com_data->cursor_hotspot_x :"  << (int)com_data->cursor_hotspot_x << endl;
-  cout << "com_data->cursor_hotspot_y :"  << (int)com_data->cursor_hotspot_y << endl;
-  cout << "com_data->monitor_no     :"	<< (int)com_data->monitor_no << endl;
-  cout << "com_data->monitor_count  :"	<< (int)com_data->monitor_count << endl;
-  cout << "com_data->max_fps        :"	<< (int)com_data->max_fps << endl;
-  cout << "com_data->sound_capture  :"	<< (int)com_data->sound_capture << endl;
-  cout << "com_data->keydown        :"	<< com_data->keydown << endl;
-  cout << "com_data->video_quality  :"	<< (int)com_data->video_quality << endl;
-  cout << "com_data->mouse_cursor   :"	<< (int)com_data->mouse_cursor << endl;
-  cout << "com_data->gamepad1       :"	<< com_data->gamepad1 << endl;
-  cout << "com_data->gamepad2       :"	<< com_data->gamepad2 << endl;
-  cout << "com_data->gamepad3       :"	<< com_data->gamepad3 << endl;
-  cout << "com_data->gamepad4       :"	<< com_data->gamepad4 << endl;
-  cout << "com_data->client_scroll_x:"  << com_data->client_scroll_x << endl;
-  cout << "com_data->client_scroll_y:"  << com_data->client_scroll_y << endl;
-  cout << "com_data->video_mode     :"  << (int)com_data->video_mode << endl;
-  cout << "com_data->server_version :"  << com_data->server_version << endl;
-  cout << "com_data->zoom           :"  << com_data->zoom << endl;
-  cout << "com_data->mode           :"	<< (int)com_data->mode << endl;
-  cout << "com_data->sound_quality  :"	<< (int)com_data->sound_quality << endl;
-  cout << "com_data->frame_no       :"	<< (int)com_data->frame_no << endl;
-  cout << "com_data->gamepad5       :"	<< com_data->gamepad5 << endl;
-  cout << "com_data->gamepad6       :"	<< com_data->gamepad6 << endl;
-  cout << "com_data->gamepad7       :"	<< com_data->gamepad7 << endl;
-  cout << "com_data->gamepad8       :"	<< com_data->gamepad8 << endl;
+  std::cout << "com_data->mouse_wheel    :"  << (int)com_data->mouse_wheel << std::endl;
+  std::cout << "com_data->keycode        :"  << (int)com_data->keycode << std::endl;
+  std::cout << "com_data->keycode_flg    :"  << (int)com_data->keycode_flg << std::endl;
+  std::cout << "com_data->cursor_hotspot_x :"  << (int)com_data->cursor_hotspot_x << std::endl;
+  std::cout << "com_data->cursor_hotspot_y :"  << (int)com_data->cursor_hotspot_y << std::endl;
+  std::cout << "com_data->monitor_no     :"	<< (int)com_data->monitor_no << std::endl;
+  std::cout << "com_data->monitor_count  :"	<< (int)com_data->monitor_count << std::endl;
+  std::cout << "com_data->max_fps        :"	<< (int)com_data->max_fps << std::endl;
+  std::cout << "com_data->sound_capture  :"	<< (int)com_data->sound_capture << std::endl;
+  std::cout << "com_data->keydown        :"	<< com_data->keydown << std::endl;
+  std::cout << "com_data->video_quality  :"	<< (int)com_data->video_quality << std::endl;
+  std::cout << "com_data->mouse_cursor   :"	<< (int)com_data->mouse_cursor << std::endl;
+  std::cout << "com_data->gamepad1       :"	<< com_data->gamepad1 << std::endl;
+  std::cout << "com_data->gamepad2       :"	<< com_data->gamepad2 << std::endl;
+  std::cout << "com_data->gamepad3       :"	<< com_data->gamepad3 << std::endl;
+  std::cout << "com_data->gamepad4       :"	<< com_data->gamepad4 << std::endl;
+  std::cout << "com_data->client_scroll_x:"  << com_data->client_scroll_x << std::endl;
+  std::cout << "com_data->client_scroll_y:"  << com_data->client_scroll_y << std::endl;
+  std::cout << "com_data->video_mode     :"  << (int)com_data->video_mode << std::endl;
+  std::cout << "com_data->server_version :"  << com_data->server_version << std::endl;
+  std::cout << "com_data->zoom           :"  << com_data->zoom << std::endl;
+  std::cout << "com_data->mode           :"	<< (int)com_data->mode << std::endl;
+  std::cout << "com_data->sound_quality  :"	<< (int)com_data->sound_quality << std::endl;
+  std::cout << "com_data->frame_no       :"	<< (int)com_data->frame_no << std::endl;
+  std::cout << "com_data->gamepad5       :"	<< com_data->gamepad5 << std::endl;
+  std::cout << "com_data->gamepad6       :"	<< com_data->gamepad6 << std::endl;
+  std::cout << "com_data->gamepad7       :"	<< com_data->gamepad7 << std::endl;
+  std::cout << "com_data->gamepad8       :"	<< com_data->gamepad8 << std::endl;
 
-  cout << endl << flush;
+  std::cout << std::endl << std::flush;
 }
 
 // save protocol header
 void NetThread::saveHeader(COM_DATA *com_data, const char* filename)
 {
-  fstream file;
-  file.open(filename, ios::out | ios::binary | ios::trunc);
+  std::fstream file;
+  file.open(filename, std::ios::out | std::ios::binary | std::ios::trunc);
   if (file.is_open()){
 	file.write((char *)com_data, sizeof(COM_DATA));
 	file.close();
@@ -618,27 +618,27 @@ void NetThread::dumpHeader(COM_DATA *com_data)
   if (com_data == 0)
 	return;
 
-  cout << "========================== HEADER DUMP ==========================" << endl;
+  std::cout << "========================== HEADER DUMP ==========================" << std::endl;
 
-  ios::fmtflags flags = cout.flags();
+  std::ios::fmtflags flags = std::cout.flags();
 
-  cout << hex << uppercase << setfill('0');
+  std::cout << std::hex << std::uppercase << std::setfill('0');
 
   unsigned char *ptr = (unsigned char *)com_data;
   for (unsigned int i = 0; i < sizeof(COM_DATA); i++){
 	if (i % 16 == 0){
-	  cout << endl;
-	  cout << setw(4) << i << ": ";
+	  std::cout << std::endl;
+	  std::cout << std::setw(4) << i << ": ";
 	}
 	else {
-	  cout << " ";
+	  std::cout << " ";
 	}
-	cout << setw(2) << (unsigned int)*ptr;
+	std::cout << std::setw(2) << (unsigned int)*ptr;
 	ptr++;
   }
-  cout << endl << endl << flush;
+  std::cout << std::endl << std::endl << std::flush;
 
-  cout.setf(flags);
+  std::cout.setf(flags);
 }
 
 // start information
@@ -650,7 +650,7 @@ void NetThread::startTimeInfo()
 	duration = startTime - previousTime;
   }
   previousTime = startTime;
-  cout << "================================   " << duration << endl;
+  std::cout << "================================   " << duration << std::endl;
 }
 
 // print time information
@@ -659,11 +659,11 @@ void NetThread::printTimeInfo(const char *str)
   qint64 currentTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
   qint64 pastTime = currentTime - startTime;
 
-  ios::fmtflags flags = cout.flags();
+  std::ios::fmtflags flags = std::cout.flags();
 
-  cout << "[" << name << "] " << left << setw(20) << str << ": " << pastTime << endl;
+  std::cout << "[" << name << "] " << std::left << std::setw(20) << str << ": " << pastTime << std::endl;
 
-  cout.setf(flags);
+  std::cout.setf(flags);
 }
 
 // set socket option
@@ -691,38 +691,38 @@ void NetThread::setSocketOption(SOCKET sock)
   // TCP_NODELAY
   val = 1;
   if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (const VAL_TYPE*)&val, len) == -1){
-	cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt() error" << endl;
-	cout << "errno = " << errno << endl << flush;
+	std::cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt() error" << std::endl;
+	std::cout << "errno = " << errno << std::endl << std::flush;
   }
   else {
 	// Succeeded to set TCP_NODELAY
 	if (outputLog)
-	  cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt("<< val << ") O.K." << endl;
+	  std::cout << "[" << name << "] sockopt: TCP_NODELAY : setsockopt("<< val << ") O.K." << std::endl;
   }
 #endif // 0 // for TEST
 
   // SO_RCVBUF
   val = 512*1024; // BDP(512KB) for TEST
   if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const VAL_TYPE*)&val, len) == -1){
-	cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error" << endl;
-	cout << "errno = " << errno << endl << flush;
+	std::cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt() error" << std::endl;
+	std::cout << "errno = " << errno << std::endl << std::flush;
   }
   else {
 	// Succeeded to set SO_RCVBUF
 	if (outputLog)
-	  cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt("<< val << ") O.K." << endl;
+	  std::cout << "[" << name << "] sockopt: SO_RCVBUF : setsockopt("<< val << ") O.K." << std::endl;
   }
 
   // SO_SNDBUF
   val = 512*1024; // BDP(512KB) for TEST
   if (setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const VAL_TYPE*)&val, len) == -1){
-	cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error" << endl;
-	cout << "errno = " << errno << endl << flush;
+	std::cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt() error" << std::endl;
+	std::cout << "errno = " << errno << std::endl << std::flush;
   }
   else {
 	// Succeeded to set SO_SNDBUF
 	if (outputLog)
-	  cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt("<< val << ") O.K." << endl;
+	  std::cout << "[" << name << "] sockopt: SO_SNDBUF : setsockopt("<< val << ") O.K." << std::endl;
   }
 }
 
@@ -742,44 +742,44 @@ void NetThread::checkSocketOption(SOCKET sock)
   // TCP_NODELAY
   len = sizeof(val);
   if (getsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (VAL_TYPE*)&val, &len) == -1){
-	cout << "[" << name << "] sockopt: TCP_NODELAY : getsockopt() error";
+	std::cout << "[" << name << "] sockopt: TCP_NODELAY : getsockopt() error";
   }
   else {
-	cout << "[" << name << "] sockopt: TCP_NODELAY : " << val.i_val << " : ";
+	std::cout << "[" << name << "] sockopt: TCP_NODELAY : " << val.i_val << " : ";
 	if (val.i_val == 0){
-	  cout << "off";
+	  std::cout << "off";
 	}
 	else {
-	  cout << "on";
+	  std::cout << "on";
 	}
   }
 
-  cout << endl;
+  std::cout << std::endl;
 
   // SO_RCVBUF
   len = sizeof(val);
   if (getsockopt(sock, SOL_SOCKET, SO_RCVBUF, (VAL_TYPE*)&val, &len) == -1){
-	cout << "[" << name << "] sockopt: SO_RCVBUF : getsockopt() error";
+	std::cout << "[" << name << "] sockopt: SO_RCVBUF : getsockopt() error";
   }
   else {
-	cout << "[" << name << "] sockopt: SO_RCVBUF : " << val.i_val << " bytes";
+	std::cout << "[" << name << "] sockopt: SO_RCVBUF : " << val.i_val << " bytes";
   }
 
-  cout << endl;
+  std::cout << std::endl;
 
   // SO_SNDBUF
   len = sizeof(val);
   if (getsockopt(sock, SOL_SOCKET, SO_SNDBUF, (VAL_TYPE*)&val, &len) == -1){
-	cout << "[" << name << "] sockopt: SO_SNDBUF : getsockopt() error";
+	std::cout << "[" << name << "] sockopt: SO_SNDBUF : getsockopt() error";
   }
   else {
-	cout << "[" << name << "] sockopt: SO_SNDBUF : " << val.i_val << " bytes";
+	std::cout << "[" << name << "] sockopt: SO_SNDBUF : " << val.i_val << " bytes";
   }
 
-  cout << endl;
+  std::cout << std::endl;
 
-  // flush
-  cout << flush;
+  // std::flush
+  std::cout << std::flush;
 }
 
 // setup interruptable
@@ -877,8 +877,8 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
   if (timeoutsec < 0){
 	// no timeout
 	result = ::connect(sockfd, addr, addrlen);
-	//cout << "result = " << result << endl << flush;
-	//cout << "errno = " << errno << endl << flush;
+	//std::cout << "result = " << result << std::endl << std::flush;
+	//std::cout << "errno = " << errno << std::endl << std::flush;
 
 	if (result < 0 && errno != EINPROGRESS && errno != 0){
 	  return SOCKET_ERROR;
@@ -894,8 +894,8 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	if (result == -1){
 	  if (errno != EINPROGRESS && errno != 0){
 		// error
-		//cout << "errno != EINPROGRESS" << endl << flush;
-		//cout << "errno = " << errno << endl << flush;
+		//std::cout << "errno != EINPROGRESS" << std::endl << std::flush;
+		//std::cout << "errno = " << errno << std::endl << std::flush;
 		// set attribute
 		setupInterruptable(sockfd, false);
 		return SOCKET_ERROR;
@@ -903,13 +903,13 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	}
 	else if (result == 0){
 	  // connect
-	  //cout << "result == 0" << endl << flush;
-	  //cout << "errno = " << errno << endl << flush;
+	  //std::cout << "result == 0" << std::endl << std::flush;
+	  //std::cout << "errno = " << errno << std::endl << std::flush;
 	  return SOCKET_OK;
 	}
 	else {
 	  // unknown return value
-	  //cout << "unknown return value" << endl << flush;
+	  //std::cout << "unknown return value" << std::endl << std::flush;
 	  setupInterruptable(sockfd, false);
 	  return SOCKET_ERROR;
 	}
@@ -934,25 +934,25 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	  write_mask = mask;
 	  int select_result = ::select(width, &read_mask, &write_mask, 0, &timeout);
 	  if (!runThread){
-		//cout << "return from select()" << endl << flush;
-		//cout << "timecounter = " << timecounter << endl << flush;
+		//std::cout << "return from select()" << std::endl << std::flush;
+		//std::cout << "timecounter = " << timecounter << std::endl << std::flush;
 		return SOCKET_OK;
 	  }
 	  if (select_result == -1){
 		if (errno != EINTR){
 		  // error
-		  //cout << "select_result == -1 : errno != EINTR" << endl << flush;
+		  //std::cout << "select_result == -1 : errno != EINTR" << std::endl << std::flush;
 		  setupInterruptable(sockfd, false);
 		  return SOCKET_ERROR;
 		}
 	  }
 	  else if (select_result == 0){
 		// time out
-		//cout << "timeout : select_result == 0" << endl << flush;
+		//std::cout << "timeout : select_result == 0" << std::endl << std::flush;
 		timecounter++;
-		//cout << "timecounter = " << timecounter << endl << flush;
+		//std::cout << "timecounter = " << timecounter << std::endl << std::flush;
 		if (timecounter > timeoutsec){
-		  //cout << "timeout!!" << endl << flush;
+		  //std::cout << "timeout!!" << std::endl << std::flush;
 		  setupInterruptable(sockfd, false);
 		  return SOCKET_TIMEOUT;
 		}
@@ -974,19 +974,19 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 		  if (getsockopt_result != -1){
 			if (val.i_val == 0){
 			  // connect
-			  //cout << "connect : val.i_val == 0" << endl << flush;
+			  //std::cout << "connect : val.i_val == 0" << std::endl << std::flush;
 			  return SOCKET_OK;
 			}
 			else {
 			  // connect error
-			  //cout << "connect error : val.i_val != 0" << endl << flush;
+			  //std::cout << "connect error : val.i_val != 0" << std::endl << std::flush;
 			  setupInterruptable(sockfd, false);
 			  return SOCKET_ERROR;
 			}
 		  }
 		  else {
 			// getsockopt error
-			//cout << "getsockopt error : getsockopt_result == -1" << endl << flush;
+			//std::cout << "getsockopt error : getsockopt_result == -1" << std::endl << std::flush;
 			setupInterruptable(sockfd, false);
 			return SOCKET_ERROR;
 		  }
@@ -995,7 +995,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	}
   }
 
-  //cout << "last result = " << result << endl << flush;
+  //std::cout << "last result = " << result << std::endl << std::flush;
   return SOCKET_OK;
 #else // 0 // for TEST
   // set attribute
@@ -1007,13 +1007,13 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
   // check result of connect()
   if (result_connect == -1){
 #if 0 // for TEST
-	cout << "errno   = " << errno << endl << flush;
-	cout << "sockfd  = " << sockfd << endl << flush;
-	cout << "addrlen = " << addrlen << endl << flush;
+	std::cout << "errno   = " << errno << std::endl << std::flush;
+	std::cout << "sockfd  = " << sockfd << std::endl << std::flush;
+	std::cout << "addrlen = " << addrlen << std::endl << std::flush;
 	if (errno != EINPROGRESS && errno != 0){
 		// error
-		//cout << "errno != EINPROGRESS" << endl << flush;
-		//cout << "errno = " << errno << endl << flush;
+		//std::cout << "errno != EINPROGRESS" << std::endl << std::flush;
+		//std::cout << "errno = " << errno << std::endl << std::flush;
 		// set attribute
 		setupInterruptable(sockfd, false);
 		return SOCKET_ERROR;
@@ -1023,13 +1023,13 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
   }
   else if (result_connect == 0){
 	// connect OK
-	//cout << "result_connect == 0" << endl << flush;
-	//cout << "errno = " << errno << endl << flush;
+	//std::cout << "result_connect == 0" << std::endl << std::flush;
+	//std::cout << "errno = " << errno << std::endl << std::flush;
 	return SOCKET_OK;
   }
   else {
 	// unknown return value
-	cout << "unknown return value of connect() = " << result_connect << endl << flush;
+	std::cout << "unknown return value of connect() = " << result_connect << std::endl << std::flush;
 	setupInterruptable(sockfd, false);
 	return SOCKET_ERROR;
   }
@@ -1060,13 +1060,13 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	if (select_result == -1){
 	  if (errno != EINTR){
 		// error
-		//cout << "select_result == -1 : errno != EINTR" << endl << flush;
+		//std::cout << "select_result == -1 : errno != EINTR" << std::endl << std::flush;
 		setupInterruptable(sockfd, false);
 		return SOCKET_ERROR;
 	  }
 	}
 	else if (select_result == 0){
-	  //cout << "timeout : select_result == 0" << endl << flush;
+	  //std::cout << "timeout : select_result == 0" << std::endl << std::flush;
 	  // timeout
 	  if (timeoutsec < 0){
 		// no timeout
@@ -1075,9 +1075,9 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	  else {
 		// check timeout
 		timecounter++;
-		//cout << "timecounter = " << timecounter << endl << flush;
+		//std::cout << "timecounter = " << timecounter << std::endl << std::flush;
 		if (timecounter > timeoutsec){
-		  //cout << "timeout!!" << endl << flush;
+		  //std::cout << "timeout!!" << std::endl << std::flush;
 		  setupInterruptable(sockfd, false);
 		  return SOCKET_TIMEOUT;
 		}
@@ -1101,19 +1101,19 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 		if (getsockopt_result != -1){
 		  if (val.i_val == 0){
 			// connect
-			//cout << "connect : val.i_val == 0" << endl << flush;
+			//std::cout << "connect : val.i_val == 0" << std::endl << std::flush;
 			return SOCKET_OK;
 		  }
 		  else {
 			// connect error
-			//cout << "connect error : val.i_val != 0" << endl << flush;
+			//std::cout << "connect error : val.i_val != 0" << std::endl << std::flush;
 			setupInterruptable(sockfd, false);
 			return SOCKET_ERROR;
 		  }
 		}
 		else {
 		  // getsockopt error
-		  //cout << "getsockopt error : getsockopt_result == -1" << endl << flush;
+		  //std::cout << "getsockopt error : getsockopt_result == -1" << std::endl << std::flush;
 		  setupInterruptable(sockfd, false);
 		  return SOCKET_ERROR;
 		}
@@ -1121,7 +1121,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 	}
   } // while-loop
 
-  //cout << "last result = " << result << endl << flush;
+  //std::cout << "last result = " << result << std::endl << std::flush;
   return SOCKET_OK;
 #endif // 0 // for TEST
 }

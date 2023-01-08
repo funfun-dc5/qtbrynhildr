@@ -22,8 +22,6 @@
 #endif // USE_KEYLAYOUTFILE
 #include "software_keyboard.h"
 
-using namespace std; // for TEST
-
 namespace qtbrynhildr {
 
 //---------------------------------------------------------------------------
@@ -82,7 +80,7 @@ SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *
 
 #ifdef USE_KEYLAYOUTFILE
 #if 0 // for TEST
-  fstream file;
+  std::fstream file;
   file.open("keyTopTable_JP.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
 	file.write((char *)&keyTopTable_JP[1], sizeof(KeyTop)*(ID_KEY_NUM-1));
@@ -228,7 +226,7 @@ void SoftwareKeyboard::paintEvent(QPaintEvent *event)
 {
   Q_UNUSED(event);
 
-  //cout << "paint! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
+  //std::cout << "paint! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << std::endl << std::flush;
 
   // panel color
   QColor panelColor = QColor::fromRgb(15, 31, 64, alpha);
@@ -312,7 +310,7 @@ void SoftwareKeyboard::resizeEvent(QResizeEvent *event)
 {
   QSize size = event->size() - QSize(1, 1);
   if (size != keyboardSize){
-	//cout << "resize! : (W, H) = (" << size.width() << "," << size.height() << ")" << endl << flush;
+	//std::cout << "resize! : (W, H) = (" << size.width() << "," << size.height() << ")" << std::endl << std::flush;
 	qreal xFactor = (qreal)size.width()/WIDTH;
 	qreal yFactor = (qreal)size.height()/HEIGHT;
 	// recalculate layout
@@ -320,7 +318,7 @@ void SoftwareKeyboard::resizeEvent(QResizeEvent *event)
 	update();
   }
   else {
-	//cout << "resize! : same size" << endl << flush;
+	//std::cout << "resize! : same size" << std::endl << std::flush;
   }
 }
 
@@ -334,7 +332,7 @@ bool SoftwareKeyboard::isOnButton() const
 void SoftwareKeyboard::mousePressEvent(QMouseEvent *event)
 {
   if (outputLog)
-	cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
+	std::cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl << std::flush;
 
   ID_KEY id = getID(event->pos());
   if (id != ID_KEY_NULL){
@@ -349,7 +347,7 @@ void SoftwareKeyboard::mousePressEvent(QMouseEvent *event)
 void SoftwareKeyboard::mouseReleaseEvent(QMouseEvent *event)
 {
   if (outputLog)
-	cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
+	std::cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl << std::flush;
 
   ID_KEY id = getID(event->pos());
   if (id != ID_KEY_NULL){
@@ -377,7 +375,7 @@ void SoftwareKeyboard::mouseMoveEvent(QMouseEvent *event)
 void SoftwareKeyboard::keyDown(uchar key)
 {
   if (outputLog){
-	cout << "DOWN: VK_Code : " << getVKCodeByString(key)  << endl << flush;
+	std::cout << "DOWN: VK_Code : " << getVKCodeByString(key)  << std::endl << std::flush;
   }
 }
 
@@ -385,7 +383,7 @@ void SoftwareKeyboard::keyDown(uchar key)
 void SoftwareKeyboard::keyUp(uchar key)
 {
   if (outputLog){
-	cout << "UP  : VK_Code : " << getVKCodeByString(key)  << endl << flush;
+	std::cout << "UP  : VK_Code : " << getVKCodeByString(key)  << std::endl << std::flush;
   }
 }
 
@@ -400,7 +398,7 @@ void SoftwareKeyboard::calculateLayout(qreal xFactor, qreal yFactor)
 	layout[i].rect.setHeight(rect.height()*yFactor);
   }
   keyboardSize = QSize(WIDTH * xFactor, HEIGHT * yFactor);
-  cout << "Keyborad Layout! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << endl << flush;
+  std::cout << "Keyborad Layout! : (W, H) = (" << keyboardSize.width() << "," << keyboardSize.height() << ")" << std::endl << std::flush;
   // font ,pen, etc
   //  setFontSize(32);
   setFontSize((int)((double)keyboardSize.height()/1080*32));
@@ -425,14 +423,14 @@ SoftwareKeyboard::ID_KEY SoftwareKeyboard::getID(QPoint pos) const
 void SoftwareKeyboard::pressedKey(ID_KEY id)
 {
   if (outputLog){
-	cout << "Pressed Key! id = " << id << endl << flush;
+	std::cout << "Pressed Key! id = " << id << std::endl << std::flush;
 #if 0 // for TEST
 	if (onShiftKey)
-	  cout << "Pressed : " << keyTop[id].keyTop.keyTopWithShift << endl << flush;
+	  std::cout << "Pressed : " << keyTop[id].keyTop.keyTopWithShift << std::endl << std::flush;
 	else if (onFnKey)
-	  cout << "Pressed : " << keyTop[id].keyTopWithFn.keyTop << endl << flush;
+	  std::cout << "Pressed : " << keyTop[id].keyTopWithFn.keyTop << std::endl << std::flush;
 	else
-	  cout << "Pressed : " << keyTop[id].keyTop.keyTop << endl << flush;
+	  std::cout << "Pressed : " << keyTop[id].keyTop.keyTop << std::endl << std::flush;
 #endif // for TEST
   }
 
@@ -491,14 +489,14 @@ void SoftwareKeyboard::pressedKey(ID_KEY id)
 void SoftwareKeyboard::releasedKey(ID_KEY id)
 {
   if (outputLog){
-	cout << "Released Key! id = " << id << endl << flush;
+	std::cout << "Released Key! id = " << id << std::endl << std::flush;
 #if 0 // for TEST
 	if (onShiftKey)
-	  cout << "Released : " << keyTopTable[id].keyTop.keyTopWithShift << endl << flush;
+	  std::cout << "Released : " << keyTopTable[id].keyTop.keyTopWithShift << std::endl << std::flush;
 	else if (onFnKey)
-	  cout << "Released : " << keyTopTable[id].keyTopWithFn.keyTop << endl << flush;
+	  std::cout << "Released : " << keyTopTable[id].keyTopWithFn.keyTop << std::endl << std::flush;
 	else
-	  cout << "Released : " << keyTopTable[id].keyTop.keyTop << endl << flush;
+	  std::cout << "Released : " << keyTopTable[id].keyTop.keyTop << std::endl << std::flush;
 #endif // for TEST
   }
 
@@ -549,7 +547,7 @@ uchar SoftwareKeyboard::pressedShiftKey(ID_KEY id)
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
-	cout << "onShiftKey : " << onShiftKey << endl << flush;
+	std::cout << "onShiftKey : " << onShiftKey << std::endl << std::flush;
   return key;
 }
 
@@ -566,7 +564,7 @@ uchar SoftwareKeyboard::pressedControlKey(ID_KEY id)
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
-	cout << "onControlKey : " << onControlKey << endl << flush;
+	std::cout << "onControlKey : " << onControlKey << std::endl << std::flush;
   return key;
 }
 
@@ -583,7 +581,7 @@ uchar SoftwareKeyboard::pressedAltKey(ID_KEY id)
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
-	cout << "onAltKey : " << onAltKey << endl << flush;
+	std::cout << "onAltKey : " << onAltKey << std::endl << std::flush;
   return key;
 }
 
@@ -600,12 +598,12 @@ uchar SoftwareKeyboard::pressedFnKey(ID_KEY id)
 	key = VK_NONE_00; // NOT downKey
   }
   if (outputLog)
-	cout << "onFnKey : " << onFnKey << endl << flush;
+	std::cout << "onFnKey : " << onFnKey << std::endl << std::flush;
   return key;
 }
 
 // get name of virtual keycode
-string SoftwareKeyboard::getVKCodeByString(uchar vkcode)
+std::string SoftwareKeyboard::getVKCodeByString(uchar vkcode)
 {
   return stringTableOfVKCode[(int)vkcode];
 }
@@ -615,12 +613,12 @@ string SoftwareKeyboard::getVKCodeByString(uchar vkcode)
 // print KeyTop
 void SoftwareKeyboard::printKeyTop(KeyTop *keyTop)
 {
-  cout << "keyTop.keyTop          : " << keyTop->keyTop.keyTop << endl;
-  cout << "keyTop.keyTopWithShift : " << keyTop->keyTop.keyTopWithShift << endl;
-  cout << "keyTop.VK_Code         : " << getVKCodeByString(keyTop->keyTop.VK_Code) << endl << endl;
+  std::cout << "keyTop.keyTop          : " << keyTop->keyTop.keyTop << std::endl;
+  std::cout << "keyTop.keyTopWithShift : " << keyTop->keyTop.keyTopWithShift << std::endl;
+  std::cout << "keyTop.VK_Code         : " << getVKCodeByString(keyTop->keyTop.VK_Code) << std::endl << std::endl;
 
-  cout << "keyTopWithFn.keyTop    : " << keyTop->keyTopWithFn.keyTop << endl;
-  cout << "keyTopWithFn.VK_Code   : " << keyTop->keyTopWithFn.VK_Code << endl << flush;
+  std::cout << "keyTopWithFn.keyTop    : " << keyTop->keyTopWithFn.keyTop << std::endl;
+  std::cout << "keyTopWithFn.VK_Code   : " << keyTop->keyTopWithFn.VK_Code << std::endl << std::flush;
 }
 #endif // QTB_DEBUG
 

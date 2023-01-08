@@ -28,7 +28,7 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
   outputLog(false)
 {
   if (outputLog)
-	cout << "Created KeyLayoutFileManager! layoutfilepath = " << layoutfilepath << endl << flush;
+	std::cout << "Created KeyLayoutFileManager! layoutfilepath = " << layoutfilepath << std::endl << std::flush;
 
   QDir dir(layoutfilepath);
   QFileInfoList list = dir.entryInfoList();
@@ -38,12 +38,12 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 	QString filename = fileInfo.fileName();
 	if (filename.endsWith(QTB_KEYLAYOUT_FILE_SUFFIX)){
 	  if (outputLog){
-		cout << "Found : " << qPrintable(filename) << endl << flush;
+		std::cout << "Found : " << qPrintable(filename) << std::endl << std::flush;
 		if (dir.exists(filename + "x")){
-		  cout << "Found : " << qPrintable(filename+"x") << endl << flush;
+		  std::cout << "Found : " << qPrintable(filename+"x") << std::endl << std::flush;
 		}
 		else {
-		  cout << "NOT Found : " << qPrintable(filename) << endl << flush;
+		  std::cout << "NOT Found : " << qPrintable(filename) << std::endl << std::flush;
 		}
 	  }
 
@@ -58,7 +58,7 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 		QDateTime xLastModifiedTime = xFileInfo.lastModified();
 		needBuild = lastModifiedTime > xLastModifiedTime;
 		if (outputLog)
-		  cout << "Found : newer .kl file!" << qPrintable(filename) << endl << flush;
+		  std::cout << "Found : newer .kl file!" << qPrintable(filename) << std::endl << std::flush;
 	  }
 	  if (needBuild){
 		QString inputFile = fileInfo.absoluteFilePath();
@@ -67,15 +67,15 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 		char* outfile = strdup(qPrintable(QDir::toNativeSeparators(outputFile)));
 
 		if (outputLog){
-		  cout << "infile  : " << infile << endl;
-		  cout << "outfile : " << outfile << endl << flush;
+		  std::cout << "infile  : " << infile << std::endl;
+		  std::cout << "outfile : " << outfile << std::endl << std::flush;
 		}
 		int result = make_KLX(infile, outfile);
 		if (result < 0){
-		  cout << "Failed to build .klx (" << infile << ")" << endl << flush;
+		  std::cout << "Failed to build .klx (" << infile << ")" << std::endl << std::flush;
 		}
 		else if (result > 0){
-		  cout << "Found : " << result << " errors to build .klx (" << infile << ")" << endl << flush;
+		  std::cout << "Found : " << result << " errors to build .klx (" << infile << ")" << std::endl << std::flush;
 		}
 
 		free(infile);
@@ -89,7 +89,7 @@ KeyLayoutFileManager::KeyLayoutFileManager(const char *layoutfilepath)
 KeyLayoutFileManager::~KeyLayoutFileManager()
 {
   if (outputLog)
-	cout << "Deleted KeyLayoutFileManager!" << endl << flush;
+	std::cout << "Deleted KeyLayoutFileManager!" << std::endl << std::flush;
 }
 
 } // end of namespace qtbrynhildr

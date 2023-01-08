@@ -129,7 +129,11 @@ void DesktopWindow::paintEvent(QPaintEvent *event)
 }
 
 // widget enter event
+#if QT_VERSION < 0x060000
 void DesktopWindow::enterEvent(QEvent *event)
+#else // QT_VERSION >= 0x060000
+void DesktopWindow::enterEvent(QEnterEvent *event)
+#endif // QT_VERSION >= 0x060000
 {
   // check connected
   if (!settings->getConnected())
@@ -144,7 +148,13 @@ void DesktopWindow::enterEvent(QEvent *event)
   if (settings->getOnControl()){
 	// taskbar assist
 	if (settings->getOnTaskbarAssist()){
+#if QT_VERSION >= 0x060000
+	  // QEnterEvent::position():QPointF
+	  QPoint pos = ((QEnterEvent*)event)->position().toPoint();
+#else // QT_VERSION < 0x060000
+	  // QEnterEvent::pos():QPoint
 	  QPoint pos = ((QEnterEvent*)event)->pos();
+#endif // QT_VERSION < 0x060000
 	  const int areaWidth = settings->getTaskbarAssistAreaWidth(); // width()/100;
 	  const int areaHeight = settings->getTaskbarAssistAreaHeight(); // height()/100;
 	  int windowWidth = width();
@@ -290,7 +300,7 @@ void DesktopWindow::dropEvent(QDropEvent *event)
 #if QTB_MOUSE_TRACKING_FOCUS_MODE
 void DesktopWindow::focusInEvent(QFocusEvent *event)
 {
-  //cout << "Focus In" << endl << flush;
+  //std::cout << "Focus In" << std::endl << std::flush;
   if (!settings->getOnMouseTrackingMode()){
 	QWidget::focusInEvent(event);
 	setMouseTracking(true); // mouse tracking mode on
@@ -301,7 +311,7 @@ void DesktopWindow::focusInEvent(QFocusEvent *event)
 }
 void DesktopWindow::focusOutEvent(QFocusEvent *event)
 {
-  //cout << "Focus Out" << endl << flush;
+  //std::cout << "Focus Out" << std::endl << std::flush;
   if (!settings->getOnMouseTrackingMode()){
 	QWidget::focusOutEvent(event);
 	setMouseTracking(false); // mouse tracking mode off
@@ -316,7 +326,11 @@ void DesktopWindow::focusOutEvent(QFocusEvent *event)
 // native event filter
 //----------------------------------------------------------------------
 #if defined(Q_OS_WIN)
+#if QT_VERSION < 0x060000
 bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+#else // QT_VERSION >= 0x060000
+bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
+#endif // QT_VERSION >= 0x060000
 {
   return DesktopPanel::nativeEventFilter(eventType, message, result);
 }

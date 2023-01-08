@@ -1,4 +1,4 @@
-# setup for Qt5
+# setup for Qt6
 #
 TARGET=$1
 UNAME=`uname`
@@ -9,17 +9,11 @@ COVVERSION=2022.6.0
 LOCALPATH=
 PATHLIST=
 #------------------
-# Qt 5.12 - 5.14
+# Qt 6.4 -
 #------------------
-#QTVERSION=5.12.10
-#VCVERSION=msvc2017
-#MINGWVERSION=mingw73
-#------------------
-# Qt 5.15 -
-#------------------
-QTVERSION=5.15.2
+QTVERSION=6.4.2
 VCVERSION=msvc2019
-MINGWVERSION=mingw81
+MINGWVERSION=1120
 
 case $UNAME in
 	CYGWIN*)
@@ -27,7 +21,7 @@ case $UNAME in
 			case $TARGET in
 				cygwin)
 					QTROOT="/usr"
-					QMAKE="qmake-qt5"
+					QMAKE="qmake-qt6"
 					;;
 				clean)
 					# ignore
@@ -38,7 +32,7 @@ case $UNAME in
 				msvc64)
 					QTROOT="/opt/Qt/${QTVERSION}/${VCVERSION}_64"
 					;;
-				msvc-xp)
+				xp)
 					QTVERSION=5.6.3
 					QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/msvc2015"
 					;;
@@ -50,27 +44,17 @@ case $UNAME in
 		else
 			case $UNAMEM in
 			x86_64)
-				QTROOT="/opt/Qt/${QTVERSION}/${MINGWVERSION}_64"
-				MINGWROOT="/opt/Qt/Tools/${MINGWVERSION}0_64"
+				QTROOT="/opt/Qt/${QTVERSION}/mingw_64"
+				MINGWROOT="/opt/Qt/Tools/mingw${MINGWVERSION}_64"
 				;;
 			i686)
-				QTROOT="/opt/Qt/${QTVERSION}/${MINGWVERSION}_32"
-				MINGWROOT="/opt/Qt/Tools/${MINGWVERSION}0_32"
+				QTROOT="/opt/Qt/${QTVERSION}/mingw_32"
+				MINGWROOT="/opt/Qt/Tools/mingw${MINGWVERSION}_32"
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
 				return;;
 			esac
-			# Qt5.12 - 5.15
-#			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/${MINGWVERSION}_32"
-#			MINGWROOT="/opt/Qt${QTVERSION}/Tools/${MINGWVERSION}0_32"
-			# Qt5.9 - 5.11
-#			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw53_32"
-#			MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw530_32"
-			# Qt5.6 for XP/Vista
-#			QTVERSION=5.6.3
-#			QTROOT="/opt/Qt${QTVERSION}/${QTVERSION}/mingw49_32"
-#			MINGWROOT="/opt/Qt${QTVERSION}/Tools/mingw492_32"
 			# MinGW
 			PATHLIST=${MINGWROOT}/bin
 			# Coverity Scan
@@ -111,14 +95,9 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
-				# macOS
-				QTROOT=/opt/Qt/${QTVERSION}/clang_64
+				QTROOT=/opt/Qt/${QTVERSION}/macos
 				# Coverity Scan
 				PATHLIST=/opt/cov-analysis-macosx-${COVVERSION}/bin:${PATHLIST}
-				if [ "$TARGET" = "ios" ] ; then
-				   # iOS
-				   QTROOT=/opt/Qt/${QTVERSION}/ios
-				fi
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

@@ -16,7 +16,7 @@ namespace qtbrynhildr {
 
 // phase name
 const QString phaseName[PHASE_NUM] = {
-  "[QtBrynhildr] ",
+  "[main]     ",
   "[control]  ",
   "[graphics] ",
   "[sound]    ",
@@ -72,7 +72,9 @@ bool LogMessage::openLogFile()
 
   // create QTextStrem
   logFileStream = new QTextStream(logFile);
+#if QT_VERSION < 0x060000
   logFileStream->setCodec("UTF-8");
+#endif // QT_VERSION < 0x060000
 
   return true;
 }

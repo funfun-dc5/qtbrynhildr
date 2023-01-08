@@ -8,7 +8,13 @@
 #include <cstring>
 
 // Qt Header
+#if QT_VERSION < 0x060000
 #include <QAudioDeviceInfo>
+#else // QT_VERSION >= 0x060000
+#include <QAudioDevice>
+#include <QMediaDevices>
+#include <QStringRef>
+#endif // QT_VERSION >= 0x060000
 #include <QByteArray>
 #include <QCloseEvent>
 #include <QDir>
@@ -189,6 +195,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,sendKey7_Action(0)
   ,onScrollMode_Action(0)
   ,onViewerMode_Action(0)
+  ,onFulFulMode_Action(0)
   ,onMonochromeMode_Action(0)
   ,onMouseTrackingMode_Action(0)
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -426,11 +433,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // create http getter
   httpGetter = new HttpGetter();
   if (!httpGetter->supportsSsl()){
-	cout << "NOT support OpenSSL" << endl << flush;
+	std::cout << "NOT support OpenSSL" << std::endl << std::flush;
   }
 #if 0 // for DEBUG
   else {
-	cout << "support OpenSSL" << endl << flush;
+	std::cout << "support OpenSSL" << std::endl << std::flush;
   }
 #endif // for DEBUG
   connect(httpGetter, SIGNAL(finished()), SLOT(finishedDownload()));
@@ -491,6 +498,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   }
 
   // Supported Sound Sample Rate List
+#if QT_VERSION < 0x060000
   {
 	const QAudioDeviceInfo deviceInfo(QAudioDeviceInfo::defaultOutputDevice());
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
@@ -501,6 +509,23 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	}
 	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
   }
+#else // QT_VERSION >= 0x060000
+  {
+	QAudioDevice defaultAudioOutput = QMediaDevices::defaultAudioOutput();
+	QString str = "Supported Sampling Rate (Hz): ";
+	if (defaultAudioOutput.isNull()){
+	  str =  str + " None";
+	  hasSoundDevice = false;
+	}
+	else {
+	  str = str +
+		QString::number(defaultAudioOutput.minimumSampleRate()) + " -  " +
+		QString::number(defaultAudioOutput.maximumSampleRate());
+	  hasSoundDevice = true;
+	}
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+  }
+#endif // QT_VERSION >= 0x060000
   // sound device check
   if (!hasSoundDevice){
 	// no sound device
@@ -1013,15 +1038,15 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   disableMaxfps_Action->setChecked(!controlThread->getOnMaxfps());
 
 #if 0 // for TEST
-  cout << "heightOfTitleBar = " <<  heightOfTitleBar << endl;
-  cout << "heightOfMenuBar = " << heightOfMenuBar << endl;
-  cout << "heightOfStatusBar = " << heightOfStatusBar << endl;
-  cout << "widthMargin = " << widthMargin << endl;
-  cout << "heightMargin = " << heightMargin << endl;
+  std::cout << "heightOfTitleBar = " <<  heightOfTitleBar << std::endl;
+  std::cout << "heightOfMenuBar = " << heightOfMenuBar << std::endl;
+  std::cout << "heightOfStatusBar = " << heightOfStatusBar << std::endl;
+  std::cout << "widthMargin = " << widthMargin << std::endl;
+  std::cout << "heightMargin = " << heightMargin << std::endl;
 
   QSize currentSize = size();
-  cout << "(width, height) = (" <<
-	currentSize.width() << ", " << currentSize.height() << ")" << endl << flush;
+  std::cout << "(width, height) = (" <<
+	currentSize.width() << ", " << currentSize.height() << ")" << std::endl << std::flush;
 #endif // for TEST
 
 #if QTB_SIMD_SUPPORT
@@ -1412,7 +1437,7 @@ void QtBrynhildr::refreshSoundQualityMenu()
 void QtBrynhildr::refreshMonitorMenu()
 {
   MONITOR_COUNT monitorCount = settings->getMonitorCount();
-  //  cout << "[QtBrynhildr] monitor_count=" << monitorCount << endl << flush;
+  //  std::cout << "[QtBrynhildr] monitor_count=" << monitorCount << std::endl << std::flush;
 
   switch(monitorCount){
   case 9:
@@ -1601,10 +1626,10 @@ void QtBrynhildr::setClipboard(QString clipboardString)
 	return;
   }
 
-  //	cout << "setClipboard = " << qPrintable(clipboardString) << endl << flush;
+  //	std::cout << "setClipboard = " << qPrintable(clipboardString) << std::endl << std::flush;
   // set clipboard
   clipboard->setText(clipboardString);
-  //	cout << "Clipboard = " << qPrintable(clipboard->text()) << endl << flush;
+  //	std::cout << "Clipboard = " << qPrintable(clipboard->text()) << std::endl << std::flush;
 }
 
 // set progress bar value for transfer file
@@ -2217,6 +2242,16 @@ void QtBrynhildr::createActions()
 	connect(onViewerMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnViewerMode()));
   }
 
+  // on FulFul Mode Action
+  if (QTB_VIEWER_MODE){
+	onFulFulMode_Action = new QAction(tr("Viewer Mode (FulFul)"), this);
+	onFulFulMode_Action->setEnabled(false);
+	onFulFulMode_Action->setCheckable(true);
+	onFulFulMode_Action->setChecked(settings->getOnViewerMode());
+	onFulFulMode_Action->setStatusTip(tr("Viewer Mode (FulFul)"));
+	connect(onFulFulMode_Action, SIGNAL(triggered()), this, SLOT(toggleOnFulFulMode()));
+  }
+
 #if QTB_GRAY_SCALE_MODE
   // Monochrome Mode
   onMonochromeMode_Action = new QAction(tr("Monochrome Mode"), this);
@@ -2659,6 +2694,7 @@ void QtBrynhildr::createMenus()
 
   if (QTB_VIEWER_MODE){
 	optionMenu->addAction(onViewerMode_Action);
+	optionMenu->addAction(onFulFulMode_Action);
   }
 
   if (QTB_SCROLL_MODE){
@@ -2961,6 +2997,9 @@ void QtBrynhildr::updateConnected()
 	if (settings->getOnViewerMode()){
 	  str += " [" + tr("Viewer Mode") + "]";
 	}
+	if (settings->getOnFulFulMode()){
+	  str += " [" + tr("FulFul Mode") + "]";
+	}
 	connectionLabel->setText(str);
   }
   else {
@@ -3126,6 +3165,7 @@ void QtBrynhildr::connected()
   // enable viewer mode
   if (QTB_VIEWER_MODE){
 	onViewerMode_Action->setEnabled(true);
+	onFulFulMode_Action->setEnabled(true);
   }
 
 #if 0 //QTB_GRAY_SCALE_MODE
@@ -3299,6 +3339,12 @@ void QtBrynhildr::disconnected()
 	  // viewer mode OFF
 	  toggleOnViewerMode();
 	}
+
+  	onFulFulMode_Action->setEnabled(false);
+	if (settings->getOnFulFulMode()){
+	  // viewer mode OFF
+	  toggleOnFulFulMode();
+	}
   }
 
   // disabled full screen
@@ -3425,7 +3471,7 @@ void QtBrynhildr::setDesktopScalingFactor(QSize windowSize)
   else {
 	settings->setDesktopScalingFactor(heightFactor);
   }
-  //cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << endl << flush;
+  //std::cout << "setDesktopScalingFactor():" << settings->getDesktopScalingFactor() << std::endl << std::flush;
 #if 0 // for TEST
   qDebug() << "screenSize = " << screenSize;
   qDebug() << "width = " << width;
@@ -3458,7 +3504,7 @@ void QtBrynhildr::changeEvent(QEvent *event)
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
 {
-  event->ignore();
+  Q_UNUSED(event);
 
   exit();
 }
@@ -3468,13 +3514,13 @@ void QtBrynhildr::resizeEvent(QResizeEvent *event)
 {
   QMainWindow::resizeEvent(event);
 
-  //cout << "resizeEvent()" << endl << flush;
+  //std::cout << "resizeEvent()" << std::endl << std::flush;
 
 #if !defined(QTB_DEV_TOUCHPANEL)
   // rescaling desktop
 #if 0 // for TEST
-  cout << "resizeEvent() : Rescaling for (width, height) = ("
-	   << event->size().width() << "," << event->size().height() << ")" << endl << flush;
+  std::cout << "resizeEvent() : Rescaling for (width, height) = ("
+	   << event->size().width() << "," << event->size().height() << ")" << std::endl << std::flush;
 #endif // for TEST
   //setDesktopScalingFactor(event->size());
 
@@ -3498,7 +3544,7 @@ void QtBrynhildr::hideEvent(QHideEvent *event)
   QMainWindow::hideEvent(event);
 
   if (settings->getConnected()){
-	//	cout << "hideEvent()" << endl << flush;
+	//	std::cout << "hideEvent()" << std::endl << std::flush;
 
 	// set frame rate to 1
 	if (savedFrameRate == 0){
@@ -3516,7 +3562,7 @@ void QtBrynhildr::showEvent(QShowEvent *event)
   QMainWindow::showEvent(event);
 
   if (settings->getConnected()){
-	//	cout << "showEvent()" << endl << flush;
+	//	std::cout << "showEvent()" << std::endl << std::flush;
 
 	// restore frame rate
 	if (savedFrameRate != 0){
@@ -3533,16 +3579,16 @@ void QtBrynhildr::contextMenuEvent(QContextMenuEvent *event)
 {
   switch(event->reason()){
   case QContextMenuEvent::Mouse:
-	//	cout << "Context Menu Event by Mouse (Right button)" << endl << flush;
+	//	std::cout << "Context Menu Event by Mouse (Right button)" << std::endl << std::flush;
 	break;
   case QContextMenuEvent::Keyboard:
-	//	cout << "Context Menu Event by Keyboard (Menu button)" << endl << flush;
+	//	std::cout << "Context Menu Event by Keyboard (Menu button)" << std::endl << std::flush;
 	break;
   case QContextMenuEvent::Other:
-	//	cout << "Context Menu Event by Other" << endl << flush;
+	//	std::cout << "Context Menu Event by Other" << std::endl << std::flush;
 	break;
   default:
-	//	cout << "Context Menu Event by Unknown" << endl << flush;
+	//	std::cout << "Context Menu Event by Unknown" << std::endl << std::flush;
 	break;
   }
 
@@ -3557,6 +3603,7 @@ void QtBrynhildr::readSettings()
 	settings->readSettings();
   }
 
+#if defined(QTB_DEV_DESKTOP)
   // restore geometry
 #if 0 // for all platform
   QRect defaultRect = QRect(200, 200, 800, 600);
@@ -3575,6 +3622,7 @@ void QtBrynhildr::readSettings()
 
   // restore window state
   restoreState(settings->getSettings()->value(QTB_WINDOWSTATE).toByteArray());
+#endif // defined(QTB_DEV_DESKTOP)
 }
 
 // save settings to setting file or registry
@@ -3583,6 +3631,7 @@ void QtBrynhildr::writeSettings()
   // write global settings
   settings->writeSettings();
 
+#if defined(QTB_DEV_DESKTOP)
   // save geometry
 #if 0 // for all platform
   settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
@@ -3595,6 +3644,7 @@ void QtBrynhildr::writeSettings()
 
   // save window state
   settings->getSettings()->setValue(QTB_WINDOWSTATE, saveState());
+#endif // defined(QTB_DEV_DESKTOP)
 
   // sync
   settings->getSettings()->sync();
@@ -3643,16 +3693,16 @@ void QtBrynhildr::popUpConnectToServer()
 // check update
 void QtBrynhildr::checkUpdate()
 {
-  //  cout << "enter checkUpdate()" << endl << flush;
+  //  std::cout << "enter checkUpdate()" << std::endl << std::flush;
 
   // start downloading release page
   //  bool result = httpGetter->startDownload(QTB_URL_FOR_RELEASE, "release_page.html");
   bool result = httpGetter->startDownload(QTB_URL_FOR_RELEASE);
   if (!result){
-	cout << "Failed to http access" << endl << flush;
+	std::cout << "Failed to http access" << std::endl << std::flush;
   }
 
-  //  cout << "leave checkUpdate()" << endl << flush;
+  //  std::cout << "leave checkUpdate()" << std::endl << std::flush;
 }
 #endif // QTB_UPDATECHECK
 
@@ -3710,7 +3760,7 @@ void QtBrynhildr::connectToServer()
 #ifdef USE_KEYLAYOUTFILE
 	int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
 	// set key layout file to eventconverter
-	//	cout << "key layout file index = " << index << endl << flush;
+	//	std::cout << "key layout file index = " << index << std::endl << std::flush;
 	eventConverter->setKeytopType(keyLayoutFileReader->getKeyLayoutFile(index));
 #else // USE_KEYLAYOUTFILE
 	ABORT();
@@ -3753,7 +3803,7 @@ void QtBrynhildr::connectToServer()
 #ifdef USE_KEYLAYOUTFILE
 	int index = keyboardType - KEYBOARD_TYPE_NATIVE - 1;
 	// set key layout file to software keyboard
-	//	  cout << "key layout file index = " << index << endl << flush;
+	//	  std::cout << "key layout file index = " << index << std::endl << std::flush;
 	KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
 	softwareKeyboard->setKeytopType(keyLayoutFile);
 	settings->setKeyboardTypeName(keyLayoutFile->getName());
@@ -3891,7 +3941,7 @@ void QtBrynhildr::disconnectToServer()
 // finished thread
 void QtBrynhildr::finishedNetThread()
 {
-  //  cout << "finishedNetThread()" << endl << flush;
+  //  std::cout << "finishedNetThread()" << std::endl << std::flush;
   // disconnect
   settings->setConnected(false);
 
@@ -3902,6 +3952,10 @@ void QtBrynhildr::finishedNetThread()
 // exit process for Application exit
 void QtBrynhildr::exit()
 {
+  // execute once
+  static bool doneExit = false;
+  if (doneExit) return;
+
   if (settings->getOnConfirmAtExit()){
 	ConfirmDialog *confirmDialog =
 	  new ConfirmDialog(tr("exit application?"),
@@ -3917,6 +3971,9 @@ void QtBrynhildr::exit()
 	  return;
 	}
   }
+
+  // execute once
+  doneExit = true;
 
   // disconnected
   disconnectToServer();
@@ -3958,17 +4015,31 @@ void QtBrynhildr::exit()
   // output average of frame rate
   // get total frame counter
   totalFrameCounter = graphicsThread->getTotalFrameCounter();
+#if QT_VERSION < 0x060000
   if (totalFrameCounter != 0){
-	//	cout << "totalFrameCounter = " << totalFrameCounter << endl << flush;
+	//	std::cout << "totalFrameCounter = " << totalFrameCounter << std::endl << std::flush;
 	uint diffSeconds = shutdownTime.toTime_t() - bootTime.toTime_t();
 	if (diffSeconds != 0){
 	  float averageFrameRate = (float)totalFrameCounter/diffSeconds;
-	  //	  cout << "FPS of last session: " << averageFrameRate << endl << flush;
+	  //	  std::cout << "FPS of last session: " << averageFrameRate << std::endl << std::flush;
 	  QString averageFrameRateString;
 	  averageFrameRateString.setNum(averageFrameRate);
 	  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("FPS of last session : ") + averageFrameRateString + " FPS");
 	}
   }
+#else // QT_VERSION >= 0x060000
+  if (totalFrameCounter != 0){
+	//	std::cout << "totalFrameCounter = " << totalFrameCounter << std::endl << std::flush;
+	uint diffSeconds = shutdownTime.toSecsSinceEpoch() - bootTime.toSecsSinceEpoch();
+	if (diffSeconds != 0){
+	  float averageFrameRate = (float)totalFrameCounter/diffSeconds;
+	  //	  std::cout << "FPS of last session: " << averageFrameRate << std::endl << std::flush;
+	  QString averageFrameRateString;
+	  averageFrameRateString.setNum(averageFrameRate);
+	  logMessage->outputLogMessage(PHASE_QTBRYNHILDR, tr("FPS of last session : ") + averageFrameRateString + " FPS");
+	}
+  }
+#endif // QT_VERSION >= 0x060000
 
   // quit
   qApp->quit();
@@ -4034,7 +4105,7 @@ void QtBrynhildr::sendClipboard()
 	}
   }
   else {
-	qDebug() << "clipboard has unknown data!";
+	std::cout << "clipboard has unknown data!";
   }
 }
 
@@ -4070,20 +4141,20 @@ void QtBrynhildr::cancelFileTransferring()
 // preferences
 void QtBrynhildr::preferences()
 {
-  //cout << "enter preferences()" << endl << flush;
+  //std::cout << "enter preferences()" << std::endl << std::flush;
 
   QPoint pos = getInitialDialogPos(preferenceDialog);
   preferenceDialog->move(pos);
   preferenceDialog->show();
 
-  //cout << "leave preferences()" << endl << flush;
+  //std::cout << "leave preferences()" << std::endl << std::flush;
 }
 #endif // QTB_PREFERENCE
 
 // initialize settings
 void QtBrynhildr::initializeSettings()
 {
-  //cout << "enter initializeSettings()" << endl << flush;
+  //std::cout << "enter initializeSettings()" << std::endl << std::flush;
 
   int ret = QMessageBox::question(this,
 								  tr("Confirm"),
@@ -4114,7 +4185,7 @@ void QtBrynhildr::initializeSettings()
 	connectToServerDialog->hide();
   }
 
-  //cout << "leave initializeSettings()" << endl << flush;
+  //std::cout << "leave initializeSettings()" << std::endl << std::flush;
 }
 
 // clear Video Quality check
@@ -4381,7 +4452,7 @@ void QtBrynhildr::topLevelChanged(bool topLevel)
 {
   Q_UNUSED(topLevel);
 
-  //  cout << "topLevel:" << topLevel << endl << flush;
+  //  std::cout << "topLevel:" << topLevel << std::endl << std::flush;
   // refresh desktop
   if (settings->getConnected()){
 	desktopPanel->resizeWindow();
@@ -4517,6 +4588,7 @@ void QtBrynhildr::refreshOtherMenu()
   }
   if (QTB_VIEWER_MODE){
 	onViewerMode_Action->setEnabled(flag);
+	onFulFulMode_Action->setEnabled(flag);
   }
 
 #if 0 //QTB_GRAY_SCALE_MODE
@@ -4905,8 +4977,8 @@ void QtBrynhildr::fullScreen()
 
 #if 0 // for DEBUG
   QSize size = desktopPanel->getSize();
-  cout << "fullScreen() : width  = " << size.width() << endl << flush;
-  cout << "fullScreen() : height = " << size.height() << endl << flush;
+  std::cout << "fullScreen() : width  = " << size.width() << std::endl << std::flush;
+  std::cout << "fullScreen() : height = " << size.height() << std::endl << std::flush;
 #endif // for DEBUG
 
   static qreal originalScalingFactor = 1.0;
@@ -4927,8 +4999,8 @@ void QtBrynhildr::fullScreen()
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->setOnFullScreen(true);
 	showFullScreen();
-	//cout << "size(width, height) = ("
-	//	 << size().width() << "," << size().height() << ")" << endl << flush;
+	//std::cout << "size(width, height) = ("
+	//	 << size().width() << "," << size().height() << ")" << std::endl << std::flush;
 	//setDesktopScalingFactor(size());
 	originalScalingFactor = settings->getDesktopScalingFactor();
 	QSize screenSize = settings->getCurrentScreenSize();
@@ -4949,8 +5021,8 @@ void QtBrynhildr::fullScreen()
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->setOnFullScreen(false);
 	showNormal();
-	//cout << "size(width, height) = ("
-	//	 << size().width() << "," << size().height() << ")" << endl << flush;
+	//std::cout << "size(width, height) = ("
+	//	 << size().width() << "," << size().height() << ")" << std::endl << std::flush;
 	//setDesktopScalingFactor(size());
 	settings->setDesktopScalingFactor(originalScalingFactor);
   }
@@ -5178,10 +5250,10 @@ QRect QtBrynhildr::calculateSoftwareKeyboardLayout()
   int x = (windowSize.width() - width) * 0.5;
   int y = (windowSize.height() - height) * 0.8;
 
-  //  cout << "width = " << width << endl;
-  //  cout << "height = " << height << endl << flush;
-  //  cout << "x = " << x << endl;
-  //  cout << "y = " << y << endl << flush;
+  //  std::cout << "width = " << width << std::endl;
+  //  std::cout << "height = " << height << std::endl << std::flush;
+  //  std::cout << "x = " << x << std::endl;
+  //  std::cout << "y = " << y << std::endl << std::flush;
 
   return QRect(x, y, width, height);
 }
@@ -5221,10 +5293,10 @@ QRect QtBrynhildr::calculateSoftwareButtonLayout()
   int x = (windowSize.width() - width) * 0.5;
   int y = (windowSize.height() - height) * 0.8;
 
-  //  cout << "width = " << width << endl;
-  //  cout << "height = " << height << endl << flush;
-  //  cout << "x = " << x << endl;
-  //  cout << "y = " << y << endl << flush;
+  //  std::cout << "width = " << width << std::endl;
+  //  std::cout << "height = " << height << std::endl << std::flush;
+  //  std::cout << "x = " << x << std::endl;
+  //  std::cout << "y = " << y << std::endl << std::flush;
 
   return QRect(x, y, width, height);
 }
@@ -5473,6 +5545,25 @@ void QtBrynhildr::toggleOnViewerMode()
 
   // set checked flag
   onViewerMode_Action->setChecked(settings->getOnViewerMode());
+
+  updateStatusBar();
+}
+
+// toggle fulful mode
+void QtBrynhildr::toggleOnFulFulMode()
+{
+  if (!QTB_VIEWER_MODE)
+	return;
+
+  if (settings->getOnFulFulMode()){
+	settings->setOnFulFulMode(false);
+  }
+  else {
+	settings->setOnFulFulMode(true);
+  }
+
+  // set checked flag
+  onFulFulMode_Action->setChecked(settings->getOnFulFulMode());
 
   updateStatusBar();
 }
@@ -5772,7 +5863,7 @@ void QtBrynhildr::finishedDownload()
   // check update
   QByteArray byteArray = httpGetter->getPage();
   if (byteArray.size() == 0){
-	cout << "finished downloading to file." << endl << flush;
+	std::cout << "finished downloading to file." << std::endl << std::flush;
 	return;
   }
 
@@ -5789,28 +5880,27 @@ void QtBrynhildr::finishedDownload()
   // check latest release
   int startIndex = releasePage.indexOf(QTB_STRING_FOR_TAGSEARCH);
   if (startIndex > 0) {
-	startIndex += qstrlen(QTB_STRING_FOR_TAGSEARCH);
+	startIndex += (int)qstrlen(QTB_STRING_FOR_TAGSEARCH);
 	int lastIndex = releasePage.indexOf("\"", startIndex);
-	//  cout << "startIndex = " << startIndex << endl << flush;
-	//  cout << "lastIndex  = " << lastIndex << endl << flush;
+	//std::cout << "startIndex = " << startIndex << std::endl << std::flush;
+	//std::cout << "lastIndex  = " << lastIndex << std::endl << std::flush;
 	QStringRef tagRef(&releasePage, startIndex, lastIndex - startIndex);
 	QString latestTag;
 	latestTag.append(tagRef);
-	//	cout << "latest tag = v" << qPrintable(latestTag) << endl;
+	//std::cout << "latest tag = v" << qPrintable(latestTag) << std::endl;
 
 	startIndex = lastIndex + 2;
 	lastIndex = releasePage.indexOf("<", startIndex);
 	QStringRef verRef(&releasePage, startIndex, lastIndex - startIndex);
 	QString ver;
 	ver.append(verRef);
-	//	  cout << " : ver = " << qPrintable(ver) << endl << flush;
+	//std::cout << " : ver = " << qPrintable(ver) << std::endl << std::flush;
 
 	QString tag(option->getVersionString());
-	//	  tag = "169";
-	//	cout << "current tag = v" <<  qPrintable(tag) << endl << flush;
 	if (tag != latestTag){
 	  // Found new version
-	  //		cout << "Found new version" << endl << flush;
+	  //std::cout << "Found new version" << std::endl << std::flush;
+#if defined(QTB_DEV_DESKTOP)
 	  int ret = QMessageBox::question(this,
 									  tr("Confirm"),
 									  tr("Found new release. Open release page?"),
@@ -5819,11 +5909,15 @@ void QtBrynhildr::finishedDownload()
 	  if (ret == QMessageBox::Ok){
 		QDesktopServices::openUrl(QUrl(QTB_URL_FOR_RELEASE));
 	  }
+#else // !defined(QTB_DEV_DESKTOP)
+	  QMessageBox::information(this, tr("Information"),
+							   tr("Found new release."));
+#endif // !defined(QTB_DEV_DESKTOP)
 	}
 	else {
 	  if (!onCheckUpdateInBackground){
 		// Up-to-date
-		//		cout << "Up-to-date!" << endl << flush;
+		//		std::cout << "Up-to-date!" << std::endl << std::flush;
 		QMessageBox::information(this, tr("Information"),
 								 tr("Up-to-date!"));
 	  }
@@ -5834,7 +5928,7 @@ void QtBrynhildr::finishedDownload()
 	}
   }
   else {
-	cout << "NOT Found tag!" << endl << flush;
+	std::cout << "NOT Found tag!" << std::endl << std::flush;
   }
 
   // clear memory
@@ -5844,7 +5938,7 @@ void QtBrynhildr::finishedDownload()
 
 void QtBrynhildr::timerExpired()
 {
-  //  cout << "timerExpired()!" << endl << flush;
+  //  std::cout << "timerExpired()!" << std::endl << std::flush;
 #if QTB_TEST_DRAW_FRAME
   {
 	static int previousDrawCounter = 0;
@@ -5854,7 +5948,7 @@ void QtBrynhildr::timerExpired()
 	else {
 	  int frameRate = drawCounter - previousDrawCounter;
 	  previousDrawCounter = drawCounter;
-	  cout << "frameRate: " << frameRate << endl << flush;
+	  std::cout << "frameRate: " << frameRate << std::endl << std::flush;
 	}
   }
 #endif // QTB_TEST_DRAW_FRAME

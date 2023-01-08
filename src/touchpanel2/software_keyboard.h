@@ -21,8 +21,6 @@
 #include "config.h"
 #include "windows/keycodes.h"
 
-using namespace std;
-
 namespace qtbrynhildr {
 
 #ifdef USE_KEYLAYOUTFILE
@@ -561,7 +559,7 @@ private:
   uchar pressedFnKey(ID_KEY id);
 
   // get name of virtual keycode
-  static string getVKCodeByString(uchar vkcode);
+  static std::string getVKCodeByString(uchar vkcode);
 
 #if QTB_DEBUG
   // print KeyTop

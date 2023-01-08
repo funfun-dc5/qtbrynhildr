@@ -93,7 +93,8 @@ typedef int SERVER_TYPE;
 #define	SERVER_TYPE_WINDOWS_8		3
 #define	SERVER_TYPE_WINDOWS_8_1		4
 #define	SERVER_TYPE_WINDOWS_10		5
-#define	SERVER_TYPE_NUM				6
+#define	SERVER_TYPE_WINDOWS_11		6
+#define	SERVER_TYPE_NUM				7
 
 #define	STRING_SERVER_TYPE_WINDOWS_XP		"Windows XP"
 #define	STRING_SERVER_TYPE_WINDOWS_VISTA	"Windows Vista"
@@ -101,6 +102,7 @@ typedef int SERVER_TYPE;
 #define	STRING_SERVER_TYPE_WINDOWS_8		"Windows 8"
 #define	STRING_SERVER_TYPE_WINDOWS_8_1		"Windows 8.1"
 #define	STRING_SERVER_TYPE_WINDOWS_10		"Windows 10"
+#define	STRING_SERVER_TYPE_WINDOWS_11		"Windows 11"
 
 // for keyboardType
 #define QTB_KEYBOARDTYPE		"keyboardType"
@@ -769,6 +771,9 @@ private:
   // viewer mode
   volatile bool onViewerMode;
 
+  // fulful mode
+  volatile bool onFulFulMode;
+
   // show password
   volatile bool onShowPassword;
 
@@ -1054,6 +1059,7 @@ public:
 	case SERVER_TYPE_WINDOWS_8:
 	case SERVER_TYPE_WINDOWS_8_1:
 	case SERVER_TYPE_WINDOWS_10:
+	case SERVER_TYPE_WINDOWS_11:
 	  setSoundCapture(SOUND_CAPTURE_CORE_AUDIO);
 	  break;
 	default:
@@ -1072,7 +1078,8 @@ public:
 	  "7",
 	  "8",
 	  "8.1",
-	  "10"
+	  "10",
+	  "11"
 	};
 	for(int i = 0; i < SERVER_TYPE_NUM; i++){
 	  if (strncmp(hostTypeTable[i], hostType, strlen(hostType)) == 0){
@@ -1094,6 +1101,7 @@ public:
 	  "SERVER_TYPE_WINDOWS_8",
 	  "SERVER_TYPE_WINDOWS_8.1",
 	  "SERVER_TYPE_WINDOWS_10",
+	  "SERVER_TYPE_WINDOWS_11",
 	};
 
 	return stringTable[serverType];
@@ -1656,13 +1664,17 @@ public:
   // set desktop scaling factor
   void setDesktopScalingFactor(qreal desktopScalingFactor)
   {
-	if (desktopScalingFactorLimit != 0.0){
-	  if (desktopScalingFactor >= desktopScalingFactorLimit){
+	if ((desktopScalingFactorLimit != 0.0)){ // for Touch Panel
+	  if (desktopScalingFactor > desktopScalingFactorLimit){
 		this->desktopScalingFactor = desktopScalingFactor;
 		this->desktopScalingFactorForZoom = 1.0/desktopScalingFactor;
 	  }
+	  else {
+		this->desktopScalingFactor = desktopScalingFactorLimit;
+		this->desktopScalingFactorForZoom = 1.0/desktopScalingFactorLimit;
+	  }
 	}
-	else {
+	else { // for Desktop
 	  this->desktopScalingFactor = desktopScalingFactor;
 	  this->desktopScalingFactorForZoom = 1.0/desktopScalingFactor;
 	}
@@ -1969,7 +1981,11 @@ public:
   // get check update at bootup flag
   bool getOnCheckUpdateAtBootup() const
   {
+#if defined(QTB_DEV_TOUCHPANEL)
+	return false;
+#else // !defined(QTB_DEV_TOUCHPANEL)
 	return onCheckUpdateAtBootup;
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   }
 
   // set check update at bootup flag
@@ -2247,6 +2263,18 @@ public:
   void setOnViewerMode(bool onViewerMode)
   {
 	this->onViewerMode = onViewerMode;
+  }
+
+  // get on fulful mode flag
+  bool getOnFulFulMode() const
+  {
+	return onFulFulMode;
+  }
+
+  // set on fulful mode flag
+  void setOnFulFulMode(bool onFulFulMode)
+  {
+	this->onFulFulMode = onFulFulMode;
   }
 
   // get on desktop capture flag

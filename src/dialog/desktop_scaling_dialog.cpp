@@ -58,7 +58,7 @@ void DesktopScalingDialog::setSliderPositionFromSetting()
 {
   horizontalSlider->setSliderPosition((int)(settings->getDesktopScalingFactor()*SLIDER_FACTOR));
   if (outputLog)
-	cout << "slider position: " << settings->getDesktopScalingFactor()*SLIDER_FACTOR << endl << flush; // for DEBUG
+	std::cout << "slider position: " << settings->getDesktopScalingFactor()*SLIDER_FACTOR << std::endl << std::flush; // for DEBUG
 }
 
 // set setting from scale slider position
@@ -70,8 +70,8 @@ void DesktopScalingDialog::setSettingFromSliderPosition()
   }
   settings->setDesktopScalingFactor((qreal)horizontalSlider->value()/SLIDER_FACTOR);
   if (outputLog){
-	cout << "scaling value: " << horizontalSlider->value() << endl << flush; // for DEBUG
-	cout << "scaling factor: " << settings->getDesktopScalingFactor() << endl << flush; // for DEBUG
+	std::cout << "scaling value: " << horizontalSlider->value() << std::endl << std::flush; // for DEBUG
+	std::cout << "scaling factor: " << settings->getDesktopScalingFactor() << std::endl << std::flush; // for DEBUG
   }
 }
 
@@ -114,7 +114,7 @@ void DesktopScalingDialog::on_horizontalSlider_valueChanged()
 {
   if (isActiveWindow()){
 	if (outputLog)
-	  cout << "slider: value Changed" << endl << flush; // for DEBUG
+	  std::cout << "slider: value Changed" << std::endl << std::flush; // for DEBUG
  	setSettingFromSliderPosition();
   }
 }
@@ -123,7 +123,7 @@ void DesktopScalingDialog::on_horizontalSlider_valueChanged()
 void DesktopScalingDialog::on_resetButton_clicked()
 {
   if (outputLog)
-	cout << "reset button: click" << endl << flush; // for DEBUG
+	std::cout << "reset button: click" << std::endl << std::flush; // for DEBUG
   if (settings->getOnDesktopScaleFixed()){
 	// NOT change scaling
 	return;
@@ -138,7 +138,7 @@ void DesktopScalingDialog::on_resetButton_clicked()
 void DesktopScalingDialog::accept()
 {
   if (outputLog)
-	cout << "accept()."; // for DEBUG
+	std::cout << "accept()."; // for DEBUG
   hide();
 }
 
@@ -146,7 +146,7 @@ void DesktopScalingDialog::accept()
 void DesktopScalingDialog::reject()
 {
   if (outputLog)
-	cout << "reject()."; // for DEBUG
+	std::cout << "reject()."; // for DEBUG
   settings->setDesktopScalingFactor(originalFactor);
   hide();
 }

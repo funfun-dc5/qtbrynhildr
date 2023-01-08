@@ -15,8 +15,6 @@
 // Local Header
 #include "software_button.h"
 
-using namespace std; // for TEST
-
 namespace qtbrynhildr {
 
 //---------------------------------------------------------------------------
@@ -155,7 +153,7 @@ void SoftwareButton::resizeEvent(QResizeEvent *event)
   QSize size = event->size() - QSize(1, 1);
 
   if (size != buttonSize){
-	//cout << "resize! : (W, H) = (" << size.width() << "," << size.height() << ")" << endl << flush;
+	//std::cout << "resize! : (W, H) = (" << size.width() << "," << size.height() << ")" << std::endl << std::flush;
 	qreal xFactor = (qreal)size.width()/WIDTH;
 	qreal yFactor = (qreal)size.height()/HEIGHT;
 	// recalculate layout
@@ -163,7 +161,7 @@ void SoftwareButton::resizeEvent(QResizeEvent *event)
 	update();
   }
   else {
-	//cout << "resize! : same size" << endl << flush;
+	//std::cout << "resize! : same size" << std::endl << std::flush;
   }
 }
 
@@ -177,7 +175,7 @@ bool SoftwareButton::isOnButton() const
 void SoftwareButton::mousePressEvent(QMouseEvent *event)
 {
   if (outputLog)
-	cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
+	std::cout << "Press  : (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl << std::flush;
   ID_BUTTON id = getID(event->pos());
   if (id != ID_BUTTON_NULL){
 	pressedButton(id);
@@ -192,7 +190,7 @@ void SoftwareButton::mousePressEvent(QMouseEvent *event)
 void SoftwareButton::mouseReleaseEvent(QMouseEvent *event)
 {
   if (outputLog)
-	cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
+	std::cout << "Release: (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl << std::flush;
   ID_BUTTON id = getID(event->pos());
   if (id != ID_BUTTON_NULL){
 	releasedButton(id);
@@ -220,7 +218,7 @@ void SoftwareButton::mouseMoveEvent(QMouseEvent *event)
 void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog)
-	cout << "Pressed : ID_BUTTON = " << id << endl << flush;
+	std::cout << "Pressed : ID_BUTTON = " << id << std::endl << std::flush;
 
   switch (id){
   case ID_BUTTON_1:
@@ -391,7 +389,7 @@ void SoftwareButton::pressedButton(SoftwareButton::ID_BUTTON id)
 void SoftwareButton::releasedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog)
-	cout << "Released: ID_BUTTON = " << id << endl << flush;
+	std::cout << "Released: ID_BUTTON = " << id << std::endl << std::flush;
 
   switch (id){
   case ID_BUTTON_1:
@@ -428,7 +426,7 @@ void SoftwareButton::calculateLayout(qreal xFactor, qreal yFactor)
 	layout[i].rect.setHeight(rect.height()*yFactor);
   }
   buttonSize = QSize(WIDTH * xFactor, HEIGHT * yFactor);
-  //  cout << "Button Layout! : (W, H) = (" << buttonSize.width() << "," << buttonSize.height() << ")" << endl << flush;;
+  //  std::cout << "Button Layout! : (W, H) = (" << buttonSize.width() << "," << buttonSize.height() << ")" << std::endl << std::flush;;
   // font ,pen, etc
   //  setFontSize(32);
   setFontSize((int)((double)buttonSize.height()/1080*32));

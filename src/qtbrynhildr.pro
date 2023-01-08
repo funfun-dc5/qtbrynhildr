@@ -14,6 +14,10 @@ TRANSLATIONS = translations/qtbrynhildr_ja.ts
 QT += gui
 QT += widgets
 QT += multimedia
+# for Qt6
+greaterThan(QT_MAJOR_VERSION, 5){
+QT += core5compat
+}
 
 # UI
 FORMS += GUI/connect_to_server_dialog.ui
@@ -25,7 +29,7 @@ FORMS += GUI/log_view_dialog.ui
 # common
 INCLUDEPATH += .
 # C++11
-CONFIG += c++11
+CONFIG += c++17
 # Endian
 DEFINES += QTB_LITTLE_ENDIAN
 
@@ -61,6 +65,7 @@ win32-g++ {
 CONFIG += mingw-x64
 # for DEBUG
 CONFIG += console
+QMAKE_CXXFLAGS += -flto
 }
 
 # MSVC
@@ -84,6 +89,7 @@ CONFIG += msvc-xp
 cygwin-g++ {
 CONFIG += cygwin-x64
 #CONFIG += cygwin-x86
+QMAKE_CXXFLAGS += -flto
 }
 include (pro/os_cygwin.pro)
 
@@ -93,6 +99,7 @@ include (pro/os_cygwin.pro)
 linux-g++-64 | linux-g++ {
 CONFIG += linux-x64
 #CONFIG += linux-x86
+QMAKE_CXXFLAGS += -flto
 }
 include (pro/os_linux.pro)
 
@@ -101,6 +108,7 @@ include (pro/os_linux.pro)
 # ------------------------------------------------------------------------------
 freebsd-g++ | freebsd-clang {
 CONFIG += freebsd-x64
+QMAKE_CXXFLAGS += -flto
 }
 include (pro/os_freebsd.pro)
 
@@ -109,6 +117,7 @@ include (pro/os_freebsd.pro)
 # ------------------------------------------------------------------------------
 macx {
 CONFIG += macos-x64
+QMAKE_CXXFLAGS += -flto
 }
 include (pro/os_macos.pro)
 
@@ -122,6 +131,7 @@ include (pro/os_ios.pro)
 # ------------------------------------------------------------------------------
 android-g++ | android-clang {
 CONFIG += android
+#QMAKE_CXXFLAGS += -flto
 }
 include (pro/os_android.pro)
 

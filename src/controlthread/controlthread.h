@@ -65,6 +65,9 @@ private:
   // mouse position
   MOUSE_POS prevPos;
 
+  // sent mouse position
+  MOUSE_POS sentPos;
+
   // SHIFT key status
   KEYDOWN keydownSHIFT;
 
@@ -109,6 +112,9 @@ private:
 
   // local buffer
   char *buffer;
+
+  // FulFul
+  bool onFulFul;
 
   //-------------------------------------------------------------------------------
   // Function

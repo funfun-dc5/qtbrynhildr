@@ -122,9 +122,9 @@ void DesktopPanel::refreshDesktop(QImage &image)
   // resize window
   if (currentSize != previousSize){
 #if 0 // for DEBUG
-	cout << "resize..." << endl; // for DEBUG
-	cout << "image.size().width()  = " << image.size().width() << endl; // for DEBUG
-	cout << "image.size().height() = " << image.size().height() << endl << flush; // for DEBUG
+	std::cout << "resize..." << std::endl; // for DEBUG
+	std::cout << "image.size().width()  = " << image.size().width() << std::endl; // for DEBUG
+	std::cout << "image.size().height() = " << image.size().height() << std::endl << std::flush; // for DEBUG
 #endif // for DEBUG
 	previousSize = currentSize;
 
@@ -178,6 +178,7 @@ void DesktopPanel::resizeWindow()
 		height += heightMargin;
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 
+#if 0 // for TEST
 		QSize screenSize = settings->getCurrentScreenSize();
 		if (width > screenSize.width()){
 		  width = screenSize.width();
@@ -185,6 +186,7 @@ void DesktopPanel::resizeWindow()
 		if (height > screenSize.height()){
 		  height = screenSize.height();
 		}
+#endif // 0 // for TEST
 
 #if !defined(QTB_DEV_TOUCHPANEL)
 		// resize
@@ -201,7 +203,7 @@ void DesktopPanel::resizeWindow()
 // clear desktop window
 void DesktopPanel::clearDesktop()
 {
-  //  cout << "clearDesktop()" << endl << flush;
+  //  std::cout << "clearDesktop()" << std::endl << std::flush;
   if (!image.isNull()){
 	image.fill(QTB_DESKTOP_BACKGROUND_COLOR);
 	updateDesktop();
@@ -368,26 +370,26 @@ void DesktopPanel::printMouseButtonEvent(QMouseEvent *event)
 {
   switch (event->button()){
   case Qt::LeftButton:
-	cout << "Left Button    : ";
+	std::cout << "Left Button    : ";
 	break;
   case Qt::RightButton:
-	cout << "Right Button   : ";
+	std::cout << "Right Button   : ";
 	break;
   case Qt::MiddleButton:
-	cout << "Middle Button  : ";
+	std::cout << "Middle Button  : ";
 	break;
   case Qt::ForwardButton:
-	cout << "Forward Button : ";
+	std::cout << "Forward Button : ";
 	break;
   case Qt::BackButton:
-	cout << "Back Button    : ";
+	std::cout << "Back Button    : ";
 	break;
   default:
-	cout << "Unknown Button : ";
+	std::cout << "Unknown Button : ";
 	break;
   }
 
-  cout << "(x, y) = (" << event->pos().x() << "," << event->pos().y() << ")" << endl << flush;
+  std::cout << "(x, y) = (" << event->pos().x() << "," << event->pos().y() << ")" << std::endl << std::flush;
 }
 
 // set mouse button event
@@ -422,7 +424,7 @@ void DesktopPanel::mousePressEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[DesktopPanel] mousePressEvent: ";
+	std::cout << "[DesktopPanel] mousePressEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -448,7 +450,7 @@ void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[DesktopPanel] mouseReleaseEvent: ";
+	std::cout << "[DesktopPanel] mouseReleaseEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -467,7 +469,7 @@ void DesktopPanel::mouseReleaseEvent(QMouseEvent *event)
 	if (event->button() == Qt::LeftButton){
 	  QRect window = QRect(0, 0, currentSize.width(), currentSize.height());
 	  if (!window.contains(event->pos(), false)){
-		//		cout << "FileDrop!" << endl << flush;
+		//		std::cout << "FileDrop!" << std::endl << std::flush;
 		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_FILEDROP, MOUSE_BUTTON_UP);
 		return;
 	  }
@@ -484,7 +486,7 @@ void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-	cout << "[DesktopPanel] mouseDoubleClickEvent: ";
+	std::cout << "[DesktopPanel] mouseDoubleClickEvent: ";
 	printMouseButtonEvent(event);
   }
 
@@ -516,38 +518,38 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 
 #if QT_VERSION >= 0x050500 // Qt 5.5.0
   if(event->source() == Qt::MouseEventNotSynthesized){
-	//cout << "[WheelEvent] source() : " << event->source() << endl << flush;
+	//std::cout << "[WheelEvent] source() : " << event->source() << std::endl << std::flush;
 	QPoint degrees = event->angleDelta() / 8;
 	mouseWheel = degrees.y();
 
 	// for DEBUG
 	if (outputLogForMouse){
 	  int ticks = mouseWheel/15;
-	  cout << "[DesktopPanel] wheelEvent(degrees): " << mouseWheel << " (ticks = " << ticks << ")" << endl << flush; // for DEBUG
+	  std::cout << "[DesktopPanel] wheelEvent(degrees): " << mouseWheel << " (ticks = " << ticks << ")" << std::endl << std::flush; // for DEBUG
 	}
   }
   else if (event->source() == Qt::MouseEventSynthesizedBySystem){
-	//cout << "[WheelEvent] source() : " << event->source() << endl << flush;
+	//std::cout << "[WheelEvent] source() : " << event->source() << std::endl << std::flush;
 	QPoint pixels = event->pixelDelta();
 	mouseWheel = pixels.y();
 
 	// for DEBUG
 	if (outputLogForMouse){
-	  cout << "[DesktopPanel] wheelEvent(pixels): " << (int)mouseWheel << endl << flush; // for DEBUG
+	  std::cout << "[DesktopPanel] wheelEvent(pixels): " << (int)mouseWheel << std::endl << std::flush; // for DEBUG
 	}
 
 	// adjust
 	mouseWheel *= settings->getDesktopScalingFactor();
   }
 #else // QT_VERSION >= 0x050500 // Qt 5.5.0
-  //cout << "[WheelEvent] source() : " << event->source() << endl << flush;
+  //std::cout << "[WheelEvent] source() : " << event->source() << std::endl << std::flush;
   QPoint degrees = event->angleDelta() / 8;
   mouseWheel = degrees.y();
 
   // for DEBUG
   if (outputLogForMouse){
 	int ticks = mouseWheel/15;
-	cout << "[DesktopPanel] wheelEvent(degrees): " << mouseWheel << " (ticks = " << ticks << ")" << endl << flush; // for DEBUG
+	std::cout << "[DesktopPanel] wheelEvent(degrees): " << mouseWheel << " (ticks = " << ticks << ")" << std::endl << std::flush; // for DEBUG
   }
 #endif // QT_VERSION >= 0x050500 // Qt 5.5.0
 
@@ -575,8 +577,8 @@ void DesktopPanel::mouseMoveEvent(QMouseEvent *event)
 {
   // for DEBUG
   if (outputLogForMouse){
-    cout << "[DesktopPanel] mouseMoveEvent: (x, y) = (" <<
-	  event->pos().x() << "," << event->pos().y() << ")" << endl << flush; // for DEBUG
+    std::cout << "[DesktopPanel] mouseMoveEvent: (x, y) = (" <<
+	  event->pos().x() << "," << event->pos().y() << ")" << std::endl << std::flush; // for DEBUG
   }
 
   // move mouse cursor
@@ -869,7 +871,11 @@ void DesktopPanel::dropEvent(QDropEvent *event)
 
 #if defined(Q_OS_WIN)
 // native event filter
+#if QT_VERSION < 0x060000
 bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+#else // QT_VERSION >= 0x060000
+bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
+#endif // QT_VERSION >= 0x060000
 {
   Q_UNUSED(result);
 
@@ -882,45 +888,70 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 	// KEY
 	if (settings->getKeyboardType() == KEYBOARD_TYPE_NATIVE){
 	  // send All key event in nativeEventFilter
+#if 0 // VK_XXXX -> VK_LXXXX/RXXXX
+	  static uchar pressedShiftKey;
+	  static uchar pressedControlKey;
+#endif // 0 // // VK_XXXX -> VK_LXXXX/RXXXX
 	  if (msg->message == WM_KEYDOWN){
-#if 0 // for TEST
-		// VK_LXXXX/RXXXX -> VK_XXXX
+#if 0 // VK_XXXX -> VK_LXXXX/RXXXX
+		// CONTROL/SHIFT
+		// VK_XXXX -> VK_LXXXX/RXXXX
 		switch(msg->wParam){
-		case VK_LSHIFT:
-		case VK_RSHIFT:
-		  msg->wParam = VK_SHIFT;
+		case VK_CONTROL:
+		  if (GetAsyncKeyState(VK_RCONTROL) & 0x01){
+			msg->wParam = VK_RCONTROL;
+			pressedControlKey = VK_RCONTROL;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Control, VK_RCONTROL);
+			}
+		  }
+		  else {
+			msg->wParam = VK_LCONTROL;
+			pressedControlKey = VK_LCONTROL;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Control, VK_LCONTROL);
+			}
+		  }
 		  break;
-		case VK_LCONTROL:
-		case VK_RCONTROL:
-		  msg->wParam = VK_CONTROL;
-		  break;
-		case VK_LMENU:
-		case VK_RMENU:
-		  msg->wParam = VK_MENU;
+		case VK_SHIFT:
+		  if (GetAsyncKeyState(VK_RSHIFT) & 0x01){
+			msg->wParam = VK_RSHIFT;
+			pressedShiftKey = VK_RSHIFT;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Shift, VK_RSHIFT);
+			}
+		  }
+		  else {
+			msg->wParam = VK_LSHIFT;
+			pressedShiftKey = VK_LSHIFT;
+			if (settings->getOutputKeyboardLog()){
+			  outputKeyboardLog("Press", Qt::Key_Shift, VK_LSHIFT);
+			}
+		  }
 		  break;
 		}
-#endif // for TEST
+#endif // 0 // VK_XXXX -> VK_LXXXX/RXXXX
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
 	  }
 	  else if (msg->message == WM_KEYUP){
-#if 0 // for TEST
-		// VK_LXXXX/RXXXX -> VK_XXXX
+#if 0 // VK_XXXX -> VK_LXXXX/RXXXX
+		// CONTROL/SHIFT
 		switch(msg->wParam){
-		case VK_LSHIFT:
-		case VK_RSHIFT:
-		  msg->wParam = VK_SHIFT;
+		case VK_CONTROL:
+		  msg->wParam = pressedControlKey;
+		  if (settings->getOutputKeyboardLog()){
+			outputKeyboardLog("Release", Qt::Key_Control, pressedControlKey);
+		  }
 		  break;
-		case VK_LCONTROL:
-		case VK_RCONTROL:
-		  msg->wParam = VK_CONTROL;
-		  break;
-		case VK_LMENU:
-		case VK_RMENU:
-		  msg->wParam = VK_MENU;
+		case VK_SHIFT:
+		  msg->wParam = pressedShiftKey;
+		  if (settings->getOutputKeyboardLog()){
+			outputKeyboardLog("Release", Qt::Key_Shift, pressedShiftKey);
+		  }
 		  break;
 		}
-#endif // for TEST
+#endif // 0 // VK_XXXX -> VK_LXXXX/RXXXX
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
 	  }
@@ -932,7 +963,7 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
 	  case VK_OEM_ENLW:
-		//		cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		//		std::cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << std::endl; // for DEBUG
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYDOWN);
 		return true;
 		break;
@@ -941,7 +972,7 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
 	  case 229:
-		//		cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << endl; // for DEBUG
+		//		std::cout << "[DesktopPanel] nativeEventFilter: KEYDOWN: " << msg->wParam << std::endl; // for DEBUG
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYDOWN);
 		return true;
 		break;
@@ -954,7 +985,7 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 	  switch(msg->wParam){
 	  case VK_OEM_AUTO:
 	  case VK_OEM_ENLW:
-		//		cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		//		std::cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << std::endl; // for DEBUG
 		keyBuffer->put(VK_KANJI, KEYCODE_FLG_KEYUP);
 		return true;
 		break;
@@ -962,7 +993,7 @@ bool DesktopPanel::nativeEventFilter(const QByteArray &eventType, void *message,
 	  case VK_CONVERT:
 	  case VK_NONCONVERT:
 	  case VK_OEM_ATTN:
-		//		cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << endl; // for DEBUG
+		//		std::cout << "[DesktopPanel] nativeEventFilter: KEYUP: " << msg->wParam << std::endl; // for DEBUG
 		keyBuffer->put(msg->wParam, KEYCODE_FLG_KEYUP);
 		return true;
 		break;
@@ -1034,7 +1065,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
 	offsetY += 100;
 	if (offsetY < 0) offsetY = 0;
 	settings->setDesktopOffsetY(offsetY);
-	//	cout << "Scroll Up : " << settings->getDesktopOffsetY() << endl << flush;
+	//	std::cout << "Scroll Up : " << settings->getDesktopOffsetY() << std::endl << std::flush;
 	result = true;
   }
   else if (VK_Code == VK_DOWN){
@@ -1044,7 +1075,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
 	  offsetY = settings->getDesktopHeight();
 	}
 	settings->setDesktopOffsetY(offsetY);
-	//	cout << "Scroll Down : " << settings->getDesktopOffsetY() << endl << flush;
+	//	std::cout << "Scroll Down : " << settings->getDesktopOffsetY() << std::endl << std::flush;
 	result = true;
   }
   else if (VK_Code == VK_LEFT){
@@ -1052,7 +1083,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
 	offsetX += 100;
 	if (offsetX < 0) offsetX = 0;
 	settings->setDesktopOffsetX(offsetX);
-	//	cout << "Scroll Left : " << settings->getDesktopOffsetX() << endl << flush;
+	//	std::cout << "Scroll Left : " << settings->getDesktopOffsetX() << std::endl << std::flush;
 	result = true;
   }
   else if (VK_Code == VK_RIGHT){
@@ -1062,7 +1093,7 @@ bool DesktopPanel::scrollArea(uchar VK_Code, bool onKeyPress)
 	  offsetX = settings->getDesktopWidth();
 	}
 	settings->setDesktopOffsetX(offsetX);
-	//	cout << "Scroll Right : " << settings->getDesktopOffsetX() << endl << flush;
+	//	std::cout << "Scroll Right : " << settings->getDesktopOffsetX() << std::endl << std::flush;
 	result = true;
   }
 
@@ -1086,7 +1117,9 @@ bool DesktopPanel::outputKeyboardLog(QString name, Qt::Key key, uchar keycode)
 
   // create QTextStrem
   QTextStream *keyboardLogFileStream = new QTextStream(keyboardLogFile);
+#if QT_VERSION < 0x060000
   keyboardLogFileStream->setCodec("UTF-8");
+#endif // QT_VERSION < 0x060000
 
   // output log
   (*keyboardLogFileStream) << name

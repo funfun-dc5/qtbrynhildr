@@ -32,7 +32,7 @@ QImage* DecoderJPEG::getDesktopImage(int numOfThread)
   if (outputLog){
 	static bool flag = true;
 	if (flag){
-	  cout << "DecoderJPEG::getDesktopImage()" << endl << flush;
+	  std::cout << "DecoderJPEG::getDesktopImage()" << std::endl << std::flush;
 	  flag = false;
 	}
   }

@@ -98,7 +98,9 @@ void LogViewDialog::show()
   if (logFile->open(QFile::ReadOnly)){
 	  QTextStream *logFileStream = new QTextStream(logFile);
 	  logFileStream->seek(topPos);
+#if QT_VERSION < 0x060000
 	  logFileStream->setCodec("UTF-8");
+#endif // QT_VERSION < 0x060000
 	  logText = logFileStream->readAll();
 	  // save last position for Reset
 	  lastPos = logFileStream->pos();
@@ -122,7 +124,7 @@ void LogViewDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
   if (button->text() == tr("Reset") || button->text() == "Reset"){ // for Android(Bug?)
 	// clear log
-	//	cout << "Clear log!" << endl <<flush;
+	//	std::cout << "Clear log!" << std::endl << std::flush;
 	topPos = lastPos;
 	//qDebug() << "Reset: topPos: " << lastPos;
 	show();

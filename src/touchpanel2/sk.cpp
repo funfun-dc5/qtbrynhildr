@@ -12,8 +12,6 @@
 #include "qtbrynhildr.h"
 #include "sk.h"
 
-using namespace std; // for TEST
-
 namespace qtbrynhildr {
 
 //---------------------------------------------------------------------------
@@ -62,7 +60,7 @@ void SK::keyDown(uchar key)
   keyBuffer->put(key, KEYCODE_FLG_KEYDOWN);
 
   if (outputLog)
-	cout << "SK:DOWN"<< endl << flush;
+	std::cout << "SK:DOWN"<< std::endl << std::flush;
 }
   
 // key up
@@ -73,7 +71,7 @@ void SK::keyUp(uchar key)
   keyBuffer->put(key, KEYCODE_FLG_KEYUP);
 
   if (outputLog)
-	cout << "SK:UP"<< endl << flush;
+	std::cout << "SK:UP"<< std::endl << std::flush;
 }
 
 // for event handling

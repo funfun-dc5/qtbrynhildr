@@ -44,7 +44,7 @@ bool Decoder::preprocess(char *buffer, int size)
   if (outputLog){
 	static bool flag = true;
 	if (flag){
-	  cout << "Decoder::preprocess()" << endl << flush;
+	  std::cout << "Decoder::preprocess()" << std::endl << std::flush;
 	  flag = false;
 	}
   }
@@ -59,7 +59,7 @@ bool Decoder::preprocess(char *buffer, int size)
 // output data to file
 bool Decoder::outputDataToFile(char *buf, int len, int frameId)
 {
-  fstream file;
+  std::fstream file;
   char filename[QTB_MAXPATHLEN+1];
   int result;
 
@@ -68,7 +68,7 @@ bool Decoder::outputDataToFile(char *buf, int len, int frameId)
 					frameId,
 					suffix());
   if (result > 0 && result <= QTB_MAXPATHLEN){
-	file.open(filename, ios::out | ios::binary | ios::trunc);
+	file.open(filename, std::ios::out | std::ios::binary | std::ios::trunc);
 	if (file.is_open()){
 	  file.write(buf, len);
 	  file.close();
@@ -76,7 +76,7 @@ bool Decoder::outputDataToFile(char *buf, int len, int frameId)
   }
   else {
 	// snprintf() error
-	cout << "[Decoder] snprintf() error!" << endl << flush;
+	std::cout << "[Decoder] snprintf() error!" << std::endl << std::flush;
 	return false;
   }
 

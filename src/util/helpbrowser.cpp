@@ -26,7 +26,9 @@ HelpBrowser::HelpBrowser(const QString &path, const QString &page, QWidget *pare
   ,outputLog(true)
 {
   setAttribute(Qt::WA_DeleteOnClose);
+#if QT_VERSION < 0x060000
   setAttribute(Qt::WA_GroupLeader);
+#endif // QT_VERSION < 0x060000
 
   textBrowser = new QTextBrowser;
 

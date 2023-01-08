@@ -1,6 +1,6 @@
 This is LICENSE.txt for Qt Brynhildr.
 
-Copyright(C) 2015-2022 FunFun @ mcz-xoxo, All rights reserved.
+Copyright(C) 2015-2023 FunFun @ mcz-xoxo, All rights reserved.
 
 ================================================================================================
 

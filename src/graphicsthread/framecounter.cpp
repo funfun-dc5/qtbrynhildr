@@ -56,8 +56,8 @@ double FrameCounter::getFrameRate()
 	qint64 diffMSeconds = currentTime - previousGetFrameRateTime;
 	if (diffMSeconds != 0){
 	  fps = frameCounter / ((double)diffMSeconds)*1000;
-	  //cout << "frameCounter = " << frameCounter << endl;
-	  //cout << "diffMSeconds = " << diffMSeconds << endl << flush;
+	  //std::cout << "frameCounter = " << frameCounter << std::endl;
+	  //std::cout << "diffMSeconds = " << diffMSeconds << std::endl << std::flush;
 	}
   }
   previousGetFrameRateTime = currentTime;

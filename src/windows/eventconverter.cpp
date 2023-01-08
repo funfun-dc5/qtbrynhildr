@@ -87,7 +87,7 @@ EventConverter::EventConverter(KEYTOP_TYPE type)
 
 #ifdef USE_KEYLAYOUTFILE
 #if 0 // for TEST
-  fstream file;
+  std::fstream file;
   file.open("keyEventTable_JP.dat", ios::out | ios::binary | ios::trunc);
   if (file.is_open()){
 	file.write((char *)keyEventTable_JP, sizeof(KeyEvent)*TABLE_SIZE_JP);
@@ -240,9 +240,9 @@ QString EventConverter::getVKCodeByString(uchar vkcode)
 #if QTB_DEBUG
 void EventConverter::printKeyEvent(KeyEvent *keyEvent)
 {
-  cout << "key             : " << keyEvent->key << endl;
-  cout << "VK_Code         : " << stringTableOfVKCode[(int)(keyEvent->VK_Code)] << endl;
-  cout << "shiftKeyControl : " << keyEvent->shiftKeyControl << endl << flush;
+  std::cout << "key             : " << keyEvent->key << std::endl;
+  std::cout << "VK_Code         : " << stringTableOfVKCode[(int)(keyEvent->VK_Code)] << std::endl;
+  std::cout << "shiftKeyControl : " << keyEvent->shiftKeyControl << std::endl << std::flush;
 }
 #endif // QTB_DEBUG
 

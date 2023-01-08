@@ -132,7 +132,7 @@ const bool QTB_IN_TESTING				= false;
 // manual page
 #define QTB_MANUAL_PAGE				1
 
-// update check
+// update check (need SSL)
 #if 0 // into qtbrynhildr.pro
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				1
@@ -140,6 +140,12 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_UPDATECHECK				0
 #endif // defined(QTB_DEV_DESKTOP)
 #endif // into qtbrynhildr.pro
+
+// help browser (need SSL)
+#if QTB_HELP_BROWSER && !QTB_UPDATECHECK
+#undef QTB_HELP_BROWSER
+#define QTB_HELP_BROWSER 0
+#endif // QTB_HELP_BROWSER && !QTB_UPDATECHECK
 
 // preference dialog
 //#define QTB_PREFERENCE				1
@@ -182,8 +188,10 @@ const bool QTB_IN_TESTING				= false;
 #define QTB_BENCHMARK				1
 
 // debug
-#define QTB_DEBUG					1
+#define QTB_DEBUG					0
 
+  // test
+#define QTB_TEST					0
 } // end of namespace qtbrynhildr
 
 #endif // CONFIG_H

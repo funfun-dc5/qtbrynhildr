@@ -19,7 +19,8 @@ namespace qtbrynhildr {
 
 // constructor
 Option::Option(int argc, char *argv[])
-  :serverName(0)
+  :versionString(0)
+  ,serverName(0)
   ,portNo(0)
   ,password(0)
   ,hostType(0)
@@ -44,6 +45,13 @@ Option::Option(int argc, char *argv[])
   ,testModeFlag(false)
   ,benchmarkFlag(false)
 {
+  // versionString
+  static std::string str = QTB_VERSION QTB_RCNAME;
+  for (std::string::size_type pos = str.find(".") ; pos != std::string::npos; pos = str.find(".")){
+       str.erase(pos,1);
+  }
+  versionString = str.c_str();
+
   // analysis options
   if (analyzeOptions(argc, argv)){
 	// error
@@ -71,7 +79,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		// check argument
 		if (argc < 3){
 		  // error : no argument
-		  cout << "-server option need an argument." << endl << flush;
+		  std::cout << "-server option need an argument." << std::endl << std::flush;
 		  printHelp();
 		  shutdownFlag = true;
 		}
@@ -91,7 +99,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  if (passwd != NULL){
 			if (strlen(passwd) > ENCRYPTION_KEY_LENGTH){
 			  // error
-			  cout << "-server option : password is too long." << endl << flush;
+			  std::cout << "-server option : password is too long." << std::endl << std::flush;
 			  printHelp();
 			  shutdownFlag = true;
 			  break;
@@ -99,7 +107,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  }
 		  else {
 			// error
-			cout << "-server option need password field." << endl << flush;
+			std::cout << "-server option need password field." << std::endl << std::flush;
 			printHelp();
 			shutdownFlag = true;
 			break;
@@ -117,7 +125,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 			}
 			else {
 			  // error
-			  cout << "illegal port no. : " << port << " (ignored)" << endl << flush;
+			  std::cout << "illegal port no. : " << port << " (ignored)" << std::endl << std::flush;
 			}
 		  }
 		  // host type
@@ -137,7 +145,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		// check argument (on/off)
 		if (argc < 3){
 		  // error : no argument
-		  cout << "-debug option need an argument(on or off)." << endl << flush;
+		  std::cout << "-debug option need an argument(on or off)." << std::endl << std::flush;
 		  printHelp();
 		  shutdownFlag = true;
 		}
@@ -152,7 +160,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  }
 		  else {
 			// unknown argument for -debug
-			cout << "-debug option need an argument(on or off)." << endl << flush;
+			std::cout << "-debug option need an argument(on or off)." << std::endl << std::flush;
 			printHelp();
 			shutdownFlag = true;
 		  }
@@ -173,7 +181,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		// check argument
 		if (argc < 3){
 		  // error : no argument
-		  cout << "-record option need an argument." << endl << flush;
+		  std::cout << "-record option need an argument." << std::endl << std::flush;
 		  printHelp();
 		  shutdownFlag = true;
 		}
@@ -182,7 +190,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 
 		  // check other option
 		  if (arg[0] == '-'){
-			cout << "-record option need an argument." << endl << flush;
+			std::cout << "-record option need an argument." << std::endl << std::flush;
 			printHelp();
 			shutdownFlag = true;
 		  }
@@ -200,7 +208,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		// check argument
 		if (argc < 3){
 		  // error : no argument
-		  cout << "-replay option need an argument." << endl << flush;
+		  std::cout << "-replay option need an argument." << std::endl << std::flush;
 		  printHelp();
 		  shutdownFlag = true;
 		}
@@ -209,7 +217,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 
 		  // check other option
 		  if (arg[0] == '-'){
-			cout << "-replay option need an argument." << endl << flush;
+			std::cout << "-replay option need an argument." << std::endl << std::flush;
 			printHelp();
 			shutdownFlag = true;
 		  }
@@ -273,7 +281,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 	  }
 #endif // QTB_BENCHMARK
 	  else {
-		cout << "unknown option : " << argv[1] << endl << flush;
+		std::cout << "unknown option : " << argv[1] << std::endl << std::flush;
 		shutdownFlag = true;
 	  }
 	}
@@ -290,145 +298,131 @@ bool Option::analyzeOptions(int argc, char *argv[])
   return true;
 }
 
-// get version string
-const char *Option::getVersionString() const
-{
-  static string str = QTB_VERSION QTB_RCNAME;
-  for (string::size_type pos = str.find(".") ; pos != string::npos; pos = str.find(".")){
-	str.erase(pos,1);
-  }
-  return str.c_str();
-}
-
 // print version
 void Option::printVersion() const
 {
-  cout << QTB_APPLICATION <<
+  std::cout << QTB_APPLICATION <<
 	" Ver." << QTB_VERSION QTB_RCNAME <<
-	" Copyright (c) " << QTB_YEAR << " " << QTB_AUTHOR << " @ " << QTB_ORGANIZATION << endl << flush;
+	" Copyright (c) " << QTB_YEAR << " " << QTB_AUTHOR << " @ " << QTB_ORGANIZATION << std::endl << std::flush;
 }
 
 // print version string
 void Option::printVersionString() const
 {
-  string str = QTB_VERSION QTB_RCNAME;
-  for (string::size_type pos = str.find(".") ; pos != string::npos; pos = str.find(".")){
-	str.erase(pos,1);
-  }
-  cout << str << flush;
+  std::cout << getVersionString() << std::flush;
 }
 
 // print spec
 void Option::printSpec() const
 {
-  cout << "spec :";
+  std::cout << "spec :";
 
 #if QTB_RECORDER
-  cout << " RECORDER";
+  std::cout << " RECORDER";
 #endif // QTB_RECORDER
 
-  cout << " MODE6";
+  std::cout << " MODE6";
 
-  cout << " MODE7";
+  std::cout << " MODE7";
 
 #if QTB_CELT_SUPPORT
-  cout << " CELT";
+  std::cout << " CELT";
 #endif // QTB_CELT_SUPPORT
 
 #ifdef USE_KEYLAYOUTFILE
-  cout << " KEYLAYOUTFILE";
+  std::cout << " KEYLAYOUTFILE";
 #endif // USE_KEYLAYOUTFILE
 
 #if QTB_PORTABLE_VERSION
-  cout << " PORTABLE";
+  std::cout << " PORTABLE";
 #endif // QTB_PORTABLE_VERSION
 
-  cout << endl << flush;
+  std::cout << std::endl << std::flush;
 }
 
 // print help messages
 void Option::printHelp() const
 {
   // print header
-  cout << "-------------------------------------------------------" << endl;
-  cout << QTB_APPLICATION << " [options] <.ini file>" << endl;
-  cout << "-------------------------------------------------------" << endl;
+  std::cout << "-------------------------------------------------------" << std::endl;
+  std::cout << QTB_APPLICATION << " [options] <.ini file>" << std::endl;
+  std::cout << "-------------------------------------------------------" << std::endl;
 
-  cout << "-mode5/mode6(mjpeg)/mode7(compress)" << endl;
-  cout << "        " << "support public mode 5/6/7." << endl;
-  cout << endl;
+  std::cout << "-mode5/mode6(mjpeg)/mode7(compress)" << std::endl;
+  std::cout << "        " << "support public mode 5/6/7." << std::endl;
+  std::cout << std::endl;
 
   // -server <server name|IP address>:<password>[:<port no>[:<host type>]]
-  cout << "-server <server name|IP address>:<password>[:<port no>[:<host type>]]" << endl;
-  cout << "        " << "bootup for server." << endl;
-  cout << "        " << "host type : xp/vista/7/8/8.1/10" << endl;
-  cout << endl;
+  std::cout << "-server <server name|IP address>:<password>[:<port no>[:<host type>]]" << std::endl;
+  std::cout << "        " << "bootup for server." << std::endl;
+  std::cout << "        " << "host type : xp/vista/7/8/8.1/10" << std::endl;
+  std::cout << std::endl;
 
 #if QTB_CELT_SUPPORT
   // -celt
-  cout << "-celt" << endl;
-  cout << "        " << "support CELT for sound." << endl;
-  cout << endl;
+  std::cout << "-celt" << std::endl;
+  std::cout << "        " << "support CELT for sound." << std::endl;
+  std::cout << std::endl;
 #endif // QTB_CELT_SUPPORT
 
 #if QTB_RECORDER
   // -record <file>
-  cout << "-record <file>" << endl;
-  cout << "        " << "record operations to <file>." << endl;
-  cout << endl;
+  std::cout << "-record <file>" << std::endl;
+  std::cout << "        " << "record operations to <file>." << std::endl;
+  std::cout << std::endl;
 
   // -replay <file>
-  cout << "-replay <file>" << endl;
-  cout << "        " << "replay operations from <file>." << endl;
-  cout << endl;
+  std::cout << "-replay <file>" << std::endl;
+  std::cout << "        " << "replay operations from <file>." << std::endl;
+  std::cout << std::endl;
 #endif // QTB_RECORDER
 
   // -fullscreen
-  cout << "-fullscreen" << endl;
-  cout << "        " << "full screen mode." << endl;
-  cout << endl;
+  std::cout << "-fullscreen" << std::endl;
+  std::cout << "        " << "full screen mode." << std::endl;
+  std::cout << std::endl;
 
   // -viewer
-  cout << "-viewer" << endl;
-  cout << "        " << "viewer mode." << endl;
-  cout << endl;
+  std::cout << "-viewer" << std::endl;
+  std::cout << "        " << "viewer mode." << std::endl;
+  std::cout << std::endl;
 
   // -debug <on|off>
-  cout << "-debug <on|off>" << endl;
-  cout << "        " << "set debug mode to on/off." << endl;
-  cout << endl;
+  std::cout << "-debug <on|off>" << std::endl;
+  std::cout << "        " << "set debug mode to on/off." << std::endl;
+  std::cout << std::endl;
 
   // -version (-v)
-  cout << "-version (-v)" << endl;
-  cout << "        " << "display version." << endl;
-  cout << endl;
+  std::cout << "-version (-v)" << std::endl;
+  std::cout << "        " << "display version." << std::endl;
+  std::cout << std::endl;
 
   // -spec
-  cout << "-spec" << endl;
-  cout << "        " << "display spec." << endl;
-  cout << endl;
+  std::cout << "-spec" << std::endl;
+  std::cout << "        " << "display spec." << std::endl;
+  std::cout << std::endl;
 
   // -help (-h)
-  cout << "-help (-h)" << endl;
-  cout << "        " << "display this help message." << endl;
-  cout << endl;
+  std::cout << "-help (-h)" << std::endl;
+  std::cout << "        " << "display this help message." << std::endl;
+  std::cout << std::endl;
 
   // -init
-  cout << "-init" << endl;
-  cout << "        " << "initialize settings." << endl;
-  cout << endl;
+  std::cout << "-init" << std::endl;
+  std::cout << "        " << "initialize settings." << std::endl;
+  std::cout << std::endl;
 
   // -notrans
-  cout << "-notrans" << endl;
-  cout << "        " << "no translation." << endl;
-  cout << endl;
+  std::cout << "-notrans" << std::endl;
+  std::cout << "        " << "no translation." << std::endl;
+  std::cout << std::endl;
 
   // .ini file
-  cout << "<.ini file>" << endl;
-  cout << "        " << ".ini filename." << endl;
+  std::cout << "<.ini file>" << std::endl;
+  std::cout << "        " << ".ini filename." << std::endl;
 
 
-  cout << flush;
+  std::cout << std::flush;
 }
 
 } // end of namespace qtbrynhildr

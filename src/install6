@@ -43,7 +43,7 @@ if [ -n "$1" ] ; then
 	esac
 fi
 
-source ./setup_qt5
+source ./setup_qt6
 
 # check arg2
 if [ -n "$2" ] ; then
@@ -267,16 +267,18 @@ case $UNAME in
 			# for Qt DLL
 			mkdir -p ${DISTDIR}/bin/platforms
 			mkdir -p ${DISTDIR}/bin/imageformats
-			mkdir -p ${DISTDIR}/bin/audio
+#			mkdir -p ${DISTDIR}/bin/audio
+			mkdir -p ${DISTDIR}/bin/tls
 			if [ -d ${QTROOT}/plugins/styles ] ; then
 				mkdir -p ${DISTDIR}/bin/styles
 			fi
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Core.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Gui.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Multimedia.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Network.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Widgets.dll ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Concurrent.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core5Compat.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Gui.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Multimedia.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Network.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Widgets.dll ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Concurrent.dll ${DISTDIR}/bin
 			if [ "$TARGET" = "" ] ; then
 			case $UNAMEM in
 				x86_64)
@@ -291,10 +293,11 @@ case $UNAME in
 			fi
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/platforms/qwindows.dll ${DISTDIR}/bin/platforms
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
+#			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
 			if [ -d ${QTROOT}/plugins/styles ] ; then
 				${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/styles/qwindowsvistastyle.dll ${DISTDIR}/bin/styles
 			fi
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/tls/qopensslbackend.dll ${DISTDIR}/bin/tls
 			# copy openssl dll
 			# OpenSSL 1.0.2x
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
@@ -348,10 +351,10 @@ case $UNAME in
 			fi
 			if [ "$TARGET" = "msvc-xp" ] ; then
 					# for JVNVU#92669710
-					if [ -x "${QTROOT}/bin/Qt5Core_patched.dll" ] ; then
-						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Core_patched.dll ${DISTDIR}/bin/Qt5Core.dll
+					if [ -x "${QTROOT}/bin/Qt6Core_patched.dll" ] ; then
+						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core_patched.dll ${DISTDIR}/bin/Qt6Core.dll
 					else
-						echo "NOT Found Qt5Core_patched.dll file!!"
+						echo "NOT Found Qt6Core_patched.dll file!!"
 						exit 1;
 					fi
 			fi
@@ -493,14 +496,15 @@ case $UNAME in
 			mkdir -p ${DISTDIR}/bin/platforms
 			mkdir -p ${DISTDIR}/bin/imageformats
 			mkdir -p ${DISTDIR}/bin/audio
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Core.so.5 ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Gui.so.5 ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Multimedia.so.5 ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Network.so.5 ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Widgets.so.5 ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5Concurrent.so.5 ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5XcbQpa.so.5 ${DISTDIR}/bin
-			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt5DBus.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Core.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Core5Compat.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Gui.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Multimedia.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Network.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Widgets.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6Concurrent.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6XcbQpa.so.5 ${DISTDIR}/bin
+			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libQt6DBus.so.5 ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicui18n.so.56 ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicuuc.so.56 ${DISTDIR}/bin
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/lib/libicudata.so.56 ${DISTDIR}/bin

@@ -10,14 +10,12 @@
 
 // Local Header
 
-using namespace std;
-
 // Assertion Macro
 #if QTB_DEBUG
 #define ASSERT(cond) \
   {																		\
 	if (!(cond)) {														\
-	  cout << "Assertion FAIL : "    << __FILE__ << " : LINE : " << dec << __LINE__ << endl; \
+	  std::cout << "Assertion FAIL : "    << __FILE__ << " : LINE : " << std::dec << __LINE__ << std::endl; \
 	  ::exit(EXIT_FAILURE);												\
 	}																	\
   }
@@ -28,7 +26,7 @@ using namespace std;
 // Abort Macro
 #define ABORT() \
   { \
-	cout << "Internal Error : "    << __FILE__ << " : LINE : " << dec << __LINE__ << endl; \
+	std::cout << "Internal Error : "    << __FILE__ << " : LINE : " << std::dec << __LINE__ << std::endl; \
 	::exit(EXIT_FAILURE);												\
   }
 

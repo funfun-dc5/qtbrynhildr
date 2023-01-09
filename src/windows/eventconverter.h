@@ -51,10 +51,10 @@ private:
 #if _MSC_VER
 #define TABLE_SIZE_JP 139
 #define TABLE_SIZE_US 136
-#else // _MSC_VER
+#else // !_MSC_VER
   static const int TABLE_SIZE_JP = 139;
   static const int TABLE_SIZE_US = 136;
-#endif // _MSC_VER
+#endif // !_MSC_VER
 
   // key event table
   const KeyEvent *keyEventTable;
@@ -87,10 +87,10 @@ private:
 #if defined(Q_OS_OSX)
 	{Qt::Key_Control,				VK_LWIN,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_CONTROL,		SHIFTKEY_THROUGH},
-#else // defined(Q_OS_OSX)
+#else // !defined(Q_OS_OSX)
 	{Qt::Key_Control,				VK_CONTROL,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_LWIN,		SHIFTKEY_THROUGH},
-#endif // defined(Q_OS_OSX)
+#endif // !defined(Q_OS_OSX)
 	{Qt::Key_Alt,					VK_MENU,		SHIFTKEY_THROUGH},
 	{Qt::Key_CapsLock,				VK_CAPITAL,		SHIFTKEY_THROUGH},
 	{Qt::Key_NumLock,				VK_NUMLOCK,		SHIFTKEY_THROUGH},
@@ -245,10 +245,10 @@ private:
 #if defined(Q_OS_OSX)
 	{Qt::Key_Control,				VK_LWIN,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_CONTROL,		SHIFTKEY_THROUGH},
-#else // defined(Q_OS_OSX)
+#else // !defined(Q_OS_OSX)
 	{Qt::Key_Control,				VK_CONTROL,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_LWIN,		SHIFTKEY_THROUGH},
-#endif // defined(Q_OS_OSX)
+#endif // !defined(Q_OS_OSX)
 	{Qt::Key_Alt,					VK_MENU,		SHIFTKEY_THROUGH},
 	{Qt::Key_CapsLock,				VK_CAPITAL,		SHIFTKEY_THROUGH},
 	{Qt::Key_NumLock,				VK_NUMLOCK,		SHIFTKEY_THROUGH},

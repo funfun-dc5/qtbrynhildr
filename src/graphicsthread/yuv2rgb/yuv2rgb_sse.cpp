@@ -7,9 +7,9 @@
 // System Header
 #if _MSC_VER
 #include <intrin.h>
-#else // _MSC_VER
+#else // !_MSC_VER
 #include <x86intrin.h>
-#endif // _MSC_VER
+#endif // !_MSC_VER
 
 // Qt Header
 
@@ -53,7 +53,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
   //  __m128i constMinV = _mm_setr_epi32(0, 0, 0, 0);
   __m128i constMinV = _mm_setzero_si128();
 
-#else // for improvement
+#else // 0 // for improvement
 
   Aligned(16) const int constYc[4] = {256, 256, 256, 0};
   Aligned(16) const int constUc[4] = {0,   -88, 453, 0};
@@ -70,7 +70,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
   __m128i constMaxV = _mm_load_si128((const __m128i*)constMax);
   __m128i constMinV = _mm_load_si128((const __m128i*)constMin);
 
-#endif // for improvement
+#endif // 0 // for improvement
 
   Aligned(16) int ya[4] = {  0,   0,   0,   0};
   Aligned(16) int ua[4] = {  0,   0,   0,   0};
@@ -176,7 +176,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		  *rgbtop++ = (uchar)result[0];
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -185,7 +185,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		  *rgbtop++ = (uchar)result[1];
 		  // B
 		  *rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -258,7 +258,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		  *rgbtop++ = (uchar)result[0];
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -267,7 +267,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		  *rgbtop++ = (uchar)result[1];
 		  // B
 		  *rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -334,7 +334,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		*rgbtop++ = (uchar)result[0];
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -343,7 +343,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		*rgbtop++ = (uchar)result[1];
 		// B
 		*rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		// xPos+1
@@ -402,7 +402,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		*rgbtop++ = (uchar)result[0];
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -411,7 +411,7 @@ void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbt
 		*rgbtop++ = (uchar)result[1];
 		// B
 		*rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		yptop += 2;
@@ -479,7 +479,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
   //  __m128i constMinV = _mm_setr_epi32(0, 0, 0, 0);
   __m128i constMinV = _mm_setzero_si128();
 
-#else // for improvement
+#else // 0 // for improvement
 
   Aligned(16) const int constYc[4] = {256, 256, 256, 0};
   Aligned(16) const int constUc[4] = {0,   -88, 453, 0};
@@ -496,7 +496,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
   __m128i constMaxV = _mm_load_si128((const __m128i*)constMax);
   __m128i constMinV = _mm_load_si128((const __m128i*)constMin);
 
-#endif // for improvement
+#endif // 0 // for improvement
 
   Aligned(16) int ya[4] = {  0,   0,   0,   0};
   Aligned(16) int ua[4] = {  0,   0,   0,   0};
@@ -612,7 +612,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		  *rgbtop++ = (uchar)gsv;
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -621,7 +621,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		  *rgbtop++ = (uchar)gsv;
 		  // B
 		  *rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -703,7 +703,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		  *rgbtop++ = (uchar)gsv;
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -712,7 +712,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		  *rgbtop++ = (uchar)gsv;
 		  // B
 		  *rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -788,7 +788,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		*rgbtop++ = (uchar)gsv;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -797,7 +797,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		*rgbtop++ = (uchar)gsv;
 		// B
 		*rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		// xPos+1
@@ -865,7 +865,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		*rgbtop++ = (uchar)gsv;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -874,7 +874,7 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 		*rgbtop++ = (uchar)gsv;
 		// B
 		*rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		yptop += 2;

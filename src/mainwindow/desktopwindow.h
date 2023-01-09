@@ -28,9 +28,9 @@ class QtBrynhildr;
 // DesktopWindow
 #if defined(Q_OS_WIN)
 class DesktopWindow : public QWidget, public DesktopPanel, public QAbstractNativeEventFilter
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 class DesktopWindow : public QWidget, public DesktopPanel
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 {
   Q_OBJECT
 

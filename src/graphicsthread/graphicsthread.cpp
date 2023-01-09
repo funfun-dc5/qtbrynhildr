@@ -27,9 +27,9 @@
 #if defined(__SSE4_2__)
 #include "decoder_vp8_sse.h"
 #endif // defined(__SSE4_2__)
-#else // !defined(__ARM_NEON__)
+#else // defined(__ARM_NEON__)
 #include "decoder_vp8_neon.h"
-#endif // !defined(__ARM_NEON__)
+#endif // defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
 
 #include "graphicsthread.h"

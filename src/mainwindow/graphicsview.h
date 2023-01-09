@@ -35,9 +35,9 @@ class QtBrynhildr;
 
 #if defined(Q_OS_WIN)
 class GraphicsView : public QGraphicsView, public QAbstractNativeEventFilter
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 class GraphicsView : public QGraphicsView
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 {
   Q_OBJECT
 

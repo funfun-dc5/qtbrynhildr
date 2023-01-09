@@ -13,9 +13,9 @@ namespace qtbrynhildr {
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN)
 // unix socket
 #define QTB_NET_UNIX	1
-#else
+#else // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 #error "Not support Q_OS for QTB_NET_*"
-#endif
+#endif // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 
 // for WinSock1 (TEST)
 #define QTB_NET_WINSOCK1 0
@@ -25,9 +25,9 @@ namespace qtbrynhildr {
 #define QTB_DEV_TOUCHPANEL
 #elif defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_CYGWIN)
 #define QTB_DEV_DESKTOP
-#else
+#else // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 #error "Not support Q_OS for QTB_DEV_*"
-#endif
+#endif // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 
 // main window size fixed mode
 const bool QTB_FIXED_MAINWINDOW_SIZE	= true;
@@ -35,16 +35,16 @@ const bool QTB_FIXED_MAINWINDOW_SIZE	= true;
 // desktop image scaling
 #if defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_SCALING	= true;
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_SCALING	= false;
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // desktop image capture
 #if defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_CAPTURE	= true;
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 const bool QTB_DESKTOP_IMAGE_CAPTURE	= false;
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // cut desktop blank area
 const bool QTB_CUT_DESKTOP_BLANK_AREA	= true;
@@ -70,9 +70,9 @@ const bool QTB_DESKTOP_FRAMERATE_CONTROL= true;
 // scroll mode
 #if defined(QTB_DEV_DESKTOP)
 const bool QTB_SCROLL_MODE				= true;
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 const bool QTB_SCROLL_MODE				= false;
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // viewer mode
 const bool QTB_VIEWER_MODE				= true;
@@ -110,16 +110,16 @@ const bool QTB_IN_TESTING				= false;
 // drag and drop support
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_DRAG_AND_DROP_SUPPORT	1
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 #define QTB_DRAG_AND_DROP_SUPPORT	0
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // desktop compress mode
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_DESKTOP_COMPRESS_MODE	1
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 #define QTB_DESKTOP_COMPRESS_MODE	0
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // disable plugins support
 #define QTB_PLUGINS_DISABLE_SUPPORT	1
@@ -136,10 +136,10 @@ const bool QTB_IN_TESTING				= false;
 #if 0 // into qtbrynhildr.pro
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				1
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 #define QTB_UPDATECHECK				0
-#endif // defined(QTB_DEV_DESKTOP)
-#endif // into qtbrynhildr.pro
+#endif // !defined(QTB_DEV_DESKTOP)
+#endif // 0 // into qtbrynhildr.pro
 
 // help browser (need SSL)
 #if QTB_HELP_BROWSER && !QTB_UPDATECHECK
@@ -173,16 +173,16 @@ const bool QTB_IN_TESTING				= false;
 // ToolBar
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_TOOLBAR					1
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 #define QTB_TOOLBAR					0
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // mouse tracking focus mode
 #if defined(QTB_DEV_DESKTOP)
 #define QTB_MOUSE_TRACKING_FOCUS_MODE	1
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 #define QTB_MOUSE_TRACKING_FOCUS_MODE	0
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // benchmark
 #define QTB_BENCHMARK				1

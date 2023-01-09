@@ -69,7 +69,7 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 #if QTB_AUTO_COMPLETE
   lineEdit_hostname->setCompleter(completer);
 #endif // QTB_AUTO_COMPLETE
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #if QTB_AUTO_COMPLETE
   comboBox_hostname->setCompleter(completer);
 #endif // QTB_AUTO_COMPLETE
@@ -80,7 +80,7 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
   comboBox_hostname->setCurrentIndex(serverNameList->indexOf(QRegularExpression(settings->getServerName())));
 #endif // QT_VERSION >= 0x060000
   comboBox_hostname->setEditable(true);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // server type field
   comboBox_hosttype->insertItem(SERVER_TYPE_WINDOWS_XP,		STRING_SERVER_TYPE_WINDOWS_XP);
@@ -260,7 +260,7 @@ bool ConnectToServerDialog::setToSettings()
 	// Yet: error
 	return false;
   }
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   if (comboBox_hostname->currentText().size() > 0){
 	QString serverName = comboBox_hostname->currentText();
 	settings->setServerName(serverName);
@@ -274,7 +274,7 @@ bool ConnectToServerDialog::setToSettings()
 	// Yet: error
 	return false;
   }
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // host type
   settings->setServerType(comboBox_hosttype->currentIndex());
@@ -319,9 +319,9 @@ void ConnectToServerDialog::resetting()
   // set minimum width
 #if defined(QTB_DEV_TOUCHPANEL)
   lineEdit_hostname->setMinimumWidth(minimumWidth);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   comboBox_hostname->setMinimumWidth(minimumWidth);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   comboBox_hosttype->setMinimumWidth(minimumWidth);
   comboBox_keyboardtype->setMinimumWidth(minimumWidth);
   spinBox_portno->setMinimumWidth(minimumWidth);
@@ -334,7 +334,7 @@ void ConnectToServerDialog::resetting()
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 
   // calc minimum width
   int dialogWidth = size().width();
@@ -343,15 +343,15 @@ void ConnectToServerDialog::resetting()
   // set minimum width
 #if defined(QTB_DEV_TOUCHPANEL)
   lineEdit_hostname->setMinimumWidth(minimumWidth);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   comboBox_hostname->setMinimumWidth(minimumWidth);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   comboBox_hosttype->setMinimumWidth(minimumWidth);
   comboBox_keyboardtype->setMinimumWidth(minimumWidth);
   spinBox_portno->setMinimumWidth(minimumWidth);
   lineEdit_password->setMinimumWidth(minimumWidth);
   comboBox_publicmode->setMinimumWidth(minimumWidth);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 }
 
 //---------------------------------------------------------------------------
@@ -364,13 +364,13 @@ void ConnectToServerDialog::on_lineEdit_hostname_textChanged()
   if (outputLog)
 	std::cout << "text Changed : hostname : " << std::endl << std::flush; // for DEBUG
 }
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 void ConnectToServerDialog::on_comboBox_hostname_currentIndexChanged(int index)
 {
   if (outputLog)
 	std::cout << "index Changed : hostname : index = " << index << std::endl << std::flush; // for DEBUG
 }
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // server type field
 void ConnectToServerDialog::on_comboBox_hosttype_currentIndexChanged(int index)

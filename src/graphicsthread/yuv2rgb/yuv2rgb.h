@@ -31,7 +31,7 @@
 // RGB888 (3bytes) format info.
 #define IMAGE_FORMAT QImage::Format_RGB888
 #define IMAGE_FORMAT_SIZE 3
-#else  // FORMAT_RGB888
+#else  // !FORMAT_RGB888
 #error "unknown image format!"
 #endif
 
@@ -102,9 +102,9 @@ extern void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rg
 extern void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX2(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
-#else // !(defined(__arm__) || defined(__aarch64__))
+#else // defined(__arm__) || defined(__aarch64__)
 extern void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
-#endif // !(defined(__arm__) || defined(__aarch64__))
+#endif // defined(__arm__) || defined(__aarch64__)
 #endif // QTB_SIMD_SUPPORT
 
 #if QTB_GRAY_SCALE_MODE
@@ -117,9 +117,9 @@ extern void convertYUVtoRGB_CPP_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar
 extern void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
 extern void convertYUVtoRGB_SIMD_AVX2_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
-#else // !(defined(__arm__) || defined(__aarch64__))
+#else // defined(__arm__) || defined(__aarch64__)
 extern void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height);
-#endif // !(defined(__arm__) || defined(__aarch64__))
+#endif // defined(__arm__) || defined(__aarch64__)
 #endif // QTB_SIMD_SUPPORT
 
 // reset YUV buffer

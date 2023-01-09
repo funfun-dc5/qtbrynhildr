@@ -9,9 +9,9 @@
 #if !defined(__ARM_NEON__)
 #if _MSC_VER
 #include <intrin.h>
-#else // _MSC_VER
+#else // !_MSC_VER
 #include <cpuid.h>
-#endif // _MSC_VER
+#endif // !_MSC_VER
 #endif // !defined(__ARM_NEON__)
 #endif // !defined(__aarch64__)
 
@@ -52,9 +52,9 @@ void CPUInfo::getCPUID(int function_id, int data[4])
   __asm__ volatile ("cpuid"
 					:"=a"(data[0]), "=b"(data[1]), "=c"(data[2]), "=d"(data[3])
 					: "a" (function_id), "c" (0));
-#else // for gcc 5.0
+#else // 0 // for gcc 5.0
   // Nothing to do
-#endif // for gcc 5.0
+#endif // 0 // for gcc 5.0
 }
 // get cpuidex
 void CPUInfo::getCPUIDEX(int function_id, int subfunction_id, int data[4])

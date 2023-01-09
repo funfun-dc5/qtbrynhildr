@@ -106,7 +106,7 @@ SoundThread::~SoundThread()
   if (settings->getOutputSoundDataToFile() && settings->getOutputSoundDataToWavFile()){
 	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
 	// create wav file
-	int pcmFileSize = pcmFile.size();
+	int pcmFileSize = (int)pcmFile.size();
 	if (pcmFileSize > 0){
 	  createWavFile(pcmFileSize);
 	}
@@ -229,7 +229,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	  outputReceivedData(receivedDataSize, "pcm/sound_output.raw");
 	}
 	// convert to PCM
-	receivedDataSize = converter->convertToPCM(buffer, receivedDataSize);
+	receivedDataSize = converter->convertToPCM(buffer, (int)receivedDataSize);
 	if (receivedDataSize == 0){
 	  // Failed to convert to pcm
 	  // Yet: error
@@ -257,7 +257,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   // put PCM data into sound buffer
   if (settings->getOnSound()){
 	// put into soundBuffer
-	int putSize = soundBuffer->put(buffer, receivedDataSize);
+	int putSize = soundBuffer->put(buffer, (int)receivedDataSize);
 	if (putSize != receivedDataSize){
 	  // error for put()
 	  // Failed to put into sound buffer
@@ -735,7 +735,7 @@ void SoundThread::createWavFile(int pcmFileSize)
 	  while(pcmFileSize > 0){
 		char buf[512*1024]; // 512KB buffer
 		in_file.read(buf, 512*1024);
-		int size = in_file.gcount();
+		int size = (int)in_file.gcount();
 		if (size > 0){
 		  file.write(buf, size);
 		  pcmFileSize -= size;

@@ -104,7 +104,7 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
 	workTop += pcmSize;
 	//	std::cout << "workTop : " << workTop << std::endl << std::flush;
   }
-  decodedPCMSize = (char*)workTop - buffer;
+  decodedPCMSize = (int)((char*)workTop - buffer);
   if (decodedPCMSize == 0){
 	return 0;
   }

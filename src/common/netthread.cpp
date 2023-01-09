@@ -463,7 +463,7 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
   long data_long = com_data->data_type + (com_data->data_size & 0x0000ffff);
 
   com_data->encryption = ENCRYPTION_OFF;
-  com_data->check_digit = ~data_long;
+  com_data->check_digit = (CHECK_DIGIT_VALUE)(~data_long);
 
   for (int i = 0; i < ENCRYPTION_KEY_LENGTH; i++){
 	char key_char = ~key[i];

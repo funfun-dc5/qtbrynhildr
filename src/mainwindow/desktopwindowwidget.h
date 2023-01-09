@@ -88,7 +88,11 @@ protected:
   void paintEvent(QPaintEvent *event);
 
   // widget enter event
+#if QT_VERSION < 0x060000
   void enterEvent(QEvent *event);
+#else // QT_VERSION >= 0x060000
+  void enterEvent(QEnterEvent *event);
+#endif // QT_VERSION >= 0x060000
 
   // widget leave event
   void leaveEvent(QEvent *event);
@@ -119,7 +123,11 @@ protected:
 private:
 #if defined(Q_OS_WIN)
   // native event filter
+#if QT_VERSION < 0x060000
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+#else // QT_VERSION >= 0x060000
+  bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result);
+#endif // QT_VERSION >= 0x060000
 #endif // defined(Q_OS_WIN)
 
   // enter area mode

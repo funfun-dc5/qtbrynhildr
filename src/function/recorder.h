@@ -80,7 +80,7 @@ private:
   int checkSum;
 
   // file stream
-  fstream file;
+  std::fstream file;
 
   // temporary filename
   const char *filename;

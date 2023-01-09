@@ -55,7 +55,7 @@ void ConfirmDialog::resizeEvent(QResizeEvent *event)
 bool ConfirmDialog::getConfirmFlag() const
 {
   if (outputLog)
-	cout << "getConfirmFlag() : confirmFlag : " << confirmFlag << endl << flush; // for DEBUG
+	std::cout << "getConfirmFlag() : confirmFlag : " << confirmFlag << std::endl << std::flush; // for DEBUG
   return confirmFlag;
 }
 
@@ -87,7 +87,7 @@ void ConfirmDialog::on_checkBox_confirm_stateChanged(int state)
   confirmFlag = (state == Qt::Checked);
 
   if (outputLog)
-	cout << "stateChanged() : confirmFlag : " << confirmFlag << endl << flush; // for DEBUG
+	std::cout << "stateChanged() : confirmFlag : " << confirmFlag << std::endl << std::flush; // for DEBUG
 }
 
 } // end of namespace qtbrynhildr

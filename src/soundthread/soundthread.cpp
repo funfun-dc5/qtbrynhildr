@@ -11,7 +11,12 @@
 
 // Qt Header
 #include <QAudio>
+#if QT_VERSION < 0x060000
 #include <QAudioDeviceInfo>
+#else // QT_VERSION >= 0x060000
+#include <QMediaDevices>
+#include <QAudioSink>
+#endif // QT_VERSION >= 0x060000
 
 // Local Header
 #include "soundthread.h"
@@ -149,7 +154,7 @@ PROCESS_RESULT SoundThread::processForHeader()
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
-	cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << endl << flush; // error
+	std::cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << std::endl << std::flush; // error
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
@@ -164,7 +169,7 @@ PROCESS_RESULT SoundThread::processForHeader()
 	if (result){
 	  // new samplerate
 	  samplerate = com_data->samplerate;
-	  //	  cout << "samplerate: " << samplerate << endl << flush;
+	  //	  std::cout << "samplerate: " << samplerate << std::endl << std::flush;
 	}
 	else {
 	  // Yet: error
@@ -192,7 +197,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
   }
   if (dataSize > QTB_SOUND_LOCAL_BUFFER_SIZE){
 	if (outputLog){
-	  cout << "[" << name << "] dataSize = " << dataSize << endl << flush; // error
+	  std::cout << "[" << name << "] dataSize = " << dataSize << std::endl << std::flush; // error
 	}
 	return TRANSMIT_DATASIZE_ERROR;
   }
@@ -244,12 +249,10 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	outputReceivedData(receivedDataSize, "pcm/" QTB_SOUND_OUTPUT_FILENAME);
   }
 
-#if 0 // defined(Q_OS_ANDROID)
   // no sound output check
   if (!hasSoundData(buffer, receivedDataSize)){
 	return TRANSMIT_SUCCEEDED;
   }
-#endif // defined(Q_OS_ANDROID)
 
   // put PCM data into sound buffer
   if (settings->getOnSound()){
@@ -262,7 +265,7 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	}
   }
 
-  //cout << "[" << name << "]  receivedDataSize = " << receivedDataSize << endl << flush; // error
+  //std::cout << "[" << name << "]  receivedDataSize = " << receivedDataSize << std::endl << std::flush; // error
 
 #if QTB_SOUND_PUSH_MODE
   // put PCM data into sound device
@@ -347,7 +350,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	soundCacheSize = (long)(samplerate * 2 * 2 * (qreal)soundCacheTime/1000);
 	soundCacheSizeForLog = soundCacheSize;
 	if (settings->getOutputLog()){
-	  cout << "soundCacheSize = " << soundCacheSize << endl << flush;
+	  std::cout << "soundCacheSize = " << soundCacheSize << std::endl << std::flush;
 	}
   }
 
@@ -355,7 +358,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	double cacheRate = 0;
 	if (soundCacheSizeForLog != 0)
 	  cacheRate = (double)(soundBuffer->getSize())/soundCacheSizeForLog * 100.0;
-	cout << "[SoundThread] Sound Cache Rate : " << cacheRate << endl << flush;
+	std::cout << "[SoundThread] Sound Cache Rate : " << cacheRate << std::endl << std::flush;
   }
 
   // write into sound buffer
@@ -363,6 +366,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	if (audioOutput->state() != QAudio::StoppedState){
 	  //	  soundCacheSize = 0;
 
+#if 0 // for TEST
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 	  while(chunks){
@@ -385,6 +389,18 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 
 		--chunks;
 	  }
+#else // 0 // for TEST
+	  // get free size of buffer
+	  int len = audioOutput->bytesFree();
+	  // write PCM data
+	  if (len != 0){
+		qint64 result = output->write(soundBuffer->get(len), len);
+		if (result != len){
+		  // Failed to write
+		  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
+		}
+	  }
+#endif // 0 // for TEST
 	}
 #if 0 // for TEST
 	else {
@@ -398,10 +414,11 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 }
 
 // change samplerate
+#if QT_VERSION < 0x060000
 bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 {
   if (settings->getOutputLog()){
-	cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << endl << flush;
+	std::cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << std::endl << std::flush;
   }
 
   // audio format
@@ -429,11 +446,11 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // supported Sample Rates
   if (settings->getOutputLog()){
 	QList<int> sampleRatesList = deviceInfo.supportedSampleRates();
-	cout << "supported Sample Rates : ";
+	std::cout << "supported Sample Rates : ";
 	for(QList<int>::iterator i = sampleRatesList.begin(); i != sampleRatesList.end(); i++){
-	  cout << (int)(*i) << " ";
+	  std::cout << (int)(*i) << " ";
 	}
-	cout << endl << flush;
+	std::cout << std::endl << std::flush;
   }
   if (!settings->getOnSound()){
 	// Sound OFF
@@ -466,8 +483,8 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	audioOutput = 0;
   }
   audioOutput = new QAudioOutput(deviceInfo, format);
-  //  cout << "bufferSize: " << audioOutput->bufferSize() << endl << flush;
-  //  cout << "periodSize: " << audioOutput->periodSize() << endl << flush;
+  //  std::cout << "bufferSize: " << audioOutput->bufferSize() << std::endl << std::flush;
+  //  std::cout << "periodSize: " << audioOutput->periodSize() << std::endl << std::flush;
   // set sound buffer size
   audioOutput->setBufferSize(QTB_SOUND_BUFFER_SIZE);
 
@@ -489,8 +506,8 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   // start output
   output = audioOutput->start();
 
-  //  cout << "bufferSize: " << audioOutput->bufferSize() << endl << flush;
-  //  cout << "periodSize: " << audioOutput->periodSize() << endl << flush;
+  //  std::cout << "bufferSize: " << audioOutput->bufferSize() << std::endl << std::flush;
+  //  std::cout << "periodSize: " << audioOutput->periodSize() << std::endl << std::flush;
   if (settings->getOutputLog()){
 	QString str;
 	str = "Sound Device BufferSize : " + QString::number(audioOutput->bufferSize()) + " (bytes)";
@@ -518,12 +535,140 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 
   return true;
 }
+#else // QT_VERSION >= 0x060000
+bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
+{
+  if (settings->getOutputLog()){
+	std::cout << "[SoundThread] changeSamplerate(" << samplerate << ")" << std::endl << std::flush;
+  }
+
+  // audio device information
+  const QAudioDevice defaultAudioOutput = QMediaDevices::defaultAudioOutput();
+
+  // audio format
+  QAudioFormat format = defaultAudioOutput.preferredFormat();
+
+  // setting for sound format
+  format.setSampleRate((int)samplerate);
+  format.setChannelCount(2); // channel
+  format.setSampleFormat(QAudioFormat::Int16); // 16bits
+#if 0 // for TEST
+  format.setCodec("audio/pcm"); // PCM
+  format.setByteOrder(QAudioFormat::LittleEndian);
+  format.setSampleType(QAudioFormat::SignedInt);
+#endif // 0 // for TEST
+
+  {
+	QString str;
+	str = "SoundType : " + QString::number(settings->getSoundType());
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SoundCacheTime : " + QString::number(settings->getSoundCacheTime()) + " (ms)";
+	emit outputLogMessage(PHASE_SOUND, str);
+	str = "SampleRate : " + QString::number(samplerate) + " (Hz)";
+	emit outputLogMessage(PHASE_SOUND, str);
+  }
+  // supported Sample Rates
+  if (settings->getOutputLog()){
+	QString str = "Supported Sampling Rate (Hz): ";
+	if (defaultAudioOutput.isNull()){
+	  str =  str + " None";
+	}
+	else {
+	  str = str +
+		QString::number(defaultAudioOutput.minimumSampleRate()) + " -  " +
+		QString::number(defaultAudioOutput.maximumSampleRate());
+	}
+	std::cout << qPrintable(str) << std::endl << std::flush;
+  }
+  if (!settings->getOnSound()){
+	// Sound OFF
+	return true;
+  }
+  if (!defaultAudioOutput.isFormatSupported(format)){
+	if (audioOutput != 0){
+	  audioOutput->stop();
+	  delete audioOutput;
+	  audioOutput = 0;
+	}
+	// NOT supported sample rate!
+	if (!settings->getOnSoundCriticalMessageDisable()){
+	  emit outputLogMessage(QTB_MSG_NOTSUPPORT_SAMPLE_RATE);
+	}
+	if (settings->getOutputLog()){
+	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
+	  emit outputLogMessage(PHASE_SOUND, msg);
+	}
+	return true; // NOT supported sample rate
+  }
+
+  // clean sound buffer
+  soundBuffer->clear();
+
+  // create Audio Output
+  if (audioOutput != 0){
+	audioOutput->stop();
+	delete audioOutput;
+	audioOutput = 0;
+  }
+  audioOutput = new QAudioSink(defaultAudioOutput, format);
+  audioOutput->setBufferSize(QTB_SOUND_BUFFER_SIZE);
+
+  // stateChanged
+  connect(audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(handleStateChanged(QAudio::State)));
+
+#if defined(Q_OS_LINUX)
+  // for Runtime Message of QAudio::State (Qt Static Library Version)
+  // QObject::connect: Cannot queue arguments of type 'QAudio::State'
+  // (Make sure 'QAudio::State' is registered using qRegisterMetaType().)
+  qRegisterMetaType<QAudio::State>("QAudio::State");
+#endif // defined(Q_OS_LINUX)
+
+#if 0 // for TEST
+  audioOutput->setNotifyInterval(1000); // 1000 (ms)
+  connect(audioOutput, SIGNAL(notify()), SLOT(notify()));
+#endif // 0 // for TEST
+
+  // start output
+  output = audioOutput->start();
+
+  //  std::cout << "bufferSize: " << audioOutput->bufferSize() << std::endl << std::flush;
+  //  std::cout << "periodSize: " << audioOutput->periodSize() << std::endl << std::flush;
+  if (settings->getOutputLog()){
+	QString str;
+	str = "Sound Device BufferSize : " + QString::number(audioOutput->bufferSize()) + " (bytes)";
+	emit outputLogMessage(PHASE_SOUND, str);
+#if 0 // for TEST
+	str = "Sound Device PeriodSize : " + QString::number(audioOutput->periodSize()) + " (bytes)";
+	emit outputLogMessage(PHASE_SOUND, str);
+#endif // 0 // for TEST
+  }
+
+#if QTB_CELT_SUPPORT
+  // setup converter
+  if (converter != 0){
+	delete converter;
+	converter = 0;
+  }
+  if (com_data->sound_type == SOUND_TYPE_CELT){
+	converter = new Converter_CELT(samplerate, 2);
+  }
+#endif // QTB_CELT_SUPPORT
+
+  // delete files
+  if (settings->getOutputSoundDataToFile()){
+	QFile pcmFile("pcm/" QTB_SOUND_OUTPUT_FILENAME);
+	pcmFile.remove();
+  }
+
+  return true;
+}
+#endif // QT_VERSION >= 0x060000
 
 // output received data
 void SoundThread::outputReceivedData(long receivedDataSize, const char *filename)
 {
-  fstream file;
-  file.open(filename, ios::out | ios::binary | ios::app);
+  std::fstream file;
+  file.open(filename, std::ios::out | std::ios::binary | std::ios::app);
   if (file.is_open()){
 	file.write(buffer, receivedDataSize);
 	file.close();
@@ -537,9 +682,9 @@ void SoundThread::createWavFile(int pcmFileSize)
   if (pcmFileSize <= 0)
 	return;
 
-  fstream file;
+  std::fstream file;
   char filename[] = "pcm/" QTB_SOUND_OUTPUT_WAV_FILENAME;
-  file.open(filename, ios::out | ios::binary);
+  file.open(filename, std::ios::out | std::ios::binary);
   if (file.is_open()){
 	// 1) Riff Header
 	RiffHeader riffHeader;
@@ -584,8 +729,8 @@ void SoundThread::createWavFile(int pcmFileSize)
 
 	// copy PCM raw data to DataChunk(waveformData[])
 	char in_filename[] = "pcm/" QTB_SOUND_OUTPUT_FILENAME;
-	fstream in_file;
-	in_file.open(in_filename, ios::in | ios::binary);
+	std::fstream in_file;
+	in_file.open(in_filename, std::ios::in | std::ios::binary);
 	if (in_file.is_open()){
 	  while(pcmFileSize > 0){
 		char buf[512*1024]; // 512KB buffer
@@ -607,7 +752,7 @@ void SoundThread::createWavFile(int pcmFileSize)
 void SoundThread::handleStateChanged(QAudio::State state)
 {
 #if defined(DEBUG)
-  cout << "state = " << state << endl << flush;
+  std::cout << "state = " << state << std::endl << std::flush;
 #else // defined(DEBUG)
   Q_UNUSED(state);
 #endif // defined(DEBUG)
@@ -616,7 +761,7 @@ void SoundThread::handleStateChanged(QAudio::State state)
 #if 0 // for TEST
 void SoundThread::notify()
 {
-  cout << "called notify" << endl << flush;
+  std::cout << "called notify" << std::endl << std::flush;
 }
 #endif // 0 // for TEST
 

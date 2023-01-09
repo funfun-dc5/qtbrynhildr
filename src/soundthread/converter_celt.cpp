@@ -24,8 +24,8 @@ Converter_CELT::Converter_CELT(int samplerate, int channels)
 {
   int error;
 
-  //  cout << "samplerate : " << samplerate << endl << flush;
-  //  cout << "channels : " << channels << endl << flush;
+  //  std::cout << "samplerate : " << samplerate << std::endl << std::flush;
+  //  std::cout << "channels : " << channels << std::endl << std::flush;
 
   // 0) frame size
   frameSize = (samplerate > 40000) ? 48 : 40;
@@ -78,7 +78,7 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
   celt_int16 *workTop = (celt_int16*)buffer;
   int pcmSize = channels * frameSize;
   int error;
-  //  cout << "frameSize : " << frameSize << endl << flush;
+  //  std::cout << "frameSize : " << frameSize << std::endl << std::flush;
   for(int decodedDataSize = 0 ; decodedDataSize < size; ){
 	// decode 1 CELT data chunk
 #if 1 // for miss align
@@ -86,23 +86,23 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
 	chunkSize |= *(chunkTop++) << 8;
 	chunkSize |= *(chunkTop++) << 16;
 	chunkSize |= *(chunkTop++) << 24;
-	//	cout << "chunkSize : " << chunkSize << endl << flush;
+	//	std::cout << "chunkSize : " << chunkSize << std::endl << std::flush;
 #else // 1 // for miss align
 	celt_int32 chunkSize = *((celt_int32 *)(chunkTop));
-	//	cout << "chunkSize : " << chunkSize << endl << flush;
+	//	std::cout << "chunkSize : " << chunkSize << std::endl << std::flush;
 	chunkTop += 4;
 #endif // 1 // for miss align
 	error = celt_decode(decoder, chunkTop, chunkSize, workTop, frameSize);
 	if (error != 0){
 	  // decode error
-	  cout << "celt_decode() error! : " << error << endl << flush;
+	  std::cout << "celt_decode() error! : " << error << std::endl << std::flush;
 	}
 
 	// for next chunk
 	decodedDataSize += (chunkSize + 4);
 	chunkTop += chunkSize;
 	workTop += pcmSize;
-	//	cout << "workTop : " << workTop << endl << flush;
+	//	std::cout << "workTop : " << workTop << std::endl << std::flush;
   }
   decodedPCMSize = (char*)workTop - buffer;
   if (decodedPCMSize == 0){
@@ -110,8 +110,8 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
   }
 
   // 2) return decoded PCM data size
-  //  cout << "CELT       : " << size << endl << flush;
-  //  cout << "convert PCM: " << decodedPCMSize << endl << flush;
+  //  std::cout << "CELT       : " << size << std::endl << std::flush;
+  //  std::cout << "convert PCM: " << decodedPCMSize << std::endl << std::flush;
   return decodedPCMSize;
 }
 

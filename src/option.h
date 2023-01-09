@@ -15,6 +15,9 @@ class Option
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // version string
+  const char *versionString;
+
   // server name
   const char *serverName;
 
@@ -89,7 +92,10 @@ public:
   ~Option();
 
   // get version string
-  const char *getVersionString() const;
+  const char *getVersionString() const
+  {
+	return versionString;
+  }
 
   // get public mode version
   int getPublicModeVersion() const

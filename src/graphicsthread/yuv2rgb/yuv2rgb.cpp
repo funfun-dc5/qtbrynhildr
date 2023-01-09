@@ -133,9 +133,9 @@ bool setup()
 #if QTB_LOAD_BITMAP
   if (sizeof(BITMAPFILEHEADER) != 14 ||
 	  sizeof(BITMAPINFOHEADER) != 40){
-	cout << "[bitmap] sizeof(BITMAPFILEHEADER) = " << sizeof(BITMAPFILEHEADER) << endl << flush;
-    cout << "[bitmap] sizeof(BITMAPINFOHEADER) = " << sizeof(BITMAPINFOHEADER) << endl << flush;
-    cout << "[bitmap] sizeof(RGBQUAD) = " << sizeof(RGBQUAD) << endl << flush;
+	std::cout << "[bitmap] sizeof(BITMAPFILEHEADER) = " << sizeof(BITMAPFILEHEADER) << std::endl << std::flush;
+    std::cout << "[bitmap] sizeof(BITMAPINFOHEADER) = " << sizeof(BITMAPINFOHEADER) << std::endl << std::flush;
+    std::cout << "[bitmap] sizeof(RGBQUAD) = " << sizeof(RGBQUAD) << std::endl << std::flush;
 	return false;
   }
   int headerSize = 64; // sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + 10 (16 bytes boundary)
@@ -176,9 +176,9 @@ bool setup()
 	rgb[i] = 0xff;
   }
 
-  // cout << "yuv1 address = " << hex << (int*)yuv1 << endl;
-  // cout << "yuv2 address = " << hex << (int*)yuv2 << endl;
-  // cout << "rgb address = " << hex << (int*)rgb << endl;
+  // std::cout << "yuv1 address = " << std::hex << (int*)yuv1 << std::endl;
+  // std::cout << "yuv2 address = " << std::hex << (int*)yuv2 << std::endl;
+  // std::cout << "rgb address = " << std::hex << (int*)rgb << std::endl;
 
   // calc parameters
   y1topOrg = (uchar*)yuv1;

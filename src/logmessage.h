@@ -17,8 +17,6 @@
 // Local Header
 #include "settings.h"
 
-using namespace std;
-
 namespace qtbrynhildr {
 
 // phase ID

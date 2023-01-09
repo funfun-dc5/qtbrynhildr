@@ -12,8 +12,6 @@
 #include "qtbrynhildr.h"
 #include "sb.h"
 
-using namespace std; // for TEST
-
 namespace qtbrynhildr {
 
 //---------------------------------------------------------------------------
@@ -47,7 +45,7 @@ SB::SB(MouseBuffer *mouseBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
 void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog){
-	cout << "SB: Pressed : ID_BUTTON = " << id << endl << flush;
+	std::cout << "SB: Pressed : ID_BUTTON = " << id << std::endl << std::flush;
   }
 
   bool updated = false;
@@ -198,7 +196,7 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 		value = MOUSE_BUTTON_DBLCLK;
 		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_LEFT, value);
 		if (outputLog){
-		  cout << "Double Click!!" << endl << flush;
+		  std::cout << "Double Click!!" << std::endl << std::flush;
 		}
 	  }
 	  previousClickButton = MouseBuffer::MOUSE_BUTTON_LEFT;
@@ -217,7 +215,7 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 		value = MOUSE_BUTTON_DBLCLK;
 		mouseBuffer->putButton(MouseBuffer::MOUSE_BUTTON_RIGHT, value);
 		if (outputLog){
-		  cout << "Double Click!!" << endl << flush;
+		  std::cout << "Double Click!!" << std::endl << std::flush;
 		}
 	  }
 	  previousClickButton = MouseBuffer::MOUSE_BUTTON_RIGHT;
@@ -265,7 +263,7 @@ void SB::pressedButton(SoftwareButton::ID_BUTTON id)
 void SB::releasedButton(SoftwareButton::ID_BUTTON id)
 {
   if (outputLog){
-	cout << "SB: Released: ID_BUTTON = " << id << endl << flush;
+	std::cout << "SB: Released: ID_BUTTON = " << id << std::endl << std::flush;
   }
 
   MOUSE_BUTTON value = MOUSE_BUTTON_UP;

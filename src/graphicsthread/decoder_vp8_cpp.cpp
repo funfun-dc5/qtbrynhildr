@@ -30,7 +30,7 @@ QImage* DecoderVP8CPP::getDesktopImage(int numOfThread)
   if (outputLog){
 	static bool flag = true;
 	if (flag){
-	  cout << "DecoderVP8CPP::getDesktopImage()" << endl << flush;
+	  std::cout << "DecoderVP8CPP::getDesktopImage()" << std::endl << std::flush;
 	  flag = false;
 	}
   }

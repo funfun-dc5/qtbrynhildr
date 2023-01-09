@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 #else // BENCHMARK_LOAD_IMAGE
 	int imageSize = convertFrame();
 	if (imageSize == 0){
-	  cout << "Error : imageSize == 0" << endl << flush;
+	  std::cout << "Error : imageSize == 0" << std::endl << std::flush;
 	  break;
 	}
 #endif // BENCHMARK_LOAD_IMAGE

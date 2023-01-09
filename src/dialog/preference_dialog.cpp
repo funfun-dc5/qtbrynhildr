@@ -392,7 +392,7 @@ void PreferenceDialog::showEvent(QShowEvent *event)
 void PreferenceDialog::accept()
 {
   if (outputLog)
-	cout << "accept()." << endl << flush; // for DEBUG
+	std::cout << "accept()." << std::endl << std::flush; // for DEBUG
   if (resultOfSetToSettings)
 	hide();
 }
@@ -401,15 +401,15 @@ void PreferenceDialog::accept()
 void PreferenceDialog::clicked(QAbstractButton *button)
 {
   if (outputLog)
-	cout << "clicked()." << endl << flush; // for DEBUG
+	std::cout << "clicked()." << std::endl << std::flush; // for DEBUG
 
   if (buttonBox->buttonRole(button) == QDialogButtonBox::ApplyRole ||
 	  buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole){
 	if (outputLog){
 	  if (buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole)
-		cout << "clicked(Accept)." << endl << flush; // for DEBUG
+		std::cout << "clicked(Accept)." << std::endl << std::flush; // for DEBUG
 	  else
-		cout << "clicked(Apply)." << endl << flush; // for DEBUG
+		std::cout << "clicked(Apply)." << std::endl << std::flush; // for DEBUG
 	}
 
 	if (changed){
@@ -419,7 +419,7 @@ void PreferenceDialog::clicked(QAbstractButton *button)
   }
   else if (buttonBox->buttonRole(button) == QDialogButtonBox::RejectRole){
 	if (outputLog)
-	  cout << "clicked(Reject)." << endl << flush; // for DEBUG
+	  std::cout << "clicked(Reject)." << std::endl << std::flush; // for DEBUG
 	// ignore change
   }
 
@@ -618,7 +618,7 @@ void PreferenceDialog::on_checkBox_onGamePadSupport_stateChanged(int state)
 void PreferenceDialog::on_pushButton_keylayoutPath_clicked()
 {
   if (outputLog)
-	cout << "on_pushButton_keylayoutPath_clicked()." << endl << flush; // for DEBUG
+	std::cout << "on_pushButton_keylayoutPath_clicked()." << std::endl << std::flush; // for DEBUG
 
   QString dir = QFileDialog::getExistingDirectory(this,
 												  tr("Select path"),
@@ -636,14 +636,14 @@ void PreferenceDialog::on_pushButton_keylayoutPath_clicked()
   changedSettings();
 
   if (outputLog)
-	cout << "Open Directory : " << qPrintable(dir) << endl << flush;
+	std::cout << "Open Directory : " << qPrintable(dir) << std::endl << std::flush;
 }
 
 // select button of output path
 void PreferenceDialog::on_pushButton_outputPath_clicked()
 {
   if (outputLog)
-	cout << "on_pushButton_outputPath_clicked()." << endl << flush; // for DEBUG
+	std::cout << "on_pushButton_outputPath_clicked()." << std::endl << std::flush; // for DEBUG
 
   QString dir = QFileDialog::getExistingDirectory(this,
 												  tr("Select path"),
@@ -661,14 +661,14 @@ void PreferenceDialog::on_pushButton_outputPath_clicked()
   changedSettings();
 
   if (outputLog)
-	cout << "Open Directory : " << qPrintable(dir) << endl << flush;
+	std::cout << "Open Directory : " << qPrintable(dir) << std::endl << std::flush;
 }
 
 // select button of logfile
 void PreferenceDialog::on_pushButton_logFile_clicked()
 {
   if (outputLog)
-	cout << "on_pushButton_logFile_clicked()." << endl << flush; // for DEBUG
+	std::cout << "on_pushButton_logFile_clicked()." << std::endl << std::flush; // for DEBUG
 
   // prepare for log file
   QString fileName =
@@ -686,14 +686,14 @@ void PreferenceDialog::on_pushButton_logFile_clicked()
   changedSettings();
 
   if (outputLog)
-	cout << "Open File : " << qPrintable(fileName) << endl << flush;
+	std::cout << "Open File : " << qPrintable(fileName) << std::endl << std::flush;
 }
 
 // select button of keyboard logfile
 void PreferenceDialog::on_pushButton_keyboardLogFile_clicked()
 {
   if (outputLog)
-	cout << "on_pushButton_keyboardLogFile_clicked()." << endl << flush; // for DEBUG
+	std::cout << "on_pushButton_keyboardLogFile_clicked()." << std::endl << std::flush; // for DEBUG
 
   // prepare for keyboard log file
   QString fileName =
@@ -711,7 +711,7 @@ void PreferenceDialog::on_pushButton_keyboardLogFile_clicked()
   changedSettings();
 
   if (outputLog)
-	cout << "Open File : " << qPrintable(fileName) << endl << flush;
+	std::cout << "Open File : " << qPrintable(fileName) << std::endl << std::flush;
 }
 
 } // end of namespace qtbrynhildr

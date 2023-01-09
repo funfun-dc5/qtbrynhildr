@@ -57,20 +57,20 @@ int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 
   // for DEBUG
   if (outputLog){
-	ios::fmtflags flags = cout.flags();
+	std::ios::fmtflags flags = std::cout.flags();
 	switch(keycode_flg){
 	case KEYCODE_FLG_KEYUP:
-	  cout << "[KeyBuffer] : KEYUP   : VK_Code = " << hex << (int)keycode << ": size() = " << dec << size() << endl << flush;
+	  std::cout << "[KeyBuffer] : KEYUP   : VK_Code = " << std::hex << (int)keycode << ": size() = " << std::dec << size() << std::endl << std::flush;
 	  break;
 	case KEYCODE_FLG_KEYDOWN:
-	  cout << "[KeyBuffer] : KEYDOWN : VK_Code = " << hex << (int)keycode << ": size() = " << dec << size() <<endl << flush;
+	  std::cout << "[KeyBuffer] : KEYDOWN : VK_Code = " << std::hex << (int)keycode << ": size() = " << std::dec << size() <<std::endl << std::flush;
 	  break;
 	default:
 	  // unknown KEYCODE_FLG
 	  ABORT();
 	  break;
 	}
-	cout.flags(flags);
+	std::cout.flags(flags);
   }
 
   return 1;

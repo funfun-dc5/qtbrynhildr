@@ -131,7 +131,7 @@ ControlThread::~ControlThread()
 void ControlThread::setCursorPointColor(QRgb cursorPointColor)
 {
   if (this->cursorPointColor != cursorPointColor){
-	//	cout << "cursorPointColor: 0x" << hex << cursorPointColor << endl << flush;
+	//	std::cout << "cursorPointColor: 0x" << std::hex << cursorPointColor << std::endl << std::flush;
 	this->cursorPointColor = cursorPointColor;
 	changeMouseCursor();
   }
@@ -185,7 +185,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
-	cout << "[" << name << "]" << " sent data size (" << dataSize << ") != sizeof(COM_DATA)" << endl << flush; // error
+	std::cout << "[" << name << "]" << " sent data size (" << dataSize << ") != sizeof(COM_DATA)" << std::endl << std::flush; // error
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
@@ -203,7 +203,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   if (dataSize != sizeof(COM_DATA)){
 	// error
 #if 0 // for TEST
-	cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << endl << flush; // error
+	std::cout << "[" << name << "]" << " received data size (" << dataSize << ") != sizeof(COM_DATA)" << std::endl << std::flush; // error
 #endif // for TEST
 	return PROCESS_NETWORK_ERROR;
   }
@@ -245,18 +245,18 @@ PROCESS_RESULT ControlThread::processForHeader()
   else {
 	// No Error
 	// check server_cx, server_cy
-	//	cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
-	//	cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
+	//	std::cout << "[ControlThread] server_cx = " << com_data->server_cx << std::endl << std::flush;
+	//	std::cout << "[ControlThread] server_cy = " << com_data->server_cy << std::endl << std::flush;
 	settings->setDesktopWidth(com_data->server_cx);
 	settings->setDesktopHeight(com_data->server_cy);
 
 	// check desktop size
 	if (settings->getOnDesktopAutoresize() &&
 		!doneCheckPassword && settings->getDesktopScalingFactor() == 1.0){
-	  // cout << "[ControlThread] server_cx = " << com_data->server_cx << endl << flush;
-	  // cout << "[ControlThread] server_cy = " << com_data->server_cy << endl << flush;
-	  // cout << "[ControlThread] screen width  = " << settings->getCurrentScreenWidth() << endl;
-	  // cout << "[ControlThread] screen height = " << settings->getCurrentScreenHeight() << endl;
+	  // std::cout << "[ControlThread] server_cx = " << com_data->server_cx << std::endl << std::flush;
+	  // std::cout << "[ControlThread] server_cy = " << com_data->server_cy << std::endl << std::flush;
+	  // std::cout << "[ControlThread] screen width  = " << settings->getCurrentScreenWidth() << std::endl;
+	  // std::cout << "[ControlThread] screen height = " << settings->getCurrentScreenHeight() << std::endl;
 	  int server_width = com_data->server_cx * settings->getDesktopScalingFactor();
 	  int server_height = com_data->server_cy * settings->getDesktopScalingFactor();
 	  int client_width = settings->getCurrentScreenWidth();
@@ -294,7 +294,7 @@ PROCESS_RESULT ControlThread::processForHeader()
   // check monitor no
   if (monitorCount != com_data->monitor_count){
 	monitorCount = com_data->monitor_count;
-	//	cout << "[ControlThread] monitor_count=" << (int)monitorCount << endl << flush;
+	//	std::cout << "[ControlThread] monitor_count=" << (int)monitorCount << std::endl << std::flush;
 	settings->setMonitorCount(monitorCount);
 	emit refreshMenu();
   }
@@ -309,7 +309,7 @@ PROCESS_RESULT ControlThread::processForHeader()
 
   // save frame no of server
   frameNoOfServer = (uchar)com_data->frame_no;
-  //cout << "[" << name << "] frameNoOfServer : " << frameNoOfServer << endl << flush;
+  //std::cout << "[" << name << "] frameNoOfServer : " << frameNoOfServer << std::endl << std::flush;
 
   return PROCESS_SUCCEEDED;
 }
@@ -435,11 +435,11 @@ void ControlThread::setupHeader()
   }
 
 #if 0 // for DEBUG
-  ios::fmtflags flags = cout.flags();
-  cout << "keycode     = " << hex << (int)com_data->keycode << endl;
-  cout << "keycode_flg = " << hex << (int)com_data->keycode_flg << endl;
-  cout << "keydown     = " << hex << (int)com_data->keydown << endl << flush;
-  cout.flags(flags);
+  std::ios::fmtflags flags = std::cout.flags();
+  std::cout << "keycode     = " << std::hex << (int)com_data->keycode << std::endl;
+  std::cout << "keycode_flg = " << std::hex << (int)com_data->keycode_flg << std::endl;
+  std::cout << "keydown     = " << std::hex << (int)com_data->keydown << std::endl << std::flush;
+  std::cout.flags(flags);
 #endif // for DEBUG
 }
 
@@ -599,7 +599,7 @@ void ControlThread::initHeaderForGraphics()
   }
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
-  //cout << "(image_cx, image_cy) = (" << com_data->image_cx << ", " << com_data->image_cy << ")" << endl << flush;
+  //std::cout << "(image_cx, image_cy) = (" << com_data->image_cx << ", " << com_data->image_cy << ")" << std::endl << std::flush;
 }
 #else // defined(QTB_DEV_DESKTOP)
 // initialize protocol header for graphics for touchpanel
@@ -723,17 +723,17 @@ void ControlThread::setMouseControl()
 	if (settings->getOnFulFulMode() && (step % 100 != 0))
 	  return;
 
-	//cout << "FulFul Mode : step " << step << endl << flush;
+	//std::cout << "FulFul Mode : step " << step << std::endl << std::flush;
 	com_data->mouse_move = MOUSE_MOVE_ON;
 	com_data->mouse_y = sentPos.y;
 	if (onFulFul){
 	  // return mouse position
-	  //cout << "FulFul Mode : Return!" << endl << flush;
+	  //std::cout << "FulFul Mode : Return!" << std::endl << std::flush;
 	  com_data->mouse_x = sentPos.x;
 	}
 	else {
 	  // move mouse position
-	  //cout << "FulFul Mode : Move!" << endl << flush;
+	  //std::cout << "FulFul Mode : Move!" << std::endl << std::flush;
 	  if (step % 2 == 0){
 		// right FulFul
 		com_data->mouse_x = sentPos.x > 5 ? sentPos.x - 5 : 0;
@@ -804,8 +804,8 @@ void ControlThread::setMouseControl()
 	}
 #endif // QTB_DESKTOP_COMPRESS_MODE
 
-	//cout << "com_data->mouse_x = " << com_data->mouse_x << endl;
-	//cout << "com_data->mouse_y = " << com_data->mouse_y << endl;
+	//std::cout << "com_data->mouse_x = " << com_data->mouse_x << std::endl;
+	//std::cout << "com_data->mouse_y = " << com_data->mouse_y << std::endl;
 
 	// move to xxxx
 	if (mouseBuffer->getButton(MouseBuffer::MOUSE_BUTTON_MOVE_TOPSIDE) == MOUSE_BUTTON_UP){
@@ -1103,8 +1103,8 @@ bool ControlThread::sendClipboard()
 	return true;
   }
 
-  //  cout << "sendClipboard = " << qPrintable(clipboardString) << endl << flush;
-  //  cout << "sendClipboard.size = " << stringSize << endl << flush;
+  //  std::cout << "sendClipboard = " << qPrintable(clipboardString) << std::endl << std::flush;
+  //  std::cout << "sendClipboard.size = " << stringSize << std::endl << std::flush;
 
   // copy to local buffer and send to server
   memset(localBuffer, 0, stringSize + 16 + 2);
@@ -1149,7 +1149,7 @@ bool ControlThread::receiveClipboard()
   if (clipboardSize == 0){
 	// set cliboard
 	QString clipboardString = QString((const QChar *)clipboardTop, -1);
-	//	cout << "receiveClipboard = " << qPrintable(clipboardString) << endl << flush;
+	//	std::cout << "receiveClipboard = " << qPrintable(clipboardString) << std::endl << std::flush;
 	emit setClipboard(clipboardString);
 	return true;
   }
@@ -1224,8 +1224,8 @@ bool ControlThread::sendFile()
   sentDataSize = sendData(fileTimeStamp, QTB_TIMESTAMP_IMAGE_SIZE);
 
   // send file image
-  fstream file;
-  file.open(qPrintable(fileName), ios::in | ios::binary);
+  std::fstream file;
+  file.open(qPrintable(fileName), std::ios::in | std::ios::binary);
   if (file.is_open()){
 	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
 	  // read to buffer
@@ -1244,7 +1244,7 @@ bool ControlThread::sendFile()
 	  // set progress bar
 	  transferFileProgress = transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
 	  if (previousProgress != transferFileProgress){
-		//		cout << "transferFileProgress: " << transferFileProgress << endl << flush;
+		//		std::cout << "transferFileProgress: " << transferFileProgress << std::endl << std::flush;
 		previousProgress = transferFileProgress;
 		emit setFileTransferProgressBarValue(transferFileProgress);
 	  }
@@ -1261,21 +1261,21 @@ bool ControlThread::sendFile()
 	  fileSize -= sentDataSize;
 	  // set progress bar
 	  transferFileProgress = transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
-	  //	  cout << "transferFileProgress: " << transferFileProgress << endl << flush;
+	  //	  std::cout << "transferFileProgress: " << transferFileProgress << std::endl << std::flush;
 	  emit setFileTransferProgressBarValue(transferFileProgress);
 	}
 	file.close();
   }
 #if 0 // for DEBUG
   else {
-	cout << "open error!" << endl << flush;
+	std::cout << "open error!" << std::endl << std::flush;
   }
 #endif // for DEBUG
 
   // sent a file
   settings->setSendFileCount(sendFileCount);
-  //  cout << "SendFile = " << qPrintable(fileName) << endl << flush;
-  //  cout << "SendFileCount = " << settings->getSendFileCount() << endl << flush;
+  //  std::cout << "SendFile = " << qPrintable(fileName) << std::endl << std::flush;
+  //  std::cout << "SendFileCount = " << settings->getSendFileCount() << std::endl << std::flush;
 
   // reset progress bar
   if (settings->getOnShowTotalProgressForTransferFile()){
@@ -1323,9 +1323,9 @@ bool ControlThread::receiveFile()
   receivedDataSize = receiveData(fileTimeStamp, QTB_TIMESTAMP_IMAGE_SIZE);
 
   // get file image
-  fstream file;
+  std::fstream file;
   QString localFilename = settings->getOutputPath() + filename;
-  file.open(qPrintable(localFilename), ios::out | ios::binary);
+  file.open(qPrintable(localFilename), std::ios::out | std::ios::binary);
   if (file.is_open()){
 	while(fileSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
 	  receivedDataSize = receiveData(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
@@ -1387,8 +1387,8 @@ bool ControlThread::receiveMouseCursorImage()
   }
 #if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
-	fstream file;
-	file.open("jpg/andMaskImage.bin", ios::out | ios::binary | ios::trunc);
+	std::fstream file;
+	file.open("jpg/andMaskImage.bin", std::ios::out | std::ios::binary | std::ios::trunc);
 	if (file.is_open()){
 	  file.write((char*)andMaskImage, receivedDataSize);
 	  file.close();
@@ -1406,8 +1406,8 @@ bool ControlThread::receiveMouseCursorImage()
   }
 #if SAVE_MOUSE_CURSOR_IMAGE_BINARY // for TEST
   else {
-	fstream file;
-	file.open("jpg/xorMaskImage.bin", ios::out | ios::binary | ios::trunc);
+	std::fstream file;
+	file.open("jpg/xorMaskImage.bin", std::ios::out | std::ios::binary | std::ios::trunc);
 	if (file.is_open()){
 	  file.write((char*)xorMaskImage, receivedDataSize);
 	  file.close();
@@ -1486,12 +1486,12 @@ bool ControlThread::isColorMouseCursorImage(uchar *image, int size)
 		(image[i+1] != 0 && image[i+1] != 0xFF) || // G
 		(image[i+2] != 0 && image[i+2] != 0xFF) || // B
 		 image[i+3] != 0 ){ // A
-	  //cout << "Found Color Mouse Cursor!" << endl << flush;
+	  //std::cout << "Found Color Mouse Cursor!" << std::endl << std::flush;
 	  return true;
 	}
   }
 
-  //cout << "Found Monochrome Mouse Cursor!" << endl << flush;
+  //std::cout << "Found Monochrome Mouse Cursor!" << std::endl << std::flush;
   return false;
 }
 
@@ -1499,56 +1499,56 @@ bool ControlThread::isColorMouseCursorImage(uchar *image, int size)
 QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 {
 #if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
-  cout << hex << uppercase << setfill('0');
-  cout << endl << "======= image - R" << endl;
+  std::cout << std::hex << std::uppercase << std::setfill('0');
+  std::cout << std::endl << "======= image - R" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)image[i+0];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)image[i+0];
   }
-  cout << endl << "======= image - G" << endl;
+  std::cout << std::endl << "======= image - G" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)image[i+1];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)image[i+1];
   }
-  cout << endl << "======= image - B" << endl;
+  std::cout << std::endl << "======= image - B" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+2];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+2];
   }
-  cout << endl << "======= image - A" << endl;
+  std::cout << std::endl << "======= image - A" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)image[i+3];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)image[i+3];
   }
-  cout << endl << "======= mask - R" << endl;
+  std::cout << std::endl << "======= mask - R" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+0];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+0];
   }
-  cout << endl << "======= mask - G" << endl;
+  std::cout << std::endl << "======= mask - G" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+1];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+1];
   }
-  cout << endl << "======= mask - B" << endl;
+  std::cout << std::endl << "======= mask - B" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+2];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+2];
   }
-  cout << endl << "======= mask - A" << endl;
+  std::cout << std::endl << "======= mask - A" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+3];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+3];
   }
-  cout << endl << flush;
+  std::cout << std::endl << std::flush;
 #endif // HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
 
   bool flag24bit = true;
@@ -1587,56 +1587,56 @@ QCursor ControlThread::createColorMouseCursor(uchar *image, uchar *mask)
 QCursor ControlThread::createMonochromeMouseCursor(uchar *image, uchar *mask)
 {
 #if HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
-  cout << hex << uppercase << setfill('0');
-  cout << endl << "======= image - R" << endl;
+  std::cout << std::hex << std::uppercase << std::setfill('0');
+  std::cout << std::endl << "======= image - R" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)image[i+0];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)image[i+0];
   }
-  cout << endl << "======= image - G" << endl;
+  std::cout << std::endl << "======= image - G" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)image[i+1];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)image[i+1];
   }
-  cout << endl << "======= image - B" << endl;
+  std::cout << std::endl << "======= image - B" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+2];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+2];
   }
-  cout << endl << "======= image - A" << endl;
+  std::cout << std::endl << "======= image - A" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)image[i+3];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)image[i+3];
   }
-  cout << endl << "======= mask - R" << endl;
+  std::cout << std::endl << "======= mask - R" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+0];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+0];
   }
-  cout << endl << "======= mask - G" << endl;
+  std::cout << std::endl << "======= mask - G" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+1];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+1];
   }
-  cout << endl << "======= mask - B" << endl;
+  std::cout << std::endl << "======= mask - B" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+2];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+2];
   }
-  cout << endl << "======= mask - A" << endl;
+  std::cout << std::endl << "======= mask - A" << std::endl;
   for(int i = 0, counter = 0; i < QTB_ICON_IMAGE_SIZE; i += 4, counter++){
 	if (counter > 0 && (counter % QTB_ICON_WIDTH == 0))
-	  cout << endl;
-	cout << setw(2) << (int)mask[i+3];
+	  std::cout << std::endl;
+	std::cout << std::setw(2) << (int)mask[i+3];
   }
-  cout << endl << flush;
+  std::cout << std::endl << std::flush;
 #endif // HEXDUMP_MOUSE_CURSOR_IMAGE_BINARY // for TEST
 
   uchar bitmapImage[QTB_ICON_SIZE*3];

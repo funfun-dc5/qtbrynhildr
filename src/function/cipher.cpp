@@ -11,8 +11,6 @@
 // Local Header
 #include "cipher.h"
 
-using namespace std;
-
 namespace qtbrynhildr {
 
 // constructor
@@ -43,9 +41,9 @@ string Cipher::encodeString(string plain)
 							  )
 			   );
   if (outputLog){
-	cout << "plain  text: " << plain << endl;
-	cout << "encode text: " << encoded << endl;
-	cout << "decode text: " << decodeString(encoded) << endl;
+	std::cout << "plain  text: " << plain << std::endl;
+	std::cout << "encode text: " << encoded << std::endl;
+	std::cout << "decode text: " << decodeString(encoded) << std::endl;
   }
 
   return encoded;
@@ -81,8 +79,8 @@ int main(int argc, char *argv[])
   Cipher cipher("Soul Gem");
 
   string encoded = cipher.encodeString("mcz-xoxo");
-  cout << "encode text: " << encoded << endl;	
+  std::cout << "encode text: " << encoded << std::endl;	
   string plain = cipher.decodeString(encoded);
-  cout << "plain  text: " << plain << endl;	
+  std::cout << "plain  text: " << plain << std::endl;	
 }
 #endif // for DEBUG

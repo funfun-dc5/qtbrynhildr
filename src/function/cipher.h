@@ -16,7 +16,6 @@
 #include "hex.h"
 #include "modes.h"
 
-using namespace std;
 using namespace CryptoPP;
 
 namespace qtbrynhildr {

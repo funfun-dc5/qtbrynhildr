@@ -103,57 +103,57 @@ private:
 	  hasSSE42 = ((data[2] >> 20) & 1) != 0;
 	  hasAVX   = ((data[2] >> 28) & 1) != 0;
 #if 0 // for TEST
-	  cout << "data[0] : 0x" << hex << data[0] << endl << flush;
-	  cout << "data[1] : 0x" << hex << data[1] << endl << flush;
-	  cout << "data[2] : 0x" << hex << data[2] << endl << flush;
-	  cout << "data[3] : 0x" << hex << data[3] << endl << flush;
+	  std::cout << "data[0] : 0x" << hex << data[0] << std::endl << std::flush;
+	  std::cout << "data[1] : 0x" << hex << data[1] << std::endl << std::flush;
+	  std::cout << "data[2] : 0x" << hex << data[2] << std::endl << std::flush;
+	  std::cout << "data[3] : 0x" << hex << data[3] << std::endl << std::flush;
 #endif // 0 // for TEST
 	  getCPUID(7, data);
 	  hasAVX2  = ((data[1] >>  5) & 1) != 0;
 #if 0 // for TEST
-	  cout << "data[0] : 0x" << hex << data[0] << endl << flush;
-	  cout << "data[1] : 0x" << hex << data[1] << endl << flush;
-	  cout << "data[2] : 0x" << hex << data[2] << endl << flush;
-	  cout << "data[3] : 0x" << hex << data[3] << endl << flush;
+	  std::cout << "data[0] : 0x" << hex << data[0] << std::endl << std::flush;
+	  std::cout << "data[1] : 0x" << hex << data[1] << std::endl << std::flush;
+	  std::cout << "data[2] : 0x" << hex << data[2] << std::endl << std::flush;
+	  std::cout << "data[3] : 0x" << hex << data[3] << std::endl << std::flush;
 #endif // 0 // for TEST
 
 	  // for TEST
 	  if (outputLog){
-		cout << "vender = " << vender << endl << flush;
+		std::cout << "vender = " << vender << std::endl << std::flush;
 
-		cout << "brand  = " << brand << endl << flush;
+		std::cout << "brand  = " << brand << std::endl << std::flush;
 
 		if (hasSSE41){
-		  cout << "SSE4.1 : Supported" << endl;
+		  std::cout << "SSE4.1 : Supported" << std::endl;
 		}
 		else {
-		  cout << "SSE4.1 : NOT Supported" << endl;
+		  std::cout << "SSE4.1 : NOT Supported" << std::endl;
 		}
 		if (hasSSE42){
-		  cout << "SSE4.2 : Supported" << endl;
+		  std::cout << "SSE4.2 : Supported" << std::endl;
 		}
 		else {
-		  cout << "SSE4.2 : NOT Supported" << endl;
+		  std::cout << "SSE4.2 : NOT Supported" << std::endl;
 		}
 		if (hasAVX){
-		  cout << "AVX    : Supported" << endl;
+		  std::cout << "AVX    : Supported" << std::endl;
 		}
 		else {
-		  cout << "AVX    : NOT Supported" << endl;
+		  std::cout << "AVX    : NOT Supported" << std::endl;
 		}
 		if (hasAVX2){
-		  cout << "AVX2   : Supported" << endl;
+		  std::cout << "AVX2   : Supported" << std::endl;
 		}
 		else {
-		  cout << "AVX2   : NOT Supported" << endl;
+		  std::cout << "AVX2   : NOT Supported" << std::endl;
 		}
 		if (hasFMA){
-		  cout << "FMA    : Supported" << endl;
+		  std::cout << "FMA    : Supported" << std::endl;
 		}
 		else {
-		  cout << "FMA    : NOT Supported" << endl;
+		  std::cout << "FMA    : NOT Supported" << std::endl;
 		}
-		cout << flush;
+		std::cout << std::flush;
 	  }
 #else // !(defined(__arm__) || defined(__aarch64__))
 	  // ARM CPU
@@ -170,10 +170,10 @@ private:
 	  // for TEST
 	  if (outputLog){
 		if (hasNEON){
-		  cout << "NEON : Supported" << endl;
+		  std::cout << "NEON : Supported" << std::endl;
 		}
 		else {
-		  cout << "NEON : NOT Supported" << endl;
+		  std::cout << "NEON : NOT Supported" << std::endl;
 		}
 	  }
 #endif // !(defined(__arm__) || defined(__aarch64__))

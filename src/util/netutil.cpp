@@ -21,8 +21,6 @@
 #include <cstdio>
 #include <cstring>
 
-using namespace std;
-
 // Qt Header
 
 // Local Header
@@ -79,11 +77,11 @@ bool NetUtil::getMacAddress()
 	  if (adr->IfType != IF_TYPE_SOFTWARE_LOOPBACK){
 		// get a mac address
 		if (adr->PhysicalAddressLength > 0){
-		  cout << "MAC:" << hex << setfill('0');
+		  std::cout << "MAC:" << std::hex << std::setfill('0');
 		  for (ULONG i = 0; i < adr->PhysicalAddressLength; ++ i) {
-			cout << setw(2) << (int)adr->PhysicalAddress[i];
+			std::cout << std::setw(2) << (int)adr->PhysicalAddress[i];
 		  }
-		  cout << endl << flush;
+		  std::cout << std::endl << std::flush;
 		}
 	  }
 	}
@@ -120,7 +118,7 @@ bool NetUtil::getMacAddress()
 	  addr = ifreq.ifr_hwaddr.sa_data;
 	  sprintf(mac_address,"%02x:%02x:%02x:%02x:%02x:%02x",
 			  (unsigned char)addr[0],  (unsigned char)addr[1],  (unsigned char)addr[2],  (unsigned char)addr[3],  (unsigned char)addr[4],  (unsigned char)addr[5]);
-	  cout << "MAC:" << mac_address << endl << flush;
+	  std::cout << "MAC:" << mac_address << std::endl << std::flush;
 	}
   }
   close(fd);

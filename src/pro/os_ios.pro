@@ -13,4 +13,7 @@ QMAKE_BUNDLE_DATA += ios_icon
 # launch images
 #app_launch_images.files = ios/Launch.xib $$files(ios/LaunchImage*.png)
 #QMAKE_BUNDLE_DATA += app_launch_images
+
+QMAKE_ASSET_CATALOGS = $$PWD/ios/Images.xcassets
+QMAKE_ASSET_CATALOGS_APP_ICON = "AppIcon"
 }

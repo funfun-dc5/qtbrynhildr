@@ -57,11 +57,11 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
   comboBox_convertThreadCount->insertItem(1, tr("2 threads"));
   comboBox_convertThreadCount->insertItem(2, tr("4 threads"));
   //  comboBox_convertThreadCount->insertItem(3, tr("8 threads"));
-#else // QTB_MULTI_THREAD_CONVERTER
+#else // !QTB_MULTI_THREAD_CONVERTER
   comboBox_convertThreadCount->insertItem(0, tr("1 thread"));
   comboBox_convertThreadCount->setCurrentIndex(0);
   comboBox_convertThreadCount->setEnabled(false);
-#endif // QTB_MULTI_THREAD_CONVERTER
+#endif // !QTB_MULTI_THREAD_CONVERTER
 
   // doubleClickThreshold
   spinBox_doubleClickThreshold->setRange(100, 1000); // for TEST
@@ -365,10 +365,10 @@ void PreferenceDialog::resetting()
   QFont currentFont = font();
   currentFont.setPointSize(fontPointSize);
   setFont(currentFont);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   // set minimum width
 
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 }
 
 // show Event

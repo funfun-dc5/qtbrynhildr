@@ -70,10 +70,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   :desktopPanel(0)
 #if defined(QTB_DEV_TOUCHPANEL)
   ,graphicsView(0)
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   ,scrollArea(0)
   ,desktopWindow(0)
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   ,connectionLabel(0)
   ,frameRateLabel(0)
   ,fileMenu(0)
@@ -314,9 +314,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #if QTB_SIMD_SUPPORT
 #if !defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::SSE42() || CPUInfo::AVX2();
-#else // !defined(__ARM_NEON__)
+#else // defined(__ARM_NEON__)
   hasSIMDInstruction = CPUInfo::NEON();
-#endif // !defined(__ARM_NEON__)
+#endif // defined(__ARM_NEON__)
 #endif // QTB_SIMD_SUPPORT
 
 #if QTB_CRYPTOGRAM
@@ -343,9 +343,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // create setting
 #if QTB_CRYPTOGRAM
   settinegs = new Settings(iniFileName, cipher);
-#else // QTB_CRYPTGRAM
+#else // !QTB_CRYPTGRAM
   settings = new Settings(iniFileName);
-#endif // QTB_CRYPTGRAM
+#endif // !QTB_CRYPTGRAM
 
   // restore settings
   readSettings();
@@ -564,7 +564,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // for full screen
   fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
 
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 
   // Desktop Window Widget
   desktopWindow = new DesktopWindow(this);
@@ -597,7 +597,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // for full screen
   fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);
 
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // set key/mouse buffer
   keyBuffer = desktopPanel->getKeyBuffer();
@@ -799,9 +799,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // keyboard
 #if defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard = new SK(keyBuffer, this, graphicsView);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard = new SK(keyBuffer, this, desktopWindow);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   softwareKeyboard->setVisible(false);
 #if 0 // for TEST
   softwareKeyboard->setGeometry(40,350,1120,300);
@@ -811,9 +811,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // button
 #if defined(QTB_DEV_TOUCHPANEL)
   softwareButton = new SB(mouseBuffer, this, graphicsView);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   softwareButton = new SB(mouseBuffer, this, desktopWindow);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   softwareButton->setVisible(false);
   connect(softwareButton, SIGNAL(refreshMenu()), SLOT(refreshMenu()));
 #if 0 // for TEST
@@ -898,9 +898,9 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   //------------------------------------------------------------
 #if QTB_RECORDER
   controlThread = new ControlThread(settings, desktopPanel, recorder);
-#else // QTB_RECORDER
+#else // !QTB_RECORDER
   controlThread = new ControlThread(settings, desktopPanel);
-#endif // QTB_RECORDER
+#endif // !QTB_RECORDER
   graphicsThread = new GraphicsThread(settings);
   soundThread = new SoundThread(settings);
 
@@ -1189,7 +1189,7 @@ QtBrynhildr::~QtBrynhildr()
 	desktopPanel = 0;
   }
 
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 
   // desktop window
   if (desktopWindow != 0){
@@ -1203,7 +1203,7 @@ QtBrynhildr::~QtBrynhildr()
 	scrollArea = 0;
   }
 
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // settings
   if (settings != 0){
@@ -1224,13 +1224,13 @@ GraphicsView *QtBrynhildr::getGraphicsView() const
 {
   return graphicsView;
 }
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 // get desktop window
 DesktopWindow *QtBrynhildr::getDesktopWindow() const
 {
   return desktopWindow;
 }
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // get desktop panel
 DesktopPanel *QtBrynhildr::getDesktopPanel() const
@@ -1742,9 +1742,9 @@ void QtBrynhildr::createActions()
   showMenuBar_Action->setStatusTip(tr("Show Menu Bar"));
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
   showMenuBar_Action->setEnabled(true);
-#else // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#else // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
   showMenuBar_Action->setEnabled(false);
-#endif // defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+#endif // !(defined(Q_OS_ANDROID) || defined(Q_OS_IOS))
   showMenuBar_Action->setCheckable(true);
   showMenuBar_Action->setChecked(settings->getOnShowMenuBar());
   connect(showMenuBar_Action, SIGNAL(triggered()), this, SLOT(toggleShowMenuBar()));
@@ -2958,14 +2958,14 @@ void QtBrynhildr::updateConnected()
 		  arg(width, 3).
 		  arg(height, 3);
 	  }
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
 		arg(settings->getServerName()).
 		arg(settings->getDesktopWidth(), 3).
 		arg(settings->getDesktopHeight(), 3);
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 	}
-#else // QTB_BENCHMARK
+#else // !QTB_BENCHMARK
 	if (settings->getDesktopScalingFactor() == 1.0 && settings->getDesktopCompressMode() == 1){
 	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
 		arg(settings->getServerName()).
@@ -2992,7 +2992,7 @@ void QtBrynhildr::updateConnected()
 		arg(width, 3).
 		arg(height, 3);
 	}
-#endif // QTB_BENCHMARK
+#endif // !QTB_BENCHMARK
 	// viewer mode
 	if (settings->getOnViewerMode()){
 	  str += " [" + tr("Viewer Mode") + "]";
@@ -3047,7 +3047,7 @@ void QtBrynhildr::updateFrameRate()
   else {
 	frameRateLabel->clear();
   }
-#else // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#else // !QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   if (settings->getOnShowFrameRate()){
 	if (!settings->getConnected()){
 	  currentFrameRate = 0;
@@ -3103,7 +3103,7 @@ void QtBrynhildr::updateFrameRate()
   else {
 	frameRateLabel->clear();
   }
-#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#endif // !QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 }
 
 // connected
@@ -3119,13 +3119,13 @@ void QtBrynhildr::connected()
 	if (showSoftwareButton_Action != 0)
 	  showSoftwareButton_Action->setEnabled(true);
   }
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
   if (showSoftwareKeyboard_Action != 0)
 	showSoftwareKeyboard_Action->setEnabled(true);
 
   if (showSoftwareButton_Action != 0)
 	showSoftwareButton_Action->setEnabled(true);
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // enabled disconnect to server
@@ -3203,9 +3203,9 @@ void QtBrynhildr::connected()
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(true);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(true);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   }
 
 #if QTB_PLUGINS_DISABLE_SUPPORT
@@ -3372,9 +3372,9 @@ void QtBrynhildr::disconnected()
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(false);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(false);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
@@ -3613,12 +3613,12 @@ void QtBrynhildr::readSettings()
 	move(defaultRect.topLeft());
 	resize(defaultRect.size());
   }
-#else // for all platform
+#else // 1 // for all platform
   QPoint pos = settings->getSettings()->value(QTB_WINDOWPOS, QVariant(QPoint(200, 200))).toPoint();
   QSize size = settings->getSettings()->value(QTB_WINDOWSIZE, QVariant(QSize(800, 600))).toSize();
   move(pos);
   resize(size);
-#endif // for all platform
+#endif // 1 // for all platform
 
   // restore window state
   restoreState(settings->getSettings()->value(QTB_WINDOWSTATE).toByteArray());
@@ -3637,10 +3637,10 @@ void QtBrynhildr::writeSettings()
   settings->getSettings()->setValue(QTB_GEOMETRY, saveGeometry());
   //qDebug() << "frame geometry: " << frameGeometry();
   //qDebug() << "geometry: " << geometry();
-#else // for all platform
+#else // 1 // for all platform
   settings->getSettings()->setValue(QTB_WINDOWPOS, pos());
   settings->getSettings()->setValue(QTB_WINDOWSIZE, size());
-#endif // for all platform
+#endif // 1 // for all platform
 
   // save window state
   settings->getSettings()->setValue(QTB_WINDOWSTATE, saveState());
@@ -3752,9 +3752,9 @@ void QtBrynhildr::connectToServer()
   case KEYBOARD_TYPE_NATIVE:
 #if defined(Q_OS_WIN)
 	// Nothing to do
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 	ABORT(); // available for windows only
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 	break;
   default: // key layout file
 #ifdef USE_KEYLAYOUTFILE
@@ -3762,9 +3762,9 @@ void QtBrynhildr::connectToServer()
 	// set key layout file to eventconverter
 	//	std::cout << "key layout file index = " << index << std::endl << std::flush;
 	eventConverter->setKeytopType(keyLayoutFileReader->getKeyLayoutFile(index));
-#else // USE_KEYLAYOUTFILE
+#else // !USE_KEYLAYOUTFILE
 	ABORT();
-#endif //  USE_KEYLAYOUTFILE
+#endif //  !USE_KEYLAYOUTFILE
 	break;
   }
 
@@ -3795,9 +3795,9 @@ void QtBrynhildr::connectToServer()
   case KEYBOARD_TYPE_NATIVE:
 #if defined(Q_OS_WIN)
 	// Nothing to do
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 	ABORT(); // available for windows only
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 	break;
   default: // key layout file
 #ifdef USE_KEYLAYOUTFILE
@@ -3807,9 +3807,9 @@ void QtBrynhildr::connectToServer()
 	KeyLayoutFile *keyLayoutFile = keyLayoutFileReader->getKeyLayoutFile(index);
 	softwareKeyboard->setKeytopType(keyLayoutFile);
 	settings->setKeyboardTypeName(keyLayoutFile->getName());
-#else // USE_KEYLAYOUTFILE
+#else // !USE_KEYLAYOUTFILE
 	ABORT();
-#endif // USE_KEYLAYOUTFILE
+#endif // !USE_KEYLAYOUTFILE
 	break;
   }
   softwareKeyboard->setVisible(false);
@@ -4173,9 +4173,9 @@ void QtBrynhildr::initializeSettings()
   // create setting
 #if QTB_CRYPTOGRAM
   settinegs = new Settings(iniFileName, cipher);
-#else // QTB_CRYPTGRAM
+#else // !QTB_CRYPTGRAM
   settings = new Settings(iniFileName);
-#endif // QTB_CRYPTGRAM
+#endif // !QTB_CRYPTGRAM
 
   // save settings
   settings->writeSettings();
@@ -4466,12 +4466,12 @@ void QtBrynhildr::setupWindowTitle()
 #if !QTB_PORTABLE_VERSION
 #if defined(QTB_DEV_TOUCHPANEL)
   setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" - [TOUCHPANEL]");
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   setWindowTitle(tr(QTB_APPLICATION)+"  - " + settings->getPublicModeAliasString() +" -");
-#endif // defined(QTB_DEV_TOUCHPANEL)
-#else // !QTB_PORTABLE_VERSION
+#endif // !defined(QTB_DEV_TOUCHPANEL)
+#else // QTB_PORTABLE_VERSION
   setWindowTitle(tr(QTB_APPLICATION)+" Portable  - " + settings->getPublicModeAliasString() +" -");
-#endif // !QTB_PORTABLE_VERSION
+#endif // QTB_PORTABLE_VERSION
 }
 
 // refresh public mode
@@ -4495,9 +4495,9 @@ void QtBrynhildr::refreshPublicMode()
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(true);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(true);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   }
   else {
 	// send clipboard
@@ -4512,9 +4512,9 @@ void QtBrynhildr::refreshPublicMode()
 	// drag and drop
 #if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanelObject->setAcceptDrops(false);
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 	desktopWindow->setAcceptDrops(false);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   }
 
   // set window title
@@ -5813,10 +5813,10 @@ bool QtBrynhildr::initPlatform()
 #if !QTB_NET_WINSOCK1
   // WinSock 2
   wsaResult = WSAStartup(MAKEWORD(2,2), &wsaData);
-#else // !QTB_NET_WINSOCK1
+#else // QTB_NET_WINSOCK1
   // WinSock 1
   wsaResult = WSAStartup(MAKEWORD(1,1), &wsaData);
-#endif // !QTB_NET_WINSOCK1
+#endif // QTB_NET_WINSOCK1
   if (wsaResult != 0){
 	// error
 	return false;
@@ -5957,9 +5957,9 @@ void QtBrynhildr::timerExpired()
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   if (settings->getOnShowFrameRate() ||
 	  settings->getOnShowSoftwareButton()){
-#else // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#else // !QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   if (settings->getOnShowFrameRate()){
-#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+#endif // !QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 	// frame rate
 	currentFrameRate = graphicsThread->getFrameRate();
 	if (currentFrameRate < 1) currentFrameRate = 1;

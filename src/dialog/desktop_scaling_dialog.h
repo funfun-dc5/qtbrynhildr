@@ -26,9 +26,9 @@ public:
   // FACTOR for slider
 #if _MSC_VER
   const qreal SLIDER_FACTOR = 20.0;
-#else  // _MSC_VER
+#else  // !_MSC_VER
   constexpr static const qreal SLIDER_FACTOR = 20.0;
-#endif // _MSC_VER
+#endif // !_MSC_VER
 
 private:
   // MINIMUM for slider

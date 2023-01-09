@@ -175,9 +175,9 @@ public:
   // for event handling
 #if defined(QTB_DEV_TOUCHPANEL)
 public:
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 protected:
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // event

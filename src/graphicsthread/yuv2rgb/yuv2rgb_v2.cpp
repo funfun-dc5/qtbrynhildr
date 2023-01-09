@@ -101,7 +101,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		*rgbtop++ = (uchar)r;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -113,7 +113,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		// B
 		b = clip(GET_B(y, u));
 		*rgbtop++ = (uchar)b;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -158,7 +158,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		*rgbtop++ = (uchar)r;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -170,7 +170,7 @@ void convertYUVtoRGB(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int h
 		// B
 		b = clip(GET_B(y, u));
 		*rgbtop++ = (uchar)b;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK

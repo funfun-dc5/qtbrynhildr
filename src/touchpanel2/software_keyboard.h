@@ -142,9 +142,9 @@ private:
   const qreal INITIAL_XFACTOR = 4.0;
 #if defined(QTB_DEV_TOUCHPANEL)
   const qreal INITIAL_YFACTOR = 4.0*1.11; // for TEST Nexus 7 (1200/1080 = 1.11)
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   const qreal INITIAL_YFACTOR = 4.0;
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // layout table for keyboard
   const QRect keyLayout[ID_KEY_NUM] = {

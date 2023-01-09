@@ -87,11 +87,11 @@ int Converter_CELT::convertToPCM(char *buffer, int size)
 	chunkSize |= *(chunkTop++) << 16;
 	chunkSize |= *(chunkTop++) << 24;
 	//	std::cout << "chunkSize : " << chunkSize << std::endl << std::flush;
-#else // 1 // for miss align
+#else // 0 // for miss align
 	celt_int32 chunkSize = *((celt_int32 *)(chunkTop));
 	//	std::cout << "chunkSize : " << chunkSize << std::endl << std::flush;
 	chunkTop += 4;
-#endif // 1 // for miss align
+#endif // 0 // for miss align
 	error = celt_decode(decoder, chunkTop, chunkSize, workTop, frameSize);
 	if (error != 0){
 	  // decode error

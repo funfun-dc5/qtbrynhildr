@@ -23,9 +23,9 @@ namespace qtbrynhildr {
 // SoundBuffer
 #if QTB_SOUND_PULL_MODE
 class SoundBuffer : public QIODevice, public RingBuffer
-#else // QTB_SOUND_PULL_MODE
+#else // !QTB_SOUND_PULL_MODE
 class SoundBuffer : public RingBuffer
-#endif // QTB_SOUND_PULL_MODE
+#endif // !QTB_SOUND_PULL_MODE
 {
 #if QTB_SOUND_PULL_MODE
   Q_OBJECT

@@ -15,9 +15,9 @@ typedef int			WORD;	// 4 byte
 #if _MSC_VER
 #pragma pack(push, 1)
 typedef struct COM_DATA_BASE { // for C/C++ Compatibility
-#else // _MSC_VER
+#else // !_MSC_VER
 typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatibility
-#endif // _MSC_VER
+#endif // !_MSC_VER
   DATA_TYPE			data_type;
   THREAD			thread;
   BYTE				dummy1[1];			// padding 1 byte
@@ -37,27 +37,27 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
 #if QTB_PLUGINS_DISABLE_SUPPORT
   BYTE				dummy3[1];			// padding 1 bytes
   BYTE				plugins_disable;	// disable plugins
-#else // QTB_PLUGINS_DISABLE_SUPPORT
+#else // !QTB_PLUGINS_DISABLE_SUPPORT
   BYTE				dummy3[2];			// padding 2 bytes
-#endif // QTB_PLUGINS_DISABLE_SUPPORT
+#endif // !QTB_PLUGINS_DISABLE_SUPPORT
   BYTE				filedrop;			// file drop from server
 #if QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_MOVE		mouse_move;			// 1 byte
   BYTE				dummy4[1];
   MOUSE_BUTTON		mouse_x1;			// mouse button status for back button
   MOUSE_BUTTON		mouse_x2;			// mouse button status for forward button
-#else // QTB_EXTRA_BUTTON_SUPPORT
+#else // !QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_MOVE		mouse_move;			// 4 bytes
-#endif // QTB_EXTRA_BUTTON_SUPPORT
+#endif // !QTB_EXTRA_BUTTON_SUPPORT
   POS			    mouse_x;			// mouse position x
   POS			    mouse_y;			// mouse position y
   MOUSE_BUTTON		mouse_left;			// mouse button status for left button
   MOUSE_BUTTON		mouse_right;		// mouse button status for right button
 #if QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_BUTTON		mouse_middle;		// mouse button status for middle button
-#else // QTB_EXTRA_BUTTON_SUPPORT
+#else // !QTB_EXTRA_BUTTON_SUPPORT
   BYTE				dummy4[1];			// padding 1 byte
-#endif // QTB_EXTRA_BUTTON_SUPPORT
+#endif // !QTB_EXTRA_BUTTON_SUPPORT
   MOUSE_WHEEL		mouse_wheel;
   char				keycode;
   KEYCODE_FLG		keycode_flg;
@@ -89,9 +89,9 @@ typedef struct __attribute__((__packed__)) COM_DATA_BASE { // for C/C++ Compatib
   BYTE				dummy17[3];			// padding 3 bytes
   char				monochrome;
   BYTE				dummy99[11];		// padding 11 bytes
-#else // QTB_GRAY_SCALE_MODE2
+#else // !QTB_GRAY_SCALE_MODE2
   BYTE				dummy17[15];		// padding 15 bytes
-#endif // QTB_GRAY_SCALE_MODE2
+#endif // !QTB_GRAY_SCALE_MODE2
   SERVER_VERSION	server_version;		// version of server
   ZOOM				zoom;
   BYTE				dummy12[4];			// padding 4 bytes

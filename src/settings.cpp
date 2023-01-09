@@ -22,9 +22,9 @@ namespace qtbrynhildr {
 // constructor
 #if QTB_CRYPTOGRAM
 Settings::Settings(const char *iniFileName, Cipher *cipher)
-#else // QTB_CRYPTGRAM
+#else // !QTB_CRYPTGRAM
 Settings::Settings(const char *iniFileName)
-#endif // QTB_CRYPTGRAM
+#endif // !QTB_CRYPTGRAM
   :desktop(new Desktop())
   ,hSpace(0)
   ,vSpace(0)
@@ -63,10 +63,10 @@ Settings::Settings(const char *iniFileName)
 #if !QTB_PORTABLE_VERSION
 	settings =
 	  new QSettings(QSettings::IniFormat, QSettings::UserScope, QTB_ORGANIZATION, QTB_APPLICATION);
-#else // !QTB_PORTABLE_VERSION
+#else // QTB_PORTABLE_VERSION
 	QString portableIniFileName = QDir::toNativeSeparators(qApp->applicationDirPath() + QDir::separator() + ".." + QDir::separator() + QTB_APPLICATION + ".ini");
 	settings = new QSettings(portableIniFileName, QSettings::IniFormat);
-#endif // !QTB_PORTABLE_VERSION
+#endif // QTB_PORTABLE_VERSION
   }
 
   // set default values
@@ -1103,9 +1103,9 @@ QString Settings::getDefaultOutputPath() const
 {
 #if !QTB_PORTABLE_VERSION
   return QDir::toNativeSeparators(QDir::homePath() + QDir::separator());
-#else // !QTB_PORTABLE_VERSION
+#else // QTB_PORTABLE_VERSION
   return QDir::toNativeSeparators(qApp->applicationDirPath() + QDir::separator() + ".." + QDir::separator());
-#endif // !QTB_PORTABLE_VERSION
+#endif // QTB_PORTABLE_VERSION
 }
 
 // get default keylayout path
@@ -1119,10 +1119,10 @@ QString Settings::getDefaultLogFile() const
 {
 #if !QTB_PORTABLE_VERSION
   return QDir::toNativeSeparators(QDir::tempPath() + QDir::separator() + QTB_LOG_FILENAME);
-#else // !QTB_PORTABLE_VERSION
+#else // QTB_PORTABLE_VERSION
   return QDir::toNativeSeparators(qApp->applicationDirPath() + QDir::separator() + ".." + QDir::separator()
 								  + QTB_LOG_FILENAME);
-#endif // !QTB_PORTABLE_VERSION
+#endif // QTB_PORTABLE_VERSION
 }
 
 // get Default Keyboard Log File
@@ -1130,10 +1130,10 @@ QString Settings::getDefaultKeyboardLogFile() const
 {
 #if !QTB_PORTABLE_VERSION
   return QDir::toNativeSeparators(QDir::tempPath() + QDir::separator() + QTB_KEYBOARDLOG_FILENAME);
-#else // !QTB_PORTABLE_VERSION
+#else // QTB_PORTABLE_VERSION
   return QDir::toNativeSeparators(qApp->applicationDirPath() + QDir::separator() + ".." + QDir::separator()
 								  + QTB_KEYBOARDLOG_FILENAME);
-#endif // !QTB_PORTABLE_VERSION
+#endif // QTB_PORTABLE_VERSION
 }
 
 } // end of namespace qtbrynhildr

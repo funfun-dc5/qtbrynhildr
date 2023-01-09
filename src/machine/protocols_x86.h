@@ -68,11 +68,11 @@ typedef char	CONTROL;
 typedef char	MOUSE_MOVE;
 #define MOUSE_MOVE_OFF		0	// not moving mouse
 #define MOUSE_MOVE_ON		1	// moving mouse
-#else // QTB_EXTRA_BUTTON_SUPPORT
+#else // !QTB_EXTRA_BUTTON_SUPPORT
 typedef long	MOUSE_MOVE;
 #define MOUSE_MOVE_OFF		0L	// not moving mouse
 #define MOUSE_MOVE_ON		1L	// moving mouse
-#endif // QTB_EXTRA_BUTTON_SUPPORT
+#endif // !QTB_EXTRA_BUTTON_SUPPORT
 
 // mouse button
 typedef char	MOUSE_BUTTON;

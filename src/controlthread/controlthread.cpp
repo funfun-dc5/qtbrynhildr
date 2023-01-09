@@ -42,9 +42,9 @@ namespace qtbrynhildr {
 // constructor
 #if QTB_RECORDER
 ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder)
-#else  // QTB_RECORDER
+#else  // !QTB_RECORDER
 ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
-#endif // QTB_RECORDER
+#endif // !QTB_RECORDER
   :NetThread("ControlThread", settings)
   ,desktopPanel(desktopPanel)
   ,serverVersion(SERVER_VERSION_BRYNHILDR2)
@@ -459,9 +459,9 @@ void ControlThread::initHeader()
 
 #if QTB_TEST_LOCAL
   initHeaderForGraphics_test();
-#else // QTB_TEST_LOCAL
+#else // !QTB_TEST_LOCAL
   initHeaderForGraphics();
-#endif // QTB_TEST_LOCAL
+#endif // !QTB_TEST_LOCAL
 
   initHeaderForSound();
 }
@@ -601,7 +601,7 @@ void ControlThread::initHeaderForGraphics()
 
   //std::cout << "(image_cx, image_cy) = (" << com_data->image_cx << ", " << com_data->image_cy << ")" << std::endl << std::flush;
 }
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 // initialize protocol header for graphics for touchpanel
 void ControlThread::initHeaderForGraphics()
 {
@@ -634,18 +634,18 @@ void ControlThread::initHeaderForGraphics()
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
   com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
   //  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
-#else // QTB_TEST
+#else // !QTB_TEST
   com_data->zoom = (ZOOM)1.0;
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
   com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
-#endif // QTB_TEST
+#endif // !QTB_TEST
 
 #if QTB_GRAY_SCALE_MODE2
   // monochrome mode
   com_data->monochrome = settings->getOnMonochromeMode()? 1 : 0;
 #endif // QTB_GRAY_SCALE_MODE2
 }
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 // initialize protocol header for graphics
 void ControlThread::initHeaderForGraphics_test()
@@ -688,9 +688,9 @@ void ControlThread::initHeaderForSound()
 	// for Brynhildr (>= 2.0.0) : soundType (PCM/CELT/...)
 	com_data->sound_type = settings->getOnSound() ? settings->getSoundType() : SOUND_TYPE_OFF;
   }
-#else // QTB_CELT_SUPPORT
+#else // !QTB_CELT_SUPPORT
   com_data->sound_type		= settings->getOnSound() ? SOUND_TYPE_PCM : SOUND_TYPE_OFF;
-#endif // QTB_CELT_SUPPORT
+#endif // !QTB_CELT_SUPPORT
   com_data->sound_capture	= settings->getSoundCapture();
   com_data->sound_quality	= settings->getSoundQuality();
 }
@@ -785,7 +785,7 @@ void ControlThread::setMouseControl()
 	// set offset
 	com_data->mouse_x += settings->getDesktopOffsetX() * scalingFactorOfWidth;
 	com_data->mouse_y += settings->getDesktopOffsetY() * scalingFactorOfHeight;
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
 	// set pos
 	com_data->mouse_x = pos.x;
 	com_data->mouse_y = pos.y;
@@ -793,7 +793,7 @@ void ControlThread::setMouseControl()
 	// set offset
 	com_data->mouse_x += settings->getDesktopOffsetX();
 	com_data->mouse_y += settings->getDesktopOffsetY();
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 
 #if QTB_DESKTOP_COMPRESS_MODE
 	// desktop compress mode
@@ -940,12 +940,12 @@ void ControlThread::setGamePadControl()
 	com_data->gamepad8 = 0;
   }
 }
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 void ControlThread::setGamePadControl()
 {
   // Yet
 }
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 
 // check server version
 void ControlThread::checkServerVersion()
@@ -1093,9 +1093,9 @@ bool ControlThread::sendClipboard()
   SIZE sentDataSize = 0;
 #if _MSC_VER
   char *localBuffer = new char[stringSize + 16 + 2];
-#else // _MSC_VER
+#else // !_MSC_VER
   char localBuffer[stringSize + 16 + 2];
-#endif // _MSC_VER
+#endif // !_MSC_VER
 
   // check
   if (stringSize == 0){
@@ -1192,9 +1192,9 @@ bool ControlThread::sendFile()
   // send time stamp
 #if QT_VERSION >= 0x050a00 // Qt 5.10.0
   qint64 CreationTime = ntfs->toFILETIME(fileInfo.birthTime()); // UTC
-#else // QT_VERSION >= 0x050a00
+#else // QT_VERSION < 0x050a00
   qint64 CreationTime = ntfs->toFILETIME(fileInfo.created()); // UTC
-#endif // QT_VERSION >= 0x050a00
+#endif // QT_VERSION < 0x050a00
   fileTimeStamp[0] = (CreationTime >>  0) & 0xFF;
   fileTimeStamp[1] = (CreationTime >>  8) & 0xFF;
   fileTimeStamp[2] = (CreationTime >> 16) & 0xFF;

@@ -102,7 +102,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		  *rgbtop++ = (uchar)r;
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -114,7 +114,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		  // B
 		  b = clip(GET_B(y, u));
 		  *rgbtop++ = (uchar)b;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -159,7 +159,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		  *rgbtop++ = (uchar)r;
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -171,7 +171,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		  // B
 		  b = clip(GET_B(y, u));
 		  *rgbtop++ = (uchar)b;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -211,7 +211,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		*rgbtop++ = (uchar)r;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -223,7 +223,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		// B
 		b = clip(GET_B(y, u));
 		*rgbtop++ = (uchar)b;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		// == xPos+1 ==
@@ -255,7 +255,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		*rgbtop++ = (uchar)r;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -267,7 +267,7 @@ void convertYUVtoRGB_CPP(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, i
 		// B
 		b = clip(GET_B(y, u));
 		*rgbtop++ = (uchar)b;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		yptop += 2;
@@ -370,12 +370,12 @@ void convertYUVtoRGB_CPP_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbto
 		  *rgbtop++ = (uchar)gsv;
 		  *rgbtop++ = (uchar)gsv;
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  *rgbtop++ = (uchar)gsv;
 		  *rgbtop++ = (uchar)gsv;
 		  *rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -416,12 +416,12 @@ void convertYUVtoRGB_CPP_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbto
 		  *rgbtop++ = (uchar)gsv;
 		  *rgbtop++ = (uchar)gsv;
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  *rgbtop++ = (uchar)gsv;
 		  *rgbtop++ = (uchar)gsv;
 		  *rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -457,12 +457,12 @@ void convertYUVtoRGB_CPP_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbto
 		*rgbtop++ = (uchar)gsv;
 		*rgbtop++ = (uchar)gsv;
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		*rgbtop++ = (uchar)gsv;
 		*rgbtop++ = (uchar)gsv;
 		*rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		// == xPos+1 ==
@@ -490,12 +490,12 @@ void convertYUVtoRGB_CPP_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbto
 		*rgbtop++ = (uchar)gsv;
 		*rgbtop++ = (uchar)gsv;
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		*rgbtop++ = (uchar)gsv;
 		*rgbtop++ = (uchar)gsv;
 		*rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		yptop += 2;

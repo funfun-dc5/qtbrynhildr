@@ -389,7 +389,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 
 		--chunks;
 	  }
-#else // 0 // for TEST
+#else // 1 // for TEST
 	  // get free size of buffer
 	  int len = audioOutput->bytesFree();
 	  // write PCM data
@@ -400,7 +400,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 		  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
 		}
 	  }
-#endif // 0 // for TEST
+#endif // 1 // for TEST
 	}
 #if 0 // for TEST
 	else {
@@ -690,24 +690,24 @@ void SoundThread::createWavFile(int pcmFileSize)
 	RiffHeader riffHeader;
 #if 1 // for Coverity Scan
 	memcpy(&riffHeader.riff, RIFF_ID, sizeof(riffHeader.riff));
-#else
+#else // 0 // for Coverity Scan
 	strncpy((char *)&riffHeader.riff, RIFF_ID, sizeof(riffHeader.riff));
-#endif
+#endif // 0 // for Coverity Scan
 	riffHeader.size = pcmFileSize + sizeof(RiffHeader) + sizeof(FormatChunk) + sizeof(DataChunk) - 8;
 #if 1 // for Coverity Scan
 	memcpy(&riffHeader.type, RIFF_TYPE, sizeof(riffHeader.type));
-#else
+#else // 0 // for Coverity Scan
 	strncpy((char *)&riffHeader.type, RIFF_TYPE, sizeof(riffHeader.type));
-#endif
+#endif // 0 // for Coverity Scan
 	file.write((char *)&riffHeader, sizeof(riffHeader));
 
 	// 2) FormatChunk
 	FormatChunk formatChunk;
 #if 1 // for Coverity Scan
 	memcpy(&formatChunk.id, FORMAT_CHUNK_ID, sizeof(formatChunk.id));
-#else
+#else // 0 // for Coverity Scan
 	strncpy((char *)&formatChunk.id, FORMAT_CHUNK_ID, sizeof(formatChunk.id));
-#endif
+#endif // 0 // for Coverity Scan
 	formatChunk.size = FORMAT_CHUNK_SIZE;
 	formatChunk.format = WAVE_FORMAT_PCM;
 	formatChunk.channels = 2;
@@ -721,9 +721,9 @@ void SoundThread::createWavFile(int pcmFileSize)
 	DataChunk dataChunk;
 #if 1 // for Coverity Scan
 	memcpy(&dataChunk.id, DATA_CHUNK_ID, sizeof(dataChunk.id));
-#else
+#else // 0 // for Coverity Scan
 	strncpy((char *)&dataChunk.id, DATA_CHUNK_ID, sizeof(dataChunk.id));
-#endif
+#endif // 0 // for Coverity Scan
 	dataChunk.size = pcmFileSize;
 	file.write((char *)&dataChunk, sizeof(dataChunk));
 
@@ -753,9 +753,9 @@ void SoundThread::handleStateChanged(QAudio::State state)
 {
 #if defined(DEBUG)
   std::cout << "state = " << state << std::endl << std::flush;
-#else // defined(DEBUG)
+#else // !defined(DEBUG)
   Q_UNUSED(state);
-#endif // defined(DEBUG)
+#endif // !defined(DEBUG)
 }
 
 #if 0 // for TEST

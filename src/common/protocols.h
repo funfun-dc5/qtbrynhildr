@@ -13,8 +13,8 @@
 
 #if __x86_64__ || __LP64__
 #include "machine/protocols_x64.h"
-#else // __x86_64__ || __LP64__
+#else // !(__x86_64__ || __LP64__)
 #include "machine/protocols_x86.h"
-#endif // __x86_64__ || __LP64__
+#endif // !(__x86_64__ || __LP64__)
 
 #endif // PROTOCOLS_H

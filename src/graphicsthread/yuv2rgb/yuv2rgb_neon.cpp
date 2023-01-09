@@ -143,7 +143,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  *rgbtop++ = (uchar)result[0];
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -152,7 +152,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  *rgbtop++ = (uchar)result[1];
 		  // B
 		  *rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -221,7 +221,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  *rgbtop++ = (uchar)result[0];
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -230,7 +230,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		  *rgbtop++ = (uchar)result[1];
 		  // B
 		  *rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -295,7 +295,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		*rgbtop++ = (uchar)result[0];
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -304,7 +304,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		*rgbtop++ = (uchar)result[1];
 		// B
 		*rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		// xPos+1
@@ -361,7 +361,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		*rgbtop++ = (uchar)result[0];
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -370,7 +370,7 @@ void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgb
 		*rgbtop++ = (uchar)result[1];
 		// B
 		*rgbtop++ = (uchar)result[2];
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		yptop += 2;
@@ -540,7 +540,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		  *rgbtop++ = (uchar)gsv;
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -549,7 +549,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		  *rgbtop++ = (uchar)gsv;
 		  // B
 		  *rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -627,7 +627,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		  *rgbtop++ = (uchar)gsv;
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		  // A
 		  rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		  // R
@@ -636,7 +636,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		  *rgbtop++ = (uchar)gsv;
 		  // B
 		  *rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 #if QTB_BENCHMARK
@@ -709,7 +709,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		*rgbtop++ = (uchar)gsv;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -718,7 +718,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		*rgbtop++ = (uchar)gsv;
 		// B
 		*rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		// xPos+1
@@ -783,7 +783,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		*rgbtop++ = (uchar)gsv;
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 		// A
 		rgbtop++;	// *rgbtop++ = (uchar)0xFF;
 		// R
@@ -792,7 +792,7 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 		*rgbtop++ = (uchar)gsv;
 		// B
 		*rgbtop++ = (uchar)gsv;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 		yptop += 2;

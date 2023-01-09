@@ -23,12 +23,12 @@ int convertFrame()
   return qtbrynhildr::makeRGBImage(qtbrynhildr::convertYUVtoRGB_SIMD_AVX, MULTI_THREAD);
 #elif defined(__SSE4_2__)
   return qtbrynhildr::makeRGBImage(qtbrynhildr::convertYUVtoRGB_SIMD_SSE, MULTI_THREAD);
-#else // defined(__SSE4_2__)
+#else // !defined(__SSE4_2__)
   return qtbrynhildr::makeRGBImage(qtbrynhildr::convertYUVtoRGB_CPP, MULTI_THREAD);
-#endif // defined(__SSE4_2__)
-#else // !defined(__ARM_NEON__)
+#endif // !defined(__SSE4_2__)
+#else // defined(__ARM_NEON__)
   return qtbrynhildr::makeRGBImage(qtbrynhildr::convertYUVtoRGB_SIMD_NEON, MULTI_THREAD);
-#endif // !defined(__ARM_NEON__)
+#endif // defined(__ARM_NEON__)
 }
 #endif // BENCHMARK_YUV2RGB
 
@@ -81,13 +81,13 @@ int main(int argc, char* argv[])
 	createImage();
 #elif BENCHMARK_LOAD_IMAGE
 	loadImage(rgbImageSize);
-#else // BENCHMARK_LOAD_IMAGE
+#else // !BENCHMARK_LOAD_IMAGE
 	int imageSize = convertFrame();
 	if (imageSize == 0){
 	  std::cout << "Error : imageSize == 0" << std::endl << std::flush;
 	  break;
 	}
-#endif // BENCHMARK_LOAD_IMAGE
+#endif // !BENCHMARK_LOAD_IMAGE
   }
 
   exit(0);

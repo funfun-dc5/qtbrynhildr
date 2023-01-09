@@ -123,9 +123,9 @@ public:
   // constructor
 #if QTB_RECORDER
   ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder);
-#else  // QTB_RECORDER
+#else  // !QTB_RECORDER
   ControlThread(Settings *settings, DesktopPanel *desktopPanel);
-#endif // QTB_RECORDER
+#endif // !QTB_RECORDER
   // destructor
   ~ControlThread();
 

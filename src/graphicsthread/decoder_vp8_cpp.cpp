@@ -49,12 +49,12 @@ QImage* DecoderVP8CPP::getDesktopImage(int numOfThread)
 #else // QTB_GRAY_SCALE_MODE
   // full color
   int rgbImageSize = makeRGBImage(convertYUVtoRGB_CPP, numOfThread);
-#endif // QTB_GRAY_SCALE_MODE
+#endif // !QTB_GRAY_SCALE_MODE
 
 #if QTB_GRAY_SCALE_MODE2
   // RGB convert to GS
   convertRGBtoGS();
-#endif // QTB_GRAY_SCALE_MODE2
+#endif // !QTB_GRAY_SCALE_MODE2
 
   // get QImage
   image = getImage(rgbImageSize);

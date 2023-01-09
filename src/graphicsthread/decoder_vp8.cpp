@@ -69,14 +69,14 @@ QImage* DecoderVP8::getImage(int rgbImageSize)
 	result = image->loadFromData((const uchar *)qtbrynhildr::bmp,
 								 (uint)rgbImageSize + 64,
 								 "BMP");
-#else // QTB_LOAD_BITMAP
+#else // !QTB_LOAD_BITMAP
 	// create QImage
 	if (image != 0){
 	  delete image;
 	}
 	image = new QImage(qtbrynhildr::rgb, qtbrynhildr::width, qtbrynhildr::height, IMAGE_FORMAT);
 	result = true;
-#endif // QTB_LOAD_BITMAP
+#endif // !QTB_LOAD_BITMAP
   }
   else {
 	if (image->isNull()){

@@ -4,7 +4,7 @@
 ios {
 CONFIG += touchpanel vp8-neon
 CONFIG -= updatecheck help_browser
-DEFINES += PLATFORM_MACOS Q_OS_IOS=1
+DEFINES += PLATFORM_MACOS
 BUILDARCH = ios-arm64-v8a
 QMAKE_INFO_PLIST=ios/Info.plist
 # icons

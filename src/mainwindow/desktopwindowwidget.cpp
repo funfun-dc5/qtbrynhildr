@@ -130,9 +130,9 @@ void DesktopWindowWidget::paintEvent(QPaintEvent *event)
 
 // widget enter event
 #if QT_VERSION < 0x060000
-void DesktopWindow::enterEvent(QEvent *event)
+void DesktopWindowWidget::enterEvent(QEvent *event)
 #else // QT_VERSION >= 0x060000
-void DesktopWindow::enterEvent(QEnterEvent *event)
+void DesktopWindowWidget::enterEvent(QEnterEvent *event)
 #endif // QT_VERSION >= 0x060000
 {
   // check connected
@@ -327,9 +327,9 @@ void DesktopWindowWidget::focusOutEvent(QFocusEvent *event)
 //----------------------------------------------------------------------
 #if defined(Q_OS_WIN)
 #if QT_VERSION < 0x060000
-bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+bool DesktopWindowWidget::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 #else // QT_VERSION >= 0x060000
-bool DesktopWindow::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
+bool DesktopWindowWidget::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
 #endif // QT_VERSION >= 0x060000
 {
   return DesktopFrame::nativeEventFilter(eventType, message, result);

@@ -206,7 +206,11 @@ protected:
 
 #if defined(Q_OS_WIN)
   // native event filter
+#if QT_VERSION < 0x060000
   bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
+#else // QT_VERSION >= 0x060000
+  bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result);
+#endif // QT_VERSION >= 0x060000
 #endif // defined(Q_OS_WIN)
 
 private:

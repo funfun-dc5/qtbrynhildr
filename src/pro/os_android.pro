@@ -15,6 +15,13 @@ SOURCES += util/android-ndk/cpu-features.c
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
 BUILDARCH = android-$(OBJECTS_DIR)
 ANDROID_ABIS = armeabi-v7a arm64-v8a
+# for Qt 6.4.2 32bit
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
+#BUILDARCH = android-armeabi-v7a-android23
+# for Qt 6.4.2 64bit
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
+#BUILDARCH = android-arm64-v8a-android31
+
 
 # for OpenSSL
 include(C:/Tools/develop/android-sdk-windows/android_openssl/openssl.pri)

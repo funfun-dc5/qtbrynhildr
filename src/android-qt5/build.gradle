@@ -36,7 +36,7 @@ android {
 
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
-    buildToolsVersion '32.0.0'
+    buildToolsVersion '33.0.1'
 
     sourceSets {
         main {

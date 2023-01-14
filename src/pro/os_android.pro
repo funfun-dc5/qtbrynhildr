@@ -12,14 +12,14 @@ SOURCES += util/android-ndk/cpu-features.c
 
 # for Android APK
 # for Qt 5.14- (for Android5.0)
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-qt5
 BUILDARCH = android-$(OBJECTS_DIR)
 ANDROID_ABIS = armeabi-v7a arm64-v8a
 # for Qt 6.4.2 32bit
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-qt6
 #BUILDARCH = android-armeabi-v7a-android23
 # for Qt 6.4.2 64bit
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
+#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-qt6
 #BUILDARCH = android-arm64-v8a-android31
 
 

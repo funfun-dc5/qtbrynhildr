@@ -94,7 +94,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  // -server urd-PC:mcz-xoxo
 		  // -server urd-PC:mcz-xoxo:30000
 		  // -server urd-PC:mcz-xoxo:30000:xp
-		  const char* server =  strtok(buf, ":");
+		  const char* server = strtok(buf, ":");
 		  const char* passwd = strtok(NULL, ":");
 		  if (passwd != NULL){
 			if (strlen(passwd) > ENCRYPTION_KEY_LENGTH){

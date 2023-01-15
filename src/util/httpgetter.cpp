@@ -19,8 +19,8 @@ namespace qtbrynhildr {
 // constructor
 HttpGetter::HttpGetter(QObject *parent)
   :QObject(parent)
-  ,reply(Q_NULLPTR)
-  ,file(Q_NULLPTR)
+  ,reply(nullptr)
+  ,file(nullptr)
   ,httpRequestAborted(false)
   // for DEBUG
   ,outputLog(false)
@@ -56,7 +56,7 @@ bool HttpGetter::startDownload(const QString &urlSpec, const QString &fileName)
   }
 
   file = openFileForWrite(fileName);
-  if (file == Q_NULLPTR)
+  if (file == nullptr)
 	return false;
 
   startRequest(newUrl);
@@ -108,7 +108,7 @@ void HttpGetter::cancelDownload()
   httpRequestAborted = true;
   reply->abort();
 
-  if (file == Q_NULLPTR)
+  if (file == nullptr)
 	byteArray.clear();
 
   if (outputLog){
@@ -144,7 +144,7 @@ QFile *HttpGetter::openFileForWrite(const QString &fileName)
 
   QScopedPointer<QFile> file(new QFile(fileName));
   if (!file->open(QIODevice::WriteOnly)){
-	return Q_NULLPTR;
+	return nullptr;
   }
 
   if (outputLog){
@@ -162,7 +162,7 @@ QFile *HttpGetter::openFileForWrite(const QString &fileName)
 
   std::unique_ptr<QFile> file(new QFile(fileName));
   if (!file->open(QIODevice::WriteOnly)){
-	return Q_NULLPTR;
+	return nullptr;
   }
 
   if (outputLog){
@@ -198,26 +198,26 @@ void HttpGetter::httpFinished()
   }
 
   QFileInfo fi;
-  if (file != Q_NULLPTR) {
+  if (file != nullptr) {
 	fi.setFile(file->fileName());
 	file->close();
 	delete file;
-	file = Q_NULLPTR;
+	file = nullptr;
   }
 
   if (httpRequestAborted) {
 	reply->deleteLater();
-	reply = Q_NULLPTR;
+	reply = nullptr;
 	return;
   }
 
   if (reply->error()) {
-	if (file != Q_NULLPTR) {
+	if (file != nullptr) {
 	  QFile::remove(fi.absoluteFilePath());
 	}
 	byteArray.clear();
 	reply->deleteLater();
-	reply = Q_NULLPTR;
+	reply = nullptr;
 	return;
   }
 
@@ -235,7 +235,7 @@ void HttpGetter::httpReadyRead()
 	std::cout << "enter httpReadyRead()" << std::endl << std::flush;
   }
 
-  if (file != Q_NULLPTR){
+  if (file != nullptr){
 	file->write(reply->readAll());
   }
   else {

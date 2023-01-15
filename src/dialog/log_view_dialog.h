@@ -37,7 +37,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  LogViewDialog(Settings *settings, QWidget *parent = 0);
+  LogViewDialog(Settings *settings, QWidget *parent = nullptr);
 
   // resize event
   void resizeEvent(QResizeEvent *event);

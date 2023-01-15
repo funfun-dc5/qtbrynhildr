@@ -37,7 +37,7 @@ class DesktopPanelObject : public QGraphicsObject, public DesktopPanel
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopPanelObject(QtBrynhildr *qtbrynhildr, QGraphicsItem *parent = Q_NULLPTR);
+  DesktopPanelObject(QtBrynhildr *qtbrynhildr, QGraphicsItem *parent = nullptr);
   // destructor
   ~DesktopPanelObject();
 
@@ -49,7 +49,7 @@ public:
 
 protected:
   QRectF boundingRect() const;
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR);
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
 };
 
 } // end of namespace qtbrynhildr

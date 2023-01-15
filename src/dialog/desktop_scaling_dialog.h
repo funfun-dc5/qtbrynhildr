@@ -50,7 +50,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopScalingDialog(Settings *settings, QWidget *parent = 0);
+  DesktopScalingDialog(Settings *settings, QWidget *parent = nullptr);
 
   // resize event
   void resizeEvent(QResizeEvent *event);

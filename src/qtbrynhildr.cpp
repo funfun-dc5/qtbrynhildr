@@ -3675,6 +3675,8 @@ void QtBrynhildr::about()
 					 "<br><br>"
 					 "manual : " QTB_MANUAL
 #endif // QTB_MANUAL_PAGE
+					 "<br><br>"
+					 "privacy : " QTB_PRIVACY_POLICY
 					 );
 }
 

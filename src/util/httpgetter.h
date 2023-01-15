@@ -45,7 +45,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  HttpGetter(QObject *parent = 0);
+  HttpGetter(QObject *parent = nullptr);
   // destructor
   ~HttpGetter();
 

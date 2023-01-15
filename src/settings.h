@@ -44,9 +44,9 @@
 // desktop background color
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_DESKTOP_BACKGROUND_COLOR Qt::black
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_DESKTOP_BACKGROUND_COLOR Qt::gray
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // key layout file directory
 #define QTB_KEYLAYOUT_FILE_PATH		"/keylayout"
@@ -136,9 +136,9 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONTASKBARASSIST			"onTaskbarAssist"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONTASKBARASSIST_DEFAULT false
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONTASKBARASSIST_DEFAULT true
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // for taskbarAssistAreaWidth
 #define QTB_TASKBARASSISTAREAWIDTH "taskbarAssistAreaWidth"
@@ -180,9 +180,9 @@ typedef int KEYBOARD_TYPE;
 #define QTB_ONSENDCONTROLKEYSTATE "onSendControlKeyState"
 #if defined(Q_OS_OSX)
 #define QTB_ONSENDCONTROLKEYSTATE_DEFAULT true
-#else // defined(Q_OS_OSX)
+#else // !defined(Q_OS_OSX)
 #define QTB_ONSENDCONTROLKEYSTATE_DEFAULT false
-#endif // defined(Q_OS_OSX)
+#endif // !defined(Q_OS_OSX)
 
 // for onGraphics
 #define QTB_ONGRAPHICS			"onGraphics"
@@ -201,16 +201,16 @@ typedef int KEYBOARD_TYPE;
 // for displayMouseCursor
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	true
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONDISPLAYMOUSECURSOR_DEFAULT	false
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 // for onGamePadSupport
 #define QTB_ONGAMEPADSUPPORT			"onGamePadSupport"
 #if defined(Q_OS_WIN)
 #define QTB_ONGAMEPADSUPPORT_DEFAULT	true
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 #define QTB_ONGAMEPADSUPPORT_DEFAULT	false
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 // for onBrynhildr2Support
 #define QTB_ONBRYNHILDR2SUPPORT			"onBrynhildr2Support"
 #define QTB_ONBRYNHILDR2SUPPORT_DEFAULT	true
@@ -247,9 +247,9 @@ typedef int KEYBOARD_TYPE;
 #define QTB_DESKTOPSCALINGQUALITY			"desktopScalingQuality"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_DESKTOPSCALINGQUALITY_DEFAULT	DESKTOPSCALINGQUALITY_FAST
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_DESKTOPSCALINGQUALITY_DEFAULT	DESKTOPSCALINGQUALITY_SMOOTH
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 #define DESKTOPSCALINGQUALITY_SMOOTH		Qt::SmoothTransformation
 #define DESKTOPSCALINGQUALITY_FAST			Qt::FastTransformation
 
@@ -372,9 +372,9 @@ typedef enum {
 #define QTB_ONFULLSCREENATCONNECTED					"onFullScreenAtConnected"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONFULLSCREENATCONNECTED_DEFAULT			true
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONFULLSCREENATCONNECTED_DEFAULT			false
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // for onViewerAtConnected
 #define QTB_ONVIEWERATCONNECTED				"onViewerAtConnected"
@@ -388,9 +388,9 @@ typedef enum {
 #define QTB_ONSHOWFRAMERATE					"onShowFrameRate"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWFRAMERATE_DEFAULT			false
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWFRAMERATE_DEFAULT			true
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowPassword
 #define QTB_ONSHOWPASSWORD					"onShowPassword"
@@ -404,17 +404,17 @@ typedef enum {
 #define QTB_ONSHOWMOUSECURSORMARKER			"onShowMouseCursorMarker"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	true
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONSHOWMOUSECURSORMARKER_DEFAULT	false
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // for onTransferFileSupport
 #define QTB_ONTRANSFERFILESUPPORT			"onTransferFileSupport"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONTRANSFERFILESUPPORT_DEFAULT	false
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_ONTRANSFERFILESUPPORT_DEFAULT	true
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 // for onShowTotalProgressForTransferFile
 #define QTB_ONSHOWTOTALPROGRESSFORTRANSFERFILE			"onShowTotalProgressForTransferFile"
@@ -454,9 +454,9 @@ typedef enum {
 #define QTB_TIMEOUTTIME						"timeoutTime"
 #if defined(QTB_DEV_TOUCHPANEL)
 #define QTB_TIMEOUTTIME_DEFAULT				10
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #define QTB_TIMEOUTTIME_DEFAULT				-1
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 #if defined(QTB_DEV_TOUCHPANEL)
 // for touchpanelOperationType
@@ -848,10 +848,10 @@ public:
   // constructor
 #if QTB_CRYPTOGRAM
   Settings(const char *iniFileName, Cipher *cipher);
-#else // QTB_CRYPTGRAM
+#else // !QTB_CRYPTGRAM
   Settings();
   Settings(const char *iniFileName);
-#endif // QTB_CRYPTGRAM
+#endif // !QTB_CRYPTGRAM
   // desctructor
   ~Settings();
 
@@ -1185,9 +1185,9 @@ public:
 	string strDecryptPassword = cipher->decodeString(password.toUtf8().constData()).c_str();
 	QString decryptPassword = strDecryptPassword.c_str();
 	return decryptPassword;
-#else // QTB_CRYPTGRAM
+#else // !QTB_CRYPTGRAM
 	return password;
-#endif // QTB_CRYPTGRAM
+#endif // !QTB_CRYPTGRAM
   }
 
   // set password
@@ -1198,9 +1198,9 @@ public:
 	string strPassword = password.toUtf8().constData();
 	QString encryptPassword = (cipher->encodeString(strPassword)).c_str();
 	this->password = encryptPassword;
-#else // QTB_CRYPTGRAM
+#else // !QTB_CRYPTGRAM
 	this->password = password;
-#endif // QTB_CRYPTGRAM
+#endif // !QTB_CRYPTGRAM
 	return true;
   }
 

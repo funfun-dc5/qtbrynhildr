@@ -209,9 +209,9 @@ private:
   // connect with retry
 #if !defined(Q_OS_WIN) // Portable Vresion (for MacOSX, FreeBSD...)
   int connect_retry(int domain, int type, int protocol, const struct sockaddr *addr, socklen_t addrlen);
-#else // !defined(Q_OS_WIN)
+#else // defined(Q_OS_WIN)
   int connect_retry(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
-#endif // !defined(Q_OS_WIN)
+#endif // defined(Q_OS_WIN)
 
 signals:
   // output Log Message

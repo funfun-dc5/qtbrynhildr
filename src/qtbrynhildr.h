@@ -20,9 +20,9 @@
 #include <QProgressBar>
 #include <QRect>
 #if defined(QTB_DEV_TOUCHPANEL)
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #include <QScrollArea>
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 #include <QShowEvent>
 #include <QSize>
 #include <QString>
@@ -47,9 +47,9 @@
 #include "mainwindow/desktopframe.h"
 #if defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktoppanel.h"
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktopwindowwidget.h"
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 #include "option.h"
 #if QTB_RECORDER
 #include "function/recorder.h"
@@ -122,12 +122,13 @@ private:
 #if defined(QTB_DEV_TOUCHPANEL)
   // desktop panel
   DesktopPanel *desktopPanel;
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   // desktop window widget
   DesktopWindowWidget *desktopWindowWidget;
+
   // desktop window
   DesktopWindow *desktopWindow;
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // connection label
   QLabel *connectionLabel;
@@ -670,10 +671,10 @@ public:
 #if defined(QTB_DEV_TOUCHPANEL)
   // get desktop panel
   DesktopPanel *getDesktopPanel() const;
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   // get desktop window widget
   DesktopWindowWidget *getDesktopWindowWidget() const;
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // get desktop frame
   DesktopFrame *getDesktopFrame() const;

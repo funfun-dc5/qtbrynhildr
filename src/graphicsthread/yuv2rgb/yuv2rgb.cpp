@@ -48,9 +48,9 @@ uchar *v2topOrg = 0;
 #if ALL_NEW_THREAD
 // for thread wait
 QFuture<void> f1, f2, f3, f4;
-#else // ALL_NEW_THREAD
+#else // !ALL_NEW_THREAD
 QFuture<void> f1, f2, f3;
-#endif // ALL_NEW_THREAD
+#endif // !ALL_NEW_THREAD
 #endif // QTB_MULTI_THREAD_CONVERTER
 
 #if QTB_LOAD_BITMAP
@@ -165,12 +165,12 @@ bool setup()
   biHeader->biYPixPerMeter = 0;
   biHeader->biClrUsed = 0;
   biHeader->biCirImportant = 0;
-#else // QTB_LOAD_BITMAP
+#else // !QTB_LOAD_BITMAP
   if (rgb != 0){
 	delete [] rgb;
   }
   rgb = new uchar[rgbImageSize];
-#endif // QTB_LOAD_BITMAP
+#endif // !QTB_LOAD_BITMAP
   memset(rgb, 0, rgbImageSize);
   for(int i = 3; i < rgbImageSize; i += 4){
 	rgb[i] = 0xff;
@@ -262,13 +262,13 @@ bool makeYUVImage()
 
   return true;
 }
-#else // !defined(BENCHMARK)
+#else // defined(BENCHMARK)
 // make YUV image
 bool makeYUVImage()
 {
   return true;
 }
-#endif // !defined(BENCHMARK)
+#endif // defined(BENCHMARK)
 
 int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height), int numOfThread)
 {
@@ -280,9 +280,9 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   // number of thread 1 or 2 or 4
 #if QTB_LOAD_BITMAP
   uchar *rgbtop = rgb;
-#else // QTB_LOAD_BITMAP
+#else // !QTB_LOAD_BITMAP
   uchar *rgbtop = rgb + width * (height - 1) * IMAGE_FORMAT_SIZE;
-#endif // QTB_LOAD_BITMAP
+#endif // !QTB_LOAD_BITMAP
   uchar *ytop;
   uchar *utop;
   uchar *vtop;
@@ -303,9 +303,9 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   int linesOfThread = height / numOfThread;
 #if QTB_LOAD_BITMAP
   int rgbtopNextThread = width * linesOfThread * IMAGE_FORMAT_SIZE;
-#else // QTB_LOAD_BITMAP
+#else // !QTB_LOAD_BITMAP
   int rgbtopNextThread = - (width * linesOfThread) * IMAGE_FORMAT_SIZE;
-#endif // QTB_LOAD_BITMAP
+#endif // !QTB_LOAD_BITMAP
   int ytopNextThread = width * linesOfThread;
   int uvtopNextThread = uvNext * linesOfThread/2;
 
@@ -349,7 +349,7 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
   f3.waitForFinished();
   f4.waitForFinished();
 
-#else // ALL_NEW_THREAD
+#else // !ALL_NEW_THREAD
 
   // this thread and other threads
   if (numOfThread <= 1 || height % 2 != 0){
@@ -364,9 +364,9 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	int linesOfThread = height / numOfThread;
 #if QTB_LOAD_BITMAP
 	int rgbtopNextThread = width * linesOfThread * IMAGE_FORMAT_SIZE;
-#else // QTB_LOAD_BITMAP
+#else // !QTB_LOAD_BITMAP
 	int rgbtopNextThread = - (width * linesOfThread) * IMAGE_FORMAT_SIZE;
-#endif // QTB_LOAD_BITMAP
+#endif // !QTB_LOAD_BITMAP
 	int ytopNextThread = width * linesOfThread;
 	int uvtopNextThread = uvNext * linesOfThread/2;
 
@@ -410,12 +410,12 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	f3.waitForFinished();
   }
 
-#endif // ALL_NEW_THREAD
-#else // QTB_MULTI_THREAD_CONVERTER
+#endif // !ALL_NEW_THREAD
+#else // !QTB_MULTI_THREAD_CONVERTER
   // no other thread
   Q_UNUSED(numOfThread);
   (*convert)(ytop, utop, vtop, rgbtop, height);
-#endif // QTB_MULTI_THREAD_CONVERTER
+#endif // !QTB_MULTI_THREAD_CONVERTER
 
 #if 0 // for TEST
   {
@@ -439,7 +439,7 @@ int makeRGBImage(void (*convert)(uchar *ytop, uchar* utop, uchar *vtop, uchar *r
 	  doFlag = false;
 	}
   }
-#endif // for TEST
+#endif // 0 // for TEST
 
   return rgbImageSize;
 }
@@ -477,9 +477,9 @@ void convertRGBtoGS()
 {
 #if QTB_LOAD_BITMAP
   uchar *rgbtop = rgb;
-#else // QTB_LOAD_BITMAP
+#else // !QTB_LOAD_BITMAP
   uchar *rgbtop = rgb + width * (height - 1) * IMAGE_FORMAT_SIZE;
-#endif // QTB_LOAD_BITMAP
+#endif // !QTB_LOAD_BITMAP
 
   for (int yPos = 0; yPos < height; yPos++){
 	for (int xPos = 0; xPos < width; xPos++){
@@ -494,12 +494,12 @@ void convertRGBtoGS()
 	  int b = *rgbtop++;
 	  int g = *rgbtop++;
 	  int r = *rgbtop++;
-#else // QTB_LITTLE_ENDIAN
+#else // !QTB_LITTLE_ENDIAN
 	  rgbtop++;
 	  int r = *rgbtop++;
 	  int g = *rgbtop++;
 	  int b = *rgbtop++;
-#endif // QTB_LITTLE_ENDIAN
+#endif // !QTB_LITTLE_ENDIAN
 #endif // FORMAT_RGB32
 
 	  int gsv = clip(GET_GS(r, g, b));

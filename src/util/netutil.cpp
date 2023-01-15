@@ -8,14 +8,14 @@
 #if defined(Q_OS_WIN)
 #include <winsock2.h>
 #include <iphlpapi.h>
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 #include <netinet/in.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 
 #include <iomanip>
 #include <cstdio>
@@ -92,7 +92,7 @@ bool NetUtil::getMacAddress()
 
   return true;
 }
-#else // defined(Q_OS_WIN)
+#else // !defined(Q_OS_WIN)
 char mac_address[128]={""};
 bool NetUtil::getMacAddress()
 {
@@ -125,6 +125,6 @@ bool NetUtil::getMacAddress()
 
   return true;
 }
-#endif // defined(Q_OS_WIN)
+#endif // !defined(Q_OS_WIN)
 
 } // end of namespace qtbrynhildr

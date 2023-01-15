@@ -275,9 +275,9 @@ SOCKET NetThread::socketToServer()
   memset(&addrinfo_hints, 0, sizeof(ADDRINFO));
 #if 0 // for TEST
   addrinfo_hints.ai_family = AF_INET; // for IP v4
-#else // for TEST
+#else // 0 // for TEST
   addrinfo_hints.ai_family = AF_UNSPEC;
-#endif // for TEST
+#endif // 0 // for TEST
   addrinfo_hints.ai_socktype = SOCK_STREAM;
 
   char server[512];
@@ -324,7 +324,7 @@ SOCKET NetThread::socketToServer()
 	if (sock == INVALID_SOCKET){
 	  continue;
 	}
-#else
+#else // defined(Q_OS_WIN)
 	sock = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol);
 	if (sock == INVALID_SOCKET){
 	  continue;
@@ -335,7 +335,7 @@ SOCKET NetThread::socketToServer()
 	  sock = INVALID_SOCKET;
 	  continue;
 	}
-#endif
+#endif // defined(Q_OS_WIN)
 	if (result == SOCKET_TIMEOUT || sock == TIMEOUT_SOCKET){
 	  //std::cout << "TimeOut!" << std::endl << std::flush;
 	  closesocket(sock);
@@ -376,7 +376,7 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
-#else // !QTB_NET_WINSOCK1
+#else // QTB_NET_WINSOCK1
 // socket to server
 // for WinSock 1
 SOCKET NetThread::socketToServer()
@@ -437,7 +437,7 @@ SOCKET NetThread::socketToServer()
 
   return sock;
 }
-#endif // !QTB_NET_WINSOCK1
+#endif // QTB_NET_WINSOCK1
 
 // send header
 long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
@@ -463,7 +463,7 @@ long NetThread::sendHeader(SOCKET sock, const char *buf, long size)
   long data_long = com_data->data_type + (com_data->data_size & 0x0000ffff);
 
   com_data->encryption = ENCRYPTION_OFF;
-  com_data->check_digit = ~data_long;
+  com_data->check_digit = (CHECK_DIGIT_VALUE)(~data_long);
 
   for (int i = 0; i < ENCRYPTION_KEY_LENGTH; i++){
 	char key_char = ~key[i];
@@ -997,7 +997,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 
   //std::cout << "last result = " << result << std::endl << std::flush;
   return SOCKET_OK;
-#else // 0 // for TEST
+#else // 1 // for TEST
   // set attribute
   setupInterruptable(sockfd, true);
 
@@ -1123,7 +1123,7 @@ int NetThread::connect_int(int sockfd, const struct sockaddr *addr, socklen_t ad
 
   //std::cout << "last result = " << result << std::endl << std::flush;
   return SOCKET_OK;
-#endif // 0 // for TEST
+#endif // 1 // for TEST
 }
 
 // connect with retry

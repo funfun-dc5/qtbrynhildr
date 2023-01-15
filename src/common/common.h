@@ -20,9 +20,9 @@ define constexpr /* */
 #if __cplusplus < 201103L
 #if _MSC_VER
 #define Aligned(n)  __declspec(align(n))
-#else // _MSC_VER
+#else // !_MSC_VER
 #define Aligned(n)  __attribute__((aligned(n)))
-#endif // _MSC_VER
+#endif // !_MSC_VER
 #else // for C++11
 #define Aligned(n)  alignas(n)
 #endif // for C++11
@@ -32,10 +32,10 @@ define constexpr /* */
 #define QTextStream_hex Qt::hex
 #define QTextStream_endl Qt::endl
 #define QTextStream_flush Qt::flush
-#else // QT_VERSION >= 0x050f00 // Qt 5.15.0
+#else // QT_VERSION < 0x050f00 // Qt 5.15.0
 #define QTextStream_hex hex
 #define QTextStream_endl endl
 #define QTextStream_flush flush
-#endif // QT_VERSION >= 0x050f00 // Qt 5.15.0
+#endif // QT_VERSION < 0x050f00 // Qt 5.15.0
 
 #endif // COMMON_H

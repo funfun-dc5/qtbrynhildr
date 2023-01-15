@@ -20,9 +20,9 @@
 #if _MSC_VER
 #pragma pack(push, 1)
 typedef struct { // for C/C++ Compatibility
-#else // _MSC_VER
+#else // !_MSC_VER
 typedef struct __attribute__((__packed__)) { // for C/C++ Compatibility
-#endif // _MSC_VER
+#endif // !_MSC_VER
   // File Header
   char	magic[4];	// file magic
   char	padding[4];	// padding

@@ -12,9 +12,9 @@
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"
-#else // __x86_64__ || __LP64__ || _WIN64
+#else // !(__x86_64__ || __LP64__ || _WIN64)
 #define QTB_ARCHNAME			" (32bit)"
-#endif // __x86_64__ || __LP64__ || _WIN64
+#endif // !(__x86_64__ || __LP64__ || _WIN64)
 
 // year
 #define QTB_YEAR				"2015-2023"

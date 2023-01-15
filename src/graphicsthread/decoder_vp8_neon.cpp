@@ -46,10 +46,10 @@ QImage* DecoderVP8NEON::getDesktopImage(int numOfThread)
 	// full color
 	rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_NEON, numOfThread);
   }
-#else // QTB_GRAY_SCALE_MODE
+#else // !QTB_GRAY_SCALE_MODE
   // full color
   int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_NEON, numOfThread);
-#endif // QTB_GRAY_SCALE_MODE
+#endif // !QTB_GRAY_SCALE_MODE
 
   // get QImage
   image = getImage(rgbImageSize);

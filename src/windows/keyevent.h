@@ -25,9 +25,9 @@ typedef enum {
 #ifdef __cplusplus
 private:
 using Key = Qt::Key;
-#else // __cplusplus
+#else // !__cplusplus
 typedef unsigned char uchar;
-#endif // __cplusplus
+#endif // !__cplusplus
 
 // key table for event convert
 typedef struct {

@@ -46,10 +46,10 @@ QImage* DecoderVP8AVX::getDesktopImage(int numOfThread)
 	// full color
 	rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_AVX, numOfThread);
   }
-#else // QTB_GRAY_SCALE_MODE
+#else // !QTB_GRAY_SCALE_MODE
   // full color
   int rgbImageSize = makeRGBImage(convertYUVtoRGB_SIMD_AVX, numOfThread);
-#endif // QTB_GRAY_SCALE_MODE
+#endif // !QTB_GRAY_SCALE_MODE
 
   // get QImage
   image = getImage(rgbImageSize);

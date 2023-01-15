@@ -25,13 +25,13 @@ namespace qtbrynhildr {
 #if _MSC_VER
 #pragma pack(push, 1)
 typedef struct BITMAPFILEHEADER { // for C/C++ Compatibility
-#else // _MSC_VER
+#else // !_MSC_VER
 #if defined(__MINGW32__)
 typedef struct __attribute__((gcc_struct, __packed__)) BITMAPFILEHEADER { // for C/C++ Compatibility
-#else // defined(__MINGW32__)
+#else // !defined(__MINGW32__)
 typedef struct __attribute__((__packed__)) BITMAPFILEHEADER { // for C/C++ Compatibility
-#endif // defined(__MINGW32__)
-#endif // _MSC_VER
+#endif // !defined(__MINGW32__)
+#endif // !_MSC_VER
 	char		bfType[2]; // "BM"
 	uint32_t	bfSize;
 	uint16_t	bfReserved1;
@@ -46,9 +46,9 @@ typedef struct __attribute__((__packed__)) BITMAPFILEHEADER { // for C/C++ Compa
 #if _MSC_VER
 #pragma pack(push, 1)
 typedef struct BITMAPINFOHEADER { // for C/C++ Compatibility
-#else // _MSC_VER
+#else // !_MSC_VER
 typedef struct __attribute__((__packed__)) BITMAPINFOHEADER { // for C/C++ Compatibility
-#endif // _MSC_VER
+#endif // !_MSC_VER
 	uint32_t	biSize; // 40 for Windows
 	uint32_t	biWidth;
 	uint32_t	biHeight;
@@ -75,9 +75,9 @@ typedef struct __attribute__((__packed__)) BITMAPINFOHEADER { // for C/C++ Compa
 #if _MSC_VER
 #pragma pack(push, 1)
 typedef struct RGBQUAD { // for C/C++ Compatibility
-#else // _MSC_VER
+#else // !_MSC_VER
 typedef struct __attribute__((__packed__)) RGBQUAD { // for C/C++ Compatibility
-#endif // _MSC_VER
+#endif // !_MSC_VER
 	uchar	rgbBlue;
 	uchar	rgbGreen;
 	uchar	rgbRed;

@@ -155,7 +155,7 @@ private:
 		}
 		std::cout << std::flush;
 	  }
-#else // !(defined(__arm__) || defined(__aarch64__))
+#else // defined(__arm__) || defined(__aarch64__)
 	  // ARM CPU
 #if defined(QTB_ANDROID)
 	  if ((android_getCpuFamily() == ANDROID_CPU_FAMILY_ARM) &&
@@ -195,10 +195,10 @@ public:
   static bool SSE42() { return CPUInformation.hasSSE42; }
   static bool AVX() { return CPUInformation.hasAVX; }
   static bool AVX2() { return CPUInformation.hasAVX2; }
-#else // !defined(__ARM_NEON__)
+#else // defined(__ARM_NEON__)
   // for ARM CPU
   static bool NEON() { return CPUInformation.hasNEON; }
-#endif // !defined(__ARM_NEON__)
+#endif // defined(__ARM_NEON__)
 
 private:
   // constructor

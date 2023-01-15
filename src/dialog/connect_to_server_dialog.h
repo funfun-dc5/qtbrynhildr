@@ -20,9 +20,9 @@
 #include "settings.h"
 #if defined(QTB_DEV_TOUCHPANEL)
 #include "ui_connect_to_server_dialog_touchpanel.h"
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
 #include "ui_connect_to_server_dialog.h"
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 namespace qtbrynhildr {
 
@@ -59,7 +59,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  ConnectToServerDialog(Settings *settings, QWidget *parent = 0);
+  ConnectToServerDialog(Settings *settings, QWidget *parent = nullptr);
   // destructor
   ~ConnectToServerDialog();
 
@@ -96,9 +96,9 @@ private slots:
   // hostname field
 #if defined(QTB_DEV_TOUCHPANEL)
   void on_lineEdit_hostname_textChanged();
-#else // defined(QTB_DEV_TOUCHPANEL)
+#else // !defined(QTB_DEV_TOUCHPANEL)
   void on_comboBox_hostname_currentIndexChanged(int index);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+#endif // !defined(QTB_DEV_TOUCHPANEL)
   // hosttype field
   void on_comboBox_hosttype_currentIndexChanged(int index);
   // keyboard type field

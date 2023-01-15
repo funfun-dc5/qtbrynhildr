@@ -17,9 +17,9 @@ public:
 
 #ifdef __cplusplus
 private:
-#else // __cplusplus
+#else // !__cplusplus
 typedef unsigned char uchar;
-#endif // __cplusplus
+#endif // !__cplusplus
 
   // key top information
 #define MAX_KEYTOP_STRING 9

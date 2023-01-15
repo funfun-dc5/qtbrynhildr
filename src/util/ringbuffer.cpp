@@ -208,7 +208,7 @@ long RingBuffer::getSize() const
 // get available data size (max size = len)
 long RingBuffer::getSize(int len) const
 {
-  int bufferLen = getSize();
+  int bufferLen = (int)getSize();
 
   if (len <= bufferLen){
 	return len;

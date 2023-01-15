@@ -415,9 +415,9 @@ void DesktopPanel::mouseDoubleClickEvent(QMouseEvent *event)
 	if (!settings->getOnShowSoftwareButton()){
 #if defined(QTB_DEV_DESKTOP)
   setMouseButtonEvent(event, MOUSE_BUTTON_DOWN);
-#else // defined(QTB_DEV_DESKTOP)
+#else // !defined(QTB_DEV_DESKTOP)
   setMouseButtonEvent(event, MOUSE_BUTTON_DBLCLK);
-#endif // defined(QTB_DEV_DESKTOP)
+#endif // !defined(QTB_DEV_DESKTOP)
 	}
   }
 }
@@ -452,7 +452,7 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 	// adjust
 	mouseWheel *= settings->getDesktopScalingFactor();
   }
-#else // QT_VERSION >= 0x050500 // Qt 5.5.0
+#else // QT_VERSION < 0x050500 // Qt 5.5.0
   //std::cout << "[WheelEvent] source() : " << event->source() << std::endl << std::flush;
   QPoint degrees = event->angleDelta() / 8;
   mouseWheel = degrees.y();
@@ -462,7 +462,7 @@ void DesktopPanel::wheelEvent(QWheelEvent *event)
 	int ticks = mouseWheel/15;
 	std::cout << "[DesktopPanel] wheelEvent(degrees): " << mouseWheel << " (ticks = " << ticks << ")" << std::endl << std::flush; // for DEBUG
   }
-#endif // QT_VERSION >= 0x050500 // Qt 5.5.0
+#endif // QT_VERSION < 0x050500 // Qt 5.5.0
 
   // check connected
   if (!settings->getConnected())
@@ -585,10 +585,10 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 		qtbrynhildr->exitFullScreen();
 		return;
 	  }
-#else // QTB_TOOLBAR
+#else // !QTB_TOOLBAR
 	  qtbrynhildr->exitFullScreen();
 	  return;
-#endif // QTB_TOOLBAR
+#endif // !QTB_TOOLBAR
 	}
 #endif // defined(QTB_DEV_DESKTOP)
 	// check shift key status

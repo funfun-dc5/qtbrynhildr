@@ -115,9 +115,9 @@ void SoftwareButton::paintEvent(QPaintEvent *event)
 	  painter.setPen(pen);
 #if QT_VERSION >= 0x050d00 // Qt 5.13.0
 	  painter.drawRoundedRect(rect, 25, 25);
-#else // QT_VERSION >= 0x050d00
+#else // QT_VERSION < 0x050d00
 	  painter.drawRoundRect(rect);
-#endif // QT_VERSION >= 0x050d00
+#endif // QT_VERSION < 0x050d00
 	  //painter.drawRect(rect);
 	  if (layout[i].pushed){
 		painter.setPen(panelColor);

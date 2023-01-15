@@ -27,10 +27,10 @@ class QtBrynhildr;
 
 // DesktopWindowWidget
 #if defined(Q_OS_WIN)
-class DesktopWindowWidget : public QWidget, public DesktopFrame, public QAbstractNativeEventFilter
-#else // defined(Q_OS_WIN)
-class DesktopWindowWidget : public QWidget, public DesktopFrame
-#endif // defined(Q_OS_WIN)
+class DesktopWindow : public QWidget, public DesktopPanel, public QAbstractNativeEventFilter
+#else // !defined(Q_OS_WIN)
+class DesktopWindow : public QWidget, public DesktopPanel
+#endif // !defined(Q_OS_WIN)
 {
   Q_OBJECT
 
@@ -61,7 +61,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopWindowWidget(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
+  DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent = nullptr);
   // destructor
   ~DesktopWindowWidget();
 

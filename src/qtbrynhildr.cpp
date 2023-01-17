@@ -3501,7 +3501,7 @@ void QtBrynhildr::changeEvent(QEvent *event)
 // close event by window close
 void QtBrynhildr::closeEvent(QCloseEvent *event)
 {
-  Q_UNUSED(event);
+  event->ignore();
 
   exit();
 }

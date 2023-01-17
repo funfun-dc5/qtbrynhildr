@@ -37,7 +37,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  ConfirmDialog(QString msg, bool confirmFlag, Settings *settings, QWidget *parent = 0);
+  ConfirmDialog(QString msg, bool confirmFlag, Settings *settings, QWidget *parent = nullptr);
 
   // resize event
   void resizeEvent(QResizeEvent *event);

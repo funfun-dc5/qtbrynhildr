@@ -44,7 +44,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  PreferenceDialog(Settings *settings, QWidget *parent = 0);
+  PreferenceDialog(Settings *settings, QWidget *parent = nullptr);
 
   // resize event
   void resizeEvent(QResizeEvent *event);

@@ -92,7 +92,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
+  GraphicsView(QGraphicsScene *scene, QtBrynhildr *qtbrynhildr, QWidget *parent = nullptr);
   // destructor
   ~GraphicsView();
 

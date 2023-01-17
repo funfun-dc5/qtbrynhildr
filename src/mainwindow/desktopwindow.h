@@ -61,7 +61,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
+  DesktopWindow(QtBrynhildr *qtbrynhildr, QWidget *parent = nullptr);
   // destructor
   ~DesktopWindow();
 

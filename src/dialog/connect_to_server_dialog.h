@@ -59,7 +59,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  ConnectToServerDialog(Settings *settings, QWidget *parent = 0);
+  ConnectToServerDialog(Settings *settings, QWidget *parent = nullptr);
   // destructor
   ~ConnectToServerDialog();
 

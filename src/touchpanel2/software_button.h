@@ -244,7 +244,7 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  SoftwareButton(QWidget *parent = 0);
+  SoftwareButton(QWidget *parent = nullptr);
   // destructor
   //  virtual ~SoftwareButton();
 

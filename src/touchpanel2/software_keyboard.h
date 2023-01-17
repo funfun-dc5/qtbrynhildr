@@ -463,10 +463,10 @@ private:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  SoftwareKeyboard(QWidget *parent = 0);
-  SoftwareKeyboard(KEYTOP_TYPE type, QWidget *parent = 0);
+  SoftwareKeyboard(QWidget *parent = nullptr);
+  SoftwareKeyboard(KEYTOP_TYPE type, QWidget *parent = nullptr);
 #ifdef USE_KEYLAYOUTFILE
-  SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = 0);
+  SoftwareKeyboard(KeyLayoutFile *klf, QWidget *parent = nullptr);
 #endif // USE_KEYLAYOUTFILE
   // destructor
   virtual ~SoftwareKeyboard();

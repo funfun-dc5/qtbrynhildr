@@ -410,6 +410,10 @@ private:
   QAction *touchpanelInterfaceTypeLeftRight_Action;
   // touchpanel interface type TopBottom
   QAction *touchpanelInterfaceTypeTopBottom_Action;
+  // touchpanel interface type Bottom Left Center
+  QAction *touchpanelInterfaceTypeBottom_LeftCenter_Action;
+  // touchpanel interface type Top Left Center
+  QAction *touchpanelInterfaceTypeTop_LeftCenter_Action;
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -481,7 +485,7 @@ private:
   struct {
 	QRect softwareButtonRect;
 	QRect softwareKeyboardRect;
-  } touchpanelInterfaceLeftRight, touchpanelInterfaceTopBottom;
+  } touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_NUM];
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -1046,6 +1050,8 @@ private slots:
   // touchpanel interface type
   void touchpanelInterfaceTypeLeftRight();
   void touchpanelInterfaceTypeTopBottom();
+  void touchpanelInterfaceTypeBottom_LeftCenter();
+  void touchpanelInterfaceTypeTop_LeftCenter();
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON

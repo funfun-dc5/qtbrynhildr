@@ -203,6 +203,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,touchpanelOperationTypeQtBrynhildr_Action(0)
   ,touchpanelInterfaceTypeLeftRight_Action(0)
   ,touchpanelInterfaceTypeTopBottom_Action(0)
+  ,touchpanelInterfaceTypeBottom_LeftCenter_Action(0)
+  ,touchpanelInterfaceTypeTop_LeftCenter_Action(0)
 #endif // defined(QTB_DEV_TOUCHPANEL)
   ,sendClipboard_Action(0)
   ,sendFile_Action(0)
@@ -685,80 +687,65 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // setup touchpanel interface
   // Left : Button, Right : Keyboard
   int checkWidth = settings->getCheckAreaWidth();
-  touchpanelInterfaceLeftRight.softwareButtonRect =
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT].softwareButtonRect =
 	QRect(0, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
-  touchpanelInterfaceLeftRight.softwareKeyboardRect =
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT].softwareKeyboardRect =
 	QRect(screenWidth - checkWidth, 0, checkWidth, QTB_TOUCHPANEL_HEIGHT_SUPPORT_MAX);
 
   // Top : Button, Bottom : Keyboard
   int checkHeight = settings->getCheckAreaHeight();
-  touchpanelInterfaceTopBottom.softwareButtonRect =
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM].softwareButtonRect =
 	QRect(0, 0, QTB_TOUCHPANEL_WIDTH_SUPPORT_MAX, checkHeight);
-  touchpanelInterfaceTopBottom.softwareKeyboardRect =
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM].softwareKeyboardRect =
 	QRect(0, screenHeight - checkHeight, QTB_TOUCHPANEL_WIDTH_SUPPORT_MAX, checkHeight);
+
+  // Bottom Left : Button, Bottom Center : Keyboard
+  checkWidth = screenWidth / 4;
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_BOTTOM_LEFTCENTER].softwareButtonRect =
+	QRect(0, screenHeight - checkHeight, checkWidth, screenHeight);
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_BOTTOM_LEFTCENTER].softwareKeyboardRect =
+	QRect(checkWidth, screenHeight - checkHeight, checkWidth*3, screenHeight);
+
+  // Top Left : Button, Top Center : Keyboard
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_TOP_LEFTCENTER].softwareButtonRect =
+	QRect(0, 0, checkWidth, checkHeight);
+  touchpanelInterfaceType[QTB_TOUCHPANELINTERFACETYPE_TOP_LEFTCENTER].softwareKeyboardRect =
+	QRect(checkWidth, 0, checkWidth*3, checkHeight);
 
   // interface check area information
   if (settings->getOutputLog()){
-	QPoint topLeft =
-	  touchpanelInterfaceLeftRight.softwareButtonRect.topLeft();
-	QPoint bottomRight =
-	  touchpanelInterfaceLeftRight.softwareButtonRect.bottomRight();
-	logMessage->outputLogMessage(PHASE_DEBUG,
-								 "software button check area: (" +
-								 QString::number(topLeft.x()) +
-								 ", " +
-								 QString::number(topLeft.y()) +
-								 ") - (" +
-								 QString::number(bottomRight.x()) +
-								 ", " +
-								 QString::number(bottomRight.y()) +
-								 ")"
-								 );
-	topLeft =
-	  touchpanelInterfaceLeftRight.softwareKeyboardRect.topLeft();
-	bottomRight =
-	  touchpanelInterfaceLeftRight.softwareKeyboardRect.bottomRight();
-	logMessage->outputLogMessage(PHASE_DEBUG,
-								 "software keyboard check area: (" +
-								 QString::number(topLeft.x()) +
-								 ", " +
-								 QString::number(topLeft.y()) +
-								 ") - (" +
-								 QString::number(bottomRight.x()) +
-								 ", " +
-								 QString::number(bottomRight.y()) +
-								 ")"
-								 );
-	topLeft =
-	  touchpanelInterfaceTopBottom.softwareButtonRect.topLeft();
-	bottomRight =
-	  touchpanelInterfaceTopBottom.softwareButtonRect.bottomRight();
-	logMessage->outputLogMessage(PHASE_DEBUG,
-								 "software button check area2: (" +
-								 QString::number(topLeft.x()) +
-								 ", " +
-								 QString::number(topLeft.y()) +
-								 ") - (" +
-								 QString::number(bottomRight.x()) +
-								 ", " +
-								 QString::number(bottomRight.y()) +
-								 ")"
-								 );
-	topLeft =
-	  touchpanelInterfaceTopBottom.softwareKeyboardRect.topLeft();
-	bottomRight =
-	  touchpanelInterfaceTopBottom.softwareKeyboardRect.bottomRight();
-	logMessage->outputLogMessage(PHASE_DEBUG,
-								 "software keyboard check area2: (" +
-								 QString::number(topLeft.x()) +
-								 ", " +
-								 QString::number(topLeft.y()) +
-								 ") - (" +
-								 QString::number(bottomRight.x()) +
-								 ", " +
-								 QString::number(bottomRight.y()) +
-								 ")"
-								 );
+	for(int i = QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT; i < QTB_TOUCHPANELINTERFACETYPE_NUM; i++){
+	  QPoint topLeft =
+		touchpanelInterfaceType[i].softwareButtonRect.topLeft();
+	  QPoint bottomRight =
+		touchpanelInterfaceType[i].softwareButtonRect.bottomRight();
+	  logMessage->outputLogMessage(PHASE_DEBUG,
+								   "software button check area " + QString::number(i) + ": (" +
+								   QString::number(topLeft.x()) +
+								   ", " +
+								   QString::number(topLeft.y()) +
+								   ") - (" +
+								   QString::number(bottomRight.x()) +
+								   ", " +
+								   QString::number(bottomRight.y()) +
+								   ")"
+								   );
+	  topLeft =
+		touchpanelInterfaceType[i].softwareKeyboardRect.topLeft();
+	  bottomRight =
+		touchpanelInterfaceType[i].softwareKeyboardRect.bottomRight();
+	  logMessage->outputLogMessage(PHASE_DEBUG,
+								   "software keyboard check area " + QString::number(i) + ": (" +
+								   QString::number(topLeft.x()) +
+								   ", " +
+								   QString::number(topLeft.y()) +
+								   ") - (" +
+								   QString::number(bottomRight.x()) +
+								   ", " +
+								   QString::number(bottomRight.y()) +
+								   ")"
+								   );
+	}
   }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
@@ -2303,6 +2290,24 @@ void QtBrynhildr::createActions()
   touchpanelInterfaceTypeTopBottom_Action->setStatusTip(tr("Top/Bottom Type"));
   connect(touchpanelInterfaceTypeTopBottom_Action, SIGNAL(triggered()), this,
 		  SLOT(touchpanelInterfaceTypeTopBottom()));
+
+  touchpanelInterfaceTypeBottom_LeftCenter_Action = new QAction(tr("Bottom Left/Center Type"), this);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setEnabled(true);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setCheckable(true);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setChecked(
+					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_BOTTOM_LEFTCENTER);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setStatusTip(tr("Bottom Left/Center Type"));
+  connect(touchpanelInterfaceTypeBottom_LeftCenter_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelInterfaceTypeBottom_LeftCenter()));
+
+  touchpanelInterfaceTypeTop_LeftCenter_Action = new QAction(tr("Top Left/Center Type"), this);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setEnabled(true);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setCheckable(true);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setChecked(
+					settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_TOP_LEFTCENTER);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setStatusTip(tr("Top Left/Center Type"));
+  connect(touchpanelInterfaceTypeTop_LeftCenter_Action, SIGNAL(triggered()), this,
+		  SLOT(touchpanelInterfaceTypeTop_LeftCenter()));
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
   // send clipboard
@@ -2714,6 +2719,8 @@ void QtBrynhildr::createMenus()
   touchpanelInterfaceTypeSubMenu = optionMenu->addMenu(tr("Touchpanel Interface"));
   touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeLeftRight_Action);
   touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeTopBottom_Action);
+  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeBottom_LeftCenter_Action);
+  touchpanelInterfaceTypeSubMenu->addAction(touchpanelInterfaceTypeTop_LeftCenter_Action);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 1 // defined(QTB_DEV_DESKTOP)
@@ -3815,19 +3822,8 @@ void QtBrynhildr::connectToServer()
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set touchpanel interface
-  if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT){
-	// Right/Left
-	desktopPanel->setSoftwareButtonRect(touchpanelInterfaceLeftRight.softwareButtonRect);
-	desktopPanel->setSoftwareKeyboardRect(touchpanelInterfaceLeftRight.softwareKeyboardRect);
-  }
-  else if (settings->getTouchpanelInterfaceType() == QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM){
-	// Top/Bottom
-	desktopPanel->setSoftwareButtonRect(touchpanelInterfaceTopBottom.softwareButtonRect);
-	desktopPanel->setSoftwareKeyboardRect(touchpanelInterfaceTopBottom.softwareKeyboardRect);
-  }
-  else {
-	// internal error
-  }
+  graphicsView->setSoftwareButtonRect(touchpanelInterfaceType[settings->getTouchpanelInterfaceType()].softwareButtonRect);
+  graphicsView->setSoftwareKeyboardRect(touchpanelInterfaceType[settings->getTouchpanelInterfaceType()].softwareKeyboardRect);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
@@ -5593,6 +5589,8 @@ void QtBrynhildr::touchpanelInterfaceTypeLeftRight()
   settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_LEFTRIGHT);
   touchpanelInterfaceTypeLeftRight_Action->setChecked(true);
   touchpanelInterfaceTypeTopBottom_Action->setChecked(false);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setChecked(false);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setChecked(false);
 }
 
 void QtBrynhildr::touchpanelInterfaceTypeTopBottom()
@@ -5600,7 +5598,25 @@ void QtBrynhildr::touchpanelInterfaceTypeTopBottom()
   settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_TOPBOTTOM);
   touchpanelInterfaceTypeLeftRight_Action->setChecked(false);
   touchpanelInterfaceTypeTopBottom_Action->setChecked(true);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setChecked(false);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setChecked(false);
 }
+void QtBrynhildr::touchpanelInterfaceTypeBottom_LeftCenter()
+{
+  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_BOTTOM_LEFTCENTER);
+  touchpanelInterfaceTypeLeftRight_Action->setChecked(false);
+  touchpanelInterfaceTypeTopBottom_Action->setChecked(false);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setChecked(true);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setChecked(false);
+}
+void QtBrynhildr::touchpanelInterfaceTypeTop_LeftCenter()
+{
+  settings->setTouchpanelInterfaceType(QTB_TOUCHPANELINTERFACETYPE_TOP_LEFTCENTER);
+  touchpanelInterfaceTypeTopBottom_Action->setChecked(false);
+  touchpanelInterfaceTypeBottom_LeftCenter_Action->setChecked(false);
+  touchpanelInterfaceTypeTop_LeftCenter_Action->setChecked(true);
+}
+
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 #if 0 // QTB_SOFTWARE_KEYBOARD_AND_BUTTON

@@ -297,7 +297,7 @@ TRANSMIT_RESULT GraphicsThread::transmitBuffer()
 	return TRANSMIT_SUCCEEDED;
 
   // draw 1 frame
-  drawDesktopImage(buffer, receivedDataSize, com_data->video_mode);
+  drawDesktopImage(buffer, (int)receivedDataSize, com_data->video_mode);
 
   return TRANSMIT_SUCCEEDED;
 }
@@ -368,7 +368,7 @@ long GraphicsThread::receiveData(char *buf, long size)
 void GraphicsThread::outputReceivedData(long receivedDataSize)
 {
   decoder->outputDataToFile(buffer,
-							receivedDataSize,
+							(int)receivedDataSize,
 							frameCounter.getFrameCounter());
 }
 

@@ -111,9 +111,14 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
+				# macOS
 				QTROOT=/opt/Qt/${QTVERSION}/clang_64
 				# Coverity Scan
 				PATHLIST=/opt/cov-analysis-macosx-${COVVERSION}/bin:${PATHLIST}
+				if [ "$TARGET" = "ios" ] ; then
+				   # iOS
+				   QTROOT=/opt/Qt/${QTVERSION}/ios
+				fi
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

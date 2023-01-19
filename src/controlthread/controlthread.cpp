@@ -41,9 +41,9 @@ namespace qtbrynhildr {
 //---------------------------------------------------------------------------
 // constructor
 #if QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel, Recorder *recorder)
+ControlThread::ControlThread(Settings *settings, DesktopFrame *desktopFrame, Recorder *recorder)
 #else  // !QTB_RECORDER
-ControlThread::ControlThread(Settings *settings, DesktopPanel *desktopPanel)
+ControlThread::ControlThread(Settings *settings, DesktopFrame *desktopFrame)
 #endif // !QTB_RECORDER
   :NetThread("ControlThread", settings)
   ,desktopFrame(desktopFrame)

@@ -10,7 +10,7 @@
 #include <QDateTime>
 
 // Local Header
-#include "logmessage.h"
+#include "util/logmessage.h"
 
 namespace qtbrynhildr {
 

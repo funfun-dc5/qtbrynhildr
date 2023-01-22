@@ -42,6 +42,7 @@ build-*/
 *.pro.user*
 .qmake.*
 src/object_script.*
+asset_catalog_compiler.Info.plist
 # for windows
 *.exe
 *.dll

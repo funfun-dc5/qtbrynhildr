@@ -2958,6 +2958,8 @@ void QtBrynhildr::updateConnected()
 		  arg(width, 3).
 		  arg(height, 3);
 	  }
+	  // sample rate (sound)
+	  str += QString(" : %1 Hz").arg(soundThread->getSampleRate());
 #else // !defined(QTB_DEV_DESKTOP)
 	  str = QString(tr("Connected : ")+"%1 [ %2x%3 ]").
 		arg(settings->getServerName()).

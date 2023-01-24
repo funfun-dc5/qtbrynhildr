@@ -4043,7 +4043,7 @@ void QtBrynhildr::exit()
 #endif // QT_VERSION >= 0x060000
 
   // quit
-  qApp->quit();
+  qApp->exit(0);
 }
 
 // send clipboard

@@ -615,7 +615,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   createStatusBar();
   // show or hide
 #if defined(QTB_DEV_TOUCHPANEL)
-  // show status bar on touchpanel device
+  // show menu bar and status bar on touchpanel device
+  settings->setOnShowMenuBar(true);
   settings->setOnShowStatusBar(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   menuBar()->setVisible(settings->getOnShowMenuBar());
@@ -4042,7 +4043,7 @@ void QtBrynhildr::exit()
 #endif // QT_VERSION >= 0x060000
 
   // quit
-  qApp->quit();
+  qApp->exit(0);
 }
 
 // send clipboard

@@ -28,9 +28,9 @@
 #endif // defined(QTB_NET_UNIX)
 
 // Local Header
-#include "logmessage.h"
 #include "protocols.h"
 #include "settings.h"
+#include "util/logmessage.h"
 
 namespace qtbrynhildr {
 

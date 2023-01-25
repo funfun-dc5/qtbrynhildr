@@ -249,10 +249,14 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	outputReceivedData(receivedDataSize, "pcm/" QTB_SOUND_OUTPUT_FILENAME);
   }
 
+#if 0 // for TEST
   // no sound output check
   if (!hasSoundData(buffer, receivedDataSize)){
+	// flush sound buffer
+	soundBuffer->clear();
 	return TRANSMIT_SUCCEEDED;
   }
+#endif // 0 // for TEST
 
   // put PCM data into sound buffer
   if (settings->getOnSound()){
@@ -366,7 +370,6 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	if (audioOutput->state() != QAudio::StoppedState){
 	  //	  soundCacheSize = 0;
 
-#if 0 // for TEST
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 	  while(chunks){
@@ -389,18 +392,6 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 
 		--chunks;
 	  }
-#else // 1 // for TEST
-	  // get free size of buffer
-	  int len = audioOutput->bytesFree();
-	  // write PCM data
-	  if (len != 0){
-		qint64 result = output->write(soundBuffer->get(len), len);
-		if (result != len){
-		  // Failed to write
-		  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
-		}
-	  }
-#endif // 1 // for TEST
 	}
 #if 0 // for TEST
 	else {

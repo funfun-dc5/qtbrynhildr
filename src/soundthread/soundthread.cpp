@@ -365,6 +365,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	std::cout << "[SoundThread] Sound Cache Rate : " << cacheRate << std::endl << std::flush;
   }
 
+#if QT_VERSION < 0x060000
   // write into sound buffer
   if (soundBuffer->getSize() > soundCacheSize){
 	if (audioOutput->state() != QAudio::StoppedState){
@@ -400,6 +401,23 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	}
 #endif // 0 // for TEST
   }
+#else // QT_VERSION >= 0x060000
+  // write all pcm data
+  while(soundBuffer->getSize() > 0){
+	// get free size of buffer
+	int len = audioOutput->bytesFree();
+	// write PCM data
+	if (len != 0){
+	  qint64 doneBytes = 0;
+	  while(true){
+		qint64 result = output->write(soundBuffer->get(len), len);
+		doneBytes += result;
+		if (doneBytes >= len) break;
+		QThread::msleep(5);
+	  }
+	}
+  }
+#endif // QT_VERSION >= 0x060000
 
   return TRANSMIT_SUCCEEDED;
 }

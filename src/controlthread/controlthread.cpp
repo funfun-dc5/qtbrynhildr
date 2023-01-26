@@ -720,6 +720,16 @@ void ControlThread::setMouseControl()
 	static int step = 0;
 	step++;
 
+	// clear mouse button info.
+	com_data->mouse_right = (MOUSE_BUTTON)0;
+	com_data->mouse_left = (MOUSE_BUTTON)0;
+#if QTB_EXTRA_BUTTON_SUPPORT
+	com_data->mouse_middle = (MOUSE_BUTTON)0;
+	com_data->mouse_x1 = (MOUSE_BUTTON)0;
+	com_data->mouse_x2 = (MOUSE_BUTTON)0;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+	com_data->mouse_wheel = (MOUSE_WHEEL)0;
+
 	if (settings->getOnFulFulMode() && (step % 100 != 0))
 	  return;
 

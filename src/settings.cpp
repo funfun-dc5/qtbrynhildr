@@ -47,16 +47,16 @@ Settings::Settings(const char *iniFileName)
   ,onShowSoftwareButton(false)
 #if QTB_RECORDER
   ,onRecordingControl(false)
-  ,recordingControlFileName(0)
+  ,recordingControlFileName(nullptr)
   ,onReplayingControl(false)
-  ,replayingControlFileName(0)
+  ,replayingControlFileName(nullptr)
 #endif // QTB_RECORDER
   ,onDesktopCapture(false)
   ,onScrollMode(false)
   ,onViewerMode(false)
   ,onFulFulMode(false)
 {
-  if (iniFileName != 0){
+  if (iniFileName != nullptr){
 	settings = new QSettings(iniFileName, QSettings::IniFormat);
   }
   else {
@@ -223,17 +223,17 @@ Settings::Settings(const char *iniFileName)
 Settings::~Settings()
 {
   // delete objects
-  if (settings != 0){
+  if (settings != nullptr){
 	delete settings;
-	settings = 0;
+	settings = nullptr;
   }
-  if (serverNameList != 0){
+  if (serverNameList != nullptr){
 	delete serverNameList;
-	serverNameList = 0;
+	serverNameList = nullptr;
   }
-  if (desktop != 0){
+  if (desktop != nullptr){
 	delete desktop;
-	desktop = 0;
+	desktop = nullptr;
   }
 }
 

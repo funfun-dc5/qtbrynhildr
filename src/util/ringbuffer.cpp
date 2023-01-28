@@ -14,8 +14,8 @@ namespace qtbrynhildr {
 
 // constructor
 RingBuffer::RingBuffer(int size)
-  :buffer(0)
-  ,pairBuffer(0)
+  :buffer(nullptr)
+  ,pairBuffer(nullptr)
   ,bufferSize(0)
   ,topPos(0)
   ,nextPos(0)
@@ -33,13 +33,13 @@ RingBuffer::RingBuffer(int size)
 // destructor
 RingBuffer::~RingBuffer()
 {
-  if (buffer != 0){
+  if (buffer != nullptr){
 	delete [] buffer;
-	buffer = 0;
+	buffer = nullptr;
   }
-  if (pairBuffer != 0){
+  if (pairBuffer != nullptr){
 	delete [] pairBuffer;
-	pairBuffer = 0;
+	pairBuffer = nullptr;
   }
   bufferSize = 0;
 }
@@ -48,7 +48,7 @@ RingBuffer::~RingBuffer()
 int RingBuffer::put(const char *buf, int len)
 {
   // check parameters
-  if (buf == 0){
+  if (buf == nullptr){
 	return -1;
   }
   if (len <= 0){
@@ -110,7 +110,7 @@ int RingBuffer::put(const char *buf, int len)
 // get data from ring buffer
 const char *RingBuffer::get(int len)
 {
-  char *retPtr = 0;
+  char *retPtr = nullptr;
 
   if (len < 0){
 	return retPtr;

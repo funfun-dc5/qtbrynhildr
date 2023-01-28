@@ -40,14 +40,14 @@ namespace qtbrynhildr {
 // constructor
 SoundThread::SoundThread(Settings *settings)
   :NetThread("SoundThread", settings)
-  ,soundBuffer(0)
+  ,soundBuffer(nullptr)
   ,samplerate(0)
-  ,audioOutput(0)
-  ,output(0)
+  ,audioOutput(nullptr)
+  ,output(nullptr)
 #if QTB_CELT_SUPPORT
-  ,converter(0)
+  ,converter(nullptr)
 #endif //QTB_CELT_SUPPORT
-  ,buffer(0)
+  ,buffer(nullptr)
 {
   //outputLog = true; // for DEBUG
 
@@ -74,31 +74,31 @@ SoundThread::~SoundThread()
 {
   // delete objects
   // sound buffer
-  if (soundBuffer != 0){
+  if (soundBuffer != nullptr){
 	delete soundBuffer;
-	soundBuffer = 0;
+	soundBuffer = nullptr;
   }
 
   // local buffer
-  if (buffer != 0){
+  if (buffer != nullptr){
 	delete [] buffer;
-	buffer = 0;
+	buffer = nullptr;
   }
 
   // audio output
-  if (audioOutput != 0){
+  if (audioOutput != nullptr){
 	audioOutput->stop();
 #if !defined(QTB_RPI3) // for Segmentation Fault on rpi3
 	delete audioOutput;
 #endif // !defined(QTB_RPI3) // for Segmentation Fault on rpi3
-	audioOutput = 0;
+	audioOutput = nullptr;
   }
 
 #if QTB_CELT_SUPPORT
   // converter
-  if (converter != 0){
+  if (converter != nullptr){
 	delete converter;
-	converter = 0;
+	converter = nullptr;
   }
 #endif // QTB_CELT_SUPPORT
 

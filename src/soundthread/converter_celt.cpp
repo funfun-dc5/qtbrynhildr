@@ -18,9 +18,9 @@ namespace qtbrynhildr {
 Converter_CELT::Converter_CELT(int samplerate, int channels)
   :Converter(samplerate, channels)
   ,frameSize(0)
-  ,mode(0)
-  ,decoder(0)
-  ,workBuffer(0)
+  ,mode(nullptr)
+  ,decoder(nullptr)
+  ,workBuffer(nullptr)
 {
   int error;
 
@@ -44,20 +44,20 @@ Converter_CELT::Converter_CELT(int samplerate, int channels)
 Converter_CELT::~Converter_CELT()
 {
   // 1) delete CELT decoder
-  if (decoder != 0){
+  if (decoder != nullptr){
 	celt_decoder_destroy(decoder);
-	decoder = 0;
+	decoder = nullptr;
   }
 
   // 2) delete CELT mode
-  if (mode != 0){
+  if (mode != nullptr){
 	celt_mode_destroy(mode);
-	mode = 0;
+	mode = nullptr;
   }
   // 3) work buffer
-  if (workBuffer != 0){
+  if (workBuffer != nullptr){
 	delete [] workBuffer;
-	workBuffer = 0;
+	workBuffer = nullptr;
   }
 }
 

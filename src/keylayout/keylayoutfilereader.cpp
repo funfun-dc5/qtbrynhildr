@@ -118,9 +118,9 @@ void KeyLayoutFileReader::readKeyLayoutFile(const char *filename)
 	keyboardTypeList << QString(header.name);
 
 	// delete KLF image
-	if (klfImage != 0){
+	if (klfImage != nullptr){
 	  delete [] klfImage;
-	  klfImage = 0;
+	  klfImage = nullptr;
 	}
   }
   else {

@@ -15,7 +15,7 @@ namespace qtbrynhildr {
 
 // constructor
 MouseBuffer::MouseBuffer(int size)
-  :wheel(0)
+  :wheel(nullptr)
   ,enabled(true)
   // for DEBUG
   ,outputLog(false)
@@ -41,15 +41,15 @@ MouseBuffer::~MouseBuffer()
   // delete objects
   // button queues
   for (int i = 0; i < MOUSE_BUTTON_NUM; i++){
-	if (buttons[i] != 0){
+	if (buttons[i] != nullptr){
 	  delete buttons[i];
-	  buttons[i] = 0;
+	  buttons[i] = nullptr;
 	}
   }
   // wheel queue
-  if (wheel != 0){
+  if (wheel != nullptr){
 	delete wheel;
-	wheel = 0;
+	wheel = nullptr;
   }
 }
 

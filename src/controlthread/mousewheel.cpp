@@ -15,7 +15,7 @@ namespace qtbrynhildr {
 
 // constructor
 MouseWheel::MouseWheel(int size)
-  :buffer(0)
+  :buffer(nullptr)
   ,bufferSize(0)
   ,topPos(0)
   ,nextPos(0)
@@ -33,9 +33,9 @@ MouseWheel::~MouseWheel()
 {
   // delete objects
   // buffer
-  if (buffer != 0){
+  if (buffer != nullptr){
 	delete [] buffer;
-	buffer = 0;
+	buffer = nullptr;
 	bufferSize = 0;
   }
 }

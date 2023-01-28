@@ -53,10 +53,10 @@ GraphicsThread::GraphicsThread(Settings *settings)
 #if QTB_SIMD_SUPPORT
   ,hasSIMDInstruction(false)
 #endif // QTB_SIMD_SUPPORT
-  ,buffer(0)
-  ,decoderMode56(0)
-  ,decoderMode7(0)
-  ,decoder(0)
+  ,buffer(nullptr)
+  ,decoderMode56(nullptr)
+  ,decoderMode7(nullptr)
+  ,decoder(nullptr)
   ,video_mode(-1)
 #if QTB_BENCHMARK
   ,initialBenchmarkPhaseCounter(20)
@@ -121,16 +121,16 @@ GraphicsThread::~GraphicsThread()
 {
   // delete objects
   // local buffer
-  if (buffer != 0){
+  if (buffer != nullptr){
 	delete [] buffer;
-	buffer = 0;
+	buffer = nullptr;
   }
 
   // decoders
   // mode 5,6
-  if (decoderMode56 != 0){
+  if (decoderMode56 != nullptr){
 	delete decoderMode56;
-	decoderMode56 = 0;
+	decoderMode56 = nullptr;
   }
   // mode 7
   QMapIterator<QString, Decoder*> i(decoderMode7Map);

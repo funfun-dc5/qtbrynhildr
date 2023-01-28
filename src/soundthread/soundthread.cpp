@@ -40,14 +40,14 @@ namespace qtbrynhildr {
 // constructor
 SoundThread::SoundThread(Settings *settings)
   :NetThread("SoundThread", settings)
-  ,soundBuffer(0)
+  ,soundBuffer(nullptr)
   ,samplerate(0)
-  ,audioOutput(0)
-  ,output(0)
+  ,audioOutput(nullptr)
+  ,output(nullptr)
 #if QTB_CELT_SUPPORT
-  ,converter(0)
+  ,converter(nullptr)
 #endif //QTB_CELT_SUPPORT
-  ,buffer(0)
+  ,buffer(nullptr)
 {
   //outputLog = true; // for DEBUG
 
@@ -74,31 +74,31 @@ SoundThread::~SoundThread()
 {
   // delete objects
   // sound buffer
-  if (soundBuffer != 0){
+  if (soundBuffer != nullptr){
 	delete soundBuffer;
-	soundBuffer = 0;
+	soundBuffer = nullptr;
   }
 
   // local buffer
-  if (buffer != 0){
+  if (buffer != nullptr){
 	delete [] buffer;
-	buffer = 0;
+	buffer = nullptr;
   }
 
   // audio output
-  if (audioOutput != 0){
+  if (audioOutput != nullptr){
 	audioOutput->stop();
 #if !defined(QTB_RPI3) // for Segmentation Fault on rpi3
 	delete audioOutput;
 #endif // !defined(QTB_RPI3) // for Segmentation Fault on rpi3
-	audioOutput = 0;
+	audioOutput = nullptr;
   }
 
 #if QTB_CELT_SUPPORT
   // converter
-  if (converter != 0){
+  if (converter != nullptr){
 	delete converter;
-	converter = 0;
+	converter = nullptr;
   }
 #endif // QTB_CELT_SUPPORT
 
@@ -249,10 +249,14 @@ TRANSMIT_RESULT SoundThread::transmitBuffer()
 	outputReceivedData(receivedDataSize, "pcm/" QTB_SOUND_OUTPUT_FILENAME);
   }
 
+#if 0 // for TEST
   // no sound output check
   if (!hasSoundData(buffer, receivedDataSize)){
+	// flush sound buffer
+	soundBuffer->clear();
 	return TRANSMIT_SUCCEEDED;
   }
+#endif // 0 // for TEST
 
   // put PCM data into sound buffer
   if (settings->getOnSound()){
@@ -361,12 +365,12 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	std::cout << "[SoundThread] Sound Cache Rate : " << cacheRate << std::endl << std::flush;
   }
 
+#if QT_VERSION < 0x060000
   // write into sound buffer
   if (soundBuffer->getSize() > soundCacheSize){
 	if (audioOutput->state() != QAudio::StoppedState){
 	  //	  soundCacheSize = 0;
 
-#if 0 // for TEST
 	  int chunks = audioOutput->bytesFree()/(audioOutput->periodSize());
 
 	  while(chunks){
@@ -389,18 +393,6 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 
 		--chunks;
 	  }
-#else // 1 // for TEST
-	  // get free size of buffer
-	  int len = audioOutput->bytesFree();
-	  // write PCM data
-	  if (len != 0){
-		qint64 result = output->write(soundBuffer->get(len), len);
-		if (result != len){
-		  // Failed to write
-		  return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
-		}
-	  }
-#endif // 1 // for TEST
 	}
 #if 0 // for TEST
 	else {
@@ -409,6 +401,23 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 	}
 #endif // 0 // for TEST
   }
+#else // QT_VERSION >= 0x060000
+  // write all pcm data
+  while(soundBuffer->getSize() > 0){
+	// get free size of buffer
+	int len = audioOutput->bytesFree();
+	// write PCM data
+	if (len != 0){
+	  qint64 doneBytes = 0;
+	  while(true){
+		qint64 result = output->write(soundBuffer->get(len), len);
+		doneBytes += result;
+		if (doneBytes >= len) break;
+		QThread::msleep(5);
+	  }
+	}
+  }
+#endif // QT_VERSION >= 0x060000
 
   return TRANSMIT_SUCCEEDED;
 }

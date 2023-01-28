@@ -43,7 +43,7 @@
 #if QTB_CRYPTOGRAM
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
-#include "logmessage.h"
+#include "util/logmessage.h"
 #include "mainwindow/desktopframe.h"
 #if defined(QTB_DEV_TOUCHPANEL)
 #include "mainwindow/desktoppanel.h"
@@ -58,6 +58,7 @@
 #include "touchpanel2/sk.h"
 #include "touchpanel2/sb.h"
 #include "util/httpgetter.h"
+#include "util/logmessage.h"
 
 // thread
 #include "controlthread/controlthread.h"

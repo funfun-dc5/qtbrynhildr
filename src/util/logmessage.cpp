@@ -10,7 +10,7 @@
 #include <QDateTime>
 
 // Local Header
-#include "logmessage.h"
+#include "util/logmessage.h"
 
 namespace qtbrynhildr {
 
@@ -37,9 +37,9 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 // constructor
 LogMessage::LogMessage(QWidget *parent)
   :QMessageBox(parent)
-  ,settings(0)
-  ,logFile(0)
-  ,logFileStream(0)
+  ,settings(nullptr)
+  ,logFile(nullptr)
+  ,logFileStream(nullptr)
 {
 }
 
@@ -47,20 +47,20 @@ LogMessage::LogMessage(QWidget *parent)
 LogMessage::~LogMessage()
 {
   // delete objects
-  if (logFile != 0){
+  if (logFile != nullptr){
 	delete logFile;
-	logFile = 0;
+	logFile = nullptr;
   }
-  if (logFileStream != 0){
+  if (logFileStream != nullptr){
 	delete logFileStream;
-	logFileStream = 0;
+	logFileStream = nullptr;
   }
 }
 
 // open log file
 bool LogMessage::openLogFile()
 {
-  if (logFile != 0)
+  if (logFile != nullptr)
 	return false;
 
   logFile = new QFile(settings->getLogFile());
@@ -82,10 +82,10 @@ bool LogMessage::openLogFile()
 // close log file
 bool LogMessage::closeLogFile()
 {
-  if (logFile == 0)
+  if (logFile == nullptr)
 	return false;
 
-  if (logFileStream == 0)
+  if (logFileStream == nullptr)
 	return false;
 
   // flush
@@ -98,10 +98,10 @@ bool LogMessage::closeLogFile()
 
   // delete object
   delete logFileStream;
-  logFileStream = 0;
+  logFileStream = nullptr;
 
   delete logFile;
-  logFile = 0;
+  logFile = nullptr;
 
   return true;
 }
@@ -319,7 +319,7 @@ bool LogMessage::hasValidLogFileStream() const
 {
   // checks
   // 1) check logFile open
-  if (logFile == 0){
+  if (logFile == nullptr){
 	// already close
 	return false;
   }
@@ -328,7 +328,7 @@ bool LogMessage::hasValidLogFileStream() const
   }
 
   // 2) check logFileStream open
-  if (logFileStream == 0){
+  if (logFileStream == nullptr){
 	return false;
   }
 

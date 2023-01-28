@@ -165,11 +165,11 @@ int main(int argc, char *argv[])
 
   // delete QtBrynhildr
   delete qtbrynhildr;
-  qtbrynhildr = 0;
+  qtbrynhildr = nullptr;
 
   // delete option
   delete option;
-  option = 0;
+  option = nullptr;
 
   return result;
 }

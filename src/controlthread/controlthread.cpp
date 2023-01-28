@@ -49,8 +49,8 @@ ControlThread::ControlThread(Settings *settings, DesktopFrame *desktopFrame)
   ,desktopFrame(desktopFrame)
   ,serverVersion(SERVER_VERSION_BRYNHILDR2)
   ,currentMode(0)
-  ,keyBuffer(0)
-  ,mouseBuffer(0)
+  ,keyBuffer(nullptr)
+  ,mouseBuffer(nullptr)
 #if QTB_RECORDER
   ,recorder(recorder)
 #endif // QTB_RECORDER
@@ -59,10 +59,10 @@ ControlThread::ControlThread(Settings *settings, DesktopFrame *desktopFrame)
   ,doneCheckPassword(false)
   ,transferFileProgress(0)
   ,transferFileProgressUnit(0)
-  ,ntfs(0)
+  ,ntfs(nullptr)
   ,onMaxfps(true)
-  ,clipboardTop(0)
-  ,buffer(0)
+  ,clipboardTop(nullptr)
+  ,buffer(nullptr)
   ,onFulFul(false)
 {
   //outputLog = true; // for DEBUG
@@ -113,16 +113,16 @@ ControlThread::~ControlThread()
 {
   // delete objects
   // local buffer
-  if (buffer != 0){
+  if (buffer != nullptr){
 	delete [] buffer;
-	buffer = 0;
-	clipboardTop = 0;
+	buffer = nullptr;
+	clipboardTop = nullptr;
   }
 
   // NTFS utility
-  if (ntfs != 0){
+  if (ntfs != nullptr){
 	delete ntfs;
-	ntfs = 0;
+	ntfs = nullptr;
   }
 }
 
@@ -720,6 +720,16 @@ void ControlThread::setMouseControl()
 	static int step = 0;
 	step++;
 
+	// clear mouse button info.
+	com_data->mouse_right = (MOUSE_BUTTON)0;
+	com_data->mouse_left = (MOUSE_BUTTON)0;
+#if QTB_EXTRA_BUTTON_SUPPORT
+	com_data->mouse_middle = (MOUSE_BUTTON)0;
+	com_data->mouse_x1 = (MOUSE_BUTTON)0;
+	com_data->mouse_x2 = (MOUSE_BUTTON)0;
+#endif // QTB_EXTRA_BUTTON_SUPPORT
+	com_data->mouse_wheel = (MOUSE_WHEEL)0;
+
 	if (settings->getOnFulFulMode() && (step % 100 != 0))
 	  return;
 
@@ -837,7 +847,7 @@ void ControlThread::setMouseControl()
 void ControlThread::setKeyboardControl()
 {
   KeyInfo *keyInfo = keyBuffer->get();
-  if (keyInfo != 0){
+  if (keyInfo != nullptr){
 	// check shift/alt/control status
 	switch((int)keyInfo->keycode){
 	case VK_SHIFT:
@@ -1116,7 +1126,7 @@ bool ControlThread::sendClipboard()
   settings->setOnSendClipboard(false);
 
 #if _MSC_VER
-  if (localBuffer != 0)
+  if (localBuffer != nullptr)
 	delete [] localBuffer;
 #endif // _MSC_VER
 

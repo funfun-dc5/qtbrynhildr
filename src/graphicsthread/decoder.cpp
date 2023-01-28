@@ -26,7 +26,7 @@ bool Decoder::onGrayScale = false;
 
 // constructor
 Decoder::Decoder()
-  :buffer(0)
+  :buffer(nullptr)
   ,size(0)
   // for DEBUG
   ,outputLog(false)

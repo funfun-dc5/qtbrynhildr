@@ -19,15 +19,15 @@ namespace qtbrynhildr {
 
 // constructor
 Option::Option(int argc, char *argv[])
-  :versionString(0)
-  ,serverName(0)
+  :versionString(nullptr)
+  ,serverName(nullptr)
   ,portNo(0)
-  ,password(0)
-  ,hostType(0)
+  ,password(nullptr)
+  ,hostType(nullptr)
   ,publicModeVersion(0)
-  ,iniFileName(0)
+  ,iniFileName(nullptr)
   ,initFlag(false)
-  ,debug(0)
+  ,debug(nullptr)
   ,fullScreenFlag(false)
   ,viewerFlag(false)
 #if QTB_CELT_SUPPORT
@@ -35,9 +35,9 @@ Option::Option(int argc, char *argv[])
 #endif // QTB_CELT_SUPPORT
 #if QTB_RECORDER
   ,recordingFlag(false)
-  ,recordingFileName(0)
+  ,recordingFileName(nullptr)
   ,replayingFlag(false)
-  ,replayingFileName(0)
+  ,replayingFileName(nullptr)
 #endif // QTB_RECORDER
   ,noTransFlag(false)
   ,bootupFlag(false)
@@ -62,9 +62,9 @@ Option::Option(int argc, char *argv[])
 Option::~Option()
 {
   // delete objects
-  if (iniFileName != 0){
+  if (iniFileName != nullptr){
 	free(iniFileName);
-	iniFileName = 0;
+	iniFileName = nullptr;
   }
 }
 
@@ -94,7 +94,7 @@ bool Option::analyzeOptions(int argc, char *argv[])
 		  // -server urd-PC:mcz-xoxo
 		  // -server urd-PC:mcz-xoxo:30000
 		  // -server urd-PC:mcz-xoxo:30000:xp
-		  const char* server =  strtok(buf, ":");
+		  const char* server = strtok(buf, ":");
 		  const char* passwd = strtok(NULL, ":");
 		  if (passwd != NULL){
 			if (strlen(passwd) > ENCRYPTION_KEY_LENGTH){

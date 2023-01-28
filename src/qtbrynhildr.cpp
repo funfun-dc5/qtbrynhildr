@@ -67,183 +67,183 @@ const QString dateFormat = QTB_LOG_DATE_FORMAT;
 
 // constructor
 QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
-  :desktopFrame(0)
+  :desktopFrame(nullptr)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,desktopPanel(0)
+  ,desktopPanel(nullptr)
 #else // !defined(QTB_DEV_TOUCHPANEL)
-  ,desktopWindowWidget(0)
-  ,desktopWindow(0)
+  ,desktopWindowWidget(nullptr)
+  ,desktopWindow(nullptr)
 #endif // !defined(QTB_DEV_TOUCHPANEL)
-  ,connectionLabel(0)
-  ,frameRateLabel(0)
-  ,fileMenu(0)
-  ,displayMenu(0)
-  ,videoMenu(0)
-  ,selectMonitorNoSubMenu(0)
-  ,selectFrameRateSubMenu(0)
-  ,soundMenu(0)
-  ,soundCacheSubMenu(0)
-  ,controlMenu(0)
-  ,sendKeySubMenu(0)
-  ,selectPublicModeVersionSubMenu(0)
+  ,connectionLabel(nullptr)
+  ,frameRateLabel(nullptr)
+  ,fileMenu(nullptr)
+  ,displayMenu(nullptr)
+  ,videoMenu(nullptr)
+  ,selectMonitorNoSubMenu(nullptr)
+  ,selectFrameRateSubMenu(nullptr)
+  ,soundMenu(nullptr)
+  ,soundCacheSubMenu(nullptr)
+  ,controlMenu(nullptr)
+  ,sendKeySubMenu(nullptr)
+  ,selectPublicModeVersionSubMenu(nullptr)
 #if QTB_RECORDER
-  ,recordAndReplaySubMenu(0)
+  ,recordAndReplaySubMenu(nullptr)
 #endif // QTB_RECORDER
-  ,optionMenu(0)
+  ,optionMenu(nullptr)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,touchpanelOperationTypeSubMenu(0)
-  ,touchpanelInterfaceTypeSubMenu(0)
+  ,touchpanelOperationTypeSubMenu(nullptr)
+  ,touchpanelInterfaceTypeSubMenu(nullptr)
 #endif // defined(QTB_DEV_TOUCHPANEL)
-  ,inTestingSubMenu(0)
+  ,inTestingSubMenu(nullptr)
 #if QTB_DESKTOP_COMPRESS_MODE
-  ,desktopCompressModeSubMenu(0)
+  ,desktopCompressModeSubMenu(nullptr)
 #endif // QTB_DESKTOP_COMPRESS_MODE
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,decodeOptionSubMenu(0)
+  ,decodeOptionSubMenu(nullptr)
 #endif // defined(QTB_DEV_TOUCHPANEL)
-  ,helpMenu(0)
+  ,helpMenu(nullptr)
 #if QTB_BENCHMARK
-  ,benchmarkMenu(0)
+  ,benchmarkMenu(nullptr)
 #endif // QTB_BENCHMARK
 #if QTB_TOOLBAR
-  ,toolBar(0)
+  ,toolBar(nullptr)
 #endif // QTB_TOOLBAR
-  ,connectToServer_Action(0)
-  ,disconnectToServer_Action(0)
-  ,initializeSettings_Action(0)
-  ,outputKeyboardLog_Action(0)
-  ,outputLog_Action(0)
-  ,exit_Action(0)
-  ,about_Action(0)
-  ,checkUpdate_Action(0)
+  ,connectToServer_Action(nullptr)
+  ,disconnectToServer_Action(nullptr)
+  ,initializeSettings_Action(nullptr)
+  ,outputKeyboardLog_Action(nullptr)
+  ,outputLog_Action(nullptr)
+  ,exit_Action(nullptr)
+  ,about_Action(nullptr)
+  ,checkUpdate_Action(nullptr)
 #if QTB_HELP_BROWSER
-  ,helpBrowser_Action(0)
+  ,helpBrowser_Action(nullptr)
 #endif // QTB_HELP_BROWSER
-  ,videoQuality_MINIMUM_Action(0)
-  ,videoQuality_LOW_Action(0)
-  ,videoQuality_STANDARD_Action(0)
-  ,videoQuality_HIGH_Action(0)
-  ,videoQuality_MAXIMUM_Action(0)
-  ,showMenuBar_Action(0)
+  ,videoQuality_MINIMUM_Action(nullptr)
+  ,videoQuality_LOW_Action(nullptr)
+  ,videoQuality_STANDARD_Action(nullptr)
+  ,videoQuality_HIGH_Action(nullptr)
+  ,videoQuality_MAXIMUM_Action(nullptr)
+  ,showMenuBar_Action(nullptr)
 #if QTB_TOOLBAR
-  ,showToolBar_Action(0)
+  ,showToolBar_Action(nullptr)
 #endif // QTB_TOOLBAR
-  ,showStatusBar_Action(0)
-  ,showFrameRate_Action(0)
-  ,fullScreen_Action(0)
-  ,staysOnTop_Action(0)
-  ,desktopScaleFixed_Action(0)
-  ,windowSizeFixed_Action(0)
-  ,desktopScalingDialog_Action(0)
-  ,desktopCapture_Action(0)
-  ,logViewDialog_Action(0)
+  ,showStatusBar_Action(nullptr)
+  ,showFrameRate_Action(nullptr)
+  ,fullScreen_Action(nullptr)
+  ,staysOnTop_Action(nullptr)
+  ,desktopScaleFixed_Action(nullptr)
+  ,windowSizeFixed_Action(nullptr)
+  ,desktopScalingDialog_Action(nullptr)
+  ,desktopCapture_Action(nullptr)
+  ,logViewDialog_Action(nullptr)
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-  ,showSoftwareKeyboard_Action(0)
-  ,showSoftwareButton_Action(0)
+  ,showSoftwareKeyboard_Action(nullptr)
+  ,showSoftwareButton_Action(nullptr)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-  ,selectFrameRateMinimum_Action(0)
-  ,selectFrameRate5_Action(0)
-  ,selectFrameRate10_Action(0)
-  ,selectFrameRate20_Action(0)
-  ,selectFrameRate30_Action(0)
-  ,selectFrameRate40_Action(0)
-  ,selectFrameRate50_Action(0)
-  ,selectFrameRate60_Action(0)
-  ,selectFrameRateMaximum_Action(0)
-  ,selectMonitorNo1_Action(0)
-  ,selectMonitorNo2_Action(0)
-  ,selectMonitorNo3_Action(0)
-  ,selectMonitorNo4_Action(0)
-  ,selectMonitorNo5_Action(0)
-  ,selectMonitorNo6_Action(0)
-  ,selectMonitorNo7_Action(0)
-  ,selectMonitorNo8_Action(0)
-  ,selectMonitorNo9_Action(0)
-  ,selectMonitorNoAll_Action(0)
-  ,soundQuality_MINIMUM_Action(0)
-  ,soundQuality_LOW_Action(0)
-  ,soundQuality_STANDARD_Action(0)
-  ,soundQuality_HIGH_Action(0)
-  ,soundQuality_MAXIMUM_Action(0)
-  ,soundCache_0_Action(0)
-  ,soundCache_1_Action(0)
-  ,soundCache_2_Action(0)
-  ,soundCache_3_Action(0)
-  ,soundCache_4_Action(0)
-  ,soundCache_5_Action(0)
-  ,onControl_Action(0)
-  ,onGraphics_Action(0)
-  ,onSound_Action(0)
-  ,selectPublicModeVersion5_Action(0)
-  ,selectPublicModeVersion6_Action(0)
-  ,selectPublicModeVersion7_Action(0)
+  ,selectFrameRateMinimum_Action(nullptr)
+  ,selectFrameRate5_Action(nullptr)
+  ,selectFrameRate10_Action(nullptr)
+  ,selectFrameRate20_Action(nullptr)
+  ,selectFrameRate30_Action(nullptr)
+  ,selectFrameRate40_Action(nullptr)
+  ,selectFrameRate50_Action(nullptr)
+  ,selectFrameRate60_Action(nullptr)
+  ,selectFrameRateMaximum_Action(nullptr)
+  ,selectMonitorNo1_Action(nullptr)
+  ,selectMonitorNo2_Action(nullptr)
+  ,selectMonitorNo3_Action(nullptr)
+  ,selectMonitorNo4_Action(nullptr)
+  ,selectMonitorNo5_Action(nullptr)
+  ,selectMonitorNo6_Action(nullptr)
+  ,selectMonitorNo7_Action(nullptr)
+  ,selectMonitorNo8_Action(nullptr)
+  ,selectMonitorNo9_Action(nullptr)
+  ,selectMonitorNoAll_Action(nullptr)
+  ,soundQuality_MINIMUM_Action(nullptr)
+  ,soundQuality_LOW_Action(nullptr)
+  ,soundQuality_STANDARD_Action(nullptr)
+  ,soundQuality_HIGH_Action(nullptr)
+  ,soundQuality_MAXIMUM_Action(nullptr)
+  ,soundCache_0_Action(nullptr)
+  ,soundCache_1_Action(nullptr)
+  ,soundCache_2_Action(nullptr)
+  ,soundCache_3_Action(nullptr)
+  ,soundCache_4_Action(nullptr)
+  ,soundCache_5_Action(nullptr)
+  ,onControl_Action(nullptr)
+  ,onGraphics_Action(nullptr)
+  ,onSound_Action(nullptr)
+  ,selectPublicModeVersion5_Action(nullptr)
+  ,selectPublicModeVersion6_Action(nullptr)
+  ,selectPublicModeVersion7_Action(nullptr)
 #if QTB_RECORDER
-  ,startRecordingControl_Action(0)
-  ,stopRecordingControl_Action(0)
-  ,startReplayRecordingControl_Action(0)
-  ,stopReplayRecordingControl_Action(0)
+  ,startRecordingControl_Action(nullptr)
+  ,stopRecordingControl_Action(nullptr)
+  ,startReplayRecordingControl_Action(nullptr)
+  ,stopReplayRecordingControl_Action(nullptr)
 #endif // QTB_RECORDER
 #if QTB_EXTRA_BUTTON_SUPPORT
-  ,onPluginsDisable_Action(0)
+  ,onPluginsDisable_Action(nullptr)
 #endif // QTB_EXTRA_BUTTON_SUPPORT
-  ,sendKey1_Action(0)
-  ,sendKey2_Action(0)
-  ,sendKey3_Action(0)
-  ,sendKey4_Action(0)
-  ,sendKey5_Action(0)
-  ,sendKey6_Action(0)
-  ,sendKey7_Action(0)
-  ,onScrollMode_Action(0)
-  ,onViewerMode_Action(0)
-  ,onFulFulMode_Action(0)
-  ,onMonochromeMode_Action(0)
-  ,onMouseTrackingMode_Action(0)
+  ,sendKey1_Action(nullptr)
+  ,sendKey2_Action(nullptr)
+  ,sendKey3_Action(nullptr)
+  ,sendKey4_Action(nullptr)
+  ,sendKey5_Action(nullptr)
+  ,sendKey6_Action(nullptr)
+  ,sendKey7_Action(nullptr)
+  ,onScrollMode_Action(nullptr)
+  ,onViewerMode_Action(nullptr)
+  ,onFulFulMode_Action(nullptr)
+  ,onMonochromeMode_Action(nullptr)
+  ,onMouseTrackingMode_Action(nullptr)
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,touchpanelOperationTypeKeroRemote_Action(0)
-  ,touchpanelOperationTypeQtBrynhildr_Action(0)
-  ,touchpanelInterfaceTypeLeftRight_Action(0)
-  ,touchpanelInterfaceTypeTopBottom_Action(0)
-  ,touchpanelInterfaceTypeBottom_LeftCenter_Action(0)
-  ,touchpanelInterfaceTypeTop_LeftCenter_Action(0)
+  ,touchpanelOperationTypeKeroRemote_Action(nullptr)
+  ,touchpanelOperationTypeQtBrynhildr_Action(nullptr)
+  ,touchpanelInterfaceTypeLeftRight_Action(nullptr)
+  ,touchpanelInterfaceTypeTopBottom_Action(nullptr)
+  ,touchpanelInterfaceTypeBottom_LeftCenter_Action(nullptr)
+  ,touchpanelInterfaceTypeTop_LeftCenter_Action(nullptr)
 #endif // defined(QTB_DEV_TOUCHPANEL)
-  ,sendClipboard_Action(0)
-  ,sendFile_Action(0)
-  ,cancelFileTransferring_Action(0)
+  ,sendClipboard_Action(nullptr)
+  ,sendFile_Action(nullptr)
+  ,cancelFileTransferring_Action(nullptr)
 #if QTB_DESKTOP_COMPRESS_MODE
-  ,desktopCompressMode0_Action(0)
-  ,desktopCompressMode2_Action(0)
-  ,desktopCompressMode4_Action(0)
-  ,desktopCompressMode8_Action(0)
+  ,desktopCompressMode0_Action(nullptr)
+  ,desktopCompressMode2_Action(nullptr)
+  ,desktopCompressMode4_Action(nullptr)
+  ,desktopCompressMode8_Action(nullptr)
 #endif // QTB_DESKTOP_COMPRESS_MODE
 #if defined(QTB_DEV_TOUCHPANEL)
    // decode option for touchpanel
-  ,decodeOptionTypeCPP_Action(0)
-  ,decodeOptionTypeNEON_Action(0)
-  ,decodeOptionThread1_Action(0)
-  ,decodeOptionThread2_Action(0)
-  ,decodeOptionThread4_Action(0)
+  ,decodeOptionTypeCPP_Action(nullptr)
+  ,decodeOptionTypeNEON_Action(nullptr)
+  ,decodeOptionThread1_Action(nullptr)
+  ,decodeOptionThread2_Action(nullptr)
+  ,decodeOptionThread4_Action(nullptr)
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #if QTB_PREFERENCE
-  ,preferences_Action(0)
+  ,preferences_Action(nullptr)
 #endif // QTB_PREFERENCE
-  ,disableDrawing_Action(0)
-  ,disableMaxfps_Action(0)
+  ,disableDrawing_Action(nullptr)
+  ,disableMaxfps_Action(nullptr)
 #if QTB_BENCHMARK
-  ,selectBenchmarkPhase0_Action(0)
-  ,selectBenchmarkPhase1_Action(0)
-  ,selectBenchmarkPhase2_Action(0)
-  ,selectBenchmarkPhase3_Action(0)
-  ,selectBenchmarkPhase4_Action(0)
+  ,selectBenchmarkPhase0_Action(nullptr)
+  ,selectBenchmarkPhase1_Action(nullptr)
+  ,selectBenchmarkPhase2_Action(nullptr)
+  ,selectBenchmarkPhase3_Action(nullptr)
+  ,selectBenchmarkPhase4_Action(nullptr)
 #endif // QTB_BENCHMARK
-  ,connectToServerDialog(0)
-  ,desktopScalingDialog(0)
-  ,logViewDialog(0)
+  ,connectToServerDialog(nullptr)
+  ,desktopScalingDialog(nullptr)
+  ,logViewDialog(nullptr)
 #if QTB_PREFERENCE
-  ,preferenceDialog(0)
+  ,preferenceDialog(nullptr)
 #endif // QTB_PREFERENCE
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
-  ,softwareKeyboard(0)
-  ,softwareButton(0)
+  ,softwareKeyboard(nullptr)
+  ,softwareButton(nullptr)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   ,totalFrameCounter(0)
   ,currentFrameRate(0)
@@ -252,25 +252,25 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,drawCounter(0)
 #endif // QTB_TEST_DRAW_FRAME
   ,option(option)
-  ,iniFileName(0)
-  ,settings(0)
+  ,iniFileName(nullptr)
+  ,settings(nullptr)
   ,writeSettingsAtExit(true)
 #if QTB_CRYPTOGRAM
-  ,cipher(0)
+  ,cipher(nullptr)
 #endif // QTB_CRYPTGRAM
 #if QTB_RECORDER
-  ,recorder(0)
+  ,recorder(nullptr)
 #endif // QTB_RECORDER
-  ,httpGetter(0)
+  ,httpGetter(nullptr)
   ,logMessage(new LogMessage(this))
-  ,controlThread(0)
-  ,graphicsThread(0)
-  ,soundThread(0)
+  ,controlThread(nullptr)
+  ,graphicsThread(nullptr)
+  ,soundThread(nullptr)
 #ifdef USE_KEYLAYOUTFILE
-  ,keyLayoutFileManager(0)
-  ,keyLayoutFileReader(0)
+  ,keyLayoutFileManager(nullptr)
+  ,keyLayoutFileReader(nullptr)
 #endif // USE_KEYLAYOUTFILE
-  ,eventConverter(0)
+  ,eventConverter(nullptr)
   ,clipboard(clipboard)
   ,fullScreenMode(false)
   ,onSetDesktopScalingFactorForFullScreen(false)
@@ -279,7 +279,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onShowToolBar(false)
 #endif // QTB_TOOLBAR
   ,onShowStatusBar(false)
-  ,progressBar(0)
+  ,progressBar(nullptr)
   ,heightOfTitleBar(0)
   ,heightOfMenuBar(0)
 #if QTB_TOOLBAR
@@ -293,10 +293,10 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,onGraphics(true)
   ,onSound(true)
   ,savedFrameRate(0)
-  ,keyBuffer(0)
+  ,keyBuffer(nullptr)
   ,onControlKey(false)
-  ,mouseBuffer(0)
-  ,timer(0)
+  ,mouseBuffer(nullptr)
+  ,timer(nullptr)
   ,isExecutingToConnect(false)
   ,onClearDesktop(false)
   ,hasSIMDInstruction(false)
@@ -327,7 +327,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 #endif // QTB_CRYPTOGRAM
 
   // set init file
-  if (option->getIniFileName() != 0){
+  if (option->getIniFileName() != nullptr){
 	iniFileName = option->getIniFileName();
   }
 
@@ -366,7 +366,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	writeSettingsAtExit = false;
 	settings->setPublicModeVersion(option->getPublicModeVersion());
   }
-  if (option->getServerName() != 0){
+  if (option->getServerName() != nullptr){
 	writeSettingsAtExit = false;
 	settings->setServerName(option->getServerName());
   }
@@ -374,15 +374,15 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	writeSettingsAtExit = false;
 	settings->setPortNo(option->getPortNo());
   }
-  if (option->getPassword() != 0){
+  if (option->getPassword() != nullptr){
 	writeSettingsAtExit = false;
 	settings->setPassword(option->getPassword());
   }
-  if (option->getHostType() != 0){
+  if (option->getHostType() != nullptr){
 	writeSettingsAtExit = false;
 	settings->setServerType(option->getHostType());
   }
-  if (option->getDebug() != 0){
+  if (option->getDebug() != nullptr){
 	writeSettingsAtExit = false;
 	if (strncmp(option->getDebug(), "on", sizeof("on")) == 0){
 	  settings->setOutputLog(true);
@@ -608,7 +608,8 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   createStatusBar();
   // show or hide
 #if defined(QTB_DEV_TOUCHPANEL)
-  // show status bar on touchpanel device
+  // show menu bar and status bar on touchpanel device
+  settings->setOnShowMenuBar(true);
   settings->setOnShowStatusBar(true);
 #endif // defined(QTB_DEV_TOUCHPANEL)
   menuBar()->setVisible(settings->getOnShowMenuBar());
@@ -1045,12 +1046,12 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 QtBrynhildr::~QtBrynhildr()
 {
   // shutdown timer for main thread
-  if (timer != 0){
+  if (timer != nullptr){
 	timer->stop();
 	delete timer;
-	timer = 0;
+	timer = nullptr;
   }
-  if (settings != 0){
+  if (settings != nullptr){
 	// disconnect to server
 	if (settings->getConnected())
 	  disconnectToServer();
@@ -1060,135 +1061,135 @@ QtBrynhildr::~QtBrynhildr()
   }
 
   // stop & delete threads
-  if (controlThread != 0){
+  if (controlThread != nullptr){
 	// delete
 	delete controlThread;
-	controlThread = 0;
+	controlThread = nullptr;
   }
-  if (graphicsThread != 0){
+  if (graphicsThread != nullptr){
 	// delete
 	delete graphicsThread;
-	graphicsThread = 0;
+	graphicsThread = nullptr;
   }
-  if (soundThread != 0){
+  if (soundThread != nullptr){
 	// delete
 	delete soundThread;
-	soundThread = 0;
+	soundThread = nullptr;
   }
 
   // Event Converter
-  if (eventConverter != 0){
+  if (eventConverter != nullptr){
 	delete eventConverter;
-	eventConverter = 0;
+	eventConverter = nullptr;
   }
 
 #ifdef USE_KEYLAYOUTFILE
   // Key Layout File Reader
-  if (keyLayoutFileReader != 0){
+  if (keyLayoutFileReader != nullptr){
 	delete keyLayoutFileReader;
-	keyLayoutFileReader = 0;
+	keyLayoutFileReader = nullptr;
   }
 
   // Key Layout File Manager
-  if (keyLayoutFileManager != 0){
+  if (keyLayoutFileManager != nullptr){
 	delete keyLayoutFileManager;
-	keyLayoutFileManager = 0;
+	keyLayoutFileManager = nullptr;
   }
 #endif // USE_KEYLAYOUTFILE
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // Software Button and Keyboard
   // keyboard
-  if (softwareKeyboard != 0){
+  if (softwareKeyboard != nullptr){
 	delete softwareKeyboard;
-	softwareKeyboard = 0;
+	softwareKeyboard = nullptr;
   }
 
   // button
-  if (softwareButton != 0){
+  if (softwareButton != nullptr){
 	delete softwareButton;
-	softwareButton = 0;
+	softwareButton = nullptr;
   }
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 #if QTB_CRYPTOGRAM
   // delete cipher
-  if (cipher != 0){
+  if (cipher != nullptr){
 	delete cipher;
-	cipher = 0;
+	cipher = nullptr;
   }
 #endif
 
   // http getter
-  if (httpGetter != 0){
+  if (httpGetter != nullptr){
 	delete httpGetter;
-	httpGetter = 0;
+	httpGetter = nullptr;
   }
 
 #if QTB_RECORDER
   // delete recorder
-  if (recorder != 0){
+  if (recorder != nullptr){
 	delete recorder;
-	recorder = 0;
+	recorder = nullptr;
   }
 #endif // QTB_RECORDER
 
   // dialogs
-  if (connectToServerDialog != 0){
+  if (connectToServerDialog != nullptr){
 	// disconnect
 	disconnect(connectToServerDialog, SIGNAL(connectToServer()), this, SLOT(connectToServer()));
 	delete connectToServerDialog;
-	connectToServerDialog = 0;
+	connectToServerDialog = nullptr;
   }
-  if (desktopScalingDialog != 0){
+  if (desktopScalingDialog != nullptr){
 	delete desktopScalingDialog;
-	desktopScalingDialog = 0;
+	desktopScalingDialog = nullptr;
   }
-  if (logViewDialog != 0){
+  if (logViewDialog != nullptr){
 	delete logViewDialog;
-	logViewDialog = 0;
+	logViewDialog = nullptr;
   }
 #if QTB_PREFERENCE
-  if (preferenceDialog != 0){
+  if (preferenceDialog != nullptr){
 	delete preferenceDialog;
-	preferenceDialog = 0;
+	preferenceDialog = nullptr;
   }
 #endif // QTB_PREFERENCE
 
   // progress bar
-  if (progressBar != 0){
+  if (progressBar != nullptr){
 	delete progressBar;
-	progressBar = 0;
+	progressBar = nullptr;
   }
 
 #if defined(QTB_DEV_TOUCHPANEL)
 
   // desktop frame
-  if (desktopFrame != 0){
+  if (desktopFrame != nullptr){
 	delete desktopFrame;
-	desktopFrame = 0;
+	desktopFrame = nullptr;
   }
 
 #else // !defined(QTB_DEV_TOUCHPANEL)
 
   // desktop window widget
-  if (desktopWindowWidget != 0){
+  if (desktopWindowWidget != nullptr){
 	delete desktopWindowWidget;
-	desktopWindowWidget = 0;
+	desktopWindowWidget = nullptr;
 	desktopFrame = 0;
   }
   // scroll area
-  if (desktopWindow != 0){
+  if (desktopWindow != nullptr){
 	delete desktopWindow;
-	desktopWindow = 0;
+	desktopWindow = nullptr;
   }
 
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // settings
-  if (settings != 0){
+  if (settings != nullptr){
 	delete settings;
-	settings = 0;
+	settings = nullptr;
   }
 
   // shutdown platform
@@ -1249,7 +1250,7 @@ int QtBrynhildr::getHeightOfMenuBar()
 // get height of tool bar
 int QtBrynhildr::getHeightOfToolBar()
 {
-  if (toolBar == 0)
+  if (toolBar == nullptr)
 	return 0;
 
   if (settings->getOnShowToolBar() &&
@@ -1265,7 +1266,7 @@ int QtBrynhildr::getHeightOfToolBar()
 // get width of tool bar
 int QtBrynhildr::getWidthOfToolBar()
 {
-  if (toolBar == 0)
+  if (toolBar == nullptr)
 	return 0;
 
   if (settings->getOnShowToolBar() &&
@@ -1601,7 +1602,7 @@ void QtBrynhildr::setClipboard(QString clipboardString)
   }
 
   // check clipboard
-  if (clipboard == 0){
+  if (clipboard == nullptr){
 	// Nothing to do
 	return;
   }
@@ -2885,7 +2886,7 @@ void QtBrynhildr::updateStatusBar()
 void QtBrynhildr::updateConnected()
 {
   // check
-  if (connectionLabel == 0){
+  if (connectionLabel == nullptr){
 	// Nothing to do
 	return;
   }
@@ -3017,7 +3018,7 @@ void QtBrynhildr::updateConnected()
 void QtBrynhildr::updateFrameRate()
 {
   // check
-  if (frameRateLabel == 0){
+  if (frameRateLabel == nullptr){
 	// Nothing to do
 	return;
   }
@@ -3040,7 +3041,7 @@ void QtBrynhildr::updateFrameRate()
 	  frameRateLabel->clear();
 	}
 	if (settings->getOnShowSoftwareButton()){ // Software Button
-	  if (softwareButton != 0){
+	  if (softwareButton != nullptr){
 		softwareButton->setCurrentFrameRate(currentFrameRate);
 		softwareButton->setCurrentDataRate(currentDataRate);
 	  }
@@ -3061,7 +3062,7 @@ void QtBrynhildr::updateFrameRate()
 	// total data counter
 	if (settings->getDisplayDataCounterType() != QTB_DISPLAYDATACOUNTERTYPE_NONE){
 	  qreal trd = 0.0;
-	  if (controlThread != 0){
+	  if (controlThread != nullptr){
 		switch(settings->getDisplayDataCounterType()){
 		case QTB_DISPLAYDATACOUNTERTYPE_TOTAL:
 		  trd += controlThread->getTotalReceivedDataCounter();
@@ -3115,17 +3116,17 @@ void QtBrynhildr::connected()
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 #if defined(Q_OS_WIN)
   if (settings->getKeyboardType() != KEYBOARD_TYPE_NATIVE){
-	if (showSoftwareKeyboard_Action != 0)
+	if (showSoftwareKeyboard_Action != nullptr)
 	  showSoftwareKeyboard_Action->setEnabled(true);
 
-	if (showSoftwareButton_Action != 0)
+	if (showSoftwareButton_Action != nullptr)
 	  showSoftwareButton_Action->setEnabled(true);
   }
 #else // !defined(Q_OS_WIN)
-  if (showSoftwareKeyboard_Action != 0)
+  if (showSoftwareKeyboard_Action != nullptr)
 	showSoftwareKeyboard_Action->setEnabled(true);
 
-  if (showSoftwareButton_Action != 0)
+  if (showSoftwareButton_Action != nullptr)
 	showSoftwareButton_Action->setEnabled(true);
 #endif // !defined(Q_OS_WIN)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
@@ -3134,19 +3135,19 @@ void QtBrynhildr::connected()
   disconnectToServer_Action->setEnabled(true);
 
   // enabled send key
-  if (sendKey1_Action != 0)
+  if (sendKey1_Action != nullptr)
     sendKey1_Action->setEnabled(true);
-  if (sendKey2_Action != 0)
+  if (sendKey2_Action != nullptr)
     sendKey2_Action->setEnabled(true);
-  if (sendKey3_Action != 0)
+  if (sendKey3_Action != nullptr)
     sendKey3_Action->setEnabled(true);
-  if (sendKey4_Action != 0)
+  if (sendKey4_Action != nullptr)
     sendKey4_Action->setEnabled(true);
-  if (sendKey5_Action != 0)
+  if (sendKey5_Action != nullptr)
     sendKey5_Action->setEnabled(true);
-  if (sendKey6_Action != 0)
+  if (sendKey6_Action != nullptr)
     sendKey6_Action->setEnabled(true);
-  if (sendKey7_Action != 0)
+  if (sendKey7_Action != nullptr)
     sendKey7_Action->setEnabled(true);
 
   // enabled scaling dialog
@@ -3286,10 +3287,10 @@ void QtBrynhildr::disconnected()
 {
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
   // disabled software keyboard/button
-  if (showSoftwareKeyboard_Action != 0)
+  if (showSoftwareKeyboard_Action != nullptr)
 	showSoftwareKeyboard_Action->setEnabled(false);
 
-  if (showSoftwareButton_Action != 0)
+  if (showSoftwareButton_Action != nullptr)
 	  showSoftwareButton_Action->setEnabled(false);
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
@@ -3297,19 +3298,19 @@ void QtBrynhildr::disconnected()
   disconnectToServer_Action->setEnabled(false);
 
   // disabled send key
-  if (sendKey1_Action != 0)
+  if (sendKey1_Action != nullptr)
     sendKey1_Action->setEnabled(false);
-  if (sendKey2_Action != 0)
+  if (sendKey2_Action != nullptr)
     sendKey2_Action->setEnabled(false);
-  if (sendKey3_Action != 0)
+  if (sendKey3_Action != nullptr)
     sendKey3_Action->setEnabled(false);
-  if (sendKey4_Action != 0)
+  if (sendKey4_Action != nullptr)
     sendKey4_Action->setEnabled(false);
-  if (sendKey5_Action != 0)
+  if (sendKey5_Action != nullptr)
     sendKey5_Action->setEnabled(false);
-  if (sendKey6_Action != 0)
+  if (sendKey6_Action != nullptr)
     sendKey6_Action->setEnabled(false);
-  if (sendKey7_Action != 0)
+  if (sendKey7_Action != nullptr)
     sendKey7_Action->setEnabled(false);
 
   // disabled scaling dialog
@@ -4039,7 +4040,7 @@ void QtBrynhildr::exit()
 #endif // QT_VERSION >= 0x060000
 
   // quit
-  qApp->quit();
+  qApp->exit(0);
 }
 
 // send clipboard
@@ -4059,7 +4060,7 @@ void QtBrynhildr::sendClipboard()
   }
 
   // check clipboard
-  if (clipboard == 0){
+  if (clipboard == nullptr){
 	// Nothing to do
 	return;
   }
@@ -4164,7 +4165,7 @@ void QtBrynhildr::initializeSettings()
   }
 
   // remove settings
-  if (settings != 0)
+  if (settings != nullptr)
 	delete settings;
 
   // create setting
@@ -5739,7 +5740,7 @@ void QtBrynhildr::disableMaxfps()
 // select phase for benchmark
 void QtBrynhildr::selectBenchmarkPhase(int initialBenchmarkPhaseCounter)
 {
-  if (graphicsThread != 0){
+  if (graphicsThread != nullptr){
 	this->initialBenchmarkPhaseCounter = initialBenchmarkPhaseCounter;
 	graphicsThread->setInitialBenchmarkPhaseCounter(initialBenchmarkPhaseCounter);
 	refreshBenchmarkMenuCheck();

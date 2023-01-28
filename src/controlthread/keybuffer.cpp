@@ -31,9 +31,9 @@ KeyBuffer::KeyBuffer(int size)
 // destructor
 KeyBuffer::~KeyBuffer()
 {
-  if (buffer != 0){
+  if (buffer != nullptr){
 	delete [] buffer;
-	buffer = 0;
+	buffer = nullptr;
   }
 }
 
@@ -79,7 +79,7 @@ int KeyBuffer::put(uchar keycode, KEYCODE_FLG keycode_flg)
 // get data from ring buffer
 KeyInfo *KeyBuffer::get()
 {
-  KeyInfo *ret = 0;
+  KeyInfo *ret = nullptr;
   if (enabled && size() != 0){
 	ret = &buffer[topPos];
 	topPos++;

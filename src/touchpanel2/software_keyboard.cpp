@@ -36,12 +36,12 @@ SoftwareKeyboard::SoftwareKeyboard(QWidget *parent)
 // constructor
 SoftwareKeyboard::SoftwareKeyboard(SoftwareKeyboard::KEYTOP_TYPE type, QWidget *parent)
   :QWidget(parent)
-  ,keyTopTable(0)
+  ,keyTopTable(nullptr)
 #if 0 // for TEST
-  ,tempKeyTopTable(0)
+  ,tempKeyTopTable(nullptr)
 #endif // for TEST
 #ifdef USE_KEYLAYOUTFILE
-  ,klf(0)
+  ,klf(nullptr)
 #endif // USE_KEYLAYOUTFILE
   ,type(KEYTOP_TYPE_UNKNOWN)
   ,onButton(false)
@@ -110,9 +110,9 @@ SoftwareKeyboard::~SoftwareKeyboard()
   // delete objects
 #if 0 // for TEST
   // temporary key top table
-  if (tempKeyTopTable != 0){
+  if (tempKeyTopTable != nullptr){
 	delete [] tempKeyTopTable;
-	tempKeyTopTable = 0;
+	tempKeyTopTable = nullptr;
   }
 #endif // for TEST
 }

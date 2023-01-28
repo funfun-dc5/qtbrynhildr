@@ -33,9 +33,9 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 											 QWidget *parent)
   :QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
   ,settings(settings)
-  ,serverNameList(0)
+  ,serverNameList(nullptr)
 #if QTB_AUTO_COMPLETE
-  ,completer(0)
+  ,completer(nullptr)
 #endif // QTB_AUTO_COMPLETE
 #if defined(QTB_DEV_TOUCHPANEL)
   ,serverNameListIndex(0)
@@ -115,9 +115,9 @@ ConnectToServerDialog::~ConnectToServerDialog()
 {
   // delete objects
 #if QTB_AUTO_COMPLETE
-  if (completer != 0){
+  if (completer != nullptr){
 	delete completer;
-	completer = 0;
+	completer = nullptr;
   }
 #endif // QTB_AUTO_COMPLETE
 }

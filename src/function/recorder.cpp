@@ -48,9 +48,9 @@ Recorder::Recorder(Settings *settings)
 Recorder::~Recorder()
 {
   // delete objects
-  if (header != 0){
+  if (header != nullptr){
 	delete header;
-	header = 0;
+	header = nullptr;
   }
 }
 

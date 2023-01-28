@@ -26,7 +26,7 @@ PreferenceDialog::PreferenceDialog(Settings *settings,
 								   QWidget *parent)
   :QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint)
   ,settings(settings)
-  ,applyButton(0)
+  ,applyButton(nullptr)
   ,changed(false)
   ,resultOfSetToSettings(false)
   // for DEBUG

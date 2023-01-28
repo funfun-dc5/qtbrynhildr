@@ -110,6 +110,7 @@ private:
   // create .wav file
   void createWavFile(int dataSize);
 
+#if 0 // for TEST
   // sound data check
   inline bool hasSoundData(char *buf, long len)
   {
@@ -118,6 +119,7 @@ private:
 	}
 	return false;
   }
+#endif // 0 // for TEST
 
 private slots:
   // stateCanged

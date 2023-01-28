@@ -43,10 +43,10 @@ namespace qtbrynhildr {
 DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
   :qtbrynhildr(qtbrynhildr)
   ,settings(qtbrynhildr->getSettings())
-  ,eventConverter(0)
+  ,eventConverter(nullptr)
   ,onShiftKey(false)
-  ,keyBuffer(0)
-  ,mouseBuffer(0)
+  ,keyBuffer(nullptr)
+  ,mouseBuffer(nullptr)
   ,onFullScreen(false)
   ,drawMarkerCounter(0)
   ,previous_KEYCODE_FLG(KEYCODE_FLG_KEYUP)
@@ -68,13 +68,13 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr)
 DesktopPanel::~DesktopPanel()
 {
   // delete objects
-  if (keyBuffer != 0){
+  if (keyBuffer != nullptr){
 	delete keyBuffer;
-	keyBuffer = 0;
+	keyBuffer = nullptr;
   }
-  if (mouseBuffer != 0){
+  if (mouseBuffer != nullptr){
 	delete mouseBuffer;
-	mouseBuffer = 0;
+	mouseBuffer = nullptr;
   }
 }
 
@@ -247,7 +247,7 @@ void DesktopPanel::setOnFullScreen(bool onFullScreen)
 // check focus
 bool DesktopPanel::hasFocus() const
 {
-  if (qtbrynhildr != 0){
+  if (qtbrynhildr != nullptr){
 	return qtbrynhildr->hasFocus();
   }
   else {
@@ -626,7 +626,7 @@ void DesktopPanel::moveMouseCursor(QMouseEvent *event, bool marker)
 void DesktopPanel::keyPressEvent(QKeyEvent *event)
 {
   // check event converter
-  if (eventConverter == 0){
+  if (eventConverter == nullptr){
 	// Nothing to do
 	return;
   }
@@ -717,7 +717,7 @@ void DesktopPanel::keyPressEvent(QKeyEvent *event)
 void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 {
   // check event converter
-  if (eventConverter == 0){
+  if (eventConverter == nullptr){
 	// Nothing to do
 	return;
   }

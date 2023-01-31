@@ -2491,7 +2491,9 @@ void QtBrynhildr::createMenus()
 #endif // defined(QTB_DEV_DESKTOP)
 
   // display menu
+#if defined(QTB_DEV_DESKTOP)
   displayMenu = menuBar()->addMenu(tr("Display"));
+#endif // defined(QTB_DEV_DESKTOP)
 #if 0 // disable now
   displayMenu->addAction(showMenuBar_Action);
 #endif // disable now
@@ -2509,9 +2511,9 @@ void QtBrynhildr::createMenus()
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 #if defined(QTB_DEV_DESKTOP)
   displayMenu->addSeparator();
-#endif // defined(QTB_DEV_DESKTOP)
   displayMenu->addAction(showSoftwareButton_Action);
   displayMenu->addAction(showSoftwareKeyboard_Action);
+#endif // defined(QTB_DEV_DESKTOP)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
   // desktop scale fixed

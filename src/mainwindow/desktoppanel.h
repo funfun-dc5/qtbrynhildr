@@ -97,6 +97,18 @@ public:
   // update desktop
   void updateDesktop();
 
+  // clear desktop
+  void clearDesktop();
+
+  // get size
+  QSize getSize() const;
+
+  // get window size
+  QSize getWindowSize() const;
+
+  // set full screen flag
+  void setOnFullScreen(bool onFullScreen);
+
   // get desktop panel widget
   DesktopPanelWidget *getDesktopPanelWidget() const
   {

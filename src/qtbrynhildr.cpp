@@ -3827,8 +3827,8 @@ void QtBrynhildr::connectToServer()
 
 #if defined(QTB_DEV_TOUCHPANEL)
   // set touchpanel interface
-  graphicsView->setSoftwareButtonRect(touchpanelInterfaceType[settings->getTouchpanelInterfaceType()].softwareButtonRect);
-  graphicsView->setSoftwareKeyboardRect(touchpanelInterfaceType[settings->getTouchpanelInterfaceType()].softwareKeyboardRect);
+  desktopPanel->setSoftwareButtonRect(touchpanelInterfaceType[settings->getTouchpanelInterfaceType()].softwareButtonRect);
+  desktopPanel->setSoftwareKeyboardRect(touchpanelInterfaceType[settings->getTouchpanelInterfaceType()].softwareKeyboardRect);
 #endif // defined(QTB_DEV_TOUCHPANEL)
 #endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 

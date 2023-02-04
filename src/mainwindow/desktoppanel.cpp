@@ -106,44 +106,25 @@ void DesktopPanel::mouseMoveEventForSP(QMouseEvent *event)
 // clear desktop window
 void DesktopPanel::clearDesktop()
 {
-  //  std::cout << "clearDesktop()" << std::endl << std::flush;
-  if (!image.isNull()){
-	image.fill(QTB_DESKTOP_BACKGROUND_COLOR);
-	updateDesktop();
-  }
+  desktopPanelWidget->clearDesktop();
 }
 
 // get size
 QSize DesktopPanel::getSize() const
 {
-  return currentSize;
+  return desktopPanelWidget->getSize();
 }
 
 // get window size
 QSize DesktopPanel::getWindowSize() const
 {
-  QSize windowSize = qtbrynhildr->size();
-  QSize diffSize =
-	QSize(widthMargin,
-		  qtbrynhildr->getHeightOfMenuBar()
-		  + qtbrynhildr->getHeightOfStatusBar()
-		  + heightMargin);
-#if QTB_TOOLBAR
-  diffSize += QSize(qtbrynhildr->getWidthOfToolBar(),
-					qtbrynhildr->getHeightOfToolBar());
-#endif // QTB_TOOLBAR
-
-  windowSize -= diffSize;
-
-  return windowSize;
+  return desktopPanelWidget->getWindowSize();
 }
 
 // set full screen flag
 void DesktopPanel::setOnFullScreen(bool onFullScreen)
 {
-  if (QTB_DESKTOP_FULL_SCREEN){
-	this->onFullScreen = onFullScreen;
-  }
+  return desktopPanelWidget->setOnFullScreen(onFullScreen);
 }
 
 #if 0 // for TEST
@@ -160,7 +141,6 @@ bool DesktopPanel::hasFocus() const
 #endif // 0 // for TEST
 
 #if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
->>>>>>> master
 // mouse move
 void DesktopPanel::mouseMove(QPoint mousePos, bool marker)
 {
@@ -173,6 +153,7 @@ void DesktopPanel::mouseMoveRelatively(QPoint mousePos, bool marker)
   mousePos /= scalingFactor;
   desktopPanelWidget->mouseMoveRelatively(mousePos, marker);
 }
+#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
 // size hint
 QSize DesktopPanel::sizeHint() const

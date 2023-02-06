@@ -93,13 +93,8 @@ void DesktopWindowWidget::paintEvent(QPaintEvent *event)
   // draw marker for mouse cursor
   if (drawMarkerCounter > 0){
 	int length = drawMarkerCounter*10;
-#if 1 // for TEST
 	int x = currentMousePos.x() - length/2;
 	int y = currentMousePos.y() - length/2;
-#else // 0 // for TEST
-	int x = currentPos.x() - length/2;
-	int y = currentPos.y() - length/2;
-#endif // 0 // for TEST
 
 	painter.setRenderHint(QPainter::Antialiasing, false);
 	painter.setPen(QPen(Qt::green, 4));

@@ -93,8 +93,13 @@ void DesktopWindowWidget::paintEvent(QPaintEvent *event)
   // draw marker for mouse cursor
   if (drawMarkerCounter > 0){
 	int length = drawMarkerCounter*10;
+#if 1 // for TEST
 	int x = currentMousePos.x() - length/2;
 	int y = currentMousePos.y() - length/2;
+#else // 0 // for TEST
+	int x = currentPos.x() - length/2;
+	int y = currentPos.y() - length/2;
+#endif // 0 // for TEST
 
 	painter.setRenderHint(QPainter::Antialiasing, false);
 	painter.setPen(QPen(Qt::green, 4));
@@ -194,7 +199,11 @@ void DesktopWindowWidget::leaveEvent(QEvent *event)
   Q_UNUSED(event);
 
   if (settings->getOnClipCursor()){
+#if 1 // for TEST
 	QCursor::setPos(mapToGlobal(currentMousePos));
+#else // 0 // for TEST
+	QCursor::setPos(currentMousePos);
+#endif // 0 // for TEST
   }
 }
 
@@ -259,6 +268,7 @@ void DesktopWindowWidget::mouseDoubleClickEvent(QMouseEvent *event)
 }
 void DesktopWindowWidget::mouseMoveEvent(QMouseEvent *event)
 {
+#if 1 // for TEST
   if (settings->getOnViewerMode()){
 	//qDebug() << "pos = " << event->pos();
 	currentPos = event->pos();
@@ -268,6 +278,16 @@ void DesktopWindowWidget::mouseMoveEvent(QMouseEvent *event)
 	currentPos.setY(y);
 	return;
   }
+#else 0 // for TEST
+	currentPos = event->pos();
+	int x = currentPos.x() & ~0x4;
+	int y = currentPos.y() & ~0x2;
+	currentPos.setX(x);
+	currentPos.setY(y);
+	if (settings->getOnViewerMode()){
+	  return;
+	}
+#endif 0 // for TEST
   DesktopFrame::mouseMoveEvent(event);
 }
 void DesktopWindowWidget::wheelEvent(QWheelEvent *event)

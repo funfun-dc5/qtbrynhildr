@@ -52,7 +52,7 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   // key buffer
   keyBuffer = desktopPanelWidget->getKeyBuffer();
 
-  setScale(0.33); // for TEST
+  setScale(0.66); // for TEST
 }
 
 // destructor
@@ -402,6 +402,9 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 #if 0 // Yet
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 	  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
+#else //0 // Yet
+	  settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x());
+	  settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y());
 #endif //0 // Yet
 	}
 	else {
@@ -600,6 +603,9 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 #if 0 // Yet
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 	  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
+#else //0 // Yet
+	  settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x());
+	  settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y());
 #endif //0 // Yet
 	}
 	else {
@@ -916,7 +922,24 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 // convert to desktop
 bool DesktopPanel::convertToDesktop(QPoint &point)
 {
-  // Yet
+#if 1 // for TEST
+  return true;
+#else // for TEST
+  QSize size = getSize();
+  QRect rect(0,0,size.width(),size.height());
+  qreal sfz = settings->getDesktopScalingFactorForZoom();
+  int xPos = point.x() * sfz + settings->getDesktopOffsetX();
+  int yPos = point.y() * sfz + settings->getDesktopOffsetY();
+  point.setX(xPos);
+  point.setY(yPos);
+
+  if (rect.contains(point)){
+	return true;
+  }
+  else {
+	return false;
+  }
+#endif // 0 // for TEST
 }
 
 } // end of namespace qtbrynhildr

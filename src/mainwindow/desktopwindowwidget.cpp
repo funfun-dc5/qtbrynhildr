@@ -194,11 +194,7 @@ void DesktopWindowWidget::leaveEvent(QEvent *event)
   Q_UNUSED(event);
 
   if (settings->getOnClipCursor()){
-#if 1 // for TEST
 	QCursor::setPos(mapToGlobal(currentMousePos));
-#else // 0 // for TEST
-	QCursor::setPos(currentMousePos);
-#endif // 0 // for TEST
   }
 }
 
@@ -263,7 +259,6 @@ void DesktopWindowWidget::mouseDoubleClickEvent(QMouseEvent *event)
 }
 void DesktopWindowWidget::mouseMoveEvent(QMouseEvent *event)
 {
-#if 1 // for TEST
   if (settings->getOnViewerMode()){
 	//qDebug() << "pos = " << event->pos();
 	currentPos = event->pos();
@@ -273,16 +268,6 @@ void DesktopWindowWidget::mouseMoveEvent(QMouseEvent *event)
 	currentPos.setY(y);
 	return;
   }
-#else 0 // for TEST
-	currentPos = event->pos();
-	int x = currentPos.x() & ~0x4;
-	int y = currentPos.y() & ~0x2;
-	currentPos.setX(x);
-	currentPos.setY(y);
-	if (settings->getOnViewerMode()){
-	  return;
-	}
-#endif 0 // for TEST
   DesktopFrame::mouseMoveEvent(event);
 }
 void DesktopWindowWidget::wheelEvent(QWheelEvent *event)

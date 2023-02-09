@@ -580,6 +580,7 @@ void GraphicsThread::rescaleDesktopImage(QImage *image)
 // rescale image for touchpanel
 void GraphicsThread::rescaleDesktopImage(QImage *image)
 {
+#if 1 // for TEST
   qreal sfz = settings->getDesktopScalingFactorForZoom();
   if (sfz >= 1.0){
 	// original size
@@ -588,6 +589,13 @@ void GraphicsThread::rescaleDesktopImage(QImage *image)
 	// fit to screen
 	*image = image->scaledToWidth(settings->getDesktopWidth()); // for TEST
   }
+#else // 0 // for TEST
+  qreal sf = settings->getDesktopScalingFactor();
+  if (sf > 1.0){
+	*image = image->scaled(settings->getDesktopWidth()*sf,
+						   settings->getDesktopHeight()*sf); // for TEST
+  }
+#endif // 0 // for TEST
 }
 #endif // defined(QTB_DEV_TOUCHPANEL)
 

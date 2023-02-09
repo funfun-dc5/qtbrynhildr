@@ -650,8 +650,13 @@ void ControlThread::initHeaderForGraphics()
 	com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
   }
   else {
+#if 1 // for TEST
 	com_data->image_cx = settings->getCurrentScreenWidth() * sfz;
 	com_data->image_cy = settings->getCurrentScreenHeight() * sfz;
+#else // 1 // for TEST
+	com_data->image_cx = settings->getCurrentScreenWidth();
+	com_data->image_cy = settings->getCurrentScreenHeight();
+#endif // 1 // for TEST
   }
 #endif // 0 // for TEST
 

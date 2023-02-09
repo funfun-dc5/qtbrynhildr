@@ -922,9 +922,7 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 // convert to desktop
 bool DesktopPanel::convertToDesktop(QPoint &point)
 {
-#if 1 // for TEST
-  return true;
-#else // for TEST
+  QPoint orgPoint = point;
   QSize size = getSize();
   QRect rect(0,0,size.width(),size.height());
   qreal sfz = settings->getDesktopScalingFactorForZoom();
@@ -934,12 +932,12 @@ bool DesktopPanel::convertToDesktop(QPoint &point)
   point.setY(yPos);
 
   if (rect.contains(point)){
+	desktopPanelWidget->setCurrentPos(orgPoint);
 	return true;
   }
   else {
 	return false;
   }
-#endif // 0 // for TEST
 }
 
 } // end of namespace qtbrynhildr

@@ -11,6 +11,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QPoint>
 #include <QSize>
 #include <QWidget>
 
@@ -30,6 +31,9 @@ class DesktopPanelWidget : public QWidget, public DesktopFrame
   // Variable
   //-------------------------------------------------------------------------------
 private:
+  // current pos
+  QPoint currentPos;
+
   // output log flag
   bool outputLog;
 
@@ -64,6 +68,12 @@ public:
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
+
+  // set current pos
+  void setCurrentPos(QPoint point)
+  {
+	currentPos = point;
+  }
 
 protected:
   // for event handling

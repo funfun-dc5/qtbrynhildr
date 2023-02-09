@@ -745,24 +745,14 @@ bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 	  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
 	if (currentScalingFactor < 1.0){
-	  if (scalingFactor > 1.0){
-		scalingFactor -= 0.002;
-	  }
-	  else {
-		scalingFactor -= 0.02;
-	  }
+	  scalingFactor -= 0.002;
 	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
 	  if (scalingFactor < scalingFactorForFullScreen){
 		scalingFactor = scalingFactorForFullScreen;
 	  }
 	}
 	else {
-	  if (scalingFactor > 1.0){
-		scalingFactor += 0.002;
-	  }
-	  else {
-		scalingFactor += 0.02;
-	  }
+	  scalingFactor += 0.002;
 #if 0 // QTB_TEST
 	  if (scalingFactor > 1.0) scalingFactor = 1.0;
 #endif // QTB_TEST
@@ -872,24 +862,14 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 	  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
 	if (currentScalingFactor < 1.0){
-	  if (scalingFactor > 1.0){
-		scalingFactor -= 0.002;
-	  }
-	  else {
-		scalingFactor -= 0.02;
-	  }
+	  scalingFactor -= 0.002;
 	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
 	  if (scalingFactor < scalingFactorForFullScreen){
 		scalingFactor = scalingFactorForFullScreen;
 	  }
 	}
 	else {
-	  if (scalingFactor > 1.0){
-		scalingFactor += 0.002;
-	  }
-	  else {
-		scalingFactor += 0.02;
-	  }
+	  scalingFactor += 0.002;
 #if 0 // QTB_TEST
 	  if (scalingFactor > 1.0) scalingFactor = 1.0;
 #endif // QTB_TEST

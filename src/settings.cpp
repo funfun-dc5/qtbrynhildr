@@ -488,6 +488,7 @@ void Settings::readSettings()
   setOnMouseTrackingMode(settings->value(QTB_ONMOUSETRACKINGMODE,
 										 QTB_ONMOUSETRACKINGMODE_DEFAULT).toBool());
 
+#if 0 // for TEST
   // load desktopOffsetX
   setDesktopOffsetX(settings->value(QTB_DESKTOPOFFSETX,
 							   (qint32)QTB_DESKTOPOFFSETX_DEFAULT).toInt());
@@ -495,6 +496,7 @@ void Settings::readSettings()
   // load desktopOffsetY
   setDesktopOffsetY(settings->value(QTB_DESKTOPOFFSETY,
 							   (qint32)QTB_DESKTOPOFFSETY_DEFAULT).toInt());
+#endif // 0 // for TEST
 
   // load monitorNo
   setMonitorNo(settings->value(QTB_MONITOR_NO,
@@ -814,11 +816,13 @@ void Settings::writeSettings()
   // save onMouseTrackingMode
   settings->setValue(QTB_ONMOUSETRACKINGMODE, onMouseTrackingMode);
 
+#if 0 // for TEST
   // save desktop offset X
   settings->setValue(QTB_DESKTOPOFFSETX, (qint32)desktopOffsetX);
 
   // save desktop offset Y
   settings->setValue(QTB_DESKTOPOFFSETY, (qint32)desktopOffsetY);
+#endif // 0 // for TEST
 
   // save monitor no
   settings->setValue(QTB_MONITOR_NO, (qint32)monitorNo);

@@ -450,10 +450,8 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 		// save desktop image size
 		settings->setDesktopImageSize(image->size());
 
-#if !defined(QTB_DEV_TOUCHPANEL)
 		// rescale image
 		rescaleDesktopImage(image);
-#endif // !defined(QTB_DEV_TOUCHPANEL)
 
 #if QTB_BENCHMARK
 		// check benchmark phase counter
@@ -473,7 +471,8 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
   }
 }
 
-// rescale image
+#if defined(QTB_DEV_DESKTOP)
+// rescale image for desktop
 void GraphicsThread::rescaleDesktopImage(QImage *image)
 {
   // cut blank area
@@ -577,6 +576,20 @@ void GraphicsThread::rescaleDesktopImage(QImage *image)
 	previousSize = currentSize;
   }
 }
+#elif defined(QTB_DEV_TOUCHPANEL)
+// rescale image for touchpanel
+void GraphicsThread::rescaleDesktopImage(QImage *image)
+{
+  qreal sfz = settings->getDesktopScalingFactorForZoom();
+  if (sfz >= 1.0){
+	// original size
+  }
+  else if (sfz < 1.0){
+	// fit to screen
+	*image = image->scaledToWidth(settings->getDesktopWidth()); // for TEST
+  }
+}
+#endif // defined(QTB_DEV_TOUCHPANEL)
 
 // get desktop scaling factor
 qreal GraphicsThread::getDesktopScalingFactor(QSize size)

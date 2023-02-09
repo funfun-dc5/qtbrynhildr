@@ -622,6 +622,7 @@ void ControlThread::initHeaderForGraphics()
 
   // image size and zoom
 #if QTB_TEST
+#if 0 // for TEST
   // zoom
   if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
 	  settings->getDesktopScalingFactor() < 1.0){
@@ -633,6 +634,27 @@ void ControlThread::initHeaderForGraphics()
   }
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
   com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+#else // 0 // for TEST
+  qreal sfz = settings->getDesktopScalingFactorForZoom();
+  // zoom
+  if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
+	  settings->getDesktopScalingFactor() < 1.0){
+	// scale down on server : zoom > 1.0
+	com_data->zoom			= (ZOOM)sfz;
+  }
+  else {
+	com_data->zoom			= (ZOOM)1.0;
+  }
+  if (settings->getCurrentScreenWidth() == 0){
+	com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
+	com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+  }
+  else {
+	com_data->image_cx = settings->getCurrentScreenWidth() * sfz;
+	com_data->image_cy = settings->getCurrentScreenHeight() * sfz;
+  }
+#endif // 0 // for TEST
+
   //  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
 #else // !QTB_TEST
   com_data->zoom = (ZOOM)1.0;

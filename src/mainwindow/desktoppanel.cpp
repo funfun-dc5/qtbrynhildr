@@ -51,8 +51,6 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   desktopPanelWidget = new DesktopPanelWidget(qtbrynhildr, this);
   // key buffer
   keyBuffer = desktopPanelWidget->getKeyBuffer();
-
-  setScale(0.66); // for TEST
 }
 
 // destructor
@@ -681,7 +679,7 @@ bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	}
 	else {
 	  scalingFactor += 0.02;
-#if QTB_TEST
+#if 0 // QTB_TEST
 	  if (scalingFactor > 1.0) scalingFactor = 1.0;
 #endif // QTB_TEST
 	}
@@ -777,7 +775,7 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	}
 	else {
 	  scalingFactor += 0.02;
-#if QTB_TEST
+#if 0 // QTB_TEST
 	  if (scalingFactor > 1.0) scalingFactor = 1.0;
 #endif // QTB_TEST
 	}
@@ -932,7 +930,7 @@ bool DesktopPanel::convertToDesktop(QPoint &point)
   point.setY(yPos);
 
   if (rect.contains(point)){
-	desktopPanelWidget->setCurrentPos(orgPoint);
+	//	desktopPanelWidget->setCurrentPos(orgPoint);
 	return true;
   }
   else {

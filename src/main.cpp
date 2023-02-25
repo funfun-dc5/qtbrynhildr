@@ -163,13 +163,5 @@ int main(int argc, char *argv[])
   // restore cursor
   app.restoreOverrideCursor();
 
-  // delete QtBrynhildr
-  delete qtbrynhildr;
-  qtbrynhildr = nullptr;
-
-  // delete option
-  delete option;
-  option = nullptr;
-
   return result;
 }

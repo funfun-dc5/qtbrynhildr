@@ -380,6 +380,12 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	inCheckingButtonOpen = false;
 	inCheckingKeyboardOpen = false;
 	inZooming = settings->getDesktopScalingFactor() > getScalingFactorForFullScreen();
+#if 1 // for TEST
+	if (!inZooming){
+	  settings->setDesktopOffsetX(0);
+	  settings->setDesktopOffsetY(0);
+	}
+#endif // 1 // for TEST
   }
   //---------------------------------------------------------------------------------
   // Move
@@ -554,6 +560,12 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	inCheckingButtonOpen = false;
 	inCheckingKeyboardOpen = false;
 	inZooming = settings->getDesktopScalingFactor() > getScalingFactorForFullScreen();
+#if 1 // for TEST
+	if (!inZooming){
+	  settings->setDesktopOffsetX(0);
+	  settings->setDesktopOffsetY(0);
+	}
+#endif // 1 // for TEST
   }
   //---------------------------------------------------------------------------------
   // Release
@@ -643,6 +655,12 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	inCheckingButtonOpen = false;
 	inCheckingKeyboardOpen = false;
 	inZooming = settings->getDesktopScalingFactor() > getScalingFactorForFullScreen();
+#if 1 // for TEST
+	if (!inZooming){
+	  settings->setDesktopOffsetX(0);
+	  settings->setDesktopOffsetY(0);
+	}
+#endif // 1 // for TEST
   }
   //---------------------------------------------------------------------------------
   // Move
@@ -749,6 +767,8 @@ bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
 	  if (scalingFactor < scalingFactorForFullScreen){
 		scalingFactor = scalingFactorForFullScreen;
+		settings->setDesktopOffsetX(0);
+		settings->setDesktopOffsetY(0);
 	  }
 	}
 	else {
@@ -866,6 +886,8 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
 	  if (scalingFactor < scalingFactorForFullScreen){
 		scalingFactor = scalingFactorForFullScreen;
+		settings->setDesktopOffsetX(0);
+		settings->setDesktopOffsetY(0);
 	  }
 	}
 	else {
@@ -1033,16 +1055,19 @@ void DesktopPanel::keyReleaseEvent(QKeyEvent *event)
 // convert to desktop
 bool DesktopPanel::convertToDesktop(QPoint &pos)
 {
-  QSize size = getSize();
-  QRect rect(0,0,size.width(),size.height());
+  int width = settings->getDesktopWidth();
+  int height = settings->getDesktopHeight();
+  QRect rect(0, 0, width, height);
   qreal sfz = settings->getDesktopScalingFactorForZoom();
   int xPos = (pos.x() + settings->getDesktopOffsetX())*sfz;
   int yPos = (pos.y() + settings->getDesktopOffsetY())*sfz;
-  //qDebug() << "pos1=" << pos;
-  //qDebug() << "sfz=" << sfz;
+  qDebug() << "posd offsetX = " << settings->getDesktopOffsetX();
+  qDebug() << "posd offsetY = " << settings->getDesktopOffsetY();
+  qDebug() << "posd before =" << pos;
+  qDebug() << "posd sfz =" << sfz;
   pos.setX(xPos);
   pos.setY(yPos);
-  //qDebug() << "pos2=" << pos;
+  qDebug() << "posd after =" << pos;
 
   if (rect.contains(pos)){
 	return true;

@@ -116,8 +116,18 @@ void DesktopPanelWidget::paintEvent(QPaintEvent *event)
 
   QPainter painter(this);
 
+#if 0 // for TEST
   // draw desktop image
   painter.drawImage(0, 0, image);
+
+#else // 0 // for TEST
+  // Origin
+  int x_org = -settings->getDesktopOffsetX();
+  int y_org = -settings->getDesktopOffsetY();
+
+  // draw desktop image
+  painter.drawImage(x_org, y_org, image);
+#endif // 0 // for TEST
 
   // draw marker for mouse cursor
   if (drawMarkerCounter > 0){

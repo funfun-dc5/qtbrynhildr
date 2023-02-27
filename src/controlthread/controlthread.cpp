@@ -650,15 +650,15 @@ void ControlThread::initHeaderForGraphics()
 	com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
   }
   else {
-#if 1 // for TEST
-	com_data->image_cx = settings->getCurrentScreenWidth() * sfz;
-	com_data->image_cy = settings->getCurrentScreenHeight() * sfz;
-#else // 1 // for TEST
-	com_data->image_cx = settings->getCurrentScreenWidth();
-	com_data->image_cy = settings->getCurrentScreenHeight();
-#endif // 1 // for TEST
+	com_data->image_cx = settings->getDesktopWidth() * sfz;
+	com_data->image_cy = settings->getDesktopHeight() * sfz;
   }
 #endif // 0 // for TEST
+
+	// client scroll
+	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
+	com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
+	com_data->scroll = 1; // enable scroll (public mode 7)
 
   //  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
 #else // !QTB_TEST

@@ -7,7 +7,7 @@
 // version
 #define QTB_VERSION				"2.5.0"
 
-#define QTB_RCNAME				"-rc3"
+#define QTB_RCNAME				"-rc4"
 #define QTB_VERSION_NUMBER		2500
 
 #if __x86_64__ || __LP64__ || _WIN64

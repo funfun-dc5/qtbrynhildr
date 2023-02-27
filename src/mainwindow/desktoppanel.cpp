@@ -26,7 +26,7 @@ DesktopPanel::DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent)
   ,scalingFactorForFullScreen(1.0)
   ,screenSize(settings->getCurrentScreenSize())
   // for DEBUG
-  ,outputLog(true)
+  ,outputLog(false)
 {
   // focus
   setFocusPolicy(Qt::StrongFocus);

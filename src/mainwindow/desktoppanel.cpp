@@ -278,6 +278,7 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  // move mouse cursor and press left button
 	  qreal distance = QLineF(lastPos, touchPoint.pos()).length();
 	  //qDebug() << "distance = " << distance;
+#if 0 // for TEST
 	  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
 		QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 												 touchPoint.pos(),
@@ -297,6 +298,32 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 
 	  mousePressEvent(pressEvent);
 	  delete pressEvent;
+#else // 0 // for TEST
+	  QPoint pos = touchPoint.pos().toPoint();
+	  if (convertToDesktop(pos)){
+		if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+												   QPointF(pos),
+												   Qt::NoButton,
+												   Qt::NoButton,
+												   Qt::NoModifier);
+
+		  mouseMoveEvent(moveEvent);
+		  delete moveEvent;
+		  lastPos = touchPoint.pos();
+		}
+		QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+												  QPointF(pos),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+
+		mousePressEvent(pressEvent);
+		delete pressEvent;
+		// move current pos
+		desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+	  }
+#endif // 0 // for TEST
 	}
   }
   //---------------------------------------------------------------------------------
@@ -333,6 +360,7 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		// move mouse cursor and press left button and release left button
 		qreal distance = QLineF(lastPos, touchPoint.pos()).length();
 		//qDebug() << "distance = " << distance;
+#if 0 // for TEST
 		if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
 		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 												   touchPoint.pos(),
@@ -362,10 +390,47 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 
 		mouseReleaseEvent(releaseEvent);
 		delete releaseEvent;
+#else // 0 // for TEST
+		QPoint pos = touchPoint.pos().toPoint();
+		if (convertToDesktop(pos)){
+		  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+													 QPointF(pos),
+													 Qt::NoButton,
+													 Qt::NoButton,
+													 Qt::NoModifier);
+
+			mouseMoveEvent(moveEvent);
+			delete moveEvent;
+			lastPos = touchPoint.pos();
+		  }
+		  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													 QPointF(pos),
+													Qt::LeftButton,
+													Qt::LeftButton,
+													Qt::NoModifier);
+
+		  mousePressEvent(pressEvent);
+		  delete pressEvent;
+
+		  // release left button
+		  QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													  QPointF(pos),
+													  Qt::LeftButton,
+													  Qt::LeftButton,
+													  Qt::NoModifier);
+
+		  mouseReleaseEvent(releaseEvent);
+		  delete releaseEvent;
+		  // move current pos
+		  desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+		}
+#endif // 0 // for TEST
 	  }
 	}
 	else {
 	  // release left button
+#if 0 // for TEST
 	  QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
@@ -374,6 +439,21 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 
 	  mouseReleaseEvent(releaseEvent);
 	  delete releaseEvent;
+#else // 0 // for TEST
+	  QPoint pos = touchPoint.pos().toPoint();
+	  if (convertToDesktop(pos)){
+		QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													QPointF(pos),
+													Qt::LeftButton,
+													Qt::LeftButton,
+													Qt::NoModifier);
+
+		mouseReleaseEvent(releaseEvent);
+		delete releaseEvent;
+		// move current pos
+		desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+	  }
+#endif // 0 // for TEST
 	}
 
 	// reset open software panel check flags
@@ -416,6 +496,7 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  qreal distance = QLineF(lastPos, touchPoint.pos()).length();
 	  //qDebug() << "distance = " << distance;
 	  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+#if 0 // for TEST
 		QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 												 touchPoint.pos(),
 												 Qt::NoButton,
@@ -424,6 +505,21 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		mouseMoveEvent(moveEvent);
 		delete moveEvent;
 		lastPos = touchPoint.pos();
+#else // 0 // for TEST
+		QPoint pos = touchPoint.pos().toPoint();
+		if (convertToDesktop(pos)){
+		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+												   QPointF(pos),
+												   Qt::NoButton,
+												   Qt::NoButton,
+												   Qt::NoModifier);
+		  mouseMoveEvent(moveEvent);
+		  delete moveEvent;
+		  lastPos = touchPoint.pos();
+		  // move current pos
+		  desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+		}
+#endif // 0 // for TEST
 	  }
 	}
   }
@@ -1063,6 +1159,7 @@ bool DesktopPanel::convertToDesktop(QPoint &pos)
   qreal sfz = settings->getDesktopScalingFactorForZoom();
   int xPos = (pos.x() + settings->getDesktopOffsetX())*sfz;
   int yPos = (pos.y() + settings->getDesktopOffsetY())*sfz;
+#if 0 // for TEST
   qDebug() << "posd offsetX = " << settings->getDesktopOffsetX();
   qDebug() << "posd offsetY = " << settings->getDesktopOffsetY();
   qDebug() << "posd before =" << pos;
@@ -1070,6 +1167,10 @@ bool DesktopPanel::convertToDesktop(QPoint &pos)
   pos.setX(xPos);
   pos.setY(yPos);
   qDebug() << "posd after =" << pos;
+#else // 0 // for TEST
+  pos.setX(xPos);
+  pos.setY(yPos);
+#endif // 0 // for TEST
 
   if (rect.contains(pos)){
 	return true;

@@ -524,7 +524,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		  delete pressEvent;
 		  delete releaseEvent;
 #else // 0 // for TEST
-		  QPoint pos = currentPos;
+		  QPoint pos = touchPoint.pos().toPoint();
 		  if (convertToDesktop(pos)){
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													 QPointF(pos),
@@ -549,7 +549,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 			delete pressEvent;
 			delete releaseEvent;
 			// move current pos
-			desktopPanelWidget->setCurrentPos(currentPos);
+			desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
 		  }
 #endif // 0 // for TEST
 		}
@@ -619,7 +619,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		  delete pressEvent;
 		  delete releaseEvent;
 #else // 0 // for TEST
-		  QPoint pos = currentPos;
+		  QPoint pos = touchPoint.pos().toPoint();
 		  if (convertToDesktop(pos)){
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													 QPointF(pos),
@@ -644,7 +644,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 			delete pressEvent;
 			delete releaseEvent;
 			// move current pos
-			desktopPanelWidget->setCurrentPos(currentPos);
+			desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
 		  }
 #endif // 0 // for TEST
 		}
@@ -695,7 +695,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  mouseMoveEvent(moveEvent);
 	  delete moveEvent;
 #else // 0 // for TEST
-	  QPoint pos = currentPos;
+	  QPoint pos = touchPoint.pos().toPoint();
 	  if (convertToDesktop(pos)){
 		// move mouse cursor
 		QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
@@ -705,6 +705,8 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 												 Qt::NoModifier);
 		mouseMoveEvent(moveEvent);
 		delete moveEvent;
+		// move current pos
+		desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
 	  }
 #endif // 0 // for TEST
 	}

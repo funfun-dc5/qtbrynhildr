@@ -24,7 +24,7 @@ SK::SK(KeyBuffer *keyBuffer, QtBrynhildr *qtbrynhildr, QWidget *parent)
   ,qtbrynhildr(qtbrynhildr)
   ,settings(qtbrynhildr->getSettings())
 #if defined(QTB_DEV_TOUCHPANEL)
-  ,graphicsView(qtbrynhildr->getGraphicsView())
+  ,desktopPanel(qtbrynhildr->getDesktopPanel())
 #endif // defined(QTB_DEV_TOUCHPANEL)
   // for DEBUG
   ,outputLog(false)
@@ -170,9 +170,9 @@ void SK::mousePressEvent(QMouseEvent *event)
 											event->buttons(),
 											event->modifiers());
 #if defined(QTB_DEV_TOUCHPANEL)
-	graphicsView->mouseMoveEventForSP(newEvent);
+	desktopPanel->mouseMoveEventForSP(newEvent);
 #endif // defined(QTB_DEV_TOUCHPANEL)
-	graphicsView->mousePressEventForSP(newEvent);
+	desktopPanel->mousePressEventForSP(newEvent);
 	//delete newEvent;
   }
 }
@@ -187,7 +187,7 @@ void SK::mouseReleaseEvent(QMouseEvent *event)
 											event->button(),
 											event->buttons(),
 											event->modifiers());
-	graphicsView->mouseReleaseEventForSP(newEvent);
+	desktopPanel->mouseReleaseEventForSP(newEvent);
 	//delete newEvent;
   }
 }
@@ -202,7 +202,7 @@ void SK::mouseMoveEvent(QMouseEvent *event)
 											event->button(),
 											event->buttons(),
 											event->modifiers());
-	graphicsView->mouseMoveEventForSP(newEvent);
+	desktopPanel->mouseMoveEventForSP(newEvent);
 	//delete newEvent;
   }
 }

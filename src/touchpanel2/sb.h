@@ -15,12 +15,12 @@
 #include "settings.h"
 #include "software_button.h"
 #if defined(QTB_DEV_TOUCHPANEL)
-#include "mainwindow/graphicsview.h"
+#include "mainwindow/desktoppanel.h"
 #endif // defined(QTB_DEV_TOUCHPANEL)
 
 namespace qtbrynhildr {
 
-class QtBrynhildr;
+class DesktopPanel;
 
 // SoftwareButton
 class SB : public SoftwareButton
@@ -40,6 +40,11 @@ private:
   // settings
   Settings *settings;
 
+#if defined(QTB_DEV_TOUCHPANEL)
+  // desktop panel
+  DesktopPanel *desktopPanel;
+#endif // defined(QTB_DEV_TOUCHPANEL)
+
   // previous click button
   MouseBuffer::MOUSE_BUTTON_ID previousClickButton;
 
@@ -51,11 +56,6 @@ private:
 
   // mouse right button
   bool pressedMouseRightButton;
-
-#if defined(QTB_DEV_TOUCHPANEL)
-  // graphics view
-  GraphicsView *graphicsView;
-#endif // defined(QTB_DEV_TOUCHPANEL)
 
   // output log flag
   bool outputLog;

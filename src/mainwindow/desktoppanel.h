@@ -1,97 +1,80 @@
 // -*- mode: c++; coding: utf-8-unix -*-
-// Copyright (c) 2015- FunFun <fu.aba.dc5@gmail.com>
+// Copyright (c) 2022- FunFun <fu.aba.dc5@gmail.com>
 
 #ifndef DESKTOPPANEL_H
 #define DESKTOPPANEL_H
 // Common Header
 #include "common/common.h"
 
+// System Header
+
 // Qt Header
-#if defined(Q_OS_WIN)
-#include <QAbstractNativeEventFilter>
-#endif // defined(Q_OS_WIN)
 #include <QEvent>
-#if QTB_DRAG_AND_DROP_SUPPORT
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#endif // QTB_DRAG_AND_DROP_SUPPORT
-#include <QImage>
-#include <QKeyEvent>
-#include <QLabel>
 #include <QMouseEvent>
-#include <QObject>
 #include <QPaintEvent>
-#include <QPoint>
-#include <QSize>
-#include <QTextStream>
-#include <QWheelEvent>
+#include <QScrollArea>
 #include <QWidget>
 
 // Local Header
 #include "controlthread/keybuffer.h"
-#include "controlthread/mousebuffer.h"
+#include "mainwindow/desktoppanelwidget.h"
+#include "qtbrynhildr.h"
 #include "settings.h"
-#include "windows/eventconverter.h"
+
 
 namespace qtbrynhildr {
 
 class QtBrynhildr;
 
-// DesktopPanel
-class DesktopPanel
+class DesktopPanel : public QScrollArea
 {
+  Q_OBJECT
+
+  //-------------------------------------------------------------------------------
+  // Type
+  //-------------------------------------------------------------------------------
+private:
+  // Touch Operation Type
+  typedef enum {
+	TOP_TYPE_UNKNOWN,
+	TOP_TYPE_1POINT,
+	TOP_TYPE_2POINT,
+	TOP_TYPE_3POINT
+  } TOP_TYPE;
+
   //-------------------------------------------------------------------------------
   // Variable
   //-------------------------------------------------------------------------------
-protected:
+private:
   // qtbrynhildr
   QtBrynhildr *qtbrynhildr;
 
   // settings
   Settings *settings;
 
-  // image
-  QImage image;
+  // desktop panel widget
+  DesktopPanelWidget *desktopPanelWidget;
 
-  // desktop size
-  QSize currentSize;
-
-  // previous desktop size
-  QSize previousSize;
-
-  // event converter
-  EventConverter *eventConverter;
-
-  // on shift key
-  bool onShiftKey;
-
-  // keyboard buffer
+  // key buffer
   KeyBuffer *keyBuffer;
 
-  // mouse buffer
-  MouseBuffer *mouseBuffer;
+  // Touch Operation Type
+  TOP_TYPE topType;
 
-  // current mouse position
-  QPoint currentMousePos;
+  // scaling factor
+  qreal scalingFactor;
 
-  // full screen flag
-  bool onFullScreen;
+  // scaling factor for fullscreen
+  qreal scalingFactorForFullScreen;
 
-  // draw marker counter
-  int drawMarkerCounter;
+  // for screen size
+  QSize screenSize;
 
-  // previous KEYCODE_FLG
-  KEYCODE_FLG previous_KEYCODE_FLG;
+  // for software button
+  QRect softwareButtonRect;
 
-  // margins
-  int widthMargin;
-  int heightMargin;
-
-  // output log flag for keyboard
-  bool outputLogForKeyboard;
-
-  // output log flag for mouse
-  bool outputLogForMouse;
+  // for software keyboard
+  QRect softwareKeyboardRect;
 
   // output log flag
   bool outputLog;
@@ -101,29 +84,20 @@ protected:
   //-------------------------------------------------------------------------------
 public:
   // constructor
-  DesktopPanel(QtBrynhildr *qtbrynhildr);
+  DesktopPanel(QtBrynhildr *qtbrynhildr, QWidget *parent = Q_NULLPTR);
   // destructor
   virtual ~DesktopPanel();
 
-  // set event converter
-  void setEventConverter(EventConverter *eventConverter);
+  // scale
+  void setScale(qreal scalingFactor);
 
-  // get keyboard buffer
-  KeyBuffer *getKeyBuffer() const;
+  // resize desktop
+  void resizeDesktop(int width, int height);
 
-  // get mouse buffer
-  MouseBuffer *getMouseBuffer() const;
+  // update desktop
+  void updateDesktop();
 
-  // set mouse position
-  void setMousePos(POS x, POS y);
-
-  // refresh desktop window
-  void refreshDesktop(QImage &image);
-
-  // resize window
-  void resizeWindow();
-
-  // clear desktop window
+  // clear desktop
   void clearDesktop();
 
   // get size
@@ -132,57 +106,76 @@ public:
   // get window size
   QSize getWindowSize() const;
 
-  // set margins
-  void setMargins(int widthMargin, int heightMargin)
-  {
-	this->widthMargin = widthMargin;
-	this->heightMargin = heightMargin;
-  }
-
   // set full screen flag
   void setOnFullScreen(bool onFullScreen);
 
-  // set draw marker counter
-  void setDrawMarkerCounter(int drawMarkerCounter)
+  // get desktop panel widget
+  DesktopPanelWidget *getDesktopPanelWidget() const
   {
-	this->drawMarkerCounter = drawMarkerCounter;
+	return desktopPanelWidget;
   }
-
-  // resize desktop
-  virtual void resizeDesktop(int width, int height) = 0;
-
-  // update desktop
-  virtual void updateDesktop() = 0;
-
-  // get current mouse position
-  QPoint getCurrentMousePos() const
-  {
-	return currentMousePos;
-  }
-
-#if 0 // for TEST
-  // check focus
-  bool hasFocus() const;
-#endif // 0 // for TEST
-
-#if QTB_SOFTWARE_KEYBOARD_AND_BUTTON
+  
+  // mouse press event software panel
+  void mousePressEventForSP(QMouseEvent *event);
+  // mouse release event software panel
+  void mouseReleaseEventForSP(QMouseEvent *event);
+  // mouse move event software panel
+  void mouseMoveEventForSP(QMouseEvent *event);
   // mouse move
   void mouseMove(QPoint mousePos, bool marker = true);
   // mouse move relatively
   void mouseMoveRelatively(QPoint mousePos, bool marker = true);
-#endif // QTB_SOFTWARE_KEYBOARD_AND_BUTTON
 
-  // for event handling
-#if defined(QTB_DEV_TOUCHPANEL)
-public:
-#else // !defined(QTB_DEV_TOUCHPANEL)
+  // for software button
+  void setSoftwareButtonRect(QRect rect)
+  {
+	softwareButtonRect = rect;
+  }
+
+  // for software keyboard
+  void setSoftwareKeyboardRect(QRect rect)
+  {
+	softwareKeyboardRect = rect;
+  }
+
 protected:
-#endif // !defined(QTB_DEV_TOUCHPANEL)
+  // size hint
+  QSize sizeHint() const;
 
-#if defined(QTB_DEV_TOUCHPANEL)
-  // event
+  // scrollarea event for event handling (touchpanel)
   bool event(QEvent *event);
-#endif // defined(QTB_DEV_TOUCHPANEL)
+
+  // -----------------------------------------------------------------------------------
+  // KeroRemote 1 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool oneFingerEventForKeroRemote(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // QtBrynhildr 1 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // KeroRemote 2 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool twoFingerEventForKeroRemote(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // QtBrynhildr 2 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent);
+
+  // -----------------------------------------------------------------------------------
+  // 3 Finger Operation
+  // -----------------------------------------------------------------------------------
+  bool threeFingerEvent(QTouchEvent *touchEvent);
+
+private:
+  // get scaling factor for full screen
+  inline qreal getScalingFactorForFullScreen() const
+  {
+	return settings->getDesktopScalingFactorLimit();
+  }
 
   // mouse event 
   void mousePressEvent(QMouseEvent *event);
@@ -191,40 +184,12 @@ protected:
   void mouseMoveEvent(QMouseEvent *event);
   void wheelEvent(QWheelEvent *event);
 
-  // move mouse cursor
-  void moveMouseCursor(QMouseEvent *event, bool marker = true);
-
   // keyboard event
   void keyPressEvent(QKeyEvent *event);
   void keyReleaseEvent(QKeyEvent *event);
 
-#if QTB_DRAG_AND_DROP_SUPPORT
-  // drag and drop
-  void dragEnterEvent(QDragEnterEvent *event);
-  void dropEvent(QDropEvent *event);
-#endif // QTB_DRAG_AND_DROP_SUPPORT
-
-#if defined(Q_OS_WIN)
-  // native event filter
-#if QT_VERSION < 0x060000
-  bool nativeEventFilter(const QByteArray &eventType, void *message, long *result);
-#else // QT_VERSION >= 0x060000
-  bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result);
-#endif // QT_VERSION >= 0x060000
-#endif // defined(Q_OS_WIN)
-
-private:
-  //
-  bool outputKeyboardLog(QString name, Qt::Key key, uchar keycode);
-
-  // print mouse button event
-  void printMouseButtonEvent(QMouseEvent *event);
-
-  // set mouse button event
-  void setMouseButtonEvent(QMouseEvent *event, MOUSE_BUTTON value);
-
-  // scroll area
-  bool scrollArea(uchar VK_Code, bool onKeyPress);
+  // convert to desktop
+  bool convertToDesktop(QPoint &point);
 };
 
 } // end of namespace qtbrynhildr

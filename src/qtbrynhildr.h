@@ -20,7 +20,6 @@
 #include <QProgressBar>
 #include <QRect>
 #if defined(QTB_DEV_TOUCHPANEL)
-#include <QGraphicsScene>
 #else // !defined(QTB_DEV_TOUCHPANEL)
 #include <QScrollArea>
 #endif // !defined(QTB_DEV_TOUCHPANEL)
@@ -44,12 +43,12 @@
 #if QTB_CRYPTOGRAM
 #include "function/cipher.h"
 #endif // QTB_CRYPTGRAM
-#include "mainwindow/desktoppanel.h"
+#include "util/logmessage.h"
+#include "mainwindow/desktopframe.h"
 #if defined(QTB_DEV_TOUCHPANEL)
-#include "mainwindow/graphicsview.h"
-#include "mainwindow/desktoppanelobject.h"
+#include "mainwindow/desktoppanel.h"
 #else // !defined(QTB_DEV_TOUCHPANEL)
-#include "mainwindow/desktopwindow.h"
+#include "mainwindow/desktopwindowwidget.h"
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 #include "option.h"
 #if QTB_RECORDER
@@ -80,6 +79,9 @@
 
 namespace qtbrynhildr {
 
+// class alias
+using DesktopWindow = QScrollArea;
+
 // ----------------------------------------------
 // global objects
 // ----------------------------------------------
@@ -102,6 +104,8 @@ extern int frameNoOfServer;
 // frame_no of client
 extern int frameNoOfClient;
 
+class SK;
+class SB;
 
 // QtBrynhildr
 class QtBrynhildr : public QMainWindow
@@ -113,19 +117,16 @@ class QtBrynhildr : public QMainWindow
   //-------------------------------------------------------------------------------
 private:
   // GUI
-  // desktop panel
-  DesktopPanel *desktopPanel;
+  // desktop frame
+  DesktopFrame *desktopFrame;
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // view
-  GraphicsView *graphicsView;
-  // scene
-  QGraphicsScene *graphicsScene;
-  // desktop panel object
-  DesktopPanelObject *desktopPanelObject;
+  // desktop panel
+  DesktopPanel *desktopPanel;
 #else // !defined(QTB_DEV_TOUCHPANEL)
-  // scroll area
-  QScrollArea *scrollArea;
+  // desktop window widget
+  DesktopWindowWidget *desktopWindowWidget;
+
   // desktop window
   DesktopWindow *desktopWindow;
 #endif // !defined(QTB_DEV_TOUCHPANEL)
@@ -673,15 +674,15 @@ public:
 #endif // QTB_TOOLBAR
 
 #if defined(QTB_DEV_TOUCHPANEL)
-  // get graphics view
-  GraphicsView *getGraphicsView() const;
-#else // !defined(QTB_DEV_TOUCHPANEL)
-  // get desktop window
-  DesktopWindow *getDesktopWindow() const;
-#endif // !defined(QTB_DEV_TOUCHPANEL)
-
   // get desktop panel
   DesktopPanel *getDesktopPanel() const;
+#else // !defined(QTB_DEV_TOUCHPANEL)
+  // get desktop window widget
+  DesktopWindowWidget *getDesktopWindowWidget() const;
+#endif // !defined(QTB_DEV_TOUCHPANEL)
+
+  // get desktop frame
+  DesktopFrame *getDesktopFrame() const;
 
   // shutdown flag
   bool getShutdownFlag() const;

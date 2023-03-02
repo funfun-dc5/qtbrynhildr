@@ -776,8 +776,20 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 	  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 #else //0 // Yet
+#if 0 // for TEST
 	  settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x());
 	  settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y());
+#else // 0 // for TEST
+	  qreal sfz = settings->getDesktopScalingFactorForZoom();
+	  if ( sfz > 1.0){
+		settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x());
+		settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y());
+	  }
+	  else {
+		settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x()*sfz);
+		settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y()*sfz);
+	  }
+#endif // 0 // for TEST
 #endif //0 // Yet
 	}
 	else {
@@ -1156,10 +1168,25 @@ bool DesktopPanel::convertToDesktop(QPoint &pos)
   int width = settings->getDesktopWidth();
   int height = settings->getDesktopHeight();
   QRect rect(0, 0, width, height);
+#if 1 // for TEST
   qreal sfz = settings->getDesktopScalingFactorForZoom();
   int xPos = (pos.x() + settings->getDesktopOffsetX())*sfz;
   int yPos = (pos.y() + settings->getDesktopOffsetY())*sfz;
-#if 0 // for TEST
+#else // 0 // for TEST
+  qreal sfz = settings->getDesktopScalingFactorForZoom();
+  int xPos, yPos;
+  if (sfz > 1.0){
+	xPos = (pos.x() + settings->getDesktopOffsetX())*sfz;
+	yPos = (pos.y() + settings->getDesktopOffsetY())*sfz;
+  }
+  else {
+	xPos = (pos.x() - settings->getDesktopOffsetX())*sfz;
+	yPos = (pos.y() - settings->getDesktopOffsetY())*sfz;
+  }
+#endif // 0 // for TEST
+
+#if 1 // for TEST
+  qDebug() << "posd rect= " << rect;
   qDebug() << "posd offsetX = " << settings->getDesktopOffsetX();
   qDebug() << "posd offsetY = " << settings->getDesktopOffsetY();
   qDebug() << "posd before =" << pos;

@@ -122,8 +122,13 @@ void DesktopPanelWidget::paintEvent(QPaintEvent *event)
 
 #else // 0 // for TEST
   // Origin
+#if 1 // for TEST
   int x_org = -settings->getDesktopOffsetX();
   int y_org = -settings->getDesktopOffsetY();
+#else // 1 // for TEST
+  int x_org = (settings->getDesktopScalingFactor() < 1.0) ? -settings->getDesktopOffsetX():0;
+  int y_org = (settings->getDesktopScalingFactor() < 1.0) ? -settings->getDesktopOffsetY():0;
+#endif // 1 // for TEST
 
   // draw desktop image
   painter.drawImage(x_org, y_org, image);

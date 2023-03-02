@@ -641,26 +641,27 @@ void ControlThread::initHeaderForGraphics()
 	  settings->getDesktopScalingFactor() < 1.0){
 	// scale down on server : zoom > 1.0
 	com_data->zoom			= (ZOOM)sfz;
-  }
-  else {
-	com_data->zoom			= (ZOOM)1.0;
-  }
-  if (settings->getCurrentScreenWidth() == 0){
 	com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
 	com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
   }
   else {
-	com_data->image_cx = settings->getDesktopWidth() * sfz;
-	com_data->image_cy = settings->getDesktopHeight() * sfz;
-  }
-#endif // 0 // for TEST
-
+	com_data->zoom			= (ZOOM)1.0;
 	// client scroll
 	com_data->client_scroll_x	= (POS)settings->getDesktopOffsetX();
 	com_data->client_scroll_y	= (POS)settings->getDesktopOffsetY();
 	com_data->scroll = 1; // enable scroll (public mode 7)
+	if (settings->getDesktopWidth() == 0){
+	  com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
+	  com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
+	}
+	else {
+	  com_data->image_cx = settings->getDesktopWidth() * sfz;
+	  com_data->image_cy = settings->getDesktopHeight() * sfz;
+	}
+  }
+#endif // 0 // for TEST
 
-  //  qDebug() << "scalingFactor = " << settings->getDesktopScalingFactor();
+  qDebug() << "posd scalingFactor = " << settings->getDesktopScalingFactor();
 #else // !QTB_TEST
   com_data->zoom = (ZOOM)1.0;
   com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
@@ -827,9 +828,8 @@ void ControlThread::setMouseControl()
 	com_data->mouse_x = pos.x;
 	com_data->mouse_y = pos.y;
 
-	// set offset
-	com_data->mouse_x += settings->getDesktopOffsetX();
-	com_data->mouse_y += settings->getDesktopOffsetY();
+	qDebug() << "posd mouse pos = (" << pos.x << "," << pos.y << ")";
+
 #endif // !defined(QTB_DEV_DESKTOP)
 
 #if QTB_DESKTOP_COMPRESS_MODE

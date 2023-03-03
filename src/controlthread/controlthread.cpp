@@ -621,8 +621,7 @@ void ControlThread::initHeaderForGraphics()
   com_data->frame_no = (char)frameNoOfClient;
 
   // image size and zoom
-#if QTB_TEST
-#if 0 // for TEST
+#if 1 // for TEST
   // zoom
   if (settings->getDesktopScalingType() == DESKTOPSCALING_TYPE_ON_SERVER &&
 	  settings->getDesktopScalingFactor() < 1.0){
@@ -661,12 +660,7 @@ void ControlThread::initHeaderForGraphics()
   }
 #endif // 0 // for TEST
 
-  qDebug() << "posd scalingFactor = " << settings->getDesktopScalingFactor();
-#else // !QTB_TEST
-  com_data->zoom = (ZOOM)1.0;
-  com_data->image_cx = QTB_MAX_SERVER_DESKTOP_WIDTH;
-  com_data->image_cy = QTB_MAX_SERVER_DESKTOP_HEIGHT;
-#endif // !QTB_TEST
+  //qDebug() << "posd scalingFactor = " << settings->getDesktopScalingFactor();
 
 #if QTB_GRAY_SCALE_MODE2
   // monochrome mode
@@ -828,7 +822,7 @@ void ControlThread::setMouseControl()
 	com_data->mouse_x = pos.x;
 	com_data->mouse_y = pos.y;
 
-	qDebug() << "posd mouse pos = (" << pos.x << "," << pos.y << ")";
+	//qDebug() << "posd mouse pos = (" << pos.x << "," << pos.y << ")";
 
 #endif // !defined(QTB_DEV_DESKTOP)
 

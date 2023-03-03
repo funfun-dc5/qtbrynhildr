@@ -487,8 +487,20 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 	  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 #else //0 // Yet
+#if 1 // for TEST
 	  settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x());
 	  settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y());
+#else // 0 // for TEST
+	  qreal sfz = settings->getDesktopScalingFactorForZoom();
+	  if ( sfz > 1.0){
+		settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x());
+		settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y());
+	  }
+	  else {
+		settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x()*sfz);
+		settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y()*sfz);
+	  }
+#endif // 0 // for TEST
 #endif //0 // Yet
 	}
 	else {
@@ -776,7 +788,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
 	  verticalScrollBar()->setValue(verticalScrollBar()->value() + move.y());
 #else //0 // Yet
-#if 0 // for TEST
+#if 1 // for TEST
 	  settings->setDesktopOffsetX(settings->getDesktopOffsetX() + move.x());
 	  settings->setDesktopOffsetY(settings->getDesktopOffsetY() + move.y());
 #else // 0 // for TEST
@@ -883,9 +895,9 @@ bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	}
 	else {
 	  scalingFactor += 0.002;
-#if 0 // QTB_TEST
+#if 0 // for TEST
 	  if (scalingFactor > 1.0) scalingFactor = 1.0;
-#endif // QTB_TEST
+#endif // for TEST
 	}
 	settings->setDesktopScalingFactor(scalingFactor);
 	scalingFactor = settings->getDesktopScalingFactor();
@@ -1002,9 +1014,9 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	}
 	else {
 	  scalingFactor += 0.002;
-#if 0 // QTB_TEST
+#if 0 // for TEST
 	  if (scalingFactor > 1.0) scalingFactor = 1.0;
-#endif // QTB_TEST
+#endif // for TEST
 	}
 	settings->setDesktopScalingFactor(scalingFactor);
 	scalingFactor = settings->getDesktopScalingFactor();
@@ -1185,7 +1197,7 @@ bool DesktopPanel::convertToDesktop(QPoint &pos)
   }
 #endif // 0 // for TEST
 
-#if 1 // for TEST
+#if 0 // for TEST
   qDebug() << "posd rect= " << rect;
   qDebug() << "posd offsetX = " << settings->getDesktopOffsetX();
   qDebug() << "posd offsetY = " << settings->getDesktopOffsetY();

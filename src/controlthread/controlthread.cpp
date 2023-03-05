@@ -1120,7 +1120,7 @@ bool ControlThread::receiveFromServer()
 bool ControlThread::sendClipboard()
 {
   QString clipboardString = settings->getSendClipboardString();
-  SIZE stringSize = clipboardString.size() * 2;
+  SIZE stringSize = (SIZE)clipboardString.size() * 2;
   SIZE sentDataSize = 0;
 #if _MSC_VER
   char *localBuffer = new char[stringSize + 16 + 2];

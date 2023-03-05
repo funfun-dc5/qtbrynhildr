@@ -4030,7 +4030,7 @@ void QtBrynhildr::exit()
 #else // QT_VERSION >= 0x060000
   if (totalFrameCounter != 0){
 	//	std::cout << "totalFrameCounter = " << totalFrameCounter << std::endl << std::flush;
-	uint diffSeconds = shutdownTime.toSecsSinceEpoch() - bootTime.toSecsSinceEpoch();
+	uint diffSeconds = (uint)(shutdownTime.toSecsSinceEpoch() - bootTime.toSecsSinceEpoch());
 	if (diffSeconds != 0){
 	  float averageFrameRate = (float)totalFrameCounter/diffSeconds;
 	  //	  std::cout << "FPS of last session: " << averageFrameRate << std::endl << std::flush;
@@ -4124,7 +4124,7 @@ void QtBrynhildr::sendFile()
 
   // send files
   settings->setSendFileNames(fileNames);
-  settings->setSendFileCount(fileNames.count());
+  settings->setSendFileCount((int)fileNames.count());
 }
 
 // cancel file transferring

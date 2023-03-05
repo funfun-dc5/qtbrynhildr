@@ -313,8 +313,12 @@ bool SB::event(QEvent *event)
 	  // touch point id for mouse button
 	  static int idMouseButton = 0;
 
+#if QT_VERSION < 0x060000
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
-	  int touchPointCount = touchPoints.count();
+#else // QT_VERSION < 0x060000
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->points();
+#endif // QT_VERSION < 0x060000
+	  int touchPointCount = (int)touchPoints.count();
 	  if (touchPointCount == 1){ // 1 finger
 
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
@@ -326,11 +330,19 @@ bool SB::event(QEvent *event)
 		  if (outputLog){
 			qDebug() << "SB: 1 Pressed!";
 		  }
+#if QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
 												  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+												  touchPoint.position(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 		  // left mouse button press
 		  mousePressEvent(newEvent);
 		  delete newEvent;
@@ -344,11 +356,19 @@ bool SB::event(QEvent *event)
 		  if (outputLog){
 			qDebug() << "SB: 1 Released!";
 		  }
+#if QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
 												  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+												  touchPoint.position(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 		  // left mouse button release
 		  mouseReleaseEvent(newEvent);
 		  delete newEvent;
@@ -357,12 +377,22 @@ bool SB::event(QEvent *event)
 		  if (outputLog){
 			qDebug() << "SB: 1 Moved!";
 		  }
+#if QT_VERSION < 0x060000
 		  QPoint currentPos = touchPoint.pos().toPoint();
 		  QPoint lastPos = touchPoint.lastPos().toPoint();
+#else // QT_VERSION < 0x060000
+		  QPoint currentPos = touchPoint.position().toPoint();
+		  QPoint lastPos = touchPoint.lastPosition().toPoint();
+#endif // QT_VERSION < 0x060000
 		  QPoint move = currentPos - lastPos;
 		  if (outputLog){
+#if QT_VERSION < 0x060000
 			qDebug() << "currentPos = " << touchPoint.pos();
 			qDebug() << "lastPos = " << touchPoint.lastPos();
+#else // QT_VERSION < 0x060000
+			qDebug() << "currentPos = " << touchPoint.position();
+			qDebug() << "lastPos = " << touchPoint.lastPosition();
+#endif // QT_VERSION < 0x060000
 			qDebug() << "move = " << move;
 		  }
 		  if (move != QPoint(0,0))
@@ -394,11 +424,19 @@ bool SB::event(QEvent *event)
 			}
 			if (touchPoint0.id() == idMouseButton){
 			  // release mouse button
+#if QT_VERSION < 0x060000
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 													  touchPoint0.pos(),
 													  Qt::LeftButton,
 													  Qt::LeftButton,
 													  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													  touchPoint0.position(),
+													  Qt::LeftButton,
+													  Qt::LeftButton,
+													  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 			  // left mouse button release
 			  mouseReleaseEvent(newEvent);
 			  delete newEvent;
@@ -414,11 +452,19 @@ bool SB::event(QEvent *event)
 			}
 			if (touchPoint1.id() == idMouseButton){
 			  // release mouse button
+#if QT_VERSION < 0x060000
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 													  touchPoint1.pos(),
 													  Qt::LeftButton,
 													  Qt::LeftButton,
 													  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													  touchPoint1.position(),
+													  Qt::LeftButton,
+													  Qt::LeftButton,
+													  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 			  // left mouse button release
 			  mouseReleaseEvent(newEvent);
 			  delete newEvent;
@@ -435,8 +481,13 @@ bool SB::event(QEvent *event)
 		  if (pressedMouseLeftButton || pressedMouseRightButton){
 			// drag
 			const QTouchEvent::TouchPoint &touchPoint = touchPoints.last();
+#if QT_VERSION < 0x060000
 			QPoint currentPos = touchPoint.pos().toPoint();
 			QPoint lastPos = touchPoint.lastPos().toPoint();
+#else // QT_VERSION < 0x060000
+			QPoint currentPos = touchPoint.position().toPoint();
+			QPoint lastPos = touchPoint.lastPosition().toPoint();
+#endif // QT_VERSION < 0x060000
 			QPoint move = currentPos - lastPos;
 			if (outputLog){
 			  qDebug() << "move = " << move;
@@ -448,9 +499,15 @@ bool SB::event(QEvent *event)
 			// pinch in/out
 			const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
 			const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+#if QT_VERSION < 0x060000
 			qreal currentScalingFactor =
 			  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 			  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+#else // QT_VERSION < 0x060000
+			qreal currentScalingFactor =
+			  QLineF(touchPoint0.position(), touchPoint1.position()).length() /
+			  QLineF(touchPoint0.pressPosition(), touchPoint1.pressPosition()).length();
+#endif // QT_VERSION < 0x060000
 			if (outputLog){
 			  qDebug() << "currentScalingFactor = " << currentScalingFactor;
 			}

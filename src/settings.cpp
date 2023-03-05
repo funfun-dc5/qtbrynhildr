@@ -263,7 +263,7 @@ void Settings::writeServerNameList()
   // save serverNameListSize
   settings->setValue(QTB_SERVERNAMELISTSIZE, (qint32)serverNameListSize);
   // save all entries
-  int serverNameListNum = serverNameList->size();
+  int serverNameListNum = (int)serverNameList->size();
   for (int i = 0; i < serverNameListSize; i++){
 	QString entryName = QTB_SERVERNAME + QString::number(i);
 	// save serverName

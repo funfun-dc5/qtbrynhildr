@@ -334,7 +334,11 @@ bool DesktopFrame::event(QEvent *event)
   case QEvent::TouchEnd:
 	{
 	  QTouchEvent *touchEvent = (QTouchEvent *)(event);
+#if QT_VERSION < 0x060000
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+#else // QT_VERSION < 0x060000
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->points();
+#endif // QT_VERSION < 0x060000
 	  if (touchPoints.count() == 1){
 		// 1 - finger action
 		//  1) tap        : move mouse cursor and push left button

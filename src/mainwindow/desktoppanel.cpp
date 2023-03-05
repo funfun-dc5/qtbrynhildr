@@ -173,8 +173,12 @@ bool DesktopPanel::event(QEvent *event)
 		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
 	  }
 
+#if QT_VERSION < 0x060000
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
-	  int touchPointCount = touchPoints.count();
+#else // QT_VERSION < 0x060000
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->points();
+#endif // QT_VERSION < 0x060000
+	  int touchPointCount = (int)touchPoints.count();
 
 	  // -----------------------------------------------------------------------------------
 	  // KeroRemote Compatible Operation
@@ -245,7 +249,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
   static bool inZooming = false;
   static QDateTime pressTimeInZooming;
 
+#if QT_VERSION < 0x060000
   const QTouchEvent::TouchPoint &touchPoint = touchEvent->touchPoints().first();
+#else // QT_VERSION < 0x060000
+  const QTouchEvent::TouchPoint &touchPoint = touchEvent->points().first();
+#endif // QT_VERSION < 0x060000
 
   //---------------------------------------------------------------------------------
   // Press
@@ -258,13 +266,21 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	// set TOP_TYPE
 	topType = TOP_TYPE_1POINT;
 
+#if QT_VERSION < 0x060000
 	if (softwareButtonRect.contains(touchPoint.pos().toPoint())){
+#else // QT_VERSION < 0x060000
+	if (softwareButtonRect.contains(touchPoint.position().toPoint())){
+#endif // QT_VERSION < 0x060000
 	  if (outputLog){
 		qDebug() << "DP: into software button open area";
 	  }
 	  inCheckingButtonOpen = true;
 	}
+#if QT_VERSION < 0x060000
 	else if (softwareKeyboardRect.contains(touchPoint.pos().toPoint())){
+#else // QT_VERSION < 0x060000
+	else if (softwareKeyboardRect.contains(touchPoint.position().toPoint())){
+#endif // QT_VERSION < 0x060000
 	  if (outputLog){
 		qDebug() << "DP: into software keyboard open area";
 	  }
@@ -276,7 +292,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	}
 	else {
 	  // move mouse cursor and press left button
+#if QT_VERSION < 0x060000
 	  qreal distance = QLineF(lastPos, touchPoint.pos()).length();
+#else // QT_VERSION < 0x060000
+	  qreal distance = QLineF(lastPos, touchPoint.position()).length();
+#endif // QT_VERSION < 0x060000
 	  //qDebug() << "distance = " << distance;
 #if 0 // for TEST
 	  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
@@ -299,7 +319,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  mousePressEvent(pressEvent);
 	  delete pressEvent;
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 	  QPoint pos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+	  QPoint pos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 	  if (convertToDesktop(pos)){
 		if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
 		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
@@ -310,7 +334,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 
 		  mouseMoveEvent(moveEvent);
 		  delete moveEvent;
+#if QT_VERSION < 0x060000
 		  lastPos = touchPoint.pos();
+#else // QT_VERSION < 0x060000
+		  lastPos = touchPoint.position();
+#endif // QT_VERSION < 0x060000
 		}
 		QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  QPointF(pos),
@@ -321,7 +349,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		mousePressEvent(pressEvent);
 		delete pressEvent;
 		// move current pos
+#if QT_VERSION < 0x060000
 		desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+#else // QT_VERSION < 0x060000
+		desktopPanelWidget->setCurrentPos(touchPoint.position().toPoint());
+#endif // QT_VERSION < 0x060000
 	  }
 #endif // 0 // for TEST
 	}
@@ -339,7 +371,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	}
 	else if (inCheckingButtonOpen || inCheckingKeyboardOpen){
 	  // display software panel check
+#if QT_VERSION < 0x060000
 	  QPoint currentPos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+	  QPoint currentPos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 	  if (inCheckingButtonOpen &&
 		  !softwareButtonRect.contains(currentPos, true)){
 		// open software button
@@ -358,7 +394,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  if (tapTime < QTB_TOUCHPANEL_TAP_TIME_THRESHOLD){
 		// tap
 		// move mouse cursor and press left button and release left button
+#if QT_VERSION < 0x060000
 		qreal distance = QLineF(lastPos, touchPoint.pos()).length();
+#else // QT_VERSION < 0x060000
+		qreal distance = QLineF(lastPos, touchPoint.position()).length();
+#endif // QT_VERSION < 0x060000
 		//qDebug() << "distance = " << distance;
 #if 0 // for TEST
 		if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
@@ -391,7 +431,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		mouseReleaseEvent(releaseEvent);
 		delete releaseEvent;
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 		QPoint pos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+		QPoint pos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		if (convertToDesktop(pos)){
 		  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
@@ -402,7 +446,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 
 			mouseMoveEvent(moveEvent);
 			delete moveEvent;
+#if QT_VERSION < 0x060000
 			lastPos = touchPoint.pos();
+#else // QT_VERSION < 0x060000
+			lastPos = touchPoint.position();
+#endif // QT_VERSION < 0x060000
 		  }
 		  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
 													 QPointF(pos),
@@ -423,7 +471,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		  mouseReleaseEvent(releaseEvent);
 		  delete releaseEvent;
 		  // move current pos
+#if QT_VERSION < 0x060000
 		  desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+#else // QT_VERSION < 0x060000
+		  desktopPanelWidget->setCurrentPos(touchPoint.position().toPoint());
+#endif // QT_VERSION < 0x060000
 		}
 #endif // 0 // for TEST
 	  }
@@ -440,7 +492,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  mouseReleaseEvent(releaseEvent);
 	  delete releaseEvent;
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 	  QPoint pos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+	  QPoint pos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 	  if (convertToDesktop(pos)){
 		QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 													QPointF(pos),
@@ -451,7 +507,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		mouseReleaseEvent(releaseEvent);
 		delete releaseEvent;
 		// move current pos
+#if QT_VERSION < 0x060000
 		desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+#else // QT_VERSION < 0x060000
+		desktopPanelWidget->setCurrentPos(touchPoint.position().toPoint());
+#endif // QT_VERSION < 0x060000
 	  }
 #endif // 0 // for TEST
 	}
@@ -480,8 +540,13 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	}
 	else if (inZooming){
 	  // scroll desktop
+#if QT_VERSION < 0x060000
 	  QPoint currentPos = touchPoint.pos().toPoint();
 	  QPoint lastPos = touchPoint.lastPos().toPoint();
+#else // QT_VERSION < 0x060000
+	  QPoint currentPos = touchPoint.position().toPoint();
+	  QPoint lastPos = touchPoint.lastPosition().toPoint();
+#endif // QT_VERSION < 0x060000
 	  QPoint move = lastPos - currentPos;
 #if 0 // Yet
 	  horizontalScrollBar()->setValue(horizontalScrollBar()->value() + move.x());
@@ -505,7 +570,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	}
 	else {
 	  // move mouse cursor
+#if QT_VERSION < 0x060000
 	  qreal distance = QLineF(lastPos, touchPoint.pos()).length();
+#else // QT_VERSION < 0x060000
+	  qreal distance = QLineF(lastPos, touchPoint.position()).length();
+#endif // QT_VERSION < 0x060000
 	  //qDebug() << "distance = " << distance;
 	  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
 #if 0 // for TEST
@@ -518,7 +587,11 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		delete moveEvent;
 		lastPos = touchPoint.pos();
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 		QPoint pos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+		QPoint pos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		if (convertToDesktop(pos)){
 		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 												   QPointF(pos),
@@ -527,9 +600,15 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 												   Qt::NoModifier);
 		  mouseMoveEvent(moveEvent);
 		  delete moveEvent;
+#if QT_VERSION < 0x060000
 		  lastPos = touchPoint.pos();
 		  // move current pos
 		  desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+#else // QT_VERSION < 0x060000
+		  lastPos = touchPoint.position();
+		  // move current pos
+		  desktopPanelWidget->setCurrentPos(touchPoint.position().toPoint());
+#endif // QT_VERSION < 0x060000
 		}
 #endif // 0 // for TEST
 	  }
@@ -550,10 +629,17 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
   // for zoom
   static bool inZooming = false;
 
+#if QT_VERSION < 0x060000
   const QTouchEvent::TouchPoint &touchPoint = touchEvent->touchPoints().first();
 
   QPoint currentPos = touchPoint.pos().toPoint();
   QPoint lastPos = touchPoint.lastPos().toPoint();
+#else // QT_VERSION < 0x060000
+  const QTouchEvent::TouchPoint &touchPoint = touchEvent->points().first();
+
+  QPoint currentPos = touchPoint.position().toPoint();
+  QPoint lastPos = touchPoint.lastPosition().toPoint();
+#endif // QT_VERSION < 0x060000
 
   // set TOP_TYPE
   topType = TOP_TYPE_1POINT;
@@ -605,7 +691,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  }
 	}
 	else {
+#if QT_VERSION < 0x060000
 	  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
+#else // QT_VERSION < 0x060000
+	  qreal distance = QLineF(touchPoint.pressPosition(), touchPoint.position()).length();
+#endif // QT_VERSION < 0x060000
 	  if (distance < QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
 		if (!settings->getOnShowSoftwareButton()){
 #if 0 // for TEST
@@ -632,7 +722,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		  delete pressEvent;
 		  delete releaseEvent;
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 		  QPoint pos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+		  QPoint pos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		  if (convertToDesktop(pos)){
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													 QPointF(pos),
@@ -657,7 +751,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 			delete pressEvent;
 			delete releaseEvent;
 			// move current pos
+#if QT_VERSION < 0x060000
 			desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+#else // QT_VERSION < 0x060000
+			desktopPanelWidget->setCurrentPos(touchPoint.position().toPoint());
+#endif // QT_VERSION < 0x060000
 		  }
 #endif // 0 // for TEST
 		}
@@ -700,7 +798,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  }
 	}
 	else {
+#if QT_VERSION < 0x060000
 	  qreal distance = QLineF(touchPoint.startPos(), touchPoint.pos()).length();
+#else // QT_VERSION < 0x060000
+	  qreal distance = QLineF(touchPoint.pressPosition(), touchPoint.position()).length();
+#endif // QT_VERSION < 0x060000
 	  if (distance < QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
 		if (!settings->getOnShowSoftwareButton()){
 #if 0 // for TEST
@@ -727,7 +829,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		  delete pressEvent;
 		  delete releaseEvent;
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 		  QPoint pos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+		  QPoint pos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		  if (convertToDesktop(pos)){
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													 QPointF(pos),
@@ -752,7 +858,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 			delete pressEvent;
 			delete releaseEvent;
 			// move current pos
+#if QT_VERSION < 0x060000
 			desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+#else // QT_VERSION < 0x060000
+			desktopPanelWidget->setCurrentPos(touchPoint.position().toPoint());
+#endif // QT_VERSION < 0x060000
 		  }
 #endif // 0 // for TEST
 		}
@@ -815,7 +925,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	  mouseMoveEvent(moveEvent);
 	  delete moveEvent;
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 	  QPoint pos = touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+	  QPoint pos = touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 	  if (convertToDesktop(pos)){
 		// move mouse cursor
 		QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
@@ -826,7 +940,11 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		mouseMoveEvent(moveEvent);
 		delete moveEvent;
 		// move current pos
+#if QT_VERSION < 0x060000
 		desktopPanelWidget->setCurrentPos(touchPoint.pos().toPoint());
+#else // QT_VERSION < 0x060000
+		desktopPanelWidget->setCurrentPos(touchPoint.position().toPoint());
+#endif // QT_VERSION < 0x060000
 	  }
 #endif // 0 // for TEST
 	}
@@ -849,7 +967,11 @@ bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	return true;
   }
 
+#if QT_VERSION < 0x060000
   QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+#else // QT_VERSION < 0x060000
+  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->points();
+#endif // QT_VERSION < 0x060000
 
   //---------------------------------------------------------------------------------
   // Press
@@ -881,9 +1003,15 @@ bool DesktopPanel::twoFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	// change scaling factor
 	const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
 	const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+#if QT_VERSION < 0x060000
 	qreal currentScalingFactor =
 	  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 	  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+#else // QT_VERSION < 0x060000
+	qreal currentScalingFactor =
+	  QLineF(touchPoint0.position(), touchPoint1.position()).length() /
+	  QLineF(touchPoint0.pressPosition(), touchPoint1.pressPosition()).length();
+#endif // QT_VERSION < 0x060000
 	if (currentScalingFactor < 1.0){
 	  scalingFactor -= 0.002;
 	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();
@@ -918,7 +1046,11 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	return true;
   }
 
+#if QT_VERSION < 0x060000
   QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+#else // QT_VERSION < 0x060000
+  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->points();
+#endif // QT_VERSION < 0x060000
 
   //---------------------------------------------------------------------------------
   // Press
@@ -942,8 +1074,13 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	else {
 	  const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
 	  const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+#if QT_VERSION < 0x060000
 	  int distance0 = QLineF(touchPoint0.startPos(), touchPoint0.pos()).length();
 	  int distance1 = QLineF(touchPoint1.startPos(), touchPoint1.pos()).length();
+#else // QT_VERSION < 0x060000
+	  int distance0 = QLineF(touchPoint0.pressPosition(), touchPoint0.position()).length();
+	  int distance1 = QLineF(touchPoint1.pressPosition(), touchPoint1.position()).length();
+#endif // QT_VERSION < 0x060000
 	  if (distance0 < QTB_TOUCHPANEL_2TAP_DIST_THRESHOLD &&
 		  distance1 < QTB_TOUCHPANEL_2TAP_DIST_THRESHOLD){
 		if (outputLog){
@@ -967,8 +1104,13 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		delete pressEvent;
 		delete releaseEvent;
 #else // 0 // for TEST
+#if QT_VERSION < 0x060000
 		QPoint pos = touchPoint0.pos().toPoint();
+#else // QT_VERSION < 0x060000
+		QPoint pos = touchPoint0.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		if (convertToDesktop(pos)){
+#if QT_VERSION < 0x060000
 		  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
 													touchPoint0.pos(),
 													Qt::RightButton,
@@ -979,6 +1121,18 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 													  Qt::RightButton,
 													  Qt::RightButton,
 													  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													touchPoint0.position(),
+													Qt::RightButton,
+													Qt::RightButton,
+													Qt::NoModifier);
+		  QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													  touchPoint0.position(),
+													  Qt::RightButton,
+													  Qt::RightButton,
+													  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 		  // R mouse button
 		  mousePressEvent(pressEvent);
 		  mouseReleaseEvent(releaseEvent);
@@ -1000,9 +1154,15 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 	// change scaling factor
 	const QTouchEvent::TouchPoint &touchPoint0 = touchPoints.first();
 	const QTouchEvent::TouchPoint &touchPoint1 = touchPoints.last();
+#if QT_VERSION < 0x060000
 	qreal currentScalingFactor =
 	  QLineF(touchPoint0.pos(), touchPoint1.pos()).length() /
 	  QLineF(touchPoint0.startPos(), touchPoint1.startPos()).length();
+#else // QT_VERSION < 0x060000
+	qreal currentScalingFactor =
+	  QLineF(touchPoint0.position(), touchPoint1.position()).length() /
+	  QLineF(touchPoint0.pressPosition(), touchPoint1.pressPosition()).length();
+#endif // QT_VERSION < 0x060000
 	if (currentScalingFactor < 1.0){
 	  scalingFactor -= 0.002;
 	  qreal scalingFactorForFullScreen = getScalingFactorForFullScreen();

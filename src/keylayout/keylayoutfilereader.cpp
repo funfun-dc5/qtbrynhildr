@@ -32,7 +32,7 @@ KeyLayoutFileReader::KeyLayoutFileReader(const char *layoutfilepath)
   QDir dir(layoutfilepath);
   QFileInfoList list = dir.entryInfoList();
 
-  for (int i = 0, size = list.size(); i < size; i++){
+  for (int i = 0, size = (int)list.size(); i < size; i++){
 	QFileInfo fileInfo = list.at(i);
 	QString filename = fileInfo.fileName();
 	if (filename.endsWith(QTB_KEYLAYOUT_FILE_SUFFIXX)){
@@ -72,7 +72,7 @@ QStringList KeyLayoutFileReader::getKeyboardTypeList()
 // get index of keyboard type
 int KeyLayoutFileReader::getIndexOfKeyboardType(QString keyboardTypeName)
 {
-  return keyboardTypeList.indexOf(keyboardTypeName);
+  return (int)keyboardTypeList.indexOf(keyboardTypeName);
 }
 
 // read a key layout file

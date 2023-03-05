@@ -90,8 +90,12 @@ bool SK::event(QEvent *event)
 		qDebug() << "TouchStates = " << touchEvent->touchPointStates();
 	  }
 
+#if QT_VERSION < 0x060000
 	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
-	  int touchPointCount = touchPoints.count();
+#else // QT_VERSION < 0x060000
+	  QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->points();
+#endif // QT_VERSION < 0x060000
+	  int touchPointCount = (int)touchPoints.count();
 	  if (touchPointCount == 1){ // 1 finger
 
 		const QTouchEvent::TouchPoint &touchPoint = touchPoints.first();
@@ -99,13 +103,25 @@ bool SK::event(QEvent *event)
 		if (touchEvent->touchPointStates() & Qt::TouchPointPressed){ // Press
 		  if (outputLog){
 			qDebug() << "SK: 1 Pressed!";
+#if QT_VERSION < 0x060000
 			qDebug() << "pos = " << touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+			qDebug() << "pos = " << touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		  }
+#if QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
 												  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
+												  touchPoint.position(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 		  // left mouse button press
 		  mousePressEvent(newEvent);
 		  delete newEvent;
@@ -113,13 +129,25 @@ bool SK::event(QEvent *event)
 		else if (touchEvent->touchPointStates() & Qt::TouchPointReleased){ // Release
 		  if (outputLog){
 			qDebug() << "SK: 1 Released!";
+#if QT_VERSION < 0x060000
 			qDebug() << "pos = " << touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+			qDebug() << "pos = " << touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		  }
+#if QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 												  touchPoint.pos(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
 												  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+												  touchPoint.position(),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 		  // left mouse button release
 		  mouseReleaseEvent(newEvent);
 		  delete newEvent;
@@ -127,15 +155,28 @@ bool SK::event(QEvent *event)
 		else if (touchEvent->touchPointStates() & Qt::TouchPointMoved){ // Move
 		  if (outputLog){
 			qDebug() << "SK: 1 Moved!";
+#if QT_VERSION < 0x060000
 			qDebug() << "pos = " << touchPoint.pos().toPoint();
+#else // QT_VERSION < 0x060000
+			qDebug() << "pos = " << touchPoint.position().toPoint();
+#endif // QT_VERSION < 0x060000
 		  }
 		  // move mouse cursor
+#if QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
 												  touchPoint.pos(),
 												  Qt::NoButton,
 												  Qt::NoButton,
 												  Qt::NoModifier);
 
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
+												  touchPoint.position(),
+												  Qt::NoButton,
+												  Qt::NoButton,
+												  Qt::NoModifier);
+
+#endif // QT_VERSION < 0x060000
 		  // move
 		  mouseMoveEvent(newEvent);
 		  delete newEvent;

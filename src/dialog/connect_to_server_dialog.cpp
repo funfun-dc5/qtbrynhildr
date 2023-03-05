@@ -65,7 +65,7 @@ ConnectToServerDialog::ConnectToServerDialog(Settings *settings,
 #if defined(QTB_DEV_TOUCHPANEL) // for TEST
   lineEdit_hostname->insert(settings->getServerName());
   //lineEdit_hostname->insert("192.168.10.12");
-  serverNameListIndex = serverNameList->indexOf(settings->getServerName());
+  serverNameListIndex = (int)serverNameList->indexOf(settings->getServerName());
 #if QTB_AUTO_COMPLETE
   lineEdit_hostname->setCompleter(completer);
 #endif // QTB_AUTO_COMPLETE

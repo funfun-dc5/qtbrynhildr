@@ -405,7 +405,7 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
   // write all pcm data
   while(soundBuffer->getSize() > 0){
 	// get free size of buffer
-	int len = audioOutput->bytesFree();
+	int len = (int)audioOutput->bytesFree();
 	// write PCM data
 	if (len != 0){
 	  qint64 doneBytes = 0;

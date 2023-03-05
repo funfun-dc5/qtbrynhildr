@@ -117,7 +117,7 @@ Desktop::Desktop()
   screens = QApplication::screens();
 
   if (outputLog){
-	int screenCount = screens.count();
+	int screenCount = (int)screens.count();
 	for (int i = 0; i < screenCount; i++){
 	  std::cout << "[Desktop] screen : " << i << std::endl;
 	  QScreen *screen = screens.at(i);

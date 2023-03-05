@@ -339,6 +339,7 @@ bool SB::event(QEvent *event)
 #else // QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.position(),
+												  touchPoint.position(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
 												  Qt::NoModifier);
@@ -364,6 +365,7 @@ bool SB::event(QEvent *event)
 												  Qt::NoModifier);
 #else // QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+												  touchPoint.position(),
 												  touchPoint.position(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
@@ -433,6 +435,7 @@ bool SB::event(QEvent *event)
 #else // QT_VERSION < 0x060000
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 													  touchPoint0.position(),
+													  touchPoint0.position(),
 													  Qt::LeftButton,
 													  Qt::LeftButton,
 													  Qt::NoModifier);
@@ -460,6 +463,7 @@ bool SB::event(QEvent *event)
 													  Qt::NoModifier);
 #else // QT_VERSION < 0x060000
 			  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													  touchPoint1.position(),
 													  touchPoint1.position(),
 													  Qt::LeftButton,
 													  Qt::LeftButton,
@@ -557,11 +561,20 @@ void SB::mouseMoveEvent(QMouseEvent *event)
   SoftwareButton::mouseMoveEvent(event);
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
+#if QT_VERSION < 0x060000
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
 											pos,
 											event->button(),
 											event->buttons(),
 											event->modifiers());
+#else // QT_VERSION < 0x060000
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											pos,
+											pos,
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+#endif // QT_VERSION < 0x060000
 	desktopPanel->mouseMoveEventForSP(newEvent);
 	//delete newEvent;
   }

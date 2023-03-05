@@ -326,11 +326,20 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 #endif // QT_VERSION < 0x060000
 	  if (convertToDesktop(pos)){
 		if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+#if QT_VERSION < 0x060000
 		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 												   QPointF(pos),
 												   Qt::NoButton,
 												   Qt::NoButton,
 												   Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+												   QPointF(pos),
+												   QPointF(pos),
+												   Qt::NoButton,
+												   Qt::NoButton,
+												   Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 
 		  mouseMoveEvent(moveEvent);
 		  delete moveEvent;
@@ -340,11 +349,20 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		  lastPos = touchPoint.position();
 #endif // QT_VERSION < 0x060000
 		}
+#if QT_VERSION < 0x060000
 		QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  QPointF(pos),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
 												  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+												  QPointF(pos),
+												  QPointF(pos),
+												  Qt::LeftButton,
+												  Qt::LeftButton,
+												  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 
 		mousePressEvent(pressEvent);
 		delete pressEvent;
@@ -438,11 +456,20 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 #endif // QT_VERSION < 0x060000
 		if (convertToDesktop(pos)){
 		  if (lastPos.isNull() || distance > QTB_TOUCHPANEL_MOVE_DIST_THRESHOLD){
+#if QT_VERSION < 0x060000
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													 QPointF(pos),
 													 Qt::NoButton,
 													 Qt::NoButton,
 													 Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+													 QPointF(pos),
+													 QPointF(pos),
+													 Qt::NoButton,
+													 Qt::NoButton,
+													 Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 
 			mouseMoveEvent(moveEvent);
 			delete moveEvent;
@@ -452,21 +479,39 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 			lastPos = touchPoint.position();
 #endif // QT_VERSION < 0x060000
 		  }
+#if QT_VERSION < 0x060000
 		  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
-													 QPointF(pos),
+													QPointF(pos),
 													Qt::LeftButton,
 													Qt::LeftButton,
 													Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													QPointF(pos),
+													QPointF(pos),
+													Qt::LeftButton,
+													Qt::LeftButton,
+													Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 
 		  mousePressEvent(pressEvent);
 		  delete pressEvent;
 
 		  // release left button
+#if QT_VERSION < 0x060000
 		  QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 													  QPointF(pos),
 													  Qt::LeftButton,
 													  Qt::LeftButton,
 													  Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													  QPointF(pos),
+													  QPointF(pos),
+													  Qt::LeftButton,
+													  Qt::LeftButton,
+													  Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 
 		  mouseReleaseEvent(releaseEvent);
 		  delete releaseEvent;
@@ -498,11 +543,20 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 	  QPoint pos = touchPoint.position().toPoint();
 #endif // QT_VERSION < 0x060000
 	  if (convertToDesktop(pos)){
+#if QT_VERSION < 0x060000
 		QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
 													QPointF(pos),
 													Qt::LeftButton,
 													Qt::LeftButton,
 													Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													QPointF(pos),
+													QPointF(pos),
+													Qt::LeftButton,
+													Qt::LeftButton,
+													Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 
 		mouseReleaseEvent(releaseEvent);
 		delete releaseEvent;
@@ -593,11 +647,20 @@ bool DesktopPanel::oneFingerEventForKeroRemote(QTouchEvent *touchEvent)
 		QPoint pos = touchPoint.position().toPoint();
 #endif // QT_VERSION < 0x060000
 		if (convertToDesktop(pos)){
+#if QT_VERSION < 0x060000
 		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 												   QPointF(pos),
 												   Qt::NoButton,
 												   Qt::NoButton,
 												   Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		  QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+												   QPointF(pos),
+												   QPointF(pos),
+												   Qt::NoButton,
+												   Qt::NoButton,
+												   Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 		  mouseMoveEvent(moveEvent);
 		  delete moveEvent;
 #if QT_VERSION < 0x060000
@@ -728,6 +791,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		  QPoint pos = touchPoint.position().toPoint();
 #endif // QT_VERSION < 0x060000
 		  if (convertToDesktop(pos)){
+#if QT_VERSION < 0x060000
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													 QPointF(pos),
 													 Qt::NoButton,
@@ -743,6 +807,26 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 														Qt::LeftButton,
 														Qt::LeftButton,
 														Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+													 QPointF(pos),
+													 QPointF(pos),
+													 Qt::NoButton,
+													 Qt::NoButton,
+													 Qt::NoModifier);
+			QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													  QPointF(pos),
+													  QPointF(pos),
+													  Qt::LeftButton,
+													  Qt::LeftButton,
+													  Qt::NoModifier);
+			QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+														QPointF(pos),
+														QPointF(pos),
+														Qt::LeftButton,
+														Qt::LeftButton,
+														Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 			// move + L mouse button
 			mouseMoveEvent(moveEvent);
 			mousePressEvent(pressEvent);
@@ -835,6 +919,7 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 		  QPoint pos = touchPoint.position().toPoint();
 #endif // QT_VERSION < 0x060000
 		  if (convertToDesktop(pos)){
+#if QT_VERSION < 0x060000
 			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 													 QPointF(pos),
 													 Qt::NoButton,
@@ -850,6 +935,26 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 														Qt::LeftButton,
 														Qt::LeftButton,
 														Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+			QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+													 QPointF(pos),
+													 QPointF(pos),
+													 Qt::NoButton,
+													 Qt::NoButton,
+													 Qt::NoModifier);
+			QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
+													  QPointF(pos),
+													  QPointF(pos),
+													  Qt::LeftButton,
+													  Qt::LeftButton,
+													  Qt::NoModifier);
+			QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+														QPointF(pos),
+														QPointF(pos),
+														Qt::LeftButton,
+														Qt::LeftButton,
+														Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 			// move + L mouse button
 			mouseMoveEvent(moveEvent);
 			mousePressEvent(pressEvent);
@@ -932,11 +1037,20 @@ bool DesktopPanel::oneFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 #endif // QT_VERSION < 0x060000
 	  if (convertToDesktop(pos)){
 		// move mouse cursor
+#if QT_VERSION < 0x060000
 		QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
 												 QPointF(pos),
 												 Qt::NoButton,
 												 Qt::NoButton,
 												 Qt::NoModifier);
+#else // QT_VERSION < 0x060000
+		QMouseEvent *moveEvent = new QMouseEvent(QEvent::MouseMove,
+												 QPointF(pos),
+												 QPointF(pos),
+												 Qt::NoButton,
+												 Qt::NoButton,
+												 Qt::NoModifier);
+#endif // QT_VERSION < 0x060000
 		mouseMoveEvent(moveEvent);
 		delete moveEvent;
 		// move current pos
@@ -1124,10 +1238,12 @@ bool DesktopPanel::twoFingerEventForQtBrynhildr(QTouchEvent *touchEvent)
 #else // QT_VERSION < 0x060000
 		  QMouseEvent *pressEvent = new QMouseEvent(QEvent::MouseButtonPress,
 													touchPoint0.position(),
+													touchPoint0.position(),
 													Qt::RightButton,
 													Qt::RightButton,
 													Qt::NoModifier);
 		  QMouseEvent *releaseEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+													  touchPoint0.position(),
 													  touchPoint0.position(),
 													  Qt::RightButton,
 													  Qt::RightButton,

@@ -118,6 +118,7 @@ bool SK::event(QEvent *event)
 #else // QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonPress,
 												  touchPoint.position(),
+												  touchPoint.position(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
 												  Qt::NoModifier);
@@ -143,6 +144,7 @@ bool SK::event(QEvent *event)
 												  Qt::NoModifier);
 #else // QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseButtonRelease,
+												  touchPoint.position(),
 												  touchPoint.position(),
 												  Qt::LeftButton,
 												  Qt::LeftButton,
@@ -171,6 +173,7 @@ bool SK::event(QEvent *event)
 
 #else // QT_VERSION < 0x060000
 		  QMouseEvent *newEvent = new QMouseEvent(QEvent::MouseMove,
+												  touchPoint.position(),
 												  touchPoint.position(),
 												  Qt::NoButton,
 												  Qt::NoButton,
@@ -205,11 +208,20 @@ void SK::mousePressEvent(QMouseEvent *event)
   SoftwareKeyboard::mousePressEvent(event);
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
+#if QT_VERSION < 0x060000
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
 											pos,
 											event->button(),
 											event->buttons(),
 											event->modifiers());
+#else // QT_VERSION < 0x060000
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											pos,
+											pos,
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+#endif // QT_VERSION < 0x060000
 #if defined(QTB_DEV_TOUCHPANEL)
 	desktopPanel->mouseMoveEventForSP(newEvent);
 #endif // defined(QTB_DEV_TOUCHPANEL)
@@ -223,11 +235,20 @@ void SK::mouseReleaseEvent(QMouseEvent *event)
   SoftwareKeyboard::mouseReleaseEvent(event);
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
+#if QT_VERSION < 0x060000
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
 											pos,
 											event->button(),
 											event->buttons(),
 											event->modifiers());
+#else // QT_VERSION < 0x060000
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											pos,
+											pos,
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+#endif // QT_VERSION < 0x060000
 	desktopPanel->mouseReleaseEventForSP(newEvent);
 	//delete newEvent;
   }
@@ -238,11 +259,20 @@ void SK::mouseMoveEvent(QMouseEvent *event)
   SoftwareKeyboard::mouseMoveEvent(event);
   if (!isOnButton()){
 	QPoint pos = event->pos() + this->pos();
+#if QT_VERSION < 0x060000
 	QMouseEvent *newEvent = new QMouseEvent(event->type(),
 											pos,
 											event->button(),
 											event->buttons(),
 											event->modifiers());
+#else // QT_VERSION < 0x060000
+	QMouseEvent *newEvent = new QMouseEvent(event->type(),
+											pos,
+											pos,
+											event->button(),
+											event->buttons(),
+											event->modifiers());
+#endif // QT_VERSION < 0x060000
 	desktopPanel->mouseMoveEventForSP(newEvent);
 	//delete newEvent;
   }

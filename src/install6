@@ -157,6 +157,11 @@ case $UNAME in
 				PKGNAME="macosx_x64"
 				echo "Installing for Darwin x64..."
 				;;
+			arm64)
+				DISTDIR="../dist/macosx"
+				PKGNAME="macosx_arm64"
+				echo "Installing for Darwin arm64..."
+				;;
 		esac
 		;;
 	*)

@@ -10,3 +10,13 @@ ICON = images/qtbrynhildr.icns
 # for warnings
 CONFIG += sdk_no_version_check
 }
+
+macos-arm64 {
+CONFIG += desktop vp8-neon recorder
+DEFINES += PLATFORM_MACOS
+BUILDARCH = macos-arm64
+ICON = images/qtbrynhildr.icns
+
+# for warnings
+CONFIG += sdk_no_version_check
+}

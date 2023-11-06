@@ -44,6 +44,8 @@ if [ -n "$2" ] ; then
 	esac
 fi
 
+UNAME=`/usr/bin/uname`
+
 case $UNAME in
 	CYGWIN*)
 		if [ "$1" = "" ] ; then
@@ -76,7 +78,7 @@ case $UNAME in
 		popd
 		rm -rf ../dist/docs/manual/*
 		# delete files for install
-		./install $EXTOPT clean
+		./install6 $EXTOPT clean
 		;;
 	Linux)
 		make clean
@@ -90,7 +92,7 @@ case $UNAME in
 		popd
 		rm -rf ../dist/docs/manual/*
 		# delete files for install
-		./install $EXTOPT clean
+		./install6 $EXTOPT clean
 		;;
 	FreeBSD)
 		make clean
@@ -104,7 +106,7 @@ case $UNAME in
 		popd
 		rm -rf ../dist/docs/manual/*
 		# delete files for install
-		./install clean
+		./install6 clean
 		;;
 	Darwin)
 		make clean
@@ -118,7 +120,7 @@ case $UNAME in
 		popd
 		rm -rf ../dist/docs/manual/*
 		# delete files for install
-		./install clean
+		./install6 clean
 		;;
 	*)
 		echo "clean : Not support platform. $UNAME"

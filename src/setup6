@@ -69,6 +69,9 @@ case $UNAME in
 			x86_64)
 				BUILDARCH=macos-x64
 				;;
+			arm64)
+				BUILDARCH=macos-arm64
+				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
 				return;;
@@ -83,7 +86,7 @@ fi
 
 source ./setup_qt6 $TARGET
 
-./clean $TARGET
+./clean6 $TARGET
 rm -f Makefile Makefile.Release Makefile.Debug
 rm -f object_script.*
 if [ -z $CONFIG ] ; then

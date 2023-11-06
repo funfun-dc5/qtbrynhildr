@@ -11,7 +11,7 @@ PATHLIST=
 #------------------
 # Qt 6.4 -
 #------------------
-QTVERSION=6.5.0
+QTVERSION=6.6.0
 VCVERSION=msvc2019
 MINGWVERSION=1120
 
@@ -95,6 +95,11 @@ case $UNAME in
 	Darwin)
 		case $UNAMEM in
 			x86_64)
+				QTROOT=/opt/Qt/${QTVERSION}/macos
+				# Coverity Scan
+				PATHLIST=/opt/cov-analysis-macosx-${COVVERSION}/bin:${PATHLIST}
+				;;
+			arm64)
 				QTROOT=/opt/Qt/${QTVERSION}/macos
 				# Coverity Scan
 				PATHLIST=/opt/cov-analysis-macosx-${COVVERSION}/bin:${PATHLIST}

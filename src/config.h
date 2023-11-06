@@ -10,12 +10,12 @@ namespace qtbrynhildr {
 #if defined(Q_OS_WIN)
 // windows socket (WinSock)
 #define QTB_NET_WIN	1
-#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN)
+#elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_MACOS) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN)
 // unix socket
 #define QTB_NET_UNIX	1
-#else // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
+#else // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_MACOS) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 #error "Not support Q_OS for QTB_NET_*"
-#endif // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
+#endif // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_MACOS) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 
 // for WinSock1 (TEST)
 #define QTB_NET_WINSOCK1 0
@@ -23,11 +23,11 @@ namespace qtbrynhildr {
 // for device type
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #define QTB_DEV_TOUCHPANEL
-#elif defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_CYGWIN)
+#elif defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_MACOS) || defined(Q_OS_CYGWIN)
 #define QTB_DEV_DESKTOP
-#else // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
+#else // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_MACOS) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 #error "Not support Q_OS for QTB_DEV_*"
-#endif // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_OSX) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
+#endif // !(defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_MACOS) || defined(Q_OS_IOS) || defined(Q_OS_CYGWIN))
 
 // main window size fixed mode
 const bool QTB_FIXED_MAINWINDOW_SIZE	= true;

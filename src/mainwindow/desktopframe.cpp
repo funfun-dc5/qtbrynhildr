@@ -766,11 +766,11 @@ void DesktopFrame::keyReleaseEvent(QKeyEvent *event)
 	if (previous_KEYCODE_FLG == KEYCODE_FLG_KEYUP){
 	  // check VK_TAB and VK_SPACE(Eisu and Kana)
 	  switch(VK_Code){
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_MACOS)
 	  case VK_SPACE:
 		VK_Code = VK_KANJI;
 		// Fall Through
-#endif // defined(Q_OS_OSX)
+#endif // defined(Q_OS_MACOS)
 	  case VK_TAB:
 		keyBuffer->put(VK_Code, KEYCODE_FLG_KEYDOWN);
 		break;

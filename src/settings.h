@@ -178,11 +178,11 @@ typedef int KEYBOARD_TYPE;
 
 // for onSendControlKeyState
 #define QTB_ONSENDCONTROLKEYSTATE "onSendControlKeyState"
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_MACOS)
 #define QTB_ONSENDCONTROLKEYSTATE_DEFAULT true
-#else // !defined(Q_OS_OSX)
+#else // !defined(Q_OS_MACOS)
 #define QTB_ONSENDCONTROLKEYSTATE_DEFAULT false
-#endif // !defined(Q_OS_OSX)
+#endif // !defined(Q_OS_MACOS)
 
 // for onGraphics
 #define QTB_ONGRAPHICS			"onGraphics"

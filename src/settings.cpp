@@ -319,11 +319,11 @@ void Settings::setDefaultValues()
   // FreeBSD
   hspace = 0;
   vspace = 0;
-#elif defined(Q_OS_OSX)
+#elif defined(Q_OS_MACOS)
   // Darwin
   hspace = 1;
   vspace = 0;
-#endif // defined(Q_OS_OSX)
+#endif // defined(Q_OS_MACOS)
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 
   // set hSpace, vSpace

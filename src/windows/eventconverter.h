@@ -84,13 +84,13 @@ private:
 	{Qt::Key_PageUp,				VK_PRIOR,		SHIFTKEY_THROUGH},
 	{Qt::Key_PageDown,				VK_NEXT,		SHIFTKEY_THROUGH},
 	{Qt::Key_Shift,					VK_SHIFT,		SHIFTKEY_THROUGH},
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_MACOS)
 	{Qt::Key_Control,				VK_LWIN,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_CONTROL,		SHIFTKEY_THROUGH},
-#else // !defined(Q_OS_OSX)
+#else // !defined(Q_OS_MACOS)
 	{Qt::Key_Control,				VK_CONTROL,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_LWIN,		SHIFTKEY_THROUGH},
-#endif // !defined(Q_OS_OSX)
+#endif // !defined(Q_OS_MACOS)
 	{Qt::Key_Alt,					VK_MENU,		SHIFTKEY_THROUGH},
 	{Qt::Key_CapsLock,				VK_CAPITAL,		SHIFTKEY_THROUGH},
 	{Qt::Key_NumLock,				VK_NUMLOCK,		SHIFTKEY_THROUGH},
@@ -242,13 +242,13 @@ private:
 	{Qt::Key_PageUp,				VK_PRIOR,		SHIFTKEY_THROUGH},
 	{Qt::Key_PageDown,				VK_NEXT,		SHIFTKEY_THROUGH},
 	{Qt::Key_Shift,					VK_SHIFT,		SHIFTKEY_THROUGH},
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_MACOS)
 	{Qt::Key_Control,				VK_LWIN,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_CONTROL,		SHIFTKEY_THROUGH},
-#else // !defined(Q_OS_OSX)
+#else // !defined(Q_OS_MACOS)
 	{Qt::Key_Control,				VK_CONTROL,		SHIFTKEY_THROUGH},
 	{Qt::Key_Meta,					VK_LWIN,		SHIFTKEY_THROUGH},
-#endif // !defined(Q_OS_OSX)
+#endif // !defined(Q_OS_MACOS)
 	{Qt::Key_Alt,					VK_MENU,		SHIFTKEY_THROUGH},
 	{Qt::Key_CapsLock,				VK_CAPITAL,		SHIFTKEY_THROUGH},
 	{Qt::Key_NumLock,				VK_NUMLOCK,		SHIFTKEY_THROUGH},

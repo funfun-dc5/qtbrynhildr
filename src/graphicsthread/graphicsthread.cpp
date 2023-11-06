@@ -658,7 +658,7 @@ qreal GraphicsThread::getDesktopScalingFactor(QSize size)
 		}
 	  } // end of while
 	}
-#elif  defined(Q_OS_OSX)
+#elif  defined(Q_OS_MACOS)
 	else {
 	  // Darwin
 	  // Internal Error: Unknown State

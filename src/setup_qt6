@@ -11,7 +11,7 @@ PATHLIST=
 #------------------
 # Qt 6.4 -
 #------------------
-QTVERSION=6.6.1
+QTVERSION=6.6.3
 VCVERSION=msvc2019
 MINGWVERSION=1120
 

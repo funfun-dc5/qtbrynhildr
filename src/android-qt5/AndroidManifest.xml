@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<manifest package="org.qtproject.mczxoxo.QtBrynhildr" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.5.1" android:versionCode="2501" android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="33"/>
+<manifest package="org.qtproject.mczxoxo.QtBrynhildr" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.5.2" android:versionCode="2502" android:installLocation="auto">
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->

@@ -1169,13 +1169,16 @@ bool ControlThread::receiveClipboard()
   // get cliboard
   while(clipboardSize > QTB_CONTROL_LOCAL_BUFFER_SIZE){
 	receivedDataSize = (SIZE)receiveData(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
-	clipboardSize -= receivedDataSize;
+	if (receivedDataSize > 0)
+	  clipboardSize -= receivedDataSize;
   }
   if (clipboardSize > 0){
 	receivedDataSize = (SIZE)receiveData(buffer, clipboardSize);
-	clipboardSize -= receivedDataSize;
-	buffer[receivedDataSize] = '\0';
-	buffer[receivedDataSize+1] = '\0';
+	if (receivedDataSize == clipboardSize){
+	  clipboardSize = 0;
+	  buffer[receivedDataSize] = '\0';
+	  buffer[receivedDataSize+1] = '\0';
+	}
   }
   if (clipboardSize == 0){
 	// set cliboard
@@ -1282,7 +1285,7 @@ bool ControlThread::sendFile()
 	}
 	if (fileSize > 0){
 	  int fragmentSize = fileSize & 0x3FF; // fileSize % 1024(10bit)
-	  int paddingSize = (fragmentSize < 16) ? 16 - fragmentSize : 0;
+	  unsigned int paddingSize = (fragmentSize < 16) ? 16 - fragmentSize : 0;
 	  // read to buffer
 	  file.read(buffer, fileSize);
 	  // send to server

@@ -300,7 +300,7 @@ case $UNAME in
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/imageformats/qjpeg.dll ${DISTDIR}/bin/imageformats
 #			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/audio/qtaudio_windows.dll ${DISTDIR}/bin/audio
 			if [ -d ${QTROOT}/plugins/styles ] ; then
-				${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/styles/qwindowsvistastyle.dll ${DISTDIR}/bin/styles
+				${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/styles/qmodernwindowsstyle.dll ${DISTDIR}/bin/styles
 			fi
 			${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/plugins/tls/qopensslbackend.dll ${DISTDIR}/bin/tls
 			# copy openssl dll

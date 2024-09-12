@@ -108,8 +108,8 @@ else
 		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
 		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
 	else
-		echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
-		${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+		echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xcode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
+		${QTROOT}/bin/${QMAKE} -spec macx-xcode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
 	fi
 fi
 

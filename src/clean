@@ -134,7 +134,7 @@ case $UNAME in
 		fi
 		;;
 	*)
-		echo "clean : Not support platform. $UNAME"
+		echo "$0 : Not support platform. $UNAME"
 		exit 1;
 		;;
 esac

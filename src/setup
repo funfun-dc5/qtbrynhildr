@@ -89,7 +89,17 @@ source ./setup_qt5 $TARGET
 
 ./clean $TARGET
 
-if [ "$TARGET" != "ios" ] ; then
+if [ "$TARGET" = "ios" ] ; then
+	# for xcode
+	echo "for xcode"
+	if [ -z $CONFIG ] ; then
+		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
+		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+	else
+		echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xcode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
+		${QTROOT}/bin/${QMAKE} -spec macx-xcode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+	fi
+else
 	# for make
 	echo "for make"
 	rm -f Makefile Makefile.Release Makefile.Debug
@@ -100,16 +110,6 @@ if [ "$TARGET" != "ios" ] ; then
 	else
 		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
 		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
-	fi
-else
-	# for xcode
-	echo "for xcode"
-	if [ -z $CONFIG ] ; then
-		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
-		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
-	else
-		echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
-		${QTROOT}/bin/${QMAKE} -spec macx-xode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
 	fi
 fi
 

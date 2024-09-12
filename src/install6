@@ -354,15 +354,15 @@ case $UNAME in
 					;;
 			esac
 			fi
-			if [ "$TARGET" = "msvc-xp" ] ; then
-					# for JVNVU#92669710
-					if [ -x "${QTROOT}/bin/Qt6Core_patched.dll" ] ; then
-						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core_patched.dll ${DISTDIR}/bin/Qt6Core.dll
-					else
-						echo "NOT Found Qt6Core_patched.dll file!!"
-						exit 1;
-					fi
-			fi
+#			if [ "$TARGET" = "msvc-xp" ] ; then
+#					# for JVNVU#92669710
+#					if [ -x "${QTROOT}/bin/Qt5Core_patched.dll" ] ; then
+#						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Core_patched.dll ${DISTDIR}/bin/Qt5Core.dll
+#					else
+#						echo "NOT Found Qt5Core_patched.dll file!!"
+#						exit 1;
+#					fi
+#			fi
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} "release/${APP}.exe" ${DISTDIR}/bin

@@ -402,20 +402,30 @@ TRANSMIT_RESULT SoundThread::putPCMDataIntoSoundDevice()
 #endif // 0 // for TEST
   }
 #else // QT_VERSION >= 0x060000
-  // write all pcm data
-  while(soundBuffer->getSize() > 0){
-	// get free size of buffer
-	int len = (int)audioOutput->bytesFree();
-	// write PCM data
-	if (len != 0){
-	  qint64 doneBytes = 0;
-	  while(true){
-		qint64 result = output->write(soundBuffer->get(len), len);
-		doneBytes += result;
-		if (doneBytes >= len) break;
-		QThread::msleep(5);
+  qint64 dataSize = soundBuffer->getSize();
+  // write into sound buffer
+  if((dataSize > soundCacheSize) &&
+	 (audioOutput->state() != QAudio::StoppedState)){
+
+	  qint64 len = (int)audioOutput->bytesFree();
+
+	  if (len != 0){
+		// write PCM data
+		if (dataSize >= len){
+		  qint64 result = output->write(soundBuffer->get(len), len);
+		  if(result != len){
+			// Failed to write
+			return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
+		  }
+		}
+		else {
+		  qint64 result = output->write(soundBuffer->get(dataSize), dataSize);
+		  if(result != dataSize){
+			// Failed to write
+			return TRANSMIT_FAILED_TRANSMIT_DEVICE_BUFFER;
+		  }
+		}
 	  }
-	}
   }
 #endif // QT_VERSION >= 0x060000
 

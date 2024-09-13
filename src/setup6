@@ -27,8 +27,6 @@ case $UNAME in
 		case $UNAMEM in
 			x86_64)
 				;;
-			i686)
-				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
 				return;;
@@ -38,9 +36,6 @@ case $UNAME in
 		case $UNAMEM in
 			x86_64)
 				BUILDARCH=linux-x64
-				;;
-			i686)
-				BUILDARCH=linux-x86
 				;;
 			armv7l)
 				# Raspberry Pi 3
@@ -55,9 +50,6 @@ case $UNAME in
 		case $UNAMEM in
 			amd64)
 				BUILDARCH=freebsd-x64
-				;;
-			i386)
-				BUILDARCH=freebsd-x86
 				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"

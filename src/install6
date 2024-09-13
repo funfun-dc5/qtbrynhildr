@@ -23,15 +23,7 @@ if [ -n "$1" ] ; then
 		msvc64)
 			ARCH=x86_64
 			;;
-		msvc)
-			ARCH=x86
-			;;
-		msvc-xp)
-			ARCH=x86
-			;;
 		ubuntu64)
-			;;
-		ubuntu)
 			;;
 		withqt)
 			WITHQT=ON
@@ -83,10 +75,6 @@ case $UNAME in
 							PKGNAME="cygwin_x64"
 							echo "Installing for Cygwin x64..."
 							;;
-						x86)
-							PKGNAME="cygwin_x86"
-							echo "Installing for Cygwin x86..."
-							;;
 					esac
 					DISTDIR="../dist/cygwin/$PKGNAME"
 					INSTALLEXEFLAGS="-s"
@@ -109,14 +97,6 @@ case $UNAME in
 				PKGNAME="linux_x64"
 				echo "Installing for Linux x64..."
 				;;
-			i686)
-				PKGNAME="linux_x86"
-				echo "Installing for Linux x86..."
-				;;
-			armv6l)
-				PKGNAME="linux_armv6l"
-				echo "Installing for Linux armv6l..."
-				;;
 			armv7l)
 				PKGNAME="linux_armv7l"
 				echo "Installing for Linux armv7l..."
@@ -126,9 +106,6 @@ case $UNAME in
 			case $TARGET in
 				ubuntu64)
 					PKGNAME="ubuntu_x64"
-					;;
-				ubuntu)
-					PKGNAME="ubuntu_x86"
 					;;
 			esac
 			DISTDIR="../dist/linux/$PKGNAME"
@@ -141,10 +118,6 @@ case $UNAME in
 			amd64)
 				PKGNAME="freebsd_x64"
 				echo "Installing for FreeBSD x64..."
-				;;
-			i386)
-				PKGNAME="freebsd_x86"
-				echo "Installing for FreeBSD x86..."
 				;;
 		esac
 		DISTDIR="../dist/freebsd/$PKGNAME"

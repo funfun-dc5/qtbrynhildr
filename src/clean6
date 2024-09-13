@@ -11,19 +11,10 @@ if [ -n "$1" ] ; then
 			EXTOPT="cygwin"
 			;;
 		msvc64)
-			EXTOPT="msvc"
-			;;
-		msvc)
 			EXTOPT="msvc64"
-			;;
-		xp)
-			EXTOPT="xp"
 			;;
 		ubuntu64)
 			EXTOPT="ubuntu64"
-			;;
-		ubuntu)
-			EXTOPT="ubuntu"
 			;;
 		ios)
 			EXTOPT="ios"

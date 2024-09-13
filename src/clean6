@@ -11,19 +11,16 @@ if [ -n "$1" ] ; then
 			EXTOPT="cygwin"
 			;;
 		msvc64)
-			EXTOPT="msvc"
-			;;
-		msvc)
 			EXTOPT="msvc64"
-			;;
-		xp)
-			EXTOPT="xp"
 			;;
 		ubuntu64)
 			EXTOPT="ubuntu64"
 			;;
-		ubuntu)
-			EXTOPT="ubuntu"
+		ios)
+			EXTOPT="ios"
+			;;
+		macos-arm64)
+			EXTOPT="macos-arm64"
 			;;
 		*)
 			echo "Unkown argument1 : $1"
@@ -123,7 +120,7 @@ case $UNAME in
 		./install6 clean
 		;;
 	*)
-		echo "clean : Not support platform. $UNAME"
+		echo "$0 : Not support platform. $UNAME"
 		exit 1;
 		;;
 esac

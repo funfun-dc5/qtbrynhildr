@@ -23,15 +23,7 @@ if [ -n "$1" ] ; then
 		msvc64)
 			ARCH=x86_64
 			;;
-		msvc)
-			ARCH=x86
-			;;
-		msvc-xp)
-			ARCH=x86
-			;;
 		ubuntu64)
-			;;
-		ubuntu)
 			;;
 		withqt)
 			WITHQT=ON
@@ -83,10 +75,6 @@ case $UNAME in
 							PKGNAME="cygwin_x64"
 							echo "Installing for Cygwin x64..."
 							;;
-						x86)
-							PKGNAME="cygwin_x86"
-							echo "Installing for Cygwin x86..."
-							;;
 					esac
 					DISTDIR="../dist/cygwin/$PKGNAME"
 					INSTALLEXEFLAGS="-s"
@@ -109,14 +97,6 @@ case $UNAME in
 				PKGNAME="linux_x64"
 				echo "Installing for Linux x64..."
 				;;
-			i686)
-				PKGNAME="linux_x86"
-				echo "Installing for Linux x86..."
-				;;
-			armv6l)
-				PKGNAME="linux_armv6l"
-				echo "Installing for Linux armv6l..."
-				;;
 			armv7l)
 				PKGNAME="linux_armv7l"
 				echo "Installing for Linux armv7l..."
@@ -126,9 +106,6 @@ case $UNAME in
 			case $TARGET in
 				ubuntu64)
 					PKGNAME="ubuntu_x64"
-					;;
-				ubuntu)
-					PKGNAME="ubuntu_x86"
 					;;
 			esac
 			DISTDIR="../dist/linux/$PKGNAME"
@@ -141,10 +118,6 @@ case $UNAME in
 			amd64)
 				PKGNAME="freebsd_x64"
 				echo "Installing for FreeBSD x64..."
-				;;
-			i386)
-				PKGNAME="freebsd_x86"
-				echo "Installing for FreeBSD x86..."
 				;;
 		esac
 		DISTDIR="../dist/freebsd/$PKGNAME"
@@ -308,16 +281,16 @@ case $UNAME in
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libeay32.dll ${DISTDIR}/bin
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/libssl32.dll ${DISTDIR}/bin
 #			${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL/${ARCH}/ssleay32.dll ${DISTDIR}/bin
-			# OpenSSL 1.1.1x
+			# OpenSSL 3
 			if [ "$2" = "openssl" -o "$3" = "openssl" ] ; then
 			case $UNAMEM in
 				x86_64)
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL3libcrypto-3-x64.dll ${DISTDIR}/bin
+					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL3/libssl-3-x64.dll ${DISTDIR}/bin
 					;;
 				x86)
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
-					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+#					${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
 					;;
 			esac
 			else
@@ -343,26 +316,26 @@ case $UNAME in
 					# for windows
 					case $UNAMEM in
 						x86_64)
-							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1-x64.dll ${DISTDIR}/bin
-							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1-x64.dll ${DISTDIR}/bin
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL3/libcrypto-3-x64.dll ${DISTDIR}/bin
+							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL3/libssl-3-x64.dll ${DISTDIR}/bin
 							;;
 						x86)
-							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
-							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
+#							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libcrypto-1_1.dll ${DISTDIR}/bin
+#							${INSTALL} ${INSTALLDLLFLAGS} ${DISTDIR}/DLL/OpenSSL111x/libssl-1_1.dll ${DISTDIR}/bin
 							;;
 					esac
 					;;
 			esac
 			fi
-			if [ "$TARGET" = "msvc-xp" ] ; then
-					# for JVNVU#92669710
-					if [ -x "${QTROOT}/bin/Qt6Core_patched.dll" ] ; then
-						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt6Core_patched.dll ${DISTDIR}/bin/Qt6Core.dll
-					else
-						echo "NOT Found Qt6Core_patched.dll file!!"
-						exit 1;
-					fi
-			fi
+#			if [ "$TARGET" = "msvc-xp" ] ; then
+#					# for JVNVU#92669710
+#					if [ -x "${QTROOT}/bin/Qt5Core_patched.dll" ] ; then
+#						${INSTALL} ${INSTALLDLLFLAGS} ${QTROOT}/bin/Qt5Core_patched.dll ${DISTDIR}/bin/Qt5Core.dll
+#					else
+#						echo "NOT Found Qt5Core_patched.dll file!!"
+#						exit 1;
+#					fi
+#			fi
 			# copy executable file
 			echo "copy executable file..."
 			${INSTALL} ${INSTALLEXEFLAGS} "release/${APP}.exe" ${DISTDIR}/bin

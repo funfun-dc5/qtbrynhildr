@@ -27,8 +27,6 @@ case $UNAME in
 		case $UNAMEM in
 			x86_64)
 				;;
-			i686)
-				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
 				return;;
@@ -38,9 +36,6 @@ case $UNAME in
 		case $UNAMEM in
 			x86_64)
 				BUILDARCH=linux-x64
-				;;
-			i686)
-				BUILDARCH=linux-x86
 				;;
 			armv7l)
 				# Raspberry Pi 3
@@ -56,9 +51,6 @@ case $UNAME in
 			amd64)
 				BUILDARCH=freebsd-x64
 				;;
-			i386)
-				BUILDARCH=freebsd-x86
-				;;
 			*)
 				echo "$0 : Not Support $UNAMEM"
 				return;;
@@ -68,6 +60,12 @@ case $UNAME in
 		case $UNAMEM in
 			x86_64)
 				BUILDARCH=macos-x64
+				if [ "$TARGET" = "ios" ] ; then
+					BUILDARCH=ios-arm64-v8a
+				fi
+				if [ "$TARGET" = "macos-arm64" ] ; then
+					BUILDARCH=macos-arm64
+				fi
 				;;
 			arm64)
 				BUILDARCH=macos-arm64
@@ -87,14 +85,29 @@ fi
 source ./setup_qt6 $TARGET
 
 ./clean6 $TARGET
-rm -f Makefile Makefile.Release Makefile.Debug
-rm -f object_script.*
-if [ -z $CONFIG ] ; then
-	echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
-	${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+
+if [ "$TARGET" = "ios" ] ; then
+	# for xcode
+	echo "for xcode"
+	if [ -z $CONFIG ] ; then
+		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
+		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+	else
+		echo "RUN : ${QTROOT}/bin/${QMAKE} -spec macx-xcode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
+		${QTROOT}/bin/${QMAKE} -spec macx-xcode ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+	fi
 else
-	echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
-	${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+	# for make
+	echo "for make"
+	rm -f Makefile Makefile.Release Makefile.Debug
+	rm -f object_script.*
+	if [ -z $CONFIG ] ; then
+		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}"
+		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH}
+	else
+		echo "RUN : ${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG"
+		${QTROOT}/bin/${QMAKE} ${PRO} BUILDARCH=${BUILDARCH} CONFIG+=$CONFIG
+	fi
 fi
 
 case $UNAME in

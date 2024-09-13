@@ -71,6 +71,9 @@ case $UNAME in
 				if [ "$TARGET" = "ios" ] ; then
 					BUILDARCH=ios-arm64-v8a
 				fi
+				if [ "$TARGET" = "macos-arm64" ] ; then
+					BUILDARCH=macos-arm64
+				fi
 				;;
 			arm64)
 				BUILDARCH=macos-arm64

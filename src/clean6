@@ -28,6 +28,9 @@ if [ -n "$1" ] ; then
 		ios)
 			EXTOPT="ios"
 			;;
+		macos-arm64)
+			EXTOPT="macos-arm64"
+			;;
 		*)
 			echo "Unkown argument1 : $1"
 			exit 1

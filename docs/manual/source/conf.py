@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Qt Brynhildr Manual'
-copyright = u'2015-2023, FunFun @ mcz-xoxo'
+copyright = u'2015-2024, FunFun @ mcz-xoxo'
 author = u'FunFun @ mcz-xoxo'
 
 # The version info for the project you're documenting, acts as replacement for

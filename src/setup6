@@ -82,7 +82,7 @@ case $UNAME in
 esac
 fi
 
-source ./setup_qt6 $TARGET
+source ./setup_qt6
 
 ./clean6 $TARGET
 

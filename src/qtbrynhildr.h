@@ -235,6 +235,9 @@ private:
   // exit application
   QAction *exit_Action;
 
+  // about Qt
+  QAction *aboutQt_Action;
+
   // about this application
   QAction *about_Action;
 

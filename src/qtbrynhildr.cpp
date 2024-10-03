@@ -114,6 +114,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   ,outputKeyboardLog_Action(nullptr)
   ,outputLog_Action(nullptr)
   ,exit_Action(nullptr)
+  ,aboutQt_Action(nullptr)
   ,about_Action(nullptr)
   ,checkUpdate_Action(nullptr)
 #if QTB_HELP_BROWSER
@@ -1696,6 +1697,12 @@ void QtBrynhildr::createActions()
   exit_Action->setMenuRole(QAction::QuitRole);
   connect(exit_Action, SIGNAL(triggered()), this, SLOT(exit()));
 
+  // about Qt Action
+  aboutQt_Action = new QAction(tr("About Qt"), this);
+  aboutQt_Action->setStatusTip(tr("About Qt"));
+  //  aboutQt_Action->setMenuRole(QAction::AboutRole);
+  connect(aboutQt_Action, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
   // about Action
   about_Action = new QAction(tr("About"), this);
   about_Action->setStatusTip(tr("About Qt Brynhildr"));
@@ -2756,6 +2763,7 @@ void QtBrynhildr::createMenus()
   helpMenu->addAction(helpBrowser_Action);
   helpMenu->addSeparator();
 #endif // QTB_HELP_BROWSER
+  helpMenu->addAction(aboutQt_Action);
   helpMenu->addAction(about_Action);
 
   // test mode menu

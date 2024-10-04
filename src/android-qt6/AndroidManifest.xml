@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="org.qtproject.mczxoxo.QtBrynhildr" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.5.2" android:versionCode="2502" android:installLocation="auto">
+<manifest package="org.qtproject.mczxoxo.QtBrynhildr" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="2.5.3" android:versionCode="2503" android:installLocation="auto">
     <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34"/>
 
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.

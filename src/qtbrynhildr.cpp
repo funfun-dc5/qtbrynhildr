@@ -588,7 +588,11 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
   // initialize palette
   backgroundPalette = fullScreenBackgroundPalette = desktopWindow->palette();
   // for background of desktop
+#if (QT_VERSION >= 0x060000) && (defined(Q_OS_WIN) || defined(Q_OS_CYGWIN))
+  backgroundPalette.setColor(QPalette::Base, QTB_DESKTOP_BACKGROUND_COLOR);
+#else // (QT_VERSION >= 0x060000) && (defined(Q_OS_WIN) || defined(Q_OS_CYGWIN))
   backgroundPalette.setColor(QPalette::Window, QTB_DESKTOP_BACKGROUND_COLOR);
+#endif // (QT_VERSION >= 0x060000) && (defined(Q_OS_WIN) || defined(Q_OS_CYGWIN))
   desktopWindow->setPalette(backgroundPalette); // change QPalette::Window to QTB_DESKTOP_BACKGROUND_COLOR
   // for full screen
   fullScreenBackgroundPalette.setColor(QPalette::Window, Qt::black);

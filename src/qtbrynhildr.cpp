@@ -1554,6 +1554,9 @@ void QtBrynhildr::drawDesktop(QImage image)
 	settings->setDesktopScalingFactorLimit(settings->getDesktopScalingFactor());
 #endif // defined(QTB_DEV_TOUCHPANEL)
   }
+
+  // update MainWindow
+  update();
 }
 
 // clear desktop
@@ -5014,13 +5017,11 @@ void QtBrynhildr::fullScreen()
 	desktopWindow->setPalette(fullScreenBackgroundPalette); // change QPalette::Window to black
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 	desktopFrame->setOnFullScreen(true);
+	originalScalingFactor = settings->getDesktopScalingFactor();
 	showFullScreen();
 	//std::cout << "size(width, height) = ("
 	//	 << size().width() << "," << size().height() << ")" << std::endl << std::flush;
-	//setDesktopScalingFactor(size());
-	originalScalingFactor = settings->getDesktopScalingFactor();
-	QSize screenSize = settings->getCurrentScreenSize();
-	setDesktopScalingFactor(screenSize);
+	setDesktopScalingFactor(size());
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){

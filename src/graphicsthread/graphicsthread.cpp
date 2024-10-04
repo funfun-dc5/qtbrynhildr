@@ -390,7 +390,7 @@ void GraphicsThread::drawDesktopImage(char *buf, int size, VIDEO_MODE mode)
 	video_mode = mode;
 
 	QString str = "Decoder : " + QString(decoder->name());
-	emit outputLogMessage(PHASE_GRAPHICS, str);
+	emit outputLogMessage(PHASE_GRAPHICS, std::move(str));
   }
 
   // pre-process

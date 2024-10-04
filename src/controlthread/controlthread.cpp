@@ -1184,7 +1184,7 @@ bool ControlThread::receiveClipboard()
 	// set cliboard
 	QString clipboardString = QString((const QChar *)clipboardTop, -1);
 	//	std::cout << "receiveClipboard = " << qPrintable(clipboardString) << std::endl << std::flush;
-	emit setClipboard(clipboardString);
+	emit setClipboard(std::move(clipboardString));
 	return true;
   }
   else {

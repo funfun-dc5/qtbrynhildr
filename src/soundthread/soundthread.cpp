@@ -460,7 +460,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	str = "SoundCacheTime : " + QString::number(settings->getSoundCacheTime()) + " (ms)";
 	emit outputLogMessage(PHASE_SOUND, str);
 	str = "SampleRate : " + QString::number(samplerate) + " (Hz)";
-	emit outputLogMessage(PHASE_SOUND, str);
+	emit outputLogMessage(PHASE_SOUND, std::move(str));
   }
   // supported Sample Rates
   if (settings->getOutputLog()){
@@ -487,7 +487,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	}
 	if (settings->getOutputLog()){
 	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
-	  emit outputLogMessage(PHASE_SOUND, msg);
+	  emit outputLogMessage(PHASE_SOUND, std::move(msg));
 	}
 	return true; // NOT supported sample rate
   }
@@ -532,7 +532,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	str = "Sound Device BufferSize : " + QString::number(audioOutput->bufferSize()) + " (bytes)";
 	emit outputLogMessage(PHASE_SOUND, str);
 	str = "Sound Device PeriodSize : " + QString::number(audioOutput->periodSize()) + " (bytes)";
-	emit outputLogMessage(PHASE_SOUND, str);
+	emit outputLogMessage(PHASE_SOUND, std::move(str));
   }
 
 #if QTB_CELT_SUPPORT
@@ -584,7 +584,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	str = "SoundCacheTime : " + QString::number(settings->getSoundCacheTime()) + " (ms)";
 	emit outputLogMessage(PHASE_SOUND, str);
 	str = "SampleRate : " + QString::number(samplerate) + " (Hz)";
-	emit outputLogMessage(PHASE_SOUND, str);
+	emit outputLogMessage(PHASE_SOUND, std::move(str));
   }
   // supported Sample Rates
   if (settings->getOutputLog()){
@@ -615,7 +615,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	}
 	if (settings->getOutputLog()){
 	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
-	  emit outputLogMessage(PHASE_SOUND, msg);
+	  emit outputLogMessage(PHASE_SOUND, std::move(msg));
 	}
 	return true; // NOT supported sample rate
   }
@@ -655,7 +655,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
   if (settings->getOutputLog()){
 	QString str;
 	str = "Sound Device BufferSize : " + QString::number(audioOutput->bufferSize()) + " (bytes)";
-	emit outputLogMessage(PHASE_SOUND, str);
+	emit outputLogMessage(PHASE_SOUND, std::move(str));
 #if 0 // for TEST
 	str = "Sound Device PeriodSize : " + QString::number(audioOutput->periodSize()) + " (bytes)";
 	emit outputLogMessage(PHASE_SOUND, str);

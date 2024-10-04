@@ -1009,7 +1009,7 @@ public:
   // set server name
   bool setServerName(QString serverName)
   {
-	this->serverName = serverName;
+	this->serverName = std::move(serverName);
 	return true;
   }
 
@@ -1136,7 +1136,7 @@ public:
   // set keyboard type name
   void setKeyboardTypeName(QString keyboardTypeName)
   {
-	this->keyboardTypeName = keyboardTypeName;
+	this->keyboardTypeName = std::move(keyboardTypeName);
   }
 
   // get keyboard type name
@@ -1206,7 +1206,7 @@ public:
 	QString encryptPassword = (cipher->encodeString(strPassword)).c_str();
 	this->password = encryptPassword;
 #else // !QTB_CRYPTGRAM
-	this->password = password;
+	this->password = std::move(password);
 #endif // !QTB_CRYPTGRAM
 	return true;
   }
@@ -1389,7 +1389,7 @@ public:
   // set send clipboard string
   void setSendClipboardString(QString sendClipboardString)
   {
-	this->sendClipboardString = sendClipboardString;
+	this->sendClipboardString = std::move(sendClipboardString);
   }
 
   // get send file count
@@ -1413,7 +1413,7 @@ public:
   // set send file name list
   void setSendFileNames(QStringList sendFileNames)
   {
-	this->sendFileNames = sendFileNames;
+	this->sendFileNames = std::move(sendFileNames);
   }
 
   // get graphics flag
@@ -2391,7 +2391,7 @@ public:
   // set SIMD operation type name
   void setSIMDOperationTypeName(QString SIMDOperationTypeName)
   {
-	this->SIMDOperationTypeName = SIMDOperationTypeName;
+	this->SIMDOperationTypeName = std::move(SIMDOperationTypeName);
   }
 
   // get on show Software Keyboard flag
@@ -2585,7 +2585,7 @@ public:
 	if (!outputPath.endsWith(QDir::separator())){
 	  outputPath.append(QDir::separator());
 	}
-	this->outputPath = outputPath;
+	this->outputPath = std::move(outputPath);
   }
 
   // get keylayout path
@@ -2600,7 +2600,7 @@ public:
 	if (!keylayoutPath.endsWith(QDir::separator())){
 	  keylayoutPath.append(QDir::separator());
 	}
-	this->keylayoutPath = keylayoutPath;
+	this->keylayoutPath = std::move(keylayoutPath);
   }
 
   // get log file
@@ -2612,7 +2612,7 @@ public:
   // set log file
   void setLogFile(QString logFile)
   {
-	this->logFile = logFile;
+	this->logFile = std::move(logFile);
   }
 
   // get keyboard log file
@@ -2624,7 +2624,7 @@ public:
   // set keyboard log file
   void setKeyboardLogFile(QString keyboardLogFile)
   {
-	this->keyboardLogFile = keyboardLogFile;
+	this->keyboardLogFile = std::move(keyboardLogFile);
   }
 
   // get desktop capture format
@@ -2636,7 +2636,7 @@ public:
   // set desktop capture format
   void setDesktopCaptureFormat(QString desktopCaptureFormat)
   {
-	this->desktopCaptureFormat = desktopCaptureFormat;
+	this->desktopCaptureFormat = std::move(desktopCaptureFormat);
   }
 
 private:

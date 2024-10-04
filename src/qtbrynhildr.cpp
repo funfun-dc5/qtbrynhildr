@@ -510,7 +510,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 	  str =  str + " " + QString::number((int)(*i));
 	  hasSoundDevice = true;
 	}
-	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, std::move(str));
   }
 #else // QT_VERSION >= 0x060000
   {
@@ -526,7 +526,7 @@ QtBrynhildr::QtBrynhildr(Option *option, QClipboard *clipboard)
 		QString::number(defaultAudioOutput.maximumSampleRate());
 	  hasSoundDevice = true;
 	}
-	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, str);
+	logMessage->outputLogMessage(PHASE_QTBRYNHILDR, std::move(str));
   }
 #endif // QT_VERSION >= 0x060000
   // sound device check

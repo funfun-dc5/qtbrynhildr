@@ -3200,7 +3200,7 @@ void QtBrynhildr::connected()
 
   // enable full screen
 #if defined(QTB_DEV_DESKTOP)
-  if (QTB_DESKTOP_FULL_SCREEN){
+  if (QTB_DESKTOP_FULL_SCREEN && settings->getDesktopCompressMode() == QTB_DESKTOPCOMPRESSMODE_DEFAULT){
 	fullScreen_Action->setEnabled(true);
   }
 #endif // defined(QTB_DEV_DESKTOP)
@@ -5017,11 +5017,22 @@ void QtBrynhildr::fullScreen()
 	desktopWindow->setPalette(fullScreenBackgroundPalette); // change QPalette::Window to black
 #endif // !defined(QTB_DEV_TOUCHPANEL)
 	desktopFrame->setOnFullScreen(true);
-	originalScalingFactor = settings->getDesktopScalingFactor();
 	showFullScreen();
-	//std::cout << "size(width, height) = ("
-	//	 << size().width() << "," << size().height() << ")" << std::endl << std::flush;
+#if 0 // for TEST
+	std::cout << "size(width, height) = ("
+			  << size().width() << "," << size().height() << ")" << std::endl << std::flush;
+	std::cout << "screen size(width, height) = ("
+			  << settings->getCurrentScreenWidth() << ","
+			  << settings->getCurrentScreenHeight() << ")" << std::endl << std::flush;
+#endif // 0 // for TEST
+#if 0 // for TEST
+	originalScalingFactor = settings->getDesktopScalingFactor();
 	setDesktopScalingFactor(size());
+#else // 0 // for TEST
+	originalScalingFactor = settings->getDesktopScalingFactor();
+	QSize screenSize = settings->getCurrentScreenSize();
+	setDesktopScalingFactor(screenSize);
+#endif // 0 // for TEST
   }
   else {
 	if (settings->getOnHideMenuAndStatusBarAtFullScreen()){
@@ -5047,6 +5058,11 @@ void QtBrynhildr::fullScreen()
 #if defined(QTB_DEV_DESKTOP)
   fullScreen_Action->setChecked(fullScreenMode);
 #endif // defined(QTB_DEV_DESKTOP)
+
+#if QTB_DESKTOP_COMPRESS_MODE
+  // enable/disable desktop compress mode menu
+  desktopCompressModeSubMenu->setEnabled(!fullScreenMode);
+#endif // QTB_DESKTOP_COMPRESS_MODE
 }
 
 // toggle stays on top
@@ -5663,6 +5679,9 @@ void QtBrynhildr::desktopCompressMode0()
   desktopCompressMode2_Action->setChecked(false);
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(false);
+
+  if (!fullScreen_Action->isEnabled())
+	fullScreen_Action->setEnabled(true);
 }
 void QtBrynhildr::desktopCompressMode2()
 {
@@ -5672,6 +5691,9 @@ void QtBrynhildr::desktopCompressMode2()
   desktopCompressMode2_Action->setChecked(true);
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(false);
+
+  if (fullScreen_Action->isEnabled())
+	fullScreen_Action->setEnabled(false);
 }
 void QtBrynhildr::desktopCompressMode4()
 {
@@ -5681,6 +5703,9 @@ void QtBrynhildr::desktopCompressMode4()
   desktopCompressMode2_Action->setChecked(false);
   desktopCompressMode4_Action->setChecked(true);
   desktopCompressMode8_Action->setChecked(false);
+
+  if (fullScreen_Action->isEnabled())
+	fullScreen_Action->setEnabled(false);
 }
 void QtBrynhildr::desktopCompressMode8()
 {
@@ -5690,6 +5715,9 @@ void QtBrynhildr::desktopCompressMode8()
   desktopCompressMode2_Action->setChecked(false);
   desktopCompressMode4_Action->setChecked(false);
   desktopCompressMode8_Action->setChecked(true);
+
+  if (fullScreen_Action->isEnabled())
+	fullScreen_Action->setEnabled(false);
 }
 #endif // QTB_DESKTOP_COMPRESS_MODE
 

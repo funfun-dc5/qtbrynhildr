@@ -11,9 +11,15 @@ PATHLIST=
 #------------------
 # Qt 6.4 -
 #------------------
-QTVERSION=6.7.3
-VCVERSION=msvc2019
-MINGWVERSION=1120
+#QTVERSION=6.7.3
+#VCVERSION=msvc2019
+#MINGWVERSION=1120
+#------------------
+# Qt 6.8 -
+#------------------
+QTVERSION=6.8.0
+VCVERSION=msvc2022
+MINGWVERSION=1310
 
 case $UNAME in
 	CYGWIN*)

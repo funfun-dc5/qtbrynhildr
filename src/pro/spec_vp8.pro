@@ -12,6 +12,16 @@ HEADERS += graphicsthread/decoder_vp8_cpp.h
 SOURCES += graphicsthread/decoder_vp8_cpp.cpp
 }
 
+macos-x64 {
+	LIBS -= -L../libs/vpx/$$BUILDARCH -lvpx
+	LIBS += -L../libs/vpx/macos-x64 -lvpx_x64
+}
+
+macos-x64 {
+	LIBS -= -L../libs/vpx/$$BUILDARCH -lvpx
+	LIBS += -L../libs/vpx/macos-arm64 -lvpx_arm64
+}
+
 # VP8-AVX2
 vp8-avx2 {
 SOURCES += graphicsthread/yuv2rgb/yuv2rgb_sse_avx2.cpp

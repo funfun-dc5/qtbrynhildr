@@ -1,5 +1,6 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2020- FunFun <fu.aba.dc5@gmail.com>
+#if defined(__aarch64__) // for Universal Binary
 
 // Common Header
 #include "common/common.h"
@@ -58,3 +59,5 @@ QImage* DecoderVP8NEON::getDesktopImage(int numOfThread)
 }
 
 } // end of namespace qtbrynhildr
+
+#endif // defined(__aarch64__)

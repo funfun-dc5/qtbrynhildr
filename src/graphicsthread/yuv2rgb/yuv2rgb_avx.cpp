@@ -1,5 +1,6 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2018- FunFun <fu.aba.dc5@gmail.com>
+#if defined(__x86_64__) // for Universal Binary
 
 // Common Header
 #include "common/common.h"
@@ -515,3 +516,5 @@ void convertYUVtoRGB_SIMD_AVX_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 #endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr
+
+#endif // defined(__x86_64__) // for Universal Binary

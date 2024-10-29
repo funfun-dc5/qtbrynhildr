@@ -117,7 +117,8 @@ include (pro/os_freebsd.pro)
 # ------------------------------------------------------------------------------
 macx {
 CONFIG += macos-x64
-#CONFIG += macos-arm64
+CONFIG += macos-arm64
+QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
 QMAKE_CXXFLAGS += -flto
 }
 include (pro/os_macos.pro)

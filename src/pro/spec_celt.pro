@@ -15,7 +15,7 @@ macos-x64 {
 	LIBS += -L../libs/celt/macos-x64 -lcelt_x64
 }
 
-macos-x64 {
+macos-arm64 {
 	LIBS -= -L../libs/celt/$$BUILDARCH -lcelt
 	LIBS += -L../libs/celt/macos-arm64 -lcelt_arm64
 }

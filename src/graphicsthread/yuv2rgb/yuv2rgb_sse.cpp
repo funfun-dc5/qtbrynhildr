@@ -1,6 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2018- FunFun <fu.aba.dc5@gmail.com>
-#if defined(__x86_64__) // for Universal Binary
+// SSE4.2
+#if defined(__SSE4_2__)
 
 // Common Header
 #include "common/common.h"
@@ -20,10 +21,6 @@
 namespace qtbrynhildr {
 
 #if QTB_SIMD_SUPPORT
-
-// SSE
-
-#if defined(__SSE4_2__)
 
 // YUV convert to RGB (SIMD version)
 void convertYUVtoRGB_SIMD_SSE(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
@@ -902,10 +899,8 @@ void convertYUVtoRGB_SIMD_SSE_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar *
 }
 #endif // QTB_GRAY_SCALE_MODE
 
-#endif // defined(__SSE4_2__)
-
 #endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr
 
-#endif // defined(__x86_64__) // for Universal Binary
+#endif // defined(__SSE4_2__)

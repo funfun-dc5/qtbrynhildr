@@ -1,6 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2020- FunFun <fu.aba.dc5@gmail.com>
-#if defined(__x86_64__) // for Universal Binary
+// AVX
+#if defined(__AVX__)
 
 // Common Header
 #include "common/common.h"
@@ -60,4 +61,4 @@ QImage* DecoderVP8AVX::getDesktopImage(int numOfThread)
 
 } // end of namespace qtbrynhildr
 
-#endif // defined(__x86_64__) // for Universal Binary
+#endif // defined(__AVX__)

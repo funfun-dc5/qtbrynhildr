@@ -1,6 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2020- FunFun <fu.aba.dc5@gmail.com>
-#if defined(__x86_64__) // for Universal Binary
+// SSE4.2
+#if defined(__SSE4_2__)
 
 // Common Header
 #include "common/common.h"
@@ -60,4 +61,4 @@ QImage* DecoderVP8SSE::getDesktopImage(int numOfThread)
 
 } // end of namespace qtbrynhildr
 
-#endif // defined(__x86_64__) // for Universal Binary
+#endif // defined(__SSE4_2__)

@@ -1,5 +1,7 @@
 // -*- mode: c++; coding: utf-8-unix -*-
 // Copyright (c) 2018- FunFun <fu.aba.dc5@gmail.com>
+// NEON
+#if defined(__ARM_NEON__)
 
 // Common Header
 #include "common/common.h"
@@ -17,10 +19,6 @@
 namespace qtbrynhildr {
 
 #if QTB_SIMD_SUPPORT
-
-// NEON
-
-#if defined(__arm__) || defined(__aarch64__)
 
 // YUV convert to RGB (SIMD version)
 void convertYUVtoRGB_SIMD_NEON(uchar *ytop, uchar* utop, uchar *vtop, uchar *rgbtop, int height)
@@ -819,8 +817,8 @@ void convertYUVtoRGB_SIMD_NEON_GSV(uchar *ytop, uchar* utop, uchar *vtop, uchar 
 }
 #endif // QTB_GRAY_SCALE_MODE
 
-#endif // defined(__arm__) || defined(__aarch64__)
-
 #endif // QTB_SIMD_SUPPORT
 
 } // end of namespace qtbrynhildr
+
+#endif // defined(__ARM_NEON__)

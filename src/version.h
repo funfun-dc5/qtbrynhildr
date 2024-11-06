@@ -5,10 +5,10 @@
 #define VERSION_H
 
 // version
-#define QTB_VERSION				"2.5.3"
+#define QTB_VERSION				"2.5.4"
 
 #define QTB_RCNAME				""
-#define QTB_VERSION_NUMBER		2503
+#define QTB_VERSION_NUMBER		2504
 
 #if __x86_64__ || __LP64__ || _WIN64
 #define QTB_ARCHNAME			" (64bit)"

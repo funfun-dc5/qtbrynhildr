@@ -1266,8 +1266,16 @@ bool ControlThread::sendFile()
 	  file.read(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
 	  // send to server
 	  sentDataSize = sendData(buffer, QTB_CONTROL_LOCAL_BUFFER_SIZE);
-	  sentDataSizeTotal += sentDataSize;
-	  fileSize -= sentDataSize;
+	  // check result
+	  if (sentDataSize == QTB_CONTROL_LOCAL_BUFFER_SIZE){
+		sentDataSizeTotal += sentDataSize;
+		fileSize -= sentDataSize;
+	  }
+	  else {
+		// send error
+		fileSize = -1;
+		break;
+	  }
 	  // check for cancel file transferring
 	  if (!runThread){
 		runThread = true;
@@ -1290,9 +1298,12 @@ bool ControlThread::sendFile()
 	  file.read(buffer, fileSize);
 	  // send to server
 	  sentDataSize = sendData(buffer, fileSize + paddingSize);
-	  sentDataSize -= paddingSize;
-	  sentDataSizeTotal += sentDataSize;
-	  fileSize -= sentDataSize;
+	  // check result
+	  if (sentDataSize == fileSize + paddingSize){
+		sentDataSize -= paddingSize;
+		sentDataSizeTotal += sentDataSize;
+		fileSize -= sentDataSize;
+	  }
 	  // set progress bar
 	  transferFileProgress = transferFileProgressUnit*(float)sentDataSizeTotal/fileSizeOrg;
 	  //	  std::cout << "transferFileProgress: " << transferFileProgress << std::endl << std::flush;

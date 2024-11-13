@@ -65,7 +65,7 @@ win32-g++ {
 CONFIG += mingw-x64
 # for DEBUG
 CONFIG += console
-QMAKE_CXXFLAGS += -flto
+QMAKE_CXXFLAGS += -flto=auto
 }
 
 # MSVC
@@ -89,7 +89,7 @@ CONFIG += msvc-xp
 cygwin-g++ {
 CONFIG += cygwin-x64
 #CONFIG += cygwin-x86
-QMAKE_CXXFLAGS += -flto
+QMAKE_CXXFLAGS += -flto=auto
 }
 include (pro/os_cygwin.pro)
 
@@ -99,7 +99,7 @@ include (pro/os_cygwin.pro)
 linux-g++-64 | linux-g++ {
 CONFIG += linux-x64
 #CONFIG += linux-x86
-QMAKE_CXXFLAGS += -flto
+QMAKE_CXXFLAGS += -flto=auto
 }
 include (pro/os_linux.pro)
 
@@ -108,7 +108,7 @@ include (pro/os_linux.pro)
 # ------------------------------------------------------------------------------
 freebsd-g++ | freebsd-clang {
 CONFIG += freebsd-x64
-QMAKE_CXXFLAGS += -flto
+QMAKE_CXXFLAGS += -flto=auto
 }
 include (pro/os_freebsd.pro)
 
@@ -119,7 +119,7 @@ macx {
 CONFIG += macos-x64
 CONFIG += macos-arm64
 QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
-QMAKE_CXXFLAGS += -flto
+QMAKE_CXXFLAGS += -flto=auto
 }
 include (pro/os_macos.pro)
 
@@ -133,7 +133,7 @@ include (pro/os_ios.pro)
 # ------------------------------------------------------------------------------
 android-g++ | android-clang {
 CONFIG += android
-#QMAKE_CXXFLAGS += -flto
+#QMAKE_CXXFLAGS += -flto=auto
 }
 include (pro/os_android.pro)
 

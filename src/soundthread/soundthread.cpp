@@ -489,7 +489,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
 	  emit outputLogMessage(PHASE_SOUND, std::move(msg));
 	}
-	return true; // NOT supported sample rate
+	return false; // NOT supported sample rate
   }
 
   // clean sound buffer
@@ -603,6 +603,7 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	// Sound OFF
 	return true;
   }
+#if QT_VERSION <= 0x060800 // for Bug on windows (Qt 6.8.1-3)
   if (!defaultAudioOutput.isFormatSupported(format)){
 	if (audioOutput != 0){
 	  audioOutput->stop();
@@ -617,8 +618,9 @@ bool SoundThread::changeSamplerate(SAMPLERATE samplerate)
 	  QString msg = "sampling rate (" + QString::number(samplerate) + ") is NOT supported.";
 	  emit outputLogMessage(PHASE_SOUND, std::move(msg));
 	}
-	return true; // NOT supported sample rate
+	return false; // NOT supported sample rate
   }
+#endif // QT_VERSION <= 0x060800 // for Bug on windows (Qt 6.8.1-3)
 
   // clean sound buffer
   soundBuffer->clear();
